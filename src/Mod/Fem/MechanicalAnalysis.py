@@ -87,7 +87,7 @@ class _CommandMechanicalJobControl:
         return {'Pixmap'  : 'Fem_NewAnalysis',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl","Start calculation"),
                 'Accel': "A",
-                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl","Dialog to start the calculation of the machanical anlysis")}
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl","Dialog to start the calculation of the mechanical anlysis")}
         
     def Activated(self):
         import FemGui
@@ -122,7 +122,7 @@ class _CommandMechanicalShowResult:
         StressObject = None
         for i in FemGui.getActiveAnalysis().Member:
             if i.isDerivedFrom("Fem::FemResultValue"):
-                if i.DataType == 'VanMisesStress':
+                if i.DataType == 'VonMisesStress':
                     StressObject = i
 
         if not DisplacementObject and not StressObject:
@@ -214,9 +214,9 @@ class _JobControlTaskPanel:
         # the categories are shown only if they are not empty.
         self.form=FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Fem/MechanicalAnalysis.ui")
         from platform import system
-        if system == 'Linux':
+        if system() == 'Linux':
           self.CalculixBinary = 'ccx'
-        elif  system == 'Windows':
+        elif  system() == 'Windows':
           self.CalculixBinary = FreeCAD.getHomePath() + 'bin/ccx.exe'
         else:
           self.CalculixBinary = 'ccx'
@@ -226,6 +226,7 @@ class _JobControlTaskPanel:
 
         self.obj = object
         #self.params = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem")
+        self.fem_prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem")
         self.Calculix = QtCore.QProcess()
         self.Timer = QtCore.QTimer()
         self.Timer.start(300)
@@ -239,6 +240,8 @@ class _JobControlTaskPanel:
         QtCore.QObject.connect(self.form.pushButton_generate, QtCore.SIGNAL("clicked()"), self.runCalculix)
 
         QtCore.QObject.connect(self.Calculix, QtCore.SIGNAL("started()"), self.calculixStarted)
+        QtCore.QObject.connect(self.Calculix, QtCore.SIGNAL("stateChanged(QProcess::ProcessState)"), self.calculixStateChanged)
+        QtCore.QObject.connect(self.Calculix, QtCore.SIGNAL("error(QProcess::ProcessError)"), self.calculixError)
         QtCore.QObject.connect(self.Calculix, QtCore.SIGNAL("finished(int)"), self.calculixFinished)
 
         QtCore.QObject.connect(self.Timer, QtCore.SIGNAL("timeout()"), self.UpdateText)
@@ -250,31 +253,45 @@ class _JobControlTaskPanel:
                                     format(time.time() - self.Start, color, message)
         self.form.textEdit_Output.setText(self.OutStr)
 
+    def printCalculiXstdout(self):
+        #There is probably no need to show user output from CalculiX. It should be
+        #written to a file in the calcs directory and shown to user upon request [BUTTON]
+        out = self.Calculix.readAllStandardOutput()
+        if out.isEmpty():
+            self.femConsoleMessage("CalculiX stdout is empty", "#FF0000")
+        else:
+            try:
+                self.femConsoleMessage(unicode(out).replace('\n','<br>'))
+            except UnicodeDecodeError:
+                self.femConsoleMessage("Error converting stdout from CalculiX", "#FF0000")
+
     def UpdateText(self):
         if(self.Calculix.state() == QtCore.QProcess.ProcessState.Running):
-            out = self.Calculix.readAllStandardOutput()
-            #print out
-            if out:
-                self.femConsoleMessage(unicode(out).replace('\n','<br>'))
+            self.printCalculiXstdout()
             self.form.label_Time.setText('Time: {0:4.1f}: '.format(time.time() - self.Start) )
 
-    def calculixError(self,error):
+    def calculixError(self, error):
         print "Error()",error
+        self.femConsoleMessage("CalculiX execute error: {}".format(error))
         
     def calculixStarted(self):
         print "calculixStarted()"
         print self.Calculix.state()
         self.form.pushButton_generate.setText("Break Calculix")
         
+    def calculixStateChanged(self, newState):
+        if (newState == QtCore.QProcess.ProcessState.Starting):
+                self.femConsoleMessage("Staring CalculiX...")
+        if (newState == QtCore.QProcess.ProcessState.Running):
+                self.femConsoleMessage("CalculiX is running...")
+        if (newState == QtCore.QProcess.ProcessState.NotRunning):
+                self.femConsoleMessage("CalculiX stopped.")
         
     def calculixFinished(self,exitCode):
         print "calculixFinished()",exitCode
         print self.Calculix.state()
-        out = self.Calculix.readAllStandardOutput()
-        print out
-        if out:
-            self.femConsoleMessage(unicode(out).replace('\n','<br>'))
 
+        self.printCalculiXstdout()
         self.Timer.stop()
         
         self.femConsoleMessage("Calculix done!", "#00FF00")
@@ -285,7 +302,7 @@ class _JobControlTaskPanel:
         self.form.label_Time.setText('Time: {0:4.1f}: '.format(time.time() - self.Start) )
 
         if os.path.isfile(self.Basename + '.frd'):
-            QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             CalculixLib.importFrd(self.Basename + '.frd',FemGui.getActiveAnalysis() )
             QApplication.restoreOverrideCursor()
             self.femConsoleMessage("Loading results done!", "#00FF00")
@@ -346,23 +363,27 @@ class _JobControlTaskPanel:
             return
         matmap = MathObject.Material
             
-        FixedObject = None
+        FixedObjects = []    # [{'Object':FixedObject, 'NodeSupports':bool}, {}, ...]
         for i in FemGui.getActiveAnalysis().Member:
+            FixedObjectDict = {}
             if i.isDerivedFrom("Fem::ConstraintFixed"):
-                FixedObject = i
-        if not FixedObject:
+                FixedObjectDict['Object'] = i
+                FixedObjects.append(FixedObjectDict)
+        if len(FixedObjects) == 0:
             QtGui.QMessageBox.critical(None, "Missing prerequisit","No fixed-constraint nodes defined in the Analysis")
             return
             
-        ForceObject = None
+        ForceObjects = []    # [{'Object':ForceObject, 'NodeLoad':value}, {}, ...]
         for i in FemGui.getActiveAnalysis().Member:
+            ForceObjectDict = {}
             if i.isDerivedFrom("Fem::ConstraintForce"):
-                ForceObject = i
-        if not ForceObject:
+                ForceObjectDict['Object'] = i
+                ForceObjects.append(ForceObjectDict)
+        if len(ForceObjects) == 0:
             QtGui.QMessageBox.critical(None, "Missing prerequisit","No force-constraint nodes defined in the Analysis")
             return
         
-        QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         
         self.Basename = self.TempDir + '/' + MeshObject.Name
         filename = self.Basename + '.inp'
@@ -378,47 +399,60 @@ class _JobControlTaskPanel:
         
         self.femConsoleMessage("Write loads & Co...")
         
-        # write fixed node set
-        NodeSetName = FixedObject.Name 
+        # write fixed node sets
         inpfile.write('\n\n\n\n***********************************************************\n')
         inpfile.write('** node set for fixed constraint\n')
-        inpfile.write('*NSET,NSET=' + NodeSetName + '\n')
-        for o,f in FixedObject.References:
-            fo = o.Shape.getElement(f)
-            if fo.ShapeType == 'Face':
-                FixedObjectType = 'AreaSupport'
-                n = MeshObject.FemMesh.getNodesByFace(fo)
+        for FixedObject in FixedObjects:
+            print FixedObject['Object'].Name
+            inpfile.write('*NSET,NSET=' + FixedObject['Object'].Name + '\n')
+            for o,f in FixedObject['Object'].References:
+                fo = o.Shape.getElement(f)
+                n = []
+                if fo.ShapeType == 'Face':
+                    print '  Face Support (fixed face) on: ', f
+                    n = MeshObject.FemMesh.getNodesByFace(fo)
+                elif fo.ShapeType == 'Edge':
+                    print '  Line Support (fixed edge) on: ', f
+                    n = MeshObject.FemMesh.getNodesByEdge(fo)
+                elif fo.ShapeType == 'Vertex':
+                    print '  Point Support (fixed vertex) on: ', f
+                    n = MeshObject.FemMesh.getNodesByVertex(fo)
                 for i in n:
                     inpfile.write( str(i)+',\n')
-            elif fo.ShapeType == 'Edge':
-                FixedObjectType = 'LineSupport'
-                print 'Line Supports are not yet implemented to export to CalculiX'
-                # getNodesByEdge(fo) # not implemented yet
-            elif fo.ShapeType == 'Vertex':
-                FixedObjectType = 'PointSupport'
-                print 'Point Supports are not yet implemented to export to CalculiX'
-        
-        # write load node set 
-        NodeSetNameForce = ForceObject.Name 
-        inpfile.write('\n\n\n\n***********************************************************\n')
-        inpfile.write('** node set for load\n')
-        inpfile.write('*NSET,NSET=' + NodeSetNameForce + '\n')
-        NbrForceNods = 0
-        for o,f in ForceObject.References:
-            fo = o.Shape.getElement(f)
-            if fo.ShapeType == 'Face':
-                ForceObjectType = 'AreaLoad'
-                n = MeshObject.FemMesh.getNodesByFace(fo)
+            inpfile.write('\n\n')
+
+        # write load node sets and calculate node loads
+        inpfile.write('\n\n***********************************************************\n')
+        inpfile.write('** node sets for loads\n')        
+        for ForceObject in ForceObjects:
+            print ForceObject['Object'].Name
+            inpfile.write('*NSET,NSET=' + ForceObject['Object'].Name + '\n')
+            NbrForceNodes = 0
+            for o,f in ForceObject['Object'].References:
+                fo = o.Shape.getElement(f)
+                n = []
+                if fo.ShapeType == 'Face':
+                    print '  AreaLoad (face load) on: ', f
+                    n = MeshObject.FemMesh.getNodesByFace(fo)
+                elif fo.ShapeType == 'Edge':
+                    print '  Line Load (edge load) on: ', f
+                    n = MeshObject.FemMesh.getNodesByEdge(fo)
+                elif fo.ShapeType == 'Vertex':
+                    print '  Point Load (vertex load) on: ', f
+                    n = MeshObject.FemMesh.getNodesByVertex(fo)
                 for i in n:
                     inpfile.write( str(i)+',\n')
-                    NbrForceNods = NbrForceNods + 1
-            elif fo.ShapeType == 'Edge':
-                ForceObjectType = 'LineLoad'
-                print 'Line Loads are not yet implemented to export to CalculiX'
-                # getNodesByEdge(fo) # not implemented yet
-            elif fo.ShapeType == 'Vertex':
-                ForceObjectType = 'PointLoad'
-                print 'Point Loads are not yet implemented to export to CalculiX'
+                    NbrForceNodes = NbrForceNodes + 1   # NodeSum of mesh-nodes of ALL reference shapes from ForceObject
+            # calculate node load
+            if NbrForceNodes == 0: 
+                print '  Warning --> no FEM-Mesh-node to apply the load to was found?'
+            else:
+                ForceObject['NodeLoad'] = (ForceObject['Object'].Force) / NbrForceNodes  
+                inpfile.write('** concentrated load [N] distributed on the area sum of the given faces\n')
+                inpfile.write('** ' + str(ForceObject['Object'].Force) + ' N / ' + str(NbrForceNodes) + ' Nodes = ' + str(ForceObject['NodeLoad']) + ' N on each node\n')
+            if ForceObject['Object'].Force == 0: 
+                print '  Warning --> Force = 0'
+            inpfile.write('\n\n')
         
         # get material properties
         YM = FreeCAD.Units.Quantity(MathObject.Material['Mechanical_youngsmodulus'])
@@ -433,7 +467,7 @@ class _JobControlTaskPanel:
         print 'PR = ', PR
         
         # write material properties
-        inpfile.write('\n\n\n\n***********************************************************\n')
+        inpfile.write('\n\n***********************************************************\n')
         inpfile.write('** material\n')
         inpfile.write('** unit is MPa = N/mm2\n')
         inpfile.write('*MATERIAL, Name='+matmap['General_name'] + '\n')
@@ -451,32 +485,23 @@ class _JobControlTaskPanel:
 
         # write constaints
         inpfile.write('\n\n** constaints\n')
-        if FixedObjectType == 'AreaSupport':
-            inpfile.write('*BOUNDARY\n')
-            inpfile.write(NodeSetName + ',1,3,0.0\n')
-        elif FixedObjectType == 'LineSupport':
-            pass  # ToDo
-        elif FixedObjectType == 'PointSupport':
-            pass  # ToDo
-
+        for FixedObject in FixedObjects:
+            inpfile.write('\n*BOUNDARY\n')
+            inpfile.write(FixedObject['Object'].Name + ',1,3,0.0\n')
+  
         # write loads
         #inpfile.write('*DLOAD\n')
         #inpfile.write('Eall,NEWTON\n')
         inpfile.write('\n\n** loads\n')
-        if ForceObjectType == 'AreaLoad':
-            Force = ForceObject.Force / NbrForceNods
-            vec = ForceObject.DirectionVector
-            inpfile.write('** direction: ' + str(vec)  + '\n')
-            inpfile.write('** concentrated load [N] distributed on the area of the given faces.\n')
-            inpfile.write('** ' + str(ForceObject.Force) + ' N / ' + str(NbrForceNods) + ' Nodes = ' + str(Force) + ' N on each node\n')
-            inpfile.write('*CLOAD\n')
-            inpfile.write(NodeSetNameForce + ',1,' + `vec.x * Force` + '\n')
-            inpfile.write(NodeSetNameForce + ',2,' + `vec.y * Force` + '\n')
-            inpfile.write(NodeSetNameForce + ',3,' + `vec.z * Force` + '\n')
-        elif ForceObjectType == 'LineLoad':
-            pass  # ToDo
-        elif ForceObjectType == 'PointLoad':
-            pass  # ToDo
+        inpfile.write('** node loads, see load node sets for how the value is calculated!\n\n')
+        for ForceObject in ForceObjects:
+            if 'NodeLoad' in ForceObject:
+                vec = ForceObject['Object'].DirectionVector
+                inpfile.write('\n** force: ' + str(ForceObject['NodeLoad']) + '  direction: ' + str(vec)  + '\n')
+                inpfile.write('*CLOAD\n')
+                inpfile.write(ForceObject['Object'].Name + ',1,' + `vec.x * ForceObject['NodeLoad']` + '\n')
+                inpfile.write(ForceObject['Object'].Name + ',2,' + `vec.y * ForceObject['NodeLoad']` + '\n')
+                inpfile.write(ForceObject['Object'].Name + ',3,' + `vec.z * ForceObject['NodeLoad']` + '\n')
  
         # write outputs, both are needed by FreeCAD        
         inpfile.write('\n\n** outputs --> frd file\n')
@@ -515,23 +540,32 @@ class _JobControlTaskPanel:
         inpfile.write('**\n')
 
         inpfile.close()
+        self.femConsoleMessage("Write completed.")
 
         QApplication.restoreOverrideCursor()
 
-    
-    def editCalculixInputFile(self):
-        print 'editCalculixInputFile'
-        print self.Basename + '.inp'
-        import webbrowser
-        # If inp-file extension is assigned the os will use the appropriate binary (normaly an Editor) to open the file. Works perfectly on Windows if SciTE is installed. 
-        webbrowser.open(self.Basename + '.inp')
+    def start_ext_editor(self, ext_editor_path, filename):
+        self.ext_editor_process = QtCore.QProcess()
+        self.ext_editor_process.execute(ext_editor_path, [filename])
 
+    def editCalculixInputFile(self):
+        filename = self.Basename + '.inp'
+        print 'editCalculixInputFile {}'.format(filename)
+        if self.fem_prefs.GetBool("UseInternalEditor",True):
+            FemGui.open(filename)
+        else:
+            ext_editor_path = self.fem_prefs.GetString("ExternalEditorPath","")
+            if ext_editor_path:
+                self.start_ext_editor(ext_editor_path, filename)
+            else:
+                print "External editor is not defined in FEM preferences. Falling back to internal editor"
+                FemGui.open(filename)
 
     def runCalculix(self):
         print 'runCalculix'
         self.Start = time.time()
 
-        self.femConsoleMessage(self.CalculixBinary)
+        self.femConsoleMessage("CalculiX binary: {}".format(self.CalculixBinary))
         self.femConsoleMessage("Run Calculix...")
 
         # run Claculix
@@ -575,7 +609,7 @@ class _ResultControlTaskPanel:
             self.MeshObject.ViewObject.ElementColor = {}
             return
             
-        QtGui.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         
         if typeName[:2] == "Ua" and self.DisplacementObject:            
             (min,max,avg) = self.MeshObject.ViewObject.setNodeColorByResult(self.DisplacementObject)
@@ -598,7 +632,7 @@ class _ResultControlTaskPanel:
         
         
     def showDisplacementClicked(self,bool):
-        QtGui.qApp.setOverrideCursor(QtCore.Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         self.setDisplacement()
         QtGui.qApp.restoreOverrideCursor()
     
@@ -647,9 +681,9 @@ class _ResultControlTaskPanel:
                     self.form.comboBox_Type.addItem("Uabs (Disp. abs)")
         for i in FemGui.getActiveAnalysis().Member:
             if i.isDerivedFrom("Fem::FemResultValue"):
-                if i.DataType == 'VanMisesStress':
+                if i.DataType == 'VonMisesStress':
                     self.StressObject = i
-                    self.form.comboBox_Type.addItem("Sabs (Van Mises Stress)")
+                    self.form.comboBox_Type.addItem("Sabs (Von Mises Stress)")
                 
     def accept(self):
         FreeCADGui.Control.closeDialog()
