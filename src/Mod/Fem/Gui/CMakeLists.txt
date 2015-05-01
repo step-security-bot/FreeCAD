@@ -42,7 +42,6 @@ SOURCE_GROUP("Python" FILES ${Python_SRCS})
 
 set(FemGui_MOC_HDRS
     DlgSettingsFemImp.h
-    Hypothesis.h
     TaskObjectName.h
     TaskCreateNodeSet.h
     TaskDlgCreateNodeSet.h
@@ -63,7 +62,6 @@ SOURCE_GROUP("Moc" FILES ${FemGui_MOC_SRCS})
 
 set(FemGui_UIC_SRCS
     DlgSettingsFem.ui
-    Hypothesis.ui
     TaskCreateNodeSet.ui
     TaskObjectName.ui
     TaskFemConstraint.ui
@@ -81,9 +79,6 @@ SET(FemGui_DLG_SRCS
     DlgSettingsFem.ui
     DlgSettingsFemImp.cpp
     DlgSettingsFemImp.h
-    Hypothesis.ui
-    Hypothesis.cpp
-    Hypothesis.h
     TaskFemConstraint.ui
     TaskFemConstraint.cpp
     TaskFemConstraint.h
@@ -210,6 +205,14 @@ fc_target_copy_resource(FemGui
     MechanicalMaterial.ui
     MechanicalAnalysis.ui
     )
+
+SET(FemGuiIcon_SVG
+    Resources/icons/preferences-fem.svg
+)
+
+fc_copy_sources(FemGui "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/Mod/Fem" ${FemGuiIcon_SVG})
+
+INSTALL(FILES ${FemGuiIcon_SVG} DESTINATION "${CMAKE_INSTALL_DATADIR}/Mod/Fem/Resources/icons")
 
 SET_BIN_DIR(FemGui FemGui /Mod/Fem)
 SET_PYTHON_PREFIX_SUFFIX(FemGui)
