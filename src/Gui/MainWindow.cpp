@@ -285,16 +285,19 @@ MainWindow::MainWindow(QWidget * parent, Qt::WFlags f)
 
     // clears the action label
     d->actionTimer = new QTimer( this );
+    d->actionTimer->setObjectName(QString::fromAscii("actionTimer"));
     connect(d->actionTimer, SIGNAL(timeout()), d->actionLabel, SLOT(clear()));
 
     // update gui timer
     d->activityTimer = new QTimer(this);
+    d->activityTimer->setObjectName(QString::fromAscii("activityTimer"));
     connect(d->activityTimer, SIGNAL(timeout()),this, SLOT(updateActions()));
     d->activityTimer->setSingleShot(true);
     d->activityTimer->start(300);
 
     // show main window timer
     d->visibleTimer = new QTimer(this);
+    d->visibleTimer->setObjectName(QString::fromAscii("visibleTimer"));
     connect(d->visibleTimer, SIGNAL(timeout()),this, SLOT(showMainWindow()));
     d->visibleTimer->setSingleShot(true);
 
@@ -1462,8 +1465,8 @@ void MainWindow::changeEvent(QEvent *e)
         if (isActiveWindow()) {
             QMdiSubWindow* mdi = d->mdiArea->currentSubWindow();
             if (mdi) {
-                MDIView* view =dynamic_cast<MDIView*>(mdi->widget());
-                if (getMainWindow()->activeWindow() != view) {
+                MDIView* view = dynamic_cast<MDIView*>(mdi->widget());
+                if (view && getMainWindow()->activeWindow() != view) {
                     d->activeView = view;
                     Application::Instance->viewActivated(view);
                 }

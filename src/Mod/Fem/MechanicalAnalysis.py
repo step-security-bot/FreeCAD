@@ -22,6 +22,7 @@
 
 import ccxFrdReader
 import FreeCAD
+import FemGui
 import os
 import sys
 import tempfile
@@ -29,7 +30,6 @@ import time
 
 if FreeCAD.GuiUp:
     import FreeCADGui
-    import FemGui
     from PySide import QtCore, QtGui
     from PySide.QtCore import Qt
     from PySide.QtGui import QApplication
@@ -119,16 +119,29 @@ class _CommandMechanicalJobControl:
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Dialog to start the calculation of the mechanical anlysis")}
 
     def Activated(self):
-        import FemGui
-
         taskd = _JobControlTaskPanel(FemGui.getActiveAnalysis())
         #taskd.obj = vobj.Object
         taskd.update()
         FreeCADGui.Control.showDialog(taskd)
 
     def IsActive(self):
-        import FemGui
         return FreeCADGui.ActiveDocument is not None and FemGui.getActiveAnalysis() is not None
+
+
+class _CommandPurgeFemResults:
+    def GetResources(self):
+        return {'Pixmap': 'Fem_Purge_Results',
+                'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_PurgeResults", "Purge results"),
+                'Accel': "S, S",
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_PurgeResults", "Purge results from an analysis")}
+
+    def Activated(self):
+        purge_fem_results()
+        reset_mesh_color()
+        reset_mesh_deformation()
+
+    def IsActive(self):
+        return FreeCADGui.ActiveDocument is not None and results_present()
 
 
 class _CommandMechanicalShowResult:
@@ -140,19 +153,12 @@ class _CommandMechanicalShowResult:
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_ResultDisplacement", "Show result information of an analysis")}
 
     def Activated(self):
-        import FemGui
-        DisplacementObject = None
+        self.result_object = None
         for i in FemGui.getActiveAnalysis().Member:
-            if i.isDerivedFrom("Fem::FemResultVector"):
-                if i.DataType == 'Displacement':
-                    DisplacementObject = i
-        StressObject = None
-        for i in FemGui.getActiveAnalysis().Member:
-            if i.isDerivedFrom("Fem::FemResultValue"):
-                if i.DataType == 'VonMisesStress':
-                    StressObject = i
+            if i.isDerivedFrom("Fem::FemResultObject"):
+                self.result_object = i
 
-        if not DisplacementObject and not StressObject:
+        if not self.result_object:
             QtGui.QMessageBox.critical(None, "Missing prerequisite", "No result found in active Analysis")
             return
 
@@ -160,8 +166,7 @@ class _CommandMechanicalShowResult:
         FreeCADGui.Control.showDialog(taskd)
 
     def IsActive(self):
-        import FemGui
-        return FreeCADGui.ActiveDocument is not None and FemGui.getActiveAnalysis() is not None
+        return FreeCADGui.ActiveDocument is not None and results_present()
 
 
 class _FemAnalysis:
@@ -171,7 +176,6 @@ class _FemAnalysis:
         obj.Proxy = self
         #obj.Material = StartMat
         obj.addProperty("App::PropertyString", "OutputDir", "Base", "Directory where the jobs get generated")
-        obj.addProperty("App::PropertyFloat", "PlateThickness", "Base", "Thickness of the plate")
 
     def execute(self, obj):
         return
@@ -210,7 +214,6 @@ class _ViewProviderFemAnalysis:
         return
 
     def doubleClicked(self, vobj):
-        import FemGui
         if not FemGui.getActiveAnalysis() == self.Object:
             if FreeCADGui.activeWorkbench().name() != 'FemWorkbench':
                 FreeCADGui.activateWorkbench("FemWorkbench")
@@ -339,7 +342,9 @@ class _JobControlTaskPanel:
         print "Loading results...."
         self.femConsoleMessage("Loading result sets...")
         self.form.label_Time.setText('Time: {0:4.1f}: '.format(time.time() - self.Start))
-
+        purge_fem_results()
+        reset_mesh_color()
+        reset_mesh_deformation()
         if os.path.isfile(self.base_name + '.frd'):
             QApplication.setOverrideCursor(Qt.WaitCursor)
             ccxFrdReader.importFrd(self.base_name + '.frd', FemGui.getActiveAnalysis())
@@ -397,51 +402,49 @@ class _JobControlTaskPanel:
         self.femConsoleMessage("Check dependencies...")
         self.form.label_Time.setText('Time: {0:4.1f}: '.format(time.time() - self.Start))
         self.MeshObject = None
-        if FemGui.getActiveAnalysis():
-            for i in FemGui.getActiveAnalysis().Member:
-                if i.isDerivedFrom("Fem::FemMeshObject"):
-                    self.MeshObject = i
-        else:
+        # [{'Object':MaterialObject}, {}, ...]
+        self.MaterialObjects = []
+        # [{'Object':FixedObject, 'NodeSupports':bool}, {}, ...]
+        self.FixedObjects = []
+        # [{'Object':ForceObject, 'NodeLoad':value}, {}, ...
+        self.ForceObjects = []
+        # [{'Object':PressureObject, 'xxxxxxxx':value}, {}, ...]
+        self.PressureObjects = []
+        if not FemGui.getActiveAnalysis():
             QtGui.QMessageBox.critical(None, "Missing prerequisite", "No active Analysis")
             return False
+
+        for i in FemGui.getActiveAnalysis().Member:
+            if i.isDerivedFrom("Fem::FemMeshObject"):
+                self.MeshObject = i
+            elif i.isDerivedFrom("App::MaterialObjectPython"):
+                MaterialObjectDict = {}
+                MaterialObjectDict['Object'] = i
+                self.MaterialObjects.append(MaterialObjectDict)
+            elif i.isDerivedFrom("Fem::ConstraintFixed"):
+                FixedObjectDict = {}
+                FixedObjectDict['Object'] = i
+                self.FixedObjects.append(FixedObjectDict)
+            elif i.isDerivedFrom("Fem::ConstraintForce"):
+                ForceObjectDict = {}
+                ForceObjectDict['Object'] = i
+                self.ForceObjects.append(ForceObjectDict)
+            elif i.isDerivedFrom("Fem::ConstraintPressure"):
+                PressureObjectDict = {}
+                PressureObjectDict['Object'] = i
+                self.PressureObjects.append(PressureObjectDict)
 
         if not self.MeshObject:
             QtGui.QMessageBox.critical(None, "Missing prerequisite", "No mesh object in the Analysis")
             return False
 
-        self.MaterialObjects = []  # [{'Object':MaterialObject}, {}, ...]
-        for i in FemGui.getActiveAnalysis().Member:
-            MaterialObjectDict = {}
-            if i.isDerivedFrom("App::MaterialObjectPython"):
-                MaterialObjectDict['Object'] = i
-                self.MaterialObjects.append(MaterialObjectDict)
         if not self.MaterialObjects:
             QtGui.QMessageBox.critical(None, "Missing prerequisite", "No material object in the Analysis")
             return False
 
-        self.FixedObjects = []    # [{'Object':FixedObject, 'NodeSupports':bool}, {}, ...]
-        for i in FemGui.getActiveAnalysis().Member:
-            FixedObjectDict = {}
-            if i.isDerivedFrom("Fem::ConstraintFixed"):
-                FixedObjectDict['Object'] = i
-                self.FixedObjects.append(FixedObjectDict)
         if not self.FixedObjects:
             QtGui.QMessageBox.critical(None, "Missing prerequisite", "No fixed-constraint nodes defined in the Analysis")
             return False
-
-        self.ForceObjects = []    # [{'Object':ForceObject, 'NodeLoad':value}, {}, ...]
-        for i in FemGui.getActiveAnalysis().Member:
-            ForceObjectDict = {}
-            if i.isDerivedFrom("Fem::ConstraintForce"):
-                ForceObjectDict['Object'] = i
-                self.ForceObjects.append(ForceObjectDict)
-
-        self.PressureObjects = []    # [{'Object':PressureObject, 'xxxxxxxx':value}, {}, ...]
-        for i in FemGui.getActiveAnalysis().Member:
-            PressureObjectDict = {}
-            if i.isDerivedFrom("Fem::ConstraintPressure"):
-                PressureObjectDict['Object'] = i
-                self.PressureObjects.append(PressureObjectDict)
 
         if not (self.ForceObjects or self.PressureObjects):
             QtGui.QMessageBox.critical(None, "Missing prerequisite", "No force-constraint or pressure-constraint defined in the Analysis")
@@ -489,116 +492,158 @@ class _JobControlTaskPanel:
 class _ResultControlTaskPanel:
     '''The control for the displacement post-processing'''
     def __init__(self, object):
-        # the panel has a tree widget that contains categories
-        # for the subcomponents, such as additions, subtractions.
-        # the categories are shown only if they are not empty.
         self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Fem/ShowDisplacement.ui")
 
         self.obj = object
 
         #Connect Signals and Slots
-        QtCore.QObject.connect(self.form.comboBox_Type, QtCore.SIGNAL("activated(int)"), self.typeChanged)
+        QtCore.QObject.connect(self.form.rb_none, QtCore.SIGNAL("toggled(bool)"), self.none_selected)
+        QtCore.QObject.connect(self.form.rb_x_displacement, QtCore.SIGNAL("toggled(bool)"), self.x_displacement_selected)
+        QtCore.QObject.connect(self.form.rb_y_displacement, QtCore.SIGNAL("toggled(bool)"), self.y_displacement_selected)
+        QtCore.QObject.connect(self.form.rb_z_displacement, QtCore.SIGNAL("toggled(bool)"), self.z_displacement_selected)
+        QtCore.QObject.connect(self.form.rb_abs_displacement, QtCore.SIGNAL("toggled(bool)"), self.abs_displacement_selected)
+        QtCore.QObject.connect(self.form.rb_vm_stress, QtCore.SIGNAL("toggled(bool)"), self.vm_stress_selected)
 
-        QtCore.QObject.connect(self.form.checkBox_ShowDisplacement, QtCore.SIGNAL("clicked(bool)"), self.showDisplacementClicked)
-        QtCore.QObject.connect(self.form.horizontalScrollBar_Factor, QtCore.SIGNAL("valueChanged(int)"), self.sliderValue)
-        QtCore.QObject.connect(self.form.spinBox_SliderFactor, QtCore.SIGNAL("valueChanged(int)"), self.sliderMaxValue)
-        QtCore.QObject.connect(self.form.spinBox_DisplacementFactor, QtCore.SIGNAL("valueChanged(int)"), self.displacementFactorValue)
-
-        self.DisplacementObject = None
-        self.StressObject = None
+        QtCore.QObject.connect(self.form.cb_show_displacement, QtCore.SIGNAL("clicked(bool)"), self.show_displacement)
+        QtCore.QObject.connect(self.form.hsb_displacement_factor, QtCore.SIGNAL("valueChanged(int)"), self.hsb_disp_factor_changed)
+        QtCore.QObject.connect(self.form.sb_displacement_factor, QtCore.SIGNAL("valueChanged(int)"), self.sb_disp_factor_changed)
+        QtCore.QObject.connect(self.form.sb_displacement_factor_max, QtCore.SIGNAL("valueChanged(int)"), self.sb_disp_factor_max_changed)
 
         self.update()
+        self.restore_result_dialog()
+
+    def restore_result_dialog(self):
+        try:
+            rt = FreeCAD.FEM_dialog["results_type"]
+            if rt == "None":
+                self.form.rb_none.setChecked(True)
+                self.none_selected(True)
+            elif rt == "Uabs":
+                self.form.rb_abs_displacement.setChecked(True)
+                self.abs_displacement_selected(True)
+            elif rt == "U1":
+                self.form.rb_x_displacement.setChecked(True)
+                self.x_displacement_selected(True)
+            elif rt == "U2":
+                self.form.rb_y_displacement.setChecked(True)
+                self.y_displacement_selected(True)
+            elif rt == "U3":
+                self.form.rb_z_displacement.setChecked(True)
+                self.z_displacement_selected(True)
+            elif rt == "Sabs":
+                self.form.rb_vm_stress.setChecked(True)
+                self.vm_stress_selected(True)
+
+            sd = FreeCAD.FEM_dialog["show_disp"]
+            self.form.cb_show_displacement.setChecked(sd)
+            self.show_displacement(sd)
+
+            df = FreeCAD.FEM_dialog["disp_factor"]
+            dfm = FreeCAD.FEM_dialog["disp_factor_max"]
+            self.form.hsb_displacement_factor.setMaximum(dfm)
+            self.form.hsb_displacement_factor.setValue(df)
+            self.form.sb_displacement_factor_max.setValue(dfm)
+            self.form.sb_displacement_factor.setValue(df)
+        except:
+            FreeCAD.FEM_dialog = {"results_type": "None", "show_disp": False,
+                                  "disp_factor": 0, "disp_factor_max": 100}
 
     def getStandardButtons(self):
         return int(QtGui.QDialogButtonBox.Close)
 
-    def typeChanged(self, index):
-        selected = self.form.comboBox_Type.itemData(index)
-        if selected[0] == "None":
-            self.MeshObject.ViewObject.NodeColor = {}
-            self.MeshObject.ViewObject.ElementColor = {}
-            self.form.lineEdit_Max.setProperty("unit", "mm")
-            self.form.lineEdit_Max.setText(" 0 mm")
-            self.form.lineEdit_Min.setProperty("unit", "mm")
-            self.form.lineEdit_Min.setText(" 0 mm")
-            self.form.lineEdit_Avg.setProperty("unit", "mm")
-            self.form.lineEdit_Avg.setText(" 0 mm")
-            return
+    def get_result_stats(self, type_name, analysis=None):
+        if analysis is None:
+            analysis = FemGui.getActiveAnalysis()
+        for i in analysis.Member:
+            if (i.isDerivedFrom("Fem::FemResultObject")) and ("Stats" in i.PropertiesList):
+                match_table = {"U1": (i.Stats[0], i.Stats[1], i.Stats[2]),
+                               "U2": (i.Stats[3], i.Stats[4], i.Stats[5]),
+                               "U3": (i.Stats[6], i.Stats[7], i.Stats[8]),
+                               "Uabs": (i.Stats[9], i.Stats[10], i.Stats[11]),
+                               "Sabs": (i.Stats[12], i.Stats[13], i.Stats[14]),
+                               "None": (0.0, 0.0, 0.0)}
+                return match_table[type_name]
+        return (0.0, 0.0, 0.0)
 
+    def none_selected(self, state):
+        FreeCAD.FEM_dialog["results_type"] = "None"
+        self.set_result_stats("mm", 0.0, 0.0, 0.0)
+        reset_mesh_color()
+
+    def abs_displacement_selected(self, state):
+        FreeCAD.FEM_dialog["results_type"] = "Uabs"
+        self.select_displacement_type("Uabs")
+
+    def x_displacement_selected(self, state):
+        FreeCAD.FEM_dialog["results_type"] = "U1"
+        self.select_displacement_type("U1")
+
+    def y_displacement_selected(self, state):
+        FreeCAD.FEM_dialog["results_type"] = "U2"
+        self.select_displacement_type("U2")
+
+    def z_displacement_selected(self, state):
+        FreeCAD.FEM_dialog["results_type"] = "U3"
+        self.select_displacement_type("U3")
+
+    def vm_stress_selected(self, state):
+        FreeCAD.FEM_dialog["results_type"] = "Sabs"
         QApplication.setOverrideCursor(Qt.WaitCursor)
-        if self.DisplacementObject:
-            if selected[0] in ("U1", "U2", "U3", "Uabs"):
-                (minm, maxm, avg) = self.MeshObject.ViewObject.setNodeColorByResult(self.DisplacementObject, selected[1])
-                unit = "mm"
-        if self.StressObject:
-            if selected[0] in ("Sabs"):
-                (minm, maxm, avg) = self.MeshObject.ViewObject.setNodeColorByResult(self.StressObject)
-                unit = "MPa"
-
-        self.form.lineEdit_Max.setProperty("unit", unit)
-        self.form.lineEdit_Max.setText("{:.6} {}".format(maxm, unit))
-        self.form.lineEdit_Min.setProperty("unit", unit)
-        self.form.lineEdit_Min.setText("{:.6} {}".format(minm, unit))
-        self.form.lineEdit_Avg.setProperty("unit", unit)
-        self.form.lineEdit_Avg.setText("{:.6} {}".format(avg, unit))
-
+        self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, self.result_object.StressValues)
+        (minm, avg, maxm) = self.get_result_stats("Sabs")
+        self.set_result_stats("MPa", minm, avg, maxm)
         QtGui.qApp.restoreOverrideCursor()
 
-    def showDisplacementClicked(self, bool):
+    def select_displacement_type(self, disp_type):
         QApplication.setOverrideCursor(Qt.WaitCursor)
-        self.setDisplacement()
+        if disp_type == "Uabs":
+            self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, self.result_object.DisplacementLengths)
+        else:
+            match = {"U1": 0, "U2": 1, "U3": 2}
+            d = zip(*self.result_object.DisplacementVectors)
+            displacements = list(d[match[disp_type]])
+            self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, displacements)
+        (minm, avg, maxm) = self.get_result_stats(disp_type)
+        self.set_result_stats("mm", minm, avg, maxm)
         QtGui.qApp.restoreOverrideCursor()
 
-    def sliderValue(self, value):
-        if(self.form.checkBox_ShowDisplacement.isChecked()):
-            self.MeshObject.ViewObject.animate(value)
+    def set_result_stats(self, unit, minm, avg, maxm):
+        self.form.le_min.setProperty("unit", unit)
+        self.form.le_min.setText("{:.6} {}".format(minm, unit))
+        self.form.le_avg.setProperty("unit", unit)
+        self.form.le_avg.setText("{:.6} {}".format(avg, unit))
+        self.form.le_max.setProperty("unit", unit)
+        self.form.le_max.setText("{:.6} {}".format(maxm, unit))
 
-        self.form.spinBox_DisplacementFactor.setValue(value)
+    def show_displacement(self, checked):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        FreeCAD.FEM_dialog["show_disp"] = checked
+        factor = 0.0
+        if checked:
+            factor = self.form.hsb_displacement_factor.value()
+        self.MeshObject.ViewObject.setNodeDisplacementByVectors(self.result_object.ElementNumbers, self.result_object.DisplacementVectors)
+        self.MeshObject.ViewObject.applyDisplacement(factor)
+        QtGui.qApp.restoreOverrideCursor()
 
-    def sliderMaxValue(self, value):
-        #print 'sliderMaxValue()'
-        self.form.horizontalScrollBar_Factor.setMaximum(value)
+    def hsb_disp_factor_changed(self, value):
+        self.MeshObject.ViewObject.applyDisplacement(value)
+        self.form.sb_displacement_factor.setValue(value)
 
-    def displacementFactorValue(self, value):
-        #print 'displacementFactorValue()'
-        self.form.horizontalScrollBar_Factor.setValue(value)
+    def sb_disp_factor_max_changed(self, value):
+        FreeCAD.FEM_dialog["disp_factor_max"] = value
+        self.form.hsb_displacement_factor.setMaximum(value)
 
-    def setDisplacement(self):
-        if self.DisplacementObject:
-            self.MeshObject.ViewObject.setNodeDisplacementByResult(self.DisplacementObject)
-
-    def setColorStress(self):
-        if self.StressObject:
-            values = self.StressObject.Values
-            maxVal = max(values)
-            self.form.doubleSpinBox_MinValueColor.setValue(maxVal)
-
-            self.MeshObject.ViewObject.setNodeColorByResult(self.StressObject)
+    def sb_disp_factor_changed(self, value):
+        FreeCAD.FEM_dialog["disp_factor"] = value
+        self.form.hsb_displacement_factor.setValue(value)
 
     def update(self):
-        'fills the widgets'
-        #print "Update-------------------------------"
         self.MeshObject = None
-        self.form.comboBox_Type.clear()
-        self.form.comboBox_Type.addItem("None", ("None", 0))
-        if FemGui.getActiveAnalysis():
-            for i in FemGui.getActiveAnalysis().Member:
-                if i.isDerivedFrom("Fem::FemMeshObject"):
-                    self.MeshObject = i
-
         for i in FemGui.getActiveAnalysis().Member:
-            if i.isDerivedFrom("Fem::FemResultVector"):
-                if i.DataType == 'Displacement':
-                    self.DisplacementObject = i
-                    self.form.comboBox_Type.addItem("U1   (Disp. X)", ("U1", 1))
-                    self.form.comboBox_Type.addItem("U2   (Disp. Y)", ("U2", 2))
-                    self.form.comboBox_Type.addItem("U3   (Disp. Z)", ("U3", 3))
-                    self.form.comboBox_Type.addItem("Uabs (Disp. abs)", ("Uabs", 0))
-        for i in FemGui.getActiveAnalysis().Member:
-            if i.isDerivedFrom("Fem::FemResultValue"):
-                if i.DataType == 'VonMisesStress':
-                    self.StressObject = i
-                    self.form.comboBox_Type.addItem("Sabs (Von Mises Stress)", ("Sabs", 0))
+            if i.isDerivedFrom("Fem::FemMeshObject"):
+                self.MeshObject = i
+            elif i.isDerivedFrom('Fem::FemResultObject'):
+                self.result_object = i
 
     def accept(self):
         FreeCADGui.Control.closeDialog()
@@ -606,7 +651,47 @@ class _ResultControlTaskPanel:
     def reject(self):
         FreeCADGui.Control.closeDialog()
 
+# Helpers
+
+
+def results_present():
+    results = False
+    analysis_members = FemGui.getActiveAnalysis().Member
+    for o in analysis_members:
+        if o.isDerivedFrom('Fem::FemResultObject'):
+            results = True
+    return results
+
+
+def purge_fem_results(Analysis=None):
+    if Analysis is None:
+        analysis_members = FemGui.getActiveAnalysis().Member
+    else:
+        analysis_members = FemGui.Analysis().Member
+    for o in analysis_members:
+        if o.isDerivedFrom("Fem::FemResultObject"):
+            FreeCAD.ActiveDocument.removeObject(o.Name)
+
+
+def reset_mesh_color(mesh=None):
+    if mesh is None:
+        for i in FemGui.getActiveAnalysis().Member:
+            if i.isDerivedFrom("Fem::FemMeshObject"):
+                mesh = i
+    mesh.ViewObject.NodeColor = {}
+    mesh.ViewObject.ElementColor = {}
+    mesh.ViewObject.setNodeColorByScalars()
+
+
+def reset_mesh_deformation(mesh=None):
+    if mesh is None:
+        for i in FemGui.getActiveAnalysis().Member:
+            if i.isDerivedFrom("Fem::FemMeshObject"):
+                mesh = i
+    mesh.ViewObject.applyDisplacement(0.0)
+
 FreeCADGui.addCommand('Fem_NewMechanicalAnalysis', _CommandNewMechanicalAnalysis())
 FreeCADGui.addCommand('Fem_CreateFromShape', _CommandFemFromShape())
 FreeCADGui.addCommand('Fem_MechanicalJobControl', _CommandMechanicalJobControl())
+FreeCADGui.addCommand('Fem_PurgeResults', _CommandPurgeFemResults())
 FreeCADGui.addCommand('Fem_ShowResult', _CommandMechanicalShowResult())

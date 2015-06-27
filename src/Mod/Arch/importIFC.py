@@ -388,7 +388,9 @@ def insert(filename,docname,skip=[],only=[],root=None):
         guid = product.GlobalId
         ptype = product.is_a()
         if DEBUG: print count,"/",len(products)," creating object ",pid," : ",ptype,
-        name = product.Name or str(ptype[3:])
+        name = str(ptype[3:])
+        if product.Name:
+            name = product.Name.decode("unicode_escape").encode("utf8")
         if PREFIX_NUMBERS: name = "ID" + str(pid) + " " + name
         obj = None
         baseobj = None
@@ -514,7 +516,7 @@ def insert(filename,docname,skip=[],only=[],root=None):
                     for p in properties[pid]:
                         o = ifcfile[p]
                         if o.is_a("IfcPropertySingleValue"):
-                            a[o.Name] = str(o.NominalValue)
+                            a[o.Name.decode("unicode_escape").encode("utf8")] = str(o.NominalValue)
                     obj.IfcAttributes = a
             
             # color
@@ -601,7 +603,8 @@ def insert(filename,docname,skip=[],only=[],root=None):
         if aid in skip: continue # user given id skip list
         if "IfcAnnotation" in SKIP: continue # preferences-set type skip list
         name = "Annotation"
-        if annotation.Name: name = annotation.Name
+        if annotation.Name: 
+            name = annotation.Name.decode("unicode_escape").encode("utf8")
         if PREFIX_NUMBERS: name = "ID" + str(aid) + " " + name
         shapes2d = []
         for repres in annotation.Representation.Representations:
@@ -622,7 +625,9 @@ def insert(filename,docname,skip=[],only=[],root=None):
         
     fcmats = {}
     for material in materials:
-        name = material.Name or "Material"
+        name = "Material"
+        if material.Name:
+            name = material.Name.decode("unicode_escape").encode("utf8")
         if MERGE_MATERIALS and (name in fcmats.keys()):
             mat = fcmats[name]
         else:
@@ -702,7 +707,7 @@ def export(exportList,filename):
     for obj in objectslist:
         
         # getting generic data
-        name = str(obj.Label)
+        name = str(obj.Label.encode("utf8"))
         description = str(obj.Description) if hasattr(obj,"Description") else ""
             
         # getting uid
@@ -850,7 +855,7 @@ def export(exportList,filename):
     # materials
     materials = {}
     for m in Arch.getDocumentMaterials():
-        mat = ifcfile.createIfcMaterial(str(m.Label))
+        mat = ifcfile.createIfcMaterial(m.Label.encode("utf8"))
         materials[m.Label] = mat
         if "Color" in m.Material:
             rgb = tuple([float(f) for f in m.Material['Color'].strip("()").split(",")])
