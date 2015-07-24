@@ -162,6 +162,9 @@ void DlgGeneralImp::saveSettings()
                 mdi->setBackground(QBrush(Qt::NoBrush));
                 QTextStream str(&f);
                 qApp->setStyleSheet(str.readAll());
+
+                ActionStyleEvent e(ActionStyleEvent::Clear);
+                qApp->sendEvent(getMainWindow(), &e);
             }
         }
     }
@@ -169,10 +172,14 @@ void DlgGeneralImp::saveSettings()
     if (sheet.toString().isEmpty()) {
         if (this->tiledBackground->isChecked()) {
             qApp->setStyleSheet(QString());
+            ActionStyleEvent e(ActionStyleEvent::Restore);
+            qApp->sendEvent(getMainWindow(), &e);
             mdi->setBackground(QPixmap(QLatin1String(":/icons/background.png")));
         }
         else {
             qApp->setStyleSheet(QString());
+            ActionStyleEvent e(ActionStyleEvent::Restore);
+            qApp->sendEvent(getMainWindow(), &e);
             mdi->setBackground(QBrush(QColor(160,160,160)));
         }
     }

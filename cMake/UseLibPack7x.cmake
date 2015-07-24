@@ -11,9 +11,9 @@ include_directories(${FREECAD_LIBPACK_DIR}/include)
 set(OPENGL_gl_LIBRARY opengl32 glu32)
 
 # Python
-set(PYTHON_DEBUG_LIBRARY python26_d.lib)
-set(PYTHON_LIBRARY python26.lib)
+set(PYTHON_LIBRARIES optimized python26.lib debug python26_d.lib)
 set(PYTHON_INCLUDE_PATH ${FREECAD_LIBPACK_DIR}/include/python)
+set(PYTHON_INCLUDE_DIRS ${FREECAD_LIBPACK_DIR}/include/python)
 set(PYTHON_EXECUTABLE   ${FREECAD_LIBPACK_DIR}/bin/python.exe)
 set(PYTHONLIBS_FOUND TRUE) 
 	
@@ -33,8 +33,6 @@ set(Boost_LIBRARIES
 	optimized boost_regex-vc90-mt-1_39.lib
 	optimized boost_signals-vc90-mt-1_39.lib
 	optimized boost_thread-vc90-mt-1_39.lib
-)
-set(Boost_DEBUG_LIBRARIES 
 	debug boost_filesystem-vc90-mt-gd-1_39.lib 
 	debug boost_date_time-vc90-mt-gd-1_39.lib
 	debug boost_filesystem-vc90-mt-gd-1_39.lib
@@ -111,8 +109,6 @@ set(QT_LIBRARIES
     optimized QtXml4.lib
     optimized QtOpenGl4.lib
     optimized QtWebKit4.lib
-)
-set(QT_DEBUG_LIBRARIES 
     debug QtCored4.lib
     debug QtGuid4.lib
     debug QtDesignerd4.lib
@@ -125,12 +121,24 @@ set(QT_DEBUG_LIBRARIES
     debug QtWebKitd4.lib
 )
 
-set(QT_QTCORE_LIBRARY_DEBUG 
-    debug QtCored4.lib
- )
- 
 set(QT_QTCORE_LIBRARY 
     optimized QtCore4.lib
+    debug QtCored4.lib
+)
+
+set(QT_QTXML_LIBRARY 
+    optimized QtXml4.lib
+    debug QtXmld4.lib
+)
+
+set(QT_QTUITOOLS_LIBRARY 
+    optimized QtUiTools.lib
+    debug QtUiToolsd.lib
+)
+
+set(QT_QTMAIN_LIBRARY 
+    debug qtmaind.lib
+    optimized qtmain.lib
 )
 
 set(QT_UIC_EXECUTABLE ${FREECAD_LIBPACK_DIR}/bin/uic.exe)

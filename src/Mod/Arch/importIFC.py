@@ -253,8 +253,11 @@ def explore(filename=None):
 
 def open(filename,skip=[],only=[],root=None):
     "opens an IFC file in a new document"
-    
+
     docname = os.path.splitext(os.path.basename(filename))[0]
+    if isinstance(docname,unicode): 
+        import sys #workaround since newDocument currently can't handle unicode filenames
+        docname = docname.encode(sys.getfilesystemencoding())
     doc = FreeCAD.newDocument(docname)
     doc.Label = docname
     doc = insert(filename,doc.Name,skip,only,root)
@@ -666,10 +669,6 @@ def export(exportList,filename):
     except:
         FreeCAD.Console.PrintError("IfcOpenShell was not found on this system. IFC support is disabled\n")
         return
-        
-    if isinstance(filename,unicode): 
-        import sys #workaround since ifcopenshell currently can't handle unicode filenames
-        filename = filename.encode(sys.getfilesystemencoding())
 
     version = FreeCAD.Version()
     owner = FreeCAD.ActiveDocument.CreatedBy
@@ -690,7 +689,7 @@ def export(exportList,filename):
     ifctemplate = ifctemplate.replace("$timestamp",str(time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())))
     template = tempfile.mkstemp(suffix=".ifc")[1]
     of = pyopen(template,"wb")
-    of.write(ifctemplate)
+    of.write(ifctemplate.encode("utf8"))
     of.close()
     global ifcfile, surfstyles
     ifcfile = ifcopenshell.open(template)
@@ -877,6 +876,11 @@ def export(exportList,filename):
                 ifcfile.createIfcRelAssociatesMaterial(ifcopenshell.guid.compress(uuid.uuid1().hex),history,'MaterialLink','',relobjs,mat)
 
     if DEBUG: print "writing ",filename,"..."
+    
+    if isinstance(filename,unicode): 
+        import sys #workaround since ifcopenshell currently can't handle unicode filenames
+        filename = filename.encode(sys.getfilesystemencoding())
+    
     ifcfile.write(filename)
 
 
@@ -895,87 +899,88 @@ def getRepresentation(ifcfile,context,obj,forcebrep=False,subtraction=False,tess
             if hasattr(obj.Proxy,"getProfiles"):
                 p = obj.Proxy.getProfiles(obj,noplacement=True)
                 extrusionv = obj.Proxy.getExtrusionVector(obj,noplacement=True)
-                extrusionv.multiply(0.001) # to meters
-                if (len(p) == 1) and extrusionv:
-                    p = p[0]
-                    p.scale(0.001) # to meters
-                    r = obj.Proxy.getPlacement(obj)
-                    r.Base = r.Base.multiply(0.001) # to meters
-                    
-                    if len(p.Edges) == 1:
+                if not DraftVecUtils.isNull(extrusionv):
+                    extrusionv.multiply(0.001) # to meters
+                    if (len(p) == 1) and extrusionv:
+                        p = p[0]
+                        p.scale(0.001) # to meters
+                        r = obj.Proxy.getPlacement(obj)
+                        r.Base = r.Base.multiply(0.001) # to meters
                         
-                        pxvc = ifcfile.createIfcDirection((1.0,0.0))
-                        povc = ifcfile.createIfcCartesianPoint((0.0,0.0))
-                        pt = ifcfile.createIfcAxis2Placement2D(povc,pxvc)
-                        
-                        # extruded circle
-                        if isinstance(p.Edges[0].Curve,Part.Circle):
-                            profile = ifcfile.createIfcCircleProfileDef("AREA",None,pt, p.Edges[0].Curve.Radius)
+                        if len(p.Edges) == 1:
                             
-                        # extruded ellipse
-                        elif isinstance(p.Edges[0].Curve,Part.Ellipse):
-                            profile = ifcfile.createIfcEllipseProfileDef("AREA",None,pt, p.Edges[0].Curve.MajorRadius, p.Edges[0].Curve.MinorRadius)     
+                            pxvc = ifcfile.createIfcDirection((1.0,0.0))
+                            povc = ifcfile.createIfcCartesianPoint((0.0,0.0))
+                            pt = ifcfile.createIfcAxis2Placement2D(povc,pxvc)
                             
-                    else:
-                        curves = False
-                        for e in p.Edges:
-                            if isinstance(e.Curve,Part.Circle):
-                                curves = True
+                            # extruded circle
+                            if isinstance(p.Edges[0].Curve,Part.Circle):
+                                profile = ifcfile.createIfcCircleProfileDef("AREA",None,pt, p.Edges[0].Curve.Radius)
                                 
-                        # extruded polyline
-                        if not curves:
-                            w = Part.Wire(DraftGeomUtils.sortEdges(p.Edges))
-                            pts = [ifcfile.createIfcCartesianPoint(tuple(v.Point)[:2]) for v in w.Vertexes+[w.Vertexes[0]]]
-                            pol = ifcfile.createIfcPolyline(pts)
-                            
-                        # extruded composite curve
+                            # extruded ellipse
+                            elif isinstance(p.Edges[0].Curve,Part.Ellipse):
+                                profile = ifcfile.createIfcEllipseProfileDef("AREA",None,pt, p.Edges[0].Curve.MajorRadius, p.Edges[0].Curve.MinorRadius)     
+                                
                         else:
-                            segments = []
-                            last = None
-                            edges = DraftGeomUtils.sortEdges(p.Edges)
-                            for e in edges:
+                            curves = False
+                            for e in p.Edges:
                                 if isinstance(e.Curve,Part.Circle):
-                                    follow = True
-                                    if last:
-                                        if not DraftVecUtils.equals(last,e.Vertexes[0].Point):
-                                            follow = False
-                                            last = e.Vertexes[0].Point
-                                        else:
-                                            last = e.Vertexes[-1].Point
-                                    else:
-                                        last = e.Vertexes[-1].Point
-                                    p1 = math.degrees(-DraftVecUtils.angle(e.Vertexes[0].Point.sub(e.Curve.Center)))
-                                    p2 = math.degrees(-DraftVecUtils.angle(e.Vertexes[-1].Point.sub(e.Curve.Center)))
-                                    da = DraftVecUtils.angle(e.valueAt(e.FirstParameter+0.1).sub(e.Curve.Center),e.Vertexes[0].Point.sub(e.Curve.Center))
-                                    if p1 < 0: 
-                                        p1 = 360 + p1
-                                    if p2 < 0:
-                                        p2 = 360 + p2
-                                    if da > 0:
-                                        follow = not(follow)
-                                    xvc =       ifcfile.createIfcDirection((1.0,0.0))
-                                    ovc =       ifcfile.createIfcCartesianPoint(tuple(e.Curve.Center)[:2])
-                                    plc =       ifcfile.createIfcAxis2Placement2D(ovc,xvc)
-                                    cir =       ifcfile.createIfcCircle(plc,e.Curve.Radius)
-                                    curve =     ifcfile.createIfcTrimmedCurve(cir,[ifcfile.createIfcParameterValue(p1)],[ifcfile.createIfcParameterValue(p2)],follow,"PARAMETER")
+                                    curves = True
                                     
-                                else:
-                                    verts = [vertex.Point for vertex in e.Vertexes]
-                                    if last:
-                                        if not DraftVecUtils.equals(last,verts[0]):
-                                            verts.reverse()
-                                            last = e.Vertexes[0].Point
+                            # extruded polyline
+                            if not curves:
+                                w = Part.Wire(DraftGeomUtils.sortEdges(p.Edges))
+                                pts = [ifcfile.createIfcCartesianPoint(tuple(v.Point)[:2]) for v in w.Vertexes+[w.Vertexes[0]]]
+                                pol = ifcfile.createIfcPolyline(pts)
+                                
+                            # extruded composite curve
+                            else:
+                                segments = []
+                                last = None
+                                edges = DraftGeomUtils.sortEdges(p.Edges)
+                                for e in edges:
+                                    if isinstance(e.Curve,Part.Circle):
+                                        follow = True
+                                        if last:
+                                            if not DraftVecUtils.equals(last,e.Vertexes[0].Point):
+                                                follow = False
+                                                last = e.Vertexes[0].Point
+                                            else:
+                                                last = e.Vertexes[-1].Point
                                         else:
                                             last = e.Vertexes[-1].Point
+                                        p1 = math.degrees(-DraftVecUtils.angle(e.Vertexes[0].Point.sub(e.Curve.Center)))
+                                        p2 = math.degrees(-DraftVecUtils.angle(e.Vertexes[-1].Point.sub(e.Curve.Center)))
+                                        da = DraftVecUtils.angle(e.valueAt(e.FirstParameter+0.1).sub(e.Curve.Center),e.Vertexes[0].Point.sub(e.Curve.Center))
+                                        if p1 < 0: 
+                                            p1 = 360 + p1
+                                        if p2 < 0:
+                                            p2 = 360 + p2
+                                        if da > 0:
+                                            follow = not(follow)
+                                        xvc =       ifcfile.createIfcDirection((1.0,0.0))
+                                        ovc =       ifcfile.createIfcCartesianPoint(tuple(e.Curve.Center)[:2])
+                                        plc =       ifcfile.createIfcAxis2Placement2D(ovc,xvc)
+                                        cir =       ifcfile.createIfcCircle(plc,e.Curve.Radius)
+                                        curve =     ifcfile.createIfcTrimmedCurve(cir,[ifcfile.createIfcParameterValue(p1)],[ifcfile.createIfcParameterValue(p2)],follow,"PARAMETER")
+                                        
                                     else:
-                                        last = e.Vertexes[-1].Point
-                                    pts =     [ifcfile.createIfcCartesianPoint(tuple(v)[:2]) for v in verts]
-                                    curve =   ifcfile.createIfcPolyline(pts)
-                                segment = ifcfile.createIfcCompositeCurveSegment("CONTINUOUS",True,curve)
-                                segments.append(segment)
-                                
-                            pol = ifcfile.createIfcCompositeCurve(segments,False)
-                        profile = ifcfile.createIfcArbitraryClosedProfileDef("AREA",None,pol)
+                                        verts = [vertex.Point for vertex in e.Vertexes]
+                                        if last:
+                                            if not DraftVecUtils.equals(last,verts[0]):
+                                                verts.reverse()
+                                                last = e.Vertexes[0].Point
+                                            else:
+                                                last = e.Vertexes[-1].Point
+                                        else:
+                                            last = e.Vertexes[-1].Point
+                                        pts =     [ifcfile.createIfcCartesianPoint(tuple(v)[:2]) for v in verts]
+                                        curve =   ifcfile.createIfcPolyline(pts)
+                                    segment = ifcfile.createIfcCompositeCurveSegment("CONTINUOUS",True,curve)
+                                    segments.append(segment)
+                                    
+                                pol = ifcfile.createIfcCompositeCurve(segments,False)
+                            profile = ifcfile.createIfcArbitraryClosedProfileDef("AREA",None,pol)
                         
         if profile:
             xvc =       ifcfile.createIfcDirection(tuple(r.Rotation.multVec(FreeCAD.Vector(1,0,0))))
