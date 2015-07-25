@@ -4,7 +4,7 @@ compiler:
   - gcc
   - clang
 
-dist: trusty
+#dist: trusty
 
 env:
   global:
@@ -79,3 +79,6 @@ script:
 #after_failure:
 
 #after_script:
+
+notifications:
+  email: false
