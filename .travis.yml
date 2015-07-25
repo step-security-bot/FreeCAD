@@ -2,11 +2,13 @@ language: cpp
 
 os:
   - linux
-  - osx
+  #- osx
 
 compiler:
   - gcc
-  - clang
+  #- clang
+
+#dist: trusty
 
 env:
   global:
