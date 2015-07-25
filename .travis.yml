@@ -1,7 +1,10 @@
 language: cpp
-#compiler:
-  #- gcc
-  #- clang
+
+compiler:
+  - gcc
+  - clang
+
+dist: trusty
 
 env:
   global:
@@ -59,7 +62,7 @@ before_install:
     - sudo apt-get install -y shiboken
     - sudo apt-get install -y swig
 #Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
-    - sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
+    #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 
 install:
     - mkdir build && cd build && cmake ../
@@ -67,7 +70,13 @@ install:
 #before_script:
 
 script:
-    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j4; fi
+    - if [[ $CC == gcc ]]; then
+      export NPROC=3;
+    else
+      export NPROC=1;
+    fi
+
+    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j$NPROC; fi
     - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"; fi
 
 #after_success:
