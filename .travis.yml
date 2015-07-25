@@ -1,6 +1,7 @@
 language: cpp
-#compiler:
-  #- gcc
+
+compiler:
+  - gcc
   #- clang
 
 env:
@@ -13,7 +14,7 @@ addons:
       name: "sasobadovinac/FreeCAD"
       description: "Build submitted via Travis CI"
     notification_email: saso.badovinac@gmail.com
-    build_command: "make -j 2"
+    build_command: "make -j3"
     branch_pattern: coverity_scan
 
 before_install:
@@ -67,7 +68,8 @@ install:
 #before_script:
 
 script:
-    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make; fi
+    - if [[ $CC == gcc ]]; then export NPROC=3; else export NPROC=1; fi
+    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j$NPROC; fi
     - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"; fi
 
 #after_success:
@@ -75,3 +77,6 @@ script:
 #after_failure:
 
 #after_script:
+
+notifications:
+  email: false
