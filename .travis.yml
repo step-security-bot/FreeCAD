@@ -42,7 +42,7 @@ before_install:
     - sudo apt-get install -y liboce-modeling-dev
     #- sudo apt-get install -y liboce-modeling1
     - sudo apt-get install -y liboce-ocaf-dev
-    - sudo apt-get install -y liboce-ocaf-lite-dev
+    #- sudo apt-get install -y liboce-ocaf-lite-dev
     #- sudo apt-get install -y liboce-ocaf-lite1
     #- sudo apt-get install -y liboce-ocaf1
     - sudo apt-get install -y liboce-visualization-dev
@@ -52,17 +52,17 @@ before_install:
     - sudo apt-get install -y libqtcore4
     - sudo apt-get install -y libshiboken-dev
     - sudo apt-get install -y libxerces-c-dev
-    - sudo apt-get install -y libxmu-dev
-    - sudo apt-get install -y libxmu-headers
-    - sudo apt-get install -y libxmu6
+    #- sudo apt-get install -y libxmu-dev
+    #- sudo apt-get install -y libxmu-headers
+    #- sudo apt-get install -y libxmu6
     - sudo apt-get install -y libxmuu-dev
-    - sudo apt-get install -y libxmuu1
+    #- sudo apt-get install -y libxmuu1
     - sudo apt-get install -y oce-draw
     - sudo apt-get install -y pyside-tools
-    - sudo apt-get install -y python-dev
-    - sudo apt-get install -y python-pyside
+    #- sudo apt-get install -y python-dev
+    #- sudo apt-get install -y python-pyside
     - sudo apt-get install -y qt4-dev-tools
-    - sudo apt-get install -y qt4-qmake
+    #- sudo apt-get install -y qt4-qmake
     - sudo apt-get install -y shiboken
     - sudo apt-get install -y swig
 #Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
