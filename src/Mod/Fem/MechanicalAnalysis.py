@@ -23,12 +23,12 @@
 import ccxFrdReader
 import FreeCAD
 from FemTools import FemTools
-import FemGui
 import os
 import time
 
 if FreeCAD.GuiUp:
     import FreeCADGui
+    import FemGui
     from PySide import QtCore, QtGui
     from PySide.QtCore import Qt
     from PySide.QtGui import QApplication
@@ -42,7 +42,7 @@ def makeMechanicalAnalysis(name):
     '''makeFemAnalysis(name): makes a Fem Analysis object'''
     obj = FreeCAD.ActiveDocument.addObject("Fem::FemAnalysisPython", name)
     _FemAnalysis(obj)
-    _ViewProviderFemAnalysis(obj.ViewObject)
+    _ViewProviderFemAnalysis()
     #FreeCAD.ActiveDocument.recompute()
     return obj
 
@@ -79,7 +79,6 @@ class _CommandNewMechanicalAnalysis:
         FreeCADGui.Selection.clearSelection()
 
     def IsActive(self):
-        import FemGui
         return FreeCADGui.ActiveDocument is not None and FemGui.getActiveAnalysis() is None
 
 
@@ -231,9 +230,9 @@ class _FemAnalysis:
 class _ViewProviderFemAnalysis:
     "A View Provider for the Material object"
 
-    def __init__(self, vobj):
+    def __init__(self):
         #vobj.addProperty("App::PropertyLength", "BubbleSize", "Base", str(translate("Fem", "The size of the axis bubbles")))
-        vobj.Proxy = self
+        pass
 
     def getIcon(self):
         return ":/icons/Fem_Analysis.svg"
@@ -315,8 +314,6 @@ class _JobControlTaskPanel:
         self.form.textEdit_Output.moveCursor(QtGui.QTextCursor.End)
 
     def printCalculiXstdout(self):
-        #There is probably no need to show user output from CalculiX. It should be
-        #written to a file in the calcs directory and shown to user upon request [BUTTON]
         out = self.Calculix.readAllStandardOutput()
         if out.isEmpty():
             self.femConsoleMessage("CalculiX stdout is empty", "#FF0000")
@@ -649,9 +646,10 @@ def results_present():
     return results
 
 
-FreeCADGui.addCommand('Fem_NewMechanicalAnalysis', _CommandNewMechanicalAnalysis())
-FreeCADGui.addCommand('Fem_CreateFromShape', _CommandFemFromShape())
-FreeCADGui.addCommand('Fem_MechanicalJobControl', _CommandMechanicalJobControl())
-FreeCADGui.addCommand('Fem_Quick_Analysis', _CommandQuickAnalysis())
-FreeCADGui.addCommand('Fem_PurgeResults', _CommandPurgeFemResults())
-FreeCADGui.addCommand('Fem_ShowResult', _CommandMechanicalShowResult())
+if FreeCAD.GuiUp:
+    FreeCADGui.addCommand('Fem_NewMechanicalAnalysis', _CommandNewMechanicalAnalysis())
+    FreeCADGui.addCommand('Fem_CreateFromShape', _CommandFemFromShape())
+    FreeCADGui.addCommand('Fem_MechanicalJobControl', _CommandMechanicalJobControl())
+    FreeCADGui.addCommand('Fem_Quick_Analysis', _CommandQuickAnalysis())
+    FreeCADGui.addCommand('Fem_PurgeResults', _CommandPurgeFemResults())
+    FreeCADGui.addCommand('Fem_ShowResult', _CommandMechanicalShowResult())

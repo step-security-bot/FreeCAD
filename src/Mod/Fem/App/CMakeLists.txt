@@ -20,7 +20,7 @@ include_directories(
     ${OCC_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
     ${SMESH_INCLUDE_DIR}
 )
 
@@ -71,6 +71,7 @@ SET(FemScripts_SRCS
     convert2TetGen.py
     ccxFrdReader.py
     ccxInpWriter.py
+    TestFem.py
     FemTools.py
     MechanicalAnalysis.ui
     MechanicalAnalysis.py
