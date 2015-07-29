@@ -34,34 +34,45 @@ before_install:
     - sudo apt-get install -y libboost-signals-dev
     - sudo apt-get install -y libboost-system-dev
     - sudo apt-get install -y libboost-thread-dev
+#depended from libcoin60-dev
     #- sudo apt-get install -y libcoin60
     - sudo apt-get install -y libcoin60-dev
     - sudo apt-get install -y libeigen3-dev
     - sudo apt-get install -y liboce-foundation-dev
+#depended from liboce-foundation-dev
     #- sudo apt-get install -y liboce-foundation1
     - sudo apt-get install -y liboce-modeling-dev
+#depended from liboce-modeling-dev
     #- sudo apt-get install -y liboce-modeling1
     - sudo apt-get install -y liboce-ocaf-dev
+#depended from liboce-ocaf-dev
     #- sudo apt-get install -y liboce-ocaf-lite-dev
     #- sudo apt-get install -y liboce-ocaf-lite1
     #- sudo apt-get install -y liboce-ocaf1
     - sudo apt-get install -y liboce-visualization-dev
+#depended from liboce-ocaf-dev
     #- sudo apt-get install -y liboce-visualization1
     - sudo apt-get install -y libopencascade-modeling-6.5.0
     - sudo apt-get install -y libpyside-dev
     - sudo apt-get install -y libqtcore4
     - sudo apt-get install -y libshiboken-dev
     - sudo apt-get install -y libxerces-c-dev
+#depended from libcoin60-dev
     #- sudo apt-get install -y libxmu-dev
     #- sudo apt-get install -y libxmu-headers
+#pre-installed
     #- sudo apt-get install -y libxmu6
     - sudo apt-get install -y libxmuu-dev
+#pre-installed
     #- sudo apt-get install -y libxmuu1
     - sudo apt-get install -y oce-draw
     - sudo apt-get install -y pyside-tools
+#pre-installed
     #- sudo apt-get install -y python-dev
+#depended from pyside-tools
     #- sudo apt-get install -y python-pyside
     - sudo apt-get install -y qt4-dev-tools
+#depended from libqtcore4
     #- sudo apt-get install -y qt4-qmake
     - sudo apt-get install -y shiboken
     - sudo apt-get install -y swig
