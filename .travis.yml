@@ -80,8 +80,8 @@ before_install:
     - sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 
 install:
-    - if [[ $CC == clang ]]; then export CXXFLAGS="-fpermissive"; fi
-    - mkdir build && cd build && cmake ../
+    #- if [[ $CC == clang ]]; then export CXXFLAGS="-fpermissive"; fi
+    - mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="-fpermissive" ../
 
 #before_script:
 
