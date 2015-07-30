@@ -12,7 +12,6 @@ compiler:
 
 env:
   global:
-    - CXXFLAGS="-fpermissive"
     - secure: "YVpSrf0YXyQKgz9Xd4VSN+K1szHNrlomWhm3h9RzbIJOs14lbBO5GW2oQaXWFfF8j77Ur36H9oyGT89OdHRAgCe/j5p8z313w1TfU3oj8/5dW6c7jVCmZ6chq2wiaIIHD61nzQ9poA5hkE3u4Jv3Ql/cfoAYZDd0hWu3jZBIA/wIjc9NI0zlHRrcMuJkhz+HLBzz5nUEBesRalrxX48PAN0cSZK2+TlwU2h7gIG5WsWwGzUckCF2j/EJTefeJ37B3C6EaEEa+uIQj3I4cqVV1SV9xp5B/6O1+lNfWzn+LpBVyulSxdW0ZF2Tn0V0H7prBeAHbMSqYFVnr//rRsulVBaOEDETyjlJee0Sx60n9V7FZdDDTn7hjKw6pyru7wwRkvjjV6P3nB4S+Bc1nEQuSRtcWbVnt1gza4fhiBJYQ/arVOWx3r8w5Om0R05OGveE8nulcmKosP3musfjW3ITscUahxFpeVojuk8p0p15lS7xlvcw6MEdxRxntopslJMjDZVwX+UvFZUzSozuFSGPRRJjwmFNV+D7hE+w23BqTk01e0JqAl7ZPG0ZwQ5Kt8LWtlbL1GqjNBHSpPTWnhg5RkNa6a9ez9x5RVNf87mmxHX6Y0W9ogVsXgH7xirLU4q2Zjr47vwkw7UWkcxfa4o3KXRAOAY8BnTFi9NMWWh4TJc="
 
 addons:
@@ -82,6 +81,7 @@ before_install:
 
 install:
     #- if [[ $CC == clang ]]; then export CXXFLAGS="-fpermissive"; fi
+    - if [ "$CXX" == "clang++" ]; then export CXXFLAGS="-fpermissive"; fi
     - mkdir build && cd build && cmake ../
 
 #before_script:
