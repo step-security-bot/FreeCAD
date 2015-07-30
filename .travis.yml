@@ -81,10 +81,8 @@ before_install:
 
 install:
     - if [[ $CC == clang ]]; then
-      mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS=-fpermissive ../;
-    else
-      mkdir build && cd build && cmake ../;
-    fi
+      mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS=-fpermissive ../; else
+      mkdir build && cd build && cmake ../; fi
 
 #before_script:
 
