@@ -5,7 +5,7 @@ os:
   #- osx
 
 compiler:
-  - gcc
+  #- gcc
   - clang
 
 #dist: trusty
@@ -81,7 +81,8 @@ before_install:
 
 install:
     #- if [[ $CC == clang ]]; then export CXXFLAGS="-fpermissive"; fi
-    - mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="-fpermissive" ../
+    - mkdir build && cd build
+    - cmake -DCMAKE_CXX_FLAGS="-fpermissive" ../
 
 #before_script:
 
