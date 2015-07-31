@@ -82,7 +82,7 @@ before_install:
 install:
     #- if [[ $CC == clang ]]; then export CXXFLAGS="-fpermissive"; fi
     #- if [ "$CXX" == "clang++" ]; then export CXXFLAGS="-fpermissive"; fi
-    - set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
+    - set(DCMAKE_CXX_FLAGS "${DCMAKE_CXX_FLAGS} -fpermissive")
     - mkdir build && cd build && cmake ../
 
 #before_script:
