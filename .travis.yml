@@ -8,7 +8,10 @@ compiler:
   - gcc
   - clang
 
-dist: trusty
+#dist: trusty
+sudo: required
+services:
+- docker
 
 env:
   global:
