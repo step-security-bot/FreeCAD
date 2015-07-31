@@ -5,7 +5,7 @@ os:
   #- osx
 
 compiler:
-  #- gcc
+  - gcc
   - clang
 
 #dist: trusty
@@ -80,9 +80,6 @@ before_install:
     - sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 
 install:
-    #- if [[ $CC == clang ]]; then export CXXFLAGS="-fpermissive"; fi
-    #- if [ "$CXX" == "clang++" ]; then export CXXFLAGS="-fpermissive"; fi
-    - set(DCMAKE_CXX_FLAGS "${DCMAKE_CXX_FLAGS} -fpermissive")
     - mkdir build && cd build && cmake ../
 
 #before_script:
