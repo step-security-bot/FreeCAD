@@ -1,8 +1,17 @@
 language: cpp
 
+os:
+  - linux
+  #- osx
+
 compiler:
   - gcc
-  #- clang
+  - clang
+
+#trusty
+sudo: required
+services:
+- docker
 
 env:
   global:
@@ -14,7 +23,7 @@ addons:
       name: "sasobadovinac/FreeCAD"
       description: "Build submitted via Travis CI"
     notification_email: saso.badovinac@gmail.com
-    build_command: "make -j3"
+    build_command: "make -j2"
     branch_pattern: coverity_scan
 
 before_install:
@@ -28,39 +37,54 @@ before_install:
     - sudo apt-get install -y libboost-signals-dev
     - sudo apt-get install -y libboost-system-dev
     - sudo apt-get install -y libboost-thread-dev
-    - sudo apt-get install -y libcoin60
-    - sudo apt-get install -y libcoin60-dev
+#depended from libcoin60-dev
+    #- sudo apt-get install -y libcoin60
+#for precise
+    #- sudo apt-get install -y libcoin60-dev
+#for trusty
+    - sudo apt-get install -y libcoin80-dev
     - sudo apt-get install -y libeigen3-dev
     - sudo apt-get install -y liboce-foundation-dev
-    - sudo apt-get install -y liboce-foundation1
+#depended from liboce-foundation-dev
+    #- sudo apt-get install -y liboce-foundation1
     - sudo apt-get install -y liboce-modeling-dev
-    - sudo apt-get install -y liboce-modeling1
+#depended from liboce-modeling-dev
+    #- sudo apt-get install -y liboce-modeling1
     - sudo apt-get install -y liboce-ocaf-dev
-    - sudo apt-get install -y liboce-ocaf-lite-dev
-    - sudo apt-get install -y liboce-ocaf-lite1
-    - sudo apt-get install -y liboce-ocaf1
+#depended from liboce-ocaf-dev
+    #- sudo apt-get install -y liboce-ocaf-lite-dev
+    #- sudo apt-get install -y liboce-ocaf-lite1
+    #- sudo apt-get install -y liboce-ocaf1
     - sudo apt-get install -y liboce-visualization-dev
-    - sudo apt-get install -y liboce-visualization1
-    - sudo apt-get install -y libopencascade-modeling-6.5.0
+#depended from liboce-ocaf-dev
+    #- sudo apt-get install -y liboce-visualization1
+#have liboce*-dev (opencascade community edition)
+    #- sudo apt-get install -y libopencascade-modeling-6.5.0
     - sudo apt-get install -y libpyside-dev
     - sudo apt-get install -y libqtcore4
     - sudo apt-get install -y libshiboken-dev
     - sudo apt-get install -y libxerces-c-dev
-    - sudo apt-get install -y libxmu-dev
-    - sudo apt-get install -y libxmu-headers
-    - sudo apt-get install -y libxmu6
+#depended from libcoin60-dev
+    #- sudo apt-get install -y libxmu-dev
+    #- sudo apt-get install -y libxmu-headers
+#pre-installed
+    #- sudo apt-get install -y libxmu6
     - sudo apt-get install -y libxmuu-dev
-    - sudo apt-get install -y libxmuu1
+#pre-installed
+    #- sudo apt-get install -y libxmuu1
     - sudo apt-get install -y oce-draw
     - sudo apt-get install -y pyside-tools
-    - sudo apt-get install -y python-dev
-    - sudo apt-get install -y python-pyside
+#pre-installed
+    #- sudo apt-get install -y python-dev
+#depended from pyside-tools
+    #- sudo apt-get install -y python-pyside
     - sudo apt-get install -y qt4-dev-tools
-    - sudo apt-get install -y qt4-qmake
+#depended from libqtcore4
+    #- sudo apt-get install -y qt4-qmake
     - sudo apt-get install -y shiboken
     - sudo apt-get install -y swig
 #Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
-    - sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
+    #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 
 install:
     - mkdir build && cd build && cmake ../
@@ -68,7 +92,7 @@ install:
 #before_script:
 
 script:
-    - if [[ $CC == gcc ]]; then export NPROC=3; else export NPROC=1; fi
+    - if [[ $CC == gcc ]]; then export NPROC=2; else export NPROC=2; fi
     - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j$NPROC; fi
     - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"; fi
 
@@ -80,3 +104,10 @@ script:
 
 notifications:
   email: false
+  #irc:
+    #channels:
+      #- "irc.freenode.net#freecad"
+    #template:
+      #- "%{repository}/%{branch} (%{commit} - %{author}): %{build_url}: %{message}"
+    #on_success: always
+    #on_failure: always
