@@ -9,9 +9,9 @@ compiler:
   - clang
 
 #trusty
-#sudo: required
-#services:
-#- docker
+sudo: required
+services:
+- docker
 
 env:
   global:
@@ -40,9 +40,9 @@ before_install:
 #depended from libcoin60-dev
     #- sudo apt-get install -y libcoin60
 #for precise
-    - sudo apt-get install -y libcoin60-dev
+    #- sudo apt-get install -y libcoin60-dev
 #for trusty
-    #- sudo apt-get install -y libcoin80-dev
+    - sudo apt-get install -y libcoin80-dev
     - sudo apt-get install -y libeigen3-dev
     - sudo apt-get install -y liboce-foundation-dev
 #depended from liboce-foundation-dev
