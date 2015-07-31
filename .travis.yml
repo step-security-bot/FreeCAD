@@ -8,7 +8,7 @@ compiler:
   - gcc
   - clang
 
-#dist: trusty
+dist: trusty
 
 env:
   global:
