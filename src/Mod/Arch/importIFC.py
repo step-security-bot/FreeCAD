@@ -86,10 +86,15 @@ ENDSEC;
 END-ISO-10303-21;
 """
 
-def decode(filename):
+def decode(filename,utf=False):
     if isinstance(filename,unicode): 
         # workaround since ifcopenshell currently can't handle unicode filenames
-        filename = filename.encode("utf8")
+        if utf:
+            encoding = "utf8"
+        else:
+            import sys
+            encoding = sys.getfilesystemencoding()
+        filename = filename.encode(encoding)
     return filename
 
 def doubleClickTree(item,column):
@@ -123,7 +128,7 @@ def explore(filename=None):
         
     from PySide import QtCore,QtGui
     
-    filename = decode(filename)
+    filename = decode(filename,utf=True)
         
     if not os.path.exists(filename):
         print "File not found"
@@ -258,7 +263,7 @@ def open(filename,skip=[],only=[],root=None):
     "opens an IFC file in a new document"
 
     docname = os.path.splitext(os.path.basename(filename))[0]
-    docname = decode(docname)
+    docname = decode(docname,utf=True)
     doc = FreeCAD.newDocument(docname)
     doc.Label = docname
     doc = insert(filename,doc.Name,skip,only,root)
@@ -304,7 +309,7 @@ def insert(filename,docname,skip=[],only=[],root=None):
     if DEBUG: print "done."
     
     global ifcfile # keeping global for debugging purposes
-    filename = decode(filename)
+    filename = decode(filename,utf=True)
     ifcfile = ifcopenshell.open(filename)
     from ifcopenshell import geom
     settings = ifcopenshell.geom.settings()
@@ -676,22 +681,22 @@ def export(exportList,filename):
         s = owner.split("<")
         owner = s[0]
         email = s[1].strip(">")
-    global ifctemplate
-    ifctemplate = ifctemplate.replace("$version",version[0]+"."+version[1]+" build "+version[2])
-    ifctemplate = ifctemplate.replace("$owner",owner)
-    ifctemplate = ifctemplate.replace("$company",FreeCAD.ActiveDocument.Company)
-    ifctemplate = ifctemplate.replace("$email",email)
-    ifctemplate = ifctemplate.replace("$now",str(int(time.time())))
-    ifctemplate = ifctemplate.replace("$projectid",FreeCAD.ActiveDocument.Uid[:22].replace("-","_"))
-    ifctemplate = ifctemplate.replace("$project",FreeCAD.ActiveDocument.Name)
-    ifctemplate = ifctemplate.replace("$filename",filename)
-    ifctemplate = ifctemplate.replace("$timestamp",str(time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())))
-    template = tempfile.mkstemp(suffix=".ifc")[1]
-    of = pyopen(template,"wb")
-    of.write(ifctemplate.encode("utf8"))
+    global template
+    template = ifctemplate.replace("$version",version[0]+"."+version[1]+" build "+version[2])
+    template = template.replace("$owner",owner)
+    template = template.replace("$company",FreeCAD.ActiveDocument.Company)
+    template = template.replace("$email",email)
+    template = template.replace("$now",str(int(time.time())))
+    template = template.replace("$projectid",FreeCAD.ActiveDocument.Uid[:22].replace("-","_"))
+    template = template.replace("$project",FreeCAD.ActiveDocument.Name)
+    template = template.replace("$filename",filename)
+    template = template.replace("$timestamp",str(time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())))
+    templatefile = tempfile.mkstemp(suffix=".ifc")[1]
+    of = pyopen(templatefile,"wb")
+    of.write(template.encode("utf8"))
     of.close()
     global ifcfile, surfstyles
-    ifcfile = ifcopenshell.open(template)
+    ifcfile = ifcopenshell.open(templatefile)
     history = ifcfile.by_type("IfcOwnerHistory")[0]
     context = ifcfile.by_type("IfcGeometricRepresentationContext")[0]
     project = ifcfile.by_type("IfcProject")[0]

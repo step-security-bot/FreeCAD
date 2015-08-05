@@ -28,6 +28,7 @@
 # include <BRep_Tool.hxx>
 # include <BRepBndLib.hxx>
 # include <BRepMesh_IncrementalMesh.hxx>
+# include <Standard_Version.hxx>
 # include <TopExp_Explorer.hxx>
 # include <TopoDS.hxx>
 # include <Poly_Triangulation.hxx>
@@ -250,10 +251,10 @@ void ViewProviderTransformed::recomputeFeature(void)
                 bounds.Get(xMin, yMin, zMin, xMax, yMax, zMax);
             }
             Standard_Real deflection = ((xMax-xMin)+(yMax-yMin)+(zMax-zMin))/300.0 * Deviation.getValue();
-            Standard_Real AngDeflectionRads = AngularDeflection.getValue() / 180.0 * M_PI;
 
             // create or use the mesh on the data structure
 #if OCC_VERSION_HEX >= 0x060600
+            Standard_Real AngDeflectionRads = AngularDeflection.getValue() / 180.0 * M_PI;
             BRepMesh_IncrementalMesh(cShape,deflection,Standard_False,
                                         AngDeflectionRads,Standard_True);
 #else

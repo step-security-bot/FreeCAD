@@ -50,7 +50,7 @@ def makeMechanicalAnalysis(name):
 class _CommandNewMechanicalAnalysis:
     "the Fem Analysis command definition"
     def GetResources(self):
-        return {'Pixmap': 'Fem_Analysis',
+        return {'Pixmap': 'fem-analysis',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Analysis", "New mechanical analysis"),
                 'Accel': "N, A",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Analysis", "Create a new mechanical analysis")}
@@ -84,7 +84,7 @@ class _CommandNewMechanicalAnalysis:
 
 class _CommandFemFromShape:
     def GetResources(self):
-        return {'Pixmap': 'Fem_FemMesh',
+        return {'Pixmap': 'fem-fem-mesh-from-shape',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_CreateFromShape", "Create FEM mesh"),
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_CreateFromShape", "Create FEM mesh from shape")}
 
@@ -111,7 +111,7 @@ class _CommandFemFromShape:
 class _CommandMechanicalJobControl:
     "the Fem JobControl command definition"
     def GetResources(self):
-        return {'Pixmap': 'Fem_NewAnalysis',
+        return {'Pixmap': 'fem-new-analysis',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Start calculation"),
                 'Accel': "S, C",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Dialog to start the calculation of the mechanical anlysis")}
@@ -128,7 +128,7 @@ class _CommandMechanicalJobControl:
 
 class _CommandPurgeFemResults:
     def GetResources(self):
-        return {'Pixmap': 'Fem_Purge_Results',
+        return {'Pixmap': 'fem-purge-results',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_PurgeResults", "Purge results"),
                 'Accel': "S, S",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_PurgeResults", "Purge results from an analysis")}
@@ -145,7 +145,7 @@ class _CommandPurgeFemResults:
 
 class _CommandQuickAnalysis:
     def GetResources(self):
-        return {'Pixmap': 'Fem_Quick_Analysis',
+        return {'Pixmap': 'fem-quick-analysis',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Quick_Analysis", "Run CalculiX ccx"),
                 'Accel': "R, C",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Quick_Analysis", "Write .inp file and run CalculiX ccx")}
@@ -182,10 +182,10 @@ class _CommandQuickAnalysis:
 class _CommandMechanicalShowResult:
     "the Fem JobControl command definition"
     def GetResources(self):
-        return {'Pixmap': 'Fem_Result',
-                'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_ResultDisplacement", "Show result"),
+        return {'Pixmap': 'fem-result',
+                'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Result", "Show result"),
                 'Accel': "S, R",
-                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_ResultDisplacement", "Show result information of an analysis")}
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Result", "Show result information of an analysis")}
 
     def Activated(self):
         self.result_object = None
@@ -235,7 +235,7 @@ class _ViewProviderFemAnalysis:
         pass
 
     def getIcon(self):
-        return ":/icons/Fem_Analysis.svg"
+        return ":/icons/fem-analysis.svg"
 
     def attach(self, vobj):
         self.ViewObject = vobj
