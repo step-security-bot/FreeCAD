@@ -6,7 +6,7 @@ os:
 
 compiler:
   - gcc
-  #- clang
+  - clang
 
 #dist: trusty
 
@@ -46,7 +46,7 @@ addons:
       #- liboce-ocaf1
       - liboce-visualization-dev
       #- liboce-visualization1
-      - libopencascade-modeling-6.5.0
+      #- libopencascade-modeling-6.5.0
       - libpyside-dev
       - libqtcore4
       - libshiboken-dev
@@ -75,7 +75,7 @@ install:
 #before_script:
 
 script:
-    - if [[ $CC == gcc ]]; then export NPROC=3; else export NPROC=1; fi
+    - if [[ $CC == gcc ]]; then export NPROC=3; else export NPROC=3; fi
     - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j$NPROC; fi
     - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"; fi
 
@@ -87,3 +87,10 @@ script:
 
 notifications:
   email: false
+  #irc:
+    #channels:
+      #- "irc.freenode.net#freecad"
+    #template:
+      #- "%{repository}/%{branch} (%{commit} - %{author}): %{build_url}: %{message}"
+    #on_success: always
+    #on_failure: always
