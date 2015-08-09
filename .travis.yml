@@ -92,7 +92,7 @@ install:
 #before_script:
 
 script:
-    - if [[ $CC == gcc ]]; then export NPROC=3; else export NPROC=2; fi
+    - if [[ $CC == gcc ]]; then export NPROC=3; else export NPROC=3; fi
     - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j$NPROC; fi
     - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"; fi
 
