@@ -703,9 +703,10 @@ class ViewProviderComponent:
         elif prop == "DiffuseColor":
             if hasattr(vobj.Object,"CloneOf"):
                 if vobj.Object.CloneOf:
-                    if vobj.DiffuseColor != vobj.Object.CloneOf.ViewObject.DiffuseColor:
-                        vobj.DiffuseColor = vobj.Object.CloneOf.ViewObject.DiffuseColor
-                        vobj.update()
+                    if len(vobj.Object.CloneOf.ViewObject.DiffuseColor) > 1:
+                        if vobj.DiffuseColor != vobj.Object.CloneOf.ViewObject.DiffuseColor:
+                            vobj.DiffuseColor = vobj.Object.CloneOf.ViewObject.DiffuseColor
+                            vobj.update()
         elif prop == "ShapeColor":
             # restore DiffuseColor after overridden by ShapeColor
             if len(vobj.DiffuseColor) > 1:
@@ -754,6 +755,9 @@ class ViewProviderComponent:
             if hasattr(self.Object,"Tool"):
                 if self.Object.Tool:
                     c.append(self.Object.Tool)
+            if hasattr(self.Object,"Subvolume"):
+                if self.Object.Subvolume:
+                    c.append(self.Object.Subvolume)
             return c
         return []
 

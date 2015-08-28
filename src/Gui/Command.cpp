@@ -807,8 +807,10 @@ PythonCommand::PythonCommand(const char* name, PyObject * pcPyCommand, const cha
     // call the method "GetResources()" of the command object
     _pcPyResourceDict = Interpreter().runMethodObject(_pcPyCommand, "GetResources");
     // check if the "GetResources()" method returns a Dict object
-    if (!PyDict_Check(_pcPyResourceDict))
-        throw Base::Exception("PythonCommand::PythonCommand(): Method GetResources() of the Python command object returns the wrong type (has to be Py Dictonary)");
+    if (!PyDict_Check(_pcPyResourceDict)) {
+        throw Base::Exception("PythonCommand::PythonCommand(): Method GetResources() of the Python "
+                              "command object returns the wrong type (has to be dict)");
+    }
 
     // check for command type
     std::string cmdType = getResource("CmdType");
@@ -834,8 +836,10 @@ const char* PythonCommand::getResource(const char* sName) const
     pcTemp = PyDict_GetItemString(_pcPyResourceDict,sName);
     if (!pcTemp)
         return "";
-    if (!PyString_Check(pcTemp))
-        throw Base::Exception("PythonCommand::getResource(): Method GetResources() of the Python command object returns a dictionary which holds not only strings");
+    if (!PyString_Check(pcTemp)) {
+        throw Base::Exception("PythonCommand::getResource(): Method GetResources() of the Python "
+                              "command object returns a dictionary which holds not only strings");
+    }
 
     return PyString_AsString(pcTemp);
 }
@@ -844,7 +848,12 @@ void PythonCommand::activated(int iMsg)
 {
     if (Activation.empty()) {
         try {
-            Interpreter().runMethodVoid(_pcPyCommand, "Activated");
+            if (isCheckable()) {
+                Interpreter().runMethod(_pcPyCommand, "Activated", "", 0, "(i)", iMsg);
+            }
+            else {
+                Interpreter().runMethodVoid(_pcPyCommand, "Activated");
+            }
         }
         catch (const Base::PyException& e) {
             Base::Console().Error("Running the Python command '%s' failed:\n%s\n%s",
@@ -902,13 +911,27 @@ const char* PythonCommand::getHelpUrl(void) const
 
 Action * PythonCommand::createAction(void)
 {
+    QAction* qtAction = new QAction(0);
     Action *pcAction;
 
-    pcAction = new Action(this,getMainWindow());
+    pcAction = new Action(this, qtAction, getMainWindow());
     pcAction->setShortcut(QString::fromAscii(getAccel()));
     applyCommandData(this->getName(), pcAction);
     if (strcmp(getResource("Pixmap"),"") != 0)
         pcAction->setIcon(Gui::BitmapFactory().iconFromTheme(getResource("Pixmap")));
+
+    try {
+        if (isCheckable()) {
+            pcAction->setCheckable(true);
+            // Here the QAction must be tmp. blocked to avoid to call the 'activated' method
+            qtAction->blockSignals(true);
+            pcAction->setChecked(isChecked());
+            qtAction->blockSignals(false);
+        }
+    }
+    catch (const Base::Exception& e) {
+        Base::Console().Error("%s\n", e.what());
+    }
 
     return pcAction;
 }
@@ -947,6 +970,29 @@ const char* PythonCommand::getAccel() const
     return getResource("Accel");
 }
 
+bool PythonCommand::isCheckable() const
+{
+    PyObject* item = PyDict_GetItemString(_pcPyResourceDict,"Checkable");
+    return item ? true : false;
+}
+
+bool PythonCommand::isChecked() const
+{
+    PyObject* item = PyDict_GetItemString(_pcPyResourceDict,"Checkable");
+    if (!item) {
+        throw Base::Exception("PythonCommand::isChecked(): Method GetResources() of the Python "
+                              "command object doesn't contain the key 'Checkable'");
+    }
+
+    if (PyBool_Check(item)) {
+        return PyObject_IsTrue(item) ? true : false;
+    }
+    else {
+        throw Base::Exception("PythonCommand::isChecked(): Method GetResources() of the Python "
+                              "command object contains the key 'Checkable' which is not a boolean");
+    }
+}
+
 //===========================================================================
 // PythonGroupCommand
 //===========================================================================
@@ -963,7 +1009,7 @@ PythonGroupCommand::PythonGroupCommand(const char* name, PyObject * pcPyCommand)
     // check if the "GetResources()" method returns a Dict object
     if (!PyDict_Check(_pcPyResource)) {
         throw Base::TypeError("PythonGroupCommand::PythonGroupCommand(): Method GetResources() of the Python "
-                              "command object returns the wrong type (has to be Py Dictonary)");
+                              "command object returns the wrong type (has to be dict)");
     }
 
     // check for command type

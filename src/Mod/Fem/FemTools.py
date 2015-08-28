@@ -22,7 +22,6 @@
 
 
 import FreeCAD
-import FemGui
 from PySide import QtCore
 
 
@@ -37,6 +36,7 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
         if analysis:
             self.analysis = analysis
         else:
+            import FemGui
             self.analysis = FemGui.getActiveAnalysis()
         if self.analysis:
             self.update_objects()
@@ -223,10 +223,10 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
         if ret_code or self.ccx_stderr:
             print "Analysis failed with exit code {}".format(ret_code)
             print "--------start of stderr-------"
-            print self.stderr
+            print self.ccx_stderr
             print "--------end of stderr---------"
             print "--------start of stdout-------"
-            print self.stdout
+            print self.ccx_stdout
             print "--------end of stdout---------"
 
     ## returns minimum, average and maximum value for provided result type

@@ -7,7 +7,7 @@ endif (CMAKE_BUILD_TOOL MATCHES "make")
 include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-if(NOT FREECAD_LIBPACK_USE)
+if(NOT FREECAD_LIBPACK_USE OR FREECAD_LIBPACK_CHECKFILE_CLBUNDLER)
     find_package( Boost COMPONENTS python REQUIRED)  # find BOOST and boost-python
     if(Boost_FOUND)
         include_directories(${Boost_INCLUDE_DIRS})
@@ -66,8 +66,32 @@ add_library(
   ${PYAREA_SRC}
 )
 
-target_link_libraries(area ${Boost_LIBRARIES})
-set_target_properties(area PROPERTIES PREFIX "") 
+if(MSVC)
+    set(area_LIBS
+        ${Boost_LIBRARIES}
+        ${PYTHON_LIBRARIES}
+        debug MSVCRTD.LIB
+        debug MSVCPRTD.LIB
+        optimized MSVCRT.LIB
+        optimized MSVCPRT.LIB
+    )
+elseif(MINGW)
+    set(area_LIBS
+        ${Boost_LIBRARIES}
+        ${PYTHON_LIBRARIES}
+        Rpcrt4.lib
+    )
+else(MSVC)
+    set(area_LIBS
+        ${Boost_LIBRARIES}
+        ${PYTHON_LIBRARIES}
+    )
+endif(MSVC)
+
+target_link_libraries(area ${area_LIBS})
+
+SET_BIN_DIR(area area)
+SET_PYTHON_PREFIX_SUFFIX(area)
 
 # this figures out where to install the Python modules
 execute_process(

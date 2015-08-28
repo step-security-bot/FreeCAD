@@ -581,7 +581,7 @@ def loadTexture(filename,size=None):
             return img
     return None
     
-def getMovableChildren(objectslist,recursive=False):
+def getMovableChildren(objectslist,recursive=True):
     '''getMovableChildren(objectslist,[recursive]): extends the given list of objects
     with all child objects that have a "MoveWithHost" property set to True. If
     recursive is True, all descendents are considered, otherwise only direct children.'''
@@ -1247,6 +1247,8 @@ def move(objectslist,vector,copy=False):
             if copy:
                 newobj = FreeCAD.ActiveDocument.addObject("App::Annotation",getRealName(obj.Name))
                 newobj.LabelText = obj.LabelText
+                if gui:
+                    formatObject(newobj,obj)
             else:
                 newobj = obj
             newobj.Position = obj.Position.add(vector)
@@ -1256,6 +1258,7 @@ def move(objectslist,vector,copy=False):
                 _Dimension(newobj)
                 if gui:
                     _ViewProviderDimension(newobj.ViewObject)
+                    formatObject(newobj,obj)
             else:
                 newobj = obj
             newobj.Start = obj.Start.add(vector)
@@ -2460,14 +2463,17 @@ def clone(obj,delta=None):
     formatObject(cl,obj[0])
     return cl
     
-def getCloneBase(obj):
-    '''getCloneBase(obj): returns the object cloned by this object, if
-    any, or this object if it is no clone'''
+def getCloneBase(obj,strict=False):
+    '''getCloneBase(obj,[strict]): returns the object cloned by this object, if
+    any, or this object if it is no clone. If strict is True, if this object is
+    not a clone, this function returns False'''
     if hasattr(obj,"CloneOf"):
         if obj.CloneOf:
             return getCloneBase(obj.CloneOf)
     if getType(obj) == "Clone":
         return obj.Objects[0]
+    if strict:
+        return False
     return obj
 
 def heal(objlist=None,delete=True,reparent=True):

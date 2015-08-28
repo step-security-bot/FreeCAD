@@ -1632,6 +1632,48 @@ bool CmdMeshSegmentation::isActive(void)
         (Mesh::Feature::getClassTypeId()) == 1;
 }
 
+
+//--------------------------------------------------------------------------------------
+
+DEF_STD_CMD_A(CmdMeshMerge);
+
+CmdMeshMerge::CmdMeshMerge()
+  :Command("Mesh_Merge")
+{
+    sAppModule    = "Mesh";
+    sGroup        = QT_TR_NOOP("Mesh");
+    sMenuText     = QT_TR_NOOP("Merge");
+    sToolTipText  = QT_TR_NOOP("Merges selected meshes into one");
+    sWhatsThis    = "Mesh_Merge";
+    sStatusTip    = sToolTipText;
+}
+
+void CmdMeshMerge::activated(int iMsg)
+{
+    App::Document *pcDoc = App::GetApplication().getActiveDocument();
+    if (!pcDoc)
+        return;
+
+    openCommand("Mesh merge");
+    Mesh::Feature *pcFeature = static_cast<Mesh::Feature*>(pcDoc->addObject("Mesh::Feature", "Mesh"));
+    Mesh::MeshObject* newMesh = pcFeature->Mesh.startEditing();
+    std::vector<App::DocumentObject*> objs = Gui::Selection().getObjectsOfType(Mesh::Feature::getClassTypeId());
+    for (std::vector<App::DocumentObject*>::const_iterator it = objs.begin(); it != objs.end(); ++it) {
+        const MeshObject& mesh = static_cast<Mesh::Feature*>(*it)->Mesh.getValue();
+        newMesh->addMesh(mesh);
+    }
+
+    pcFeature->Mesh.finishEditing();
+    updateActive();
+    commitCommand();
+}
+
+bool CmdMeshMerge::isActive(void)
+{
+    return getSelection().countObjectsOfType(Mesh::Feature::getClassTypeId()) >= 2;
+}
+
+
 void CreateMeshCommands(void)
 {
     Gui::CommandManager &rcCmdMgr = Gui::Application::Instance->commandManager();
@@ -1667,4 +1709,5 @@ void CreateMeshCommands(void)
     rcCmdMgr.addCommand(new CmdMeshFromGeometry());
     rcCmdMgr.addCommand(new CmdMeshFromPartShape());
     rcCmdMgr.addCommand(new CmdMeshSegmentation());
+    rcCmdMgr.addCommand(new CmdMeshMerge());
 }

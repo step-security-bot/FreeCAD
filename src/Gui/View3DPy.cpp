@@ -86,7 +86,8 @@ void View3DInventorPy::init_type()
     add_varargs_method("viewRear",&View3DInventorPy::viewRear,"viewRear()");
     add_varargs_method("viewRight",&View3DInventorPy::viewRight,"viewRight()");
     add_varargs_method("viewTop",&View3DInventorPy::viewTop,"viewTop()");
-    add_varargs_method("viewAxometric",&View3DInventorPy::viewAxometric,"viewAxometric()");
+    add_varargs_method("viewAxometric",&View3DInventorPy::viewAxonometric,"viewAxonometric()"); // for backward compatibility
+    add_varargs_method("viewAxonometric",&View3DInventorPy::viewAxonometric,"viewAxonometric()");
     add_varargs_method("viewRotateLeft",&View3DInventorPy::viewRotateLeft,"viewRotateLeft()");
     add_varargs_method("viewRotateRight",&View3DInventorPy::viewRotateRight,"viewRotateRight()");
     add_varargs_method("zoomIn",&View3DInventorPy::zoomIn,"zoomIn()");
@@ -97,7 +98,6 @@ void View3DInventorPy::init_type()
     add_varargs_method("setAnimationEnabled",&View3DInventorPy::setAnimationEnabled,"setAnimationEnabled()");
     add_varargs_method("isAnimationEnabled",&View3DInventorPy::isAnimationEnabled,"isAnimationEnabled()");
     add_varargs_method("dump",&View3DInventorPy::dump,"dump()");
-    add_varargs_method("dumpSelection",&View3DInventorPy::dumpSelection,"dumpSelection()");
     add_varargs_method("dumpNode",&View3DInventorPy::dumpNode,"dumpNode(node)");
     add_varargs_method("setStereoType",&View3DInventorPy::setStereoType,"setStereoType()");
     add_varargs_method("getStereoType",&View3DInventorPy::getStereoType,"getStereoType()");
@@ -418,12 +418,19 @@ Py::Object View3DInventorPy::viewTop(const Py::Tuple& args)
     return Py::None();
 }
 
-Py::Object View3DInventorPy::viewAxometric(const Py::Tuple& args)
+Py::Object View3DInventorPy::viewAxonometric(const Py::Tuple& args)
 {
     if (!PyArg_ParseTuple(args.ptr(), ""))
         throw Py::Exception();
 
     try {
+        //from math import sqrt, degrees, asin
+        //p1=App.Rotation(App.Vector(1,0,0),45)
+        //p2=App.Rotation(App.Vector(0,0,1),-45)
+        //p3=p2.multiply(p1)
+        //_view->getViewer()->setCameraOrientation(SbRotation
+        //    (0.353553f, -0.146447f, -0.353553f, 0.853553f));
+
         //from math import sqrt, degrees, asin
         //p1=App.Rotation(App.Vector(1,0,0),90)
         //p2=App.Rotation(App.Vector(0,0,1),45)
@@ -431,7 +438,7 @@ Py::Object View3DInventorPy::viewAxometric(const Py::Tuple& args)
         //p3=App.Rotation(App.Vector(1,1,0),degrees(asin(-sqrt(1.0/3.0))))
         //p4=p3.multiply(p2).multiply(p1)
         _view->getViewer()->setCameraOrientation(SbRotation
-            (0.424708f, 0.17592f, 0.339851f, 0.820473f));
+             (0.424708f, 0.17592f, 0.339851f, 0.820473f));
     }
     catch (const Base::Exception& e) {
         throw Py::Exception(e.what());
@@ -980,27 +987,6 @@ Py::Object View3DInventorPy::dump(const Py::Tuple& args)
 
     try {
         _view->dump(filename);
-        return Py::None();
-    }
-    catch (const Base::Exception& e) {
-        throw Py::Exception(e.what());
-    }
-    catch (const std::exception& e) {
-        throw Py::Exception(e.what());
-    }
-    catch(...) {
-        throw Py::Exception("Unknown C++ exception");
-    }
-}
-
-Py::Object View3DInventorPy::dumpSelection(const Py::Tuple& args)
-{
-    char* filename;
-    if (!PyArg_ParseTuple(args.ptr(), "s", &filename))
-        throw Py::Exception();
-
-    try {
-        _view->dumpSelection(filename);
         return Py::None();
     }
     catch (const Base::Exception& e) {

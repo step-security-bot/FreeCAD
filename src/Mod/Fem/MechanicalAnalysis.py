@@ -23,12 +23,12 @@
 import ccxFrdReader
 import FreeCAD
 from FemTools import FemTools
-import FemGui
 import os
 import time
 
 if FreeCAD.GuiUp:
     import FreeCADGui
+    import FemGui
     from PySide import QtCore, QtGui
     from PySide.QtCore import Qt
     from PySide.QtGui import QApplication
@@ -42,7 +42,7 @@ def makeMechanicalAnalysis(name):
     '''makeFemAnalysis(name): makes a Fem Analysis object'''
     obj = FreeCAD.ActiveDocument.addObject("Fem::FemAnalysisPython", name)
     _FemAnalysis(obj)
-    _ViewProviderFemAnalysis(obj.ViewObject)
+    _ViewProviderFemAnalysis()
     #FreeCAD.ActiveDocument.recompute()
     return obj
 
@@ -50,7 +50,7 @@ def makeMechanicalAnalysis(name):
 class _CommandNewMechanicalAnalysis:
     "the Fem Analysis command definition"
     def GetResources(self):
-        return {'Pixmap': 'Fem_Analysis',
+        return {'Pixmap': 'fem-analysis',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Analysis", "New mechanical analysis"),
                 'Accel': "N, A",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Analysis", "Create a new mechanical analysis")}
@@ -79,13 +79,12 @@ class _CommandNewMechanicalAnalysis:
         FreeCADGui.Selection.clearSelection()
 
     def IsActive(self):
-        import FemGui
         return FreeCADGui.ActiveDocument is not None and FemGui.getActiveAnalysis() is None
 
 
 class _CommandFemFromShape:
     def GetResources(self):
-        return {'Pixmap': 'Fem_FemMesh',
+        return {'Pixmap': 'fem-fem-mesh-from-shape',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_CreateFromShape", "Create FEM mesh"),
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_CreateFromShape", "Create FEM mesh from shape")}
 
@@ -112,7 +111,7 @@ class _CommandFemFromShape:
 class _CommandMechanicalJobControl:
     "the Fem JobControl command definition"
     def GetResources(self):
-        return {'Pixmap': 'Fem_NewAnalysis',
+        return {'Pixmap': 'fem-new-analysis',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Start calculation"),
                 'Accel': "S, C",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Dialog to start the calculation of the mechanical anlysis")}
@@ -129,7 +128,7 @@ class _CommandMechanicalJobControl:
 
 class _CommandPurgeFemResults:
     def GetResources(self):
-        return {'Pixmap': 'Fem_Purge_Results',
+        return {'Pixmap': 'fem-purge-results',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_PurgeResults", "Purge results"),
                 'Accel': "S, S",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_PurgeResults", "Purge results from an analysis")}
@@ -146,7 +145,7 @@ class _CommandPurgeFemResults:
 
 class _CommandQuickAnalysis:
     def GetResources(self):
-        return {'Pixmap': 'Fem_Quick_Analysis',
+        return {'Pixmap': 'fem-quick-analysis',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Quick_Analysis", "Run CalculiX ccx"),
                 'Accel': "R, C",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Quick_Analysis", "Write .inp file and run CalculiX ccx")}
@@ -183,10 +182,10 @@ class _CommandQuickAnalysis:
 class _CommandMechanicalShowResult:
     "the Fem JobControl command definition"
     def GetResources(self):
-        return {'Pixmap': 'Fem_Result',
-                'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_ResultDisplacement", "Show result"),
+        return {'Pixmap': 'fem-result',
+                'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Result", "Show result"),
                 'Accel': "S, R",
-                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_ResultDisplacement", "Show result information of an analysis")}
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Result", "Show result information of an analysis")}
 
     def Activated(self):
         self.result_object = None
@@ -231,12 +230,12 @@ class _FemAnalysis:
 class _ViewProviderFemAnalysis:
     "A View Provider for the Material object"
 
-    def __init__(self, vobj):
+    def __init__(self):
         #vobj.addProperty("App::PropertyLength", "BubbleSize", "Base", str(translate("Fem", "The size of the axis bubbles")))
-        vobj.Proxy = self
+        pass
 
     def getIcon(self):
-        return ":/icons/Fem_Analysis.svg"
+        return ":/icons/fem-analysis.svg"
 
     def attach(self, vobj):
         self.ViewObject = vobj
@@ -315,8 +314,6 @@ class _JobControlTaskPanel:
         self.form.textEdit_Output.moveCursor(QtGui.QTextCursor.End)
 
     def printCalculiXstdout(self):
-        #There is probably no need to show user output from CalculiX. It should be
-        #written to a file in the calcs directory and shown to user upon request [BUTTON]
         out = self.Calculix.readAllStandardOutput()
         if out.isEmpty():
             self.femConsoleMessage("CalculiX stdout is empty", "#FF0000")
@@ -649,9 +646,10 @@ def results_present():
     return results
 
 
-FreeCADGui.addCommand('Fem_NewMechanicalAnalysis', _CommandNewMechanicalAnalysis())
-FreeCADGui.addCommand('Fem_CreateFromShape', _CommandFemFromShape())
-FreeCADGui.addCommand('Fem_MechanicalJobControl', _CommandMechanicalJobControl())
-FreeCADGui.addCommand('Fem_Quick_Analysis', _CommandQuickAnalysis())
-FreeCADGui.addCommand('Fem_PurgeResults', _CommandPurgeFemResults())
-FreeCADGui.addCommand('Fem_ShowResult', _CommandMechanicalShowResult())
+if FreeCAD.GuiUp:
+    FreeCADGui.addCommand('Fem_NewMechanicalAnalysis', _CommandNewMechanicalAnalysis())
+    FreeCADGui.addCommand('Fem_CreateFromShape', _CommandFemFromShape())
+    FreeCADGui.addCommand('Fem_MechanicalJobControl', _CommandMechanicalJobControl())
+    FreeCADGui.addCommand('Fem_Quick_Analysis', _CommandQuickAnalysis())
+    FreeCADGui.addCommand('Fem_PurgeResults', _CommandPurgeFemResults())
+    FreeCADGui.addCommand('Fem_ShowResult', _CommandMechanicalShowResult())
