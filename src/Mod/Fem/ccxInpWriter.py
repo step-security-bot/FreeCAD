@@ -1,11 +1,13 @@
 import FreeCAD
 import os
 import sys
+import time
 
 
 class inp_writer:
     def __init__(self, analysis_obj, mesh_obj, mat_obj, fixed_obj, force_obj, pressure_obj, dir_name=None):
         self.dir_name = dir_name
+        self.analysis = analysis_obj
         self.mesh_object = mesh_obj
         self.material_objects = mat_obj
         self.fixed_objects = fixed_obj
@@ -17,6 +19,7 @@ class inp_writer:
             os.mkdir(self.dir_name)
         self.base_name = self.dir_name + '/' + self.mesh_object.Name
         self.file_name = self.base_name + '.inp'
+        self.fc_ver = FreeCAD.Version()
 
     def write_calculix_input_file(self):
         self.mesh_object.FemMesh.writeABAQUS(self.file_name)
@@ -125,9 +128,9 @@ class inp_writer:
             f.write('{}, \n'.format(YM_in_MPa))
             f.write('{0:.3f}\n'.format(PR))
             density = FreeCAD.Units.Quantity(mat_obj.Material['Density'])
-            density_in_kg_per_mm3 = density.getValueAs('t/mm^3')
+            density_in_tone_per_mm3 = float(density.getValueAs('t/mm^3'))
             f.write('*DENSITY \n')
-            f.write('{}, \n'.format(density_in_kg_per_mm3))
+            f.write('{0:.3e}, \n'.format(density_in_tone_per_mm3))
             # write element properties
             if len(self.material_objects) == 1:
                 f.write('*SOLID SECTION, ELSET=' + mat_obj_name + ', MATERIAL=' + mat_name + '\n')
@@ -346,6 +349,12 @@ class inp_writer:
         f.write('\n***********************************************************\n')
         f.write('** CalculiX Input file\n')
         f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
+        f.write('**   written by    --> FreeCAD ' + self.fc_ver[0] + '.' + self.fc_ver[1] + '.' + self.fc_ver[2] + '\n')
+        f.write('**   written on    --> ' + time.ctime() + '\n')
+        f.write('**   file name     --> ' + os.path.basename(FreeCAD.ActiveDocument.FileName) + '\n')
+        f.write('**   analysis name --> ' + self.analysis.Name + '\n')
+        f.write('**\n')
+        f.write('**\n')
         f.write('**\n')
         f.write('**   Units\n')
         f.write('**\n')

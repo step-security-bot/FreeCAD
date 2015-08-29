@@ -30,6 +30,8 @@
 # include <QPrinter>
 # include <QFileInfo>
 # include <Inventor/SoInput.h>
+# include <Inventor/actions/SoGetPrimitiveCountAction.h>
+# include <Inventor/nodes/SoSeparator.h>
 #endif
 
 #include <xercesc/util/XMLString.hpp>
@@ -42,7 +44,9 @@
 #include "MainWindow.h"
 #include "EditorView.h"
 #include "PythonEditor.h"
+#include "SoFCDB.h"
 #include "View3DInventor.h"
+#include "ViewProvider.h"
 #include "WidgetFactory.h"
 #include "Workbench.h"
 #include "WorkbenchManager.h"
@@ -395,46 +399,61 @@ PyObject* Application::sExport(PyObject * /*self*/, PyObject *args,PyObject * /*
             }
         }
 
-        // get the view that belongs to the found document
-        if (doc) {
-            QString fileName = QString::fromUtf8(Utf8Name.c_str());
-            QFileInfo fi;
-            fi.setFile(fileName);
-            QString ext = fi.suffix().toLower();
-            if (ext == QLatin1String("iv") || ext == QLatin1String("wrl") ||
-                ext == QLatin1String("vrml") || ext == QLatin1String("wrz") ||
-                ext == QLatin1String("svg") || ext == QLatin1String("idtf")) {
-                Gui::Document* gui_doc = Application::Instance->getDocument(doc);
-                std::list<MDIView*> view3d = gui_doc->getMDIViewsOfType(View3DInventor::getClassTypeId());
-                if (view3d.empty()) {
-                    PyErr_SetString(Base::BaseExceptionFreeCADError, "Cannot export to SVG because document doesn't have a 3d view");
-                    return 0;
-                }
-                else {
-                    QString cmd = QString::fromLatin1(
-                        "Gui.getDocument(\"%1\").mdiViewsOfType('Gui::View3DInventor')[0].dumpSelection(\"%2\")"
-                        ).arg(QLatin1String(doc->getName())).arg(fi.absoluteFilePath());
-                    Base::Interpreter().runString(cmd.toUtf8());
-                }
-            }
-            else if (ext == QLatin1String("pdf")) {
-                Gui::Document* gui_doc = Application::Instance->getDocument(doc);
-                if (gui_doc) {
-                    Gui::MDIView* view = gui_doc->getActiveView();
-                    if (view) {
-                        View3DInventor* view3d = qobject_cast<View3DInventor*>(view);
-                        if (view3d)
-                            view3d->viewAll();
-                        QPrinter printer(QPrinter::ScreenResolution);
-                        printer.setOutputFormat(QPrinter::PdfFormat);
-                        printer.setOutputFileName(fileName);
-                        view->print(&printer);
+        QString fileName = QString::fromUtf8(Utf8Name.c_str());
+        QFileInfo fi;
+        fi.setFile(fileName);
+        QString ext = fi.suffix().toLower();
+        if (ext == QLatin1String("iv") || ext == QLatin1String("wrl") ||
+            ext == QLatin1String("vrml") || ext == QLatin1String("wrz")) {
+
+            // build up the graph
+            SoSeparator* sep = new SoSeparator();
+            sep->ref();
+
+            for (Py::Sequence::iterator it = list.begin(); it != list.end(); ++it) {
+                PyObject* item = (*it).ptr();
+                if (PyObject_TypeCheck(item, &(App::DocumentObjectPy::Type))) {
+                    App::DocumentObject* obj = static_cast<App::DocumentObjectPy*>(item)->getDocumentObjectPtr();
+
+                    Gui::ViewProvider* vp = Gui::Application::Instance->getViewProvider(obj);
+                    if (vp) {
+                        sep->addChild(vp->getRoot());
                     }
                 }
             }
-            else {
-                Base::Console().Error("File type '%s' not supported\n", ext.toLatin1().constData());
+
+
+            SoGetPrimitiveCountAction action;
+            action.setCanApproximate(true);
+            action.apply(sep);
+
+            bool binary = false;
+            if (action.getTriangleCount() > 100000 ||
+                action.getPointCount() > 30000 ||
+                action.getLineCount() > 10000)
+                binary = true;
+
+            SoFCDB::writeToFile(sep, Utf8Name.c_str(), binary);
+            sep->unref();
+        }
+        else if (ext == QLatin1String("pdf")) {
+            // get the view that belongs to the found document
+            Gui::Document* gui_doc = Application::Instance->getDocument(doc);
+            if (gui_doc) {
+                Gui::MDIView* view = gui_doc->getActiveView();
+                if (view) {
+                    View3DInventor* view3d = qobject_cast<View3DInventor*>(view);
+                    if (view3d)
+                        view3d->viewAll();
+                    QPrinter printer(QPrinter::ScreenResolution);
+                    printer.setOutputFormat(QPrinter::PdfFormat);
+                    printer.setOutputFileName(fileName);
+                    view->print(&printer);
+                }
             }
+        }
+        else {
+            Base::Console().Error("File type '%s' not supported\n", ext.toLatin1().constData());
         }
     } PY_CATCH;
 
