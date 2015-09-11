@@ -86,7 +86,7 @@ bool CCurve::CheckForArc(const CVertex& prev_vt, std::list<const CVertex*>& migh
 	if(might_be_an_arc.size() < 2)return false;
 
 	// find middle point
-	int num = might_be_an_arc.size();
+	int num = static_cast<int>(might_be_an_arc.size());
 	int i = 0;
 	const CVertex* mid_vt = NULL;
 	int mid_i = (num-1)/2;
@@ -465,7 +465,7 @@ void CCurve::ChangeStart(const Point &p) {
 
 	bool started = false;
 	bool finished = false;
-	int start_span;
+	int start_span = 0;
 	bool closed = IsClosed();
 
 	for(int i = 0; i < (closed ? 2:1); i++)
@@ -720,10 +720,12 @@ static geoff_geometry::Span MakeSpan(const Span& span)
 	return geoff_geometry::Span(span.m_v.m_type, geoff_geometry::Point(span.m_p.x, span.m_p.y), geoff_geometry::Point(span.m_v.m_p.x, span.m_v.m_p.y), geoff_geometry::Point(span.m_v.m_c.x, span.m_v.m_c.y));
 }
 
+#if 0
 static Span MakeCSpan(const geoff_geometry::Span &sp)
 {
 	return Span(Point(sp.p0.x, sp.p0.y), CVertex(sp.dir, Point(sp.p1.x, sp.p1.y), Point(sp.pc.x, sp.pc.y)));
 }
+#endif
 
 bool CCurve::Offset(double leftwards_value)
 {
@@ -911,7 +913,6 @@ double CCurve::PointToPerim(const Point& p)const
 {
 	double best_dist = 0.0;
 	double perim_at_best_dist = 0.0;
-	Point best_point = Point(0, 0);
 	bool best_dist_found = false;
 
 	double perim = 0.0;

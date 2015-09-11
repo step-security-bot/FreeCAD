@@ -142,7 +142,7 @@ void openEditDatumDialog(Sketcher::SketchObject* sketch, int ConstrNbr)
                 double newDatum = newQuant.getValue();
                 if (Constr->Type == Sketcher::Angle ||
                     ((Constr->Type == Sketcher::DistanceX || Constr->Type == Sketcher::DistanceY) &&
-                     Constr->FirstPos == Sketcher::none || Constr->Second != Sketcher::Constraint::GeoUndef)) {
+                     (Constr->FirstPos == Sketcher::none || Constr->Second != Sketcher::Constraint::GeoUndef))) {
                     // Permit negative values to flip the sign of the constraint
                     if (newDatum >= 0) // keep the old sign
                         newDatum = ((datum >= 0) ? 1 : -1) * std::abs(newDatum);
@@ -485,7 +485,6 @@ int SketchSelection::setUp(void)
     std::vector<Gui::SelectionObject> selection = Gui::Selection().getSelectionEx();
 
     Sketcher::SketchObject *SketchObj=0;
-    Part::Feature          *SupportObj=0;
     std::vector<std::string> SketchSubNames;
     std::vector<std::string> SupportSubNames;
 
@@ -510,7 +509,6 @@ int SketchSelection::setUp(void)
             }
             // assume always a Part::Feature derived object as support
             assert(selection[1].getObject()->getTypeId().isDerivedFrom(Part::Feature::getClassTypeId()));
-            SupportObj = dynamic_cast<Part::Feature*>(selection[1].getObject());
             SketchSubNames  = selection[0].getSubNames();
             SupportSubNames = selection[1].getSubNames();
 
@@ -523,7 +521,6 @@ int SketchSelection::setUp(void)
             }
             // assume always a Part::Feature derived object as support
             assert(selection[0].getObject()->getTypeId().isDerivedFrom(Part::Feature::getClassTypeId()));
-            SupportObj = dynamic_cast<Part::Feature*>(selection[0].getObject());
             SketchSubNames  = selection[1].getSubNames();
             SupportSubNames = selection[0].getSubNames();
 
@@ -532,13 +529,6 @@ int SketchSelection::setUp(void)
             return -1;
         }
     }
-
-    // colect Sketch geos
-    for ( std::vector<std::string>::const_iterator it= SketchSubNames.begin();it!=SketchSubNames.end();++it){
-
-
-    }
-
 
     return Items.size();
 }
@@ -872,7 +862,6 @@ void CmdSketcherConstrainCoincident::activated(int iMsg)
     // get the needed lists and objects
     const std::vector<std::string> &SubNames = selection[0].getSubNames();
     Sketcher::SketchObject* Obj = dynamic_cast<Sketcher::SketchObject*>(selection[0].getObject());
-    const std::vector< Sketcher::Constraint * > &vals = Obj->Constraints.getValues();
 
     if (SubNames.size() < 2) {
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
@@ -901,19 +890,8 @@ void CmdSketcherConstrainCoincident::activated(int iMsg)
     for (std::size_t i=1; i<SubNames.size(); i++) {
         getIdsFromName(SubNames[i], Obj, GeoId2, PosId2);
 
-        // check if any of the coincident constraints exist
-        bool constraintExists=false;
-
-        for (std::vector< Sketcher::Constraint * >::const_iterator it= vals.begin(); it != vals.end(); ++it) {
-            if ((*it)->Type == Sketcher::Coincident && (
-               ((*it)->First == GeoId1 && (*it)->FirstPos == PosId1 &&
-                (*it)->Second == GeoId2 && (*it)->SecondPos == PosId2  ) ||
-               ((*it)->First == GeoId2 && (*it)->FirstPos == PosId2 &&
-                (*it)->Second == GeoId1 && (*it)->SecondPos == PosId1  ) ) ) {
-                constraintExists=true;
-                break;
-            }
-        }
+        // check if this coincidence is already enforced (even indirectly)
+        bool constraintExists=Obj->arePointsCoincident(GeoId1,PosId1,GeoId2,PosId2);
 
         if (!constraintExists) {
             constraintsAdded = true;
@@ -1159,7 +1137,7 @@ void CmdSketcherConstrainPointOnObject::activated(int iMsg)
     //count curves and points
     std::vector<SelIdPair> points;
     std::vector<SelIdPair> curves;
-    for (int i = 0  ;  i < SubNames.size()  ;  i++){
+    for (std::size_t i = 0  ;  i < SubNames.size()  ;  i++){
         SelIdPair id;
         getIdsFromName(SubNames[i], Obj, id.GeoId, id.PosId);
         if (isEdge(id.GeoId, id.PosId))
@@ -1168,13 +1146,13 @@ void CmdSketcherConstrainPointOnObject::activated(int iMsg)
             points.push_back(id);
     }
 
-    if (points.size() == 1 && curves.size() >= 1 ||
-        points.size() >= 1 && curves.size() == 1) {
+    if ((points.size() == 1 && curves.size() >= 1) ||
+        (points.size() >= 1 && curves.size() == 1)) {
 
         openCommand("add point on object constraint");
         int cnt = 0;
-        for (int iPnt = 0;  iPnt < points.size();  iPnt++) {
-            for (int iCrv = 0;  iCrv < curves.size();  iCrv++) {
+        for (std::size_t iPnt = 0;  iPnt < points.size();  iPnt++) {
+            for (std::size_t iCrv = 0;  iCrv < curves.size();  iCrv++) {
                 if (checkBothExternal(points[iPnt].GeoId, curves[iCrv].GeoId)){
                     showNoConstraintBetweenExternal();
                     continue;
@@ -1842,9 +1820,9 @@ void CmdSketcherConstrainPerpendicular::activated(int iMsg)
                 geo1->getTypeId() == Part::GeomArcOfEllipse::getClassTypeId() ) {
 
                 Base::Vector3d center;
-                double majord;
-                double minord;
-                double phi;
+                double majord = 0;
+                double minord = 0;
+                double phi = 0;
 
                 if( geo1->getTypeId() == Part::GeomEllipse::getClassTypeId() ){
                     const Part::GeomEllipse *ellipse = static_cast<const Part::GeomEllipse *>(geo1);
@@ -1866,7 +1844,6 @@ void CmdSketcherConstrainPerpendicular::activated(int iMsg)
                 const Part::GeomLineSegment *line = static_cast<const Part::GeomLineSegment *>(geo2);
 
                 Base::Vector3d point1=line->getStartPoint();
-                Base::Vector3d point2=line->getEndPoint();
 
                 Base::Vector3d direction=point1-center;
                 double tapprox=atan2(direction.y,direction.x)-phi; // we approximate the eccentric anomally by the polar
@@ -2300,7 +2277,7 @@ void CmdSketcherConstrainRadius::activated(int iMsg)
         // Create the non-driving radius constraints now
         openCommand("Add radius constraint");
         commandopened=true;
-        unsigned int constrSize;
+        unsigned int constrSize = 0;
         
         for (std::vector< std::pair<int, double> >::iterator it = externalGeoIdRadiusMap.begin(); it != externalGeoIdRadiusMap.end(); ++it) {
             Gui::Command::doCommand(
@@ -3359,6 +3336,8 @@ void CmdSketcherConstrainInternalAlignment::activated(int iMsg)
                     case Sketcher::EllipseFocus2: 
                         focus2=true;
                         break;
+                    default:
+                        break;
                 }
             }
         }
@@ -3520,6 +3499,8 @@ void CmdSketcherConstrainInternalAlignment::activated(int iMsg)
                         break;
                     case Sketcher::EllipseFocus2: 
                         focus2=true;
+                        break;
+                    default:
                         break;
                 }
             }
@@ -3718,11 +3699,6 @@ void CmdSketcherToggleDrivingConstraint::activated(int iMsg)
                 QObject::tr("Select constraint(s) from the sketch."));
             return;
         }
-
-        // make sure the selected object is the sketch in edit mode
-        const App::DocumentObject* obj = selection[0].getObject();
-        ViewProviderSketch* sketchView = static_cast<ViewProviderSketch*>
-            (Gui::Application::Instance->getViewProvider(obj));
 
         // undo command open
         openCommand("Toggle driving from/to non-driving");
