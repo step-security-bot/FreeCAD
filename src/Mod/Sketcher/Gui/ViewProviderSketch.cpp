@@ -832,11 +832,6 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                         } else if (edit->PreselectConstraintSet.empty() != true) {
                             return true;
                         } else {
-                            //Get Viewer
-                            Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
-                            Gui::View3DInventorViewer *viewer;
-                            viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
-
                             Gui::MenuItem *geom = new Gui::MenuItem();
                             geom->setCommand("Sketcher geoms");
                             *geom << "Sketcher_CreatePoint"
@@ -853,7 +848,8 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                                   << "Sketcher_External"
                                   << "Sketcher_ToggleConstruction"
                                 /*<< "Sketcher_CreateText"*/
-                                /*<< "Sketcher_CreateDraftLine"*/;
+                                /*<< "Sketcher_CreateDraftLine"*/
+                                  << "Separator";
 
                             Gui::Application::Instance->setupContextMenu("View", geom);
                             //Create the Context Menu using the Main View Qt Widget
@@ -868,11 +864,6 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                     break;
                 case STATUS_SELECT_Edge:
                     {
-                        //Get Viewer
-                        Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
-                        Gui::View3DInventorViewer *viewer ;
-                        viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
-
                         Gui::MenuItem *geom = new Gui::MenuItem();
                         geom->setCommand("Sketcher constraints");
                         *geom << "Sketcher_ConstrainVertical"
@@ -1336,8 +1327,11 @@ Base::Vector3d ViewProviderSketch::seekConstraintPosition(const Base::Vector3d &
                                                           const SoNode *constraint)
 {
     assert(edit);
-    Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
+    Gui::MDIView *mdi = this->getEditingView();
+    if (!(mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())))
+        return Base::Vector3d(0, 0, 0);
     Gui::View3DInventorViewer *viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
+
     SoRayPickAction rp(viewer->getSoRenderManager()->getViewportRegion());
 
     float scaled_step = step * getScaleFactor();
@@ -1818,6 +1812,39 @@ SbVec3s ViewProviderSketch::getDisplayedSize(const SoImage *iconPtr) const
     if (iconPtr->height.getValue() != -1)
         iconSize[1] = iconPtr->height.getValue();
     return iconSize;
+}
+
+void ViewProviderSketch::centerSelection()
+{
+    Gui::MDIView *mdi = this->getActiveView();
+    Gui::View3DInventor *view = qobject_cast<Gui::View3DInventor*>(mdi);
+    if (!view || !edit)
+        return;
+
+    SoGroup* group = new SoGroup();
+    group->ref();
+
+    for (int i=0; i < edit->constrGroup->getNumChildren(); i++) {
+        if (edit->SelConstraintSet.find(i) != edit->SelConstraintSet.end()) {
+            SoSeparator *sep = dynamic_cast<SoSeparator *>(edit->constrGroup->getChild(i));
+            group->addChild(sep);
+        }
+    }
+
+    Gui::View3DInventorViewer* viewer = view->getViewer();
+    SoGetBoundingBoxAction action(viewer->getSoRenderManager()->getViewportRegion());
+    action.apply(group);
+    group->unref();
+
+    SbBox3f box = action.getBoundingBox();
+    if (!box.isEmpty()) {
+        SoCamera* camera = viewer->getSoRenderManager()->getCamera();
+        SbVec3f direction;
+        camera->orientation.getValue().multVec(SbVec3f(0, 0, 1), direction);
+        SbVec3f box_cnt = box.getCenter();
+        SbVec3f cam_pos = box_cnt + camera->focalDistance.getValue() * direction;
+        camera->position.setValue(cam_pos);
+    }
 }
 
 void ViewProviderSketch::doBoxSelection(const SbVec2s &startPos, const SbVec2s &endPos,
@@ -2526,11 +2553,14 @@ void ViewProviderSketch::drawConstraintIcons()
             double x0,y0,x1,y1;
             SbVec3f pos0(startingpoint.x,startingpoint.y,startingpoint.z);
             SbVec3f pos1(endpoint.x,endpoint.y,endpoint.z);
-            
-            Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
+
+            Gui::MDIView *mdi = this->getEditingView();
+            if (!(mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())))
+                return;
             Gui::View3DInventorViewer *viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
             SoCamera* pCam = viewer->getSoRenderManager()->getCamera();
-            if (!pCam) return;
+            if (!pCam)
+                return;
 
             try {
                 SbViewVolume vol = pCam->getViewVolume();
@@ -2894,11 +2924,12 @@ void ViewProviderSketch::drawTypicalConstraintIcon(const constrIconQueueItem &i)
 
 float ViewProviderSketch::getScaleFactor()
 {
-    Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
+    Gui::MDIView *mdi = this->getEditingView();
     if (mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())) {
         Gui::View3DInventorViewer *viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
         return viewer->getSoRenderManager()->getCamera()->getViewVolume(viewer->getSoRenderManager()->getCamera()->aspectRatio.getValue()).getWorldToScreenScale(SbVec3f(0.f, 0.f, 0.f), 0.1f) / 3;
-    } else {
+    }
+    else {
         return 1.f;
     }
 }
@@ -2906,9 +2937,6 @@ float ViewProviderSketch::getScaleFactor()
 void ViewProviderSketch::draw(bool temp)
 {
     assert(edit);
-
-    // Get Bounding box dimensions for Datum text
-    Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
 
     // Render Geometry ===================================================
     std::vector<Base::Vector3d> Coords;
@@ -3885,10 +3913,14 @@ Restart:
     this->updateColor();
 
     // delete the cloned objects
-    if (temp)
-        for (std::vector<Part::Geometry *>::iterator it=tempGeo.begin(); it != tempGeo.end(); ++it)
-            if (*it) delete *it;
+    if (temp) {
+        for (std::vector<Part::Geometry *>::iterator it=tempGeo.begin(); it != tempGeo.end(); ++it) {
+            if (*it)
+                delete *it;
+        }
+    }
 
+    Gui::MDIView *mdi = this->getActiveView();
     if (mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())) { 
         static_cast<Gui::View3DInventor *>(mdi)->getViewer()->redraw();
     }
@@ -4090,18 +4122,17 @@ void ViewProviderSketch::updateData(const App::Property *prop)
         // Because a solve is mandatory to any addition (at least to update the DoF of the solver),
         // only when the solver geometry is the same in number than the sketch geometry an update
         // should trigger a redraw. This reduces even more the number of redraws per insertion of geometry
-	
-	// solver information is also updated when no matching geometry, so that if a solving fails
-	// this failed solving info is presented to the user
-	UpdateSolverInformation(); // just update the solver window with the last SketchObject solving information
-	
+
+        // solver information is also updated when no matching geometry, so that if a solving fails
+        // this failed solving info is presented to the user
+        UpdateSolverInformation(); // just update the solver window with the last SketchObject solving information
+
         if(getSketchObject()->getExternalGeometryCount()+getSketchObject()->getHighestCurveIndex() + 1 == 
             getSketchObject()->getSolvedSketch().getGeometrySize()) {
             draw(false);
             
             signalConstraintsChanged();
             signalElementsChanged();
-        
         }
     }
 }
@@ -4223,11 +4254,15 @@ bool ViewProviderSketch::setEdit(int ModNum)
     // The false parameter indicates that the geometry of the SketchObject shall not be updateData
     // so as not to trigger an onChanged that would set the document as modified and trigger a recompute
     // if we just close the sketch without touching anything.
+    if (getSketchObject()->Support.getValue()) {
+        if (!getSketchObject()->evaluateSupport())
+            getSketchObject()->validateExternalLinks();
+    }
+
     getSketchObject()->solve(false);
     UpdateSolverInformation();
     draw(false);
-    
-    
+
     connectUndoDocument = Gui::Application::Instance->activeDocument()
         ->signalUndoDocument.connect(boost::bind(&ViewProviderSketch::slotUndoDocument, this, _1));
     connectRedoDocument = Gui::Application::Instance->activeDocument()

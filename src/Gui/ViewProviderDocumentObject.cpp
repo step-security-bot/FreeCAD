@@ -38,6 +38,7 @@
 #include "Application.h"
 #include "Document.h"
 #include "Selection.h"
+#include "MainWindow.h"
 #include "MDIView.h"
 #include "TaskView/TaskAppearance.h"
 #include "ViewProviderDocumentObject.h"
@@ -161,6 +162,26 @@ Gui::MDIView* ViewProviderDocumentObject::getActiveView() const
     App::Document* pAppDoc = pcObject->getDocument();
     Gui::Document* pGuiDoc = Gui::Application::Instance->getDocument(pAppDoc);
     return pGuiDoc->getActiveView();
+}
+
+Gui::MDIView* ViewProviderDocumentObject::getEditingView() const
+{
+    App::Document* pAppDoc = pcObject->getDocument();
+    Gui::Document* pGuiDoc = Gui::Application::Instance->getDocument(pAppDoc);
+    return pGuiDoc->getEditingViewOfViewProvider(const_cast<ViewProviderDocumentObject*>(this));
+}
+
+Gui::MDIView* ViewProviderDocumentObject::getInventorView() const
+{
+    App::Document* pAppDoc = pcObject->getDocument();
+    Gui::Document* pGuiDoc = Gui::Application::Instance->getDocument(pAppDoc);
+
+    Gui::MDIView* mdi = pGuiDoc->getEditingViewOfViewProvider(const_cast<ViewProviderDocumentObject*>(this));
+    if (!mdi) {
+        mdi = pGuiDoc->getViewOfViewProvider(const_cast<ViewProviderDocumentObject*>(this));
+    }
+
+    return mdi;
 }
 
 SoNode* ViewProviderDocumentObject::findFrontRootOfType(const SoType& type) const

@@ -60,7 +60,9 @@ public:
 
     /** Sets the current property objects. */
     void setPropertyData( const std::vector<App::Property*>& );
+    void updateData();
     const std::vector<App::Property*>& getPropertyData() const;
+    bool hasProperty(const App::Property*) const;
     App::Property* getFirstProperty();
     const App::Property* getFirstProperty() const;
 

@@ -40,7 +40,7 @@ texts, colors,layers (from groups)
 '''
 
 TEXTSCALING = 1.35 # scaling factor between autocad font sizes and coin font sizes
-CURRENTDXFLIB = 1.38 # the minimal version of the dxfLibrary needed to run
+CURRENTDXFLIB = 1.39 # the minimal version of the dxfLibrary needed to run
 
 import sys, FreeCAD, os, Part, math, re, string, Mesh, Draft, DraftVecUtils, DraftGeomUtils
 from Draft import _Dimension, _ViewProviderDimension
@@ -52,8 +52,8 @@ if gui:
     import FreeCADGui
     try:
         draftui = FreeCADGui.draftToolBar
-    except AttributeError:
-        pass
+    except (AttributeError,NameError):
+        draftui = None
 
 def errorDXFLib(gui):
     p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Draft")
@@ -74,9 +74,9 @@ def errorDXFLib(gui):
                     from PySide import QtGui, QtCore
                     from DraftTools import translate
                     message = translate("Draft","""Download of dxf libraries failed.
-Please download them manually from:
-https://github.com/yorikvanhavre/Draft-dxf-importer
-and place them in your macros folder.""")
+Please download and install them manually.
+See complete instructions at
+http://www.freecadweb.org/wiki/index.php?title=Dxf_Importer_Install""")
                     QtGui.QMessageBox.information(None,"",message)
                 else:
                     FreeCAD.Console.PrintWarning("The DXF import/export libraries needed by FreeCAD to handle the DXF format are not installed.\n")

@@ -731,7 +731,7 @@ std::string Document::getTransientDirectoryName(const std::string& uuid, const s
     std::stringstream s;
     QCryptographicHash hash(QCryptographicHash::Sha1);
     hash.addData(filename.c_str(), filename.size());
-    s << Base::FileInfo::getTempPath() << GetApplication().getExecutableName()
+    s << App::Application::getTempPath() << GetApplication().getExecutableName()
       << "_Doc_" << uuid
       << "_" << hash.result().toHex().left(6).constData()
       << "_" << QCoreApplication::applicationPid();
@@ -1074,6 +1074,10 @@ bool Document::save (void)
 
             // write additional files
             writer.writeFiles();
+
+            if (writer.hasErrors()) {
+                throw Base::FileException("Failed to write all data to file", tmp);
+            }
 
             GetApplication().signalSaveDocument(*this);
         }

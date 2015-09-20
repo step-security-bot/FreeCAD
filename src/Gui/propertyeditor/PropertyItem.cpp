@@ -81,20 +81,34 @@ void PropertyItem::reset()
 void PropertyItem::setPropertyData(const std::vector<App::Property*>& items)
 {
     propertyItems = items;
+    updateData();
+    this->initialize();
+}
+
+void PropertyItem::updateData()
+{
     bool ro = true;
-    for (std::vector<App::Property*>::const_iterator it = items.begin();
-        it != items.end(); ++it) {
+    for (std::vector<App::Property*>::const_iterator it = propertyItems.begin();
+        it != propertyItems.end(); ++it) {
         App::PropertyContainer* parent = (*it)->getContainer();
         if (parent)
             ro &= (parent->isReadOnly(*it) || (*it)->StatusBits.test(2));
     }
     this->setReadOnly(ro);
-    this->initialize();
 }
 
 const std::vector<App::Property*>& PropertyItem::getPropertyData() const
 {
     return propertyItems;
+}
+
+bool PropertyItem::hasProperty(const App::Property* prop) const
+{
+    std::vector<App::Property*>::const_iterator it = std::find(propertyItems.begin(), propertyItems.end(), prop);
+    if (it != propertyItems.end())
+        return true;
+    else
+        return false;
 }
 
 App::Property* PropertyItem::getFirstProperty()
@@ -1765,6 +1779,7 @@ void PropertyEnumItem::setEditorData(QWidget *editor, const QVariant& data) cons
 
     QComboBox *cb = qobject_cast<QComboBox*>(editor);
     if (!commonModes.isEmpty()) {
+        cb->clear();
         cb->addItems(commonModes);
         cb->setCurrentIndex(cb->findText(data.toString()));
     }
