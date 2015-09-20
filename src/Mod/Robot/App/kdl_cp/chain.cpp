@@ -25,9 +25,9 @@ namespace KDL {
     using namespace std;
 
     Chain::Chain():
-        segments(0),
         nrOfJoints(0),
-        nrOfSegments(0)
+        nrOfSegments(0),
+        segments(0)
     {
     }
 
@@ -43,7 +43,7 @@ namespace KDL {
         nrOfJoints=0;
         nrOfSegments=0;
         segments.resize(0);
-        for(unsigned int i=0;i<arg.nrOfSegments;i++)
+        for(int i=0;i<arg.nrOfSegments;i++)
             addSegment(arg.getSegment(i));
         return *this;
 

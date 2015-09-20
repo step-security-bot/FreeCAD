@@ -120,6 +120,8 @@ public:
     bool save(void);
     /// Save the document under a new file name
     bool saveAs(void);
+    /// Save a copy of the document under a new file name
+    bool saveCopy(void);
     /// This method is used to save properties or very small amounts of data to an XML document.
     virtual void Save (Base::Writer &writer) const;
     /// This method is used to restore properties from an XML document.
@@ -146,8 +148,9 @@ public:
     //@{
     /// Getter for the active view
     Gui::MDIView* getActiveView(void) const;
+    Gui::MDIView* getEditingViewOfViewProvider(Gui::ViewProvider*) const;
     Gui::MDIView* getViewOfViewProvider(Gui::ViewProvider*) const;
-    /// Creat a new view
+    /// Create a new view
     void createView(const Base::Type& typeId);
     /** send messages to the active view 
      * Send a specific massage to the active view and is able to recive a

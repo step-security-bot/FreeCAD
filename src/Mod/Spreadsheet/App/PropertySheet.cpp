@@ -203,9 +203,9 @@ PropertySheet::PropertySheet(Sheet *_owner)
 }
 
 PropertySheet::PropertySheet(const PropertySheet &other)
-    : owner(other.owner)
-    , dirty(other.dirty)
+    : dirty(other.dirty)
     , mergedCells(other.mergedCells)
+    , owner(other.owner)
     , propertyNameToCellMap(other.propertyNameToCellMap)
     , documentObjectToCellMap(other.documentObjectToCellMap)
     , signalCounter(0)
@@ -764,7 +764,7 @@ void PropertySheet::removeColumns(int col, int count)
     }
 }
 
-unsigned int PropertySheet::getMemSize()
+unsigned int PropertySheet::getMemSize() const
 {
     return sizeof(*this);
 }
@@ -857,7 +857,6 @@ bool PropertySheet::isHidden(CellAddress address) const
 void PropertySheet::addDependencies(CellAddress key)
 {
     Cell * cell = getValue(key);
-    bool hasUnresolvedDeps = false;
 
     if (!cell)
         return;

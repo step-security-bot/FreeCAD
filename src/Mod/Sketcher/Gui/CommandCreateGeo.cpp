@@ -239,16 +239,20 @@ public:
         if (Mode==STATUS_End){
             unsetCursor();
             resetPositionText();
-            
-            int currentgeoid= getHighestCurveIndex();
-            
-            Gui::Command::openCommand("Add sketch line");
-            Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addGeometry(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)),%s)",
-                      sketchgui->getObject()->getNameInDocument(),
-                      EditCurve[0].fX,EditCurve[0].fY,EditCurve[1].fX,EditCurve[1].fY,
-                      geometryCreationMode==Construction?"True":"False");
-                        
-            Gui::Command::commitCommand();
+
+            try {
+                Gui::Command::openCommand("Add sketch line");
+                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addGeometry(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)),%s)",
+                          sketchgui->getObject()->getNameInDocument(),
+                          EditCurve[0].fX,EditCurve[0].fY,EditCurve[1].fX,EditCurve[1].fY,
+                          geometryCreationMode==Construction?"True":"False");
+
+                Gui::Command::commitCommand();
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("Failed to add line: %s\n", e.what());
+                Gui::Command::abortCommand();
+            }
 
             // add auto constraints for the line segment start
             if (sugConstr1.size() > 0) {
@@ -261,10 +265,10 @@ public:
                 createAutoConstraints(sugConstr2, getHighestCurveIndex(), Sketcher::end);
                 sugConstr2.clear();
             }
-            
+
             ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
             bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
-            
+
             if(autoRecompute)
                 Gui::Command::updateActive();
             else
@@ -272,10 +276,10 @@ public:
 
             EditCurve.clear();
             sketchgui->drawEdit(EditCurve);
-            
+
             //ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
             bool continuousMode = hGrp->GetBool("ContinuousCreationMode",true);
-            
+
             if(continuousMode){
                 // This code enables the continuous creation mode.
                 Mode=STATUS_SEEK_First;
@@ -446,43 +450,50 @@ public:
         if (Mode==STATUS_End){
             unsetCursor();
             resetPositionText();
-            Gui::Command::openCommand("Add sketch box");
             int firstCurve = getHighestCurveIndex() + 1;
-            Gui::Command::doCommand(Gui::Command::Doc,
-                "geoList = []\n"
-                "geoList.append(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)))\n"
-                "geoList.append(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)))\n"
-                "geoList.append(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)))\n"
-                "geoList.append(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)))\n"
-                "App.ActiveDocument.%s.addGeometry(geoList,%s)\n"
-                "conList = []\n"
-                "conList.append(Sketcher.Constraint('Coincident',%i,2,%i,1))\n"
-                "conList.append(Sketcher.Constraint('Coincident',%i,2,%i,1))\n"
-                "conList.append(Sketcher.Constraint('Coincident',%i,2,%i,1))\n"
-                "conList.append(Sketcher.Constraint('Coincident',%i,2,%i,1))\n"
-                "conList.append(Sketcher.Constraint('Horizontal',%i))\n"
-                "conList.append(Sketcher.Constraint('Horizontal',%i))\n"
-                "conList.append(Sketcher.Constraint('Vertical',%i))\n"
-                "conList.append(Sketcher.Constraint('Vertical',%i))\n"
-                "App.ActiveDocument.%s.addConstraint(conList)\n",
-                EditCurve[0].fX,EditCurve[0].fY,EditCurve[1].fX,EditCurve[1].fY, // line 1
-                EditCurve[1].fX,EditCurve[1].fY,EditCurve[2].fX,EditCurve[2].fY, // line 2
-                EditCurve[2].fX,EditCurve[2].fY,EditCurve[3].fX,EditCurve[3].fY, // line 3
-                EditCurve[3].fX,EditCurve[3].fY,EditCurve[0].fX,EditCurve[0].fY, // line 4
-                sketchgui->getObject()->getNameInDocument(), // the sketch
-                geometryCreationMode==Construction?"True":"False", // geometry as construction or not                                        
-                firstCurve,firstCurve+1, // coincident1
-                firstCurve+1,firstCurve+2, // coincident2
-                firstCurve+2,firstCurve+3, // coincident3
-                firstCurve+3,firstCurve, // coincident4
-                firstCurve, // horizontal1
-                firstCurve+2, // horizontal2
-                firstCurve+1, // vertical1
-                firstCurve+3, // vertical2
-                sketchgui->getObject()->getNameInDocument()); // the sketch
-            
-            Gui::Command::commitCommand();
-            
+
+            try {
+                Gui::Command::openCommand("Add sketch box");
+                Gui::Command::doCommand(Gui::Command::Doc,
+                    "geoList = []\n"
+                    "geoList.append(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)))\n"
+                    "geoList.append(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)))\n"
+                    "geoList.append(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)))\n"
+                    "geoList.append(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)))\n"
+                    "App.ActiveDocument.%s.addGeometry(geoList,%s)\n"
+                    "conList = []\n"
+                    "conList.append(Sketcher.Constraint('Coincident',%i,2,%i,1))\n"
+                    "conList.append(Sketcher.Constraint('Coincident',%i,2,%i,1))\n"
+                    "conList.append(Sketcher.Constraint('Coincident',%i,2,%i,1))\n"
+                    "conList.append(Sketcher.Constraint('Coincident',%i,2,%i,1))\n"
+                    "conList.append(Sketcher.Constraint('Horizontal',%i))\n"
+                    "conList.append(Sketcher.Constraint('Horizontal',%i))\n"
+                    "conList.append(Sketcher.Constraint('Vertical',%i))\n"
+                    "conList.append(Sketcher.Constraint('Vertical',%i))\n"
+                    "App.ActiveDocument.%s.addConstraint(conList)\n",
+                    EditCurve[0].fX,EditCurve[0].fY,EditCurve[1].fX,EditCurve[1].fY, // line 1
+                    EditCurve[1].fX,EditCurve[1].fY,EditCurve[2].fX,EditCurve[2].fY, // line 2
+                    EditCurve[2].fX,EditCurve[2].fY,EditCurve[3].fX,EditCurve[3].fY, // line 3
+                    EditCurve[3].fX,EditCurve[3].fY,EditCurve[0].fX,EditCurve[0].fY, // line 4
+                    sketchgui->getObject()->getNameInDocument(), // the sketch
+                    geometryCreationMode==Construction?"True":"False", // geometry as construction or not
+                    firstCurve,firstCurve+1, // coincident1
+                    firstCurve+1,firstCurve+2, // coincident2
+                    firstCurve+2,firstCurve+3, // coincident3
+                    firstCurve+3,firstCurve, // coincident4
+                    firstCurve, // horizontal1
+                    firstCurve+2, // horizontal2
+                    firstCurve+1, // vertical1
+                    firstCurve+3, // vertical2
+                    sketchgui->getObject()->getNameInDocument()); // the sketch
+
+                Gui::Command::commitCommand();
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("Failed to add box: %s\n", e.what());
+                Gui::Command::abortCommand();
+            }
+
             // add auto constraints at the start of the first side
             if (sugConstr1.size() > 0) {
                 createAutoConstraints(sugConstr1, getHighestCurveIndex() - 3 , Sketcher::start);
@@ -930,12 +941,12 @@ public:
     virtual bool releaseButton(Base::Vector2D onSketchPos)
     {
         if (Mode == STATUS_Do || Mode == STATUS_Close) {
-            bool addedGeometry = true;            
+            bool addedGeometry = true;
             if (SegmentMode == SEGMENT_MODE_Line) {
-                // open the transaction
-                Gui::Command::openCommand("Add line to sketch wire");
                 // issue the geometry
                 try {
+                    // open the transaction
+                    Gui::Command::openCommand("Add line to sketch wire");
                     Gui::Command::doCommand(Gui::Command::Doc,
                         "App.ActiveDocument.%s.addGeometry(Part.Line(App.Vector(%f,%f,0),App.Vector(%f,%f,0)),%s)",
                         sketchgui->getObject()->getNameInDocument(),
@@ -953,8 +964,9 @@ public:
                     Mode = STATUS_SEEK_Second;
                     return true;
                 }
-                Gui::Command::openCommand("Add arc to sketch wire");
+
                 try {
+                    Gui::Command::openCommand("Add arc to sketch wire");
                     Gui::Command::doCommand(Gui::Command::Doc,
                         "App.ActiveDocument.%s.addGeometry(Part.ArcOfCircle"
                         "(Part.Circle(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),%f,%f),%s)",
@@ -969,6 +981,7 @@ public:
                     Gui::Command::abortCommand();
                 }
             }
+
             int lastCurve = getHighestCurveIndex();
             // issue the constraint
             if (addedGeometry && (previousPosId != Sketcher::none)) {
@@ -1020,14 +1033,14 @@ public:
                 }
 
                 unsetCursor();
-                
+
                 resetPositionText();
                 EditCurve.clear();
-                sketchgui->drawEdit(EditCurve);                
-                
+                sketchgui->drawEdit(EditCurve);
+
                 ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                 bool continuousMode = hGrp->GetBool("ContinuousCreationMode",true);
-                
+
                 if(continuousMode){
                     // This code enables the continuous creation mode.
                     Mode=STATUS_SEEK_First;
@@ -1352,20 +1365,25 @@ public:
         if (Mode==STATUS_End) {
             unsetCursor();
             resetPositionText();
-            int currentgeoid= getHighestCurveIndex();
-            
-            Gui::Command::openCommand("Add sketch arc");
-            Gui::Command::doCommand(Gui::Command::Doc,
-                "App.ActiveDocument.%s.addGeometry(Part.ArcOfCircle"
-                "(Part.Circle(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),"
-                "%f,%f),%s)",
-                      sketchgui->getObject()->getNameInDocument(),
-                      CenterPoint.fX, CenterPoint.fY, sqrt(rx*rx + ry*ry),
-                      startAngle, endAngle,
-                      geometryCreationMode==Construction?"True":"False"); //arcAngle > 0 ? 0 : 1);                   
-                      
-            Gui::Command::commitCommand();
-            
+
+            try {
+                Gui::Command::openCommand("Add sketch arc");
+                Gui::Command::doCommand(Gui::Command::Doc,
+                    "App.ActiveDocument.%s.addGeometry(Part.ArcOfCircle"
+                    "(Part.Circle(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),"
+                    "%f,%f),%s)",
+                          sketchgui->getObject()->getNameInDocument(),
+                          CenterPoint.fX, CenterPoint.fY, sqrt(rx*rx + ry*ry),
+                          startAngle, endAngle,
+                          geometryCreationMode==Construction?"True":"False"); //arcAngle > 0 ? 0 : 1);
+
+                Gui::Command::commitCommand();
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("Failed to add arc: %s\n", e.what());
+                Gui::Command::abortCommand();
+            }
+
             // Auto Constraint center point
             if (sugConstr1.size() > 0) {
                 createAutoConstraints(sugConstr1, getHighestCurveIndex(), Sketcher::mid);
@@ -1409,7 +1427,7 @@ public:
             }
             else{
                 sketchgui->purgeHandler(); // no code after this line, Handler get deleted in ViewProvider    
-            }                        
+            }
         }
         return true;
     }
@@ -1650,20 +1668,25 @@ public:
         if (Mode==STATUS_End) {
             unsetCursor();
             resetPositionText();
-            int currentgeoid= getHighestCurveIndex();
-            
-            Gui::Command::openCommand("Add sketch arc");
-            Gui::Command::doCommand(Gui::Command::Doc,
-                "App.ActiveDocument.%s.addGeometry(Part.ArcOfCircle"
-                "(Part.Circle(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),"
-                "%f,%f),%s)",
-                      sketchgui->getObject()->getNameInDocument(),
-                      CenterPoint.fX, CenterPoint.fY, radius,
-                      startAngle, endAngle,
-                      geometryCreationMode==Construction?"True":"False");           
 
-            Gui::Command::commitCommand();
-            
+            try {
+                Gui::Command::openCommand("Add sketch arc");
+                Gui::Command::doCommand(Gui::Command::Doc,
+                    "App.ActiveDocument.%s.addGeometry(Part.ArcOfCircle"
+                    "(Part.Circle(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),"
+                    "%f,%f),%s)",
+                          sketchgui->getObject()->getNameInDocument(),
+                          CenterPoint.fX, CenterPoint.fY, radius,
+                          startAngle, endAngle,
+                          geometryCreationMode==Construction?"True":"False");
+
+                Gui::Command::commitCommand();
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("Failed to add arc: %s\n", e.what());
+                Gui::Command::abortCommand();
+            }
+
             // Auto Constraint first picked point
             if (sugConstr1.size() > 0) {
                 createAutoConstraints(sugConstr1, getHighestCurveIndex(), arcPos1);
@@ -1958,18 +1981,23 @@ public:
             double ry = EditCurve[1].fY - EditCurve[0].fY;
             unsetCursor();
             resetPositionText();
-            int currentgeoid= getHighestCurveIndex();
-            
-            Gui::Command::openCommand("Add sketch circle");
-            Gui::Command::doCommand(Gui::Command::Doc,
-                "App.ActiveDocument.%s.addGeometry(Part.Circle"
-                "(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),%s)",
-                      sketchgui->getObject()->getNameInDocument(),
-                      EditCurve[0].fX, EditCurve[0].fY,
-                      sqrt(rx*rx + ry*ry),
-                      geometryCreationMode==Construction?"True":"False");            
 
-            Gui::Command::commitCommand();
+            try {
+                Gui::Command::openCommand("Add sketch circle");
+                Gui::Command::doCommand(Gui::Command::Doc,
+                    "App.ActiveDocument.%s.addGeometry(Part.Circle"
+                    "(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),%s)",
+                          sketchgui->getObject()->getNameInDocument(),
+                          EditCurve[0].fX, EditCurve[0].fY,
+                          sqrt(rx*rx + ry*ry),
+                          geometryCreationMode==Construction?"True":"False");
+
+                Gui::Command::commitCommand();
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("Failed to add circle: %s\n", e.what());
+                Gui::Command::abortCommand();
+            }
 
             // add auto constraints for the center point
             if (sugConstr1.size() > 0) {
@@ -1993,7 +2021,7 @@ public:
 
             //ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
             bool continuousMode = hGrp->GetBool("ContinuousCreationMode",true);
-            
+
             if(continuousMode){
                 // This code enables the continuous creation mode.
                 Mode=STATUS_SEEK_First;
@@ -2302,7 +2330,7 @@ public:
             saveEllipse();
             ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
             bool continuousMode = hGrp->GetBool("ContinuousCreationMode",true);
-            
+
             if(continuousMode){
                 if (constrMethod == 0) {
                     method = CENTER_PERIAPSIS_B;
@@ -2756,19 +2784,19 @@ private:
 
         int currentgeoid = getHighestCurveIndex(); // index of the ellipse we just created
 
-        Gui::Command::openCommand("Add sketch ellipse");
-        Gui::Command::doCommand(Gui::Command::Doc,
-                                "App.ActiveDocument.%s.addGeometry(Part.Ellipse"
-                                "(App.Vector(%f,%f,0),App.Vector(%f,%f,0),App.Vector(%f,%f,0)),%s)",
-                                sketchgui->getObject()->getNameInDocument(),
-                                periapsis.fX, periapsis.fY,
-                                positiveB.fX, positiveB.fY,
-                                centroid.fX, centroid.fY,
-                                geometryCreationMode==Construction?"True":"False");
-        
-        currentgeoid++;
-        
         try {
+            Gui::Command::openCommand("Add sketch ellipse");
+            Gui::Command::doCommand(Gui::Command::Doc,
+                                    "App.ActiveDocument.%s.addGeometry(Part.Ellipse"
+                                    "(App.Vector(%f,%f,0),App.Vector(%f,%f,0),App.Vector(%f,%f,0)),%s)",
+                                    sketchgui->getObject()->getNameInDocument(),
+                                    periapsis.fX, periapsis.fY,
+                                    positiveB.fX, positiveB.fY,
+                                    centroid.fX, centroid.fY,
+                                    geometryCreationMode==Construction?"True":"False");
+
+            currentgeoid++;
+
             Gui::Command::doCommand(Gui::Command::Doc,
                                 "App.ActiveDocument.%s.ExposeInternalGeometry(%d)",
                                 sketchgui->getObject()->getNameInDocument(),
@@ -2777,7 +2805,7 @@ private:
         catch (const Base::Exception& e) {
             Base::Console().Error("%s\n", e.what());
             Gui::Command::abortCommand();
-            
+
             ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
             bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
             
@@ -3170,25 +3198,25 @@ public:
                 phi-=M_PI/2;
                 double t=a; a=b; b=t;//swap a,b
             }
-                        
+
             int currentgeoid = getHighestCurveIndex();
 
-            Gui::Command::openCommand("Add sketch arc of ellipse");
+            try {
+                Gui::Command::openCommand("Add sketch arc of ellipse");
 
-            Gui::Command::doCommand(Gui::Command::Doc,
-                "App.ActiveDocument.%s.addGeometry(Part.ArcOfEllipse"
-                "(Part.Ellipse(App.Vector(%f,%f,0),App.Vector(%f,%f,0),App.Vector(%f,%f,0)),"
-                "%f,%f),%s)",
-                    sketchgui->getObject()->getNameInDocument(),
-                    majAxisPoint.fX, majAxisPoint.fY,                                    
-                    minAxisPoint.fX, minAxisPoint.fY,
-                    centerPoint.fX, centerPoint.fY,
-                    startAngle, endAngle,
-                    geometryCreationMode==Construction?"True":"False");
-            
-            currentgeoid++;
+                Gui::Command::doCommand(Gui::Command::Doc,
+                    "App.ActiveDocument.%s.addGeometry(Part.ArcOfEllipse"
+                    "(Part.Ellipse(App.Vector(%f,%f,0),App.Vector(%f,%f,0),App.Vector(%f,%f,0)),"
+                    "%f,%f),%s)",
+                        sketchgui->getObject()->getNameInDocument(),
+                        majAxisPoint.fX, majAxisPoint.fY,
+                        minAxisPoint.fX, minAxisPoint.fY,
+                        centerPoint.fX, centerPoint.fY,
+                        startAngle, endAngle,
+                        geometryCreationMode==Construction?"True":"False");
 
-            try {                 
+                currentgeoid++;
+
                 Gui::Command::doCommand(Gui::Command::Doc,
                                         "App.ActiveDocument.%s.ExposeInternalGeometry(%d)",
                                         sketchgui->getObject()->getNameInDocument(),
@@ -3197,7 +3225,7 @@ public:
             catch (const Base::Exception& e) {
                 Base::Console().Error("%s\n", e.what());
                 Gui::Command::abortCommand();
-                
+
                 ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                 bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
                 
@@ -3329,7 +3357,7 @@ void CmdSketcherCompCreateConic::activated(int iMsg)
     } else if (iMsg == 2) {
         ActivateHandler(getActiveGuiDocument(), new DrawSketchHandlerArcOfEllipse());
     } else {
-        return;        
+        return;
     }
 
     // Since the default icon is reset when enabing/disabling the command we have
@@ -3568,17 +3596,23 @@ public:
         if (Mode==STATUS_End) {
             unsetCursor();
             resetPositionText();
-            int currentgeoid= getHighestCurveIndex();
-            Gui::Command::openCommand("Add sketch circle");
-            Gui::Command::doCommand(Gui::Command::Doc,
-                "App.ActiveDocument.%s.addGeometry(Part.Circle"
-                "(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),%s)",
-                      sketchgui->getObject()->getNameInDocument(),
-                      CenterPoint.fX, CenterPoint.fY,
-                      radius,
-                      geometryCreationMode==Construction?"True":"False");
-            
-            Gui::Command::commitCommand();
+
+            try {
+                Gui::Command::openCommand("Add sketch circle");
+                Gui::Command::doCommand(Gui::Command::Doc,
+                    "App.ActiveDocument.%s.addGeometry(Part.Circle"
+                    "(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),%s)",
+                          sketchgui->getObject()->getNameInDocument(),
+                          CenterPoint.fX, CenterPoint.fY,
+                          radius,
+                          geometryCreationMode==Construction?"True":"False");
+
+                Gui::Command::commitCommand();
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("Failed to add circle: %s\n", e.what());
+                Gui::Command::abortCommand();
+            }
 
             // Auto Constraint first picked point
             if (sugConstr1.size() > 0) {
@@ -3832,15 +3866,19 @@ public:
         if (selectionDone){
             unsetCursor();
             resetPositionText();
-            
-            int currentgeoid= getHighestCurveIndex();
 
-            Gui::Command::openCommand("Add sketch point");
-            Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addGeometry(Part.Point(App.Vector(%f,%f,0)))",
-                      sketchgui->getObject()->getNameInDocument(),
-                      EditPoint.fX,EditPoint.fY);                       
-            
-            Gui::Command::commitCommand();
+            try {
+                Gui::Command::openCommand("Add sketch point");
+                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addGeometry(Part.Point(App.Vector(%f,%f,0)))",
+                          sketchgui->getObject()->getNameInDocument(),
+                          EditPoint.fX,EditPoint.fY);
+
+                Gui::Command::commitCommand();
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("Failed to add point: %s\n", e.what());
+                Gui::Command::abortCommand();
+            }
 
             // add auto constraints for the line segment start
             if (sugConstr.size() > 0) {
@@ -3989,7 +4027,7 @@ namespace SketcherGui {
                 Sketcher::SketchObject *Sketch = static_cast<Sketcher::SketchObject*>(object);
                 std::vector<int> GeoIdList;
                 std::vector<Sketcher::PointPos> PosIdList;
-                Sketch->getCoincidentPoints(VtId, GeoIdList, PosIdList);
+                Sketch->getDirectlyCoincidentPoints(VtId, GeoIdList, PosIdList);
                 if (GeoIdList.size() == 2 && GeoIdList[0] >= 0  && GeoIdList[1] >= 0) {
                     const Part::Geometry *geom1 = Sketch->getGeometry(GeoIdList[0]);
                     const Part::Geometry *geom2 = Sketch->getGeometry(GeoIdList[1]);
@@ -4088,7 +4126,7 @@ public:
                 double radius=-1;
                 std::vector<int> GeoIdList;
                 std::vector<Sketcher::PointPos> PosIdList;
-                sketchgui->getSketchObject()->getCoincidentPoints(GeoId, PosId, GeoIdList, PosIdList);
+                sketchgui->getSketchObject()->getDirectlyCoincidentPoints(GeoId, PosId, GeoIdList, PosIdList);
                 if (GeoIdList.size() == 2 && GeoIdList[0] >= 0  && GeoIdList[1] >= 0) {
                     const Part::Geometry *geom1 = sketchgui->getSketchObject()->getGeometry(GeoIdList[0]);
                     const Part::Geometry *geom2 = sketchgui->getSketchObject()->getGeometry(GeoIdList[1]);
@@ -4114,20 +4152,26 @@ public:
 
                 int currentgeoid= getHighestCurveIndex();
                 // create fillet at point
-                Gui::Command::openCommand("Create fillet");
-                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.fillet(%d,%d,%f)",
-                          sketchgui->getObject()->getNameInDocument(),
-                          GeoId, PosId, radius);
+                try {
+                    Gui::Command::openCommand("Create fillet");
+                    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.fillet(%d,%d,%f)",
+                              sketchgui->getObject()->getNameInDocument(),
+                              GeoId, PosId, radius);
 
-                if(construction) {
-                    Gui::Command::doCommand(Gui::Command::Doc,
-                        "App.ActiveDocument.%s.toggleConstruction(%d) ",
-                        sketchgui->getObject()->getNameInDocument(),
-                        currentgeoid+1);                        
+                    if(construction) {
+                        Gui::Command::doCommand(Gui::Command::Doc,
+                            "App.ActiveDocument.%s.toggleConstruction(%d) ",
+                            sketchgui->getObject()->getNameInDocument(),
+                            currentgeoid+1);
+                    }
+
+                    Gui::Command::commitCommand();
                 }
-                    
-                Gui::Command::commitCommand();
-                
+                catch (const Base::Exception& e) {
+                    Base::Console().Error("Failed to create fillet: %s\n", e.what());
+                    Gui::Command::abortCommand();
+                }
+
                 ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                 bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
             
@@ -4173,22 +4217,28 @@ public:
                         return false;
                     
                     construction=lineSeg1->Construction && lineSeg2->Construction;
+                    int currentgeoid= getHighestCurveIndex();
 
                     // create fillet between lines
-                    Gui::Command::openCommand("Create fillet");
-                    int currentgeoid= getHighestCurveIndex();
-                    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.fillet(%d,%d,App.Vector(%f,%f,0),App.Vector(%f,%f,0),%f)",
-                              sketchgui->getObject()->getNameInDocument(),
-                              firstCurve, secondCurve,
-                              firstPos.fX, firstPos.fY,
-                              secondPos.fX, secondPos.fY, radius);
-                    Gui::Command::commitCommand();
-                    
+                    try {
+                        Gui::Command::openCommand("Create fillet");
+                        Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.fillet(%d,%d,App.Vector(%f,%f,0),App.Vector(%f,%f,0),%f)",
+                                  sketchgui->getObject()->getNameInDocument(),
+                                  firstCurve, secondCurve,
+                                  firstPos.fX, firstPos.fY,
+                                  secondPos.fX, secondPos.fY, radius);
+                        Gui::Command::commitCommand();
+                    }
+                    catch (const Base::Exception& e) {
+                        Base::Console().Error("Failed to create fillet: %s\n", e.what());
+                        Gui::Command::abortCommand();
+                    }
+
                     ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                     bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
                 
                     if(autoRecompute)
-                        Gui::Command::updateActive();                    
+                        Gui::Command::updateActive();
                     
                     if(construction) {
                         Gui::Command::doCommand(Gui::Command::Doc,
@@ -4368,7 +4418,8 @@ public:
                         Gui::Command::updateActive();
                 }
                 catch (const Base::Exception& e) {
-                    Base::Console().Error("%s\n", e.what());
+                    Base::Console().Error("Failed to trim edge: %s\n", e.what());
+                    Gui::Command::abortCommand();
                 }
             }
         }
@@ -4561,7 +4612,8 @@ public:
                 * right button of the mouse */
                 }
                 catch (const Base::Exception& e) {
-                    Base::Console().Error("%s\n", e.what());
+                    Base::Console().Error("Failed to add external geometry: %s\n", e.what());
+                    Gui::Command::abortCommand();
                 }
                 return true;
             }
@@ -4722,7 +4774,7 @@ public:
         if (Mode==STATUS_End){
             unsetCursor();
             resetPositionText();
-            Gui::Command::openCommand("Add slot");
+
             int firstCurve = getHighestCurveIndex() + 1;
             // add the geometry to the sketch
             double start, end;
@@ -4740,6 +4792,7 @@ public:
             }
 
             try {
+                Gui::Command::openCommand("Add slot");
                 Gui::Command::doCommand(Gui::Command::Doc,
                     "geoList = []\n"
                     "geoList.append(Part.ArcOfCircle(Part.Circle(App.Vector(%f,%f,0),App.Vector(0,0,1),%f),%f,%f))\n"
@@ -4796,7 +4849,7 @@ public:
                     static_cast<Sketcher::SketchObject *>(sketchgui->getObject())->solve();
             }
             catch (const Base::Exception& e) {
-                Base::Console().Error("%s\n", e.what());
+                Base::Console().Error("Failed to add slot: %s\n", e.what());
                 Gui::Command::abortCommand();
                 ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                 bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
@@ -4993,14 +5046,11 @@ public:
 
     virtual bool releaseButton(Base::Vector2D onSketchPos)
     {
-
         if (Mode==STATUS_End){
             unsetCursor();
             resetPositionText();
             Gui::Command::openCommand("Add hexagon");
 
-            int currentgeoid= getHighestCurveIndex();
-            
             try {
                 Gui::Command::doCommand(Gui::Command::Doc,
                         "import ProfileLib.RegularPolygon\n"
@@ -5011,10 +5061,10 @@ public:
                                             geometryCreationMode==Construction?"True":"False");
                 
                 Gui::Command::commitCommand();
-                
+
                 ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                 bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
-        
+
                 // add auto constraints at the center of the polygon
                 if (sugConstr1.size() > 0) {
                     createAutoConstraints(sugConstr1, getHighestCurveIndex(), Sketcher::mid);
@@ -5026,26 +5076,26 @@ public:
                     createAutoConstraints(sugConstr2, getHighestCurveIndex() - 1, Sketcher::end);
                     sugConstr2.clear();
                 }
-                
+
                 if(autoRecompute)
                     Gui::Command::updateActive();
                 else
                     static_cast<Sketcher::SketchObject *>(sketchgui->getObject())->solve();                
             }
             catch (const Base::Exception& e) {
-                Base::Console().Error("%s\n", e.what());
+                Base::Console().Error("Failed to add hexagon: %s\n", e.what());
                 Gui::Command::abortCommand();
-                
+
                 ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                 bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
-                
+
                 if(autoRecompute) // toggling does not modify the DoF of the solver, however it may affect features depending on the sketch
                     Gui::Command::updateActive();
             }
-            
+
             ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
             bool continuousMode = hGrp->GetBool("ContinuousCreationMode",true);
-            
+
             if(continuousMode){
                 // This code enables the continuous creation mode.
                 Mode=STATUS_SEEK_First;

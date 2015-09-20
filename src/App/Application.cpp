@@ -505,6 +505,16 @@ const char* Application::getExecutableName(void) const
     return _mConfig["ExeName"].c_str();
 }
 
+std::string Application::getTempPath()
+{
+    return mConfig["AppTempPath"];
+}
+
+std::string Application::getTempFileName(const char* FileName)
+{
+    return Base::FileInfo::getTempFileName(FileName, getTempPath().c_str());
+}
+
 std::string Application::getUserAppDataDir()
 {
     return mConfig["UserAppData"];
@@ -1073,6 +1083,7 @@ void Application::initTypes(void)
     App ::PropertyLinkSubList       ::init();
     App ::PropertyMatrix            ::init();
     App ::PropertyVector            ::init();
+    App ::PropertyVectorDistance    ::init();
     App ::PropertyVectorList        ::init();
     App ::PropertyPlacement         ::init();
     App ::PropertyPlacementLink     ::init();
@@ -1191,6 +1202,15 @@ void Application::initConfig(int argc, char ** argv)
                           mConfig["BuildRevision"].c_str());
 
     LoadParameters();
+
+    // Set application tmp. directory
+    mConfig["AppTempPath"] = Base::FileInfo::getTempPath();
+    std::string tmpPath = _pcUserParamMngr->GetGroup("BaseApp/Preferences/General")->GetASCII("TempPath");
+    Base::FileInfo di(tmpPath);
+    if (di.exists() && di.isDir()) {
+        mConfig["AppTempPath"] = tmpPath + "/";
+    }
+
 
     // capture python variables
     SaveEnv("PYTHONPATH");

@@ -225,7 +225,7 @@ bool BitmapFactoryInst::loadPixmap(const QString& filename, QPixmap& icon) const
 QPixmap BitmapFactoryInst::pixmap(const char* name) const
 {
     if (!name || *name == '\0')
-        return QPixmap(px);
+        return QPixmap();
 
     // as very first test check whether the pixmap is in the cache
     QMap<std::string, QPixmap>::ConstIterator it = d->xpmCache.find(name);
@@ -362,7 +362,11 @@ QPixmap BitmapFactoryInst::pixmapFromSvg(const QByteArray& contents, const QSize
         return QPixmap();
     }
     frame->setContent(contents, QString::fromAscii("image/svg+xml"));
-    qApp->processEvents();
+    // Important to exclude user events here because otherwise
+    // it may happen that an item the icon is created for gets
+    // deleted in the meantime. This happens e.g. dragging over
+    // the categories in the commands panel very quickly.
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     webPage.setViewportSize(webPage.mainFrame()->contentsSize());
 
     double ww = webPage.viewportSize().width();

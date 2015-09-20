@@ -245,14 +245,23 @@ inline void SketcherAddWorkbenchTools<Gui::MenuItem>(Gui::MenuItem& consaccel){
         << "Sketcher_SelectRedundantConstraints"
         << "Sketcher_SelectConflictingConstraints"
         << "Sketcher_SelectElementsAssociatedWithConstraints"
-        << "Sketcher_RestoreInternalAlignmentGeometry";
+        << "Sketcher_RestoreInternalAlignmentGeometry" 
+        << "Sketcher_Symmetry"
+        << "Sketcher_Clone"
+        << "Sketcher_Copy"
+        << "Sketcher_RectangularArray";
+    
 }
 template <>
 inline void SketcherAddWorkbenchTools<Gui::ToolBarItem>(Gui::ToolBarItem& consaccel){
     consaccel << "Sketcher_CloseShape"
         << "Sketcher_ConnectLines"
         << "Sketcher_SelectConstraints"
-        << "Sketcher_RestoreInternalAlignmentGeometry";
+        << "Sketcher_SelectElementsAssociatedWithConstraints"
+        << "Sketcher_RestoreInternalAlignmentGeometry"
+        << "Sketcher_Symmetry"
+        << "Sketcher_CompCopy"
+        << "Sketcher_RectangularArray";
 }
 
 template <typename T>
@@ -263,7 +272,8 @@ template <>
 inline void SketcherAddWorkspaceSketchExtra<Gui::MenuItem>(Gui::MenuItem& sketch){
     sketch  << "Sketcher_ReorientSketch"
             << "Sketcher_ValidateSketch"
-            << "Sketcher_MergeSketches";
+            << "Sketcher_MergeSketches"
+            << "Sketcher_MirrorSketch";
 }
 
 template <typename T>

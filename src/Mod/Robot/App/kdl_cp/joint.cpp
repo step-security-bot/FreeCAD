@@ -42,7 +42,7 @@ namespace KDL {
     // constructor for joint along arbitrary axis, at arbitrary origin
     Joint::Joint(const std::string& _name, const Vector& _origin, const Vector& _axis, const JointType& _type, const double& _scale, 
                  const double& _offset, const double& _inertia, const double& _damping, const double& _stiffness):
-      name(_name), origin(_origin), axis(_axis / _axis.Norm()), type(_type),scale(_scale),offset(_offset),inertia(_inertia),damping(_damping),stiffness(_stiffness)
+      name(_name), type(_type),scale(_scale),offset(_offset),inertia(_inertia),damping(_damping),stiffness(_stiffness), axis(_axis / _axis.Norm()), origin(_origin)
     {
       if (type != RotAxis && type != TransAxis) throw joint_type_ex;
 
@@ -55,7 +55,7 @@ namespace KDL {
     // constructor for joint along arbitrary axis, at arbitrary origin
     Joint::Joint(const Vector& _origin, const Vector& _axis, const JointType& _type, const double& _scale, 
                  const double& _offset, const double& _inertia, const double& _damping, const double& _stiffness):
-      name("NoName"), origin(_origin), axis(_axis / _axis.Norm()), type(_type),scale(_scale),offset(_offset),inertia(_inertia),damping(_damping),stiffness(_stiffness)
+      name("NoName"), type(_type),scale(_scale),offset(_offset),inertia(_inertia),damping(_damping),stiffness(_stiffness), axis(_axis / _axis.Norm()), origin(_origin)
     {
       if (type != RotAxis && type != TransAxis) throw joint_type_ex;
 
@@ -103,6 +103,7 @@ namespace KDL {
             return Frame(Vector(0.0,0.0,scale*q+offset));
             break;
         case None:
+        default:
             return Frame::Identity();
             break;
         }
@@ -136,6 +137,7 @@ namespace KDL {
             return Twist(Vector(0.0,0.0,scale*qdot),Vector(0.0,0.0,0.0));
             break;
         case None:
+        default:
             return Twist::Zero();
             break;
         }
@@ -170,6 +172,7 @@ namespace KDL {
         return Vector(0.,0.,1.);
         break;
       case None:
+      default:
         return Vector::Zero();
         break;
       }
