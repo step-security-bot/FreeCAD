@@ -694,6 +694,12 @@ MacroCommand::MacroCommand(const char* name)
     eType  = 0;
 }
 
+MacroCommand::~MacroCommand()
+{
+    free(const_cast<char*>(sName));
+    sName = 0;
+}
+
 void MacroCommand::activated(int iMsg)
 {
     std::string cMacroPath = App::GetApplication().GetParameterGroupByPath
@@ -795,7 +801,12 @@ void MacroCommand::save()
 //===========================================================================
 
 PythonCommand::PythonCommand(const char* name, PyObject * pcPyCommand, const char* pActivationString)
-  : Command(name),_pcPyCommand(pcPyCommand)
+#if defined (_MSC_VER)
+  : Command( _strdup(name) )
+#else
+  : Command( strdup(name) )
+#endif
+  ,_pcPyCommand(pcPyCommand)
 {
     if (pActivationString)
         Activation = pActivationString;
@@ -807,8 +818,10 @@ PythonCommand::PythonCommand(const char* name, PyObject * pcPyCommand, const cha
     // call the method "GetResources()" of the command object
     _pcPyResourceDict = Interpreter().runMethodObject(_pcPyCommand, "GetResources");
     // check if the "GetResources()" method returns a Dict object
-    if (!PyDict_Check(_pcPyResourceDict))
-        throw Base::Exception("PythonCommand::PythonCommand(): Method GetResources() of the Python command object returns the wrong type (has to be Py Dictonary)");
+    if (!PyDict_Check(_pcPyResourceDict)) {
+        throw Base::Exception("PythonCommand::PythonCommand(): Method GetResources() of the Python "
+                              "command object returns the wrong type (has to be dict)");
+    }
 
     // check for command type
     std::string cmdType = getResource("CmdType");
@@ -826,6 +839,14 @@ PythonCommand::PythonCommand(const char* name, PyObject * pcPyCommand, const cha
     }
 }
 
+PythonCommand::~PythonCommand()
+{
+    Base::PyGILStateLocker lock;
+    Py_DECREF(_pcPyCommand);
+    free(const_cast<char*>(sName));
+    sName = 0;
+}
+
 const char* PythonCommand::getResource(const char* sName) const
 {
     PyObject* pcTemp;
@@ -834,8 +855,10 @@ const char* PythonCommand::getResource(const char* sName) const
     pcTemp = PyDict_GetItemString(_pcPyResourceDict,sName);
     if (!pcTemp)
         return "";
-    if (!PyString_Check(pcTemp))
-        throw Base::Exception("PythonCommand::getResource(): Method GetResources() of the Python command object returns a dictionary which holds not only strings");
+    if (!PyString_Check(pcTemp)) {
+        throw Base::Exception("PythonCommand::getResource(): Method GetResources() of the Python "
+                              "command object returns a dictionary which holds not only strings");
+    }
 
     return PyString_AsString(pcTemp);
 }
@@ -844,7 +867,12 @@ void PythonCommand::activated(int iMsg)
 {
     if (Activation.empty()) {
         try {
-            Interpreter().runMethodVoid(_pcPyCommand, "Activated");
+            if (isCheckable()) {
+                Interpreter().runMethod(_pcPyCommand, "Activated", "", 0, "(i)", iMsg);
+            }
+            else {
+                Interpreter().runMethodVoid(_pcPyCommand, "Activated");
+            }
         }
         catch (const Base::PyException& e) {
             Base::Console().Error("Running the Python command '%s' failed:\n%s\n%s",
@@ -902,13 +930,27 @@ const char* PythonCommand::getHelpUrl(void) const
 
 Action * PythonCommand::createAction(void)
 {
+    QAction* qtAction = new QAction(0);
     Action *pcAction;
 
-    pcAction = new Action(this,getMainWindow());
+    pcAction = new Action(this, qtAction, getMainWindow());
     pcAction->setShortcut(QString::fromAscii(getAccel()));
     applyCommandData(this->getName(), pcAction);
     if (strcmp(getResource("Pixmap"),"") != 0)
         pcAction->setIcon(Gui::BitmapFactory().iconFromTheme(getResource("Pixmap")));
+
+    try {
+        if (isCheckable()) {
+            pcAction->setCheckable(true);
+            // Here the QAction must be tmp. blocked to avoid to call the 'activated' method
+            qtAction->blockSignals(true);
+            pcAction->setChecked(isChecked());
+            qtAction->blockSignals(false);
+        }
+    }
+    catch (const Base::Exception& e) {
+        Base::Console().Error("%s\n", e.what());
+    }
 
     return pcAction;
 }
@@ -947,12 +989,40 @@ const char* PythonCommand::getAccel() const
     return getResource("Accel");
 }
 
+bool PythonCommand::isCheckable() const
+{
+    PyObject* item = PyDict_GetItemString(_pcPyResourceDict,"Checkable");
+    return item ? true : false;
+}
+
+bool PythonCommand::isChecked() const
+{
+    PyObject* item = PyDict_GetItemString(_pcPyResourceDict,"Checkable");
+    if (!item) {
+        throw Base::Exception("PythonCommand::isChecked(): Method GetResources() of the Python "
+                              "command object doesn't contain the key 'Checkable'");
+    }
+
+    if (PyBool_Check(item)) {
+        return PyObject_IsTrue(item) ? true : false;
+    }
+    else {
+        throw Base::Exception("PythonCommand::isChecked(): Method GetResources() of the Python "
+                              "command object contains the key 'Checkable' which is not a boolean");
+    }
+}
+
 //===========================================================================
 // PythonGroupCommand
 //===========================================================================
 
 PythonGroupCommand::PythonGroupCommand(const char* name, PyObject * pcPyCommand)
-  : Command(name),_pcPyCommand(pcPyCommand)
+#if defined (_MSC_VER)
+  : Command( _strdup(name) )
+#else
+  : Command( strdup(name) )
+#endif
+  ,_pcPyCommand(pcPyCommand)
 {
     sGroup = "Python";
 
@@ -963,7 +1033,7 @@ PythonGroupCommand::PythonGroupCommand(const char* name, PyObject * pcPyCommand)
     // check if the "GetResources()" method returns a Dict object
     if (!PyDict_Check(_pcPyResource)) {
         throw Base::TypeError("PythonGroupCommand::PythonGroupCommand(): Method GetResources() of the Python "
-                              "command object returns the wrong type (has to be Py Dictonary)");
+                              "command object returns the wrong type (has to be dict)");
     }
 
     // check for command type
@@ -986,6 +1056,8 @@ PythonGroupCommand::~PythonGroupCommand()
 {
     Base::PyGILStateLocker lock;
     Py_DECREF(_pcPyCommand);
+    free(const_cast<char*>(sName));
+    sName = 0;
 }
 
 void PythonGroupCommand::activated(int iMsg)
@@ -1048,7 +1120,8 @@ bool PythonGroupCommand::isActive(void)
 Action * PythonGroupCommand::createAction(void)
 {
     Gui::ActionGroup* pcAction = new Gui::ActionGroup(this, Gui::getMainWindow());
-    pcAction->setDropDownMenu(true);
+    pcAction->setDropDownMenu(hasDropDownMenu());
+    pcAction->setExclusive(isExclusive());
 
     applyCommandData(this->getName(), pcAction);
 
@@ -1057,6 +1130,7 @@ Action * PythonGroupCommand::createAction(void)
     try {
         Base::PyGILStateLocker lock;
         Py::Object cmd(_pcPyCommand);
+        Gui::CommandManager &rcCmdMgr = Gui::Application::Instance->commandManager();
 
         Py::Callable call(cmd.getAttr("GetCommands"));
         Py::Tuple args;
@@ -1065,12 +1139,30 @@ Action * PythonGroupCommand::createAction(void)
             Py::String str(*it);
             QAction* cmd = pcAction->addAction(QString());
             cmd->setProperty("CommandName", QByteArray(static_cast<std::string>(str).c_str()));
+
+            PythonCommand* pycmd = dynamic_cast<PythonCommand*>(rcCmdMgr.getCommandByName(cmd->property("CommandName").toByteArray()));
+            if (pycmd) {
+                cmd->setCheckable(pycmd->isCheckable());
+            }
         }
 
         if (cmd.hasAttr("GetDefaultCommand")) {
             Py::Callable call2(cmd.getAttr("GetDefaultCommand"));
             Py::Int def(call2.apply(args));
             defaultId = static_cast<int>(def);
+        }
+
+        // if the command is 'exclusive' then activate the default action
+        if (pcAction->isExclusive()) {
+            QList<QAction*> a = pcAction->actions();
+            if (defaultId >= 0 && defaultId < a.size()) {
+                QAction* qtAction = a[defaultId];
+                if (qtAction->isCheckable()) {
+                    qtAction->blockSignals(true);
+                    qtAction->setChecked(true);
+                    qtAction->blockSignals(false);
+                }
+            }
         }
     }
     catch(Py::Exception&) {
@@ -1181,6 +1273,38 @@ const char* PythonGroupCommand::getPixmap() const
 const char* PythonGroupCommand::getAccel() const
 {
     return getResource("Accel");
+}
+
+bool PythonGroupCommand::isExclusive() const
+{
+    PyObject* item = PyDict_GetItemString(_pcPyResource,"Exclusive");
+    if (!item) {
+        return false;
+    }
+
+    if (PyBool_Check(item)) {
+        return PyObject_IsTrue(item) ? true : false;
+    }
+    else {
+        throw Base::Exception("PythonGroupCommand::isExclusive(): Method GetResources() of the Python "
+                              "command object contains the key 'Exclusive' which is not a boolean");
+    }
+}
+
+bool PythonGroupCommand::hasDropDownMenu() const
+{
+    PyObject* item = PyDict_GetItemString(_pcPyResource,"DropDownMenu");
+    if (!item) {
+        return true;
+    }
+
+    if (PyBool_Check(item)) {
+        return PyObject_IsTrue(item) ? true : false;
+    }
+    else {
+        throw Base::Exception("PythonGroupCommand::hasDropDownMenu(): Method GetResources() of the Python "
+                              "command object contains the key 'DropDownMenu' which is not a boolean");
+    }
 }
 
 //===========================================================================

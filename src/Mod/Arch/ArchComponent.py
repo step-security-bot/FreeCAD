@@ -423,7 +423,7 @@ class Component:
                                                 dvec2 = DraftVecUtils.scaleTo(dvec,obj.Offset.Value)
                                                 wire = DraftGeomUtils.offsetWire(wire,dvec2)
                                         w2 = DraftGeomUtils.offsetWire(wire,dvec)
-                                        w1 = Part.Wire(DraftGeomUtils.sortEdges(wire.Edges))
+                                        w1 = Part.Wire(Part.__sortEdges__(wire.Edges))
                                         sh = DraftGeomUtils.bind(w1,w2)
                                     elif obj.Align == "Right":
                                         dvec.multiply(w)
@@ -433,7 +433,7 @@ class Component:
                                                 dvec2 = DraftVecUtils.scaleTo(dvec,obj.Offset.Value)
                                                 wire = DraftGeomUtils.offsetWire(wire,dvec2)
                                         w2 = DraftGeomUtils.offsetWire(wire,dvec)
-                                        w1 = Part.Wire(DraftGeomUtils.sortEdges(wire.Edges))
+                                        w1 = Part.Wire(Part.__sortEdges__(wire.Edges))
                                         sh = DraftGeomUtils.bind(w1,w2)
                                     elif obj.Align == "Center":
                                         dvec.multiply(w/2)
@@ -703,9 +703,10 @@ class ViewProviderComponent:
         elif prop == "DiffuseColor":
             if hasattr(vobj.Object,"CloneOf"):
                 if vobj.Object.CloneOf:
-                    if vobj.DiffuseColor != vobj.Object.CloneOf.ViewObject.DiffuseColor:
-                        vobj.DiffuseColor = vobj.Object.CloneOf.ViewObject.DiffuseColor
-                        vobj.update()
+                    if len(vobj.Object.CloneOf.ViewObject.DiffuseColor) > 1:
+                        if vobj.DiffuseColor != vobj.Object.CloneOf.ViewObject.DiffuseColor:
+                            vobj.DiffuseColor = vobj.Object.CloneOf.ViewObject.DiffuseColor
+                            vobj.update()
         elif prop == "ShapeColor":
             # restore DiffuseColor after overridden by ShapeColor
             if len(vobj.DiffuseColor) > 1:
@@ -754,6 +755,9 @@ class ViewProviderComponent:
             if hasattr(self.Object,"Tool"):
                 if self.Object.Tool:
                     c.append(self.Object.Tool)
+            if hasattr(self.Object,"Subvolume"):
+                if self.Object.Subvolume:
+                    c.append(self.Object.Subvolume)
             return c
         return []
 

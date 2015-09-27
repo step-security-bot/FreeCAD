@@ -29,51 +29,22 @@ __title__="FreeCAD Draft Workbench"
 __author__ = "Yorik van Havre, Werner Mayer, Martin Burbaum, Ken Cline, Dmitry Chigrin, Daniel Falck"
 __url__ = "http://www.freecadweb.org"
 
-'''
-General description:
+## \addtogroup DRAFT
+#
+#  This module offers a range of tools to create and manipulate basic 2D objects
+#
+#  The module allows to create 2D geometric objects such as line, rectangle, circle,
+#  etc, modify these objects by moving, scaling or rotating them, and offers a couple of
+#  other utilities to manipulate further these objects, such as decompose them (downgrade)
+#  into smaller elements.
+#
+#  The functionality of the module is divided into GUI tools, usable from the
+#  FreeCAD interface, and corresponding python functions, that can perform the same
+#  operation programmatically.
+#
 
-    The Draft module is a FreeCAD module for drawing/editing 2D entities.
-    The aim is to give FreeCAD basic 2D-CAD capabilities (similar
-    to Autocad and other similar software). This modules is made to be run
-    inside FreeCAD and needs the PySide and pivy modules available.
+'''The Draft module offers a range of tools to create and manipulate basic 2D objects'''
 
-User manual:
-
-    http://www.freecadweb.org/wiki/index.php?title=2d_Drafting_Module
-
-How it works / how to extend:
-
-    This module is written entirely in python. If you know a bit of python
-    language, you are welcome to modify this module or to help us to improve it.
-    Suggestions are also welcome on the FreeCAD discussion forum.
-    
-    If you want to have a look at the code, here is a general explanation. The
-    Draft module is divided in several files:
-
-    - Draft.py: Hosts the functions that are useful for scripting outside of
-    the Draft module, it is the "Draft API"
-    - DraftGui.py: Creates and manages the special Draft toolbar
-    - DraftTools.py: Contains the user tools of the Draft module (the commands
-    from the Draft menu), and a couple of helpers such as the "Trackers"
-    (temporary geometry used while drawing)
-    - DraftVecUtils.py: a vector math library, contains functions that are not
-    implemented in the standard FreeCAD vector
-    - DraftGeomUtils.py: a library of misc functions to manipulate shapes.
-        
-    The Draft.py contains everything to create geometry in the scene. You
-    should start there if you intend to modify something. Then, the DraftTools
-    are where the FreeCAD commands are defined, while in DraftGui.py
-    you have the ui part, ie. the draft command bar. Both DraftTools and
-    DraftGui are loaded at module init by InitGui.py, which is called directly by FreeCAD.
-    The tools all have an Activated() function, which is called by FreeCAD when the
-    corresponding FreeCAD command is invoked. Most tools then create the trackers they
-    will need during operation, then place a callback mechanism, which will detect
-    user input and do the necessary cad operations. They also send commands to the
-    command bar, which will display the appropriate controls. While the scene event
-    callback watches mouse events, the keyboard is being watched by the command bar.
-'''
-
-# import FreeCAD modules
 import FreeCAD, math, sys, os, DraftVecUtils, Draft_rc
 from FreeCAD import Vector
 
@@ -90,17 +61,17 @@ arrowtypes = ["Dot","Circle","Arrow"]
 # General functions
 #---------------------------------------------------------------------------
 
-def stringencodecoin(str):
-    """Encode a unicode object to be used as a string in coin"""
+def stringencodecoin(ustr):
+    """stringencodecoin(str): Encodes a unicode object to be used as a string in coin"""
     try:
         from pivy import coin
         coin4 = coin.COIN_MAJOR_VERSION >= 4
     except (ImportError, AttributeError):
         coin4 = False
     if coin4:
-        return str.encode('utf-8')
+        return ustr.encode('utf-8')
     else:
-        return str.encode('latin1')
+        return ustr.encode('latin1')
 
 def typecheck (args_and_types, name="?"):
     "typecheck([arg1,type),(arg2,type),...]): checks arguments types"
@@ -581,7 +552,7 @@ def loadTexture(filename,size=None):
             return img
     return None
     
-def getMovableChildren(objectslist,recursive=False):
+def getMovableChildren(objectslist,recursive=True):
     '''getMovableChildren(objectslist,[recursive]): extends the given list of objects
     with all child objects that have a "MoveWithHost" property set to True. If
     recursive is True, all descendents are considered, otherwise only direct children.'''
@@ -785,7 +756,7 @@ def makeWire(pointslist,closed=False,placement=None,face=True,support=None):
     import DraftGeomUtils, Part
     if not isinstance(pointslist,list):
         e = pointslist.Wires[0].Edges
-        pointslist = Part.Wire(DraftGeomUtils.sortEdges(e))
+        pointslist = Part.Wire(Part.__sortEdges__(e))
         nlist = []
         for v in pointslist.Vertexes:
             nlist.append(v.Point)
@@ -1247,6 +1218,8 @@ def move(objectslist,vector,copy=False):
             if copy:
                 newobj = FreeCAD.ActiveDocument.addObject("App::Annotation",getRealName(obj.Name))
                 newobj.LabelText = obj.LabelText
+                if gui:
+                    formatObject(newobj,obj)
             else:
                 newobj = obj
             newobj.Position = obj.Position.add(vector)
@@ -1256,6 +1229,7 @@ def move(objectslist,vector,copy=False):
                 _Dimension(newobj)
                 if gui:
                     _ViewProviderDimension(newobj.ViewObject)
+                    formatObject(newobj,obj)
             else:
                 newobj = obj
             newobj.Start = obj.Start.add(vector)
@@ -1633,12 +1607,10 @@ def draftify(objectslist,makeblock=False,delete=True):
                         nobj.Shape = w
                 else:
                     nobj = makeWire(w)
-                #if obj.Shape.Faces:
-                #    nobj.ViewObject.DisplayMode = "Flat Lines"
-                #else:
-                #    nobj.ViewObject.DisplayMode = "Wireframe"
                 newobjlist.append(nobj)
                 formatObject(nobj,obj)
+                # sketches are always in wireframe mode. In Draft we don't like that!
+                nobj.ViewObject.DisplayMode = "Flat Lines"
             if delete:
                 FreeCAD.ActiveDocument.removeObject(obj.Name)
     FreeCAD.ActiveDocument.recompute()
@@ -1759,13 +1731,13 @@ def getSVG(obj,scale=1,linewidth=0.35,fontsize=12,fillstyle="shape color",direct
             svg += 'id="%s" ' % pathname
         svg += ' d="'
         if not wires:
-            egroups = (DraftGeomUtils.sortEdges(edges),)
+            egroups = (Part.__sortEdges__(edges),)
         else:
             egroups = []
             for w in wires:
                 w1=w.copy()
                 w1.fixWire()
-                egroups.append(DraftGeomUtils.sortEdges(w1.Edges))
+                egroups.append(Part.__sortEdges__(w1.Edges))
         for egroupindex, edges in enumerate(egroups):
             vs=() #skipped for the first edge
             for edgeindex,e in enumerate(edges):
@@ -2460,14 +2432,17 @@ def clone(obj,delta=None):
     formatObject(cl,obj[0])
     return cl
     
-def getCloneBase(obj):
-    '''getCloneBase(obj): returns the object cloned by this object, if
-    any, or this object if it is no clone'''
+def getCloneBase(obj,strict=False):
+    '''getCloneBase(obj,[strict]): returns the object cloned by this object, if
+    any, or this object if it is no clone. If strict is True, if this object is
+    not a clone, this function returns False'''
     if hasattr(obj,"CloneOf"):
         if obj.CloneOf:
             return getCloneBase(obj.CloneOf)
     if getType(obj) == "Clone":
         return obj.Objects[0]
+    if strict:
+        return False
     return obj
 
 def heal(objlist=None,delete=True,reparent=True):
@@ -2644,7 +2619,7 @@ def upgrade(objects,delete=False,force=None):
                     newobj.Shape = f
                 else:
                     edges.append(Part.Line(p1,p0).toShape())
-                    w = Part.Wire(DraftGeomUtils.sortEdges(edges))
+                    w = Part.Wire(Part.__sortEdges__(edges))
                     newobj = FreeCAD.ActiveDocument.addObject("Part::Feature","Wire")
                     newobj.Shape = w
                 addList.append(newobj)
@@ -2747,7 +2722,7 @@ def upgrade(objects,delete=False,force=None):
             for e in o.Shape.Edges:
                 edges.append(e)
         try:
-            nedges = DraftGeomUtils.sortEdges(edges[:])
+            nedges = Part.__sortEdges__(edges[:])
             # for e in nedges: print("debug: ",e.Curve,e.Vertexes[0].Point,e.Vertexes[-1].Point)
             w = Part.Wire(nedges)
         except Part.OCCError:
@@ -3281,11 +3256,11 @@ class _Dimension(_DraftObject):
     "The Draft Dimension object"
     def __init__(self, obj):
         _DraftObject.__init__(self,obj,"Dimension")
-        obj.addProperty("App::PropertyVector","Start","Draft","Startpoint of dimension")
-        obj.addProperty("App::PropertyVector","End","Draft","Endpoint of dimension")
+        obj.addProperty("App::PropertyVectorDistance","Start","Draft","Startpoint of dimension")
+        obj.addProperty("App::PropertyVectorDistance","End","Draft","Endpoint of dimension")
         obj.addProperty("App::PropertyVector","Normal","Draft","the normal direction of this dimension")
         obj.addProperty("App::PropertyVector","Direction","Draft","the normal direction of this dimension")
-        obj.addProperty("App::PropertyVector","Dimline","Draft","Point through which the dimension line passes")
+        obj.addProperty("App::PropertyVectorDistance","Dimline","Draft","Point through which the dimension line passes")
         obj.addProperty("App::PropertyLink","Support","Draft","The object measured by this dimension")
         obj.addProperty("App::PropertyLinkSubList","LinkedGeometry","Draft","The geometry this dimension is linked to")
         obj.addProperty("App::PropertyLength","Distance","Draft","The measurement of this dimension")
@@ -3343,7 +3318,7 @@ class _ViewProviderDimension(_ViewProviderDraft):
         obj.addProperty("App::PropertyDistance","ExtLines","Draft","Length of the extension lines")
         obj.addProperty("App::PropertyBool","FlipArrows","Draft","Rotate the dimension arrows 180 degrees")
         obj.addProperty("App::PropertyBool","ShowUnit","Draft","Show the unit suffix")        
-        obj.addProperty("App::PropertyVector","TextPosition","Draft","The position of the text. Leave (0,0,0) for automatic position")
+        obj.addProperty("App::PropertyVectorDistance","TextPosition","Draft","The position of the text. Leave (0,0,0) for automatic position")
         obj.addProperty("App::PropertyString","Override","Draft","Text override. Use $dim to insert the dimension length")
         obj.FontSize = getParam("textheight",0.20)
         obj.TextSpacing = getParam("dimspacing",0.05)
@@ -3677,8 +3652,8 @@ class _AngularDimension(_DraftObject):
         _DraftObject.__init__(self,obj,"AngularDimension")
         obj.addProperty("App::PropertyAngle","FirstAngle","Draft","Start angle of the dimension")
         obj.addProperty("App::PropertyAngle","LastAngle","Draft","End angle of the dimension")
-        obj.addProperty("App::PropertyVector","Dimline","Draft","Point through which the dimension line passes")
-        obj.addProperty("App::PropertyVector","Center","Draft","The center point of this dimension")
+        obj.addProperty("App::PropertyVectorDistance","Dimline","Draft","Point through which the dimension line passes")
+        obj.addProperty("App::PropertyVectorDistance","Center","Draft","The center point of this dimension")
         obj.addProperty("App::PropertyVector","Normal","Draft","The normal direction of this dimension")
         obj.addProperty("App::PropertyLink","Support","Draft","The object measured by this dimension")
         obj.addProperty("App::PropertyLinkSubList","LinkedGeometry","Draft","The geometry this dimension is linked to")
@@ -3713,7 +3688,7 @@ class _ViewProviderAngularDimension(_ViewProviderDraft):
         obj.addProperty("App::PropertyColor","LineColor","Draft","Line color")
         obj.addProperty("App::PropertyBool","FlipArrows","Draft","Rotate the dimension arrows 180 degrees")
         obj.addProperty("App::PropertyBool","ShowUnit","Draft","Show the unit suffix")
-        obj.addProperty("App::PropertyVector","TextPosition","Draft","The position of the text. Leave (0,0,0) for automatic position")
+        obj.addProperty("App::PropertyVectorDistance","TextPosition","Draft","The position of the text. Leave (0,0,0) for automatic position")
         obj.addProperty("App::PropertyString","Override","Draft","Text override. Use 'dim' to insert the dimension length")
         obj.FontSize = getParam("textheight",0.20)
         obj.FontName = getParam("textfont","")
@@ -4125,8 +4100,8 @@ class _Wire(_DraftObject):
         obj.addProperty("App::PropertyBool","Closed","Draft","If the wire is closed or not")
         obj.addProperty("App::PropertyLink","Base","Draft","The base object is the wire is formed from 2 objects")
         obj.addProperty("App::PropertyLink","Tool","Draft","The tool object is the wire is formed from 2 objects")
-        obj.addProperty("App::PropertyVector","Start","Draft","The start point of this line")
-        obj.addProperty("App::PropertyVector","End","Draft","The end point of this line")
+        obj.addProperty("App::PropertyVectorDistance","Start","Draft","The start point of this line")
+        obj.addProperty("App::PropertyVectorDistance","End","Draft","The end point of this line")
         obj.addProperty("App::PropertyLength","Length","Draft","The length of this line")
         obj.addProperty("App::PropertyLength","FilletRadius","Draft","Radius to use to fillet the corners")
         obj.addProperty("App::PropertyLength","ChamferSize","Draft","Size of the chamfer to give to the corners")
@@ -4674,7 +4649,7 @@ class _Shape2DView(_DraftObject):
                             c = sh.section(cutp)
                             if (obj.ProjectionMode == "Cutfaces") and (sh.ShapeType == "Solid"):
                                 try:
-                                    c = Part.Wire(DraftGeomUtils.sortEdges(c.Edges))
+                                    c = Part.Wire(Part.__sortEdges__(c.Edges))
                                 except Part.OCCError:
                                     pass
                                 else:
@@ -4733,11 +4708,11 @@ class _Array(_DraftObject):
         obj.addProperty("App::PropertyInteger","NumberY","Draft","Number of copies in Y direction")
         obj.addProperty("App::PropertyInteger","NumberZ","Draft","Number of copies in Z direction")
         obj.addProperty("App::PropertyInteger","NumberPolar","Draft","Number of copies")
-        obj.addProperty("App::PropertyVector","IntervalX","Draft","Distance and orientation of intervals in X direction")
-        obj.addProperty("App::PropertyVector","IntervalY","Draft","Distance and orientation of intervals in Y direction")
-        obj.addProperty("App::PropertyVector","IntervalZ","Draft","Distance and orientation of intervals in Z direction")
-        obj.addProperty("App::PropertyVector","IntervalAxis","Draft","Distance and orientation of intervals in Axis direction")
-        obj.addProperty("App::PropertyVector","Center","Draft","Center point")
+        obj.addProperty("App::PropertyVectorDistance","IntervalX","Draft","Distance and orientation of intervals in X direction")
+        obj.addProperty("App::PropertyVectorDistance","IntervalY","Draft","Distance and orientation of intervals in Y direction")
+        obj.addProperty("App::PropertyVectorDistance","IntervalZ","Draft","Distance and orientation of intervals in Z direction")
+        obj.addProperty("App::PropertyVectorDistance","IntervalAxis","Draft","Distance and orientation of intervals in Axis direction")
+        obj.addProperty("App::PropertyVectorDistance","Center","Draft","Center point")
         obj.addProperty("App::PropertyAngle","Angle","Draft","Angle to cover with copies")
         obj.addProperty("App::PropertyBool","Fuse","Draft","Specifies if copies must be fused (slower)")
         obj.ArrayType = ['ortho','polar']
@@ -4832,7 +4807,7 @@ class _PathArray(_DraftObject):
         obj.addProperty("App::PropertyLink","PathObj","Draft","The path object along which to distribute objects")
         obj.addProperty("App::PropertyLinkSubList","PathSubs","Draft","Selected subobjects (edges) of PathObj")                        
         obj.addProperty("App::PropertyInteger","Count","Draft","Number of copies")
-        obj.addProperty("App::PropertyVector","Xlate","Draft","Optional translation vector")
+        obj.addProperty("App::PropertyVectorDistance","Xlate","Draft","Optional translation vector")
         obj.addProperty("App::PropertyBool","Align","Draft","Orientation of Base along path")
         obj.Count = 2
         obj.PathSubs = []
@@ -4945,7 +4920,7 @@ class _PathArray(_DraftObject):
         import DraftGeomUtils
         closedpath = DraftGeomUtils.isReallyClosed(pathwire)
         normal = DraftGeomUtils.getNormal(pathwire)
-        path = DraftGeomUtils.sortEdges(pathwire.Edges)
+        path = Part.__sortEdges__(pathwire.Edges)
         ends = []
         cdist = 0
         for e in path:                                                 # find cumulative edge end distance
@@ -5042,7 +5017,8 @@ class _Clone(_DraftObject):
                 if not o.isDerivedFrom("Part::Part2DObject"):
                     FreeCAD.Console.PrintWarning("Warning 2D Clone "+obj.Name+" contains 3D geometry")
                     return
-        for o in obj.Objects:
+        objs = getGroupContents(obj.Objects)
+        for o in objs:
             if o.isDerivedFrom("Part::Feature"):
                 if o.Shape.isNull():
                     return
@@ -5353,4 +5329,3 @@ class _ViewProviderVisGroup:
                                     # touch the page if something was changed
                                     if vobj.Object.InList[0].isDerivedFrom("Drawing::FeaturePage"):
                                         vobj.Object.InList[0].touch()
-

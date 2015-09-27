@@ -150,6 +150,12 @@ public:
 
     /// trim a curve
     int trim(int geoId, const Base::Vector3d& point);
+    /// adds symmetric geometric elements with respect to the refGeoId (line or point)
+    int addSymmetric(const std::vector<int> &geoIdList, int refGeoId, Sketcher::PointPos refPosId=Sketcher::none);
+    /// with default parameters adds a copy of the geometric elements displaced by the displacement vector.
+    /// It creates an array of csize elements in the direction of the displacement vector by rsize elements in the
+    /// direction perpendicular to the displacement vector, wherein the modulus of this perpendicular vector is scaled by perpscale.
+    int addCopy(const std::vector<int> &geoIdList, const Base::Vector3d& displacement, bool clone=false, int csize=2, int rsize=1, bool constraindisplacement = false, double perpscale = 1.0);
     /// Exposes all internal geometry of an object supporting internal geometry
     /*!
      * \return -1 on error
@@ -170,10 +176,19 @@ public:
     /// retrieves for a GeoId and PosId the Vertex number 
     int getVertexIndexGeoPos(int GeoId, PointPos PosId) const;
 
-    /// retrieves for a Vertex number a list with all coincident points
-    void getCoincidentPoints(int GeoId, PointPos PosId, std::vector<int> &GeoIdList,
+    // retrieves an array of maps, each map containing the points that are coincidence by virtue of 
+    // any number of direct or indirect coincidence constraints
+    const std::vector< std::map<int, Sketcher::PointPos> > getCoincidenceGroups();
+    // returns if the given geoId is fixed (coincident) with external geometry on any of the possible relevant points
+    void isCoincidentWithExternalGeometry(int GeoId, bool &start_external, bool &mid_external, bool &end_external);
+    // returns a map containing all the GeoIds that are coincident with the given point as keys, and the PosIds as values associated
+    // with the keys.
+    const std::map<int, Sketcher::PointPos> getAllCoincidentPoints(int GeoId, PointPos PosId);
+    
+    /// retrieves for a Vertex number a list with all coincident points (sharing a single coincidence constraint)
+    void getDirectlyCoincidentPoints(int GeoId, PointPos PosId, std::vector<int> &GeoIdList,
                              std::vector<PointPos> &PosIdList);
-    void getCoincidentPoints(int VertexId, std::vector<int> &GeoIdList, std::vector<PointPos> &PosIdList);
+    void getDirectlyCoincidentPoints(int VertexId, std::vector<int> &GeoIdList, std::vector<PointPos> &PosIdList);
     bool arePointsCoincident(int GeoId1, PointPos PosId1, int GeoId2, PointPos PosId2);
 
     /// generates a warning message about constraint conflicts and appends it to the given message
@@ -207,6 +222,10 @@ public:
     bool evaluateConstraints() const;
     /// Remove constraints with invalid indexes
     void validateConstraints();
+    /// Checks if support is valid
+    bool evaluateSupport(void);
+    /// validate External Links (remove invalid external links)
+    void validateExternalLinks(void);
     
     /// gets DoF of last solver execution
     inline int getLastDoF() const {return lastDoF;}

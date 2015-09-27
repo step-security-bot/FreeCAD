@@ -420,13 +420,13 @@ void ViewProviderPartExt::onChanged(const App::Property* prop)
     }
     else if (prop == &DrawStyle) {
         if (DrawStyle.getValue() == 0)
-        pcLineStyle->linePattern = 0xffff;
+            pcLineStyle->linePattern = 0xffff;
         else if (DrawStyle.getValue() == 1)
-        pcLineStyle->linePattern = 0xf00f;
+            pcLineStyle->linePattern = 0xf00f;
         else if (DrawStyle.getValue() == 2)
-        pcLineStyle->linePattern = 0x0f0f;
+            pcLineStyle->linePattern = 0x0f0f;
         else
-        pcLineStyle->linePattern = 0xff88;
+            pcLineStyle->linePattern = 0xff88;
     }
     else {
         // if the object was invisible and has been changed, recreate the visual
@@ -435,9 +435,9 @@ void ViewProviderPartExt::onChanged(const App::Property* prop)
             // The material has to be checked again (#0001736)
             onChanged(&DiffuseColor);
         }
-
-        ViewProviderGeometryObject::onChanged(prop);
     }
+
+    ViewProviderGeometryObject::onChanged(prop);
 }
 
 void ViewProviderPartExt::attach(App::DocumentObject *pcFeat)
@@ -762,10 +762,10 @@ void ViewProviderPartExt::updateVisual(const TopoDS_Shape& inputShape)
         bounds.Get(xMin, yMin, zMin, xMax, yMax, zMax);
         Standard_Real deflection = ((xMax-xMin)+(yMax-yMin)+(zMax-zMin))/300.0 *
             Deviation.getValue();
-        Standard_Real AngDeflectionRads = AngularDeflection.getValue() / 180.0 * M_PI;
 
         // create or use the mesh on the data structure
 #if OCC_VERSION_HEX >= 0x060600
+        Standard_Real AngDeflectionRads = AngularDeflection.getValue() / 180.0 * M_PI;
         BRepMesh_IncrementalMesh(cShape,deflection,Standard_False,
                 AngDeflectionRads,Standard_True);
 #else

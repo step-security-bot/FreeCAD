@@ -165,7 +165,7 @@ App::PropertyFloatConstraint::Constraints ViewProviderFemMesh::floatRange = {1.0
 
 ViewProviderFemMesh::ViewProviderFemMesh()
 {
-    sPixmap = "Fem_FemMesh";
+    sPixmap = "fem-fem-mesh-from-shape";
 
     ADD_PROPERTY(PointColor,(App::Color(0.7f,0.7f,0.7f)));
     ADD_PROPERTY(PointSize,(5.0f));
@@ -418,7 +418,7 @@ std::string ViewProviderFemMesh::getElement(const SoDetail* detail) const
         else if (detail->getTypeId() == SoPointDetail::getClassTypeId()) {
             const SoPointDetail* point_detail = static_cast<const SoPointDetail*>(detail);
             int idx = point_detail->getCoordinateIndex();
-            if (idx < vNodeElementIdx.size()) {
+            if (idx < static_cast<int>(vNodeElementIdx.size())) {
                 int vertex = vNodeElementIdx[point_detail->getCoordinateIndex()];
                 str << "Node" << vertex;
             }
@@ -729,14 +729,12 @@ void ViewProviderFEMMeshBuilder::createMesh(const App::Property* prop,
 	const SMDS_MeshInfo& info = data->GetMeshInfo();
     int numTria = info.NbTriangles();
     int numQuad = info.NbQuadrangles();
-    int numPoly = info.NbPolygons();
                                                 
     int numVolu = info.NbVolumes();
     int numTetr = info.NbTetras();
     int numHexa = info.NbHexas();
     int numPyrd = info.NbPyramids();
     int numPris = info.NbPrisms();
-    int numHedr = info.NbPolyhedrons();
 
 
     bool ShowFaces = (numFaces >0 && numVolu == 0);

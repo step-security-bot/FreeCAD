@@ -321,7 +321,7 @@ def closeHole(shape):
     for e in shape.Edges:
         if lut[e.hashCode()] == 1:
             bound.append(e)
-    bound = DraftGeomUtils.sortEdges(bound)
+    bound = Part.__sortEdges__(bound)
     try:
         nface = Part.Face(Part.Wire(bound))
         shell = Part.makeShell(shape.Faces+[nface])
@@ -649,7 +649,14 @@ def pruneIncluded(objectslist):
                     if parent.isDerivedFrom("Part::Feature"):
                         if not parent.isDerivedFrom("Part::Part2DObject"):
                             # don't consider 2D objects based on arch elements
-                            toplevel = False
+                            if hasattr(parent,"CloneOf"):
+                                if parent.CloneOf:
+                                    if parent.CloneOf.Name != obj.Name:
+                                        toplevel = False
+                                else:
+                                    toplevel = False
+                            else:
+                                toplevel = False
         if toplevel:
             newlist.append(obj)
     return newlist

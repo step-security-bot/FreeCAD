@@ -18,10 +18,10 @@ set(PYTHON_EXECUTABLE   ${FREECAD_LIBPACK_DIR}/bin/python.exe)
 set(PYTHONLIBS_FOUND TRUE) 
 
 # XercesC
-set(XERCESC_INCLUDE_DIR ${FREECAD_LIBPACK_DIR}/include/xerces-c-3.1.0)
-set(XERCESC_LIBRARIES       xerces-c_3.lib)
-set(XERCESC_DEBUG_LIBRARIES xerces-c_3D.lib)
-set(XERCESC_FOUND TRUE) 
+set(XercesC_INCLUDE_DIRS ${FREECAD_LIBPACK_DIR}/include/xerces-c-3.1.0)
+set(XercesC_LIBRARIES       xerces-c_3.lib)
+set(XercesC_DEBUG_LIBRARIES xerces-c_3D.lib)
+set(XercesC_FOUND TRUE) 
 
 # Boost
 set(Boost_INCLUDE_DIRS ${FREECAD_LIBPACK_DIR}/include/boost-1_54)
@@ -30,6 +30,7 @@ set(Boost_LIBRARIES
     optimized boost_system-vc90-mt-1_54.lib 
     optimized boost_graph-vc90-mt-1_54.lib 
     optimized boost_program_options-vc90-mt-1_54.lib
+    optimized boost_python-vc90-mt-1_54.lib
     optimized boost_regex-vc90-mt-1_54.lib
     optimized boost_signals-vc90-mt-1_54.lib
     optimized boost_thread-vc90-mt-1_54.lib
@@ -37,6 +38,7 @@ set(Boost_LIBRARIES
     debug boost_system-vc90-mt-gd-1_54.lib
     debug boost_graph-vc90-mt-gd-1_54.lib 
     debug boost_program_options-vc90-mt-gd-1_54.lib
+    debug boost_python-vc90-mt-gd-1_54.lib
     debug boost_regex-vc90-mt-gd-1_54.lib
     debug boost_signals-vc90-mt-gd-1_54.lib
     debug boost_thread-vc90-mt-gd-1_54.lib
@@ -65,17 +67,8 @@ set(SMESH_LIBRARIES
 set(SMESH_FOUND TRUE) 
 
 # Coin3D
-find_path(COIN3D_INCLUDE_DIR Inventor/So.h
-${FREECAD_LIBPACK_DIR}/include/Coin-2.4.5
-)
-find_path(COIN3D_INCLUDE_DIR Inventor/So.h
+find_path(COIN3D_INCLUDE_DIRS Inventor/So.h
 ${FREECAD_LIBPACK_DIR}/include/Coin-4.0.0
-)
-find_library(COIN3D_LIBRARY_RELEASE coin2
-    "${FREECAD_LIBPACK_DIR}/lib"
-)
-find_library(COIN3D_LIBRARY_DEBUG coin2d
-    "${FREECAD_LIBPACK_DIR}/lib"
 )
 find_library(COIN3D_LIBRARY_RELEASE coin4
     "${FREECAD_LIBPACK_DIR}/lib"
@@ -83,6 +76,8 @@ find_library(COIN3D_LIBRARY_RELEASE coin4
 find_library(COIN3D_LIBRARY_DEBUG coin4d
     "${FREECAD_LIBPACK_DIR}/lib"
 )
+set(COIN3D_LIBRARIES optimized ${COIN3D_LIBRARY_RELEASE}
+                     debug ${COIN3D_LIBRARY_DEBUG})
 
 set(COIN3D_FOUND TRUE) 
 
@@ -376,6 +371,7 @@ set(OCC_LIBRARIES
     optimized TKSTL
     optimized TKShHealing
     optimized TKXSBase
+    optimized TKBin
     optimized TKBool
     optimized TKBO
     optimized TKBRep
@@ -401,6 +397,7 @@ set(OCC_DEBUG_LIBRARIES
     debug TKSTLd
     debug TKShHealingd
     debug TKXSBased
+    debug TKBind
     debug TKBoold
     debug TKBOd
     debug TKBRepd

@@ -100,6 +100,29 @@ private:
 };
 
 
+class AppExport PropertyVectorDistance: public PropertyVector
+{
+    TYPESYSTEM_HEADER();
+
+public:
+    /**
+     * A constructor.
+     * A more elaborate description of the constructor.
+     */
+    PropertyVectorDistance();
+
+    /**
+     * A destructor.
+     * A more elaborate description of the destructor.
+     */
+    virtual ~PropertyVectorDistance();
+
+    const char* getEditorName(void) const {
+        return "Gui::PropertyEditor::PropertyVectorDistanceItem";
+    }
+};
+
+
 class AppExport PropertyVectorList: public PropertyLists
 {
     TYPESYSTEM_HEADER();

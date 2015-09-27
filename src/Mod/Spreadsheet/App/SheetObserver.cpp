@@ -37,26 +37,8 @@ using namespace App;
 
 SheetObserver::SheetObserver(App::Document * document, PropertySheet *_sheet)
     : DocumentObserver(document)
-    , sheet(_sheet)
     , refCount(1)
-{
-}
-
-/**
-  * Unimplemented.
-  *
-  */
-
-void SheetObserver::slotCreatedDocument(const App::Document &Doc)
-{
-}
-
-/**
-  * Unimplemented.
-  *
-  */
-
-void SheetObserver::slotDeletedDocument(const App::Document &Doc)
+    , sheet(_sheet)
 {
 }
 

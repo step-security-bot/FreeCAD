@@ -47,7 +47,7 @@ def makeMechanicalMaterial(name):
 class _CommandMechanicalMaterial:
     "the Fem Material command definition"
     def GetResources(self):
-        return {'Pixmap': 'Fem_Material',
+        return {'Pixmap': 'fem-material',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Material", "Mechanical material..."),
                 'Accel': "M, M",
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Material", "Creates or edit the mechanical material definition.")}
@@ -78,7 +78,7 @@ class _CommandMechanicalMaterial:
 class _MechanicalMaterial:
     "The Material object"
     def __init__(self, obj):
-        self.Type = "MechanicaltMaterial"
+        self.Type = "MechanicalMaterial"
         obj.Proxy = self
         # obj.Material = StartMat
 
@@ -93,7 +93,7 @@ class _ViewProviderMechanicalMaterial:
         vobj.Proxy = self
 
     def getIcon(self):
-        return ":/icons/Fem_Material.svg"
+        return ":/icons/fem-material.svg"
 
     def attach(self, vobj):
         self.ViewObject = vobj
@@ -133,6 +133,7 @@ class _MechanicalMaterialTaskPanel:
         QtCore.QObject.connect(self.form.cb_materials, QtCore.SIGNAL("activated(int)"), self.choose_material)
         QtCore.QObject.connect(self.form.input_fd_young_modulus, QtCore.SIGNAL("valueChanged(double)"), self.ym_changed)
         QtCore.QObject.connect(self.form.spinBox_poisson_ratio, QtCore.SIGNAL("valueChanged(double)"), self.pr_changed)
+        QtCore.QObject.connect(self.form.input_fd_density, QtCore.SIGNAL("valueChanged(double)"), self.density_changed)
         self.previous_material = self.obj.Material
         self.import_materials()
         previous_mat_path = self.get_material_path(self.previous_material)
@@ -155,7 +156,6 @@ class _MechanicalMaterialTaskPanel:
     def reject(self):
         self.obj.Material = self.previous_material
         print "Reverting to material:"
-        self.print_mat_data(self.previous_material)
         FreeCADGui.ActiveDocument.resetEdit()
 
     def goMatWeb(self):
@@ -169,6 +169,14 @@ class _MechanicalMaterialTaskPanel:
             material = self.obj.Material
             # FreeCAD uses kPa internall for Stress
             material['YoungsModulus'] = unicode(value) + " kPa"
+            self.obj.Material = material
+
+    def density_changed(self, value):
+        import Units
+        old_density = Units.Quantity(self.obj.Material['Density'])
+        if old_density != value:
+            material = self.obj.Material
+            material['Density'] = unicode(value) + " kg/mm^3"
             self.obj.Material = material
 
     def pr_changed(self, value):
@@ -190,7 +198,6 @@ class _MechanicalMaterialTaskPanel:
         if 'Description' in self.obj.Material:
             gen_mat_desc = self.obj.Material['Description']
         self.form.l_mat_description.setText(gen_mat_desc)
-        self.print_mat_data(self.obj.Material)
 
     def get_material_name(self, material):
         if 'Name' in self.previous_material:
@@ -205,14 +212,6 @@ class _MechanicalMaterialTaskPanel:
                 return a_mat
         return ""
 
-    def print_mat_data(self, matmap):
-        print 'Material data:'
-        print ' Name = {}'.format(self.get_material_name(matmap))
-        if 'YoungsModulus' in matmap:
-            print ' YM = ', matmap['YoungsModulus']
-        if 'PoissonRatio' in matmap:
-            print ' PR = ', matmap['PoissonRatio']
-
     def set_mat_params_in_combo_box(self, matmap):
         if 'YoungsModulus' in matmap:
             ym_new_unit = "MPa"
@@ -221,6 +220,11 @@ class _MechanicalMaterialTaskPanel:
             self.form.input_fd_young_modulus.setText("{} {}".format(ym_with_new_unit, ym_new_unit))
         if 'PoissonRatio' in matmap:
             self.form.spinBox_poisson_ratio.setValue(float(matmap['PoissonRatio']))
+        if 'Density' in matmap:
+            density_new_unit = "kg/m^3"
+            density = FreeCAD.Units.Quantity(matmap['Density'])
+            density_with_new_unit = density.getValueAs(density_new_unit)
+            self.form.input_fd_density.setText("{} {}".format(density_with_new_unit, density_new_unit))
 
     def add_transient_material(self, material):
         material_name = self.get_material_name(material)
@@ -265,4 +269,5 @@ class _MechanicalMaterialTaskPanel:
             self.add_mat_dir(custom_mat_dir, ":/icons/user.svg")
 
 
-FreeCADGui.addCommand('Fem_MechanicalMaterial', _CommandMechanicalMaterial())
+if FreeCAD.GuiUp:
+    FreeCADGui.addCommand('Fem_MechanicalMaterial', _CommandMechanicalMaterial())

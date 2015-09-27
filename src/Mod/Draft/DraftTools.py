@@ -27,6 +27,11 @@ __title__="FreeCAD Draft Workbench GUI Tools"
 __author__ = "Yorik van Havre, Werner Mayer, Martin Burbaum, Ken Cline, Dmitry Chigrin"
 __url__ = "http://www.freecadweb.org"
 
+## \defgroup DRAFTTOOLS DraftTools
+#  \ingroup DRAFT
+#
+# GUI Commands of the Draft workbench
+
 #---------------------------------------------------------------------------
 # Generic stuff
 #---------------------------------------------------------------------------
@@ -2718,7 +2723,7 @@ class Trimex(Modifier):
             self.extrudeMode = False
             if self.obj.Shape.Wires:
                 self.edges = self.obj.Shape.Wires[0].Edges
-                self.edges = DraftGeomUtils.sortEdges(self.edges)
+                self.edges = Part.__sortEdges__(self.edges)
             else:
                 self.edges = self.obj.Shape.Edges
             self.ghost = []
@@ -2782,7 +2787,7 @@ class Trimex(Modifier):
         dvec = self.point.sub(self.newpoint)
         if not shift: delta = DraftVecUtils.project(dvec,self.normal)
         else: delta = dvec
-        if self.force:
+        if self.force and delta.Length:
             ratio = self.force/delta.Length
             delta.multiply(ratio)
         if real: return delta
@@ -4058,7 +4063,7 @@ class Draft2Sketch(Modifier):
     def GetResources(self):
         return {'Pixmap'  : 'Draft_Draft2Sketch',
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Draft_Draft2Sketch", "Draft to Sketch"),
-                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Draft_Shape2DView", "Convert bidirectionally between Draft and Sketch objects")}
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Draft_Draft2Sketch", "Convert bidirectionally between Draft and Sketch objects")}
 
     def Activated(self):
         Modifier.Activated(self)

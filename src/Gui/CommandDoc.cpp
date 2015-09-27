@@ -477,6 +477,38 @@ bool StdCmdSaveAs::isActive(void)
 }
 
 //===========================================================================
+// Std_SaveCopy
+//===========================================================================
+DEF_STD_CMD_A(StdCmdSaveCopy);
+
+StdCmdSaveCopy::StdCmdSaveCopy()
+  :Command("Std_SaveCopy")
+{
+  sGroup        = QT_TR_NOOP("File");
+  sMenuText     = QT_TR_NOOP("Save a &Copy...");
+  sToolTipText  = QT_TR_NOOP("Save a copy of the active document under a new file name");
+  sWhatsThis    = "Std_SaveCopy";
+  sStatusTip    = QT_TR_NOOP("Save a copy of the active document under a new file name");
+  //sPixmap       = "document-save-as";
+}
+
+void StdCmdSaveCopy::activated(int iMsg)
+{
+#if 0
+  Gui::Document* pActiveDoc = getActiveGuiDocument();
+  if ( pActiveDoc )
+    pActiveDoc->saveCopy();
+  else
+#endif
+    doCommand(Command::Gui,"Gui.SendMsgToActiveView(\"SaveCopy\")");
+}
+
+bool StdCmdSaveCopy::isActive(void)
+{
+  return ( getActiveGuiDocument() ? true : false );
+}
+
+//===========================================================================
 // Std_Revert
 //===========================================================================
 DEF_STD_CMD_A(StdCmdRevert);
@@ -494,7 +526,6 @@ StdCmdRevert::StdCmdRevert()
 
 void StdCmdRevert::activated(int iMsg)
 {
-    App::Document* doc = App::GetApplication().getActiveDocument();
     QMessageBox msgBox;
     msgBox.setText(qApp->translate("Std_Revert","This will discard all the changes since last file save."));
     msgBox.setInformativeText(qApp->translate("Std_Revert","Are you sure?"));
@@ -894,7 +925,7 @@ void StdCmdDuplicateSelection::activated(int iMsg)
     if (objs.empty())
         return;
 
-    Base::FileInfo fi(Base::FileInfo::getTempFileName());
+    Base::FileInfo fi(App::Application::getTempFileName());
     {
         std::vector<App::DocumentObject*> sel; // selected
         std::vector<App::DocumentObject*> all; // object sub-graph
@@ -1009,7 +1040,6 @@ void StdCmdDelete::activated(int iMsg)
             if (vpedit) {
                 // check if the edited view provider is selected
                 for (std::vector<Gui::SelectionObject>::iterator ft = sel.begin(); ft != sel.end(); ++ft) {
-                    App::DocumentObject* obj = ft->getObject();
                     Gui::ViewProvider* vp = pGuiDoc->getViewProvider(ft->getObject());
                     if (vp == vpedit) {
                         if (!ft->getSubNames().empty()) {
@@ -1031,7 +1061,6 @@ void StdCmdDelete::activated(int iMsg)
                 // check if we can delete the object
                 for (std::vector<Gui::SelectionObject>::iterator ft = sel.begin(); ft != sel.end(); ++ft) {
                     App::DocumentObject* obj = ft->getObject();
-                    Gui::ViewProvider* vp = pGuiDoc->getViewProvider(ft->getObject());
                     std::vector<App::DocumentObject*> links = obj->getInList();
                     if (!links.empty()) {
                         // check if the referenced objects are groups or are selected too
@@ -1330,6 +1359,7 @@ void CreateDocCommands(void)
 
     rcCmdMgr.addCommand(new StdCmdSave());
     rcCmdMgr.addCommand(new StdCmdSaveAs());
+    rcCmdMgr.addCommand(new StdCmdSaveCopy());
     rcCmdMgr.addCommand(new StdCmdRevert());
     rcCmdMgr.addCommand(new StdCmdProjectInfo());
     rcCmdMgr.addCommand(new StdCmdProjectUtil());

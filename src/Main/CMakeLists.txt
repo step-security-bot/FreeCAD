@@ -4,19 +4,19 @@
 if(BUILD_GUI)
     include_directories(
         ${Boost_INCLUDE_DIRS}
-        ${COIN3D_INCLUDE_DIR}
+        ${COIN3D_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIR}
         ${QT_INCLUDE_DIR}
-        ${PYTHON_INCLUDE_PATH}
-        ${XERCESC_INCLUDE_DIR}
+        ${PYTHON_INCLUDE_DIRS}
+        ${XercesC_INCLUDE_DIRS}
     )
 else(BUILD_GUI)
     include_directories(
         ${Boost_INCLUDE_DIRS}
         ${ZLIB_INCLUDE_DIR}
         ${QT_INCLUDE_DIR}
-        ${PYTHON_INCLUDE_PATH}
-        ${XERCESC_INCLUDE_DIR}
+        ${PYTHON_INCLUDE_DIRS}
+        ${XercesC_INCLUDE_DIRS}
     )
 endif(BUILD_GUI)
 

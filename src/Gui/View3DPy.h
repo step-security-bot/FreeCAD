@@ -54,7 +54,7 @@ public:
     Py::Object viewRear(const Py::Tuple&);
     Py::Object viewRight(const Py::Tuple&);
     Py::Object viewTop(const Py::Tuple&);
-    Py::Object viewAxometric(const Py::Tuple&);
+    Py::Object viewAxonometric(const Py::Tuple&);
     Py::Object viewPosition(const Py::Tuple&);
     Py::Object viewRotateLeft(const Py::Tuple&);
     Py::Object viewRotateRight(const Py::Tuple&);
@@ -65,7 +65,6 @@ public:
     Py::Object setAnimationEnabled(const Py::Tuple&);
     Py::Object isAnimationEnabled(const Py::Tuple&);
     Py::Object dump(const Py::Tuple&);
-    Py::Object dumpSelection(const Py::Tuple&);
     Py::Object dumpNode(const Py::Tuple&);
     Py::Object setStereoType(const Py::Tuple&);
     Py::Object getStereoType(const Py::Tuple&);

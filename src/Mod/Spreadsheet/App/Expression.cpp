@@ -111,7 +111,7 @@ bool Path::operator <(const Path &other) const
     if (components.size() > other.components.size())
         return false;
 
-    for (int i = 0; i < components.size(); ++i) {
+    for (std::size_t i = 0; i < components.size(); ++i) {
         if (components[i].component < other.components[i].component)
             return true;
         if (components[i].component > other.components[i].component)
@@ -448,8 +448,8 @@ TYPESYSTEM_SOURCE(Spreadsheet::OperatorExpression, Spreadsheet::Expression);
 
 OperatorExpression::OperatorExpression(const App::DocumentObject *_owner, Expression * _left, Operator _op, Expression * _right)
     : UnitExpression(_owner)
-    , left(_left)
     , op(_op)
+    , left(_left)
     , right(_right)
 {
 
@@ -481,7 +481,7 @@ Expression * OperatorExpression::eval() const
     NumberExpression * v1;
     std::auto_ptr<Expression> e2(right->eval());
     NumberExpression * v2;
-    NumberExpression * output;
+    NumberExpression * output = 0;
 
     v1 = freecad_dynamic_cast<NumberExpression>(e1.get());
     v2 = freecad_dynamic_cast<NumberExpression>(e2.get());
@@ -592,6 +592,8 @@ std::string OperatorExpression::toString() const
         break;
     case POS:
         s << "+";
+        break;
+    default:
         break;
     }
 
@@ -805,9 +807,9 @@ Expression * FunctionExpression::eval() const
             if (!p)
                 continue;
 
-            if (qp = freecad_dynamic_cast<PropertyQuantity>(p))
+            if ( (qp = freecad_dynamic_cast<PropertyQuantity>(p)) )
                 value = qp->getQuantityValue();
-            else if (fp = freecad_dynamic_cast<PropertyFloat>(p))
+            else if ( (fp = freecad_dynamic_cast<PropertyFloat>(p)) )
                 value = fp->getValue();
             else
                 throw Exception("Invalid property type for aggregate");
@@ -843,6 +845,8 @@ Expression * FunctionExpression::eval() const
                 if (first || value > q)
                     q = value;
                 break;
+            default:
+                break;
             }
 
             first = false;
@@ -858,6 +862,8 @@ Expression * FunctionExpression::eval() const
             else
                 q = (M2 / (n - 1.0)).pow(Quantity(0.5));
             break;
+        default:
+            break;
         }
 
         return new NumberExpression(owner, q);
@@ -871,7 +877,7 @@ Expression * FunctionExpression::eval() const
     std::auto_ptr<Expression> e2(args.size() > 1 ? args[1]->eval() : 0);
     NumberExpression * v1 = freecad_dynamic_cast<NumberExpression>(e1.get());
     NumberExpression * v2 = freecad_dynamic_cast<NumberExpression>(e2.get());
-    double output;
+    double output = 0;
     Unit unit;
     double scaler = 1;
 
@@ -1054,6 +1060,7 @@ Expression *FunctionExpression::simplify() const
         case ATAN2:
         case MOD:
         case POW:
+        {
             Expression * v2 = args[1]->simplify();
 
             if (freecad_dynamic_cast<NumberExpression>(v2)) {
@@ -1067,6 +1074,9 @@ Expression *FunctionExpression::simplify() const
                 a.push_back(v2);
                 return new FunctionExpression(owner, f, a);
             }
+        }
+        default:
+            break;
         }
         delete v1;
         return eval();
