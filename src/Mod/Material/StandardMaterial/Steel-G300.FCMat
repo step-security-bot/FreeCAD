@@ -7,7 +7,6 @@
 Name = G300
 NameDE = GS 60
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 600
 PoissonRatio = 0.3

@@ -7,7 +7,6 @@
 Name = C25E
 NameDE = Ck25
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 550
 PoissonRatio = 0.3

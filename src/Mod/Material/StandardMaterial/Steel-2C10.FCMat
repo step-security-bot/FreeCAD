@@ -7,7 +7,6 @@
 Name = 2C10
 NameDE = Ck10
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 640
 PoissonRatio = 0.3

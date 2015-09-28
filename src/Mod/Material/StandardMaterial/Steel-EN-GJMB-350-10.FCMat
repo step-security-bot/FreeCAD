@@ -8,7 +8,6 @@ Name = EN-GJMB-350-10
 NameDE = GTS 35-10
 DescriptionDE = gut spanbar, Schaltgabeln, Getriebe-, Achsgehäuse
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 175000 MPa
 UltimateTensileStrength = 350
 PoissonRatio = 0.3

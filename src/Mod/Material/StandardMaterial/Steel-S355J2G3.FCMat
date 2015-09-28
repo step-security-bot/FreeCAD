@@ -7,7 +7,6 @@
 Name = S355J2G3
 NameDE = St52-3
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 510
 PoissonRatio = 0.3

@@ -371,6 +371,7 @@ set(OCC_LIBRARIES
     optimized TKSTL
     optimized TKShHealing
     optimized TKXSBase
+    optimized TKBin
     optimized TKBool
     optimized TKBO
     optimized TKBRep
@@ -396,6 +397,7 @@ set(OCC_DEBUG_LIBRARIES
     debug TKSTLd
     debug TKShHealingd
     debug TKXSBased
+    debug TKBind
     debug TKBoold
     debug TKBOd
     debug TKBRepd
@@ -435,10 +437,6 @@ set(EIGEN2_FOUND TRUE)
 
 set(EIGEN3_INCLUDE_DIR ${FREECAD_LIBPACK_DIR}/include/eigen3)
 set(EIGEN3_FOUND TRUE)
-
-set(ODE_INCLUDE_DIRS ${FREECAD_LIBPACK_DIR}/include/ode-0.11.1)
-set(ODE_LIBRARIES ${FREECAD_LIBPACK_DIR}/lib/ode_double.lib)
-set(ODE_FOUND TRUE)
 
 # FreeType
 if(FREECAD_USE_FREETYPE)

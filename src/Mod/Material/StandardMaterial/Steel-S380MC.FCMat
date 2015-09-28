@@ -8,7 +8,6 @@ Name = S380MC
 NameDE = QStE380 TM
 DescriptionDE = gut biegbar, Fahrgestellrahmen, Hilfsrahmen
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 520
 PoissonRatio = 0.3

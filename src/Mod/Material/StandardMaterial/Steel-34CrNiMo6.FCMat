@@ -8,7 +8,6 @@ Name = 34CrNiMo6
 NameDE = 34CrNiMo6
 DescriptionDE = höchste Beanspruchung, Wellen, Zahnräder
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 1200
 PoissonRatio = 0.3

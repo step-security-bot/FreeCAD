@@ -689,19 +689,18 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                 case STATUS_SELECT_Constraint:
                     if (pp) {
                         for(std::set<int>::iterator it = edit->PreselectConstraintSet.begin(); it != edit->PreselectConstraintSet.end(); ++it) {
-                            std::stringstream ss;
-                            ss << "Constraint" << *it + 1;
+                            std::string constraintName(Sketcher::PropertyConstraintList::getConstraintName(*it));
 
                             // If the constraint already selected remove
                             if (Gui::Selection().isSelected(getSketchObject()->getDocument()->getName()
-                                                           ,getSketchObject()->getNameInDocument(),ss.str().c_str()) ) {
+                                                           ,getSketchObject()->getNameInDocument(),constraintName.c_str()) ) {
                                 Gui::Selection().rmvSelection(getSketchObject()->getDocument()->getName()
-                                                             ,getSketchObject()->getNameInDocument(), ss.str().c_str());
+                                                             ,getSketchObject()->getNameInDocument(), constraintName.c_str());
                             } else {
                                 // Add constraint to current selection
                                 Gui::Selection().addSelection(getSketchObject()->getDocument()->getName()
                                                              ,getSketchObject()->getNameInDocument()
-                                                             ,ss.str().c_str()
+                                                             ,constraintName.c_str()
                                                              ,pp->getPoint()[0]
                                                              ,pp->getPoint()[1]
                                                              ,pp->getPoint()[2]);
@@ -832,11 +831,6 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                         } else if (edit->PreselectConstraintSet.empty() != true) {
                             return true;
                         } else {
-                            //Get Viewer
-                            Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
-                            Gui::View3DInventorViewer *viewer;
-                            viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
-
                             Gui::MenuItem *geom = new Gui::MenuItem();
                             geom->setCommand("Sketcher geoms");
                             *geom << "Sketcher_CreatePoint"
@@ -853,7 +847,8 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                                   << "Sketcher_External"
                                   << "Sketcher_ToggleConstruction"
                                 /*<< "Sketcher_CreateText"*/
-                                /*<< "Sketcher_CreateDraftLine"*/;
+                                /*<< "Sketcher_CreateDraftLine"*/
+                                  << "Separator";
 
                             Gui::Application::Instance->setupContextMenu("View", geom);
                             //Create the Context Menu using the Main View Qt Widget
@@ -868,11 +863,6 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                     break;
                 case STATUS_SELECT_Edge:
                     {
-                        //Get Viewer
-                        Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
-                        Gui::View3DInventorViewer *viewer ;
-                        viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
-
                         Gui::MenuItem *geom = new Gui::MenuItem();
                         geom->setCommand("Sketcher constraints");
                         *geom << "Sketcher_ConstrainVertical"
@@ -1011,7 +1001,7 @@ bool ViewProviderSketch::mouseMove(const SbVec2s &cursorPos, Gui::View3DInventor
         return false;
     }
 
-    bool preselectChanged;
+    bool preselectChanged = false;
     if (Mode != STATUS_SELECT_Point &&
         Mode != STATUS_SELECT_Edge &&
         Mode != STATUS_SELECT_Constraint &&
@@ -1169,15 +1159,19 @@ void ViewProviderSketch::moveConstraint(int constNum, const Base::Vector2D &toPo
     const std::vector<Sketcher::Constraint *> &constrlist = getSketchObject()->Constraints.getValues();
     Constraint *Constr = constrlist[constNum];
 
+#ifdef _DEBUG
     int intGeoCount = getSketchObject()->getHighestCurveIndex() + 1;
     int extGeoCount = getSketchObject()->getExternalGeometryCount();
-    
+#endif
+
     // with memory allocation
     const std::vector<Part::Geometry *> geomlist = getSketchObject()->getSolvedSketch().extractGeometry(true, true);
 
+#ifdef _DEBUG
     assert(int(geomlist.size()) == extGeoCount + intGeoCount);
     assert((Constr->First >= -extGeoCount && Constr->First < intGeoCount)
            || Constr->First != Constraint::GeoUndef);
+#endif
 
     if (Constr->Type == Distance || Constr->Type == DistanceX || Constr->Type == DistanceY ||
         Constr->Type == Radius) {
@@ -1332,8 +1326,11 @@ Base::Vector3d ViewProviderSketch::seekConstraintPosition(const Base::Vector3d &
                                                           const SoNode *constraint)
 {
     assert(edit);
-    Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
+    Gui::MDIView *mdi = this->getEditingView();
+    if (!(mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())))
+        return Base::Vector3d(0, 0, 0);
     Gui::View3DInventorViewer *viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
+
     SoRayPickAction rp(viewer->getSoRenderManager()->getViewportRegion());
 
     float scaled_step = step * getScaleFactor();
@@ -1445,7 +1442,7 @@ void ViewProviderSketch::onSelectionChanged(const Gui::SelectionChanges& msg)
                         this->updateColor();
                     }
                     else if (shapetype.size() > 10 && shapetype.substr(0,10) == "Constraint") {
-                        int ConstrId = std::atoi(&shapetype[10]) - 1;
+                        int ConstrId = Sketcher::PropertyConstraintList::getIndexFromConstraintName(shapetype);
                         edit->SelConstraintSet.insert(ConstrId);
                         this->drawConstraintIcons();
                         this->updateColor();
@@ -1490,7 +1487,7 @@ void ViewProviderSketch::onSelectionChanged(const Gui::SelectionChanges& msg)
                             this->updateColor();
                         }
                         else if (shapetype.size() > 10 && shapetype.substr(0,10) == "Constraint") {
-                            int ConstrId = std::atoi(&shapetype[10]) - 1;
+                            int ConstrId = Sketcher::PropertyConstraintList::getIndexFromConstraintName(shapetype);
                             edit->SelConstraintSet.erase(ConstrId);
                             this->drawConstraintIcons();
                             this->updateColor();
@@ -1744,12 +1741,12 @@ bool ViewProviderSketch::detectPreselection(const SoPickedPoint *Point,
         } else if (constrIndices.empty() == false && constrIndices != edit->PreselectConstraintSet) { // if a constraint is hit
             bool accepted = true;
             for(std::set<int>::iterator it = constrIndices.begin(); it != constrIndices.end(); ++it) {
-                std::stringstream ss;
-                ss << "Constraint" << *it + 1;
+                std::string constraintName(Sketcher::PropertyConstraintList::getConstraintName(*it));
+
                 accepted &=
                 Gui::Selection().setPreselect(getSketchObject()->getDocument()->getName()
                                              ,getSketchObject()->getNameInDocument()
-                                             ,ss.str().c_str()
+                                             ,constraintName.c_str()
                                              ,Point->getPoint()[0]
                                              ,Point->getPoint()[1]
                                              ,Point->getPoint()[2]);
@@ -1814,6 +1811,39 @@ SbVec3s ViewProviderSketch::getDisplayedSize(const SoImage *iconPtr) const
     if (iconPtr->height.getValue() != -1)
         iconSize[1] = iconPtr->height.getValue();
     return iconSize;
+}
+
+void ViewProviderSketch::centerSelection()
+{
+    Gui::MDIView *mdi = this->getActiveView();
+    Gui::View3DInventor *view = qobject_cast<Gui::View3DInventor*>(mdi);
+    if (!view || !edit)
+        return;
+
+    SoGroup* group = new SoGroup();
+    group->ref();
+
+    for (int i=0; i < edit->constrGroup->getNumChildren(); i++) {
+        if (edit->SelConstraintSet.find(i) != edit->SelConstraintSet.end()) {
+            SoSeparator *sep = dynamic_cast<SoSeparator *>(edit->constrGroup->getChild(i));
+            group->addChild(sep);
+        }
+    }
+
+    Gui::View3DInventorViewer* viewer = view->getViewer();
+    SoGetBoundingBoxAction action(viewer->getSoRenderManager()->getViewportRegion());
+    action.apply(group);
+    group->unref();
+
+    SbBox3f box = action.getBoundingBox();
+    if (!box.isEmpty()) {
+        SoCamera* camera = viewer->getSoRenderManager()->getCamera();
+        SbVec3f direction;
+        camera->orientation.getValue().multVec(SbVec3f(0, 0, 1), direction);
+        SbVec3f box_cnt = box.getCenter();
+        SbVec3f cam_pos = box_cnt + camera->focalDistance.getValue() * direction;
+        camera->position.setValue(cam_pos);
+    }
 }
 
 void ViewProviderSketch::doBoxSelection(const SbVec2s &startPos, const SbVec2s &endPos,
@@ -2277,7 +2307,7 @@ void ViewProviderSketch::updateColor(void)
         // Non DatumLabel Nodes will have a material excluding coincident
         bool hasMaterial = false;
 
-        SoMaterial *m;
+        SoMaterial *m = 0;
         if (!hasDatumLabel && type != Sketcher::Coincident && type !=InternalAlignment) {
             hasMaterial = true;
             m = dynamic_cast<SoMaterial *>(s->getChild(CONSTRAINT_SEPARATOR_INDEX_MATERIAL_OR_DATUMLABEL));
@@ -2306,7 +2336,6 @@ void ViewProviderSketch::updateColor(void)
                             int cGeoId = edit->CurvIdToGeoId[i];
                             
                             if(cGeoId == constraint->First) {
-                                int indexes=(edit->CurveSet->numVertices[i]);
                                 color[i] = SelectColor;
                                 break;
                             }
@@ -2523,11 +2552,14 @@ void ViewProviderSketch::drawConstraintIcons()
             double x0,y0,x1,y1;
             SbVec3f pos0(startingpoint.x,startingpoint.y,startingpoint.z);
             SbVec3f pos1(endpoint.x,endpoint.y,endpoint.z);
-            
-            Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
+
+            Gui::MDIView *mdi = this->getEditingView();
+            if (!(mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())))
+                return;
             Gui::View3DInventorViewer *viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
             SoCamera* pCam = viewer->getSoRenderManager()->getCamera();
-            if (!pCam) return;
+            if (!pCam)
+                return;
 
             try {
                 SbViewVolume vol = pCam->getViewVolume();
@@ -2644,8 +2676,8 @@ void ViewProviderSketch::drawMergedConstraintIcons(IconQueue iconQueue)
 
     QImage compositeIcon;
     float closest = FLT_MAX;  // Closest distance between avPos and any icon
-    SoImage *thisDest;
-    SoInfo *thisInfo;
+    SoImage *thisDest = 0;
+    SoInfo *thisInfo = 0;
 
     // Tracks all constraint IDs that are combined into this icon
     QString idString;
@@ -2891,11 +2923,12 @@ void ViewProviderSketch::drawTypicalConstraintIcon(const constrIconQueueItem &i)
 
 float ViewProviderSketch::getScaleFactor()
 {
-    Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
+    Gui::MDIView *mdi = this->getEditingView();
     if (mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())) {
         Gui::View3DInventorViewer *viewer = static_cast<Gui::View3DInventor *>(mdi)->getViewer();
         return viewer->getSoRenderManager()->getCamera()->getViewVolume(viewer->getSoRenderManager()->getCamera()->aspectRatio.getValue()).getWorldToScreenScale(SbVec3f(0.f, 0.f, 0.f), 0.1f) / 3;
-    } else {
+    }
+    else {
         return 1.f;
     }
 }
@@ -2903,9 +2936,6 @@ float ViewProviderSketch::getScaleFactor()
 void ViewProviderSketch::draw(bool temp)
 {
     assert(edit);
-
-    // Get Bounding box dimensions for Datum text
-    Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
 
     // Render Geometry ===================================================
     std::vector<Base::Vector3d> Coords;
@@ -3163,7 +3193,6 @@ Restart:
             SoSeparator *sep = dynamic_cast<SoSeparator *>(edit->constrGroup->getChild(i));
             const Constraint *Constr = *it;
 
-            bool major_radius = false; // this is checked in the radius to reuse code
             // distinquish different constraint types to build up
             switch (Constr->Type) {
                 case Horizontal: // write the new position of the Horizontal constraint Same as vertical position.
@@ -3495,9 +3524,9 @@ Restart:
                         if ((Constr->Type == DistanceX || Constr->Type == DistanceY) &&
                             Constr->FirstPos != Sketcher::none && Constr->Second == Constraint::GeoUndef)
                             // display negative sign for absolute coordinates
-                            asciiText->string = SbString(Base::Quantity(Constr->Value,Base::Unit::Length).getUserString().toUtf8().constData());
+                            asciiText->string = SbString(Base::Quantity(Constr->getValue(),Base::Unit::Length).getUserString().toUtf8().constData());
                         else // hide negative sign
-                            asciiText->string = SbString(Base::Quantity(std::abs(Constr->Value),Base::Unit::Length).getUserString().toUtf8().constData());
+                            asciiText->string = SbString(Base::Quantity(std::abs(Constr->getValue()),Base::Unit::Length).getUserString().toUtf8().constData());
 
                         if (Constr->Type == Distance)
                             asciiText->datumtype = SoDatumLabel::DISTANCE;
@@ -3786,7 +3815,6 @@ Restart:
                                 const Part::GeomArcOfCircle *arc = dynamic_cast<const Part::GeomArcOfCircle *>(geo);
                                 p0 = Base::convertTo<SbVec3f>(arc->getCenter());
 
-                                Base::Vector3d dir = arc->getEndPoint(/*emulateCCWXY=*/true)-arc->getStartPoint(/*emulateCCWXY=*/true);
                                 arc->getRange(startangle, endangle,/*emulateCCWXY=*/true);
                                 range = endangle - startangle;
                             }
@@ -3797,7 +3825,7 @@ Restart:
                             break;
 
                         SoDatumLabel *asciiText = dynamic_cast<SoDatumLabel *>(sep->getChild(CONSTRAINT_SEPARATOR_INDEX_MATERIAL_OR_DATUMLABEL));
-                        asciiText->string    = SbString(Base::Quantity(Base::toDegrees<double>(std::abs(Constr->Value)),Base::Unit::Angle).getUserString().toUtf8().constData());
+                        asciiText->string    = SbString(Base::Quantity(Base::toDegrees<double>(std::abs(Constr->getValue())),Base::Unit::Angle).getUserString().toUtf8().constData());
                         asciiText->datumtype = SoDatumLabel::ANGLE;
                         asciiText->param1    = Constr->LabelDistance;
                         asciiText->param2    = startangle;
@@ -3851,7 +3879,7 @@ Restart:
                         SbVec3f p2(pnt2.x,pnt2.y,zConstr);
 
                         SoDatumLabel *asciiText = dynamic_cast<SoDatumLabel *>(sep->getChild(CONSTRAINT_SEPARATOR_INDEX_MATERIAL_OR_DATUMLABEL));
-                        asciiText->string = SbString(Base::Quantity(Constr->Value,Base::Unit::Length).getUserString().toUtf8().constData());
+                        asciiText->string = SbString(Base::Quantity(Constr->getValue(),Base::Unit::Length).getUserString().toUtf8().constData());
 
                         asciiText->datumtype    = SoDatumLabel::RADIUS;
                         asciiText->param1       = Constr->LabelDistance;
@@ -3884,10 +3912,14 @@ Restart:
     this->updateColor();
 
     // delete the cloned objects
-    if (temp)
-        for (std::vector<Part::Geometry *>::iterator it=tempGeo.begin(); it != tempGeo.end(); ++it)
-            if (*it) delete *it;
+    if (temp) {
+        for (std::vector<Part::Geometry *>::iterator it=tempGeo.begin(); it != tempGeo.end(); ++it) {
+            if (*it)
+                delete *it;
+        }
+    }
 
+    Gui::MDIView *mdi = this->getActiveView();
     if (mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())) { 
         static_cast<Gui::View3DInventor *>(mdi)->getViewer()->redraw();
     }
@@ -4089,15 +4121,19 @@ void ViewProviderSketch::updateData(const App::Property *prop)
         // Because a solve is mandatory to any addition (at least to update the DoF of the solver),
         // only when the solver geometry is the same in number than the sketch geometry an update
         // should trigger a redraw. This reduces even more the number of redraws per insertion of geometry
-    
+
+        // solver information is also updated when no matching geometry, so that if a solving fails
+        // this failed solving info is presented to the user
+        UpdateSolverInformation(); // just update the solver window with the last SketchObject solving information
+
         if(getSketchObject()->getExternalGeometryCount()+getSketchObject()->getHighestCurveIndex() + 1 == 
             getSketchObject()->getSolvedSketch().getGeometrySize()) {
-            UpdateSolverInformation(); // just update the solver window with the last SketchObject solving information
-            draw(false);
+            Gui::MDIView *mdi = Gui::Application::Instance->activeDocument()->getActiveView();
+            if (mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId()))
+                draw(false);
             
             signalConstraintsChanged();
             signalElementsChanged();
-        
         }
     }
 }
@@ -4219,11 +4255,15 @@ bool ViewProviderSketch::setEdit(int ModNum)
     // The false parameter indicates that the geometry of the SketchObject shall not be updateData
     // so as not to trigger an onChanged that would set the document as modified and trigger a recompute
     // if we just close the sketch without touching anything.
+    if (getSketchObject()->Support.getValue()) {
+        if (!getSketchObject()->evaluateSupport())
+            getSketchObject()->validateExternalLinks();
+    }
+
     getSketchObject()->solve(false);
     UpdateSolverInformation();
     draw(false);
-    
-    
+
     connectUndoDocument = Gui::Application::Instance->activeDocument()
         ->signalUndoDocument.connect(boost::bind(&ViewProviderSketch::slotUndoDocument, this, _1));
     connectRedoDocument = Gui::Application::Instance->activeDocument()
@@ -4716,30 +4756,36 @@ bool ViewProviderSketch::onDelete(const std::vector<std::string> &subList)
         edit->PreselectCross = -1;
         edit->PreselectConstraintSet.clear();
 
-        std::set<int> delGeometries, delCoincidents, delConstraints;
+        std::set<int> delInternalGeometries, delExternalGeometries, delCoincidents, delConstraints;
         // go through the selected subelements
         for (std::vector<std::string>::const_iterator it=SubNames.begin(); it != SubNames.end(); ++it) {
             if (it->size() > 4 && it->substr(0,4) == "Edge") {
                 int GeoId = std::atoi(it->substr(4,4000).c_str()) - 1;
-                delGeometries.insert(GeoId);
+                if( GeoId >= 0 )
+                    delInternalGeometries.insert(GeoId);
+                else
+                    delExternalGeometries.insert(-3-GeoId);
             } else if (it->size() > 12 && it->substr(0,12) == "ExternalEdge") {
                 int GeoId = std::atoi(it->substr(12,4000).c_str()) - 1;
-                GeoId = -GeoId - 3;
-                delGeometries.insert(GeoId);
+                delExternalGeometries.insert(GeoId);
             } else if (it->size() > 6 && it->substr(0,6) == "Vertex") {
                 int VtId = std::atoi(it->substr(6,4000).c_str()) - 1;
                 int GeoId;
                 Sketcher::PointPos PosId;
                 getSketchObject()->getGeoVertexIndex(VtId, GeoId, PosId);
                 if (getSketchObject()->getGeometry(GeoId)->getTypeId()
-                    == Part::GeomPoint::getClassTypeId())
-                    delGeometries.insert(GeoId);
+                    == Part::GeomPoint::getClassTypeId()) {
+                    if(GeoId>=0)
+                        delInternalGeometries.insert(GeoId);
+                    else
+                        delExternalGeometries.insert(-3-GeoId);
+                }
                 else
                     delCoincidents.insert(VtId);
             } else if (*it == "RootPoint") {
                 delCoincidents.insert(-1);
             } else if (it->size() > 10 && it->substr(0,10) == "Constraint") {
-                int ConstrId = std::atoi(it->substr(10,4000).c_str()) - 1;
+                int ConstrId = Sketcher::PropertyConstraintList::getIndexFromConstraintName(*it);
                 delConstraints.insert(ConstrId);
             }
         }
@@ -4765,14 +4811,20 @@ bool ViewProviderSketch::onDelete(const std::vector<std::string> &subList)
             }
         }
 
-        for (rit = delGeometries.rbegin(); rit != delGeometries.rend(); rit++) {
+        for (rit = delInternalGeometries.rbegin(); rit != delInternalGeometries.rend(); rit++) {
             try {
-                if (*rit >= 0)
-                    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.delGeometry(%i)"
+                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.delGeometry(%i)"
                                            ,getObject()->getNameInDocument(), *rit);
-                else if (*rit < -2) // external geometry
-                    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.delExternal(%i)"
-                                           ,getObject()->getNameInDocument(), -3-*rit);
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("%s\n", e.what());
+            }
+        }
+
+        for (rit = delExternalGeometries.rbegin(); rit != delExternalGeometries.rend(); rit++) {
+            try {
+                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.delExternal(%i)"
+                    ,getObject()->getNameInDocument(), *rit);
             }
             catch (const Base::Exception& e) {
                 Base::Console().Error("%s\n", e.what());

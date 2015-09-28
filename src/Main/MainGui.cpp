@@ -1,5 +1,5 @@
 /***************************************************************************
- *   (c) Jürgen Riegel (juergen.riegel@web.de) 2008                        *   
+ *   (c) JÃ¼rgen Riegel (juergen.riegel@web.de) 2008                        *   
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -168,7 +168,10 @@ int main( int argc, char ** argv )
         }
 
         Gui::Application::initApplication();
-        Base::Interpreter().replaceStdOutput();
+
+        // Only if 'RunMode' is set to 'Gui' do the replacement
+        if (App::Application::Config()["RunMode"] == "Gui")
+            Base::Interpreter().replaceStdOutput();
     }
     catch (const Base::UnknownProgramOption& e) {
         QApplication app(argc,argv);

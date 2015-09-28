@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2010     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2010     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -318,15 +318,36 @@ PyObject* SketchObjectPy::delConstraint(PyObject *args)
 PyObject* SketchObjectPy::renameConstraint(PyObject *args)
 {
     int Index;
-    char* Name;
-    if (!PyArg_ParseTuple(args, "is", &Index, &Name))
+    char* utf8Name;
+    if (!PyArg_ParseTuple(args, "iet", &Index, "utf-8", &utf8Name))
         return 0;
+
+    std::string Name = utf8Name;
+    PyMem_Free(utf8Name);
 
     if (this->getSketchObjectPtr()->Constraints.getSize() <= Index) {
         std::stringstream str;
         str << "Not able to rename a constraint with the given index: " << Index;
         PyErr_SetString(PyExc_IndexError, str.str().c_str());
         return 0;
+    }
+
+    if (!Name.empty()) {
+
+        if (!Sketcher::PropertyConstraintList::validConstraintName(Name)) {
+            std::stringstream str;
+            str << "Invalid constraint name with the given index: " << Index;
+            PyErr_SetString(PyExc_IndexError, str.str().c_str());
+            return 0;
+        }
+
+        const std::vector< Sketcher::Constraint * > &vals = getSketchObjectPtr()->Constraints.getValues();
+        for (std::size_t i = 0; i < vals.size(); ++i) {
+            if (static_cast<int>(i) != Index && Name == vals[i]->Name) {
+                PyErr_SetString(PyExc_ValueError, "Duplicate constraint not allowed");
+                return 0;
+            }
+        }
     }
 
     Constraint* copy = this->getSketchObjectPtr()->Constraints[Index]->clone();
@@ -537,15 +558,9 @@ PyObject* SketchObjectPy::getDatum(PyObject *args)
         PyErr_Clear();
         char* name;
         if (PyArg_ParseTuple(args,"s", &name)) {
-            int id = 1;
+            int id = 0;
             for (std::vector<Constraint*>::const_iterator it = vals.begin(); it != vals.end(); ++it, ++id) {
-                std::string constrName = (*it)->Name;
-                if (constrName.empty()) {
-                    std::stringstream str;
-                    str << "Constraint" << id;
-                    constrName = str.str();
-                }
-                if (constrName == name) {
+                if (Sketcher::PropertyConstraintList::getConstraintName((*it)->Name, id) == name) {
                     constr = *it;
                     break;
                 }
@@ -579,7 +594,7 @@ PyObject* SketchObjectPy::getDatum(PyObject *args)
     }
 
     Base::Quantity datum;
-    datum.setValue(constr->Value);
+    datum.setValue(constr->getValue());
     if (type == Angle) {
         datum.setValue(Base::toDegrees<double>(datum.getValue()));
         datum.setUnit(Base::Unit::Angle);
@@ -617,7 +632,6 @@ PyObject* SketchObjectPy::getDriving(PyObject *args)
     if (!PyArg_ParseTuple(args, "i", &constrid))
         return 0;
 
-    SketchObject* obj = this->getSketchObjectPtr();
     if (this->getSketchObjectPtr()->getDriving(constrid, driving)) {
         PyErr_SetString(PyExc_ValueError, "Invalid constraint id");
         return 0;
@@ -753,6 +767,121 @@ PyObject* SketchObjectPy::trim(PyObject *args)
     }
 
     Py_Return;
+}
+
+PyObject* SketchObjectPy::addSymmetric(PyObject *args)
+{
+    PyObject *pcObj;
+    int refGeoId;
+    int refPosId = Sketcher::none;
+
+    if (!PyArg_ParseTuple(args, "Oi|i", &pcObj, &refGeoId, &refPosId))
+        return 0;
+
+    if (PyObject_TypeCheck(pcObj, &(PyList_Type)) ||
+             PyObject_TypeCheck(pcObj, &(PyTuple_Type))) {
+        std::vector<int> geoIdList;
+        Py::Sequence list(pcObj);
+        for (Py::Sequence::iterator it = list.begin(); it != list.end(); ++it) {
+            if (PyInt_Check((*it).ptr()))
+                geoIdList.push_back(PyInt_AsLong((*it).ptr()));
+        }
+
+        int ret = this->getSketchObjectPtr()->addSymmetric(geoIdList,refGeoId,(Sketcher::PointPos) refPosId) + 1;
+
+        if(ret == -1)
+            throw Py::TypeError("Symmetric operation unsuccessful!");    
+
+        std::size_t numGeo = geoIdList.size();
+        Py::Tuple tuple(numGeo);
+        for (std::size_t i=0; i<numGeo; ++i) {
+            int geoId = ret - int(numGeo - i);
+            tuple.setItem(i, Py::Int(geoId));
+        }
+
+        return Py::new_reference_to(tuple);
+    }
+
+    std::string error = std::string("type must be list of GeoIds, not ");
+    error += pcObj->ob_type->tp_name;
+    throw Py::TypeError(error);
+}
+
+PyObject* SketchObjectPy::addCopy(PyObject *args)
+{
+    PyObject *pcObj, *pcVect;
+    PyObject* clone= Py_False;
+
+    if (!PyArg_ParseTuple(args, "OO!|O!", &pcObj, &(Base::VectorPy::Type), &pcVect, &PyBool_Type, &clone))
+        return 0;
+
+    Base::Vector3d vect = static_cast<Base::VectorPy*>(pcVect)->value();
+
+    if (PyObject_TypeCheck(pcObj, &(PyList_Type)) ||
+             PyObject_TypeCheck(pcObj, &(PyTuple_Type))) {
+        std::vector<int> geoIdList;
+        Py::Sequence list(pcObj);
+        for (Py::Sequence::iterator it = list.begin(); it != list.end(); ++it) {
+            if (PyInt_Check((*it).ptr()))
+                geoIdList.push_back(PyInt_AsLong((*it).ptr()));
+        }
+
+        int ret = this->getSketchObjectPtr()->addCopy(geoIdList, vect, PyObject_IsTrue(clone) ? true : false) + 1;
+    
+        if(ret == -1)
+            throw Py::TypeError("Copy operation unsuccessful!");
+
+        std::size_t numGeo = geoIdList.size();
+        Py::Tuple tuple(numGeo);
+        for (std::size_t i=0; i<numGeo; ++i) {
+            int geoId = ret - int(numGeo - i);
+            tuple.setItem(i, Py::Int(geoId));
+        }
+
+        return Py::new_reference_to(tuple);
+    }
+
+    std::string error = std::string("type must be list of GeoIds, not ");
+    error += pcObj->ob_type->tp_name;
+    throw Py::TypeError(error);    
+}
+
+PyObject* SketchObjectPy::addRectangularArray(PyObject *args)
+{
+    PyObject *pcObj, *pcVect;
+    int rows,cols;
+    double perpscale=1.0;
+    PyObject* constraindisplacement= Py_False;
+    PyObject* clone= Py_False;
+    
+    if (!PyArg_ParseTuple(args, "OO!O!ii|O!d", &pcObj, &(Base::VectorPy::Type), &pcVect, 
+            &PyBool_Type, &clone, &rows, &cols, &PyBool_Type, &constraindisplacement,&perpscale))
+        return 0;
+
+    Base::Vector3d vect = static_cast<Base::VectorPy*>(pcVect)->value();
+
+    if (PyObject_TypeCheck(pcObj, &(PyList_Type)) ||
+             PyObject_TypeCheck(pcObj, &(PyTuple_Type))) {
+        std::vector<int> geoIdList;
+        Py::Sequence list(pcObj);
+        for (Py::Sequence::iterator it = list.begin(); it != list.end(); ++it) {
+	    if (PyInt_Check((*it).ptr()))
+		geoIdList.push_back(PyInt_AsLong((*it).ptr()));
+        }
+
+        int ret = this->getSketchObjectPtr()->addCopy(geoIdList,vect, PyObject_IsTrue(clone) ? true : false, 
+                                                      rows, cols, PyObject_IsTrue(constraindisplacement) ? true : false, perpscale) + 1;
+    
+	if(ret == -1)
+	    throw Py::TypeError("Copy operation unsuccessful!");    
+    
+
+        Py_Return;
+    }
+
+    std::string error = std::string("type must be list of GeoIds, not ");
+    error += pcObj->ob_type->tp_name;
+    throw Py::TypeError(error);    
 }
 
 PyObject* SketchObjectPy::calculateAngleViaPoint(PyObject *args)

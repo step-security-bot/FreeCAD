@@ -7,7 +7,6 @@
 Name = [DE]St E 315
 NameDE = St E 315
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 440
 PoissonRatio = 0.3

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -115,14 +115,14 @@ void CmdRobotInsertWaypoint::activated(int iMsg)
 
     std::vector<Gui::SelectionSingleton::SelObj> Sel = getSelection().getSelection();
 
-    Robot::RobotObject *pcRobotObject;
+    Robot::RobotObject *pcRobotObject=0;
     if(Sel[0].pObject->getTypeId() == Robot::RobotObject::getClassTypeId())
         pcRobotObject = dynamic_cast<Robot::RobotObject*>(Sel[0].pObject);
     else if(Sel[1].pObject->getTypeId() == Robot::RobotObject::getClassTypeId())
         pcRobotObject = dynamic_cast<Robot::RobotObject*>(Sel[1].pObject);
     std::string RoboName = pcRobotObject->getNameInDocument();
 
-    Robot::TrajectoryObject *pcTrajectoryObject;
+    Robot::TrajectoryObject *pcTrajectoryObject=0;
     if(Sel[0].pObject->getTypeId() == Robot::TrajectoryObject::getClassTypeId())
         pcTrajectoryObject = dynamic_cast<Robot::TrajectoryObject*>(Sel[0].pObject);
     else if(Sel[1].pObject->getTypeId() == Robot::TrajectoryObject::getClassTypeId())

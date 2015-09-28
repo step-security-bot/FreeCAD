@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de)          *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de)          *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -257,12 +257,14 @@ protected:
 class BaseExport Reader : public std::istream
 {
 public:
-    Reader(std::istream&, int version);
-    int getFileVersion() const;
+    Reader(std::istream&, const std::string&, int version);
     std::istream& getStream();
+    std::string getFileName() const;
+    int getFileVersion() const;
 
 private:
     std::istream& _str;
+    std::string _name;
     int fileVersion;
 };
 

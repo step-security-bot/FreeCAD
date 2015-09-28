@@ -8,7 +8,6 @@ Name = EN-GJS-500-7
 NameDE = GGG-50
 DescriptionDE = Seiltrommeln, Bremsteile, Zylinderköpfe
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 170000 MPa
 UltimateTensileStrength = 500
 PoissonRatio = 0.3

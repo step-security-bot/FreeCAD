@@ -8,7 +8,6 @@ Name = [DE]St 37-2K
 NameDE = St 37-2K
 DescriptionDE = mäßige Beanspruchung
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 460
 PoissonRatio = 0.3

@@ -8,7 +8,6 @@ Name = S235JRG1
 NameDE = USt37-2
 DescriptionDE = üblich für mäßige Beanspruchung
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 360
 PoissonRatio = 0.3

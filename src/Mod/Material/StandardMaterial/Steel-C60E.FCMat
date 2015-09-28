@@ -7,7 +7,6 @@
 Name = C60E
 NameDE = Ck60
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 850
 PoissonRatio = 0.3

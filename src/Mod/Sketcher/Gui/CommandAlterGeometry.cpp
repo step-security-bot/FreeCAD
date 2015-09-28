@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2011 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2011 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -125,11 +125,6 @@ void CmdSketcherToggleConstruction::activated(int iMsg)
                 QObject::tr("Select edge(s) from the sketch."));
             return;
         }
-
-        // make sure the selected object is the sketch in edit mode
-        const App::DocumentObject* obj = selection[0].getObject();
-        ViewProviderSketch* sketchView = static_cast<ViewProviderSketch*>
-            (Gui::Application::Instance->getViewProvider(obj));
 
         // undo command open
         openCommand("Toggle draft from/to draft");

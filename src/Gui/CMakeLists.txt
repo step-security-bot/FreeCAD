@@ -155,6 +155,7 @@ set(Gui_MOC_HDRS
     Action.h
     ActionFunction.h
     Assistant.h
+    AutoSaver.h
     CallTips.h
     CombiView.h
     Control.h
@@ -201,7 +202,10 @@ set(Gui_MOC_HDRS
     DlgUndoRedo.h
     DockWindow.h
     DockWindowManager.h
+    DocumentRecovery.h
     EditorView.h
+    ExpressionCompleter.h
+    DlgExpressionInput.h
     FileDialog.h
     Flag.h
     GraphicsViewZoom.h
@@ -225,6 +229,7 @@ set(Gui_MOC_HDRS
     PythonEditor.h
     QuantitySpinBox.h
     QListWidgetCustom.h
+    QuantitySpinBox_p.h
     ReportView.h
     SceneInspector.h
     SelectionView.h
@@ -302,8 +307,10 @@ SET(Gui_UIC_SRCS
     DlgTreeWidget.ui
     DlgLocationAngle.ui
     DlgLocationPos.ui
+    DocumentRecovery.ui
     DownloadManager.ui
     DownloadItem.ui
+    DlgExpressionInput.ui
     MouseButtons.ui
     SceneInspector.ui
     InputVector.ui
@@ -363,6 +370,7 @@ SET(Dialog_CPP_SRCS
     DlgProjectUtility.cpp
     DlgPropertyLink.cpp
     DlgTipOfTheDayImp.cpp
+    DlgExpressionInput.cpp
     TaskDlgRelocation.cpp
     DlgUndoRedo.cpp
     InputVector.cpp
@@ -374,6 +382,7 @@ SET(Dialog_CPP_SRCS
     DownloadDialog.cpp
     DownloadItem.cpp
     DownloadManager.cpp
+    DocumentRecovery.cpp
 )
 
 SET(Dialog_HPP_SRCS
@@ -393,6 +402,7 @@ SET(Dialog_HPP_SRCS
     DlgProjectUtility.h
     DlgPropertyLink.h
     DlgTipOfTheDayImp.h
+    DlgExpressionInput.h
     TaskDlgRelocation.h
     DlgUndoRedo.h
     InputVector.h
@@ -404,6 +414,7 @@ SET(Dialog_HPP_SRCS
     DownloadDialog.h
     DownloadItem.h
     DownloadManager.h
+    DocumentRecovery.h
 )
 
 SET(Dialog_SRCS
@@ -429,8 +440,10 @@ SET(Dialog_SRCS
     DlgPropertyLink.ui
     DlgTipOfTheDay.ui
     DlgTreeWidget.ui
+    DlgExpressionInput.ui
     DownloadManager.ui
     DownloadItem.ui
+    DocumentRecovery.ui
     MouseButtons.ui
     InputVector.ui
     Placement.ui
@@ -725,6 +738,7 @@ SET(View3D_CPP_SRCS
     InventorNavigationStyle.cpp
     CADNavigationStyle.cpp
     BlenderNavigationStyle.cpp
+    MayaGestureNavigationStyle.cpp
     OpenCascadeNavigationStyle.cpp
     TouchpadNavigationStyle.cpp
     GestureNavigationStyle.cpp
@@ -887,6 +901,7 @@ SET(Widget_HPP_SRCS
     InputField.h
     ProgressBar.h
     QuantitySpinBox.h
+    QuantitySpinBox_p.h
     SpinBox.h
     Splashscreen.h
     WidgetFactory.h
@@ -955,11 +970,14 @@ SOURCE_GROUP("Selection" FILES ${Selection_SRCS})
 SET(FreeCADGui_CPP_SRCS
     Application.cpp
     ApplicationPy.cpp
+    AutoSaver.cpp
     BitmapFactory.cpp
     Document.cpp
     DocumentModel.cpp
     DocumentPyImp.cpp
+    ExpressionBinding.cpp
     GraphicsViewZoom.cpp
+    ExpressionCompleter.cpp
     GuiApplicationNativeEventAware.cpp
     GuiConsole.cpp
     Macro.cpp
@@ -975,9 +993,12 @@ SET(FreeCADGui_CPP_SRCS
 )
 SET(FreeCADGui_SRCS 
     Application.h
+    AutoSaver.h
     BitmapFactory.h
     Document.h
     DocumentModel.h
+    ExpressionBinding.cpp
+    ExpressionCompleter.h
     FreeCADGuiInit.py
     GraphicsViewZoom.h
     GuiApplicationNativeEventAware.h

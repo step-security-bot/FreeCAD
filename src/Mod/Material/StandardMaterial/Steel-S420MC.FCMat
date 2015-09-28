@@ -8,7 +8,6 @@ Name = S420MC
 NameDE = QStE420 TM
 DescriptionDE = gut biegbar, Fahrgestellrahmen, Hilfsrahmen
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 550
 PoissonRatio = 0.3

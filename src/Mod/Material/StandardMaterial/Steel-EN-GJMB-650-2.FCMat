@@ -8,7 +8,6 @@ Name = EN-GJMB-650-2
 NameDE = GTS 65-02
 DescriptionDE = Gabelköpfe
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 175000 MPa
 UltimateTensileStrength = 650
 PoissonRatio = 0.3

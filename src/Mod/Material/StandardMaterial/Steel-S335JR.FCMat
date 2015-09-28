@@ -7,7 +7,6 @@
 Name = S335JR
 NameDE = St53-3
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 510
 PoissonRatio = 0.3

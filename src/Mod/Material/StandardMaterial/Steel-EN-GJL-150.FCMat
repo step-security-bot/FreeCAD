@@ -8,7 +8,6 @@ Name = EN-GJL-150
 NameDE = GG-15
 DescriptionDE = für dünnwandige Teile wie Gehäuse, Ständer
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 95000 MPa
 UltimateTensileStrength = 150
 PoissonRatio = 0.3

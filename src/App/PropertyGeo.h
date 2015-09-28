@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -97,6 +97,29 @@ public:
 
 private:
     Base::Vector3d _cVec;
+};
+
+
+class AppExport PropertyVectorDistance: public PropertyVector
+{
+    TYPESYSTEM_HEADER();
+
+public:
+    /**
+     * A constructor.
+     * A more elaborate description of the constructor.
+     */
+    PropertyVectorDistance();
+
+    /**
+     * A destructor.
+     * A more elaborate description of the destructor.
+     */
+    virtual ~PropertyVectorDistance();
+
+    const char* getEditorName(void) const {
+        return "Gui::PropertyEditor::PropertyVectorDistanceItem";
+    }
 };
 
 
@@ -236,6 +259,10 @@ public:
     /** This method returns a string representation of the property
      */
     const Base::Placement &getValue(void) const;
+
+    /// Get valid paths for this property; used by auto completer
+    void getPaths(std::vector<ObjectIdentifier> &paths) const;
+
     const char* getEditorName(void) const {
         return "Gui::PropertyEditor::PropertyPlacementItem";
     }

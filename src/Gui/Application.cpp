@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -62,6 +62,7 @@
 #include <App/DocumentObjectPy.h>
 
 #include "Application.h"
+#include "AutoSaver.h"
 #include "GuiApplicationNativeEventAware.h"
 #include "MainWindow.h"
 #include "Document.h"
@@ -86,6 +87,7 @@
 #include "DlgOnlineHelpImp.h"
 #include "SpaceballEvent.h"
 #include "Control.h"
+#include "DocumentRecovery.h"
 #include "TaskView/TaskView.h"
 
 #include "SplitView3DInventor.h"
@@ -648,7 +650,7 @@ void Application::slotNewDocument(const App::Document& Doc)
     pDoc->signalNewObject.connect(boost::bind(&Gui::Application::slotNewObject, this, _1));
     pDoc->signalDeletedObject.connect(boost::bind(&Gui::Application::slotDeletedObject, this, _1));
     pDoc->signalChangedObject.connect(boost::bind(&Gui::Application::slotChangedObject, this, _1, _2));
-    pDoc->signalRenamedObject.connect(boost::bind(&Gui::Application::slotRenamedObject, this, _1));
+    pDoc->signalRelabelObject.connect(boost::bind(&Gui::Application::slotRelabelObject, this, _1));
     pDoc->signalActivatedObject.connect(boost::bind(&Gui::Application::slotActivatedObject, this, _1));
 
 
@@ -723,9 +725,9 @@ void Application::slotChangedObject(const ViewProvider& vp, const App::Property&
     this->signalChangedObject(vp,prop);
 }
 
-void Application::slotRenamedObject(const ViewProvider& vp)
+void Application::slotRelabelObject(const ViewProvider& vp)
 {
-    this->signalRenamedObject(vp);
+    this->signalRelabelObject(vp);
 }
 
 void Application::slotActivatedObject(const ViewProvider& vp)
@@ -1695,6 +1697,13 @@ void Application::runApplication(void)
     MainWindow mw;
     mw.setWindowTitle(mainApp.applicationName());
 
+    ParameterGrp::handle hDocGrp = WindowParameter::getDefaultParameter()->GetGroup("Document");
+    int timeout = hDocGrp->GetInt("AutoSaveTimeout", 15); // 15 min
+    if (!hDocGrp->GetBool("AutoSaveEnabled", true))
+        timeout = 0;
+    AutoSaver::instance()->setTimeout(timeout * 60000);
+    AutoSaver::instance()->setCompressed(hDocGrp->GetBool("AutoSaveCompressed", true));
+
     // set toolbar icon size
     ParameterGrp::handle hGrp = WindowParameter::getDefaultParameter()->GetGroup("General");
     int size = hGrp->GetInt("ToolbarIconSize", 0);
@@ -1832,7 +1841,7 @@ void Application::runApplication(void)
 
     try {
         std::stringstream s;
-        s << Base::FileInfo::getTempPath() << App::GetApplication().getExecutableName()
+        s << App::Application::getTempPath() << App::GetApplication().getExecutableName()
           << "_" << QCoreApplication::applicationPid() << ".lock";
         // open a lock file with the PID
         Base::FileInfo fi(s.str());
@@ -1866,7 +1875,7 @@ void Application::runApplication(void)
 
 void Application::checkForPreviousCrashes()
 {
-    QDir tmp = QDir::temp();
+    QDir tmp = QString::fromUtf8(App::Application::getTempPath().c_str());
     tmp.setNameFilters(QStringList() << QString::fromAscii("*.lock"));
     tmp.setFilter(QDir::Files);
 
@@ -1906,7 +1915,8 @@ void Application::checkForPreviousCrashes()
                             if (tmp.rmdir(it->filePath()))
                                 countDeletedDocs++;
                         }
-                        else {
+                        // search for the existance of a recovery file
+                        else if (doc_dir.exists(QLatin1String("fc_recovery_file.xml"))) {
                             // store the transient directory in case it's not empty
                             restoreDocFiles << *it;
                         }
@@ -1923,6 +1933,8 @@ void Application::checkForPreviousCrashes()
     }
 
     if (!restoreDocFiles.isEmpty()) {
-        //TODO:
+        Gui::Dialog::DocumentRecovery dlg(restoreDocFiles, Gui::getMainWindow());
+        if (dlg.foundDocuments())
+            dlg.exec();
     }
 }

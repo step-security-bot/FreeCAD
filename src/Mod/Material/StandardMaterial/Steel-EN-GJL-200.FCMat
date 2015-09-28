@@ -8,7 +8,6 @@ Name = EN-GJL-200
 NameDE = GG-20
 DescriptionDE = Hebel, Lager , Lagerböcke
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 105000 MPa
 UltimateTensileStrength = 200
 PoissonRatio = 0.3

@@ -7,7 +7,6 @@
 Name = E295
 NameDE = St50-2
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 490
 PoissonRatio = 0.3

@@ -8,7 +8,6 @@ Name = EN-GJS-800-1
 NameDE = GGG-80
 DescriptionDE = Zahnräder
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 180000 MPa
 UltimateTensileStrength = 800
 PoissonRatio = 0.3

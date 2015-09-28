@@ -9,7 +9,6 @@ Description = High-strength carbon steel
 DescriptionDE = höchste Beanspruchung, Achsen, Wellen, Ritzel, Nocken, Kegelräder
 DescriptionPL = Wysokowytrzymała stal węglowa
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 1000
 PoissonRatio = 0.3

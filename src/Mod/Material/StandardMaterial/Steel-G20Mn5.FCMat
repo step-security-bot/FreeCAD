@@ -8,7 +8,6 @@ Name = G20Mn5
 NameDE = GS-20Mn5v
 DescriptionDE = Gehäuse, Zahnräder, Bremsscheiben
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 500
 PoissonRatio = 0.3

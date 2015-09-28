@@ -31,8 +31,8 @@ namespace KDL {
 		Frame pos;
 	public:
 		Trajectory_Stationary(double _duration,const Frame& _pos):
-		  pos(_pos),duration(_duration) {}
-		virtual double Duration() {
+		  duration(_duration),pos(_pos) {}
+		virtual double Duration() const {
 			return duration;
 		}
 		virtual Frame Pos(double time) const {

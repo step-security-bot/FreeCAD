@@ -8,7 +8,6 @@ Name = EN-GJS-700-2
 NameDE = GGG-70
 DescriptionDE = Kurbelwellen, Zahnräder, Turbinenschaufeln
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 180000 MPa
 UltimateTensileStrength = 700
 PoissonRatio = 0.3

@@ -29,10 +29,11 @@
 #endif
 
 #include "SheetModel.h"
-#include <Mod/Spreadsheet/App/Expression.h>
+#include <Mod/Spreadsheet/App/SpreadsheetExpression.h>
 #include <Mod/Spreadsheet/App/Utils.h>
 #include "../App/Sheet.h"
 #include <Gui/Command.h>
+#include <Base/Tools.h>
 #include <strstream>
 #include <boost/bind.hpp>
 
@@ -106,7 +107,7 @@ static std::string getUnitString(const Base::Unit & unit)
     std::string unitStr;
 
     if (numerator.size() > 0) {
-        for (int i = 0; i < numerator.size(); ++i) {
+        for (std::size_t i = 0; i < numerator.size(); ++i) {
             if (i > 0)
                 unitStr += "*";
             unitStr += numerator[i];
@@ -120,7 +121,7 @@ static std::string getUnitString(const Base::Unit & unit)
 
         if (denominator.size() > 1)
             unitStr += "(";
-        for (int i = 0; i < denominator.size(); ++i) {
+        for (std::size_t i = 0; i < denominator.size(); ++i) {
             if (i > 0)
                 unitStr += "*";
             unitStr += denominator[i];
@@ -155,13 +156,13 @@ QVariant SheetModel::data(const QModelIndex &index, int role) const
         if (deps.size() > 0) {
             v += QString::fromUtf8("Depends on:");
             for (std::set<std::string>::const_iterator i = deps.begin(); i != deps.end(); ++i)
-                v += QString::fromUtf8("\n\t") + QString::fromStdString(*i);
+                v += QString::fromUtf8("\n\t") + Tools::fromStdString(*i);
             v += QString::fromUtf8("\n");
         }
         if (provides.size() > 0) {
             v += QString::fromUtf8("Used by:");
             for (std::set<std::string>::const_iterator i = provides.begin(); i != provides.end(); ++i)
-                v += QString::fromUtf8("\n\t") + QString::fromStdString(*i);
+                v += QString::fromUtf8("\n\t") + Tools::fromStdString(*i);
             v += QString::fromUtf8("\n");
         }
         return QVariant(v);
@@ -171,10 +172,10 @@ QVariant SheetModel::data(const QModelIndex &index, int role) const
     if (cell->hasException()) {
         switch (role) {
         case Qt::ToolTipRole:
-            return QVariant::fromValue(QString::fromStdString(cell->getException()));
+            return QVariant::fromValue(Base::Tools::fromStdString(cell->getException()));
         case Qt::DisplayRole:
 #ifdef DEBUG_DEPS
-            return QVariant::fromValue(QString::fromUtf8("#ERR: %1").arg(QString::fromStdString(cell->getException())));
+            return QVariant::fromValue(QString::fromUtf8("#ERR: %1").arg(Tools::fromStdString(cell->getException())));
 #else
             return QVariant::fromValue(QString::fromUtf8("#ERR"));
 #endif
@@ -303,13 +304,13 @@ QVariant SheetModel::data(const QModelIndex &index, int role) const
 
             if (cell->getDisplayUnit(displayUnit)) {
                 if (computedUnit.isEmpty() || computedUnit == displayUnit.unit)
-                    v = QString::number(floatProp->getValue() / displayUnit.scaler) + QString::fromStdString(" " + displayUnit.stringRep);
+                    v = QString::number(floatProp->getValue() / displayUnit.scaler) + Base::Tools::fromStdString(" " + displayUnit.stringRep);
                 else
                     v = QString::fromUtf8("ERR: unit");
             }
             else {
                 if (!computedUnit.isEmpty())
-                    v = QString::number(floatProp->getValue()) + QString::fromStdString(" " + getUnitString(computedUnit));
+                    v = QString::number(floatProp->getValue()) + Base::Tools::fromStdString(" " + getUnitString(computedUnit));
                 else
                     v = QString::number(floatProp->getValue());
             }
@@ -346,7 +347,7 @@ QVariant SheetModel::data(const QModelIndex &index, int role) const
             DisplayUnit displayUnit;
 
             if (cell->getDisplayUnit(displayUnit))
-                v = QString::number(floatProp->getValue() / displayUnit.scaler) + QString::fromStdString(" " + displayUnit.stringRep);
+                v = QString::number(floatProp->getValue() / displayUnit.scaler) + Base::Tools::fromStdString(" " + displayUnit.stringRep);
             else
                 v = QString::number(floatProp->getValue());
             return QVariant(v);
@@ -403,7 +404,7 @@ bool SheetModel::setData(const QModelIndex & index, const QVariant & value, int 
             if (cell)
                 cell->getStringContent(content);
 
-            if ( content != str.toStdString()) {
+            if ( content != Base::Tools::toStdString(str)) {
                 str.replace(QString::fromUtf8("'"), QString::fromUtf8("\\'"));
                 Gui::Command::openCommand("Edit cell");
                 Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.set('%s', '%s')", sheet->getNameInDocument(),

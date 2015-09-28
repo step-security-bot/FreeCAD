@@ -7,7 +7,6 @@
 Name = E360 GC
 NameDE = St70-2K
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 780
 PoissonRatio = 0.3

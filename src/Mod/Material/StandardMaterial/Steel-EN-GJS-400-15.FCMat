@@ -8,7 +8,6 @@ Name = EN-GJS-400-15
 NameDE = GGG-40
 DescriptionDE = Pumpen-, Getriebegehäuse
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 167000 MPa
 UltimateTensileStrength = 400
 PoissonRatio = 0.3

@@ -8,7 +8,6 @@ Name = EN-GJMW-400-5
 NameDE = GTW 40-05
 DescriptionDE = gut schweißbar, Auspuffkrümmer, Schraubzwingen
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 175000 MPa
 UltimateTensileStrength = 400
 PoissonRatio = 0.3

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -106,8 +106,8 @@ public:
     boost::signal<void (const App::DocumentObject&)> signalDeletedObject;
     /// signal on changed Object
     boost::signal<void (const App::DocumentObject&, const App::Property&)> signalChangedObject;
-    /// signal on renamed Object
-    boost::signal<void (const App::DocumentObject&)> signalRenamedObject;
+    /// signal on relabeled Object
+    boost::signal<void (const App::DocumentObject&)> signalRelabelObject;
     /// signal on activated Object
     boost::signal<void (const App::DocumentObject&)> signalActivatedObject;
     /// signal on undo
@@ -139,6 +139,7 @@ public:
     /// Save the document to the file in Property Path
     bool save (void);
     bool saveAs(const char* file);
+    bool saveCopy(const char* file);
     /// Restore the document from the file in Property Path
     void restore (void);
     void exportObjects(const std::vector<App::DocumentObject*>&, std::ostream&);
@@ -277,6 +278,9 @@ public:
     // set Changed
     //void setChanged(DocumentObject* change);
     //@}
+
+    /// Function called to signal that an object identifier has been renamed
+    void renameObjectIdentifiers(const std::map<App::ObjectIdentifier, App::ObjectIdentifier> & paths);
 
     virtual PyObject *getPyObject(void);
 

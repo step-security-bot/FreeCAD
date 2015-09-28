@@ -7,7 +7,6 @@
 Name = [DE]C10
 NameDE = C10
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 650
 PoissonRatio = 0.3

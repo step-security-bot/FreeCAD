@@ -7,7 +7,6 @@
 Name = S275N
 NameDE = St E 275
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 370
 PoissonRatio = 0.3

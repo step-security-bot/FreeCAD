@@ -7,7 +7,6 @@
 Name = [DE]St E 380
 NameDE = St E 380
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 500
 PoissonRatio = 0.3

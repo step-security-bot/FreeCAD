@@ -8,7 +8,6 @@ Name = S185
 NameDE = St33
 DescriptionDE = für geringe Beanspruchung
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 310
 PoissonRatio = 0.3

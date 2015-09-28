@@ -7,7 +7,6 @@
 Name = S275JO
 NameDE = St44-3U
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 430
 PoissonRatio = 0.3

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is Drawing of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -152,8 +152,7 @@ bool ViewProviderDrawingPage::onDelete(const std::vector<std::string> & items)
 
 void ViewProviderDrawingPage::setupContextMenu(QMenu* menu, QObject* receiver, const char* member)
 {
-    QAction* act;
-    act = menu->addAction(QObject::tr("Show drawing"), receiver, member);
+    menu->addAction(QObject::tr("Show drawing"), receiver, member);
 }
 
 bool ViewProviderDrawingPage::setEdit(int ModNum)

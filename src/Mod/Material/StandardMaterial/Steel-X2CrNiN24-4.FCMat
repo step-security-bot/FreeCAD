@@ -7,7 +7,6 @@
 Name = X2CrNiN24-4
 NameDE = -
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 200000 MPa
 UltimateTensileStrength = 600
 PoissonRatio = 0.3

@@ -7,7 +7,6 @@
 Name = E360
 NameDE = St70-2
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 690
 PoissonRatio = 0.3

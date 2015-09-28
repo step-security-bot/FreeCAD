@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -104,6 +104,8 @@ void FemGuiExport initFemGui()
 
     Base::Interpreter().loadModule("MechanicalAnalysis");
     Base::Interpreter().loadModule("MechanicalMaterial");
+    Base::Interpreter().loadModule("FemBeamSection");
+    Base::Interpreter().loadModule("FemShellThickness");
 
     // register preferences pages
     new Gui::PrefPageProducer<FemGui::DlgSettingsFemImp> ("FEM");

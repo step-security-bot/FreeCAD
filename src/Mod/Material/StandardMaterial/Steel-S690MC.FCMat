@@ -8,7 +8,6 @@ Name = S690MC
 NameDE = QStE690 TM
 DescriptionDE = gut biegbar, Fahrgestellrahmen, Hilfsrahmen
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 790
 PoissonRatio = 0.3

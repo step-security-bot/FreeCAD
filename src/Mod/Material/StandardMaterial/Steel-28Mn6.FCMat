@@ -7,7 +7,6 @@
 Name = 28Mn6
 NameDE = 28Mn6
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 800
 PoissonRatio = 0.3

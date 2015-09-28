@@ -7,7 +7,6 @@
 Name = EN-GJL-250
 NameDE = GG-25
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 115000 MPa
 UltimateTensileStrength = 250
 PoissonRatio = 0.3

@@ -8,7 +8,6 @@ Name = EN-GJMW-350-4
 NameDE = GTW 35-04
 DescriptionDE = dünnwandige Teile, Fittings, Beschläge, Förderketten
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 175000 MPa
 UltimateTensileStrength = 350
 PoissonRatio = 0.3

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -30,14 +30,17 @@
 #endif
 
 /// Here the FreeCAD includes sorted by Base,App,Gui......
+#include <boost/math/special_functions/round.hpp>
 
 #include <Base/Exception.h>
 #include <Base/Reader.h>
 #include <Base/Writer.h>
 #include <Base/Stream.h>
+#include <Base/Quantity.h>
 
 #include "PropertyStandard.h"
 #include "MaterialPy.h"
+#include "ObjectIdentifier.h"
 
 using namespace App;
 using namespace Base;
@@ -128,6 +131,22 @@ void PropertyInteger::Paste(const Property &from)
     aboutToSetValue();
     _lValue = dynamic_cast<const PropertyInteger&>(from)._lValue;
     hasSetValue();
+}
+
+void PropertyInteger::setValue(const ObjectIdentifier &path, const boost::any &value)
+{
+    verifyPath(path);
+
+    if (value.type() == typeid(long))
+        setValue(boost::any_cast<long>(value));
+    else if (value.type() == typeid(double))
+        setValue(boost::math::round(boost::any_cast<double>(value)));
+    else if (value.type() == typeid(Quantity) && boost::any_cast<Quantity>(value).getUnit().isEmpty())
+        setValue(boost::math::round(boost::any_cast<Quantity>(value).getValue()));
+    else if (value.type() == typeid(int))
+        setValue(boost::any_cast<int>(value));
+    else
+        throw bad_cast();
 }
 
 
@@ -460,6 +479,26 @@ void PropertyEnumeration::Paste(const Property &from)
     _enum = prop._enum;
 
     hasSetValue();
+}
+
+void PropertyEnumeration::setValue(const ObjectIdentifier &path, const boost::any &value)
+{
+    verifyPath(path);
+
+    if (value.type() == typeid(int))
+        setValue(boost::any_cast<int>(value));
+    else if (value.type() == typeid(double))
+        setValue(boost::any_cast<double>(value));
+    else if (value.type() == typeid(short))
+        setValue(boost::any_cast<short>(value));
+    else if (value.type() == typeid(std::string))
+        setValue(boost::any_cast<std::string>(value).c_str());
+    else if (value.type() == typeid(char*))
+        setValue(boost::any_cast<char*>(value));
+    else if (value.type() == typeid(const char*))
+        setValue(boost::any_cast<const char*>(value));
+    else
+        throw bad_cast();
 }
 
 //**************************************************************************
@@ -920,6 +959,24 @@ void PropertyFloat::Paste(const Property &from)
     hasSetValue();
 }
 
+void PropertyFloat::setValue(const ObjectIdentifier &path, const boost::any &value)
+{
+    verifyPath(path);
+
+    if (value.type() == typeid(double))
+        setValue(boost::any_cast<double>(value));
+    else if (value.type() == typeid(Quantity) && boost::any_cast<Quantity>(value).getUnit().isEmpty())
+        setValue((boost::any_cast<Quantity>(value)).getValue());
+    else
+        throw bad_cast();
+}
+
+const boost::any PropertyFloat::getValue(const ObjectIdentifier &path) const
+{
+    verifyPath(path);
+    return _dValue;
+}
+
 //**************************************************************************
 //**************************************************************************
 // PropertyFloatConstraint
@@ -1288,6 +1345,17 @@ void PropertyString::Paste(const Property &from)
 unsigned int PropertyString::getMemSize (void) const
 {
     return static_cast<unsigned int>(_cValue.size());
+}
+
+void PropertyString::setValue(const ObjectIdentifier &path, const boost::any &value)
+{
+    verifyPath(path);
+}
+
+const boost::any PropertyString::getValue(const ObjectIdentifier &path) const
+{
+    verifyPath(path);
+    return _cValue;
 }
 
 //**************************************************************************
@@ -1788,11 +1856,7 @@ bool PropertyBool::getValue(void) const
 
 PyObject *PropertyBool::getPyObject(void)
 {
-    if (_lValue)
-        {Py_INCREF(Py_True); return Py_True;}
-    else
-        {Py_INCREF(Py_False); return Py_False;}
-
+    return PyBool_FromLong(_lValue ? 1 : 0);
 }
 
 void PropertyBool::setPyObject(PyObject *value)
@@ -1840,6 +1904,29 @@ void PropertyBool::Paste(const Property &from)
     aboutToSetValue();
     _lValue = dynamic_cast<const PropertyBool&>(from)._lValue;
     hasSetValue();
+}
+
+void PropertyBool::setValue(const ObjectIdentifier &path, const boost::any &value)
+{
+    verifyPath(path);
+
+    if (value.type() == typeid(bool))
+        setValue(boost::any_cast<bool>(value));
+    else if (value.type() == typeid(int))
+        setValue(boost::any_cast<int>(value) != 0);
+    else if (value.type() == typeid(double))
+        setValue(boost::math::round(boost::any_cast<double>(value)));
+    else if (value.type() == typeid(Quantity) && boost::any_cast<Quantity>(value).getUnit().isEmpty())
+        setValue(boost::any_cast<Quantity>(value).getValue() != 0);
+    else
+        throw bad_cast();
+}
+
+const boost::any PropertyBool::getValue(const ObjectIdentifier &path) const
+{
+    verifyPath(path);
+
+    return _lValue;
 }
 
 //**************************************************************************
@@ -1904,12 +1991,10 @@ PyObject *PropertyBoolList::getPyObject(void)
     for(int i = 0;i<getSize(); i++) {
         bool v = _lValueList[i];
         if (v) {
-            Py_INCREF(Py_True);
-            PyTuple_SetItem(tuple, i, Py_True);
+            PyTuple_SetItem(tuple, i, PyBool_FromLong(1));
         }
         else {
-            Py_INCREF(Py_False);
-            PyTuple_SetItem(tuple, i, Py_False);
+            PyTuple_SetItem(tuple, i, PyBool_FromLong(0));
         }
     }
     return tuple;

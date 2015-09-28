@@ -7,7 +7,6 @@
 Name = X3CrNiMo13-14
 NameDE = -
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 216000 MPa
 UltimateTensileStrength = 900
 PoissonRatio = 0.3

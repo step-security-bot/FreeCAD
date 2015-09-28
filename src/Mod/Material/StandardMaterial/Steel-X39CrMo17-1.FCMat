@@ -7,7 +7,6 @@
 Name = X39CrMo17-1
 NameDE = -
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 213000 MPa
 UltimateTensileStrength = 750
 PoissonRatio = 0.3

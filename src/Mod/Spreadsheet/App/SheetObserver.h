@@ -33,8 +33,6 @@ class SheetObserver : public App::DocumentObserver {
 public:
     SheetObserver(App::Document* document, PropertySheet *_sheet);
     ~SheetObserver() { }
-    virtual void slotCreatedDocument(const App::Document& Doc);
-    virtual void slotDeletedDocument(const App::Document& Doc);
     virtual void slotCreatedObject(const App::DocumentObject& Obj);
     virtual void slotDeletedObject(const App::DocumentObject& Obj);
     virtual void slotChangedObject(const App::DocumentObject& Obj, const App::Property& Prop);
@@ -43,7 +41,7 @@ public:
     App::Document* getDocument() const { return App::DocumentObserver::getDocument(); }
 private:
     std::set<std::string> isUpdating;
-    int refCount;
+    unsigned int refCount;
     PropertySheet * sheet;
 };
 

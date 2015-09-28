@@ -14,10 +14,11 @@ INSTALL(
         ccxInpWriter.py
         FemTools.py
         TestFem.py
-	mesh_points.csv
-	mesh_volumes.csv
-	inp_standard.inp
+        FemBeamSection.py
+        FemBeamSection.ui
         FemExample.py
+        FemShellThickness.py 
+        FemShellThickness.ui 
         MechanicalAnalysis.py
         MechanicalMaterial.py
         MechanicalMaterial.ui
@@ -27,3 +28,20 @@ INSTALL(
         Mod/Fem
 )
 
+INSTALL(
+    FILES
+        test_files/mesh_points.csv
+        test_files/mesh_volumes.csv
+        test_files/static_analysis.inp
+        test_files/frequency_analysis.inp
+        test_files/cube_frequency.inp
+        test_files/cube_frequency.dat
+        test_files/cube_frequency.frd
+        test_files/cube_frequency_expected_values
+        test_files/cube_static.inp
+        test_files/cube_static.dat
+        test_files/cube_static.frd
+        test_files/cube_static_expected_values
+    DESTINATION
+        Mod/Fem/test_files
+)

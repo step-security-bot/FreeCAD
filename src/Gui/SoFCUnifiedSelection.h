@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2005 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2005 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -40,6 +40,7 @@
 #include <Inventor/fields/SoSFString.h>
 #include <Inventor/nodes/SoLightModel.h>
 #include "View3DInventorViewer.h"
+#include <list>
 
 class SoFullPath;
 class SoPickedPoint;
@@ -55,7 +56,7 @@ class Document;
  *  gradually remove all the low level selection nodes in the view
  *  provider. The handling of the highlighting and the selection will
  *  be unified here. 
- *  \author Jürgen Riegel
+ *  \author JÃ¼rgen Riegel
  */
 class GuiExport SoFCUnifiedSelection : public SoSeparator {
     typedef SoSeparator inherited;
@@ -187,10 +188,14 @@ class GuiExport SoVRMLAction : public SoAction
 public:
     SoVRMLAction();
     ~SoVRMLAction();
+    void setOverrideMode(SbBool);
+    SbBool isOverrideMode() const;
 
     static void initClass();
 
 private:
+    SbBool overrideMode;
+    std::list<int> bindList;
     static void callDoAction(SoAction *action,SoNode *node);
 
 };

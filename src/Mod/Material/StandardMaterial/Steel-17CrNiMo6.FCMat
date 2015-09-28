@@ -8,7 +8,6 @@ Name = 17CrNiMo6
 NameDE = 17CrNiMo6
 DescriptionDE = höchste Beanspruchung, Wellen, Zahnräder
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 1150
 PoissonRatio = 0.3

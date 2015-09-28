@@ -7,7 +7,6 @@
 Name = C22E
 NameDE = Ck22
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 500
 PoissonRatio = 0.3

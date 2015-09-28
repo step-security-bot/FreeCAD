@@ -8,7 +8,6 @@ Name = EN-GJMB-550-4
 NameDE = GTS 55-04
 DescriptionDE = Randschichthärtung, Kurbelwellen, Bremsträger, Federböcke, Kipphebel
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 175000 MPa
 UltimateTensileStrength = 550
 PoissonRatio = 0.3

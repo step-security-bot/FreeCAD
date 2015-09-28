@@ -8,7 +8,6 @@ Name = X6CrNiTi18-10
 NameDE = X10CrNiTi 18 9
 DescriptionDE = schlecht spanbar, gut schweißbar, gut kaltumformbar, Schienenfahrzeugbau
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 200000 MPa
 UltimateTensileStrength = 500
 PoissonRatio = 0.3

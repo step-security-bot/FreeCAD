@@ -7,7 +7,6 @@
 Name = G30Mn5
 NameDE = GS-30Mn5
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 520
 PoissonRatio = 0.3

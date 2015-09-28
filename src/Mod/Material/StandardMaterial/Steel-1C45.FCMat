@@ -9,7 +9,6 @@ NameDE = C45
 Description = Non-alloy quality steel
 DescriptionPL = Wysokogatunkowa stal niestopowa
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 580
 PoissonRatio = 0.3

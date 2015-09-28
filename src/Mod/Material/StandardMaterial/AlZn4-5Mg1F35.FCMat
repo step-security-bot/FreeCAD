@@ -7,7 +7,6 @@
 Name = [DE]AlZn4,5Mg1F35
 NameDE = AlZn4,5Mg1F35
 Father = Metal
-SpecificWeight = 2700
 YoungsModulus = 70000 MPa
 UltimateTensileStrength = 350
 PoissonRatio = 0.3

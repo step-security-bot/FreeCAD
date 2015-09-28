@@ -7,7 +7,6 @@
 Name = S335JO
 NameDE = St60-2U
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 510
 PoissonRatio = 0.3

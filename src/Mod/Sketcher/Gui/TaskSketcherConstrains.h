@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2009 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2009 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -51,13 +51,16 @@ protected:
 
 Q_SIGNALS:
     void onUpdateDrivingStatus(QListWidgetItem *item, bool status);
+    void emitCenterSelectedItems();
 
 protected Q_SLOTS:
     void modifyCurrentItem();
     void renameCurrentItem();
+    void centerSelectedItems();
     void deleteSelectedItems();
     void doSelectConstraints();
     void updateDrivingStatus();
+    void swapNamedOfSelectedItems();
 };
 
 class TaskSketcherConstrains : public Gui::TaskView::TaskBox, public Gui::SelectionObserver
@@ -76,10 +79,11 @@ private:
 
 public Q_SLOTS:
     void on_comboBoxFilter_currentIndexChanged(int);
-    void on_listWidgetConstraints_itemSelectionChanged(void); 
+    void on_listWidgetConstraints_itemSelectionChanged(void);
     void on_listWidgetConstraints_itemActivated(QListWidgetItem *item);
     void on_listWidgetConstraints_itemChanged(QListWidgetItem * item);
     void on_listWidgetConstraints_updateDrivingStatus(QListWidgetItem *item, bool status);
+    void on_listWidgetConstraints_emitCenterSelectedItems(void);
 
 protected:
     void changeEvent(QEvent *e);

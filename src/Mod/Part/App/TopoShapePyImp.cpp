@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2008     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2008     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -355,6 +355,26 @@ PyObject*  TopoShapePy::exportBrep(PyObject *args)
     Py_Return;
 }
 
+PyObject*  TopoShapePy::exportBinary(PyObject *args)
+{
+    char* input;
+    if (!PyArg_ParseTuple(args, "s", &input))
+        return NULL;
+
+    try {
+        // read binary brep
+        std::ofstream str(input, std::ios::out | std::ios::binary);
+        getTopoShapePtr()->exportBinary(str);
+        str.close();
+    }
+    catch (const Base::Exception& e) {
+        PyErr_SetString(PartExceptionOCCError,e.what());
+        return NULL;
+    }
+
+    Py_Return;
+}
+
 PyObject*  TopoShapePy::dumpToString(PyObject *args)
 {
     if (!PyArg_ParseTuple(args, ""))
@@ -421,6 +441,26 @@ PyObject*  TopoShapePy::importBrep(PyObject *args)
         str.rdbuf(&buf);
         //std::stringstream str(input);
         getTopoShapePtr()->importBrep(str);
+    }
+    catch (const Base::Exception& e) {
+        PyErr_SetString(PartExceptionOCCError,e.what());
+        return NULL;
+    }
+
+    Py_Return;
+}
+
+PyObject*  TopoShapePy::importBinary(PyObject *args)
+{
+    char* input;
+    if (!PyArg_ParseTuple(args, "s", &input))
+        return NULL;
+
+    try {
+        // read binary brep
+        std::ifstream str(input, std::ios::in | std::ios::binary);
+        getTopoShapePtr()->importBinary(str);
+        str.close();
     }
     catch (const Base::Exception& e) {
         PyErr_SetString(PartExceptionOCCError,e.what());
@@ -1748,18 +1788,21 @@ PyObject* TopoShapePy::distToShape(PyObject *args)
                     pSuppType1 = PyString_FromString("Vertex");
                     pSupportIndex1 = _getSupportIndex("Vertex",ts1,suppS1);
                     pParm1 = Py_None;
+                    pParm2 = Py_None;
                     break;
                 case BRepExtrema_IsOnEdge:
                     pSuppType1 = PyString_FromString("Edge");
                     pSupportIndex1 = _getSupportIndex("Edge",ts1,suppS1);
                     extss.ParOnEdgeS1(i,t1);
                     pParm1 = PyFloat_FromDouble(t1);
+                    pParm2 = Py_None;
                     break;
                 case BRepExtrema_IsInFace:
                     pSuppType1 = PyString_FromString("Face");
                     pSupportIndex1 = _getSupportIndex("Face",ts1,suppS1);
                     extss.ParOnFaceS1(i,u1,v1);
                     pParm1 = PyTuple_New(2);
+                    pParm2 = Py_None;
                     PyTuple_SetItem(pParm1,0,PyFloat_FromDouble(u1));
                     PyTuple_SetItem(pParm1,1,PyFloat_FromDouble(v1));
                     break;
@@ -1768,6 +1811,7 @@ PyObject* TopoShapePy::distToShape(PyObject *args)
                     pSuppType1 = PyString_FromString("Unknown");
                     pSupportIndex1 = PyInt_FromLong(-1);
                     pParm1 = Py_None;
+                    pParm2 = Py_None;
             }
 
             P2 = extss.PointOnShape2(i);

@@ -7,7 +7,6 @@
 Name = E335
 NameDE = St60-2
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 590
 PoissonRatio = 0.3

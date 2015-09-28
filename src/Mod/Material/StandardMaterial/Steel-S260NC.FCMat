@@ -8,7 +8,6 @@ Name = S260NC
 NameDE = QStE260 N
 DescriptionDE = gut biegbar, Fahrgestellrahmen, Hilfsrahmen, nicht für Punktlasten
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 350
 PoissonRatio = 0.3

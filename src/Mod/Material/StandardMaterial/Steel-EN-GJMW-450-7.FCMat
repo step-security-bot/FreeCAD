@@ -8,7 +8,6 @@ Name = EN-GJMW-450-7
 NameDE = GTW 45-07
 DescriptionDE = schlagfest, Fahrwerksteile
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 175000 MPa
 UltimateTensileStrength = 450
 PoissonRatio = 0.3

@@ -72,10 +72,11 @@ SET(FemScripts_SRCS
     ccxFrdReader.py
     ccxInpWriter.py
     TestFem.py
+    FemShellThickness.py
+    FemShellThickness.ui
+    FemBeamSection.py
+    FemBeamSection.ui
     FemTools.py
-    mesh_points.csv
-    mesh_volumes.csv
-    inp_standard.inp
     MechanicalAnalysis.ui
     MechanicalAnalysis.py
     MechanicalMaterial.ui
@@ -83,6 +84,21 @@ SET(FemScripts_SRCS
     ShowDisplacement.ui
 )
 #SOURCE_GROUP("Scripts" FILES ${FemScripts_SRCS})
+
+SET(FemTests_SRCS
+    test_files/mesh_points.csv
+    test_files/mesh_volumes.csv
+    test_files/static_analysis.inp
+    test_files/frequency_analysis.inp
+    test_files/cube_frequency.inp
+    test_files/cube_frequency.dat
+    test_files/cube_frequency.frd
+    test_files/cube_frequency_expected_values
+    test_files/cube_static.inp
+    test_files/cube_static.dat
+    test_files/cube_static.frd
+    test_files/cube_static_expected_values
+)
 
 SET(FemBase_SRCS
     FemMeshObject.cpp
@@ -157,6 +173,7 @@ fc_target_copy_resource(Fem
     ${CMAKE_BINARY_DIR}/Mod/Fem
 	Init.py 
     ${FemScripts_SRCS}
+    ${FemTests_SRCS}
     )
 
 SET_BIN_DIR(Fem Fem /Mod/Fem)

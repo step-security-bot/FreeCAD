@@ -8,7 +8,6 @@ Name = S275JR
 NameDE = St44-2
 DescriptionDE = Wellen, Achsen, gut bearbeitbar, gut schweißbar
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 430
 PoissonRatio = 0.3

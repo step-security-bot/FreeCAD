@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2009     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2009     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -43,6 +43,7 @@
 #include <Base/FileInfo.h>
 #include <Base/TimeInfo.h>
 #include <Base/Console.h>
+#include <App/Application.h>
 
 #include <Mod/Mesh/App/Core/MeshKernel.h>
 #include <Mod/Mesh/App/Core/Evaluation.h>
@@ -414,7 +415,6 @@ std::list<std::pair<int, int> > FemMesh::getVolumesByFace(const TopoDS_Face &fac
     SMDS_VolumeIteratorPtr vol_iter = myMesh->GetMeshDS()->volumesIterator();
     while (vol_iter->more()) {
         const SMDS_MeshVolume* vol = vol_iter->next();
-        int numFaces = vol->NbFaces();
         SMDS_ElemIteratorPtr face_iter = vol->facesIterator();
 
         while (face_iter->more()) {
@@ -431,7 +431,7 @@ std::list<std::pair<int, int> > FemMesh::getVolumesByFace(const TopoDS_Face &fac
                 std::back_insert_iterator<std::vector<int> >(element_face_nodes));
 
             // For curved faces it is possible that a volume contributes more than one face
-            if (element_face_nodes.size() == numNodes) {
+            if (element_face_nodes.size() == static_cast<std::size_t>(numNodes)) {
                 result.push_back(std::make_pair(vol->GetID(), face->GetID()));
             }
         }
@@ -499,7 +499,7 @@ std::map<int, int> FemMesh::getccxVolumesByFace(const TopoDS_Face &face) const
              Face 2: 1-4-2, missing point 3 means it's face P2
              Face 3: 2-4-3, missing point 1 means it's face P3
              Face 4: 3-4-1, missing point 2 means it's face P4 */
-            int face_ccx;
+            int face_ccx = 0;
             switch (missing_node) {
             case 1:
                 face_ccx = 3;
@@ -776,8 +776,8 @@ void FemMesh::readNastran(const std::string &Filename)
 
 	for(unsigned int i=0;i<all_elements.size();i++)
 	{
-		//Die Reihenfolge wie hier die Elemente hinzugefügt werden ist sehr wichtig. 
-		//Ansonsten ist eine konsistente Datenstruktur nicht möglich
+		//Die Reihenfolge wie hier die Elemente hinzugefÃ¼gt werden ist sehr wichtig. 
+		//Ansonsten ist eine konsistente Datenstruktur nicht mÃ¶glich
 		//meshds->AddVolumeWithID
 		//(
 		//	meshds->FindNode(all_elements[i][0]),
@@ -1126,7 +1126,7 @@ void FemMesh::Restore(Base::XMLReader &reader)
 void FemMesh::SaveDocFile (Base::Writer &writer) const
 {
     // create a temporary file and copy the content to the zip stream
-    Base::FileInfo fi(Base::FileInfo::getTempFileName().c_str());
+    Base::FileInfo fi(App::Application::getTempFileName().c_str());
 
     myMesh->ExportUNV(fi.filePath().c_str());
  
@@ -1155,7 +1155,7 @@ void FemMesh::SaveDocFile (Base::Writer &writer) const
 void FemMesh::RestoreDocFile(Base::Reader &reader)
 {
     // create a temporary file and copy the content from the zip stream
-    Base::FileInfo fi(Base::FileInfo::getTempFileName().c_str());
+    Base::FileInfo fi(App::Application::getTempFileName().c_str());
 
     // read in the ASCII file and write back to the file stream
     Base::ofstream file(fi, std::ios::out | std::ios::binary);
@@ -1262,8 +1262,8 @@ struct Fem::FemMesh::FemMeshInfo FemMesh::getInfo(void) const{
 }
 //		for(unsigned int i=0;i<all_elements.size();i++)
 //		{
-//			//Die Reihenfolge wie hier die Elemente hinzugefügt werden ist sehr wichtig. 
-//			//Ansonsten ist eine konsistente Datenstruktur nicht möglich
+//			//Die Reihenfolge wie hier die Elemente hinzugefÃ¼gt werden ist sehr wichtig. 
+//			//Ansonsten ist eine konsistente Datenstruktur nicht mÃ¶glich
 //			meshds->AddVolumeWithID(
 //				meshds->FindNode(all_elements[i][0]),
 //				meshds->FindNode(all_elements[i][2]),

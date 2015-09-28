@@ -7,7 +7,6 @@
 Name = [DE]St E 500
 NameDE = St E 500
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 610
 PoissonRatio = 0.3

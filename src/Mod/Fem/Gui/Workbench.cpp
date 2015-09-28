@@ -58,6 +58,8 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
     *fem << "Fem_NewMechanicalAnalysis"
          << "Fem_CreateFromShape"
          << "Fem_MechanicalMaterial"
+         << "Fem_BeamSection"
+         << "Fem_ShellThickness"
          << "Separator"
          << "Fem_CreateNodesSet"
          << "Separator"
@@ -70,6 +72,7 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
          << "Separator"
          << "Fem_MechanicalJobControl"
          << "Fem_Quick_Analysis"
+         << "Fem_Frequency_Analysis"
          << "Fem_PurgeResults"
          << "Fem_ShowResult";
     return root;
@@ -85,6 +88,8 @@ Gui::MenuItem* Workbench::setupMenuBar() const
     *fem << "Fem_NewMechanicalAnalysis"
          << "Fem_CreateFromShape"
          << "Fem_MechanicalMaterial"
+         << "Fem_BeamSection"
+         << "Fem_ShellThickness"
          << "Separator"
          << "Fem_CreateNodesSet"
          << "Separator"
@@ -97,6 +102,7 @@ Gui::MenuItem* Workbench::setupMenuBar() const
          << "Separator"
          << "Fem_MechanicalJobControl"
          << "Fem_Quick_Analysis"
+         << "Fem_Frequency_Analysis"
          << "Fem_PurgeResults"
          << "Fem_ShowResult";
 

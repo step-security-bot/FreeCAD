@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2008     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2008     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -215,7 +215,7 @@ bool Part2DObject::seekTrimPoints(const std::vector<Geometry *> &geomlist,
     gp_Pln plane(gp_Pnt(0,0,0),gp_Dir(0,0,1));
 
     Standard_Boolean periodic=Standard_False;
-    double period;
+    double period = 0;
     Handle_Geom2d_Curve primaryCurve;
     Handle_Geom_Geometry geom = (geomlist[GeoId])->handle();
     Handle_Geom_Curve curve3d = Handle_Geom_Curve::DownCast(geom);

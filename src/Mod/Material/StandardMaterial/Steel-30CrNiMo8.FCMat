@@ -8,7 +8,6 @@ Name = 30CrNiMo8
 NameDE = 30CrNiMo8
 DescriptionDE = höchste Beanspruchung, Wellen, Zahnräder
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 1250
 PoissonRatio = 0.3

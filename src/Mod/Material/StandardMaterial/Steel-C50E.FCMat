@@ -7,7 +7,6 @@
 Name = C50E
 NameDE = Ck50
 Father = Metal
-SpecificWeight = 7800
 YoungsModulus = 210000 MPa
 UltimateTensileStrength = 750
 PoissonRatio = 0.3

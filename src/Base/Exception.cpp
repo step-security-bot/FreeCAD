@@ -1,5 +1,5 @@
 /***************************************************************************
- *   (c) Jürgen Riegel (juergen.riegel@web.de) 2002                        *   
+ *   (c) JÃ¼rgen Riegel (juergen.riegel@web.de) 2002                        *   
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -315,6 +315,40 @@ DivisionByZeroError::DivisionByZeroError(const std::string& sMessage)
 }
 
 DivisionByZeroError::DivisionByZeroError(const DivisionByZeroError &inst)
+ : Exception(inst)
+{
+}
+
+// ---------------------------------------------------------
+
+ExpressionError::ExpressionError(const char * sMessage)
+  : Exception(sMessage)
+{
+}
+
+ExpressionError::ExpressionError(const std::string& sMessage)
+  : Exception(sMessage)
+{
+}
+
+ExpressionError::ExpressionError(const ExpressionError &inst)
+ : Exception(inst)
+{
+}
+
+// ---------------------------------------------------------
+
+ParserError::ParserError(const char * sMessage)
+  : Exception(sMessage)
+{
+}
+
+ParserError::ParserError(const std::string& sMessage)
+  : Exception(sMessage)
+{
+}
+
+ParserError::ParserError(const ParserError &inst)
  : Exception(inst)
 {
 }

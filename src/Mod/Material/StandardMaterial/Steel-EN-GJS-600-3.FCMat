@@ -8,7 +8,6 @@ Name = EN-GJS-600-3
 NameDE = GGG-60
 DescriptionDE = Kurbelwellen, Stangen
 Father = Metal
-SpecificWeight = 7200
 YoungsModulus = 177000 MPa
 UltimateTensileStrength = 600
 PoissonRatio = 0.3

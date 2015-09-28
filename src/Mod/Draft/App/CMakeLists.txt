@@ -1,5 +1,5 @@
 if(MSVC)
-    add_definitions(-DHAVE_ACOSH -DHAVE_ASINH -DHAVE_ATANH)
+    add_definitions(-DHAVE_ACOSH -DHAVE_ASINH -DHAVE_ATANH -D_CRT_SECURE_NO_WARNINGS)
 else(MSVC)
     add_definitions(-DHAVE_LIMITS_H -DHAVE_CONFIG_H)
 endif(MSVC)
@@ -14,6 +14,7 @@ include_directories(
     ${OCC_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
     ${XercesC_INCLUDE_DIRS}
+    ${QT_QTCORE_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
 )
 link_directories(${OCC_LIBRARY_DIR})
