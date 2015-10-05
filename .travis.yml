@@ -1,5 +1,31 @@
 language: cpp
 
+os:
+  - linux
+  #- osx
+
+compiler:
+  - gcc
+  - clang
+
+#trusty
+sudo: required
+services:
+- docker
+
+env:
+  global:
+    - secure: "YVpSrf0YXyQKgz9Xd4VSN+K1szHNrlomWhm3h9RzbIJOs14lbBO5GW2oQaXWFfF8j77Ur36H9oyGT89OdHRAgCe/j5p8z313w1TfU3oj8/5dW6c7jVCmZ6chq2wiaIIHD61nzQ9poA5hkE3u4Jv3Ql/cfoAYZDd0hWu3jZBIA/wIjc9NI0zlHRrcMuJkhz+HLBzz5nUEBesRalrxX48PAN0cSZK2+TlwU2h7gIG5WsWwGzUckCF2j/EJTefeJ37B3C6EaEEa+uIQj3I4cqVV1SV9xp5B/6O1+lNfWzn+LpBVyulSxdW0ZF2Tn0V0H7prBeAHbMSqYFVnr//rRsulVBaOEDETyjlJee0Sx60n9V7FZdDDTn7hjKw6pyru7wwRkvjjV6P3nB4S+Bc1nEQuSRtcWbVnt1gza4fhiBJYQ/arVOWx3r8w5Om0R05OGveE8nulcmKosP3musfjW3ITscUahxFpeVojuk8p0p15lS7xlvcw6MEdxRxntopslJMjDZVwX+UvFZUzSozuFSGPRRJjwmFNV+D7hE+w23BqTk01e0JqAl7ZPG0ZwQ5Kt8LWtlbL1GqjNBHSpPTWnhg5RkNa6a9ez9x5RVNf87mmxHX6Y0W9ogVsXgH7xirLU4q2Zjr47vwkw7UWkcxfa4o3KXRAOAY8BnTFi9NMWWh4TJc="
+
+addons:
+  coverity_scan:
+    project:
+      name: "sasobadovinac/FreeCAD"
+      description: "Build submitted via Travis CI"
+    notification_email: saso.badovinac@gmail.com
+    build_command: "make -j2"
+    branch_pattern: coverity_scan
+
 before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -y doxygen
@@ -11,56 +37,78 @@ before_install:
     - sudo apt-get install -y libboost-signals-dev
     - sudo apt-get install -y libboost-system-dev
     - sudo apt-get install -y libboost-thread-dev
-    - sudo apt-get install -y libcoin60
-    - sudo apt-get install -y libcoin60-dev
+#depended from libcoin60-dev
+    #- sudo apt-get install -y libcoin60
+#for precise
+    #- sudo apt-get install -y libcoin60-dev
+#for trusty
+    - sudo apt-get install -y libcoin80-dev
     - sudo apt-get install -y libeigen3-dev
     - sudo apt-get install -y liboce-foundation-dev
-    - sudo apt-get install -y liboce-foundation1
+#depended from liboce-foundation-dev
+    #- sudo apt-get install -y liboce-foundation1
     - sudo apt-get install -y liboce-modeling-dev
-    - sudo apt-get install -y liboce-modeling1
+#depended from liboce-modeling-dev
+    #- sudo apt-get install -y liboce-modeling1
     - sudo apt-get install -y liboce-ocaf-dev
-    - sudo apt-get install -y liboce-ocaf-lite-dev
-    - sudo apt-get install -y liboce-ocaf-lite1
-    - sudo apt-get install -y liboce-ocaf1
+#depended from liboce-ocaf-dev
+    #- sudo apt-get install -y liboce-ocaf-lite-dev
+    #- sudo apt-get install -y liboce-ocaf-lite1
+    #- sudo apt-get install -y liboce-ocaf1
     - sudo apt-get install -y liboce-visualization-dev
-    - sudo apt-get install -y liboce-visualization1
-    - sudo apt-get install -y libopencascade-modeling-6.5.0
+#depended from liboce-ocaf-dev
+    #- sudo apt-get install -y liboce-visualization1
+#have liboce*-dev (opencascade community edition)
+    #- sudo apt-get install -y libopencascade-modeling-6.5.0
     - sudo apt-get install -y libpyside-dev
     - sudo apt-get install -y libqtcore4
     - sudo apt-get install -y libshiboken-dev
     - sudo apt-get install -y libxerces-c-dev
-    - sudo apt-get install -y libxmu-dev
-    - sudo apt-get install -y libxmu-headers
-    - sudo apt-get install -y libxmu6
+#depended from libcoin60-dev
+    #- sudo apt-get install -y libxmu-dev
+    #- sudo apt-get install -y libxmu-headers
+#pre-installed
+    #- sudo apt-get install -y libxmu6
     - sudo apt-get install -y libxmuu-dev
-    - sudo apt-get install -y libxmuu1
+#pre-installed
+    #- sudo apt-get install -y libxmuu1
     - sudo apt-get install -y oce-draw
     - sudo apt-get install -y pyside-tools
-    - sudo apt-get install -y python-dev
-    - sudo apt-get install -y python-pyside
+#pre-installed
+    #- sudo apt-get install -y python-dev
+#depended from pyside-tools
+    #- sudo apt-get install -y python-pyside
     - sudo apt-get install -y qt4-dev-tools
-    - sudo apt-get install -y qt4-qmake
+#depended from libqtcore4
+    #- sudo apt-get install -y qt4-qmake
     - sudo apt-get install -y shiboken
     - sudo apt-get install -y swig
 #Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
-    - sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
-    - "export DISPLAY=:99.0"
-    - "sh -e /etc/init.d/xvfb start"
+    #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 
 install:
     - mkdir build && cd build && cmake ../
 
-script:
-    - make -j2
-    - PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"
-    - bin/FreeCAD --log-file /tmp/FreeCAD.log &
-    - sleep 10 && pkill FreeCAD
-    - cat /tmp/FreeCAD.log
-    - grep --file=../.log_errors /tmp/FreeCAD.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from build directory" || ( echo "Error from .log_errors found!" && false )
-    - sudo make install
-    - /usr/local/bin/FreeCAD --run-test 0
-    - /usr/local/bin/FreeCAD --log-file /tmp/FreeCAD_installed.log &
-    - sleep 10 && pkill FreeCAD
-    - cat /tmp/FreeCAD_installed.log
-    - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
+#before_script:
 
+script:
+    - if [[ $CC == gcc ]]; then export NPROC=2; else export NPROC=2; fi
+    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j$NPROC; fi
+    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"; fi
+    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then sudo make install; fi
+
+#after_success:
+
+#after_failure:
+
+#after_script:
+
+notifications:
+  email: false
+  #irc:
+    #channels:
+      #- "irc.freenode.net#freecad"
+    #template:
+      #- "%{repository}/%{branch} (%{commit} - %{author}): %{build_url}: %{message}"
+    #on_success: always
+    #on_failure: always
