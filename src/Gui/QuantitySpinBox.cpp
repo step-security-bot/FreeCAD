@@ -23,16 +23,35 @@
 
 #include "PreCompiled.h"
 #ifndef _PreComp_
+# include <QDebug>
 # include <QLineEdit>
 # include <QFocusEvent>
+# include <QHBoxLayout>
+# include <QLabel>
+# include <QStyle>
+# include <QPixmapCache>
+# include <QMouseEvent>
+# include <QToolTip>
+# include <QApplication>
 #endif
 
 #include "QuantitySpinBox.h"
+#include "QuantitySpinBox_p.h"
+#include "DlgExpressionInput.h"
+#include "BitmapFactory.h"
+#include "Command.h"
+#include <Base/Tools.h>
 #include <Base/Exception.h>
+#include <App/Expression.h>
+#include <sstream>
+#include <boost/math/special_functions/round.hpp>
 
 using namespace Gui;
+using namespace App;
+using namespace Base;
 
 namespace Gui {
+
 class QuantitySpinBoxPrivate
 {
 public:
@@ -214,19 +233,158 @@ end:
 }
 
 QuantitySpinBox::QuantitySpinBox(QWidget *parent)
-    : QAbstractSpinBox(parent), d_ptr(new QuantitySpinBoxPrivate())
+    : QAbstractSpinBox(parent),
+      ExpressionBinding(),
+      d_ptr(new QuantitySpinBoxPrivate())
 {
     d_ptr->locale = locale();
     this->setContextMenuPolicy(Qt::DefaultContextMenu);
     QObject::connect(lineEdit(), SIGNAL(textChanged(QString)),
                      this, SLOT(userInput(QString)));
+
+    defaultPalette = lineEdit()->palette();
+
+    /* Icon for f(x) */
+    QFontMetrics fm(lineEdit()->font());
+    int frameWidth = style()->pixelMetric(QStyle::PM_SpinBoxFrameWidth);
+    iconHeight = fm.height() - frameWidth;
+    iconLabel = new ExpressionLabel(lineEdit());
+    iconLabel->setCursor(Qt::ArrowCursor);
+    QPixmap pixmap = getIcon(":/icons/bound-expression-unset.svg", QSize(iconHeight, iconHeight));
+    iconLabel->setPixmap(pixmap);
+    iconLabel->setStyleSheet(QString::fromAscii("QLabel { border: none; padding: 0px; padding-top: %2px; width: %1px; height: %1px }").arg(iconHeight).arg(frameWidth/2));
+    iconLabel->hide();
+    lineEdit()->setStyleSheet(QString::fromAscii("QLineEdit { padding-right: %1px } ").arg(iconHeight+frameWidth));
+
+    QObject::connect(iconLabel, SIGNAL(clicked()), this, SLOT(openFormulaDialog()));
 }
 
 QuantitySpinBox::~QuantitySpinBox()
 {
 }
 
-void QuantitySpinBox::updateText(const Base::Quantity& quant)
+void QuantitySpinBox::bind(const App::ObjectIdentifier &_path)
+{
+    ExpressionBinding::bind(_path);
+
+    iconLabel->show();
+}
+
+void Gui::QuantitySpinBox::setExpression(boost::shared_ptr<Expression> expr)
+{
+    Q_ASSERT(isBound());
+
+    try {
+        ExpressionBinding::setExpression(expr);
+
+        if (getExpression()) {
+            std::auto_ptr<Expression> result(getExpression()->eval());
+            NumberExpression * value = freecad_dynamic_cast<NumberExpression>(result.get());
+
+            if (value) {
+                updateText(value->getQuantity());
+                setReadOnly(true);
+                iconLabel->setPixmap(getIcon(":/icons/bound-expression.svg", QSize(iconHeight, iconHeight)));
+
+                QPalette p(lineEdit()->palette());
+                p.setColor(QPalette::Text, Qt::lightGray);
+                lineEdit()->setPalette(p);
+            }
+            setToolTip(Base::Tools::fromStdString(getExpression()->toString()));
+        }
+        else {
+            setReadOnly(false);
+            iconLabel->setPixmap(getIcon(":/icons/bound-expression-unset.svg", QSize(iconHeight, iconHeight)));
+            QPalette p(lineEdit()->palette());
+            p.setColor(QPalette::Active, QPalette::Text, defaultPalette.color(QPalette::Text));
+            lineEdit()->setPalette(p);
+
+        }
+        iconLabel->setToolTip(QString());
+    }
+    catch (const Base::Exception & e) {
+        setReadOnly(true);
+        QPalette p(lineEdit()->palette());
+        p.setColor(QPalette::Active, QPalette::Text, Qt::red);
+        lineEdit()->setPalette(p);
+        iconLabel->setToolTip(QString::fromAscii(e.what()));
+    }
+}
+
+bool QuantitySpinBox::apply(const std::string & propName)
+{
+    if (!ExpressionBinding::apply(propName)) {
+        Gui::Command::doCommand(Gui::Command::Doc, "%s = %f", propName.c_str(), value().getValue());
+        return true;
+    }
+    else
+        return false;
+}
+
+bool QuantitySpinBox::apply()
+{
+    return ExpressionBinding::apply();
+}
+
+void QuantitySpinBox::resizeEvent(QResizeEvent * event)
+{
+    QAbstractSpinBox::resizeEvent(event);
+
+    int frameWidth = style()->pixelMetric(QStyle::PM_SpinBoxFrameWidth);
+
+    QSize sz = iconLabel->sizeHint();
+    iconLabel->move(lineEdit()->rect().right() - frameWidth - sz.width(), 0);
+
+    try {
+        if (isBound() && getExpression()) {
+            std::auto_ptr<Expression> result(getExpression()->eval());
+            NumberExpression * value = freecad_dynamic_cast<NumberExpression>(result.get());
+
+            if (value) {
+                setReadOnly(true);
+                QPixmap pixmap = getIcon(":/icons/bound-expression.svg", QSize(iconHeight, iconHeight));
+                iconLabel->setPixmap(pixmap);
+
+                QPalette p(lineEdit()->palette());
+                p.setColor(QPalette::Text, Qt::lightGray);
+                lineEdit()->setPalette(p);
+            }
+            setToolTip(Base::Tools::fromStdString(getExpression()->toString()));
+        }
+        else {
+            setReadOnly(false);
+            QPixmap pixmap = getIcon(":/icons/bound-expression-unset.svg", QSize(iconHeight, iconHeight));
+            iconLabel->setPixmap(pixmap);
+
+            QPalette p(lineEdit()->palette());
+            p.setColor(QPalette::Active, QPalette::Text, defaultPalette.color(QPalette::Text));
+            lineEdit()->setPalette(p);
+
+        }
+        iconLabel->setToolTip(QString());
+    }
+    catch (const Base::Exception & e) {
+        setReadOnly(true);
+        QPalette p(lineEdit()->palette());
+        p.setColor(QPalette::Active, QPalette::Text, Qt::red);
+        lineEdit()->setPalette(p);
+        iconLabel->setToolTip(QString::fromAscii(e.what()));
+    }
+
+}
+
+void Gui::QuantitySpinBox::keyPressEvent(QKeyEvent *event)
+{
+    if (event->text() == QString::fromUtf8("=") && isBound())
+        openFormulaDialog();
+    else {
+        if (!hasExpression())
+            QAbstractSpinBox::keyPressEvent(event);
+    }
+}
+
+
+void QuantitySpinBox::updateText(const Quantity &quant)
 {
     Q_D(QuantitySpinBox);
 
@@ -310,6 +468,36 @@ void QuantitySpinBox::userInput(const QString & text)
     // signaling
     valueChanged(res);
     valueChanged(res.getValue());
+}
+
+void QuantitySpinBox::openFormulaDialog()
+{
+    Q_ASSERT(isBound());
+
+    Q_D(const QuantitySpinBox);
+    Gui::Dialog::DlgExpressionInput* box = new Gui::Dialog::DlgExpressionInput(getPath(), getExpression(), d->unit, this);
+    connect(box, SIGNAL(finished(int)), this, SLOT(finishFormulaDialog()));
+    box->show();
+
+    QPoint pos = mapToGlobal(QPoint(0,0));
+    box->move(pos-box->expressionPosition());
+    box->setExpressionInputSize(width(), height());
+}
+
+void QuantitySpinBox::finishFormulaDialog()
+{
+    Gui::Dialog::DlgExpressionInput* box = qobject_cast<Gui::Dialog::DlgExpressionInput*>(sender());
+    if (!box) {
+        qWarning() << "Sender is not a Gui::Dialog::DlgExpressionInput";
+        return;
+    }
+
+    if (box->result() == QDialog::Accepted)
+        setExpression(box->getExpression());
+    else if (box->discardedFormula())
+        setExpression(boost::shared_ptr<Expression>());
+
+    box->deleteLater();
 }
 
 Base::Unit QuantitySpinBox::unit() const
@@ -430,6 +618,23 @@ void QuantitySpinBox::showEvent(QShowEvent * event)
         selectNumber();
 }
 
+bool QuantitySpinBox::event(QEvent * event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        if (isBound() && getExpression() && lineEdit()->isReadOnly()) {
+            QHelpEvent * helpEvent = static_cast<QHelpEvent*>(event);
+
+            QToolTip::showText( helpEvent->globalPos(), Base::Tools::fromStdString(getExpression()->toString()), this);
+            event->accept();
+            return true;
+        }
+        else
+            return QAbstractSpinBox::event(event);
+    }
+    else
+        return QAbstractSpinBox::event(event);
+}
+
 void QuantitySpinBox::focusInEvent(QFocusEvent * event)
 {
     bool hasSel = lineEdit()->hasSelectedText();
@@ -438,8 +643,16 @@ void QuantitySpinBox::focusInEvent(QFocusEvent * event)
     if (event->reason() == Qt::TabFocusReason ||
         event->reason() == Qt::BacktabFocusReason  ||
         event->reason() == Qt::ShortcutFocusReason) {
-        if (!hasSel)
-            selectNumber();
+
+        if (isBound() && getExpression() && lineEdit()->isReadOnly()) {
+            QHelpEvent * helpEvent = new QHelpEvent(QEvent::ToolTip, QPoint( 0, rect().height() ), mapToGlobal( QPoint( 0, rect().height() ) ));
+            QApplication::postEvent(this, helpEvent);
+            lineEdit()->setSelection(0, 0);
+        }
+        else {
+            if (!hasSel)
+                selectNumber();
+        }
     }
 }
 
@@ -454,6 +667,7 @@ void QuantitySpinBox::focusOutEvent(QFocusEvent * event)
     if (state != QValidator::Acceptable) {
         lineEdit()->setText(d->validStr);
     }
+    QToolTip::hideText();
     QAbstractSpinBox::focusOutEvent(event);
 }
 
@@ -530,3 +744,4 @@ void QuantitySpinBox::fixup(QString &input) const
 
 
 #include "moc_QuantitySpinBox.cpp"
+#include "moc_QuantitySpinBox_p.cpp"

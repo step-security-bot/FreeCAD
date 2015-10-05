@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2008     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2008     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -91,6 +91,9 @@ public:
     void Paste(const App::Property &from);
     unsigned int getMemSize (void) const;
     //@}
+
+    /// Get valid paths for this property; used by auto completer
+    virtual void getPaths(std::vector<App::ObjectIdentifier> & paths) const;
 
 private:
     TopoShape _Shape;

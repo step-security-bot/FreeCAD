@@ -24,153 +24,26 @@
 #define EXPRESSION_H
 
 #include <string>
-#include <App/DocumentObject.h>
+#include <boost/tuple/tuple.hpp>
 #include <Base/Exception.h>
 #include <Base/Unit.h>
 #include <App/Property.h>
+#include <App/ObjectIdentifier.h>
 #include <Base/BaseClass.h>
 #include <Base/Quantity.h>
-#include <Mod/Spreadsheet/App/Range.h>
 #include <set>
+#include <deque>
 
-namespace Spreadsheet  {
+namespace App  {
 
+class DocumentObject;
 class Expression;
+class Document;
 
-class SpreadsheetExport ExpressionVisitor {
+class AppExport ExpressionVisitor {
 public:
     virtual ~ExpressionVisitor() {}
     virtual void visit(Expression * e) = 0;
-};
-
-class SpreadsheetExport Path {
-
-public:
-
-    class String {
-    public:
-        String(const std::string & s = "", bool _isRealString = false) : str(s), isString(_isRealString) { }
-
-        std::string getString() const { return str; }
-
-        operator std::string() const { return str; }
-
-        operator const char *() const { return str.c_str(); }
-
-        bool operator==(const String & other) const { return str == other.str; }
-
-        bool operator!=(const String & other) const { return str != other.str; }
-
-        bool operator>=(const String & other) const { return str >= other.str; }
-
-        bool operator<(const String & other) const { return str < other.str; }
-
-        bool operator>(const String & other) const { return str > other.str; }
-
-        std::string toString() const;
-
-        bool isRealString() const { return isString; }
-
-        std::string str;
-        bool isString;
-    };
-
-    struct SpreadsheetExport Component {
-
-        enum typeEnum {
-            SIMPLE,
-            MAP,
-            ARRAY
-        } ;
-
-        std::string component;
-        typeEnum type;
-        int index;
-        String key;
-        bool keyIsString;
-
-        Component(const std::string & _component, typeEnum _type = SIMPLE, int _index = -1, String _key = String());
-
-        static Component SimpleComponent(const std::string & _component);
-
-        static Component ArrayComponent(const std::string & _component, int _index);
-
-        static Component MapComponent(const std::string & _component, const String &_key);
-
-        bool operator==(const Component & other) const;
-
-        bool isSimple() const { return type == SIMPLE; }
-
-        bool isMap() const { return type == MAP; }
-
-        bool isArray() const { return type == ARRAY; }
-
-        std::string toString() const;
-
-    };
-
-    Path(const App::DocumentObject * _owner = 0, const std::string & property = std::string());
-
-    void addComponent(const Component &c) { components.push_back(c); resolve(); }
-
-    template<typename C>
-    void addComponents(const C &cs) { components.insert(components.end(), cs.begin(), cs.end()); resolve(); }
-
-    void setDocumentName(const String & name, bool force = false) { documentName = name; documentNameSet = force; }
-
-    const String getDocumentName() const { return documentName; }
-
-    void setDocumentObjectName(const String & name, bool force = false) { documentObjectName = name; documentObjectNameSet = force; }
-
-    const String getDocumentObjectName() const { return documentObjectName; }
-
-    const std::string & getPropertyName() const { return components[propertyIndex].component; }
-
-    const Component & getPropertyComponent(std::size_t i) const { assert(i < components.size()); return components[propertyIndex + i]; }
-
-    std::string getSubPathStr() const;
-
-    bool operator==(const Path & other) const;
-
-    bool operator!=(const Path & other) const { return !(operator==)(other); }
-
-    bool operator<(const Path &other) const;
-
-    int numComponents() const;
-
-    static Path parse(const App::DocumentObject * _owner, const char * expr);
-
-    virtual std::string toString() const;
-
-    void resolve();
-
-    void resetResolve();
-
-    const App::Property *getProperty() const;
-
-    std::string getPythonAccessor() const;
-
-    void renameDocumentObject(const std::string & oldName, const std::string & newName);
-
-    void renameDocument(const std::string &oldName, const std::string &newName);
-
-    App::Document *getDocument() const;
-
-    const App::DocumentObject *getDocumentObject() const;
-
-protected:
-
-    const App::DocumentObject *getDocumentObject(const App::Document *doc, const std::string &name) const;
-
-    const App::DocumentObject * owner;
-    mutable int propertyIndex;
-    String documentName;
-    bool documentNameSet;
-    String documentObjectName;
-    bool documentObjectNameSet;
-    std::string propertyName;
-
-    std::vector<Component> components;
 };
 
 /**
@@ -178,7 +51,7 @@ protected:
   *
   */
 
-class SpreadsheetExport Expression : public Base::BaseClass {
+class AppExport Expression : public Base::BaseClass {
     TYPESYSTEM_HEADER();
 
 public:
@@ -199,7 +72,7 @@ public:
 
     virtual int priority() const { return 0; }
 
-    virtual void getDeps(std::set<Path> &props) const { }
+    virtual void getDeps(std::set<ObjectIdentifier> &props) const { }
 
     virtual Expression * simplify() const = 0;
 
@@ -212,6 +85,8 @@ public:
 
     const App::DocumentObject *  getOwner() const { return owner; }
 
+    virtual boost::any getValueAsAny() const { static boost::any empty; return empty; }
+
 protected:
     const App::DocumentObject * owner; /**< The document object used to access unqualified variables (i.e local scope) */
 };
@@ -221,7 +96,7 @@ protected:
   *
   */
 
-class  SpreadsheetExport UnitExpression : public Expression {
+class  AppExport UnitExpression : public Expression {
     TYPESYSTEM_HEADER();
 public:
     UnitExpression(const App::DocumentObject *_owner = 0, const Base::Quantity & _quantity = Base::Quantity(), const std::string & _unitStr = std::string());
@@ -248,6 +123,8 @@ public:
 
     double getScaler() const { return quantity.getValue(); }
 
+    boost::any getValueAsAny() const { return quantity.getUnit().isEmpty() ? boost::any(quantity.getValue()) : boost::any(quantity); }
+
 protected:
     Base::Quantity quantity;
     std::string unitStr; /**< The unit string from the original parsed string */
@@ -257,7 +134,7 @@ protected:
   * Class implementing a number with an optional unit
   */
 
-class SpreadsheetExport NumberExpression : public UnitExpression {
+class AppExport NumberExpression : public UnitExpression {
     TYPESYSTEM_HEADER();
 public:
     NumberExpression(const App::DocumentObject *_owner = 0, const Base::Quantity & quantity = Base::Quantity());
@@ -277,7 +154,7 @@ public:
 protected:
 };
 
-class SpreadsheetExport ConstantExpression : public NumberExpression {
+class AppExport ConstantExpression : public NumberExpression {
     TYPESYSTEM_HEADER();
 public:
     ConstantExpression(const App::DocumentObject *_owner = 0, std::string _name = "", const Base::Quantity &_quantity = Base::Quantity());
@@ -300,7 +177,7 @@ protected:
   *
   */
 
-class SpreadsheetExport OperatorExpression : public UnitExpression {
+class AppExport OperatorExpression : public UnitExpression {
     TYPESYSTEM_HEADER();
 public:
     enum Operator {
@@ -336,7 +213,7 @@ public:
 
     virtual int priority() const;
 
-    virtual void getDeps(std::set<Path> &props) const;
+    virtual void getDeps(std::set<ObjectIdentifier> &props) const;
 
     virtual void visit(ExpressionVisitor & v);
 
@@ -346,36 +223,7 @@ protected:
     Expression * right; /**< Right operand */
 };
 
-class SpreadsheetExport RangeExpression : public Expression {
-    TYPESYSTEM_HEADER();
-public:
-    RangeExpression(const App::DocumentObject * _owner = 0, const std::string & begin = std::string(), const std::string & end = std::string());
-
-    virtual ~RangeExpression() { }
-
-    virtual bool isTouched() const;
-
-    virtual Expression * eval() const;
-
-    virtual std::string toString() const;
-
-    virtual Expression * copy() const;
-
-    virtual int priority() const { return 20; }
-
-    virtual void getDeps(std::set<Path> &props) const;
-
-    virtual Expression * simplify() const;
-
-    Range getRange() const { return range; }
-
-    void setRange(const Range & r);
-
-protected:
-    Range range;
-};
-
-class SpreadsheetExport ConditionalExpression : public Expression {
+class AppExport ConditionalExpression : public Expression {
     TYPESYSTEM_HEADER();
 public:
     ConditionalExpression(const App::DocumentObject *_owner = 0, Expression * _condition = 0,Expression * _trueExpr = 0,  Expression * _falseExpr = 0);
@@ -394,7 +242,7 @@ public:
 
     virtual int priority() const;
 
-    virtual void getDeps(std::set<Path> &props) const;
+    virtual void getDeps(std::set<ObjectIdentifier> &props) const;
 
     virtual void visit(ExpressionVisitor & v);
 
@@ -410,7 +258,7 @@ protected:
   *
   */
 
-class SpreadsheetExport FunctionExpression : public UnitExpression {
+class AppExport FunctionExpression : public UnitExpression {
     TYPESYSTEM_HEADER();
 public:
     enum Function {
@@ -434,14 +282,11 @@ public:
         ATAN2,
         MOD,
         POW,
-
-        // Aggregates
-        SUM,
-        AVERAGE,
-        STDDEV,
-        COUNT,
-        MIN,
-        MAX
+        ROUND,
+        TRUNC,
+        CEIL,
+        FLOOR,
+        LAST,
     };
 
     FunctionExpression(const App::DocumentObject *_owner = 0, Function _f = NONE, std::vector<Expression *> _args = std::vector<Expression*>());
@@ -460,7 +305,7 @@ public:
 
     virtual int priority() const { return 20; }
 
-    virtual void getDeps(std::set<Path> &props) const;
+    virtual void getDeps(std::set<ObjectIdentifier> &props) const;
 
     virtual void visit(ExpressionVisitor & v);
 
@@ -477,10 +322,10 @@ protected:
   *
   */
 
-class SpreadsheetExport VariableExpression : public UnitExpression {
+class AppExport VariableExpression : public UnitExpression {
     TYPESYSTEM_HEADER();
 public:
-    VariableExpression(const App::DocumentObject *_owner = 0, Path _var = Path());
+    VariableExpression(const App::DocumentObject *_owner = 0, ObjectIdentifier _var = ObjectIdentifier());
 
     ~VariableExpression();
 
@@ -496,15 +341,15 @@ public:
 
     virtual int priority() const { return 20; }
 
-    virtual void getDeps(std::set<Path> &props) const;
+    virtual void getDeps(std::set<ObjectIdentifier> &props) const;
 
     std::string name() const { return var.getPropertyName(); }
 
-    Path getPath() const { return var; }
+    ObjectIdentifier getPath() const { return var; }
+
+    void setPath(const ObjectIdentifier & path);
 
     void setName(const std::string & name) { assert(0); }
-
-    void resolve();
 
     void renameDocumentObject(const std::string & oldName, const std::string & newName);
 
@@ -514,7 +359,7 @@ public:
 
 protected:
 
-    Path var; /**< Variable name  */
+    ObjectIdentifier var; /**< Variable name  */
 };
 
 /**
@@ -522,7 +367,7 @@ protected:
   * a failed evaluation of an expression.
   */
 
-class SpreadsheetExport StringExpression : public Expression {
+class AppExport StringExpression : public Expression {
     TYPESYSTEM_HEADER();
 public:
     StringExpression(const App::DocumentObject *_owner = 0, const std::string & _text = std::string());
@@ -545,9 +390,43 @@ protected:
 };
 
 namespace ExpressionParser {
-SpreadsheetExport Expression * parse(const App::DocumentObject *owner, const char *buffer);
-SpreadsheetExport UnitExpression * parseUnit(const App::DocumentObject *owner, const char *buffer);
-SpreadsheetExport Path parsePath(const App::DocumentObject *owner, const char* buffer);
+AppExport Expression * parse(const App::DocumentObject *owner, const char *buffer);
+AppExport UnitExpression * parseUnit(const App::DocumentObject *owner, const char *buffer);
+AppExport ObjectIdentifier parsePath(const App::DocumentObject *owner, const char* buffer);
+AppExport bool isTokenAnIndentifier(const std::string & str);
+AppExport std::vector<boost::tuple<int, int, std::string> > tokenize(const std::string & str);
+
+/**
+ * @brief The semantic_type class encapsulates the value in the parse tree during parsing.
+ */
+
+class semantic_type {
+public:
+  struct  {
+    Base::Quantity scaler;
+    std::string unitStr;
+  } quantity;
+  Expression * expr;
+  ObjectIdentifier path;
+  std::deque<ObjectIdentifier::Component> components;
+  int ivalue;
+  double fvalue;
+  struct {
+    std::string name;
+    double fvalue;
+  } constant;
+  std::vector<Expression*> arguments;
+  std::string string;
+  FunctionExpression::Function func;
+  ObjectIdentifier::String string_or_identifier;
+  semantic_type() {}
+};
+
+#define YYSTYPE semantic_type
+#include "ExpressionParser.tab.h"
+#undef YYTOKENTYPE
+#undef YYSTYPE
+#undef YYSTYPE_ISDECLARED
 }
 
 }

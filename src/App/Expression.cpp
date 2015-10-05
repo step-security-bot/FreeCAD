@@ -44,8 +44,9 @@
 #include "Expression.h"
 #include <Base/Unit.h>
 #include <App/PropertyUnits.h>
-#include "Utils.h"
+#include <App/ObjectIdentifier.h>
 #include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 
 #ifndef M_PI
 #define M_PI       3.14159265358979323846
@@ -66,235 +67,59 @@
 
 using namespace Base;
 using namespace App;
-using namespace Spreadsheet;
 
-Path::Path(const App::DocumentObject * _owner, const std::string & property)
-    : owner(_owner)
-    , propertyIndex(-1)
-    , documentNameSet(false)
-    , documentObjectNameSet(false)
+std::string unquote(const std::string & input)
 {
-    if (property.size() > 0)
-        addComponent(Component::SimpleComponent(property));
-}
+    assert(input.size() >= 4);
 
-bool Path::operator ==(const Path &other) const
-{
-    if (owner != other.owner)
-        return false;
-    if (documentName != other.documentName)
-        return false;
-    if (documentObjectName != other.documentObjectName)
-        return false;
-    if (components != other.components)
-        return false;
-    return true;
-}
+    std::string output;
+    std::string::const_iterator cur = input.begin() + 2;
+    std::string::const_iterator end = input.end() - 2;
 
-bool Path::operator <(const Path &other) const
-{
-    if (documentName < other.documentName)
-        return true;
+    output.reserve(input.size());
 
-    if (documentName > other.documentName)
-        return false;
-
-    if (documentObjectName < other.documentObjectName)
-        return true;
-
-    if (documentObjectName > other.documentObjectName)
-        return false;
-
-    if (components.size() < other.components.size())
-        return true;
-
-    if (components.size() > other.components.size())
-        return false;
-
-    for (std::size_t i = 0; i < components.size(); ++i) {
-        if (components[i].component < other.components[i].component)
-            return true;
-        if (components[i].component > other.components[i].component)
-            return false;
-        if (components[i].type < other.components[i].type)
-            return true;
-        if (components[i].type > other.components[i].type)
-            return false;
-        if (components[i].type == Component::ARRAY) {
-            if (components[i].index < other.components[i].index)
-                return true;
-            if (components[i].index > other.components[i].index)
-                return false;
+    bool escaped = false;
+    while (cur != end) {
+        if (escaped) {
+            switch (*cur) {
+            case 't':
+                output += '\t';
+                break;
+            case 'n':
+                output += '\n';
+                break;
+            case 'r':
+                output += '\r';
+                break;
+            case '\\':
+                output += '\\';
+                break;
+            case '\'':
+                output += '\'';
+                break;
+            case '"':
+                output += '"';
+                break;
+            }
+            escaped = false;
         }
-        else if (components[i].type == Component::MAP) {
-            if (components[i].key < other.components[i].key)
-                return true;
-            if (components[i].key > other.components[i].key)
-                return false;
+        else {
+            if (*cur == '\\')
+                escaped = true;
+            else
+                output += *cur;
         }
-    }
-    return false;
-}
-
-int Path::numComponents() const
-{
-    return components.size();
-}
-
-Path Path::parse(const DocumentObject * docObj, const char *expr)
-{
-    return Path();
-}
-
-std::string Path::toString() const
-{
-    std::stringstream s;
-
-    if (documentNameSet) {
-        if (getDocumentName().isRealString())
-            s << quote(getDocumentName().getString()) << "#";
-        else
-            s << getDocumentName().getString() << "#";
+        ++cur;
     }
 
-    if (documentObjectNameSet) {
-        if (getDocumentObjectName().isRealString())
-            s << quote(getDocumentObjectName().getString()) << ".";
-        else
-            s << getDocumentObjectName().getString() << ".";
-    }
-    else if (propertyIndex > 0)
-        s << components[0].component << ".";
-
-    s << getPropertyName() << getSubPathStr();
-
-    return s.str();
-}
-
-std::string Path::getPythonAccessor() const
-{
-    const Property * prop = getProperty();
-
-    if (!prop)
-        throw Exception(std::string("Property '") + getPropertyName() + std::string("' not found."));
-
-    const DocumentObject * docObj = freecad_dynamic_cast<DocumentObject>(prop->getContainer());
-
-    if (!docObj)
-        throw Exception("Document object not found");
-
-    const Document * doc = docObj->getDocument();
-
-    return "App.getDocument('" +
-            std::string(doc->getName()) + "')." +
-            docObj->getNameInDocument() + "." +
-            getPropertyName() +
-            getSubPathStr();
-}
-
-void Path::renameDocumentObject(const std::string &oldName, const std::string &newName)
-{
-    if (documentObjectNameSet && documentObjectName == oldName) {
-        documentObjectName = newName;
-        resolve();
-    }
-    else if (propertyIndex == 1 && documentObjectName == oldName) {
-        components[0].component = newName;
-        resolve();
-    }
-}
-
-void Path::renameDocument(const std::string &oldName, const std::string &newName)
-{
-    if (documentName == oldName) {
-        documentName = newName;
-        resolve();
-    }
-}
-
-std::string Path::getSubPathStr() const
-{
-    std::stringstream s;
-
-    std::vector<Component>::const_iterator i = components.begin() + propertyIndex + 1;
-    while (i != components.end()) {
-        s << "." << i->toString();
-        ++i;
-    }
-
-    return s.str();
-}
-
-Path::Component::Component(const std::string &_component, Path::Component::typeEnum _type, int _index, String _key)
-    : component(_component)
-    , type(_type)
-    , index(_index)
-    , key(_key)
-{
-}
-
-Path::Component Path::Component::SimpleComponent(const std::string &_component)
-{
-    return Component(_component);
-}
-
-Path::Component Path::Component::ArrayComponent(const std::string &_component, int _index)
-{
-    return Component(_component, ARRAY, _index);
-}
-
-Path::Component Path::Component::MapComponent(const std::string &_component, const String & _key)
-{
-    return Component(_component, MAP, -1, _key);
-}
-
-bool Path::Component::operator ==(const Path::Component &other) const
-{
-    if (type != other.type)
-        return false;
-
-    if (component != other.component)
-        return false;
-
-    switch (type) {
-    case SIMPLE:
-        return true;
-    case ARRAY:
-        return index == other.index;
-    case MAP:
-        return key == other.key;
-    default:
-        assert(0);
-        return false;
-    }
-}
-
-std::string Path::Component::toString() const
-{
-    std::stringstream s;
-
-    s << component;
-    switch (type) {
-    case Component::SIMPLE:
-        break;
-    case Component::MAP:
-        s << "[" << key.toString() << "]";
-        break;
-    case Component::ARRAY:
-        s << "[" << index << "]";
-        break;
-    default:
-        assert(0);
-    }
-
-    return s.str();
+    return output;
 }
 
 //
 // Expression base-class
 //
 
-TYPESYSTEM_SOURCE_ABSTRACT(Spreadsheet::Expression, Base::BaseClass);
+TYPESYSTEM_SOURCE_ABSTRACT(App::Expression, Base::BaseClass);
 
 Expression::Expression(const DocumentObject *_owner)
     : owner(_owner)
@@ -315,7 +140,7 @@ Expression * Expression::parse(const DocumentObject *owner, const std::string &b
 // UnitExpression class
 //
 
-TYPESYSTEM_SOURCE(Spreadsheet::UnitExpression, Spreadsheet::Expression);
+TYPESYSTEM_SOURCE(App::UnitExpression, App::Expression);
 
 UnitExpression::UnitExpression(const DocumentObject *_owner, const Base::Quantity & _quantity, const std::string &_unitStr)
     : Expression(_owner)
@@ -377,14 +202,14 @@ std::string UnitExpression::toString() const
 
 Expression *UnitExpression::copy() const
 {
-    return new UnitExpression(owner, quantity);
+    return new UnitExpression(owner, quantity, unitStr);
 }
 
 //
 // NumberExpression class
 //
 
-TYPESYSTEM_SOURCE(Spreadsheet::NumberExpression, Spreadsheet::Expression);
+TYPESYSTEM_SOURCE(App::NumberExpression, App::Expression);
 
 NumberExpression::NumberExpression(const DocumentObject *_owner, const Quantity &_quantity)
     : UnitExpression(_owner, _quantity)
@@ -444,7 +269,7 @@ std::string NumberExpression::toString() const
 // OperatorExpression class
 //
 
-TYPESYSTEM_SOURCE(Spreadsheet::OperatorExpression, Spreadsheet::Expression);
+TYPESYSTEM_SOURCE(App::OperatorExpression, App::Expression);
 
 OperatorExpression::OperatorExpression(const App::DocumentObject *_owner, Expression * _left, Operator _op, Expression * _right)
     : UnitExpression(_owner)
@@ -481,23 +306,23 @@ Expression * OperatorExpression::eval() const
     NumberExpression * v1;
     std::auto_ptr<Expression> e2(right->eval());
     NumberExpression * v2;
-    NumberExpression * output = 0;
+    NumberExpression * output;
 
     v1 = freecad_dynamic_cast<NumberExpression>(e1.get());
     v2 = freecad_dynamic_cast<NumberExpression>(e2.get());
 
     if (v1 == 0 || v2 == 0)
-        throw Exception("Invalid expression");
+        throw ExpressionError("Invalid expression");
 
     switch (op) {
     case ADD:
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Incompatible units for + operator");
+            throw ExpressionError("Incompatible units for + operator");
         output = new NumberExpression(owner, v1->getQuantity() + v2->getQuantity());
         break;
     case SUB:
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Incompatible units for - operator");
+            throw ExpressionError("Incompatible units for - operator");
         output = new NumberExpression(owner, v1->getQuantity()- v2->getQuantity());
         break;
     case MUL:
@@ -512,32 +337,32 @@ Expression * OperatorExpression::eval() const
         break;
     case EQ:
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Incompatible units for + operator");
+            throw ExpressionError("Incompatible units for + operator");
         output = new NumberExpression(owner, Quantity(fabs(v1->getValue() - v2->getValue()) < 1e-7));
         break;
     case NEQ:
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Incompatible units for + operator");
+            throw ExpressionError("Incompatible units for + operator");
         output = new NumberExpression(owner, Quantity(fabs(v1->getValue() - v2->getValue()) > 1e-7));
         break;
     case LT:
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Incompatible units for + operator");
+            throw ExpressionError("Incompatible units for + operator");
         output = new NumberExpression(owner, Quantity(v1->getValue() < v2->getValue()));
         break;
     case GT:
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Incompatible units for + operator");
+            throw ExpressionError("Incompatible units for + operator");
         output = new NumberExpression(owner, Quantity(v1->getValue() > v2->getValue()));
         break;
     case LTE:
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Incompatible units for + operator");
+            throw ExpressionError("Incompatible units for + operator");
         output = new NumberExpression(owner, Quantity(v1->getValue() - v2->getValue() < 1e-7));
         break;
     case GTE:
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Incompatible units for + operator");
+            throw ExpressionError("Incompatible units for + operator");
         output = new NumberExpression(owner, Quantity(v2->getValue() - v1->getValue()) < 1e-7);
         break;
     case NEG:
@@ -547,6 +372,7 @@ Expression * OperatorExpression::eval() const
         output = new NumberExpression(owner, v1->getQuantity() );
         break;
     default:
+        output = 0;
         assert(0);
     }
 
@@ -697,7 +523,7 @@ int OperatorExpression::priority() const
   * @param props A set of strings. Each string contains the name of a property that this expression depends on.
   */
 
-void OperatorExpression::getDeps(std::set<Path> &props) const
+void OperatorExpression::getDeps(std::set<ObjectIdentifier> &props) const
 {
     left->getDeps(props);
     right->getDeps(props);
@@ -716,7 +542,7 @@ void OperatorExpression::visit(ExpressionVisitor &v)
 // FunctionExpression class. This class handles functions with one or two parameters.
 //
 
-TYPESYSTEM_SOURCE(Spreadsheet::FunctionExpression, Spreadsheet::UnitExpression);
+TYPESYSTEM_SOURCE(App::FunctionExpression, App::UnitExpression);
 
 FunctionExpression::FunctionExpression(const DocumentObject *_owner, Function _f, std::vector<Expression *> _args)
     : UnitExpression(_owner)
@@ -725,16 +551,16 @@ FunctionExpression::FunctionExpression(const DocumentObject *_owner, Function _f
 {
     switch (f) {
     case NONE:
-        throw Exception("Unknown function");
+        throw ExpressionError("Unknown function");
     case MOD:
     case ATAN2:
     case POW:
         if (args.size() != 2)
-            throw Exception("Invalid number of arguments.");
+            throw ExpressionError("Invalid number of arguments.");
         break;
     default:
         if (args.size() != 1)
-            throw Exception("Invalid number of arguments.");
+            throw ExpressionError("Invalid number of arguments.");
         break;
     }
 }
@@ -770,119 +596,23 @@ bool FunctionExpression::isTouched() const
 
 /**
   * Evaluate function. Returns a NumberExpression if evaluation is successfuly.
-  * Throws an exception if something fails.
+  * Throws an ExpressionError exception if something fails.
   *
   * @returns A NumberExpression with the result.
   */
 
 Expression * FunctionExpression::eval() const
 {
-    switch (f) {
-    case SUM:
-    case AVERAGE:
-    case STDDEV:
-    case COUNT:
-    case MIN:
-    case MAX:
-    {
-        RangeExpression * v = freecad_dynamic_cast<RangeExpression>(args[0]);
-        Quantity q;
-        Quantity mean;
-        Quantity M2;
-
-        int n = 0;
-        bool first = true;
-
-        if (!v)
-            throw Exception("Expected range as argument");
-
-        Range range(v->getRange());
-
-        do {
-            Property * p = owner->getPropertyByName(range.address().c_str());
-            PropertyQuantity * qp;
-            PropertyFloat * fp;
-            Quantity value;
-
-            if (!p)
-                continue;
-
-            if ( (qp = freecad_dynamic_cast<PropertyQuantity>(p)) )
-                value = qp->getQuantityValue();
-            else if ( (fp = freecad_dynamic_cast<PropertyFloat>(p)) )
-                value = fp->getValue();
-            else
-                throw Exception("Invalid property type for aggregate");
-
-            if (first) {
-                q.setUnit(value.getUnit());
-                mean.setUnit(value.getUnit());
-                M2.setUnit(value.getUnit());
-            }
-
-            switch (f) {
-            case AVERAGE:
-                n++;
-            case SUM:
-                q = q + value;
-                break;
-            case STDDEV: {
-                n++;
-
-                const Quantity delta = value - mean;
-                mean = mean + delta / n;
-                M2 = M2 + delta * (value - mean);
-                break;
-            }
-            case COUNT:
-                q = q + 1;
-                break;
-            case MIN:
-                if (first || value < q)
-                    q = value;
-                break;
-            case MAX:
-                if (first || value > q)
-                    q = value;
-                break;
-            default:
-                break;
-            }
-
-            first = false;
-        } while (range.next());
-
-        switch (f) {
-        case AVERAGE:
-            q = q / (double)n;
-            break;
-        case STDDEV:
-            if (n < 2)
-                q = Quantity();
-            else
-                q = (M2 / (n - 1.0)).pow(Quantity(0.5));
-            break;
-        default:
-            break;
-        }
-
-        return new NumberExpression(owner, q);
-    }
-    default:
-        break;
-    }
-
-
     std::auto_ptr<Expression> e1(args[0]->eval());
     std::auto_ptr<Expression> e2(args.size() > 1 ? args[1]->eval() : 0);
     NumberExpression * v1 = freecad_dynamic_cast<NumberExpression>(e1.get());
     NumberExpression * v2 = freecad_dynamic_cast<NumberExpression>(e2.get());
-    double output = 0;
+    double output;
     Unit unit;
     double scaler = 1;
 
     if (v1 == 0)
-        throw Exception("Invalid argument.");
+        throw ExpressionError("Invalid argument.");
 
     double value = v1->getValue();
 
@@ -892,7 +622,7 @@ Expression * FunctionExpression::eval() const
     case SIN:
     case TAN:
         if (!(v1->getUnit() == Unit::Angle || v1->getUnit().isEmpty()))
-            throw Exception("Unit must be either empty or an angle.");
+            throw ExpressionError("Unit must be either empty or an angle.");
 
         // Convert value to radians
         value *= M_PI / 180.0;
@@ -902,7 +632,7 @@ Expression * FunctionExpression::eval() const
     case ASIN:
     case ATAN:
         if (!v1->getUnit().isEmpty())
-            throw Exception("Unit must be empty.");
+            throw ExpressionError("Unit must be empty.");
         unit = Unit::Angle;
         scaler = 180.0 / M_PI;
         break;
@@ -913,9 +643,13 @@ Expression * FunctionExpression::eval() const
     case TANH:
     case COSH:
         if (!v1->getUnit().isEmpty())
-            throw Exception("Unit must be empty.");
+            throw ExpressionError("Unit must be empty.");
         unit = Unit();
         break;
+    case ROUND:
+    case TRUNC:
+    case CEIL:
+    case FLOOR:
     case ABS:
         unit = v1->getUnit();
         break;
@@ -932,7 +666,7 @@ Expression * FunctionExpression::eval() const
               ((s.AmountOfSubstance % 2) == 0) &&
               ((s.LuminoseIntensity % 2) == 0) &&
               ((s.Angle % 2) == 0))
-            throw Exception("All dimensions must be even to compute the square root.");
+            throw ExpressionError("All dimensions must be even to compute the square root.");
 
         unit = Unit(s.Length /2,
                     s.Mass / 2,
@@ -946,26 +680,26 @@ Expression * FunctionExpression::eval() const
     }
     case ATAN2:
         if (v2 == 0)
-            throw Exception("Invalid second argument.");
+            throw ExpressionError("Invalid second argument.");
 
         if (v1->getUnit() != v2->getUnit())
-            throw Exception("Units must be equal");
+            throw ExpressionError("Units must be equal");
         unit = Unit::Angle;
         scaler = 180.0 / M_PI;
         break;
     case MOD:
         if (v2 == 0)
-            throw Exception("Invalid second argument.");
+            throw ExpressionError("Invalid second argument.");
         if (!v2->getUnit().isEmpty())
-            throw Exception("Second argument must have empty unit.");
+            throw ExpressionError("Second argument must have empty unit.");
         unit = v1->getUnit();
         break;
     case POW: {
         if (v2 == 0)
-            throw Exception("Invalid second argument.");
+            throw ExpressionError("Invalid second argument.");
 
         if (!v2->getUnit().isEmpty())
-            throw Exception("Exponent is not allowed to have a unit.");
+            throw ExpressionError("Exponent is not allowed to have a unit.");
 
         // Compute new unit for exponentation
         double exponent = v2->getValue();
@@ -973,7 +707,7 @@ Expression * FunctionExpression::eval() const
             if (exponent - boost::math::round(exponent) < 1e-9)
                 unit = v1->getUnit().pow(exponent);
             else
-                throw Exception("Exponent must be an integer when used with a unit");
+                throw ExpressionError("Exponent must be an integer when used with a unit");
         }
         break;
     }
@@ -1037,7 +771,20 @@ Expression * FunctionExpression::eval() const
         output = pow(value, v2->getValue());
         break;
     }
+    case ROUND:
+        output = boost::math::round(value);
+        break;
+    case TRUNC:
+        output = boost::math::trunc(value);
+        break;
+    case CEIL:
+        output = ceil(value);
+        break;
+    case FLOOR:
+        output = floor(value);
+        break;
     default:
+        output = 0;
         assert(0);
     }
 
@@ -1059,8 +806,7 @@ Expression *FunctionExpression::simplify() const
         switch (f) {
         case ATAN2:
         case MOD:
-        case POW:
-        {
+        case POW: {
             Expression * v2 = args[1]->simplify();
 
             if (freecad_dynamic_cast<NumberExpression>(v2)) {
@@ -1131,18 +877,14 @@ std::string FunctionExpression::toString() const
         return "atan2(" + args[0]->toString() + ", " + args[1]->toString() +  ")";
     case POW:
         return "pow(" + args[0]->toString() + ", " + args[1]->toString() +  ")";
-    case SUM:
-        return "sum(" + args[0]->toString() + ")";
-    case COUNT:
-        return "count(" + args[0]->toString() + ")";
-    case AVERAGE:
-        return "average(" + args[0]->toString() + ")";
-    case STDDEV:
-        return "stddev(" + args[0]->toString() + ")";
-    case MIN:
-        return "min(" + args[0]->toString() + ")";
-    case MAX:
-        return "max(" + args[0]->toString() + ")";
+    case ROUND:
+        return "round(" + args[0]->toString() + ")";
+    case TRUNC:
+        return "trunc(" + args[0]->toString() + ")";
+    case CEIL:
+        return "ceil(" + args[0]->toString() + ")";
+    case FLOOR:
+        return "floor(" + args[0]->toString() + ")";
     default:
         assert(0);
         return std::string();
@@ -1172,7 +914,7 @@ Expression *FunctionExpression::copy() const
   * of all Property objects this expression relies on.
   */
 
-void FunctionExpression::getDeps(std::set<Path> &props) const
+void FunctionExpression::getDeps(std::set<ObjectIdentifier> &props) const
 {
     std::vector<Expression*>::const_iterator i = args.begin();
 
@@ -1197,9 +939,9 @@ void FunctionExpression::visit(ExpressionVisitor &v)
 // VariableExpression class
 //
 
-TYPESYSTEM_SOURCE(Spreadsheet::VariableExpression, Spreadsheet::UnitExpression);
+TYPESYSTEM_SOURCE(App::VariableExpression, App::UnitExpression);
 
-VariableExpression::VariableExpression(const DocumentObject *_owner, Path _var)
+VariableExpression::VariableExpression(const DocumentObject *_owner, ObjectIdentifier _var)
     : UnitExpression(_owner)
     , var(_var)
 {
@@ -1226,144 +968,6 @@ bool VariableExpression::isTouched() const
     }
 }
 
-const App::DocumentObject * Path::getDocumentObject(const App::Document * doc, const std::string & name) const
-{
-    DocumentObject * o1 = 0;
-    DocumentObject * o2 = 0;
-    std::vector<DocumentObject*> docObjects = doc->getObjects();
-
-    for (std::vector<DocumentObject*>::iterator j = docObjects.begin(); j != docObjects.end(); ++j) {
-        if (strcmp((*j)->Label.getValue(), name.c_str()) == 0) {
-            // Found object with matching label
-            if (o1 != 0)
-                return 0;
-            o1 = *j;
-        }
-    }
-
-    // No object found with matching label, try using name directly
-    o2 = doc->getObject(name.c_str());
-
-    if (o1 == 0 && o2 == 0) // Not found at all
-        return 0;
-    else if (o1 == 0) // Found by name
-        return o2;
-    else if (o2 == 0) // Found by label
-        return o1;
-    else if (o1 == o2) // Found by both name and label, same object
-        return o1;
-    else
-        return 0; // Found by both name and label, two different objects
-}
-
-void Path::resetResolve()
-{
-    if (!documentNameSet)
-        documentName = String();
-    if (!documentObjectNameSet)
-        documentObjectName = String();
-}
-
-void Path::resolve()
-{
-    const App::Document * doc;
-    const App::DocumentObject * docObject;
-
-    /* Document name specified? */
-    if (getDocumentName().getString().size() > 0)
-        doc = getDocument();
-    else {
-        setDocumentName(String(owner->getDocument()->Label.getValue()));
-        doc = owner->getDocument();
-    }
-
-    propertyName = "";
-    propertyIndex = 0;
-    if (doc == 0)
-        return;
-
-    /* Document object name specified? */
-    if (getDocumentObjectName().getString().size() > 0) {
-        docObject = getDocumentObject(doc, getDocumentObjectName().getString());
-        if (!docObject)
-            return;
-        if (components.size() > 0) {
-            propertyName = components[0].component;
-            propertyIndex = 0;
-        }
-        else
-            return;
-    }
-    else {
-        /* Document object name not specified, resolve from path */
-        if (components.size() == 1) {
-            setDocumentObjectName(String(owner->getNameInDocument()));
-            propertyName = components[0].component;
-            propertyIndex = 0;
-        }
-        else if (components.size() >= 2) {
-            if (!components[0].isSimple())
-                return;
-
-            docObject = getDocumentObject(doc, components[0].component);
-
-            if (docObject) {
-                setDocumentObjectName(components[0].component);
-                propertyName = components[1].component;
-                propertyIndex = 1;
-            }
-            else {
-                setDocumentObjectName(String(owner->getNameInDocument()));
-                propertyName = components[0].component;
-                propertyIndex = 0;
-            }
-        }
-        else
-            return;
-    }
-}
-
-Document * Path::getDocument() const
-{
-    App::Document * doc = 0;
-    const std::vector<App::Document*> docs = App::GetApplication().getDocuments();
-
-    for (std::vector<App::Document*>::const_iterator i = docs.begin(); i != docs.end(); ++i) {
-        if ((*i)->Label.getValue() == getDocumentName().getString()) {
-            if (doc != 0)
-                return 0;
-            doc = *i;
-        }
-    }
-
-    return doc;
-}
-
-const DocumentObject *Path::getDocumentObject() const
-{
-    const App::Document * doc = getDocument();
-
-    if (!doc)
-        return 0;
-
-    return  getDocumentObject(doc, documentObjectName);
-}
-
-const Property *Path::getProperty() const
-{
-    const App::Document * doc = getDocument();
-
-    if (!doc)
-        return 0;
-
-    const App::DocumentObject * docObj = getDocumentObject(doc, documentObjectName);
-
-    if (!docObj)
-        return 0;
-
-    return docObj->getPropertyByName(propertyName.c_str());
-}
-
 /**
   * Find the property this expression referse to.
   *
@@ -1378,15 +982,12 @@ const Property *Path::getProperty() const
 
 const Property * VariableExpression::getProperty() const
 {
-#ifdef FULL_EXPRESSION_SUPPORT
-    const Property * prop = docObject->getPropertyByPath(var);
-#else
     const Property * prop = var.getProperty();
-#endif
+
     if (prop)
         return prop;
     else
-        throw Base::Exception(std::string("Property '") + var.getPropertyName() + std::string("' not found."));
+        throw ExpressionError(std::string("Property '") + var.getPropertyName() + std::string("' not found."));
 }
 
 /**
@@ -1400,70 +1001,51 @@ const Property * VariableExpression::getProperty() const
 
 Expression * VariableExpression::eval() const
 {
-#ifdef FULL_EXPRESSION_SUPPORT
     const Property * prop = getProperty();
     PropertyContainer * parent = prop->getContainer();
 
     if (!parent->isDerivedFrom(App::DocumentObject::getClassTypeId()))
-        throw Base::Exception("Property must belong to a document object.");
+        throw ExpressionError("Property must belong to a document object.");
 
-    return static_cast<App::DocumentObject*>(parent)->getValue(var);
-#else
-    std::string s = "_spreadsheet_temp_ = " + var.getPythonAccessor();
-    PyObject * pyvalue = Base::Interpreter().getValue(s.c_str(), "_spreadsheet_temp_");
-    Expression * output;
+    boost::any value = prop->getPathValue(var);
 
-    if (!pyvalue)
-        throw Base::Exception("Failed to get property value.");
+    if (value.type() == typeid(Quantity)) {
+        Quantity qvalue = boost::any_cast<Quantity>(value);
 
-    if (PyInt_Check(pyvalue))
-        output = new NumberExpression(owner, PyInt_AsLong(pyvalue));
-    else if (PyFloat_Check(pyvalue))
-        output = new NumberExpression(owner, PyFloat_AsDouble(pyvalue));
-    else if (PyString_Check(pyvalue))
-        output = new StringExpression(owner, PyString_AsString(pyvalue));
-    else if (PyUnicode_Check(pyvalue)) {
-        PyObject * s = PyUnicode_AsUTF8String(pyvalue);
-
-        output = new StringExpression(owner, PyString_AsString(s));
-        Py_DECREF(s);
+        return new NumberExpression(owner, qvalue);
     }
-    else if (PyObject_TypeCheck(pyvalue, &QuantityPy::Type)) {
-        Base::QuantityPy * qp = static_cast<QuantityPy*>(pyvalue);
-        Base::Quantity * q = qp->getQuantityPtr();
+    else if (value.type() == typeid(double)) {
+        double dvalue = boost::any_cast<double>(value);
 
-        output = new NumberExpression(owner, *q);
+        return new NumberExpression(owner, dvalue);
     }
-    else {
-        Py_DECREF(pyvalue);
-        throw Base::Exception("Invalid property type.");
-    }
+    else if (value.type() == typeid(float)) {
+        double fvalue = boost::any_cast<float>(value);
 
-    Py_DECREF(pyvalue);
+        return new NumberExpression(owner, fvalue);
+    }
+    else if (value.type() == typeid(int)) {
+        int ivalue = boost::any_cast<int>(value);
 
-    return output;
-#if 0
+        return new NumberExpression(owner, ivalue);
+    }
+    else if (value.type() == typeid(std::string)) {
+        std::string svalue = boost::any_cast<std::string>(value);
 
-    if (prop->isDerivedFrom(PropertyQuantity::getClassTypeId())) {
-        const PropertyQuantity * value = static_cast<const PropertyQuantity*>(prop);
-        return new NumberExpression(owner, value->getValue(), value->getUnit());
+        return new StringExpression(owner, svalue);
     }
-    else if (prop->isDerivedFrom(PropertyFloat::getClassTypeId())) {
-        const PropertyFloat * value = static_cast<const PropertyFloat*>(prop);
-        return new NumberExpression(owner, value->getValue());
+    else if (value.type() == typeid(char*)) {
+        char* svalue = boost::any_cast<char*>(value);
+
+        return new StringExpression(owner, svalue);
     }
-    else if (prop->isDerivedFrom(PropertyInteger::getClassTypeId())) {
-        const PropertyInteger * value = static_cast<const PropertyInteger*>(prop);
-        return new NumberExpression(owner, value->getValue());
-    }
-    else if (prop->isDerivedFrom(PropertyString::getClassTypeId())) {
-        const PropertyString * value = static_cast<const PropertyString*>(prop);
-        return new StringExpression(owner, value->getValue());
+    else if (value.type() == typeid(const char*)) {
+        const char* svalue = boost::any_cast<const char*>(value);
+
+        return new StringExpression(owner, svalue);
     }
 
-    throw Base::Exception("Property is of invalid type (not float).");
-#endif
-#endif
+    throw ExpressionError("Property is of invalid type.");
 }
 
 /**
@@ -1496,15 +1078,14 @@ Expression *VariableExpression::copy() const
   * the set.
   */
 
-void VariableExpression::getDeps(std::set<Path> &props) const
+void VariableExpression::getDeps(std::set<ObjectIdentifier> &props) const
 {
     props.insert(var);
 }
 
-void VariableExpression::resolve()
+void VariableExpression::setPath(const ObjectIdentifier &path)
 {
-    var.resetResolve();
-    var.resolve();
+     var = path;
 }
 
 void VariableExpression::renameDocumentObject(const std::string &oldName, const std::string &newName)
@@ -1521,7 +1102,7 @@ void VariableExpression::renameDocument(const std::string &oldName, const std::s
 // StringExpression class
 //
 
-TYPESYSTEM_SOURCE(Spreadsheet::StringExpression, Spreadsheet::Expression);
+TYPESYSTEM_SOURCE(App::StringExpression, App::Expression);
 
 StringExpression::StringExpression(const DocumentObject *_owner, const std::string &_text)
     : Expression(_owner)
@@ -1561,7 +1142,7 @@ Expression *StringExpression::copy() const
     return new StringExpression(owner, text);
 }
 
-TYPESYSTEM_SOURCE(Spreadsheet::ConditionalExpression, Spreadsheet::Expression);
+TYPESYSTEM_SOURCE(App::ConditionalExpression, App::Expression);
 
 ConditionalExpression::ConditionalExpression(const DocumentObject *_owner, Expression *_condition, Expression *_trueExpr, Expression *_falseExpr)
     : Expression(_owner)
@@ -1589,7 +1170,7 @@ Expression *ConditionalExpression::eval() const
     NumberExpression * v = freecad_dynamic_cast<NumberExpression>(e.get());
 
     if (v == 0)
-        throw Exception("Invalid expression");
+        throw ExpressionError("Invalid expression");
 
     if (fabs(v->getValue()) > 0.5)
         return trueExpr->eval();
@@ -1624,10 +1205,10 @@ Expression *ConditionalExpression::copy() const
 
 int ConditionalExpression::priority() const
 {
-    return 10;
+    return 0;
 }
 
-void ConditionalExpression::getDeps(std::set<Path> &props) const
+void ConditionalExpression::getDeps(std::set<ObjectIdentifier> &props) const
 {
     condition->getDeps(props);
     trueExpr->getDeps(props);
@@ -1641,7 +1222,7 @@ void ConditionalExpression::visit(ExpressionVisitor &v)
     falseExpr->visit(v);
 }
 
-TYPESYSTEM_SOURCE(Spreadsheet::ConstantExpression, Spreadsheet::NumberExpression);
+TYPESYSTEM_SOURCE(App::ConstantExpression, App::NumberExpression);
 
 ConstantExpression::ConstantExpression(const DocumentObject *_owner, std::string _name, const Quantity & _quantity)
     : NumberExpression(_owner, _quantity)
@@ -1659,7 +1240,7 @@ Expression *ConstantExpression::copy() const
     return new ConstantExpression(owner, name.c_str(), quantity);
 }
 
-namespace Spreadsheet {
+namespace App {
 
 namespace ExpressionParser {
 
@@ -1700,12 +1281,15 @@ static bool unitExpression = false;                    /**< True if the parsed s
 static bool valueExpression = false;                   /**< True if the parsed string is a full expression */
 static std::stack<std::string> labels;                /**< Label string primitive */
 static std::map<std::string, FunctionExpression::Function> registered_functions;                /**< Registerd functions */
+static int last_column;
+static int column;
 
 // show the parser the lexer method
 #define yylex ExpressionParserlex
 int ExpressionParserlex(void);
 
 // Parser, defined in ExpressionParser.y
+# define YYTOKENTYPE
 #include "ExpressionParser.tab.c"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -1720,18 +1304,13 @@ static void initParser(const App::DocumentObject *owner)
 {
     static bool has_registered_functions = false;
 
-    using namespace Spreadsheet::ExpressionParser;
+    using namespace App::ExpressionParser;
 
     ScanResult = 0;
-    Spreadsheet::ExpressionParser::DocumentObject = owner;
+    App::ExpressionParser::DocumentObject = owner;
     labels = std::stack<std::string>();
+    column = 0;
     unitExpression = valueExpression = false;
-
-#ifdef FC_DEBUG
-    yydebug = 1;
-#else
-    yydebug = 0;
-#endif
 
     if (!has_registered_functions) {
         registered_functions["acos"] = FunctionExpression::ACOS;
@@ -1751,83 +1330,29 @@ static void initParser(const App::DocumentObject *owner)
         registered_functions["atan2"] = FunctionExpression::ATAN2;
         registered_functions["mod"] = FunctionExpression::MOD;
         registered_functions["pow"] = FunctionExpression::POW;
-
-        // Aggregates
-        registered_functions["sum"] = FunctionExpression::SUM;
-        registered_functions["count"] = FunctionExpression::COUNT;
-        registered_functions["average"] = FunctionExpression::AVERAGE;
-        registered_functions["stddev"] = FunctionExpression::STDDEV;
-        registered_functions["min"] = FunctionExpression::MIN;
-        registered_functions["max"] = FunctionExpression::MAX;
+        registered_functions["round"] = FunctionExpression::ROUND;
+        registered_functions["trunc"] = FunctionExpression::TRUNC;
+        registered_functions["ceil"] = FunctionExpression::CEIL;
+        registered_functions["floor"] = FunctionExpression::FLOOR;
 
         has_registered_functions = true;
     }
 }
 
+std::vector<boost::tuple<int, int, std::string> > tokenize(const std::string &str)
+{
+    ExpressionParser::YY_BUFFER_STATE buf = ExpressionParser_scan_string(str.c_str());
+    std::vector<boost::tuple<int, int, std::string> > result;
+    int token;
+
+    column = 0;
+    while ( (token  = ExpressionParserlex()) != 0)
+        result.push_back(boost::make_tuple(token, ExpressionParser::last_column, yytext));
+
+    ExpressionParser_delete_buffer(buf);
+    return result;
 }
 
-std::string Path::String::toString() const
-{
-    if (isRealString())
-        return quote(str);
-    else
-        return str;
-}
-
-TYPESYSTEM_SOURCE(Spreadsheet::RangeExpression, Spreadsheet::Expression);
-
-RangeExpression::RangeExpression(const DocumentObject *_owner, const std::string &begin, const std::string &end)
-    : Expression(_owner)
-    , range((begin + ":" + end).c_str())
-{
-}
-
-bool RangeExpression::isTouched() const
-{
-    Range i(range);
-
-    do {
-        Property * prop = owner->getPropertyByName(i.address().c_str());
-
-        if (prop && prop->isTouched())
-            return true;
-    } while (i.next());
-
-    return false;
-}
-
-Expression *RangeExpression::eval() const
-{
-    throw Exception("Range expression cannot be evaluated");
-}
-
-std::string RangeExpression::toString() const
-{
-    return range.rangeString();
-}
-
-Expression *RangeExpression::copy() const
-{
-    return new RangeExpression(owner, range.fromCellString(), range.toCellString());
-}
-
-void RangeExpression::getDeps(std::set<Path> &props) const
-{
-    Range i(range);
-
-    do {
-        props.insert(Path(owner, i.address()));
-    } while (i.next());
-}
-
-Expression *RangeExpression::simplify() const
-{
-    return copy();
-}
-
-void RangeExpression::setRange(const Range &r)
-{
-    range = r;
 }
 
 }
@@ -1843,12 +1368,14 @@ void RangeExpression::setRange(const Range &r)
   *
   */
 
-Expression * Spreadsheet::ExpressionParser::parse(const App::DocumentObject *owner, const char* buffer)
+Expression * App::ExpressionParser::parse(const App::DocumentObject *owner, const char* buffer)
 {
     // parse from buffer
     ExpressionParser::YY_BUFFER_STATE my_string_buffer = ExpressionParser::ExpressionParser_scan_string (buffer);
 
     initParser(owner);
+
+    yydebug = 0;
 
     // run the parser
     int result = ExpressionParser::ExpressionParser_yyparse ();
@@ -1857,10 +1384,10 @@ Expression * Spreadsheet::ExpressionParser::parse(const App::DocumentObject *own
     ExpressionParser::ExpressionParser_delete_buffer (my_string_buffer);
 
     if (result != 0)
-        throw Base::Exception("Failed to parse expression.");
+        throw ParserError("Failed to parse expression.");
 
     if (ScanResult == 0)
-        throw Base::Exception("Unknown error in expression");
+        throw ParserError("Unknown error in expression");
 
     if (valueExpression)
         return ScanResult;
@@ -1885,10 +1412,10 @@ UnitExpression * ExpressionParser::parseUnit(const App::DocumentObject *owner, c
     ExpressionParser::ExpressionParser_delete_buffer (my_string_buffer);
 
     if (result != 0)
-        throw Base::Exception("Failed to parse expression.");
+        throw ParserError("Failed to parse expression.");
 
     if (ScanResult == 0)
-        throw Base::Exception("Unknown error in expression");
+        throw ParserError("Unknown error in expression");
 
     // Simplify expression
     Expression * simplified = ScanResult->simplify();
@@ -1908,4 +1435,17 @@ UnitExpression * ExpressionParser::parseUnit(const App::DocumentObject *owner, c
         throw Expression::Exception("Expression is not a unit.");
         return 0;
     }
+}
+
+bool ExpressionParser::isTokenAnIndentifier(const std::string & str)
+{
+    ExpressionParser::YY_BUFFER_STATE buf = ExpressionParser_scan_string(str.c_str());
+    int token = ExpressionParserlex();
+    int status = ExpressionParserlex();
+    ExpressionParser_delete_buffer(buf);
+
+    if (status == 0 && (token == IDENTIFIER || token == CELLADDRESS ))
+        return true;
+    else
+        return false;
 }

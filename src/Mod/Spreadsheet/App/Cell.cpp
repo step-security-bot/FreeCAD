@@ -30,7 +30,7 @@
 #include <boost/tokenizer.hpp>
 #include <Base/Reader.h>
 #include <Base/Writer.h>
-#include "Expression.h"
+#include "SpreadsheetExpression.h"
 #include "Sheet.h"
 #include <iomanip>
 
@@ -38,7 +38,7 @@
 #define __func__ __FUNCTION__
 #endif
 
-using namespace App;
+using namespace Base;
 using namespace Spreadsheet;
 
 const int Cell::EXPRESSION_SET       = 1;
@@ -147,7 +147,7 @@ Cell::~Cell()
   *
   */
 
-void Cell::setExpression(Expression *expr)
+void Cell::setExpression(App::Expression *expr)
 {
     PropertySheet::Signaller signaller(*owner);
 
@@ -170,7 +170,7 @@ void Cell::setExpression(Expression *expr)
   *
   */
 
-const Expression *Cell::getExpression() const
+const App::Expression *Cell::getExpression() const
 {
     return expression;
 }
@@ -183,8 +183,8 @@ const Expression *Cell::getExpression() const
 bool Cell::getStringContent(std::string & s) const
 {
     if (expression) {
-        if (freecad_dynamic_cast<StringExpression>(expression)) {
-            s = static_cast<StringExpression*>(expression)->getText();
+        if (freecad_dynamic_cast<App::StringExpression>(expression)) {
+            s = static_cast<App::StringExpression*>(expression)->getText();
             char * end;
             errno = 0;
             double d = strtod(s.c_str(), &end);
@@ -192,9 +192,9 @@ bool Cell::getStringContent(std::string & s) const
             if (!*end && errno == 0)
                 s = "'" + s;
         }
-        else if (freecad_dynamic_cast<ConstantExpression>(expression))
+        else if (freecad_dynamic_cast<App::ConstantExpression>(expression))
             s = "=" + expression->toString();
-        else if (freecad_dynamic_cast<NumberExpression>(expression))
+        else if (freecad_dynamic_cast<App::NumberExpression>(expression))
             s = expression->toString();
         else
             s = "=" + expression->toString();
@@ -210,28 +210,28 @@ bool Cell::getStringContent(std::string & s) const
 void Cell::setContent(const char * value)
 {
     PropertySheet::Signaller signaller(*owner);
-    Expression * expr = 0;
+    App::Expression * expr = 0;
 
     setUsed(PARSE_EXCEPTION_SET, false);
     if (value != 0) {
         if (*value == '=') {
             try {
-                expr = ExpressionParser::parse(owner->sheet(), value + 1);
+                expr = Spreadsheet::ExpressionParser::parse(owner->sheet(), value + 1);
             }
             catch (Base::Exception & e) {
                 QString msg = QString::fromUtf8("ERR: %1").arg(QString::fromUtf8(e.what()));
-                expr = new StringExpression(owner->sheet(), value);
+                expr = new App::StringExpression(owner->sheet(), value);
                 setUsed(PARSE_EXCEPTION_SET);
             }
         }
         else if (*value == '\'')
-            expr = new StringExpression(owner->sheet(), value + 1);
+            expr = new App::StringExpression(owner->sheet(), value + 1);
         else if (*value != '\0') {
             char * end;
             errno = 0;
             double float_value = strtod(value, &end);
             if (!*end && errno == 0)
-                expr = new NumberExpression(owner->sheet(), float_value);
+                expr = new App::NumberExpression(owner->sheet(), float_value);
             else {
                 try {
                     expr = ExpressionParser::parse(owner->sheet(), value);
@@ -239,7 +239,7 @@ void Cell::setContent(const char * value)
                         delete expr->eval();
                 }
                 catch (Base::Exception &) {
-                    expr = new StringExpression(owner->sheet(), value);
+                    expr = new App::StringExpression(owner->sheet(), value);
                 }
             }
         }
@@ -307,7 +307,7 @@ bool Cell::getStyle(std::set<std::string> & _style) const
   *
   */
 
-void Cell::setForeground(const Color &color)
+void Cell::setForeground(const App::Color &color)
 {
     if (color != foregroundColor) {
         PropertySheet::Signaller signaller(*owner);
@@ -322,7 +322,7 @@ void Cell::setForeground(const Color &color)
   *
   */
 
-bool Cell::getForeground(Color &color) const
+bool Cell::getForeground(App::Color &color) const
 {
     color = foregroundColor;
     return isUsed(FOREGROUND_COLOR_SET);
@@ -333,7 +333,7 @@ bool Cell::getForeground(Color &color) const
   *
   */
 
-void Cell::setBackground(const Color &color)
+void Cell::setBackground(const App::Color &color)
 {
     if (color != backgroundColor) {
         PropertySheet::Signaller signaller(*owner);
@@ -350,7 +350,7 @@ void Cell::setBackground(const Color &color)
   *
   */
 
-bool Cell::getBackground(Color &color) const
+bool Cell::getBackground(App::Color &color) const
 {
     color = backgroundColor;
     return isUsed(BACKGROUND_COLOR_SET);
@@ -365,7 +365,7 @@ void Cell::setDisplayUnit(const std::string &unit)
 {
     DisplayUnit newDisplayUnit;
     if (unit.size() > 0) {
-        std::auto_ptr<UnitExpression> e(ExpressionParser::parseUnit(owner->sheet(), unit.c_str()));
+        std::auto_ptr<App::UnitExpression> e(ExpressionParser::parseUnit(owner->sheet(), unit.c_str()));
 
         newDisplayUnit = DisplayUnit(unit, e->getUnit(), e->getScaler());
     }
@@ -569,12 +569,12 @@ void Cell::restore(Base::XMLReader &reader)
         setAlignment(alignmentCode);
     }
     if (foregroundColor) {
-        Color color = decodeColor(foregroundColor, Color(0, 0, 0, 1));
+        App::Color color = decodeColor(foregroundColor, App::Color(0, 0, 0, 1));
 
         setForeground(color);
     }
     if (backgroundColor) {
-        Color color = decodeColor(backgroundColor, Color(1, 1, 1, 1));
+        App::Color color = decodeColor(backgroundColor, App::Color(1, 1, 1, 1));
 
         setBackground(color);
     }
@@ -609,7 +609,7 @@ void Cell::save(Base::Writer &writer) const
         std::string content;
 
         getStringContent(content);
-        writer.Stream() << "content=\"" << Property::encodeAttribute(content) << "\" ";
+        writer.Stream() << "content=\"" << App::Property::encodeAttribute(content) << "\" ";
     }
 
     if (isUsed(ALIGNMENT_SET))
@@ -625,10 +625,10 @@ void Cell::save(Base::Writer &writer) const
         writer.Stream() << "backgroundColor=\"" << encodeColor(backgroundColor) << "\" ";
 
     if (isUsed(DISPLAY_UNIT_SET))
-        writer.Stream() << "displayUnit=\"" << Property::encodeAttribute(displayUnit.stringRep) << "\" ";
+        writer.Stream() << "displayUnit=\"" << App::Property::encodeAttribute(displayUnit.stringRep) << "\" ";
 
     if (isUsed(ALIAS_SET))
-        writer.Stream() << "alias=\"" << Property::encodeAttribute(alias) << "\" ";
+        writer.Stream() << "alias=\"" << App::Property::encodeAttribute(alias) << "\" ";
 
     if (isUsed(SPANS_SET)) {
         writer.Stream() << "rowSpan=\"" << rowSpan<< "\" ";
@@ -673,7 +673,7 @@ bool Cell::isUsed() const
     return used != 0;
 }
 
-void Cell::visit(ExpressionVisitor &v)
+void Cell::visit(App::ExpressionVisitor &v)
 {
     if (expression)
         expression->visit(v);
@@ -759,7 +759,7 @@ std::string Cell::encodeAlignment(int alignment)
   *
   */
 
-std::string Cell::encodeColor(const Color & color)
+std::string Cell::encodeColor(const App::Color & color)
 {
     std::stringstream tmp;
 
@@ -807,10 +807,10 @@ std::string Cell::encodeStyle(const std::set<std::string> & style)
   *
   */
 
-Color Cell::decodeColor(const std::string & color, const Color & defaultColor)
+App::Color Cell::decodeColor(const std::string & color, const App::Color & defaultColor)
 {
     if (color.size() == 7 || color.size() == 9) {
-        Color c;
+        App::Color c;
 
         if (color[0] != '#')
             return defaultColor;

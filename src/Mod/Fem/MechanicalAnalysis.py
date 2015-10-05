@@ -391,9 +391,10 @@ class _JobControlTaskPanel:
         self.form.label_Time.setText('Time: {0:4.1f}: '.format(time.time() - self.Start))
         fea = FemTools()
         fea.reset_all()
-        if os.path.isfile(self.base_name + '.frd'):
+        frd_result_file = os.path.splitext(self.inp_file_name)[0] + '.frd'
+        if os.path.isfile(frd_result_file):
             QApplication.setOverrideCursor(Qt.WaitCursor)
-            ccxFrdReader.importFrd(self.base_name + '.frd', FemGui.getActiveAnalysis())
+            ccxFrdReader.importFrd(frd_result_file, FemGui.getActiveAnalysis())
             QApplication.restoreOverrideCursor()
             self.femConsoleMessage("Loading results done!", "#00AA00")
         else:
@@ -427,12 +428,12 @@ class _JobControlTaskPanel:
         QApplication.restoreOverrideCursor()
         if self.check_prerequisites_helper():
             QApplication.setOverrideCursor(Qt.WaitCursor)
-            self.base_name = ""
+            self.inp_file_name = ""
             fea = FemTools()
             fea.update_objects()
             fea.write_inp_file()
-            if fea.base_name != "":
-                self.base_name = fea.base_name
+            if fea.inp_file_name != "":
+                self.inp_file_name = fea.inp_file_name
                 self.femConsoleMessage("Write completed.")
                 self.form.pushButton_edit.setEnabled(True)
                 self.form.pushButton_generate.setEnabled(True)
@@ -460,17 +461,16 @@ class _JobControlTaskPanel:
             self.ext_editor_process.start(ext_editor_path, [filename])
 
     def editCalculixInputFile(self):
-        filename = self.base_name + '.inp'
-        print 'editCalculixInputFile {}'.format(filename)
+        print 'editCalculixInputFile {}'.format(self.inp_file_name)
         if self.fem_prefs.GetBool("UseInternalEditor", True):
-            FemGui.open(filename)
+            FemGui.open(self.inp_file_name)
         else:
             ext_editor_path = self.fem_prefs.GetString("ExternalEditorPath", "")
             if ext_editor_path:
-                self.start_ext_editor(ext_editor_path, filename)
+                self.start_ext_editor(ext_editor_path, self.inp_file_name)
             else:
                 print "External editor is not defined in FEM preferences. Falling back to internal editor"
-                FemGui.open(filename)
+                FemGui.open(self.inp_file_name)
 
     def runCalculix(self):
         print 'runCalculix'
@@ -480,11 +480,11 @@ class _JobControlTaskPanel:
         self.femConsoleMessage("Run Calculix...")
 
         # run Calculix
-        print 'run Calculix at: ', self.CalculixBinary, '  with: ', self.base_name
+        print 'run Calculix at: ', self.CalculixBinary, ' with: ', os.path.splitext(self.inp_file_name)[0]
         # change cwd because ccx may crash if directory has no write permission
         # there is also a limit of the length of file names so jump to the document directory
         self.cwd = QtCore.QDir.currentPath()
-        fi = QtCore.QFileInfo(self.base_name)
+        fi = QtCore.QFileInfo(self.inp_file_name)
         QtCore.QDir.setCurrent(fi.path())
         self.Calculix.start(self.CalculixBinary, ['-i', fi.baseName()])
 
@@ -590,7 +590,8 @@ class _ResultControlTaskPanel:
     def vm_stress_selected(self, state):
         FreeCAD.FEM_dialog["results_type"] = "Sabs"
         QApplication.setOverrideCursor(Qt.WaitCursor)
-        self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, self.result_object.StressValues)
+        if self.suitable_results:
+            self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, self.result_object.StressValues)
         (minm, avg, maxm) = self.get_result_stats("Sabs")
         self.set_result_stats("MPa", minm, avg, maxm)
         QtGui.qApp.restoreOverrideCursor()
@@ -598,12 +599,14 @@ class _ResultControlTaskPanel:
     def select_displacement_type(self, disp_type):
         QApplication.setOverrideCursor(Qt.WaitCursor)
         if disp_type == "Uabs":
-            self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, self.result_object.DisplacementLengths)
+            if self.suitable_results:
+                self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, self.result_object.DisplacementLengths)
         else:
             match = {"U1": 0, "U2": 1, "U3": 2}
             d = zip(*self.result_object.DisplacementVectors)
             displacements = list(d[match[disp_type]])
-            self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, displacements)
+            if self.suitable_results:
+                self.MeshObject.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, displacements)
         (minm, avg, maxm) = self.get_result_stats(disp_type)
         self.set_result_stats("mm", minm, avg, maxm)
         QtGui.qApp.restoreOverrideCursor()
@@ -631,7 +634,8 @@ class _ResultControlTaskPanel:
             if FreeCAD.FEM_dialog["result_object"] != self.result_object:
                 self.update_displacement()
         FreeCAD.FEM_dialog["result_object"] = self.result_object
-        self.MeshObject.ViewObject.setNodeDisplacementByVectors(self.result_object.ElementNumbers, self.result_object.DisplacementVectors)
+        if self.suitable_results:
+            self.MeshObject.ViewObject.setNodeDisplacementByVectors(self.result_object.ElementNumbers, self.result_object.DisplacementVectors)
         self.update_displacement()
         QtGui.qApp.restoreOverrideCursor()
 
@@ -655,6 +659,15 @@ class _ResultControlTaskPanel:
             if i.isDerivedFrom("Fem::FemMeshObject"):
                 self.MeshObject = i
                 break
+
+        if self.MeshObject.FemMesh.NodeCount == len(self.result_object.ElementNumbers):
+            self.suitable_results = True
+        else:
+            self.suitable_results = False
+            if not self.MeshObject.FemMesh.VolumeCount:
+                FreeCAD.Console.PrintError('Graphical output for beam or shell FEM Meshes not yet supported!\n')
+            else:
+                FreeCAD.Console.PrintError('Result node numbers are not equal to FEM Mesh NodeCount!\n')
 
     def accept(self):
         FreeCADGui.Control.closeDialog()

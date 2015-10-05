@@ -5,7 +5,7 @@
  *   published by the Free Software Foundation; either version 2 of the    *
  *   License, or (at your option) any later version.                       *
  *   for detail see the LICENCE text file.                                 *
- *   Jürgen Riegel 2002                                                    *
+ *   JÃ¼rgen Riegel 2002                                                    *
  *   Eivind Kvedalen 2015                                                  *
  *                                                                         *
  ***************************************************************************/
@@ -25,6 +25,7 @@
 
 #include <Base/Exception.h>
 #include <Base/Interpreter.h>
+#include <Base/Tools.h>
 #include <App/Document.h>
 #include <Gui/Application.h>
 #include <Gui/MainWindow.h>
@@ -43,6 +44,7 @@
 
 using namespace SpreadsheetGui;
 using namespace Spreadsheet;
+using namespace Base;
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -182,7 +184,7 @@ void CmdSpreadsheetImport::activated(int iMsg)
         std::string FeatName = getUniqueObjectName("Spreadsheet");
         Sheet * sheet = freecad_dynamic_cast<Sheet>(App::GetApplication().getActiveDocument()->addObject("Spreadsheet::Sheet", FeatName.c_str()));
 
-        sheet->importFromFile(fileName.toStdString(), '\t', '"', '\\');        
+        sheet->importFromFile(Base::Tools::toStdString(fileName), '\t', '"', '\\');
         sheet->execute();
     }
 }
@@ -224,7 +226,7 @@ void CmdSpreadsheetExport::activated(int iMsg)
                                                                 formatList,
                                                                 &selectedFilter);
             if (!fileName.isEmpty())
-                sheet->exportToFile(fileName.toStdString(), '\t', '"', '\\');
+                sheet->exportToFile(Base::Tools::toStdString(fileName), '\t', '"', '\\');
         }
     }
 }

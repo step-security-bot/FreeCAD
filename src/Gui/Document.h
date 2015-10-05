@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -58,7 +58,7 @@ class DocumentPy;
  *  All handled views on the document must inherit from MDIView
  *  @see App::Document 
  *  @see MDIView
- *  @author Jürgen Riegel
+ *  @author JÃ¼rgen Riegel
  */
 class GuiExport Document : public Base::Persistence
 {
@@ -73,7 +73,7 @@ protected:
     void slotNewObject(const App::DocumentObject&);
     void slotDeletedObject(const App::DocumentObject&);
     void slotChangedObject(const App::DocumentObject&, const App::Property&);
-    void slotRenamedObject(const App::DocumentObject&);
+    void slotRelabelObject(const App::DocumentObject&);
     void slotActivatedObject(const App::DocumentObject&);
     void slotStartRestoreDocument(const App::Document&);
     void slotFinishRestoreDocument(const App::Document&);
@@ -93,7 +93,7 @@ public:
     mutable boost::signal<void (const Gui::ViewProviderDocumentObject&,
                                 const App::Property&)>                   signalChangedObject;
     /// signal on renamed Object
-    mutable boost::signal<void (const Gui::ViewProviderDocumentObject&)> signalRenamedObject;
+    mutable boost::signal<void (const Gui::ViewProviderDocumentObject&)> signalRelabelObject;
     /// signal on activated Object
     mutable boost::signal<void (const Gui::ViewProviderDocumentObject&)> signalActivatedObject;
     /// signal on entering in edit mode

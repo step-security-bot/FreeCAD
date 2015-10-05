@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2007     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2007     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -611,8 +611,9 @@ int DocumentPy::setCustomAttributes(const char* attr, PyObject *)
         std::stringstream str;
         str << "'Document' object attribute '" << attr 
             << "' must not be set this way" << std::ends;
-        throw Py::AttributeError(str.str());
+        PyErr_SetString(PyExc_RuntimeError, str.str().c_str());
+        return -1;
     }
-    
+
     return 0;
 }

@@ -85,6 +85,7 @@
 #include "PropertyFile.h"
 #include "PropertyLinks.h"
 #include "PropertyPythonObject.h"
+#include "PropertyExpressionEngine.h"
 #include "Document.h"
 #include "DocumentObjectGroup.h"
 #include "DocumentObjectFileIncluded.h"
@@ -95,6 +96,7 @@
 #include "Placement.h"
 #include "Plane.h"
 #include "MaterialObject.h"
+#include "Expression.h"
 
 // If you stumble here, run the target "BuildExtractRevision" on Windows systems
 // or the Python script "SubWCRev.py" on Linux based systems which builds
@@ -313,7 +315,7 @@ Document* Application::newDocument(const char * Name, const char * UserName)
     _pActiveDoc->signalNewObject.connect(boost::bind(&App::Application::slotNewObject, this, _1));
     _pActiveDoc->signalDeletedObject.connect(boost::bind(&App::Application::slotDeletedObject, this, _1));
     _pActiveDoc->signalChangedObject.connect(boost::bind(&App::Application::slotChangedObject, this, _1, _2));
-    _pActiveDoc->signalRenamedObject.connect(boost::bind(&App::Application::slotRenamedObject, this, _1));
+    _pActiveDoc->signalRelabelObject.connect(boost::bind(&App::Application::slotRelabelObject, this, _1));
     _pActiveDoc->signalActivatedObject.connect(boost::bind(&App::Application::slotActivatedObject, this, _1));
     _pActiveDoc->signalUndo.connect(boost::bind(&App::Application::slotUndoDocument, this, _1));
     _pActiveDoc->signalRedo.connect(boost::bind(&App::Application::slotRedoDocument, this, _1));
@@ -857,9 +859,9 @@ void Application::slotChangedObject(const App::DocumentObject&O, const App::Prop
     this->signalChangedObject(O,P);
 }
 
-void Application::slotRenamedObject(const App::DocumentObject&O)
+void Application::slotRelabelObject(const App::DocumentObject&O)
 {
-    this->signalRenamedObject(O);
+    this->signalRelabelObject(O);
 }
 
 void Application::slotActivatedObject(const App::DocumentObject&O)
@@ -1096,6 +1098,8 @@ void Application::initTypes(void)
     App ::PropertyFile              ::init();
     App ::PropertyFileIncluded      ::init();
     App ::PropertyPythonObject      ::init();
+    App ::PropertyExpressionEngine  ::init();
+
     // Document classes
     App ::DocumentObject            ::init();
     App ::GeoFeature                ::init();
@@ -1116,6 +1120,18 @@ void Application::initTypes(void)
     App ::MaterialObjectPython      ::init();
     App ::Placement                 ::init();
     App ::Plane                     ::init();
+
+    // Expression classes
+    App ::Expression                ::init();
+    App ::UnitExpression            ::init();
+    App ::NumberExpression          ::init();
+    App ::ConstantExpression        ::init();
+    App ::OperatorExpression        ::init();
+    App ::VariableExpression        ::init();
+    App ::ConditionalExpression     ::init();
+    App ::StringExpression          ::init();
+    App ::FunctionExpression        ::init();
+
 }
 
 void Application::initConfig(int argc, char ** argv)
