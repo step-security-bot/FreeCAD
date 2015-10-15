@@ -10,8 +10,9 @@ compiler:
 
 #trusty
 sudo: required
-services:
-- docker
+dist: trusty
+#services:
+#- docker
 
 env:
   global:
