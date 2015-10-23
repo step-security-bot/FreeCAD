@@ -84,12 +84,14 @@ before_install:
     #- sudo apt-get install -y qt4-qmake
     - sudo apt-get install -y shiboken
     - sudo apt-get install -y swig
-#trusty
-    - sudo apt-get install -y libpython2.6-dev
 #Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
     #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 
 install:
+    - pyenv versions
+    - pyenv install 2.7
+    - pyenv versions
+    - pyenv global 2.7
     - pyenv versions
     - mkdir build && cd build && cmake ../
 
