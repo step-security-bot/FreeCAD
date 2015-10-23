@@ -89,9 +89,9 @@ before_install:
 
 install:
     - pyenv versions
-    - pyenv install 2.7
+    - pyenv install 2.7.10
     - pyenv versions
-    - pyenv global 2.7
+    - pyenv global 2.7.10
     - pyenv versions
     - mkdir build && cd build && cmake ../
 
