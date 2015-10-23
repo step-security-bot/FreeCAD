@@ -90,7 +90,7 @@ before_install:
     #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 
 install:
-    - pyenv global 2.7.*
+    - pyenv global 2.7.10
     - mkdir build && cd build && cmake ../
 
 #before_script:
