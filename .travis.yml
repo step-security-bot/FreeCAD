@@ -87,7 +87,7 @@ before_install:
 #Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
     #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 #trusty
-    - sudo apt-get install -y libpython2.7.10
+    - sudo apt-get install -y libpython2.7.so.1.0
 
 install:
     - mkdir build && cd build && cmake ../
