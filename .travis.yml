@@ -86,13 +86,10 @@ before_install:
     - sudo apt-get install -y swig
 #Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
     #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
+#trusty
+    - sudo ln -s /usr/lib/x86_64-linux-gnu/libpython2.7.so /usr/lib/x86_64-linux-gnu/libpython2.6.so.1.0
 
 install:
-    - pyenv versions
-    - pyenv install 2.7.10
-    - pyenv versions
-    - pyenv global 2.7.10
-    - pyenv versions
     - mkdir build && cd build && cmake ../
 
 #before_script:
