@@ -86,6 +86,7 @@ before_install:
     #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
 #travis trusty python-libpython version mismatch workaround
     - sudo rm -rf /opt/python/2.7.10
+    - sudo apt-get remove --purge -y python2.6
     - pyenv versions
     - pyenv install 2.7.6
     - pyenv global 2.7.6
