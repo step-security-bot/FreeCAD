@@ -87,10 +87,10 @@ before_install:
 #travis trusty python-libpython version mismatch workaround
     - sudo rm -rf /opt/python/2.7.10
     - sudo rm -rf /opt/python/2.6.9
-    - pyenv versions
-    - pyenv install 2.7.6
-    - pyenv global 2.7.6
-    - pyenv versions
+    #- pyenv versions
+    #- pyenv install 2.7.6
+    #- pyenv global 2.7.6
+    #- pyenv versions
 
 install:
     - mkdir build && cd build && cmake ../
