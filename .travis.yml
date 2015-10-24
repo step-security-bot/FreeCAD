@@ -11,8 +11,6 @@ compiler:
 #trusty
 sudo: required
 dist: trusty
-#services:
-#- docker
 
 env:
   global:
@@ -86,8 +84,12 @@ before_install:
     - sudo apt-get install -y swig
 #Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
     #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
-#trusty
+#travis trusty python-libpython version mismatch workaround
     - sudo rm -rf /opt/python/2.7.10
+    - pyenv versions
+    - pyenv install 2.7.6
+    - pyenv global 2.7.6
+    - pyenv versions
 
 install:
     - mkdir build && cd build && cmake ../
