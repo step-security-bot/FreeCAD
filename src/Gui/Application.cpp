@@ -706,8 +706,23 @@ void Application::slotActiveDocument(const App::Document& Doc)
 {
     std::map<const App::Document*, Gui::Document*>::iterator doc = d->documents.find(&Doc);
     // this can happen when closing a document with two views opened
-    if (doc != d->documents.end())
+    if (doc != d->documents.end()) {
+        // this can happen when calling App.setActiveDocument directly from Python
+        // because no MDI view will be activated
+        if (d->activeDocument != doc->second) {
+            d->activeDocument = doc->second;
+            if (d->activeDocument) {
+                Base::PyGILStateLocker lock;
+                Py::Object active(d->activeDocument->getPyObject(), true);
+                Py::Module("FreeCADGui").setAttr(std::string("ActiveDocument"),active);
+            }
+            else {
+                Base::PyGILStateLocker lock;
+                Py::Module("FreeCADGui").setAttr(std::string("ActiveDocument"),Py::None());
+            }
+        }
         signalActiveDocument(*doc->second);
+    }
 }
 
 void Application::slotNewObject(const ViewProvider& vp)
@@ -825,7 +840,7 @@ void Application::setActiveDocument(Gui::Document* pcDocument)
     }
 
     // notify all views attached to the application (not views belong to a special document)
-    for(list<Gui::BaseView*>::iterator It=d->passive.begin();It!=d->passive.end();It++)
+    for(list<Gui::BaseView*>::iterator It=d->passive.begin();It!=d->passive.end();++It)
         (*It)->setDocument(pcDocument);
 }
 
@@ -888,10 +903,10 @@ void Application::onUpdate(void)
 {
     // update all documents
     std::map<const App::Document*, Gui::Document*>::iterator It;
-    for (It = d->documents.begin();It != d->documents.end();It++)
+    for (It = d->documents.begin();It != d->documents.end();++It)
         It->second->onUpdate();
     // update all the independed views
-    for (std::list<Gui::BaseView*>::iterator It2 = d->passive.begin();It2 != d->passive.end();It2++)
+    for (std::list<Gui::BaseView*>::iterator It2 = d->passive.begin();It2 != d->passive.end();++It2)
         (*It2)->onUpdate();
 }
 
@@ -925,7 +940,7 @@ void Application::tryClose(QCloseEvent * e)
     else {
         // ask all documents if closable
         std::map<const App::Document*, Gui::Document*>::iterator It;
-        for (It = d->documents.begin();It!=d->documents.end();It++) {
+        for (It = d->documents.begin();It!=d->documents.end();++It) {
             // a document may have several views attached, so ask it directly
 #if 0
             MDIView* active = It->second->getActiveView();
@@ -939,7 +954,7 @@ void Application::tryClose(QCloseEvent * e)
     }
 
     // ask all passive views if closable
-    for (std::list<Gui::BaseView*>::iterator It = d->passive.begin();It!=d->passive.end();It++) {
+    for (std::list<Gui::BaseView*>::iterator It = d->passive.begin();It!=d->passive.end();++It) {
         e->setAccepted((*It)->canClose());
         if (!e->isAccepted())
             return;

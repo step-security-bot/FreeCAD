@@ -19,6 +19,11 @@
  *   Suite 330, Boston, MA  02111-1307, USA                                *
  *                                                                         *
  ***************************************************************************/
+
+#ifdef _MSC_VER
+#pragma warning(disable : 4244)
+#endif
+
 #include <iostream>
 #include <algorithm>
 #include <cfloat>
@@ -30,13 +35,16 @@
 // NOTE: In CMakeList.txt -DEIGEN_NO_DEBUG is set (it does not work with a define here), to solve this:
 // this is needed to fix this SparseQR crash http://forum.freecadweb.org/viewtopic.php?f=10&t=11341&p=92146#p92146, 
 // until Eigen library fixes its own problem with the assertion (definitely not solved in 3.2.0 branch)
+// NOTE2: solved in eigen3.3
 
 #define EIGEN_VERSION (EIGEN_WORLD_VERSION * 10000 \
                                + EIGEN_MAJOR_VERSION * 100 \
                                + EIGEN_MINOR_VERSION)
 
 #if EIGEN_VERSION >= 30202                              
+#if EIGEN_VERSION < 30290 // this is eigen3.3. Bad numbering? This should be safe anyway.
 #define EIGEN_SPARSEQR_COMPATIBLE
+#endif
 #endif
 
 //#undef EIGEN_SPARSEQR_COMPATIBLE
@@ -1086,7 +1094,7 @@ int System::solve(bool isFine, Algorithm alg, bool isRedundantsolving)
     }
     if (res == Success) {
         for (std::set<Constraint *>::const_iterator constr=redundant.begin();
-             constr != redundant.end(); constr++){
+             constr != redundant.end(); ++constr){
             //DeepSOIC: there used to be a comparison of signed error value to
             //convergence, which makes no sense. Potentially I fixed bug, and
             //chances are low I've broken anything.
@@ -2004,7 +2012,7 @@ int System::diagnose(Algorithm alg)
                 int maxPopularity = 0;
                 Constraint *mostPopular = NULL;
                 for (std::map< Constraint *, SET_I >::const_iterator it=conflictingMap.begin();
-                     it != conflictingMap.end(); it++) {
+                     it != conflictingMap.end(); ++it) {
                     if (static_cast<int>(it->second.size()) > maxPopularity ||
                         (static_cast<int>(it->second.size()) == maxPopularity && mostPopular &&
                          it->first->getTag() > mostPopular->getTag())) {
@@ -2015,7 +2023,7 @@ int System::diagnose(Algorithm alg)
                 if (maxPopularity > 0) {
                     skipped.insert(mostPopular);
                     for (SET_I::const_iterator it=conflictingMap[mostPopular].begin();
-                         it != conflictingMap[mostPopular].end(); it++)
+                         it != conflictingMap[mostPopular].end(); ++it)
                         satisfiedGroups.insert(*it);
                 }
             }
@@ -2051,7 +2059,7 @@ int System::diagnose(Algorithm alg)
             if (res == Success) {
                 subSysTmp->applySolution();
                 for (std::set<Constraint *>::const_iterator constr=skipped.begin();
-                     constr != skipped.end(); constr++) {
+                     constr != skipped.end(); ++constr) {
                     double err = (*constr)->error();
                     if (err * err < convergenceRedundant)
                         redundant.insert(*constr);

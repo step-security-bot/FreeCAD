@@ -1,26 +1,27 @@
-#***************************************************************************
-#*                                                                         *
-#*   Copyright (c) 2013 - Juergen Riegel <FreeCAD@juergen-riegel.net>      *
-#*                                                                         *
-#*   This program is free software; you can redistribute it and/or modify  *
-#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
-#*   as published by the Free Software Foundation; either version 2 of     *
-#*   the License, or (at your option) any later version.                   *
-#*   for detail see the LICENCE text file.                                 *
-#*                                                                         *
-#*   This program is distributed in the hope that it will be useful,       *
-#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-#*   GNU Library General Public License for more details.                  *
-#*                                                                         *
-#*   You should have received a copy of the GNU Library General Public     *
-#*   License along with this program; if not, write to the Free Software   *
-#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
-#*   USA                                                                   *
-#*                                                                         *
-#***************************************************************************
+# ***************************************************************************
+# *                                                                         *
+# *   Copyright (c) 2013 - Juergen Riegel <FreeCAD@juergen-riegel.net>      *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU Lesser General Public License (LGPL)    *
+# *   as published by the Free Software Foundation; either version 2 of     *
+# *   the License, or (at your option) any later version.                   *
+# *   for detail see the LICENCE text file.                                 *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU Library General Public License for more details.                  *
+# *                                                                         *
+# *   You should have received a copy of the GNU Library General Public     *
+# *   License along with this program; if not, write to the Free Software   *
+# *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+# *   USA                                                                   *
+# *                                                                         *
+# ***************************************************************************
 
 import FreeCAD
+from FemCommands import FemCommands
 
 if FreeCAD.GuiUp:
     import FreeCADGui
@@ -39,18 +40,21 @@ def makeMechanicalMaterial(name):
     name there fore is a material name or an file name for a FCMat file'''
     obj = FreeCAD.ActiveDocument.addObject("App::MaterialObjectPython", name)
     _MechanicalMaterial(obj)
-    _ViewProviderMechanicalMaterial(obj.ViewObject)
+    if FreeCAD.GuiUp:
+        _ViewProviderMechanicalMaterial(obj.ViewObject)
     # FreeCAD.ActiveDocument.recompute()
     return obj
 
 
-class _CommandMechanicalMaterial:
+class _CommandMechanicalMaterial(FemCommands):
     "the Fem Material command definition"
-    def GetResources(self):
-        return {'Pixmap': 'fem-material',
-                'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Material", "Mechanical material..."),
-                'Accel': "M, M",
-                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Material", "Creates or edit the mechanical material definition.")}
+    def __init__(self):
+        super(_CommandMechanicalMaterial, self).__init__()
+        self.resources = {'Pixmap': 'fem-material',
+                          'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Material", "Mechanical material..."),
+                          'Accel': "M, M",
+                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Material", "Creates or edit the mechanical material definition.")}
+        self.is_active = 'with_analysis'
 
     def Activated(self):
         MatObj = None
@@ -59,6 +63,9 @@ class _CommandMechanicalMaterial:
                     MatObj = i
 
         if (not MatObj):
+            femDoc = FemGui.getActiveAnalysis().Document
+            if FreeCAD.ActiveDocument is not femDoc:
+                FreeCADGui.setActiveDocument(femDoc)
             FreeCAD.ActiveDocument.openTransaction("Create Material")
             FreeCADGui.addModule("MechanicalMaterial")
             FreeCADGui.doCommand("MechanicalMaterial.makeMechanicalMaterial('MechanicalMaterial')")
@@ -66,13 +73,9 @@ class _CommandMechanicalMaterial:
             FreeCADGui.doCommand("Gui.activeDocument().setEdit(App.ActiveDocument.ActiveObject.Name,0)")
             # FreeCADGui.doCommand("Fem.makeMaterial()")
         else:
+            if FreeCAD.ActiveDocument is not MatObj.Document:
+                FreeCADGui.setActiveDocument(MatObj.Document)
             FreeCADGui.doCommand("Gui.activeDocument().setEdit('" + MatObj.Name + "',0)")
-
-    def IsActive(self):
-        if FemGui.getActiveAnalysis():
-            return True
-        else:
-            return False
 
 
 class _MechanicalMaterial:
@@ -134,14 +137,14 @@ class _MechanicalMaterialTaskPanel:
         QtCore.QObject.connect(self.form.input_fd_young_modulus, QtCore.SIGNAL("valueChanged(double)"), self.ym_changed)
         QtCore.QObject.connect(self.form.spinBox_poisson_ratio, QtCore.SIGNAL("valueChanged(double)"), self.pr_changed)
         QtCore.QObject.connect(self.form.input_fd_density, QtCore.SIGNAL("valueChanged(double)"), self.density_changed)
-        self.previous_material = self.obj.Material
+        self.material = self.obj.Material
         self.import_materials()
-        previous_mat_path = self.get_material_path(self.previous_material)
+        previous_mat_path = self.get_material_path(self.material)
         if not previous_mat_path:
-            print "Previously used material cannot be found in material directories. Using transient material."
-            material_name = self.get_material_name(self.previous_material)
+            print("Previously used material cannot be found in material directories. Using transient material.")
+            material_name = self.get_material_name(self.material)
             if material_name != 'None':
-                self.add_transient_material(self.previous_material)
+                self.add_transient_material(self.material)
                 index = self.form.cb_materials.findData(material_name)
             else:
                 index = self.form.cb_materials.findText(material_name)
@@ -151,12 +154,14 @@ class _MechanicalMaterialTaskPanel:
             self.choose_material(index)
 
     def accept(self):
-        FreeCADGui.ActiveDocument.resetEdit()
+        self.obj.Material = self.material
+        doc = FreeCADGui.getDocument(self.obj.Document)
+        doc.resetEdit()
+        doc.Document.recompute()
 
     def reject(self):
-        self.obj.Material = self.previous_material
-        print "Reverting to material:"
-        FreeCADGui.ActiveDocument.resetEdit()
+        doc = FreeCADGui.getDocument(self.obj.Document)
+        doc.resetEdit()
 
     def goMatWeb(self):
         import webbrowser
@@ -164,44 +169,44 @@ class _MechanicalMaterialTaskPanel:
 
     def ym_changed(self, value):
         import Units
-        old_ym = Units.Quantity(self.obj.Material['YoungsModulus'])
+        old_ym = Units.Quantity(self.material['YoungsModulus'])
         if old_ym != value:
-            material = self.obj.Material
+            material = self.material
             # FreeCAD uses kPa internall for Stress
             material['YoungsModulus'] = unicode(value) + " kPa"
-            self.obj.Material = material
+            self.material = material
 
     def density_changed(self, value):
         import Units
-        old_density = Units.Quantity(self.obj.Material['Density'])
+        old_density = Units.Quantity(self.material['Density'])
         if old_density != value:
-            material = self.obj.Material
+            material = self.material
             material['Density'] = unicode(value) + " kg/mm^3"
-            self.obj.Material = material
+            self.material = material
 
     def pr_changed(self, value):
         import Units
-        old_pr = Units.Quantity(self.obj.Material['PoissonRatio'])
+        old_pr = Units.Quantity(self.material['PoissonRatio'])
         if old_pr != value:
-            material = self.obj.Material
+            material = self.material
             material['PoissonRatio'] = unicode(value)
-            self.obj.Material = material
+            self.material = material
 
     def choose_material(self, index):
         if index < 0:
             return
         mat_file_path = self.form.cb_materials.itemData(index)
-        self.obj.Material = self.materials[mat_file_path]
+        self.material = self.materials[mat_file_path]
         self.form.cb_materials.setCurrentIndex(index)
-        self.set_mat_params_in_combo_box(self.obj.Material)
+        self.set_mat_params_in_combo_box(self.material)
         gen_mat_desc = ""
-        if 'Description' in self.obj.Material:
-            gen_mat_desc = self.obj.Material['Description']
+        if 'Description' in self.material:
+            gen_mat_desc = self.material['Description']
         self.form.l_mat_description.setText(gen_mat_desc)
 
     def get_material_name(self, material):
-        if 'Name' in self.previous_material:
-            return self.previous_material['Name']
+        if 'Name' in self.material:
+            return self.material['Name']
         else:
             return 'None'
 

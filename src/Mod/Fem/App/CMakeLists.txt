@@ -82,6 +82,17 @@ SET(FemScripts_SRCS
     MechanicalMaterial.ui
     MechanicalMaterial.py
     ShowDisplacement.ui
+    FemCommands.py
+    _ResultControlTaskPanel.py
+    _JobControlTaskPanel.py
+    _ViewProviderFemAnalysis.py
+    _FemAnalysis.py
+    _CommandMechanicalShowResult.py
+    _CommandQuickAnalysis.py
+    _CommandPurgeFemResults.py
+    _CommandMechanicalJobControl.py
+    _CommandFemFromShape.py
+    _CommandNewMechanicalAnalysis.py
 )
 #SOURCE_GROUP("Scripts" FILES ${FemScripts_SRCS})
 
