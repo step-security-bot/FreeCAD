@@ -77,8 +77,8 @@ public:
 
     virtual unsigned int getMemSize (void) const{return sizeof(long);}
 
-    virtual void setValue(const App::ObjectIdentifier & path, const boost::any & value);
-    virtual const boost::any getValue(const App::ObjectIdentifier & path) const { return _lValue; }
+    virtual void setPathValue(const App::ObjectIdentifier & path, const boost::any & value);
+    virtual const boost::any getPathValue(const App::ObjectIdentifier & path) const { return _lValue; }
 
 protected:
     long _lValue;
@@ -198,8 +198,8 @@ public:
     virtual Property * Copy(void) const;
     virtual void Paste(const Property &from);
 
-    virtual void setValue(const App::ObjectIdentifier & path, const boost::any & value);
-    virtual const boost::any getValue(const App::ObjectIdentifier & path) const { return _enum; }
+    virtual void setPathValue(const App::ObjectIdentifier & path, const boost::any & value);
+    virtual const boost::any getPathValue(const App::ObjectIdentifier & path) const { return _enum; }
 
 private:
     Enumeration _enum;
@@ -459,18 +459,18 @@ public:
     
     virtual unsigned int getMemSize (void) const{return sizeof(double);}
     
-    void setValue(const App::ObjectIdentifier &path, const boost::any &value);
-    const boost::any getValue(const App::ObjectIdentifier &path) const;
+    void setPathValue(const App::ObjectIdentifier &path, const boost::any &value);
+    const boost::any getPathValue(const App::ObjectIdentifier &path) const;
 
 protected:
     double _dValue;
 };
 
 /** Constraint float properties
- * This property fullfill the need of constraint float. It holds basicly a 
+ * This property fullfill the need of constraint float. It holds basicly a
  * state (float) and a struct of boundaries. If the boundaries
- * is not set it act basicly like a IntegerProperty and do no checking.
- * The constraints struct can be created on the heap or build in.
+ * is not set it acts basicly like a PropertyFloat and does no checking
+ * The constraints struct can be created on the heap or built-in.
  */
 class AppExport PropertyFloatConstraint: public PropertyFloat
 {
@@ -614,8 +614,8 @@ public:
     virtual void Paste(const Property &from);
     virtual unsigned int getMemSize (void) const;
 
-    void setValue(const App::ObjectIdentifier &path, const boost::any &value);
-    const boost::any getValue(const App::ObjectIdentifier &path) const;
+    void setPathValue(const App::ObjectIdentifier &path, const boost::any &value);
+    const boost::any getPathValue(const App::ObjectIdentifier &path) const;
 
 private:
     std::string _cValue;
@@ -768,8 +768,8 @@ public:
     
     virtual unsigned int getMemSize (void) const{return sizeof(bool);}
     
-    void setValue(const App::ObjectIdentifier &path, const boost::any &value);
-    const boost::any getValue(const App::ObjectIdentifier &path) const;
+    void setPathValue(const App::ObjectIdentifier &path, const boost::any &value);
+    const boost::any getPathValue(const App::ObjectIdentifier &path) const;
 
 private:
     bool _lValue;

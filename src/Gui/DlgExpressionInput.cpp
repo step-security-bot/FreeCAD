@@ -66,7 +66,11 @@ DlgExpressionInput::DlgExpressionInput(const App::ObjectIdentifier & _path,
     DocumentObject * docObj = path.getDocumentObject();
     ui->expression->setDocumentObject(docObj);
 
+#if defined(Q_OS_MAC)
+    setWindowFlags(Qt::Widget | Qt::Popup | Qt::FramelessWindowHint);
+#else
     setWindowFlags(Qt::SubWindow | Qt::Widget | Qt::Popup | Qt::FramelessWindowHint);
+#endif
     setAttribute(Qt::WA_NoSystemBackground, true);
     setAttribute(Qt::WA_TranslucentBackground, true);
 
@@ -209,7 +213,9 @@ void DlgExpressionInput::mousePressEvent(QMouseEvent* ev)
 #endif
     //we need to reject the dialog when clicked on the background. As the background is transparent
     //this is the expected behaviour for the user
-    this->reject();
+    bool on = ui->expression->completerActive();
+    if (!on)
+        this->reject();
 }
 
 void DlgExpressionInput::showEvent(QShowEvent* ev)
@@ -236,8 +242,12 @@ bool DlgExpressionInput::eventFilter(QObject *obj, QEvent *ev)
         // on the size of the widget. Instead, it must be checked if the
         // cursor is on this or an underlying widget or outside.
         if (!underMouse()) {
-            qApp->removeEventFilter(this);
-            reject();
+            bool on = ui->expression->completerActive();
+            // Do this only if the completer is not shown
+            if (!on) {
+                qApp->removeEventFilter(this);
+                reject();
+            }
         }
     }
 

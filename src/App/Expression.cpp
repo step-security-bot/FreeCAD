@@ -63,6 +63,8 @@
 
 #if defined(_MSC_VER)
 #define strtoll _strtoi64
+#pragma warning(disable : 4003)
+#pragma warning(disable : 4065)
 #endif
 
 using namespace Base;
@@ -1007,7 +1009,7 @@ Expression * VariableExpression::eval() const
     if (!parent->isDerivedFrom(App::DocumentObject::getClassTypeId()))
         throw ExpressionError("Property must belong to a document object.");
 
-    boost::any value = prop->getValue(var);
+    boost::any value = prop->getPathValue(var);
 
     if (value.type() == typeid(Quantity)) {
         Quantity qvalue = boost::any_cast<Quantity>(value);

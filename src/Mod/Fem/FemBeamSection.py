@@ -1,24 +1,24 @@
-#***************************************************************************
-#*                                                                         *
-#*   Copyright (c) 2015 - Bernd Hahnebach <bernd@bimstatik.org>            *
-#*                                                                         *
-#*   This program is free software; you can redistribute it and/or modify  *
-#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
-#*   as published by the Free Software Foundation; either version 2 of     *
-#*   the License, or (at your option) any later version.                   *
-#*   for detail see the LICENCE text file.                                 *
-#*                                                                         *
-#*   This program is distributed in the hope that it will be useful,       *
-#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-#*   GNU Library General Public License for more details.                  *
-#*                                                                         *
-#*   You should have received a copy of the GNU Library General Public     *
-#*   License along with this program; if not, write to the Free Software   *
-#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
-#*   USA                                                                   *
-#*                                                                         *
-#***************************************************************************
+# ***************************************************************************
+# *                                                                         *
+# *   Copyright (c) 2015 - Bernd Hahnebach <bernd@bimstatik.org>            *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU Lesser General Public License (LGPL)    *
+# *   as published by the Free Software Foundation; either version 2 of     *
+# *   the License, or (at your option) any later version.                   *
+# *   for detail see the LICENCE text file.                                 *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU Library General Public License for more details.                  *
+# *                                                                         *
+# *   You should have received a copy of the GNU Library General Public     *
+# *   License along with this program; if not, write to the Free Software   *
+# *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+# *   USA                                                                   *
+# *                                                                         *
+# ***************************************************************************
 
 import FreeCAD
 
@@ -37,7 +37,7 @@ __url__ = "http://www.freecadweb.org"
 
 def makeFemBeamSection(width=20.0, height=20.0, name="BeamSection"):
     '''makeFemBeamSection([width], [height], [name]): creates an beamsection object to define a cross section'''
-    obj = FreeCAD.ActiveDocument.addObject("App::FeaturePython", name)
+    obj = FemGui.getActiveAnalysis().Document.addObject("Fem::FeaturePython", name)
     _FemBeamSection(obj)
     obj.Width = width
     obj.Height = height
@@ -57,11 +57,13 @@ class _CommandFemBeamSection:
     def Activated(self):
         FreeCAD.ActiveDocument.openTransaction("Create FemBeamSection")
         FreeCADGui.addModule("FemBeamSection")
-        FreeCADGui.doCommand("FemBeamSection.makeFemBeamSection()")
-        FreeCADGui.doCommand("App.activeDocument()." + FemGui.getActiveAnalysis().Name + ".Member = App.activeDocument()." + FemGui.getActiveAnalysis().Name + ".Member + [App.ActiveDocument.ActiveObject]")
+        FreeCADGui.doCommand("FemGui.getActiveAnalysis().Member = FemGui.getActiveAnalysis().Member + [FemBeamSection.makeFemBeamSection()]")
 
     def IsActive(self):
-        True if FemGui.getActiveAnalysis() else False
+        if FemGui.getActiveAnalysis():
+            return True
+        else:
+            return False
 
 
 class _FemBeamSection:
@@ -106,7 +108,7 @@ class _ViewProviderFemBeamSection:
     def setEdit(self, vobj, mode=0):
         taskd = _FemBeamSectionTaskPanel(self.Object)
         taskd.obj = vobj.Object
-        #taskd.update()     When is this needed ?
+        # taskd.update()    When is this needed ?
         FreeCADGui.Control.showDialog(taskd)
         return True
 
@@ -130,14 +132,13 @@ class _FemBeamSectionTaskPanel:
         FreeCADGui.Selection.clearSelection()
         self.sel_server = None
         self.obj = obj
-        self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Fem/FemBeamSection.ui")
+        self.references = self.obj.References
 
+        self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Fem/FemBeamSection.ui")
         QtCore.QObject.connect(self.form.pushButton_Reference, QtCore.SIGNAL("clicked()"), self.add_references)
         self.form.list_References.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.form.list_References.connect(self.form.list_References, QtCore.SIGNAL("customContextMenuRequested(QPoint)"), self.references_list_right_clicked)
 
-        self.previous_references = self.obj.References
-        self.references = self.obj.References
         self.rebuild_list_References()
 
     def accept(self):
@@ -169,7 +170,7 @@ class _FemBeamSectionTaskPanel:
             return
         currentItemName = str(self.form.list_References.currentItem().text())
         for ref in self.references:
-            refname_to_compare_listentry = ref[0].Name + '-->' + ref[1]
+            refname_to_compare_listentry = ref[0].Name + ':' + ref[1]
             if refname_to_compare_listentry == currentItemName:
                 self.references.remove(ref)
         self.rebuild_list_References()
@@ -182,27 +183,24 @@ class _FemBeamSectionTaskPanel:
         # start SelectionObserver and parse the function to add the References to the widget
         self.sel_server = ReferenceShapeSelectionObserver(self.selectionParser)
 
-    def selectionParser(self, selsub):
-        sel = selsub[0]
-        sub = selsub[1]
-        # print 'selection: ', sel.Shape.ShapeType, '  ', sel.Name, '  ', sub
-        if hasattr(sel, "Shape"):
-            elt = sel.Shape.getElement(sub)
+    def selectionParser(self, selection):
+        # print('selection: ', selection[0].Shape.ShapeType, '  ', selection[0].Name, '  ', selection[1])
+        if hasattr(selection[0], "Shape"):
+            elt = selection[0].Shape.getElement(selection[1])
             if elt.ShapeType == 'Edge':
-                if selsub not in self.references:
-                    self.references.append(selsub)
+                if selection not in self.references:
+                    self.references.append(selection)
                     self.rebuild_list_References()
                 else:
-                    print sel.Name, '-->', sub, ' is already in reference list!'
-
+                    print(selection[0].Name, '-->', selection[1], ' is already in reference list!')
         else:
-            print 'Selection has no shape!'
+            print('Selection has no shape!')
 
     def rebuild_list_References(self):
         self.form.list_References.clear()
         items = []
         for i in self.references:
-            item_name = i[0].Name + '-->' + i[1]
+            item_name = i[0].Name + ':' + i[1]
             items.append(item_name)
         for listItemName in sorted(items):
             listItem = QtGui.QListWidgetItem(listItemName, self.form.list_References)  # listItem =   is needed

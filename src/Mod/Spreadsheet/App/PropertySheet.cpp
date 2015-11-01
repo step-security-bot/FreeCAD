@@ -449,6 +449,15 @@ void PropertySheet::setAlias(CellAddress address, const std::string &alias)
         owner->aliasRemoved(address, oldAlias);
 
     cell->setAlias(alias);
+
+    if (oldAlias.size() > 0) {
+        std::map<App::ObjectIdentifier, App::ObjectIdentifier> m;
+
+        m[App::ObjectIdentifier(owner, oldAlias)] = App::ObjectIdentifier(owner, alias);
+
+        owner->getDocument()->renameObjectIdentifiers(m);
+    }
+
 }
 
 void PropertySheet::setComputedUnit(CellAddress address, const Base::Unit &unit)
@@ -495,7 +504,7 @@ void PropertySheet::clear(CellAddress address)
     rebuildDocDepList();
 }
 
-void PropertySheet::moveCell(CellAddress currPos, CellAddress newPos)
+void PropertySheet::moveCell(CellAddress currPos, CellAddress newPos, std::map<App::ObjectIdentifier, App::ObjectIdentifier> & renames)
 {
     std::map<CellAddress, Cell*>::const_iterator i = data.find(currPos);
     std::map<CellAddress, Cell*>::const_iterator j = data.find(newPos);
@@ -518,6 +527,8 @@ void PropertySheet::moveCell(CellAddress currPos, CellAddress newPos)
         data[newPos] = cell;
         addDependencies(newPos);
         setDirty(newPos);
+
+        renames[ObjectIdentifier(owner, currPos.toString())] = ObjectIdentifier(owner, newPos.toString());
 
         rebuildDocDepList();
     }
@@ -600,6 +611,7 @@ private:
 void PropertySheet::insertRows(int row, int count)
 {
     std::vector<CellAddress> keys;
+    std::map<App::ObjectIdentifier, App::ObjectIdentifier> renames;
 
     /* Copy all keys from cells map */
     boost::copy( data | boost::adaptors::map_keys, std::back_inserter(keys));
@@ -626,8 +638,10 @@ void PropertySheet::insertRows(int row, int count)
         }
 
         if (i->row() >= row)
-            moveCell(*i, CellAddress(i->row() + count, i->col()));
+            moveCell(*i, CellAddress(i->row() + count, i->col()), renames);
     }
+
+    owner->getDocument()->renameObjectIdentifiers(renames);
 }
 
 /**
@@ -645,6 +659,7 @@ bool PropertySheet::rowSortFunc(const CellAddress & a, const CellAddress & b) {
 void PropertySheet::removeRows(int row, int count)
 {
     std::vector<CellAddress> keys;
+    std::map<App::ObjectIdentifier, App::ObjectIdentifier> renames;
 
     /* Copy all keys from cells map */
     boost::copy(data | boost::adaptors::map_keys, std::back_inserter(keys));
@@ -673,14 +688,16 @@ void PropertySheet::removeRows(int row, int count)
         if (i->row() >= row && i->row() < row + count)
             clear(*i);
         else if (i->row() >= row + count)
-            moveCell(*i, CellAddress(i->row() - count, i->col()));
+            moveCell(*i, CellAddress(i->row() - count, i->col()), renames);
     }
+
+    owner->getDocument()->renameObjectIdentifiers(renames);
 }
 
 void PropertySheet::insertColumns(int col, int count)
 {
-
     std::vector<CellAddress> keys;
+    std::map<App::ObjectIdentifier, App::ObjectIdentifier> renames;
 
     /* Copy all keys from cells map */
     boost::copy(data | boost::adaptors::map_keys, std::back_inserter(keys));
@@ -707,8 +724,10 @@ void PropertySheet::insertColumns(int col, int count)
         }
 
         if (i->col() >= col)
-            moveCell(*i, CellAddress(i->row(), i->col() + count));
+            moveCell(*i, CellAddress(i->row(), i->col() + count), renames);
     }
+
+    owner->getDocument()->renameObjectIdentifiers(renames);
 }
 
 /**
@@ -726,6 +745,7 @@ bool PropertySheet::colSortFunc(const CellAddress & a, const CellAddress & b) {
 void PropertySheet::removeColumns(int col, int count)
 {
     std::vector<CellAddress> keys;
+    std::map<App::ObjectIdentifier, App::ObjectIdentifier> renames;
 
     /* Copy all keys from cells map */
     boost::copy(data | boost::adaptors::map_keys, std::back_inserter(keys));
@@ -754,8 +774,10 @@ void PropertySheet::removeColumns(int col, int count)
         if (i->col() >= col && i->col() < col + count)
             clear(*i);
         else if (i->col() >= col + count)
-            moveCell(*i, CellAddress(i->row(), i->col() - count));
+            moveCell(*i, CellAddress(i->row(), i->col() - count), renames);
     }
+
+    owner->getDocument()->renameObjectIdentifiers(renames);
 }
 
 unsigned int PropertySheet::getMemSize() const
