@@ -37,7 +37,7 @@ mesh_name = 'Mesh'
 
 home_path = FreeCAD.getHomePath()
 temp_dir = tempfile.gettempdir()
-test_file_dir = home_path + 'Mod/Fem/test_files'
+test_file_dir = home_path + 'Mod/Fem/test_files/ccx'
 
 static_base_name = 'cube_static'
 frequency_base_name = 'cube_frequency'
@@ -52,7 +52,7 @@ mesh_volumes_file = test_file_dir + '/mesh_volumes.csv'
 
 
 def fcc_print(message):
-    FreeCAD.Console.PrintMessage(message + '\n')
+    FreeCAD.Console.PrintMessage('{} \n'.format(message))
 
 
 class FemTest(unittest.TestCase):
@@ -115,15 +115,25 @@ class FemTest(unittest.TestCase):
         self.pressure_constraint.Pressure = 10.000000
         self.pressure_constraint.Reversed = True
 
+    def force_unix_line_ends(self, line_list):
+        new_line_list = []
+        for l in line_list:
+            if l.endswith("\r\n"):
+                l = l[:-2] + '\n'
+            new_line_list.append(l)
+        return new_line_list
+
     def compare_inp_files(self, file_name1, file_name2):
         file1 = open(file_name1, 'r')
         f1 = file1.readlines()
         file1.close()
+        lf1 = [l for l in f1 if not l.startswith('**   written ')]
+        lf1 = self.force_unix_line_ends(lf1)
         file2 = open(file_name2, 'r')
         f2 = file2.readlines()
         file2.close()
-        lf1 = [l for l in f1 if not l.startswith('**   written ')]
         lf2 = [l for l in f2 if not l.startswith('**   written ')]
+        lf2 = self.force_unix_line_ends(lf2)
         import difflib
         diff = difflib.unified_diff(lf1, lf2, n=0)
         result = ''
@@ -138,6 +148,7 @@ class FemTest(unittest.TestCase):
             sf = open(stat_file, 'r')
             sf_content = sf.readlines()
             sf.close()
+            sf_content = self.force_unix_line_ends(sf_content)
         stat_types = ["U1", "U2", "U3", "Uabs", "Sabs"]
         stats = []
         for s in stat_types:

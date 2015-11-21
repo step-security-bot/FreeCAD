@@ -141,6 +141,17 @@ public:
     boost::signal<void (const App::DocumentObject&)> signalActivatedObject;
     //@}
 
+    /** @name Signals of property changes
+     * These signals are emitted on property additions or removal.
+     * The changed object can be any sub-class of PropertyContainer.
+     */
+    //@{
+    /// signal on adding a dynamic property
+    boost::signal<void (const App::Property&)> signalAppendDynamicProperty;
+    /// signal on about removing a dynamic property
+    boost::signal<void (const App::Property&)> signalRemoveDynamicProperty;
+    //@}
+
 
     /** @name methods for parameter handling */
     //@{
@@ -216,6 +227,8 @@ public:
     static void destruct(void);
     static void destructObserver(void);
     static void processCmdLineFiles(void);
+    static std::list<std::string> getCmdLineFiles();
+    static void processFiles(const std::list<std::string>&);
     static void runApplication(void);
     friend Application &GetApplication(void);
     static std::map<std::string,std::string> &Config(void){return mConfig;}

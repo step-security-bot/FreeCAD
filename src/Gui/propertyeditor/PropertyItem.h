@@ -63,6 +63,7 @@ public:
     void updateData();
     const std::vector<App::Property*>& getPropertyData() const;
     bool hasProperty(const App::Property*) const;
+    bool removeProperty(const App::Property*);
     App::Property* getFirstProperty();
     const App::Property* getFirstProperty() const;
 
@@ -75,6 +76,7 @@ public:
     void setParent(PropertyItem* parent);
     PropertyItem *parent() const;
     void appendChild(PropertyItem *child);
+    void removeChildren(int from, int to);
 
     void setReadOnly(bool);
     bool isReadOnly() const;
