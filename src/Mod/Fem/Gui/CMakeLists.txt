@@ -116,6 +116,8 @@ SET(FemGui_SRCS_ViewProvider
     ViewProviderFemMeshShapeNetgen.h
     ViewProviderAnalysis.cpp
     ViewProviderAnalysis.h
+    ViewProviderSolver.cpp
+    ViewProviderSolver.h
     ViewProviderSetNodes.cpp
     ViewProviderSetNodes.h
     ViewProviderSetElements.cpp
@@ -210,7 +212,6 @@ fc_target_copy_resource(FemGui
     ${CMAKE_BINARY_DIR}/Mod/Fem
     InitGui.py
     TaskPanelMechanicalMaterial.ui
-    TaskPanelMechanicalAnalysis.ui
     )
 
 SET(FemGuiIcon_SVG

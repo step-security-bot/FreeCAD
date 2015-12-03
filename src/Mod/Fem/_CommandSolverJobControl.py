@@ -29,27 +29,23 @@ from FemCommands import FemCommands
 
 if FreeCAD.GuiUp:
     import FreeCADGui
-    import FemGui
     from PySide import QtCore
 
 
-class _CommandMechanicalJobControl(FemCommands):
+class _CommandSolverJobControl(FemCommands):
     "the Fem JobControl command definition"
     def __init__(self):
-        super(_CommandMechanicalJobControl, self).__init__()
+        super(_CommandSolverJobControl, self).__init__()
         self.resources = {'Pixmap': 'fem-new-analysis',
-                          'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Start calculation"),
+                          'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Start solver job control"),
                           'Accel': "S, C",
-                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Dialog to start the calculation of the mechanical anlysis")}
-        self.is_active = 'with_analysis'
+                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_JobControl", "Dialog to start the calculation of the selected solver")}
+        self.is_active = 'with_solver'
 
     def Activated(self):
-        import _TaskPanelJobControl
-        taskd = _TaskPanelJobControl._TaskPanelJobControl(FemGui.getActiveAnalysis())
-        #taskd.obj = vobj.Object
-        taskd.update()
-        FreeCADGui.Control.showDialog(taskd)
+        solver_obj = FreeCADGui.Selection.getSelection()[0]
+        FreeCADGui.ActiveDocument.setEdit(solver_obj,0)
 
 
 if FreeCAD.GuiUp:
-    FreeCADGui.addCommand('Fem_MechanicalJobControl', _CommandMechanicalJobControl())
+    FreeCADGui.addCommand('Fem_SolverJobControl', _CommandSolverJobControl())

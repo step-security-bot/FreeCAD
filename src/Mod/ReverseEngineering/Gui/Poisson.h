@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) 2015 Werner Mayer <wmayer[at]users.sourceforge.net>     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -21,46 +21,53 @@
  ***************************************************************************/
 
 
-#include "PreCompiled.h"
+#ifndef REENGUI_POISSON_H
+#define REENGUI_POISSON_H
 
-#ifndef _PreComp_
-#endif
+#include <Gui/TaskView/TaskView.h>
+#include <Gui/TaskView/TaskDialog.h>
+#include <App/DocumentObserver.h>
 
-#include "ViewProviderRegularPolygon.h"
-#include <Base/Parameter.h>
+namespace ReenGui {
 
-using namespace PartGui;
-using namespace std;
-
-
-//**************************************************************************
-// Construction/Destruction
-
-PROPERTY_SOURCE(PartGui::ViewProviderRegularPolygon, PartGui::ViewProviderPart)
-
-       
-ViewProviderRegularPolygon::ViewProviderRegularPolygon()
+class PoissonWidget : public QWidget
 {
-  sPixmap = "Part_Polygon_Parametric.svg";
-}
+    Q_OBJECT
 
-ViewProviderRegularPolygon::~ViewProviderRegularPolygon()
+public:
+    PoissonWidget(const App::DocumentObjectT&, QWidget* parent = 0);
+    ~PoissonWidget();
+
+    bool accept();
+
+private:
+    void changeEvent(QEvent *e);
+
+private:
+    class Private;
+    Private* d;
+};
+
+class TaskPoisson : public Gui::TaskView::TaskDialog
 {
+    Q_OBJECT
 
-}
+public:
+    TaskPoisson(const App::DocumentObjectT&);
+    ~TaskPoisson();
 
+public:
+    void open();
+    bool accept();
 
+    QDialogButtonBox::StandardButtons getStandardButtons() const
+    { return QDialogButtonBox::Ok|QDialogButtonBox::Cancel; }
 
-// **********************************************************************************
+private:
+    PoissonWidget* widget;
+    Gui::TaskView::TaskBox* taskbox;
+};
 
-std::vector<std::string> ViewProviderRegularPolygon::getDisplayModes(void) const
-{
-    // get the modes of the father
-    std::vector<std::string> StrList;
+} //namespace ReenGui
 
-    // add your own modes
-    StrList.push_back("Wireframe");
-    StrList.push_back("Points");
-
-    return StrList;
-}
+#endif // REENGUI_POISSON_H

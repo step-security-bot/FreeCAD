@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) 2013 Jürgen Riegel (FreeCAD@juergen-riegel.net)         *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -21,46 +21,45 @@
  ***************************************************************************/
 
 
-#include "PreCompiled.h"
+#ifndef FEM_ViewProviderSolver_H
+#define FEM_ViewProviderSolver_H
 
-#ifndef _PreComp_
-#endif
+#include <Gui/ViewProviderGeometryObject.h>
+#include <Gui/ViewProviderBuilder.h>
+#include <Gui/ViewProviderPythonFeature.h>
 
-#include "ViewProviderRegularPolygon.h"
-#include <Base/Parameter.h>
+class SoCoordinate3;
+class SoDrawStyle;  
+class SoIndexedFaceSet; 
+class SoIndexedLineSet; 
+class SoShapeHints;
+class SoMaterialBinding;
 
-using namespace PartGui;
-using namespace std;
-
-
-//**************************************************************************
-// Construction/Destruction
-
-PROPERTY_SOURCE(PartGui::ViewProviderRegularPolygon, PartGui::ViewProviderPart)
-
-       
-ViewProviderRegularPolygon::ViewProviderRegularPolygon()
-{
-  sPixmap = "Part_Polygon_Parametric.svg";
-}
-
-ViewProviderRegularPolygon::~ViewProviderRegularPolygon()
+namespace FemGui
 {
 
-}
 
 
-
-// **********************************************************************************
-
-std::vector<std::string> ViewProviderRegularPolygon::getDisplayModes(void) const
+class FemGuiExport ViewProviderSolver : public Gui::ViewProviderDocumentObject
 {
-    // get the modes of the father
-    std::vector<std::string> StrList;
+    PROPERTY_HEADER(FemGui::ViewProviderSolver);
 
-    // add your own modes
-    StrList.push_back("Wireframe");
-    StrList.push_back("Points");
+public:
+    /// constructor
+    ViewProviderSolver();
 
-    return StrList;
-}
+    /// destructor
+    ~ViewProviderSolver();
+
+    // shows solid in the tree
+    virtual bool isShow(void) const{return true;}
+protected:
+
+};
+
+typedef Gui::ViewProviderPythonFeatureT<ViewProviderSolver> ViewProviderSolverPython;
+
+} //namespace FemGui
+
+
+#endif // FEM_ViewProviderSolver_H

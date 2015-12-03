@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) 2013 Jürgen Riegel (FreeCAD@juergen-riegel.net)         *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -24,43 +24,46 @@
 #include "PreCompiled.h"
 
 #ifndef _PreComp_
+# include <Standard_math.hxx>
+
 #endif
 
-#include "ViewProviderRegularPolygon.h"
-#include <Base/Parameter.h>
+#include "ViewProviderSolver.h"
+#include <Gui/Command.h>
+#include <Gui/Document.h>
+#include <Gui/Control.h>
 
-using namespace PartGui;
-using namespace std;
+#include <Mod/Fem/App/FemAnalysis.h>
+
+#include "TaskDlgAnalysis.h"
+
+using namespace FemGui;
 
 
-//**************************************************************************
-// Construction/Destruction
 
-PROPERTY_SOURCE(PartGui::ViewProviderRegularPolygon, PartGui::ViewProviderPart)
+PROPERTY_SOURCE(FemGui::ViewProviderSolver, Gui::ViewProviderDocumentObject)
 
-       
-ViewProviderRegularPolygon::ViewProviderRegularPolygon()
+
+ViewProviderSolver::ViewProviderSolver()
 {
-  sPixmap = "Part_Polygon_Parametric.svg";
+  sPixmap = "fem-solver";
+
 }
 
-ViewProviderRegularPolygon::~ViewProviderRegularPolygon()
+ViewProviderSolver::~ViewProviderSolver()
 {
 
 }
 
 
 
-// **********************************************************************************
+// Python feature -----------------------------------------------------------------------
 
-std::vector<std::string> ViewProviderRegularPolygon::getDisplayModes(void) const
-{
-    // get the modes of the father
-    std::vector<std::string> StrList;
+namespace Gui {
+/// @cond DOXERR
+PROPERTY_SOURCE_TEMPLATE(FemGui::ViewProviderSolverPython, FemGui::ViewProviderSolver)
+/// @endcond
 
-    // add your own modes
-    StrList.push_back("Wireframe");
-    StrList.push_back("Points");
-
-    return StrList;
+// explicit template instantiation
+template class FemGuiExport ViewProviderPythonFeatureT<ViewProviderSolver>;
 }

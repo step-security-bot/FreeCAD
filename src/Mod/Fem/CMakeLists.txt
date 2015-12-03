@@ -12,7 +12,6 @@ INSTALL(
         InitGui.py
 
         convert2TetGen.py
-        FemExample.py
 
         SelectionObserverFem.py
         TestFem.py
@@ -34,12 +33,12 @@ INSTALL(
         _FemAnalysis.py
         _ViewProviderFemAnalysis.py
 
-        MechanicalAnalysis.py
+        FemAnalysis.py
         _CommandNewMechanicalAnalysis.py
 
-        _CommandMechanicalJobControl.py
-        _TaskPanelJobControl.py
-        TaskPanelMechanicalAnalysis.ui
+        _CommandSolverJobControl.py
+        _TaskPanelFemSolverCalculix.py
+        TaskPanelFemSolverCalculix.ui
 
         FemBeamSection.py
         _FemBeamSection.py
@@ -61,6 +60,11 @@ INSTALL(
         _CommandMechanicalMaterial.py
         _TaskPanelMechanicalMaterial.py
         TaskPanelMechanicalMaterial.ui
+
+        FemSolverCalculix.py
+        _FemSolverCalculix.py
+        _ViewProviderFemSolverCalculix.py
+        _CommandFemSolverCalculix.py
 
     DESTINATION
         Mod/Fem
