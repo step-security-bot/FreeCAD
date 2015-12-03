@@ -1,24 +1,24 @@
-#***************************************************************************
-#*                                                                         *
-#*   Copyright (c) 2015 - Przemo Firszt <przemo@firszt.eu>                 *
-#*                                                                         *
-#*   This program is free software; you can redistribute it and/or modify  *
-#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
-#*   as published by the Free Software Foundation; either version 2 of     *
-#*   the License, or (at your option) any later version.                   *
-#*   for detail see the LICENCE text file.                                 *
-#*                                                                         *
-#*   This program is distributed in the hope that it will be useful,       *
-#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-#*   GNU Library General Public License for more details.                  *
-#*                                                                         *
-#*   You should have received a copy of the GNU Library General Public     *
-#*   License along with this program; if not, write to the Free Software   *
-#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
-#*   USA                                                                   *
-#*                                                                         *
-#***************************************************************************
+# ***************************************************************************
+# *                                                                         *
+# *   Copyright (c) 2015 - Przemo Firszt <przemo@firszt.eu>                 *
+# *                                                                         *
+# *   This program is free software; you can redistribute it and/or modify  *
+# *   it under the terms of the GNU Lesser General Public License (LGPL)    *
+# *   as published by the Free Software Foundation; either version 2 of     *
+# *   the License, or (at your option) any later version.                   *
+# *   for detail see the LICENCE text file.                                 *
+# *                                                                         *
+# *   This program is distributed in the hope that it will be useful,       *
+# *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+# *   GNU Library General Public License for more details.                  *
+# *                                                                         *
+# *   You should have received a copy of the GNU Library General Public     *
+# *   License along with this program; if not, write to the Free Software   *
+# *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+# *   USA                                                                   *
+# *                                                                         *
+# ***************************************************************************
 
 
 import FreeCAD
@@ -50,15 +50,18 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
             self.analysis = FemGui.getActiveAnalysis()
         if self.analysis:
             self.update_objects()
-            self.set_analysis_type()
-            self.set_eigenmode_parameters()
             ## @var base_name
             #  base name of .inp/.frd file (without extension). It is used to construct .inp file path that is passed to CalculiX ccx
             self.base_name = ""
             ## @var results_present
             #  boolean variable indicating if there are calculation results ready for use
             self.results_present = False
-            self.setup_working_dir()
+            if self.solver:
+                self.set_analysis_type()
+                self.set_eigenmode_parameters()
+                self.setup_working_dir()
+            else:
+                raise Exception('FEM: No solver found!')
             if test_mode:
                 self.ccx_binary_present = True
             else:
@@ -134,25 +137,31 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
                     filtered_values.append(v)
         else:
             filtered_values = values
-        self.mesh.ViewObject.setNodeColorByScalars(self.result_object.ElementNumbers, filtered_values)
+        self.mesh.ViewObject.setNodeColorByScalars(self.result_object.NodeNumbers, filtered_values)
 
     def show_displacement(self, displacement_factor=0.0):
-        self.mesh.ViewObject.setNodeDisplacementByVectors(self.result_object.ElementNumbers,
+        self.mesh.ViewObject.setNodeDisplacementByVectors(self.result_object.NodeNumbers,
                                                           self.result_object.DisplacementVectors)
         self.mesh.ViewObject.applyDisplacement(displacement_factor)
 
     def update_objects(self):
-        # [{'Object':material}, {}, ...]
+        # [{'Object':materials}, {}, ...]
         # [{'Object':fixed_constraints, 'NodeSupports':bool}, {}, ...]
         # [{'Object':force_constraints, 'NodeLoad':value}, {}, ...
         # [{'Object':pressure_constraints, 'xxxxxxxx':value}, {}, ...]
         # [{'Object':beam_sections, 'xxxxxxxx':value}, {}, ...]
         # [{'Object':shell_thicknesses, 'xxxxxxxx':value}, {}, ...]
 
+        ## @var solver
+        #  solver of the analysis. Used to store solver and analysis parameters
+        self.solver = None
         ## @var mesh
         #  mesh of the analysis. Used to generate .inp file and to show results
         self.mesh = None
-        self.material = []
+        ## @var materials
+        # set of materials from the analysis. Updated with update_objects
+        # Induvidual materials are "App::MaterialObjectPython" type
+        self.materials = []
         ## @var fixed_constraints
         #  set of fixed constraints from the analysis. Updated with update_objects
         #  Individual constraints are "Fem::ConstraintFixed" type
@@ -165,16 +174,30 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
         #  set of pressure constraints from the analysis. Updated with update_objects
         #  Individual constraints are "Fem::ConstraintPressure" type
         self.pressure_constraints = []
+        ## @var beam_sections
+        # set of beam sections from the analyis. Updated with update_objects
+        # Individual beam sections are Proxy.Type "FemBeamSection"
         self.beam_sections = []
+        ## @var shell_thicknesses
+        # set of shell thicknesses from the analyis. Updated with update_objects
+        # Individual shell thicknesses are Proxy.Type "FemShellThickness"
         self.shell_thicknesses = []
 
         for m in self.analysis.Member:
-            if m.isDerivedFrom("Fem::FemMeshObject"):
-                self.mesh = m
+            if m.isDerivedFrom("Fem::FemSolverObjectPython"):
+                if not self.solver:
+                    self.solver = m
+                else:
+                    raise Exception('FEM: Multiple solver in analysis not yet supported!')
+            elif m.isDerivedFrom("Fem::FemMeshObject"):
+                if not self.mesh:
+                    self.mesh = m
+                else:
+                    raise Exception('FEM: Multiple mesh in analysis not yet supported!')
             elif m.isDerivedFrom("App::MaterialObjectPython"):
                 material_dict = {}
                 material_dict['Object'] = m
-                self.material.append(material_dict)
+                self.materials.append(material_dict)
             elif m.isDerivedFrom("Fem::ConstraintFixed"):
                 fixed_constraint_dict = {}
                 fixed_constraint_dict['Object'] = m
@@ -187,11 +210,11 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
                 PressureObjectDict = {}
                 PressureObjectDict['Object'] = m
                 self.pressure_constraints.append(PressureObjectDict)
-            elif hasattr(m, "Proxy") and m.Proxy.Type == 'FemBeamSection':
+            elif hasattr(m, "Proxy") and m.Proxy.Type == "FemBeamSection":
                 beam_section_dict = {}
                 beam_section_dict['Object'] = m
                 self.beam_sections.append(beam_section_dict)
-            elif hasattr(m, "Proxy") and m.Proxy.Type == 'FemShellThickness':
+            elif hasattr(m, "Proxy") and m.Proxy.Type == "FemShellThickness":
                 shell_thickness_dict = {}
                 shell_thickness_dict['Object'] = m
                 self.shell_thicknesses.append(shell_thickness_dict)
@@ -209,8 +232,14 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
                 message += "Working directory \'{}\' doesn't exist.".format(self.working_dir)
         if not self.mesh:
             message += "No mesh object in the Analysis\n"
-        if not self.material:
+        if not self.materials:
             message += "No material object in the Analysis\n"
+        has_no_references = False
+        for m in self.materials:
+            if len(m['Object'].References) == 0:
+                if has_no_references is True:
+                    message += "More than one Material has empty References list (Only one empty References list is allowed!).\n"
+                has_no_references = True
         if not self.fixed_constraints:
             message += "No fixed-constraint nodes defined in the Analysis\n"
         if self.analysis_type == "static":
@@ -237,7 +266,7 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
         import sys
         self.inp_file_name = ""
         try:
-            inp_writer = iw.inp_writer(self.analysis, self.mesh, self.material,
+            inp_writer = iw.inp_writer(self.analysis, self.mesh, self.materials,
                                        self.fixed_constraints,
                                        self.force_constraints, self.pressure_constraints,
                                        self.beam_sections, self.shell_thicknesses,
@@ -284,10 +313,10 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
             _number = number
         else:
             try:
-                _number = self.analysis.NumberOfEigenmodes
+                _number = self.solver.NumberOfEigenmodes
             except:
                 #Not yet in prefs, so it will always default to 10
-                _number = self.fem_prefs.GetString("NumberOfEigenmodes", 10)
+                _number = self.fem_prefs.GetInteger("NumberOfEigenmodes", 10)
         if _number < 1:
             _number = 1
 
@@ -295,19 +324,19 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
             _limit_low = limit_low
         else:
             try:
-                _limit_low = self.analysis.EigenmodeLowLimit
+                _limit_low = self.solver.EigenmodeLowLimit
             except:
                 #Not yet in prefs, so it will always default to 0.0
-                _limit_low = self.fem_prefs.GetString("EigenmodeLowLimit", 0.0)
+                _limit_low = self.fem_prefs.GetFloat("EigenmodeLowLimit", 0.0)
 
         if limit_high is not None:
             _limit_high = limit_high
         else:
             try:
-                _limit_high = self.analysis.EigenmodeHighLimit
+                _limit_high = self.solver.EigenmodeHighLimit
             except:
                 #Not yet in prefs, so it will always default to 1000000.0
-                _limit_high = self.fem_prefs.GetString("EigenmodeHighLimit", 1000000.0)
+                _limit_high = self.fem_prefs.GetFloat("EigenmodeHighLimit", 1000000.0)
         self.eigenmode_parameters = (_number, _limit_low, _limit_high)
 
     ## Sets base_name
@@ -342,21 +371,21 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
             self.analysis_type = analysis_type
         else:
             try:
-                self.analysis_type = self.analysis.AnalysisType
+                self.analysis_type = self.solver.AnalysisType
             except:
                 self.fem_prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem")
                 self.analysis_type = self.fem_prefs.GetString("AnalysisType", "static")
 
-    ## Sets working dir for ccx execution. Called with no working_dir uses WorkingDir from FEM preferences
+    ## Sets working dir for solver execution. Called with no working_dir uses WorkingDir from FEM preferences
     #  @param self The python object self
-    #  @working_dir directory to be used for writing .inp file and executing CalculiX ccx
+    #  @working_dir directory to be used for writing solver input file or files and executing solver
     def setup_working_dir(self, working_dir=None):
         import os
         if working_dir is not None:
             self.working_dir = working_dir
         else:
             try:
-                self.working_dir = self.analysis.WorkingDir
+                self.working_dir = self.solver.WorkingDir
             except:
                 FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem").GetString("WorkingDir")
                 self.working_dir = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem").GetString("WorkingDir")
@@ -377,11 +406,11 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
     #  @ccx_binary path to ccx binary, default is guessed: "bin/ccx" windows, "ccx" for other systems
     #  @ccx_binary_sig expected output form ccx when run empty. Default value is "CalculiX.exe -i jobname"
     def setup_ccx(self, ccx_binary=None, ccx_binary_sig="CalculiX"):
+        from platform import system
         if not ccx_binary:
             self.fem_prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem")
             ccx_binary = self.fem_prefs.GetString("ccxBinaryPath", "")
         if not ccx_binary:
-            from platform import system
             if system() == "Linux":
                 ccx_binary = "ccx"
             elif system() == "Windows":
@@ -389,14 +418,23 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
             else:
                 ccx_binary = "ccx"
         self.ccx_binary = ccx_binary
+
         import subprocess
+        startup_info = None
+        if system() == "Windows":
+            # Windows workaround to avoid blinking terminal window
+            startup_info = subprocess.STARTUPINFO()
+            startup_info.dwFlags = subprocess.STARTF_USESHOWWINDOW
+        ccx_stdout = None
+        ccx_stderr = None
         try:
             p = subprocess.Popen([self.ccx_binary], stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE, shell=False)
+                                 stderr=subprocess.PIPE, shell=False,
+                                 startupinfo=startup_info)
             ccx_stdout, ccx_stderr = p.communicate()
             if ccx_binary_sig in ccx_stdout:
                 self.ccx_binary_present = True
-        except OSError, e:
+        except OSError as e:
             FreeCAD.Console.PrintError(e.message)
             if e.errno == 2:
                 raise Exception("FEM: CalculiX binary ccx \'{}\' not found. Please set it in FEM preferences.".format(ccx_binary))
@@ -421,6 +459,17 @@ class FemTools(QtCore.QRunnable, QtCore.QObject):
                 self.results_present = True
         else:
             raise Exception('FEM: No results found at {}!'.format(frd_result_file))
+
+        import ccxDatReader
+        dat_result_file = os.path.splitext(self.inp_file_name)[0] + '.dat'
+        if os.path.isfile(dat_result_file):
+            mode_frequencies = ccxDatReader.import_dat(dat_result_file, self.analysis)
+        else:
+            raise Exception('FEM: No .dat results found at {}!'.format(dat_result_file))
+        for m in self.analysis.Member:
+            if m.isDerivedFrom("Fem::FemResultObject") and m.Eigenmode > 0:
+                    m.EigenmodeFrequency = mode_frequencies[m.Eigenmode - 1]['frequency']
+                    m.setEditorMode("EigenmodeFrequency", 1)
 
     def use_results(self, results_name=None):
         for m in self.analysis.Member:

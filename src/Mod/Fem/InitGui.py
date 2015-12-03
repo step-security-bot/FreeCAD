@@ -45,14 +45,13 @@ class FemWorkbench (Workbench):
         import _CommandMechanicalShowResult
         import _CommandQuickAnalysis
         import _CommandPurgeFemResults
-        import _CommandMechanicalJobControl
+        import _CommandSolverJobControl
         import _CommandFemFromShape
         import _CommandNewMechanicalAnalysis
-
-        import MechanicalAnalysis
-        import MechanicalMaterial
-        import FemBeamSection
-        import FemShellThickness
+        import _CommandFemShellThickness
+        import _CommandFemBeamSection
+        import _CommandMechanicalMaterial
+        import _CommandFemSolverCalculix
 
         import subprocess
         from platform import system

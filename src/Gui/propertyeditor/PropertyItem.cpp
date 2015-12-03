@@ -111,6 +111,16 @@ bool PropertyItem::hasProperty(const App::Property* prop) const
         return false;
 }
 
+bool PropertyItem::removeProperty(const App::Property* prop)
+{
+    std::vector<App::Property*>::iterator it = std::find(propertyItems.begin(), propertyItems.end(), prop);
+    if (it != propertyItems.end()) {
+        propertyItems.erase(it);
+    }
+
+    return propertyItems.empty();
+}
+
 App::Property* PropertyItem::getFirstProperty()
 {
     if (propertyItems.empty())
@@ -138,6 +148,15 @@ PropertyItem *PropertyItem::parent() const
 void PropertyItem::appendChild(PropertyItem *item)
 {
     childItems.append(item);
+}
+
+void PropertyItem::removeChildren(int from, int to)
+{
+    int count = to-from+1;
+    for (int i=0; i<count; i++) {
+        PropertyItem* child = childItems.takeAt(from);
+        delete child;
+    }
 }
 
 PropertyItem *PropertyItem::child(int row)

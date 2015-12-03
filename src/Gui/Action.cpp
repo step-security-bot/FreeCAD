@@ -234,6 +234,7 @@ void ActionGroup::addTo(QWidget *w)
             w->addAction(_action);
             QToolButton* tb = w->findChildren<QToolButton*>().last();
             tb->setPopupMode(QToolButton::MenuButtonPopup);
+            tb->setObjectName(QString::fromLatin1("qt_toolbutton_menubutton"));
             QList<QAction*> acts = _group->actions();
             QMenu* menu = new QMenu(tb);
             menu->addActions(acts);
@@ -534,6 +535,8 @@ void WorkbenchGroup::setWorkbenchData(int i, const QString& wb)
     workbenches[i]->setToolTip(tip);
     workbenches[i]->setStatusTip(tr("Select the '%1' workbench").arg(name));
     workbenches[i]->setVisible(true);
+    if (i < 10)
+        workbenches[i]->setShortcut(QKeySequence(QString::fromUtf8("Ctrl+%1").arg(i)));
 }
 
 void WorkbenchGroup::refreshWorkbenchList()
