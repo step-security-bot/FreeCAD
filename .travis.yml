@@ -1,7 +1,7 @@
 language: cpp
 
 os:
-  #- linux
+  - linux
   - osx
 
 compiler:
@@ -13,23 +13,59 @@ sudo: required
 dist: trusty
 
 before_install:
-    - brew update
-    - brew tap homebrew/science
-    - brew tap sanelson/freecad
-    - brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl
-    - brew install --without-framework --without-soqt sanelson/freecad/coin
-    - brew install --HEAD pivy
-    - pip install matplotlib
+  #linux
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install doxygen; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libboost-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libboost-filesystem-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libboost-program-options-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libboost-python-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libboost-regex-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libboost-signals-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libboost-system-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libboost-thread-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libcoin80-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libeigen3-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install liboce-foundation-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install liboce-modeling-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install liboce-ocaf-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install liboce-visualization-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libpyside-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libqtcore4; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libshiboken-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libxerces-c-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install libxmuu-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install oce-draw; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install pyside-tools; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install qt4-dev-tools; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install shiboken; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install swig; fi
+  #travis trusty python-libpython version mismatch workaround
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo rm -rf /opt/python/2.7.10; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo rm -rf /opt/python/2.6.9; fi
+
+  #osx
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew tap homebrew/science; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew tap sanelson/freecad; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install --without-framework --without-soqt sanelson/freecad/coin; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install --HEAD pivy; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pip install matplotlib; fi
 
 install:
-    - mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON ../
+  #linux
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then mkdir build && cd build && cmake ../; fi
+
+  #osx
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON ../; fi
 
 #before_script:
 
 script:
-    - make -j2
-    #- PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"
-    - sudo make install/fast
+  - make -j2
+  #- PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"
+  - sudo make install
 
 #after_success:
 
