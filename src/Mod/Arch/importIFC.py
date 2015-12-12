@@ -318,7 +318,7 @@ def insert(filename,docname,skip=[],only=[],root=None):
 
     if DEBUG: print "done."
 
-    global ifcfile # keeping global for debugging purposes
+    #global ifcfile # keeping global for debugging purposes
     filename = decode(filename,utf=True)
     ifcfile = ifcopenshell.open(filename)
     from ifcopenshell import geom
@@ -328,12 +328,6 @@ def insert(filename,docname,skip=[],only=[],root=None):
     settings.set(settings.USE_WORLD_COORDS,True)
     if SEPARATE_OPENINGS:
         settings.set(settings.DISABLE_OPENING_SUBTRACTIONS,True)
-    if MERGE_MODE_STRUCT != 3:
-        try:
-            settings.set(settings.INCLUDE_CURVES,True)
-        except:
-            FreeCAD.Console.PrintError("Set INCLUDE_CURVES failed. IfcOpenShell seams to be an Outdated Developer Version.\n")
-            FreeCAD.Console.PrintError("Import of StructuralAnalysisView Entities will not work!\n")
     sites = ifcfile.by_type("IfcSite")
     buildings = ifcfile.by_type("IfcBuilding")
     floors = ifcfile.by_type("IfcBuildingStorey")
@@ -419,7 +413,7 @@ def insert(filename,docname,skip=[],only=[],root=None):
         if DEBUG: print count+1,"/",len(products)," creating object #",pid," : ",ptype,
         name = str(ptype[3:])
         if product.Name:
-            name = product.Name.decode("unicode_escape").encode("utf8")
+            name = product.Name.encode("utf8")
         if PREFIX_NUMBERS: name = "ID" + str(pid) + " " + name
         obj = None
         baseobj = None
@@ -427,8 +421,10 @@ def insert(filename,docname,skip=[],only=[],root=None):
         shape = None
 
         archobj = True  # assume all objects not in structuralifcobjects are architecture
+        structobj = False
         if ptype in structuralifcobjects:
             archobj = False
+            structobj = True
             if DEBUG: print " (struct)",
         else:
             if DEBUG: print " (arch)",
@@ -459,6 +455,10 @@ def insert(filename,docname,skip=[],only=[],root=None):
                             sharedobjects[bid] = None
                             store = bid
 
+        if structobj:
+            settings.set(settings.INCLUDE_CURVES,True)
+        else:
+            settings.set(settings.INCLUDE_CURVES,False)
         try:
             cr = ifcopenshell.geom.create_shape(settings,product)
             brep = cr.geometry.brep_data
@@ -474,10 +474,10 @@ def insert(filename,docname,skip=[],only=[],root=None):
             shape.scale(1000.0) # IfcOpenShell always outputs in meters
 
             if not shape.isNull():
-                if (MERGE_MODE_ARCH > 0 and archobj) or not archobj:
+                if (MERGE_MODE_ARCH > 0 and archobj) or structobj:
                     if ptype == "IfcSpace": # do not add spaces to compounds
                         if DEBUG: print "skipping space ",pid
-                    elif not archobj:
+                    elif structobj:
                         structshapes[pid] = shape
                         if DEBUG: print shape.Solids," ",
                         baseobj = shape
@@ -594,7 +594,7 @@ def insert(filename,docname,skip=[],only=[],root=None):
                     for p in properties[pid]:
                         o = ifcfile[p]
                         if o.is_a("IfcPropertySingleValue"):
-                            a[o.Name.decode("unicode_escape").encode("utf8")] = str(o.NominalValue)
+                            a[o.Name.encode("utf8")] = str(o.NominalValue)
                     obj.IfcAttributes = a
 
             # color
@@ -729,7 +729,7 @@ def insert(filename,docname,skip=[],only=[],root=None):
         if "IfcAnnotation" in SKIP: continue # preferences-set type skip list
         name = "Annotation"
         if annotation.Name:
-            name = annotation.Name.decode("unicode_escape").encode("utf8")
+            name = annotation.Name.encode("utf8")
         if PREFIX_NUMBERS: name = "ID" + str(aid) + " " + name
         shapes2d = []
         for repres in annotation.Representation.Representations:
@@ -752,7 +752,7 @@ def insert(filename,docname,skip=[],only=[],root=None):
     for material in materials:
         name = "Material"
         if material.Name:
-            name = material.Name.decode("unicode_escape").encode("utf8")
+            name = material.Name.encode("utf8")
         if MERGE_MATERIALS and (name in fcmats.keys()):
             mat = fcmats[name]
         else:
