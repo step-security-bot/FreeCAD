@@ -5,7 +5,7 @@ os:
   - osx
 
 compiler:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then gcc; fi
+  - gcc
   - clang
 
 #trusty
