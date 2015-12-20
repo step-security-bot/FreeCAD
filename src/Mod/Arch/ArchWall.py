@@ -223,7 +223,7 @@ class _CommandWall:
             FreeCADGui.Snapper.getPoint(last=self.points[0],callback=self.getPoint,movecallback=self.update,extradlg=self.taskbox())
         elif len(self.points) == 2:
             import Part
-            l = Part.Line(self.points[0],self.points[1])
+            l = Part.Line(FreeCAD.DraftWorkingPlane.getLocalCoords(self.points[0]),FreeCAD.DraftWorkingPlane.getLocalCoords(self.points[1]))
             self.tracker.finalize()
             FreeCAD.ActiveDocument.openTransaction(translate("Arch","Create Wall"))
             FreeCADGui.addModule("Arch")
@@ -258,8 +258,10 @@ class _CommandWall:
 
     def addDefault(self,l):
         FreeCADGui.doCommand('base=FreeCAD.ActiveDocument.addObject("Sketcher::SketchObject","'+translate('Arch','WallTrace')+'")')
+        FreeCADGui.doCommand('base.Placement = FreeCAD.DraftWorkingPlane.getPlacement()')
         FreeCADGui.doCommand('base.addGeometry(trace)')
-        FreeCADGui.doCommand('Arch.makeWall(base,width='+str(self.Width)+',height='+str(self.Height)+',align="'+str(self.Align)+'")')
+        FreeCADGui.doCommand('wall = Arch.makeWall(base,width='+str(self.Width)+',height='+str(self.Height)+',align="'+str(self.Align)+'")')
+        FreeCADGui.doCommand('wall.Normal = FreeCAD.DraftWorkingPlane.axis')
 
     def update(self,point,info):
         "this function is called by the Snapper when the mouse is moved"
@@ -464,6 +466,12 @@ class _Wall(ArchComponent.Component):
                     base = obj.Base.Shape.copy()
                 elif obj.Base.Shape.Edges:
                     # case 3: the base is flat, we need to extrude it
+                    if not obj.Base.Shape.Faces:
+                        # set the length property
+                        if hasattr(obj.Base.Shape,"Length"):
+                            l = obj.Base.Shape.Length
+                            if obj.Length != l:
+                                obj.Length = l
                     profiles = self.getProfiles(obj)
                     if profiles:
                         normal.multiply(height)
