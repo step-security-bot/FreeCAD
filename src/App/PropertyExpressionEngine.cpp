@@ -31,6 +31,7 @@
 #include "PropertyExpressionEngine.h"
 #include "PropertyStandard.h"
 #include "PropertyUnits.h"
+#include <CXX/Objects.hxx>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
@@ -122,8 +123,10 @@ void PropertyExpressionEngine::Paste(const Property &from)
     aboutToSetValue();
     expressions.clear();
 
-    for (ExpressionMap::const_iterator it = fromee->expressions.begin(); it != fromee->expressions.end(); ++it)
+    for (ExpressionMap::const_iterator it = fromee->expressions.begin(); it != fromee->expressions.end(); ++it) {
         expressions[it->first] = ExpressionInfo(it->second);
+        expressionChanged(it->first);
+    }
 
     validator = fromee->validator;
 
@@ -272,8 +275,10 @@ void PropertyExpressionEngine::slotObjectRenamed(const DocumentObject &obj)
 
     aboutToSetValue();
 
-    for (ExpressionMap::iterator it = expressions.begin(); it != expressions.end(); ++it)
+    for (ExpressionMap::iterator it = expressions.begin(); it != expressions.end(); ++it) {
         it->second.expression->visit(v);
+        expressionChanged(it->first);
+    }
 
     hasSetValue();
 }
@@ -312,6 +317,11 @@ void PropertyExpressionEngine::setValue(const ObjectIdentifier & path, boost::sh
     // Try to access value; it should trigger an exception if it is not supported, or if the path is invalid
     prop->getPathValue(usePath);
 
+    // Check if the current expression equals the new one and do nothing if so to reduce unneeded computations
+    ExpressionMap::iterator it = expressions.find(usePath);
+    if(it != expressions.end() && expr == it->second.expression)
+        return;
+    
     if (expr) {
         std::string error = validateExpression(usePath, expr);
 
@@ -320,11 +330,13 @@ void PropertyExpressionEngine::setValue(const ObjectIdentifier & path, boost::sh
 
         aboutToSetValue();
         expressions[usePath] = ExpressionInfo(expr, comment);
+        expressionChanged(usePath);
         hasSetValue();
     }
     else {
         aboutToSetValue();
         expressions.erase(usePath);
+        expressionChanged(usePath);
         hasSetValue();
     }
 }
@@ -669,6 +681,9 @@ void PropertyExpressionEngine::renameExpressions(const std::map<ObjectIdentifier
 
     aboutToSetValue();
     expressions = newExpressions;
+    for (ExpressionMap::const_iterator i = expressions.begin(); i != expressions.end(); ++i) 
+        expressionChanged(i->first);
+    
     hasSetValue();
 }
 
@@ -724,7 +739,14 @@ void PropertyExpressionEngine::renameObjectIdentifiers(const std::map<ObjectIden
 
 PyObject *PropertyExpressionEngine::getPyObject(void)
 {
-    Py_Return;
+    Py::List list;
+    for (ExpressionMap::const_iterator it = expressions.begin(); it != expressions.end(); ++it) {
+        Py::Tuple tuple(2);
+        tuple.setItem(0, Py::String(it->first.toString()));
+        tuple.setItem(1, Py::String(it->second.expression->toString()));
+        list.append(tuple);
+    }
+    return Py::new_reference_to(list);
 }
 
 void PropertyExpressionEngine::setPyObject(PyObject *)

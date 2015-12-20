@@ -26,6 +26,9 @@
 #	include <cassert>
 #endif
 
+#include <limits>
+#include <iomanip>
+
 /// Here the FreeCAD includes sorted by Base,App,Gui......
 #include "Property.h"
 #include "Application.h"
@@ -574,7 +577,7 @@ void ObjectIdentifier::resolve() const
     else {
         /* Document object name not specified, resolve from path */
         if (components.size() == 1) {
-            documentObjectName = String(freecad_dynamic_cast<DocumentObject>(owner)->getNameInDocument());
+            documentObjectName = String(static_cast<const DocumentObject*>(owner)->getNameInDocument());
             propertyName = components[0].name.getString();
             propertyIndex = 0;
         }
@@ -590,7 +593,7 @@ void ObjectIdentifier::resolve() const
                 propertyIndex = 1;
             }
             else {
-                documentObjectName = String(freecad_dynamic_cast<DocumentObject>(owner)->getNameInDocument());
+                documentObjectName = String(static_cast<const DocumentObject*>(owner)->getNameInDocument());
                 propertyName = components[0].name.getString();
                 propertyIndex = 0;
             }
@@ -912,9 +915,9 @@ void ObjectIdentifier::setValue(const boost::any &value) const
     ss << getPythonAccessor() + " = ";
 
     if (value.type() == typeid(Base::Quantity))
-        ss << boost::any_cast<Base::Quantity>(value).getValue();
+        ss << std::setprecision(std::numeric_limits<double>::digits10 + 1) << boost::any_cast<Base::Quantity>(value).getValue();
     else if (value.type() == typeid(double))
-        ss << boost::any_cast<double>(value);
+        ss << std::setprecision(std::numeric_limits<double>::digits10 + 1) << boost::any_cast<double>(value);
     else if (value.type() == typeid(char*))
         ss << '\'' << Base::Tools::escapedUnicodeFromUtf8(boost::any_cast<char*>(value)) << '\'';
     else if (value.type() == typeid(const char*))
