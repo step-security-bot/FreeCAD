@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -52,6 +52,7 @@
 #include "FemConstraintPulley.h"
 
 #include "FemResultObject.h"
+#include "FemSolverObject.h"
 
 extern struct PyMethodDef Fem_methods[];
 
@@ -118,6 +119,8 @@ void AppFemExport initFem()
  
     Fem::FemAnalysis                ::init();
     Fem::FemAnalysisPython          ::init();
+    Fem::DocumentObject             ::init();
+    Fem::FeaturePython              ::init();
     Fem::FemMesh                    ::init();
     Fem::FemMeshObject              ::init();
     Fem::FemMeshShapeObject         ::init();
@@ -140,6 +143,8 @@ void AppFemExport initFem()
 
     Fem::FemResultObject            ::init();
     Fem::FemResultObjectPython      ::init();
+    Fem::FemSolverObject            ::init();
+    Fem::FemSolverObjectPython      ::init();
 }
 
 } // extern "C"

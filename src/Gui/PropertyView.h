@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2002 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2002 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -76,6 +76,8 @@ private:
     void onSelectionChanged(const SelectionChanges& msg);
     void slotChangePropertyData(const App::DocumentObject&, const App::Property&);
     void slotChangePropertyView(const Gui::ViewProvider&, const App::Property&);
+    void slotAppendDynamicProperty(const App::Property&);
+    void slotRemoveDynamicProperty(const App::Property&);
 
 private:
     struct PropInfo;
@@ -83,6 +85,8 @@ private:
     typedef boost::BOOST_SIGNALS_NAMESPACE::connection Connection;
     Connection connectPropData;
     Connection connectPropView;
+    Connection connectPropAppend;
+    Connection connectPropRemove;
     QTabWidget* tabs;
 };
 

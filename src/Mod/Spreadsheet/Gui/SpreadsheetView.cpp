@@ -37,18 +37,20 @@
 
 #include "SpreadsheetView.h"
 #include "SpreadsheetDelegate.h"
-#include <Mod/Spreadsheet/App/Expression.h>
+#include <Mod/Spreadsheet/App/SpreadsheetExpression.h>
 #include <Mod/Spreadsheet/App/Sheet.h>
 #include <Mod/Spreadsheet/App/Range.h>
 #include <Gui/MainWindow.h>
 #include <Gui/Application.h>
 #include <Gui/Document.h>
+#include <Gui/ExpressionCompleter.h>
 #include <App/DocumentObject.h>
 #include <App/PropertyStandard.h>
 #include <Gui/Command.h>
 #include <boost/bind.hpp>
 #include <Mod/Spreadsheet/App/Utils.h>
 #include "qtcolorpicker.h"
+#include <LineEdit.h>
 
 #include "ui_Sheet.h"
 
@@ -73,7 +75,7 @@ SheetView::SheetView(Gui::Document *pcDocument, App::DocumentObject *docObj, QWi
     ui->setupUi(w);
     setCentralWidget(w);
 
-    delegate = new SpreadsheetDelegate();
+    delegate = new SpreadsheetDelegate(sheet);
     ui->cells->setModel(model);
     ui->cells->setItemDelegate(delegate);
     ui->cells->setSheet(sheet);
@@ -96,7 +98,6 @@ SheetView::SheetView(Gui::Document *pcDocument, App::DocumentObject *docObj, QWi
 
     columnWidthChangedConnection = sheet->columnWidthChanged.connect(bind(&SheetView::resizeColumn, this, _1, _2));
     rowHeightChangedConnection = sheet->rowHeightChanged.connect(bind(&SheetView::resizeRow, this, _1, _2));
-    positionChangedConnection = sheet->positionChanged.connect(bind(&SheetView::setPosition, this, _1));
 
     QPalette palette = ui->cells->palette();
     palette.setColor(QPalette::Base, QColor(255, 255, 255));
@@ -110,6 +111,9 @@ SheetView::SheetView(Gui::Document *pcDocument, App::DocumentObject *docObj, QWi
     QList<QtColorPicker*> fgList = Gui::getMainWindow()->findChildren<QtColorPicker*>(QString::fromAscii("Spreadsheet_ForegroundColor"));
     if (fgList.size() > 0)
         fgList[0]->setCurrentColor(palette.color(QPalette::Text));
+
+    // Set document object to create auto completer
+    ui->cellContent->setDocumentObject(sheet);
 }
 
 SheetView::~SheetView()
@@ -194,7 +198,11 @@ void SheetView::updateContentLine()
         if (cell)
             cell->getStringContent(str);
         ui->cellContent->setText(QString::fromUtf8(str.c_str()));
+        ui->cellContent->setIndex(i);
         ui->cellContent->setEnabled(true);
+
+        // Update completer model; for the time being, we do this by setting the document object of the input line.
+        ui->cellContent->setDocumentObject(sheet);
     }
 }
 
@@ -254,17 +262,6 @@ void SheetView::resizeColumn(int col, int newSize)
         ui->cells->setColumnWidth(col, newSize);
 }
 
-void SheetView::setPosition(CellAddress address)
-{
-    QModelIndex curr = ui->cells->currentIndex();
-    QModelIndex i = ui->cells->model()->index(address.row(), address.col());
-
-    if (i.isValid() && (curr.row() != address.row() || curr.column() != address.col())) {
-        ui->cells->clearSelection();
-        ui->cells->setCurrentIndex(i);
-    }
-}
-
 void SheetView::resizeRow(int col, int newSize)
 {
     if (ui->cells->verticalHeader()->sectionSize(col) != newSize)
@@ -273,16 +270,23 @@ void SheetView::resizeRow(int col, int newSize)
 
 void SheetView::editingFinished()
 {
+    if (ui->cellContent->completerActive()) {
+        ui->cellContent->hideCompleter();
+        return;
+    }
+
     QModelIndex i = ui->cells->currentIndex();
 
     // Update data in cell
     ui->cells->model()->setData(i, QVariant(ui->cellContent->text()), Qt::EditRole);
+
+    ui->cells->setCurrentIndex(ui->cellContent->next());
+    ui->cells->setFocus();
 }
 
 void SheetView::currentChanged ( const QModelIndex & current, const QModelIndex & previous  )
 {
     updateContentLine();
-    sheet->setPosition(CellAddress(current.row(), current.column()));
 }
 
 void SheetView::updateCell(const App::Property *prop)

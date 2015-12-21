@@ -40,6 +40,7 @@
 #include "Mod/Spreadsheet/App/Range.h"
 #include "Mod/Spreadsheet/Gui/SpreadsheetView.h"
 
+using namespace Base;
 using namespace SpreadsheetGui;
 using namespace Spreadsheet;
 
@@ -222,6 +223,8 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
           << "Spreadsheet_StyleBold"
           << "Spreadsheet_StyleItalic"
           << "Spreadsheet_StyleUnderline"
+          << "Separator"
+          << "Spreadsheet_SetAlias"
           << "Separator"
              ;
 

@@ -284,7 +284,7 @@ def findIntersection(edge1,edge2,infinite1=False,infinite2=False,ex1=False,ex2=F
     # First, try to use distToShape if possible
     if dts and isinstance(edge1,Part.Edge) and isinstance(edge2,Part.Edge) \
             and (not infinite1) and (not infinite2) and \
-            edge1.BoundBox.isIntersection(edge2.BoundBox):
+            edge1.BoundBox.intersect(edge2.BoundBox):
         dist, pts, geom = edge1.distToShape(edge2)
         sol = []
         for p in pts:
@@ -1076,6 +1076,8 @@ def isReallyClosed(wire):
 def getNormal(shape):
         "finds the normal of a shape, if possible"
         n = Vector(0,0,1)
+        if shape.isNull():
+            return n
         if (shape.ShapeType == "Face") and hasattr(shape,"normalAt"):
                 n = shape.copy().normalAt(0.5,0.5)
         elif shape.ShapeType == "Edge":
@@ -1198,7 +1200,7 @@ def connect(edges,closed=False):
                 #print("debug: DraftGeomUtils.connect prev : ",prev.Vertexes[0].Point,prev.Vertexes[-1].Point)
                 i = findIntersection(curr,prev,True,True)
                 if i:
-                    v1 = i[0]
+                    v1 = i[DraftVecUtils.closest(curr.Vertexes[0].Point,i)]
                 else:    
                     v1 = curr.Vertexes[0].Point
             else:
@@ -1207,7 +1209,7 @@ def connect(edges,closed=False):
                 #print("debug: DraftGeomUtils.connect next : ",next.Vertexes[0].Point,next.Vertexes[-1].Point)
                 i = findIntersection(curr,next,True,True)
                 if i:
-                    v2 = i[0]
+                    v2 = i[DraftVecUtils.closest(curr.Vertexes[-1].Point,i)]
                 else:
                     v2 = curr.Vertexes[-1].Point 
             else:

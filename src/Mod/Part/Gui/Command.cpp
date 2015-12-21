@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -39,6 +39,7 @@
 #include <Base/Exception.h>
 #include <App/Document.h>
 #include <App/DocumentObjectGroup.h>
+#include <App/DocumentObserver.h>
 #include <Gui/Action.h>
 #include <Gui/Application.h>
 #include <Gui/BitmapFactory.h>
@@ -53,6 +54,7 @@
 #include <Gui/WaitCursor.h>
 
 #include "../App/PartFeature.h"
+#include <Mod/Part/App/Part2DObject.h>
 #include "DlgPartImportStepImp.h"
 #include "DlgBooleanOperation.h"
 #include "DlgExtrusion.h"
@@ -806,11 +808,13 @@ CmdPartImportCurveNet::CmdPartImportCurveNet()
 void CmdPartImportCurveNet::activated(int iMsg)
 {
     QStringList filter;
-    filter << QObject::tr("All CAD Files (*.stp *.step *.igs *.iges *.brp *.brep)");
-    filter << QObject::tr("STEP (*.stp *.step)");
-    filter << QObject::tr("IGES (*.igs *.iges)");
-    filter << QObject::tr("BREP (*.brp *.brep)");
-    filter << QObject::tr("All Files (*.*)");
+    filter << QString::fromLatin1("%1 (*.stp *.step *.igs *.iges *.brp *.brep)")
+                 .arg(QObject::tr("All CAD Files"));
+    filter << QString::fromLatin1("STEP (*.stp *.step)");
+    filter << QString::fromLatin1("IGES (*.igs *.iges)");
+    filter << QString::fromLatin1("BREP (*.brp *.brep)");
+    filter << QString::fromLatin1("%1 (*.*)")
+                 .arg(QObject::tr("All Files"));
 
     QString fn = Gui::FileDialog::getOpenFileName(Gui::getMainWindow(), QString(), QString(), filter.join(QLatin1String(";;")));
     if (!fn.isEmpty()) {
@@ -1017,6 +1021,55 @@ void CmdPartExtrude::activated(int iMsg)
 bool CmdPartExtrude::isActive(void)
 {
     return (hasActiveDocument() && !Gui::Control().activeDialog());
+}
+
+//===========================================================================
+// Part_MakeFace
+//===========================================================================
+DEF_STD_CMD_A(CmdPartMakeFace);
+
+CmdPartMakeFace::CmdPartMakeFace()
+  : Command("Part_MakeFace")
+{
+    sAppModule    = "Part";
+    sGroup        = QT_TR_NOOP("Part");
+    sMenuText     = QT_TR_NOOP("Make face from sketch");
+    sToolTipText  = QT_TR_NOOP("Make face from selected sketches");
+    sWhatsThis    = "Part_MakeFace";
+    sStatusTip    = sToolTipText;
+}
+
+void CmdPartMakeFace::activated(int iMsg)
+{
+    std::vector<Part::Part2DObject*> sketches = Gui::Selection().getObjectsOfType<Part::Part2DObject>();
+    openCommand("Make face");
+
+    try {
+        App::DocumentT doc(sketches.front()->getDocument());
+        std::stringstream str;
+        str << doc.getDocumentPython()
+            << ".addObject(\"Part::Face\", \"Face\").Sources = (";
+        for (std::vector<Part::Part2DObject*>::iterator it = sketches.begin(); it != sketches.end(); ++it) {
+            App::DocumentObjectT obj(*it);
+            str << obj.getObjectPython() << ", ";
+        }
+
+        str << ")";
+
+        doCommand(Doc,str.str().c_str());
+        commitCommand();
+        updateActive();
+    }
+    catch (...) {
+        abortCommand();
+        throw;
+    }
+}
+
+bool CmdPartMakeFace::isActive(void)
+{
+    return (Gui::Selection().countObjectsOfType(Part::Part2DObject::getClassTypeId()) > 0 &&
+            !Gui::Control().activeDialog());
 }
 
 //===========================================================================
@@ -1835,6 +1888,7 @@ void CreatePartCommands(void)
     rcCmdMgr.addCommand(new CmdPartReverseShape());
     rcCmdMgr.addCommand(new CmdPartBoolean());
     rcCmdMgr.addCommand(new CmdPartExtrude());
+    rcCmdMgr.addCommand(new CmdPartMakeFace());
     rcCmdMgr.addCommand(new CmdPartMirror());
     rcCmdMgr.addCommand(new CmdPartRevolve());
     rcCmdMgr.addCommand(new CmdPartCrossSections());

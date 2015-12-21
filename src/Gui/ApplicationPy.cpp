@@ -36,6 +36,7 @@
 
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/TranscodingException.hpp>
+#include <boost/regex.hpp>
 
 #include "Application.h"
 #include "BitmapFactory.h"
@@ -54,6 +55,7 @@
 #include "Language/Translator.h"
 #include "DownloadManager.h"
 #include <App/DocumentObjectPy.h>
+#include <App/DocumentPy.h>
 #include <App/PropertyFile.h>
 #include <Base/Interpreter.h>
 #include <Base/Console.h>
@@ -139,6 +141,9 @@ PyMethodDef Application::Methods[] = {
   {"activeDocument",          (PyCFunction) Application::sActiveDocument,   1,
    "activeDocument() -> object or None\n\n"
    "Return the active document or None if no one exists"},
+  {"setActiveDocument",       (PyCFunction) Application::sSetActiveDocument,1,
+   "setActiveDocument(string or App.Document) -> None\n\n"
+   "Activate the specified document"},
   {"getDocument",             (PyCFunction) Application::sGetDocument,      1,
    "getDocument(string) -> object\n\n"
    "Get a document by its name"},
@@ -171,19 +176,71 @@ PyObject* Gui::Application::sActiveDocument(PyObject * /*self*/, PyObject *args,
     }
 }
 
-PyObject* Application::sGetDocument(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
+PyObject* Gui::Application::sSetActiveDocument(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
 {
-    char *pstr=0;
-    if (!PyArg_ParseTuple(args, "s", &pstr))     // convert args: Python->C 
-        return NULL;                             // NULL triggers exception
+    Document *pcDoc = 0;
 
-    Document *pcDoc = Instance->getDocument(pstr);
+    do {
+        char *pstr=0;
+        if (PyArg_ParseTuple(args, "s", &pstr)) {
+            pcDoc = Instance->getDocument(pstr);
+            if (!pcDoc) {
+                PyErr_Format(PyExc_NameError, "Unknown document '%s'", pstr);
+                return 0;
+            }
+            break;
+        }
+
+        PyErr_Clear();
+        PyObject* doc;
+        if (PyArg_ParseTuple(args, "O!", &(App::DocumentPy::Type), &doc)) {
+            pcDoc = Instance->getDocument(static_cast<App::DocumentPy*>(doc)->getDocumentPtr());
+            if (!pcDoc) {
+                PyErr_Format(PyExc_KeyError, "Unknown document instance");
+                return 0;
+            }
+            break;
+        }
+    }
+    while(false);
+
     if (!pcDoc) {
-        PyErr_Format(PyExc_NameError, "Unknown document '%s'", pstr);
+        PyErr_SetString(PyExc_TypeError, "Either string or App.Document expected");
         return 0;
     }
 
-    return pcDoc->getPyObject();
+    if (Instance->activeDocument() != pcDoc) {
+        Gui::MDIView* view = pcDoc->getActiveView();
+        getMainWindow()->setActiveWindow(view);
+    }
+    Py_Return;
+}
+
+PyObject* Application::sGetDocument(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
+{
+    char *pstr=0;
+    if (PyArg_ParseTuple(args, "s", &pstr)) {
+        Document *pcDoc = Instance->getDocument(pstr);
+        if (!pcDoc) {
+            PyErr_Format(PyExc_NameError, "Unknown document '%s'", pstr);
+            return 0;
+        }
+        return pcDoc->getPyObject();
+    }
+
+    PyErr_Clear();
+    PyObject* doc;
+    if (PyArg_ParseTuple(args, "O!", &(App::DocumentPy::Type), &doc)) {
+        Document *pcDoc = Instance->getDocument(static_cast<App::DocumentPy*>(doc)->getDocumentPtr());
+        if (!pcDoc) {
+            PyErr_Format(PyExc_KeyError, "Unknown document instance");
+            return 0;
+        }
+        return pcDoc->getPyObject();
+    }
+
+    PyErr_SetString(PyExc_TypeError, "Either string or App.Document exprected");
+    return 0;
 }
 
 PyObject* Application::sHide(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
@@ -845,14 +902,61 @@ PyObject* Application::sAddCommand(PyObject * /*self*/, PyObject *args,PyObject 
     if (!PyArg_ParseTuple(args, "sO|s", &pName,&pcCmdObj,&pSource))     // convert args: Python->C 
         return NULL;                    // NULL triggers exception 
 
+    // get the call stack to find the Python module name
+    //
+    std::string module, group;
     try {
         Base::PyGILStateLocker lock;
-        Py::Object cmd(pcCmdObj);
-        if (cmd.hasAttr("GetCommands")) {
-            Application::Instance->commandManager().addCommand(new PythonGroupCommand(pName, pcCmdObj));
+        Py::Module mod(PyImport_ImportModule("inspect"), true);
+        Py::Callable inspect(mod.getAttr("stack"));
+        Py::Tuple args;
+        Py::List list(inspect.apply(args));
+        args = list.getItem(0);
+
+        // usually this is the file name of the calling script
+        std::string file = args.getItem(1).as_string();
+        Base::FileInfo fi(file);
+        // convert backslashes to slashes
+        file = fi.filePath();
+        module = fi.fileNamePure();
+
+        // for the group name get the directory name after 'Mod'
+        boost::regex rx("/Mod/(\\w+)/");
+        boost::smatch what;
+        if (boost::regex_search(file, what, rx)) {
+            group = what[1];
         }
         else {
-            Application::Instance->commandManager().addCommand(new PythonCommand(pName, pcCmdObj, pSource));
+            group = module;
+        }
+    }
+    catch (Py::Exception& e) {
+        e.clear();
+    }
+
+    try {
+        Base::PyGILStateLocker lock;
+
+        Py::Object cmd(pcCmdObj);
+        if (cmd.hasAttr("GetCommands")) {
+            Command* cmd = new PythonGroupCommand(pName, pcCmdObj);
+            if (!module.empty()) {
+                cmd->setAppModuleName(module.c_str());
+            }
+            if (!group.empty()) {
+                cmd->setGroupName(group.c_str());
+            }
+            Application::Instance->commandManager().addCommand(cmd);
+        }
+        else {
+            Command* cmd = new PythonCommand(pName, pcCmdObj, pSource);
+            if (!module.empty()) {
+                cmd->setAppModuleName(module.c_str());
+            }
+            if (!group.empty()) {
+                cmd->setGroupName(group.c_str());
+            }
+            Application::Instance->commandManager().addCommand(cmd);
         }
     }
     catch (const Base::Exception& e) {

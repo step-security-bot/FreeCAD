@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2010     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2010     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -264,7 +264,12 @@ PyObject* SketchObjectPy::addConstraint(PyObject *args)
         //
         // N.B.: However, the solve itself may be inhibited in cases where groups of geometry/constraints
         //      are added together, because in that case undoing will also make the geometry disappear.
-        this->getSketchObjectPtr()->solve(); 
+        this->getSketchObjectPtr()->solve();
+        // if the geometry moved during the solve, then the initial solution is invalid
+        // at this point, so a point movement may not work in cases where redundant constraints exist.
+        // this forces recalculation of the initial solution (not a full solve)
+        if(this->getSketchObjectPtr()->noRecomputes)
+            this->getSketchObjectPtr()->setUpSketch(); 
         return Py::new_reference_to(Py::Int(ret));
     }
     else if (PyObject_TypeCheck(pcObj, &(PyList_Type)) ||
@@ -318,15 +323,36 @@ PyObject* SketchObjectPy::delConstraint(PyObject *args)
 PyObject* SketchObjectPy::renameConstraint(PyObject *args)
 {
     int Index;
-    char* Name;
-    if (!PyArg_ParseTuple(args, "is", &Index, &Name))
+    char* utf8Name;
+    if (!PyArg_ParseTuple(args, "iet", &Index, "utf-8", &utf8Name))
         return 0;
+
+    std::string Name = utf8Name;
+    PyMem_Free(utf8Name);
 
     if (this->getSketchObjectPtr()->Constraints.getSize() <= Index) {
         std::stringstream str;
         str << "Not able to rename a constraint with the given index: " << Index;
         PyErr_SetString(PyExc_IndexError, str.str().c_str());
         return 0;
+    }
+
+    if (!Name.empty()) {
+
+        if (!Sketcher::PropertyConstraintList::validConstraintName(Name)) {
+            std::stringstream str;
+            str << "Invalid constraint name with the given index: " << Index;
+            PyErr_SetString(PyExc_IndexError, str.str().c_str());
+            return 0;
+        }
+
+        const std::vector< Sketcher::Constraint * > &vals = getSketchObjectPtr()->Constraints.getValues();
+        for (std::size_t i = 0; i < vals.size(); ++i) {
+            if (static_cast<int>(i) != Index && Name == vals[i]->Name) {
+                PyErr_SetString(PyExc_ValueError, "Duplicate constraint not allowed");
+                return 0;
+            }
+        }
     }
 
     Constraint* copy = this->getSketchObjectPtr()->Constraints[Index]->clone();
@@ -537,15 +563,9 @@ PyObject* SketchObjectPy::getDatum(PyObject *args)
         PyErr_Clear();
         char* name;
         if (PyArg_ParseTuple(args,"s", &name)) {
-            int id = 1;
+            int id = 0;
             for (std::vector<Constraint*>::const_iterator it = vals.begin(); it != vals.end(); ++it, ++id) {
-                std::string constrName = (*it)->Name;
-                if (constrName.empty()) {
-                    std::stringstream str;
-                    str << "Constraint" << id;
-                    constrName = str.str();
-                }
-                if (constrName == name) {
+                if (Sketcher::PropertyConstraintList::getConstraintName((*it)->Name, id) == name) {
                     constr = *it;
                     break;
                 }
@@ -579,7 +599,7 @@ PyObject* SketchObjectPy::getDatum(PyObject *args)
     }
 
     Base::Quantity datum;
-    datum.setValue(constr->Value);
+    datum.setValue(constr->getValue());
     if (type == Angle) {
         datum.setValue(Base::toDegrees<double>(datum.getValue()));
         datum.setUnit(Base::Unit::Angle);

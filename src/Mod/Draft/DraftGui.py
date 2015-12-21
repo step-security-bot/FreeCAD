@@ -512,7 +512,8 @@ class DraftToolBar:
         QtCore.QObject.connect(self.xyButton,QtCore.SIGNAL("clicked()"),self.selectXY)
         QtCore.QObject.connect(self.xzButton,QtCore.SIGNAL("clicked()"),self.selectXZ)
         QtCore.QObject.connect(self.yzButton,QtCore.SIGNAL("clicked()"),self.selectYZ)
-        QtCore.QObject.connect(self.continueCmd,QtCore.SIGNAL("stateChanged(int)"),self.setContinue)               
+        QtCore.QObject.connect(self.continueCmd,QtCore.SIGNAL("stateChanged(int)"),self.setContinue)
+        QtCore.QObject.connect(self.isCopy,QtCore.SIGNAL("stateChanged(int)"),self.setCopymode)
         QtCore.QObject.connect(self.isRelative,QtCore.SIGNAL("stateChanged(int)"),self.setRelative)
         QtCore.QObject.connect(self.hasFill,QtCore.SIGNAL("stateChanged(int)"),self.setFill) 
         QtCore.QObject.connect(self.currentViewButton,QtCore.SIGNAL("clicked()"),self.selectCurrentView)
@@ -568,9 +569,11 @@ class DraftToolBar:
         self.facecolorPix = QtGui.QPixmap(16,16)
         self.facecolorPix.fill(self.facecolor)
         self.facecolorButton.setIcon(QtGui.QIcon(self.facecolorPix))
-        self.widthButton = self._spinbox("widthButton", self.bottomtray, val=self.linewidth,hide=False,size=(50,22))
+        p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/General")
+        bsize = p.GetInt("ToolbarIconSize",24)+2
+        self.widthButton = self._spinbox("widthButton", self.bottomtray, val=self.linewidth,hide=False,size=(bsize * 2,bsize))
         self.widthButton.setSuffix("px")
-        self.fontsizeButton = self._spinbox("fontsizeButton",self.bottomtray, val=self.fontsize,vmax=999, hide=False,double=True,size=(65,22))
+        self.fontsizeButton = self._spinbox("fontsizeButton",self.bottomtray, val=self.fontsize,vmax=999, hide=False,double=True,size=(bsize * 3,bsize))
         self.applyButton = self._pushbutton("applyButton", self.toptray, hide=False, icon='Draft_Apply',width=22)
 
         QtCore.QObject.connect(self.wplabel,QtCore.SIGNAL("pressed()"),self.selectplane)
@@ -1004,6 +1007,9 @@ class DraftToolBar:
 
     def modUi(self):
         self.isCopy.show()
+        p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Draft")
+        if p.GetBool("copymode",True):
+            self.isCopy.setChecked(p.GetBool("copymodeValue",False))
         self.continueCmd.show()
 
     def vertUi(self,addmode=True):
@@ -1054,6 +1060,10 @@ class DraftToolBar:
         self.relativeMode = bool(val)
         if (not self.taskmode) or self.isTaskOn:
             self.isRelative.show()
+            
+    def setCopymode(self,val=0):
+        p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Draft")
+        p.SetBool("copymodeValue",bool(val))
 
     def relocate(self):
         "relocates the right-aligned buttons depending on the toolbar size"
@@ -1793,7 +1803,105 @@ class DraftToolBar:
         else:
             self.draftWidget.setVisible(False)
             self.draftWidget.toggleViewAction().setVisible(False)
-                        
+            
+            
+class FacebinderTaskPanel:
+    '''A TaskPanel for the facebinder'''
+    def __init__(self):
+        
+        self.obj = None
+        self.form = QtGui.QWidget()
+        self.form.setObjectName("FacebinderTaskPanel")
+        self.grid = QtGui.QGridLayout(self.form)
+        self.grid.setObjectName("grid")
+        self.title = QtGui.QLabel(self.form)
+        self.grid.addWidget(self.title, 0, 0, 1, 2)
+
+        # tree
+        self.tree = QtGui.QTreeWidget(self.form)
+        self.grid.addWidget(self.tree, 1, 0, 1, 2)
+        self.tree.setColumnCount(2)
+        self.tree.setHeaderLabels(["Name","Subelement"])
+
+        # buttons
+        self.addButton = QtGui.QPushButton(self.form)
+        self.addButton.setObjectName("addButton")
+        self.addButton.setIcon(QtGui.QIcon(":/icons/Arch_Add.svg"))
+        self.grid.addWidget(self.addButton, 3, 0, 1, 1)
+
+        self.delButton = QtGui.QPushButton(self.form)
+        self.delButton.setObjectName("delButton")
+        self.delButton.setIcon(QtGui.QIcon(":/icons/Arch_Remove.svg"))
+        self.grid.addWidget(self.delButton, 3, 1, 1, 1)
+
+        QtCore.QObject.connect(self.addButton, QtCore.SIGNAL("clicked()"), self.addElement)
+        QtCore.QObject.connect(self.delButton, QtCore.SIGNAL("clicked()"), self.removeElement)
+        self.update()
+
+    def isAllowedAlterSelection(self):
+        return True
+
+    def isAllowedAlterView(self):
+        return True
+
+    def getStandardButtons(self):
+        return int(QtGui.QDialogButtonBox.Ok)
+
+    def update(self):
+        'fills the treewidget'
+        self.tree.clear()
+        if self.obj:
+            for f in self.obj.Faces:
+                item = QtGui.QTreeWidgetItem(self.tree)
+                item.setText(0,f[0].Name)
+                item.setIcon(0,QtGui.QIcon(":/icons/Tree_Part.svg"))
+                item.setText(1,f[1])
+        self.retranslateUi(self.form)
+
+    def addElement(self):
+        if self.obj:
+            for sel in FreeCADGui.Selection.getSelectionEx():
+                if sel.HasSubObjects:
+                    obj = sel.Object
+                    for elt in sel.SubElementNames:
+                        if "Face" in elt:
+                            flist = self.obj.Faces
+                            found = False
+                            for face in flist:
+                                if (face[0] == obj.Name) and (face[1] == elt):
+                                    found = True
+                            if not found:
+                                flist.append((obj,elt))
+                                self.obj.Faces = flist
+                                FreeCAD.ActiveDocument.recompute()
+            self.update()
+
+    def removeElement(self):
+        if self.obj:
+            it = self.tree.currentItem()
+            if it:
+                obj = FreeCAD.ActiveDocument.getObject(str(it.text(0)))
+                elt = str(it.text(1))
+                flist = []
+                for face in self.obj.Faces:
+                    if (face[0].Name != obj.Name) or (face[1] != elt):
+                        flist.append(face)
+                self.obj.Faces = flist
+                FreeCAD.ActiveDocument.recompute()
+            self.update()
+
+    def accept(self):
+        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        return True
+
+    def retranslateUi(self, TaskPanel):
+        TaskPanel.setWindowTitle(QtGui.QApplication.translate("draft", "Faces", None, QtGui.QApplication.UnicodeUTF8))
+        self.delButton.setText(QtGui.QApplication.translate("draft", "Remove", None, QtGui.QApplication.UnicodeUTF8))
+        self.addButton.setText(QtGui.QApplication.translate("draft", "Add", None, QtGui.QApplication.UnicodeUTF8))
+        self.title.setText(QtGui.QApplication.translate("draft", "Facebinder elements", None, QtGui.QApplication.UnicodeUTF8))
+
+
 if not hasattr(FreeCADGui,"draftToolBar"):
     FreeCADGui.draftToolBar = DraftToolBar()
 #----End of Python Features Definitions----#

@@ -60,8 +60,8 @@ QVariant PropertyConstraintListItem::toString(const QVariant& prop) const
 
 void PropertyConstraintListItem::initialize()
 {
-    const Sketcher::PropertyConstraintList* item = static_cast<const Sketcher::PropertyConstraintList*>(getPropertyData()[0]);
-    const std::vector< Sketcher::Constraint * > &vals = item->getValues();
+    const Sketcher::PropertyConstraintList* list = static_cast<const Sketcher::PropertyConstraintList*>(getPropertyData()[0]);
+    const std::vector< Sketcher::Constraint * > &vals = list->getValues();
 
     int id = 1;
     int iNamed = 0;
@@ -101,6 +101,9 @@ void PropertyConstraintListItem::initialize()
                 item->setObjectName(internalName);
                 this->appendChild(item);
             }
+            
+            item->bind(list->createPath(id-1));
+            item->setAutoApply(false);
         }
     }
 
@@ -150,13 +153,13 @@ QVariant PropertyConstraintListItem::value(const App::Property* prop) const
 
             Base::Quantity quant;
             if ((*it)->Type == Sketcher::Angle ) {
-                double datum = Base::toDegrees<double>((*it)->Value);
+                double datum = Base::toDegrees<double>((*it)->getValue());
                 quant.setUnit(Base::Unit::Angle);
                 quant.setValue(datum);
             }
             else {
                 quant.setUnit(Base::Unit::Length);
-                quant.setValue((*it)->Value);
+                quant.setValue((*it)->getValue());
             }
 
             quantities.append(quant);
@@ -228,7 +231,7 @@ bool PropertyConstraintListItem::event (QEvent* ev)
                         double datum = quant.getValue();
                         if ((*it)->Type == Sketcher::Angle)
                             datum = Base::toRadians<double>(datum);
-                        const_cast<Sketcher::Constraint *>((*it))->Value = datum;
+                        const_cast<Sketcher::Constraint *>((*it))->setValue(datum);
                         item->set1Value(id,(*it));
                         break;
                     }

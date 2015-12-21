@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -26,6 +26,7 @@
 #ifndef _PreComp_
 #endif
 
+#include "ViewProviderImport.h"
 #include <Mod/Part/App/PartFeature.h>
 
 /// Here the FreeCAD includes sorted by Base,App,Gui......
@@ -35,8 +36,6 @@
 #include <Base/Sequencer.h>
 #include <Gui/View3DInventorViewer.h>
 #include <App/Application.h>
-
-#include "ViewProviderImport.h"
 
 
 using namespace PartGui;

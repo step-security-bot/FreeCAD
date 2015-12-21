@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2002 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2002 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -24,10 +24,10 @@
 #include "PreCompiled.h"
 
 #include <QMessageBox>
+#include "ViewProvider.h"
 #include "DlgSettings3DViewPartImp.h"
 #include "ui_DlgSettings3DViewPart.h"
 
-#include "ViewProvider.h"
 #include <Gui/PrefWidgets.h>
 #include <Gui/Application.h>
 #include <Gui/Document.h>

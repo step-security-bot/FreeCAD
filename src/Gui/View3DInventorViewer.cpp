@@ -582,10 +582,10 @@ void View3DInventorViewer::initialize()
 void View3DInventorViewer::OnChange(Gui::SelectionSingleton::SubjectType& rCaller,
                                     Gui::SelectionSingleton::MessageType Reason)
 {
-    if(Reason.Type == SelectionChanges::AddSelection ||
-            Reason.Type == SelectionChanges::RmvSelection ||
-            Reason.Type == SelectionChanges::SetSelection ||
-            Reason.Type == SelectionChanges::ClrSelection) {
+    if (Reason.Type == SelectionChanges::AddSelection ||
+        Reason.Type == SelectionChanges::RmvSelection ||
+        Reason.Type == SelectionChanges::SetSelection ||
+        Reason.Type == SelectionChanges::ClrSelection) {
         SoFCSelectionAction cAct(Reason);
         cAct.apply(pcViewProviderRoot);
     }
@@ -2644,7 +2644,7 @@ void View3DInventorViewer::removeEventCallback(SoType eventtype, SoEventCallback
 ViewProvider* View3DInventorViewer::getViewProviderByPath(SoPath* path) const
 {
     // FIXME Use the viewprovider map introduced for the selection
-    for(std::set<ViewProvider*>::const_iterator it = _ViewProviderSet.begin(); it != _ViewProviderSet.end(); it++) {
+    for(std::set<ViewProvider*>::const_iterator it = _ViewProviderSet.begin(); it != _ViewProviderSet.end(); ++it) {
         for(int i = 0; i<path->getLength(); i++) {
             SoNode* node = path->getNode(i);
 
@@ -2679,7 +2679,7 @@ std::vector<ViewProvider*> View3DInventorViewer::getViewProvidersOfType(const Ba
 {
     std::vector<ViewProvider*> views;
 
-    for(std::set<ViewProvider*>::const_iterator it = _ViewProviderSet.begin(); it != _ViewProviderSet.end(); it++) {
+    for(std::set<ViewProvider*>::const_iterator it = _ViewProviderSet.begin(); it != _ViewProviderSet.end(); ++it) {
         if((*it)->getTypeId().isDerivedFrom(typeId)) {
             views.push_back(*it);
         }

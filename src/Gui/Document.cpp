@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -127,8 +127,8 @@ Document::Document(App::Document* pcDocument,Application * app)
         (boost::bind(&Gui::Document::slotDeletedObject, this, _1));
     d->connectCngObject = pcDocument->signalChangedObject.connect
         (boost::bind(&Gui::Document::slotChangedObject, this, _1, _2));
-    d->connectRenObject = pcDocument->signalRenamedObject.connect
-        (boost::bind(&Gui::Document::slotRenamedObject, this, _1));
+    d->connectRenObject = pcDocument->signalRelabelObject.connect
+        (boost::bind(&Gui::Document::slotRelabelObject, this, _1));
     d->connectActObject = pcDocument->signalActivatedObject.connect
         (boost::bind(&Gui::Document::slotActivatedObject, this, _1));
     d->connectSaveDocument = pcDocument->signalSaveDocument.connect
@@ -529,11 +529,11 @@ void Document::slotChangedObject(const App::DocumentObject& Obj, const App::Prop
     setModified(true);
 }
 
-void Document::slotRenamedObject(const App::DocumentObject& Obj)
+void Document::slotRelabelObject(const App::DocumentObject& Obj)
 {
     ViewProvider* viewProvider = getViewProvider(&Obj);
     if (viewProvider && viewProvider->isDerivedFrom(ViewProviderDocumentObject::getClassTypeId())) {
-        signalRenamedObject(*(static_cast<ViewProviderDocumentObject*>(viewProvider)));
+        signalRelabelObject(*(static_cast<ViewProviderDocumentObject*>(viewProvider)));
     }
 }
 
@@ -629,7 +629,7 @@ bool Document::saveAs(void)
 
     QString exe = qApp->applicationName();
     QString fn = FileDialog::getSaveFileName(getMainWindow(), QObject::tr("Save %1 Document").arg(exe), 
-                                             QString(), QObject::tr("%1 document (*.FCStd)").arg(exe));
+        QString(), QString::fromLatin1("%1 %2 (*.FCStd)").arg(exe).arg(QObject::tr("Document")));
     if (!fn.isEmpty()) {
         QFileInfo fi;
         fi.setFile(fn);
@@ -1139,42 +1139,55 @@ bool Document::canClose ()
             QObject::tr("The document is not closable for the moment."));
         return false;
     }
-    else if (!Gui::Control().isAllowedAlterDocument()) {
-        std::string name = Gui::Control().activeDialog()->getDocumentName();
-        if (name == this->getDocument()->getName()) {
-            QMessageBox::warning(getActiveView(),
-                QObject::tr("Document not closable"),
-                QObject::tr("The document is in editing mode and thus cannot be closed for the moment.\n"
-                            "You either have to finish or cancel the editing in the task panel."));
-            Gui::TaskView::TaskDialog* dlg = Gui::Control().activeDialog();
-            if (dlg) Gui::Control().showDialog(dlg);
-            return false;
+    //else if (!Gui::Control().isAllowedAlterDocument()) {
+    //    std::string name = Gui::Control().activeDialog()->getDocumentName();
+    //    if (name == this->getDocument()->getName()) {
+    //        QMessageBox::warning(getActiveView(),
+    //            QObject::tr("Document not closable"),
+    //            QObject::tr("The document is in editing mode and thus cannot be closed for the moment.\n"
+    //                        "You either have to finish or cancel the editing in the task panel."));
+    //        Gui::TaskView::TaskDialog* dlg = Gui::Control().activeDialog();
+    //        if (dlg) Gui::Control().showDialog(dlg);
+    //        return false;
+    //    }
+    //}
+
+    bool ok = true;
+    if (isModified()) {
+        QMessageBox box(getActiveView());
+        box.setIcon(QMessageBox::Question);
+        box.setWindowTitle(QObject::tr("Unsaved document"));
+        box.setText(QObject::tr("Do you want to save your changes to document '%1' before closing?")
+                    .arg(QString::fromUtf8(getDocument()->Label.getValue())));
+        box.setInformativeText(QObject::tr("If you don't save, your changes will be lost."));
+        box.setStandardButtons(QMessageBox::Discard | QMessageBox::Cancel | QMessageBox::Save);
+        box.setDefaultButton(QMessageBox::Save);
+
+        switch (box.exec())
+        {
+        case QMessageBox::Save:
+            ok = save();
+            break;
+        case QMessageBox::Discard:
+            ok = true;
+            break;
+        case QMessageBox::Cancel:
+            ok = false;
+            break;
         }
     }
 
-    if (!isModified())
-        return true;
-    bool ok = true;
-    QMessageBox box(getActiveView());
-    box.setIcon(QMessageBox::Question);
-    box.setWindowTitle(QObject::tr("Unsaved document"));
-    box.setText(QObject::tr("Do you want to save your changes to document '%1' before closing?")
-                .arg(QString::fromUtf8(getDocument()->Label.getValue())));
-    box.setInformativeText(QObject::tr("If you don't save, your changes will be lost."));
-    box.setStandardButtons(QMessageBox::Discard | QMessageBox::Cancel | QMessageBox::Save);
-    box.setDefaultButton(QMessageBox::Save);
-
-    switch (box.exec())
-    {
-    case QMessageBox::Save:
-        ok = save();
-        break;
-    case QMessageBox::Discard:
-        ok = true;
-        break;
-    case QMessageBox::Cancel:
-        ok = false;
-        break;
+    if (ok) {
+        // If a tsk dialog is open that doesn't allow other commands to modify
+        // the document it must be closed by resetting the edit mode of the
+        // corresponding view provider.
+        if (!Gui::Control().isAllowedAlterDocument()) {
+            std::string name = Gui::Control().activeDialog()->getDocumentName();
+            if (name == this->getDocument()->getName()) {
+                if (this->getInEdit())
+                    this->resetEdit();
+            }
+        }
     }
 
     return ok;

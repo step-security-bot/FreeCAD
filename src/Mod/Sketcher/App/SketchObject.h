@@ -23,6 +23,7 @@
 #ifndef SKETCHER_SKETCHOBJECT_H
 #define SKETCHER_SKETCHOBJECT_H
 
+#include <boost/signals/connection.hpp>
 #include <App/PropertyStandard.h>
 #include <App/PropertyFile.h>
 #include <App/FeaturePython.h>
@@ -96,6 +97,9 @@ public:
      *  external geometry
      */
     int delExternal(int ExtGeoId);
+    
+    /** deletes all external geometry */
+    int delAllExternal();
 
     /** returns a pointer to a given Geometry index, possible indexes are:
      *  id>=0 for user defined geometries,
@@ -118,6 +122,11 @@ public:
 
     /// returns non zero if the sketch contains conflicting constraints
     int hasConflicts(void) const;
+    /** 
+     * sets the geometry of sketchObject as the solvedsketch geometry
+     * returns the DoF of such a geometry.
+     */
+    int setUpSketch();
 
     /** solves the sketch and updates the geometry, but not all the dependent features (does not recompute)
         When a recompute is necessary, recompute triggers execute() which solves the sketch and updates all dependent features
@@ -248,6 +257,13 @@ protected:
     /// get called by the container when a property has changed
     virtual void onChanged(const App::Property* /*prop*/);
     virtual void onDocumentRestored();
+    
+    virtual void setExpression(const App::ObjectIdentifier &path, boost::shared_ptr<App::Expression> expr, const char * comment = 0);
+
+    std::string validateExpression(const App::ObjectIdentifier &path, boost::shared_ptr<const App::Expression> expr);
+
+    void constraintsRenamed(const std::map<App::ObjectIdentifier, App::ObjectIdentifier> &renamed);
+    void constraintsRemoved(const std::set<App::ObjectIdentifier> &removed);
 
 private:
     std::vector<Part::Geometry *> ExternalGeo;
@@ -270,6 +286,9 @@ private:
 
     std::vector<int> lastConflicting;
     std::vector<int> lastRedundant;
+
+    boost::signals::scoped_connection constraintsRenamedConn;
+    boost::signals::scoped_connection constraintsRemovedConn;
 
     bool AutoLockTangencyAndPerpty(Constraint* cstr, bool bForce = false, bool bLock = true);
 };

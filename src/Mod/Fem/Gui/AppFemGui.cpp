@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -37,6 +37,7 @@
 #include "ViewProviderFemMeshShape.h"
 #include "ViewProviderFemMeshShapeNetgen.h"
 #include "ViewProviderAnalysis.h"
+#include "ViewProviderSolver.h"
 #include "ViewProviderSetNodes.h"
 #include "ViewProviderSetElements.h"
 #include "ViewProviderSetFaces.h"
@@ -68,7 +69,7 @@ extern struct PyMethodDef FemGui_Import_methods[];
 
 /* Python entry */
 extern "C" {
-void FemGuiExport initFemGui()  
+void FemGuiExport initFemGui()
 {
     if (!Gui::Application::Instance) {
         PyErr_SetString(PyExc_ImportError, "Cannot load Gui module in console application.");
@@ -88,6 +89,8 @@ void FemGuiExport initFemGui()
     FemGui::ViewProviderFemMesh                ::init();
     FemGui::ViewProviderFemMeshShape           ::init();
     FemGui::ViewProviderFemMeshShapeNetgen     ::init();
+    FemGui::ViewProviderSolver                 ::init();
+    FemGui::ViewProviderSolverPython           ::init();
     FemGui::ViewProviderSetNodes               ::init();
     FemGui::ViewProviderSetElements            ::init();
     FemGui::ViewProviderSetFaces               ::init();
@@ -101,9 +104,6 @@ void FemGuiExport initFemGui()
     FemGui::ViewProviderFemConstraintPulley    ::init();
     FemGui::ViewProviderResult                 ::init();
     FemGui::ViewProviderResultPython           ::init();
-
-    Base::Interpreter().loadModule("MechanicalAnalysis");
-    Base::Interpreter().loadModule("MechanicalMaterial");
 
     // register preferences pages
     new Gui::PrefPageProducer<FemGui::DlgSettingsFemImp> ("FEM");

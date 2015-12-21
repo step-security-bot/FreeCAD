@@ -1,5 +1,5 @@
 /***************************************************************************
- *   (c) Jürgen Riegel (juergen.riegel@web.de) 2002                        *
+ *   (c) JÃ¼rgen Riegel (juergen.riegel@web.de) 2002                        *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -222,11 +222,6 @@ PyMethodDef ParameterGrpPy::Methods[] = {
 
     {NULL, NULL, 0, NULL}		/* Sentinel */
 };
-
-//--------------------------------------------------------------------------
-// Parents structure
-//--------------------------------------------------------------------------
-PyParentObject ParameterGrpPy::Parents[] = {&PyObjectBase::Type,&ParameterGrpPy::Type, NULL};     
 
 //--------------------------------------------------------------------------
 // constructor

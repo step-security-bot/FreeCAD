@@ -17,7 +17,7 @@
 
 #include <Base/Console.h>
 #include "Sheet.h"
-#include "Expression.h"
+#include "SpreadsheetExpression.h"
 
 
 /* registration table  */
@@ -37,15 +37,7 @@ void SpreadsheetExport initSpreadsheet() {
     Spreadsheet::PropertySheet::init();
 
     Spreadsheet::Sheet::init();
-    Spreadsheet::Expression::init();
-    Spreadsheet::UnitExpression::init();
-    Spreadsheet::NumberExpression::init();
-    Spreadsheet::ConstantExpression::init();
-    Spreadsheet::FunctionExpression::init();
-    Spreadsheet::OperatorExpression::init();
-    Spreadsheet::VariableExpression::init();
-    Spreadsheet::ConditionalExpression::init();
-    Spreadsheet::StringExpression::init();
+    Spreadsheet::AggregateFunctionExpression::init();
     Spreadsheet::RangeExpression::init();
 
     return;

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -259,6 +259,12 @@ public:
     /** This method returns a string representation of the property
      */
     const Base::Placement &getValue(void) const;
+
+    /// Get valid paths for this property; used by auto completer
+    void getPaths(std::vector<ObjectIdentifier> &paths) const;
+
+    void setPathValue(const ObjectIdentifier &path, const boost::any &value);
+
     const char* getEditorName(void) const {
         return "Gui::PropertyEditor::PropertyPlacementItem";
     }

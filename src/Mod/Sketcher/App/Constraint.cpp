@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2008     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2008     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -23,11 +23,12 @@
 
 #include "PreCompiled.h"
 #ifndef _PreComp_
+# include <cmath>
 #endif
 
 #include <Base/Writer.h>
 #include <Base/Reader.h>
-
+#include <QDateTime>
 
 #include "Constraint.h"
 #include "ConstraintPy.h"
@@ -42,10 +43,10 @@ TYPESYSTEM_SOURCE(Sketcher::Constraint, Base::Persistence)
 const int Constraint::GeoUndef = -2000;
 
 Constraint::Constraint()
-: Type(None),
+: Value(0.0),
+  Type(None),
   AlignmentType(Undef),
   Name(""),
-  Value(0.0),
   First(GeoUndef),
   FirstPos(none),
   Second(GeoUndef),
@@ -56,13 +57,24 @@ Constraint::Constraint()
   LabelPosition(0.f),
   isDriving(true)
 {
+    // Initialize a random number generator, to avoid Valgrind false positives.
+    static boost::mt19937 ran;
+    static bool seeded = false;
+
+    if (!seeded) {
+        ran.seed(QDateTime::currentMSecsSinceEpoch() & 0xffffffff);
+        seeded = true;
+    }
+    static boost::uuids::basic_random_generator<boost::mt19937> gen(&ran);
+
+    tag = gen();
 }
 
 Constraint::Constraint(const Constraint& from)
-: Type(from.Type),
+: Value(from.Value),
+  Type(from.Type),
   AlignmentType(from.AlignmentType),
   Name(from.Name),
-  Value(from.Value),
   First(from.First),
   FirstPos(from.FirstPos),
   Second(from.Second),
@@ -71,7 +83,8 @@ Constraint::Constraint(const Constraint& from)
   ThirdPos(from.ThirdPos),
   LabelDistance(from.LabelDistance),
   LabelPosition(from.LabelPosition),
-  isDriving(from.isDriving)
+  isDriving(from.isDriving),
+  tag(from.tag)
 {
 }
 
@@ -84,9 +97,59 @@ Constraint *Constraint::clone(void) const
     return new Constraint(*this);
 }
 
+Constraint *Constraint::copy(void) const
+{
+    Constraint *temp = new Constraint();
+    temp->Value = this->Value;
+    temp->Type = this->Type;
+    temp->AlignmentType = this->AlignmentType;
+    temp->Name = this->Name;
+    temp->First = this->First;
+    temp->FirstPos = this->FirstPos;
+    temp->Second = this->Second;
+    temp->SecondPos = this->SecondPos;
+    temp->Third = this->Third;
+    temp->ThirdPos = this->ThirdPos;
+    temp->LabelDistance = this->LabelDistance;
+    temp->LabelPosition = this->LabelPosition;
+    temp->isDriving = this->isDriving;
+    // Do not copy tag, otherwise it is considered a clone, and a "rename" by the expression engine.
+    return temp;
+}
+
 PyObject *Constraint::getPyObject(void)
 {
     return new ConstraintPy(new Constraint(*this));
+}
+
+void Constraint::setValue(double newValue)
+{
+    Value = newValue;
+}
+
+double Constraint::getValue() const
+{
+    return Value;
+}
+
+double Constraint::getPresentationValue() const
+{
+    switch (Type) {
+    case Distance:
+    case Radius:
+        return std::abs(Value);
+    case DistanceX:
+    case DistanceY:
+        if (FirstPos == Sketcher::none || Second != Sketcher::Constraint::GeoUndef)
+            return std::abs(Value);
+        else
+            return Value;
+    case Angle:
+    case SnellsLaw:
+        return Value;
+    default:
+        return Value;
+    }
 }
 
 unsigned int Constraint::getMemSize (void) const

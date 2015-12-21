@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2009     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2009     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -524,6 +524,45 @@ std::map<int, int> FemMesh::getccxVolumesByFace(const TopoDS_Face &face) const
     return result;
 }
 
+std::set<int> FemMesh::getNodesBySolid(const TopoDS_Solid &solid) const
+{
+    std::set<int> result;
+
+    Bnd_Box box;
+    BRepBndLib::Add(solid, box);
+    // limit where the mesh node belongs to the solid:
+    double limit = box.SquareExtent()/10000.0;
+    //double limit = BRep_Tool::Tolerance(solid);   // does not compile --> no matching function for call to 'BRep_Tool::Tolerance(const TopoDS_Solid&)'
+    box.Enlarge(limit);
+
+    // get the current transform of the FemMesh
+    const Base::Matrix4D Mtrx(getTransform());
+
+    SMDS_NodeIteratorPtr aNodeIter = myMesh->GetMeshDS()->nodesIterator();
+    while (aNodeIter->more()) {
+        const SMDS_MeshNode* aNode = aNodeIter->next();
+        Base::Vector3d vec(aNode->X(),aNode->Y(),aNode->Z());
+        // Apply the matrix to hold the BoundBox in absolute space.
+        vec = Mtrx * vec;
+
+        if (!box.IsOut(gp_Pnt(vec.x,vec.y,vec.z))) {
+            // create a vertex
+            BRepBuilderAPI_MakeVertex aBuilder(gp_Pnt(vec.x,vec.y,vec.z));
+            TopoDS_Shape s = aBuilder.Vertex();
+            // measure distance
+            BRepExtrema_DistShapeShape measure(solid,s);
+            measure.Perform();
+            if (!measure.IsDone() || measure.NbSolution() < 1)
+                continue;
+
+            if (measure.Value() < limit)
+                result.insert(aNode->GetID());
+        }
+    }
+
+    return result;
+}
+
 std::set<int> FemMesh::getNodesByFace(const TopoDS_Face &face) const
 {
     std::set<int> result;
@@ -776,8 +815,8 @@ void FemMesh::readNastran(const std::string &Filename)
 
 	for(unsigned int i=0;i<all_elements.size();i++)
 	{
-		//Die Reihenfolge wie hier die Elemente hinzugefügt werden ist sehr wichtig. 
-		//Ansonsten ist eine konsistente Datenstruktur nicht möglich
+		//Die Reihenfolge wie hier die Elemente hinzugefÃ¼gt werden ist sehr wichtig. 
+		//Ansonsten ist eine konsistente Datenstruktur nicht mÃ¶glich
 		//meshds->AddVolumeWithID
 		//(
 		//	meshds->FindNode(all_elements[i][0]),
@@ -855,7 +894,7 @@ void FemMesh::writeABAQUS(const std::string &Filename) const
         // dimension 1
         //
         std::vector<int> b31 = boost::assign::list_of(0)(1);
-        std::vector<int> b32 = boost::assign::list_of(0)(1)(2);
+        std::vector<int> b32 = boost::assign::list_of(0)(2)(1);
 
         elemOrderMap.insert(std::make_pair("B31", b31));
         edgeTypeMap.insert(std::make_pair(elemOrderMap["B31"].size(), "B31"));
@@ -911,7 +950,12 @@ void FemMesh::writeABAQUS(const std::string &Filename) const
 
     std::ofstream anABAQUS_Output;
     anABAQUS_Output.open(Filename.c_str());
+
+    // add nodes
+    //
     anABAQUS_Output << "*Node, NSET=Nall" << std::endl;
+    typedef std::map<int, Base::Vector3d> VertexMap;
+    VertexMap vertexMap;
 
     //Extract Nodes and Elements of the current SMESH datastructure
     SMDS_NodeIteratorPtr aNodeIter = myMesh->GetMeshDS()->nodesIterator();
@@ -921,10 +965,16 @@ void FemMesh::writeABAQUS(const std::string &Filename) const
         const SMDS_MeshNode* aNode = aNodeIter->next();
         current_node.Set(aNode->X(),aNode->Y(),aNode->Z());
         current_node = _Mtrx * current_node;
-        anABAQUS_Output << aNode->GetID() << ", "
-            << current_node.x << ", "
-            << current_node.y << ", "
-            << current_node.z << std::endl;
+        vertexMap[aNode->GetID()] = current_node;
+    }
+
+    // This way we get sorted output.
+    // See http://forum.freecadweb.org/viewtopic.php?f=18&t=12646&start=40#p103004
+    for (VertexMap::iterator it = vertexMap.begin(); it != vertexMap.end(); ++it) {
+        anABAQUS_Output << it->first << ", "
+            << it->second.x << ", "
+            << it->second.y << ", "
+            << it->second.z << std::endl;
     }
 
     typedef std::map<int, std::vector<int> > NodesMap;
@@ -1262,8 +1312,8 @@ struct Fem::FemMesh::FemMeshInfo FemMesh::getInfo(void) const{
 }
 //		for(unsigned int i=0;i<all_elements.size();i++)
 //		{
-//			//Die Reihenfolge wie hier die Elemente hinzugefügt werden ist sehr wichtig. 
-//			//Ansonsten ist eine konsistente Datenstruktur nicht möglich
+//			//Die Reihenfolge wie hier die Elemente hinzugefÃ¼gt werden ist sehr wichtig. 
+//			//Ansonsten ist eine konsistente Datenstruktur nicht mÃ¶glich
 //			meshds->AddVolumeWithID(
 //				meshds->FindNode(all_elements[i][0]),
 //				meshds->FindNode(all_elements[i][2]),

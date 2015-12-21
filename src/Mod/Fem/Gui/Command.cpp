@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -207,6 +207,51 @@ bool CmdFemAddPart::isActive(void)
 
 //=====================================================================================
 
+DEF_STD_CMD_A(CmdFemCreateSolver);
+
+CmdFemCreateSolver::CmdFemCreateSolver()
+  : Command("Fem_CreateSolver")
+{
+    sAppModule      = "Fem";
+    sGroup          = QT_TR_NOOP("Fem");
+    sMenuText       = QT_TR_NOOP("Add a solver to the Analysis");
+    sToolTipText    = QT_TR_NOOP("Add a solver to the Analysis");
+    sWhatsThis      = "Fem_CreateSolver";
+    sStatusTip      = sToolTipText;
+    sPixmap         = "fem-solver";
+}
+
+void CmdFemCreateSolver::activated(int iMsg)
+{
+#ifndef FCWithNetgen
+    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+            QObject::tr("Your FreeCAD is build without NETGEN support. Meshing will not work...."));
+    return;
+#endif 
+
+    Fem::FemAnalysis        *Analysis;
+
+    if(getConstraintPrerequisits(&Analysis))
+        return;
+
+    std::string FeatName = getUniqueObjectName("Solver");
+
+    openCommand("Create solver for FEM or CFD analysis");
+    doCommand(Doc,"App.activeDocument().addObject(\"Fem::FemSolverObject\",\"%s\")",FeatName.c_str());
+    doCommand(Doc,"App.activeDocument().%s.Member = App.activeDocument().%s.Member + [App.activeDocument().%s]",Analysis->getNameInDocument(),Analysis->getNameInDocument(),FeatName.c_str());
+    updateActive();
+
+    doCommand(Gui,"Gui.activeDocument().setEdit('%s')",FeatName.c_str());
+}
+
+bool CmdFemCreateSolver::isActive(void)
+{
+    return hasActiveDocument();
+}
+
+//=====================================================================================
+
+
 DEF_STD_CMD_A(CmdFemConstraintBearing);
 
 CmdFemConstraintBearing::CmdFemConstraintBearing()
@@ -240,7 +285,7 @@ void CmdFemConstraintBearing::activated(int iMsg)
 
 bool CmdFemConstraintBearing::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -278,7 +323,7 @@ void CmdFemConstraintFixed::activated(int iMsg)
 
 bool CmdFemConstraintFixed::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -317,7 +362,7 @@ void CmdFemConstraintForce::activated(int iMsg)
 
 bool CmdFemConstraintForce::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -357,7 +402,7 @@ void CmdFemConstraintPressure::activated(int iMsg)
 
 bool CmdFemConstraintPressure::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -395,7 +440,7 @@ void CmdFemConstraintGear::activated(int iMsg)
 
 bool CmdFemConstraintGear::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -438,7 +483,7 @@ void CmdFemConstraintPulley::activated(int iMsg)
 
 bool CmdFemConstraintPulley::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 // #####################################################################################################
@@ -643,6 +688,7 @@ void CreateFemCommands(void)
     Gui::CommandManager &rcCmdMgr = Gui::Application::Instance->commandManager();
     //rcCmdMgr.addCommand(new CmdFemCreateAnalysis());
     rcCmdMgr.addCommand(new CmdFemAddPart());
+    //rcCmdMgr.addCommand(new CmdFemCreateSolver()); // Solver will be extended and created in python
     rcCmdMgr.addCommand(new CmdFemCreateNodesSet());
     rcCmdMgr.addCommand(new CmdFemDefineNodesSet());
     rcCmdMgr.addCommand(new CmdFemConstraintBearing());

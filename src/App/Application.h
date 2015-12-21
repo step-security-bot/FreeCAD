@@ -1,5 +1,5 @@
 /***************************************************************************
- *   (c) Jürgen Riegel (juergen.riegel@web.de) 2002                        *   
+ *   (c) JÃ¼rgen Riegel (juergen.riegel@web.de) 2002                        *   
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -135,10 +135,21 @@ public:
     boost::signal<void (const App::DocumentObject&)> signalDeletedObject;
     /// signal on changed Object
     boost::signal<void (const App::DocumentObject&, const App::Property&)> signalChangedObject;
-    /// signal on renamed Object
-    boost::signal<void (const App::DocumentObject&)> signalRenamedObject;
+    /// signal on relabeled Object
+    boost::signal<void (const App::DocumentObject&)> signalRelabelObject;
     /// signal on activated Object
     boost::signal<void (const App::DocumentObject&)> signalActivatedObject;
+    //@}
+
+    /** @name Signals of property changes
+     * These signals are emitted on property additions or removal.
+     * The changed object can be any sub-class of PropertyContainer.
+     */
+    //@{
+    /// signal on adding a dynamic property
+    boost::signal<void (const App::Property&)> signalAppendDynamicProperty;
+    /// signal on about removing a dynamic property
+    boost::signal<void (const App::Property&)> signalRemoveDynamicProperty;
     //@}
 
 
@@ -216,6 +227,8 @@ public:
     static void destruct(void);
     static void destructObserver(void);
     static void processCmdLineFiles(void);
+    static std::list<std::string> getCmdLineFiles();
+    static void processFiles(const std::list<std::string>&);
     static void runApplication(void);
     friend Application &GetApplication(void);
     static std::map<std::string,std::string> &Config(void){return mConfig;}
@@ -251,7 +264,7 @@ protected:
     void slotNewObject(const App::DocumentObject&);
     void slotDeletedObject(const App::DocumentObject&);
     void slotChangedObject(const App::DocumentObject&, const App::Property& Prop);
-    void slotRenamedObject(const App::DocumentObject&);
+    void slotRelabelObject(const App::DocumentObject&);
     void slotActivatedObject(const App::DocumentObject&);
     void slotUndoDocument(const App::Document&);
     void slotRedoDocument(const App::Document&);

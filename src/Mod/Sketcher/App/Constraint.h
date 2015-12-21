@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2008     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2008     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -26,6 +26,8 @@
 
 
 #include <Base/Persistence.h>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
 
 namespace Sketcher
 {
@@ -69,7 +71,8 @@ public:
     Constraint();
     Constraint(const Constraint&);
     virtual ~Constraint();
-    virtual Constraint *clone(void) const;
+    virtual Constraint *clone(void) const; // does copy the tag, it will be treated as a rename by the expression engine.
+    virtual Constraint *copy(void) const; // does not copy the tag, but generates a new one
 
     static const int GeoUndef;
 
@@ -80,13 +83,19 @@ public:
 
     virtual PyObject *getPyObject(void);
 
-    friend class Sketch;
+    void setValue(double newValue);
+    double getPresentationValue() const;
+    double getValue() const;
 
+    friend class Sketch;
+    friend class PropertyConstraintList;
+
+private:
+    double Value;
 public:
     ConstraintType Type;
     InternalAlignmentType AlignmentType;
     std::string Name;
-    double Value;
     int First;
     PointPos FirstPos;
     int Second;
@@ -96,6 +105,9 @@ public:
     float LabelDistance;
     float LabelPosition;
     bool isDriving;
+
+protected:
+    boost::uuids::uuid tag;
 };
 
 } //namespace Sketcher

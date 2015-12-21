@@ -28,11 +28,13 @@
 # include <QMessageBox>
 #endif
 
+#include <Gui/Application.h>
 #include "SheetModel.h"
-#include <Mod/Spreadsheet/App/Expression.h>
+#include <Mod/Spreadsheet/App/SpreadsheetExpression.h>
 #include <Mod/Spreadsheet/App/Utils.h>
 #include "../App/Sheet.h"
 #include <Gui/Command.h>
+#include <Base/Tools.h>
 #include <strstream>
 #include <boost/bind.hpp>
 
@@ -45,6 +47,9 @@ SheetModel::SheetModel(Sheet *_sheet, QObject *parent)
     , sheet(_sheet)
 {
     cellUpdatedConnection = sheet->cellUpdated.connect(bind(&SheetModel::cellUpdated, this, _1));
+
+    ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Spreadsheet");
+    aliasBgColor = QColor(Base::Tools::fromStdString(hGrp->GetASCII("AliasedCellBackgroundColor", "#feff9e")));
 }
 
 SheetModel::~SheetModel()
@@ -155,26 +160,33 @@ QVariant SheetModel::data(const QModelIndex &index, int role) const
         if (deps.size() > 0) {
             v += QString::fromUtf8("Depends on:");
             for (std::set<std::string>::const_iterator i = deps.begin(); i != deps.end(); ++i)
-                v += QString::fromUtf8("\n\t") + QString::fromStdString(*i);
+                v += QString::fromUtf8("\n\t") + Tools::fromStdString(*i);
             v += QString::fromUtf8("\n");
         }
         if (provides.size() > 0) {
             v += QString::fromUtf8("Used by:");
             for (std::set<std::string>::const_iterator i = provides.begin(); i != provides.end(); ++i)
-                v += QString::fromUtf8("\n\t") + QString::fromStdString(*i);
+                v += QString::fromUtf8("\n\t") + Tools::fromStdString(*i);
             v += QString::fromUtf8("\n");
         }
         return QVariant(v);
+    }
+#else
+    if (role == Qt::ToolTipRole) {
+        std::string alias;
+        if (cell->getAlias(alias))
+            return QVariant(Base::Tools::fromStdString(alias));
+        return QVariant();
     }
 #endif
 
     if (cell->hasException()) {
         switch (role) {
         case Qt::ToolTipRole:
-            return QVariant::fromValue(QString::fromStdString(cell->getException()));
+            return QVariant::fromValue(Base::Tools::fromStdString(cell->getException()));
         case Qt::DisplayRole:
 #ifdef DEBUG_DEPS
-            return QVariant::fromValue(QString::fromUtf8("#ERR: %1").arg(QString::fromStdString(cell->getException())));
+            return QVariant::fromValue(QString::fromUtf8("#ERR: %1").arg(Tools::fromStdString(cell->getException())));
 #else
             return QVariant::fromValue(QString::fromUtf8("#ERR"));
 #endif
@@ -213,8 +225,14 @@ QVariant SheetModel::data(const QModelIndex &index, int role) const
     if (role == Qt::BackgroundRole) {
         if (cell->getBackground(color))
             return QVariant::fromValue(QColor(255.0 * color.r, 255.0 * color.g, 255.0 * color.b, 255.0 * color.a));
-        else
-            return QVariant();
+        else {
+            std::string alias;
+            if (cell->getAlias(alias)) {
+                return QVariant::fromValue(aliasBgColor);
+            }
+            else
+                return QVariant();
+        }
     }
 
     int qtAlignment = 0;
@@ -303,13 +321,13 @@ QVariant SheetModel::data(const QModelIndex &index, int role) const
 
             if (cell->getDisplayUnit(displayUnit)) {
                 if (computedUnit.isEmpty() || computedUnit == displayUnit.unit)
-                    v = QString::number(floatProp->getValue() / displayUnit.scaler) + QString::fromStdString(" " + displayUnit.stringRep);
+                    v = QString::number(floatProp->getValue() / displayUnit.scaler) + Base::Tools::fromStdString(" " + displayUnit.stringRep);
                 else
                     v = QString::fromUtf8("ERR: unit");
             }
             else {
                 if (!computedUnit.isEmpty())
-                    v = QString::number(floatProp->getValue()) + QString::fromStdString(" " + getUnitString(computedUnit));
+                    v = QString::number(floatProp->getValue()) + Base::Tools::fromStdString(" " + getUnitString(computedUnit));
                 else
                     v = QString::number(floatProp->getValue());
             }
@@ -346,7 +364,7 @@ QVariant SheetModel::data(const QModelIndex &index, int role) const
             DisplayUnit displayUnit;
 
             if (cell->getDisplayUnit(displayUnit))
-                v = QString::number(floatProp->getValue() / displayUnit.scaler) + QString::fromStdString(" " + displayUnit.stringRep);
+                v = QString::number(floatProp->getValue() / displayUnit.scaler) + Base::Tools::fromStdString(" " + displayUnit.stringRep);
             else
                 v = QString::number(floatProp->getValue());
             return QVariant(v);
@@ -395,7 +413,6 @@ bool SheetModel::setData(const QModelIndex & index, const QVariant & value, int 
 
         try {
             std::string strAddress = address.toString();
-            std::string next_address = CellAddress(address.row() + 1, address.col()).toString();
             QString str = value.toString();
             std::string content;
             Cell * cell = sheet->getCell(address);
@@ -403,13 +420,11 @@ bool SheetModel::setData(const QModelIndex & index, const QVariant & value, int 
             if (cell)
                 cell->getStringContent(content);
 
-            if ( content != str.toStdString()) {
+            if ( content != Base::Tools::toStdString(str)) {
                 str.replace(QString::fromUtf8("'"), QString::fromUtf8("\\'"));
                 Gui::Command::openCommand("Edit cell");
                 Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.set('%s', '%s')", sheet->getNameInDocument(),
                                         strAddress.c_str(), str.toUtf8().constData());
-                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.setPosition('%s')", sheet->getNameInDocument(),
-                                        next_address.c_str());
                 Gui::Command::commitCommand();
                 Gui::Command::doCommand(Gui::Command::Doc, "App.ActiveDocument.recompute()");
             }

@@ -22,11 +22,12 @@
 
 #include "PropertiesDialog.h"
 #include <Base/Tools.h>
-#include <Mod/Spreadsheet/App/Expression.h>
+#include <Mod/Spreadsheet/App/SpreadsheetExpression.h>
 #include <Mod/Spreadsheet/App/Range.h>
 #include <Gui/Command.h>
 #include "ui_PropertiesDialog.h"
 
+using namespace App;
 using namespace Spreadsheet;
 using namespace SpreadsheetGui;
 
@@ -90,9 +91,9 @@ PropertiesDialog::PropertiesDialog(Sheet *_sheet, const std::vector<Range> &_ran
     if (style.find("underline") != style.end())
         ui->styleUnderline->setChecked(true);
 
-    ui->displayUnit->setText(QString::fromStdString(displayUnit.stringRep));
+    ui->displayUnit->setText(Base::Tools::fromStdString(displayUnit.stringRep));
 
-    ui->alias->setText(QString::fromStdString(alias));
+    ui->alias->setText(Base::Tools::fromStdString(alias));
 
     // Colors
     connect(ui->foregroundColor, SIGNAL(colorChanged(QColor)), this, SLOT(foregroundColorChanged(QColor)));
@@ -182,7 +183,7 @@ void PropertiesDialog::displayUnitChanged(const QString & text)
 
     QPalette palette = ui->displayUnit->palette();
     try {
-        std::auto_ptr<UnitExpression> e(ExpressionParser::parseUnit(sheet, text.toUtf8().constData()));
+        std::auto_ptr<UnitExpression> e(Spreadsheet::ExpressionParser::parseUnit(sheet, text.toUtf8().constData()));
 
         displayUnit = DisplayUnit(text.toUtf8().constData(), e->getUnit(), e->getScaler());
         palette.setColor(QPalette::Text, Qt::black);
@@ -212,7 +213,7 @@ void PropertiesDialog::aliasChanged(const QString & text)
         catch (...) {
             aliasOk = true;
             palette.setColor(QPalette::Text, Qt::black);
-            alias = text.toStdString();
+            alias = Base::Tools::toStdString(text);
         }
     }
     else {
@@ -292,6 +293,12 @@ void PropertiesDialog::apply()
         else
             Gui::Command::abortCommand();
     }
+}
+
+void PropertiesDialog::selectAlias()
+{
+    ui->tabWidget->setCurrentIndex(4);
+    ui->alias->setFocus();
 }
 
 #include "moc_PropertiesDialog.cpp"

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Jürgen Riegel (FreeCAD@juergen-riegel.net)         *
+ *   Copyright (c) 2013 JÃ¼rgen Riegel (FreeCAD@juergen-riegel.net)         *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -24,24 +24,16 @@
 #ifndef FEM_ViewProviderAnalysis_H
 #define FEM_ViewProviderAnalysis_H
 
-#include <Gui/ViewProviderGeometryObject.h>
-#include <Gui/ViewProviderBuilder.h>
+#include <Gui/ViewProviderDocumentObject.h>
 #include <Gui/ViewProviderPythonFeature.h>
-
-class SoCoordinate3;
-class SoDrawStyle;  
-class SoIndexedFaceSet; 
-class SoIndexedLineSet; 
-class SoShapeHints;
-class SoMaterialBinding;
+#include <QCoreApplication>
 
 namespace FemGui
 {
 
-
-
 class FemGuiExport ViewProviderFemAnalysis : public Gui::ViewProviderDocumentObject
 {
+    Q_DECLARE_TR_FUNCTIONS(FemGui::ViewProviderFemAnalysis)
     PROPERTY_HEADER(FemGui::ViewProviderAnalysis);
 
 public:
@@ -49,7 +41,7 @@ public:
     ViewProviderFemAnalysis();
 
     /// destructor.
-    ~ViewProviderFemAnalysis();
+    virtual ~ViewProviderFemAnalysis();
 
     virtual bool doubleClicked(void);
 

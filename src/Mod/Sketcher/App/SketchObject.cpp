@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2008     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2008     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -46,6 +46,10 @@
 # include <vector>
 #endif  // #ifndef _PreComp_
 
+#include <boost/bind.hpp>
+
+#include <App/Document.h>
+#include <App/FeaturePythonPyImp.h>
 #include <Base/Writer.h>
 #include <Base/Reader.h>
 #include <Base/Tools.h>
@@ -93,6 +97,11 @@ SketchObject::SketchObject()
     solverNeedsUpdate=false;
     
     noRecomputes=false;
+
+    ExpressionEngine.setValidator(boost::bind(&Sketcher::SketchObject::validateExpression, this, _1, _2));
+
+    constraintsRemovedConn = Constraints.signalConstraintsRemoved.connect(boost::bind(&Sketcher::SketchObject::constraintsRemoved, this, _1));
+    constraintsRenamedConn = Constraints.signalConstraintsRenamed.connect(boost::bind(&Sketcher::SketchObject::constraintsRenamed, this, _1));
 }
 
 SketchObject::~SketchObject()
@@ -131,6 +140,9 @@ App::DocumentObjectExecReturn *SketchObject::execute(void)
     lastHasRedundancies = solvedSketch.hasRedundancies();
     lastConflicting=solvedSketch.getConflicting();
     lastRedundant=solvedSketch.getRedundant();
+    
+    lastSolveTime=0.0;
+    lastSolverStatus=GCS::Failed; // Failure is default for notifying the user unless otherwise proven
     
     solverNeedsUpdate=false;
     
@@ -202,8 +214,14 @@ int SketchObject::solve(bool updateGeoAfterSolving/*=true*/)
         err = -3;
     else {
         lastSolverStatus=solvedSketch.solve();
-        if (lastSolverStatus != 0) // solving
+        if (lastSolverStatus != 0){ // solving
             err = -2;
+            // if solver failed, geometry was never updated, but invalid constraints were likely added before
+            // solving (see solve in addConstraint), so solver information is definitely invalid.
+            this->Constraints.touch();
+            
+        }
+            
     }
     
     lastHasRedundancies = solvedSketch.hasRedundancies();
@@ -247,7 +265,7 @@ int SketchObject::setDatum(int ConstrId, double Datum)
     std::vector<Constraint *> newVals(vals);
     // clone the changed Constraint
     Constraint *constNew = vals[ConstrId]->clone();
-    constNew->Value = Datum;
+    constNew->setValue(Datum);
     newVals[ConstrId] = constNew;
     this->Constraints.setValues(newVals);
     delete constNew;
@@ -286,6 +304,8 @@ int SketchObject::setDriving(int ConstrId, bool isdriving)
     constNew->isDriving = isdriving;
     newVals[ConstrId] = constNew;
     this->Constraints.setValues(newVals);
+    if (isdriving)
+        setExpression(Constraints.createPath(ConstrId), boost::shared_ptr<App::Expression>());
     delete constNew;
     
     if(noRecomputes) // if we do not have a recompute, the sketch must be solved to update the DoF of the solver
@@ -342,12 +362,20 @@ int SketchObject::toggleDriving(int ConstrId)
     constNew->isDriving = !constNew->isDriving;
     newVals[ConstrId] = constNew;
     this->Constraints.setValues(newVals);
+    if (constNew->isDriving)
+        setExpression(Constraints.createPath(ConstrId), boost::shared_ptr<App::Expression>());
     delete constNew;
     
     if(noRecomputes) // if we do not have a recompute, the sketch must be solved to update the DoF of the solver
         solve();
 
     return 0;
+}
+
+int SketchObject::setUpSketch()
+{
+    return solvedSketch.setUpSketch(getCompleteGeometry(), Constraints.getValues(),
+                             getExternalGeometryCount());
 }
 
 int SketchObject::movePoint(int GeoId, PointPos PosId, const Base::Vector3d& toPoint, bool relative, bool updateGeoBeforeMoving)
@@ -1923,7 +1951,7 @@ int SketchObject::addSymmetric(const std::vector<int> &geoIdList, int refGeoId, 
                 if( (*it)->Type != Sketcher::DistanceX &&
                     (*it)->Type != Sketcher::DistanceY) {
 
-                    Constraint *constNew = (*it)->clone();        
+                    Constraint *constNew = (*it)->copy();        
 
                     constNew->First = geoIdMap[(*it)->First];
                     newconstrVals.push_back(constNew);
@@ -1944,7 +1972,7 @@ int SketchObject::addSymmetric(const std::vector<int> &geoIdList, int refGeoId, 
                         (*it)->Type ==  Sketcher::Equal ||
                         (*it)->Type ==  Sketcher::Radius ||
                         (*it)->Type ==  Sketcher::PointOnObject ){
-                            Constraint *constNew = (*it)->clone();
+                            Constraint *constNew = (*it)->copy();
 
                             constNew->First = geoIdMap[(*it)->First];
                             constNew->Second = geoIdMap[(*it)->Second];
@@ -1971,7 +1999,7 @@ int SketchObject::addSymmetric(const std::vector<int> &geoIdList, int refGeoId, 
                         std::vector<int>::const_iterator tit=std::find(geoIdList.begin(), geoIdList.end(), (*it)->Third);
 
                         if(tit != geoIdList.end()) { // Third is also in the list
-                            Constraint *constNew = (*it)->clone();
+                            Constraint *constNew = (*it)->copy();
                             constNew->First = geoIdMap[(*it)->First];
                             constNew->Second = geoIdMap[(*it)->Second];
                             constNew->Third = geoIdMap[(*it)->Third];
@@ -2154,20 +2182,20 @@ int SketchObject::addCopy(const std::vector<int> &geoIdList, const Base::Vector3
                                     (*it)->Type == Sketcher::Distance  ||
                                     (*it)->Type == Sketcher::Radius ) && clone ) {
                                     // Distances on a single Element are mapped to equality constraints in clone mode
-                                    Constraint *constNew = (*it)->clone();
+                                    Constraint *constNew = (*it)->copy();
                                     constNew->Type = Sketcher::Equal;
                                     constNew->Second = geoIdMap[(*it)->First]; // first is already (*it->First)
                                     newconstrVals.push_back(constNew);
                                 }
                                 else if ((*it)->Type == Sketcher::Angle && clone){
                                     // Angles on a single Element are mapped to parallel constraints in clone mode
-                                    Constraint *constNew = (*it)->clone();
+                                    Constraint *constNew = (*it)->copy();
                                     constNew->Type = Sketcher::Parallel;
                                     constNew->Second = geoIdMap[(*it)->First]; // first is already (*it->First)
                                     newconstrVals.push_back(constNew);
                                 }
                                 else {
-                                    Constraint *constNew = (*it)->clone();
+                                    Constraint *constNew = (*it)->copy();
                                     constNew->First = geoIdMap[(*it)->First];
                                     newconstrVals.push_back(constNew);
                                 }
@@ -2183,7 +2211,7 @@ int SketchObject::addCopy(const std::vector<int> &geoIdList, const Base::Vector3
                                     (*it)->Type == Sketcher::DistanceY ||
                                     (*it)->Type == Sketcher::Distance) && ((*it)->First == (*it)->Second) && clone ) {
                                     // Distances on a two Elements, which must be points of the same line are mapped to equality constraints in clone mode
-                                    Constraint *constNew = (*it)->clone();
+                                    Constraint *constNew = (*it)->copy();
                                     constNew->Type = Sketcher::Equal;
                                     constNew->FirstPos = Sketcher::none;
                                     constNew->Second = geoIdMap[(*it)->First]; // first is already (*it->First)
@@ -2191,7 +2219,7 @@ int SketchObject::addCopy(const std::vector<int> &geoIdList, const Base::Vector3
                                     newconstrVals.push_back(constNew);
                                 }
                                 else {
-                                    Constraint *constNew = (*it)->clone();
+                                    Constraint *constNew = (*it)->copy();
                                     constNew->First = geoIdMap[(*it)->First];
                                     constNew->Second = geoIdMap[(*it)->Second];
                                     newconstrVals.push_back(constNew);
@@ -2201,7 +2229,7 @@ int SketchObject::addCopy(const std::vector<int> &geoIdList, const Base::Vector3
                                 std::vector<int>::const_iterator tit=std::find(geoIdList.begin(), geoIdList.end(), (*it)->Third);
 
                                 if(tit != geoIdList.end()) { // Third is also in the list
-                                    Constraint *constNew = (*it)->clone();
+                                    Constraint *constNew = (*it)->copy();
                                     constNew->First = geoIdMap[(*it)->First];
                                     constNew->Second = geoIdMap[(*it)->Second];
                                     constNew->Third = geoIdMap[(*it)->Third];
@@ -2268,7 +2296,7 @@ int SketchObject::addCopy(const std::vector<int> &geoIdList, const Base::Vector3
                             constNew->Type = Sketcher::Distance;
                             constNew->First = rowrefgeoid;
                             constNew->FirstPos = Sketcher::none;
-                            constNew->Value = perpendicularDisplacement.Length();
+                            constNew->setValue(perpendicularDisplacement.Length());
                             newconstrVals.push_back(constNew);
                         }
 
@@ -2329,14 +2357,14 @@ int SketchObject::addCopy(const std::vector<int> &geoIdList, const Base::Vector3
                             constNew->Type = Sketcher::Distance;
                             constNew->First = colrefgeoid;
                             constNew->FirstPos = Sketcher::none;
-                            constNew->Value = displacement.Length();
+                            constNew->setValue(displacement.Length());
                             newconstrVals.push_back(constNew);
 
                             constNew = new Constraint();
                             constNew->Type = Sketcher::Angle;
                             constNew->First = colrefgeoid;
                             constNew->FirstPos = Sketcher::none;
-                            constNew->Value = atan2(displacement.y,displacement.x);
+                            constNew->setValue(atan2(displacement.y,displacement.x));
                             newconstrVals.push_back(constNew);
                     }
                     else { // any other element
@@ -2707,6 +2735,50 @@ int SketchObject::delExternal(int ExtGeoId)
         }
     }
 
+    ExternalGeometry.setValues(Objects,SubElements);
+    try {
+        rebuildExternalGeometry();
+    }
+    catch (const Base::Exception& e) {
+        Base::Console().Error("%s\n", e.what());
+        // revert to original values
+        ExternalGeometry.setValues(originalObjects,originalSubElements);
+        return -1;
+    }
+    
+    solverNeedsUpdate=true;
+    Constraints.setValues(newConstraints);
+    Constraints.acceptGeometry(getCompleteGeometry());
+    rebuildVertexIndex();
+    return 0;
+}
+
+int SketchObject::delAllExternal()
+{
+    // get the actual lists of the externals
+    std::vector<DocumentObject*> Objects     = ExternalGeometry.getValues();
+    std::vector<std::string>     SubElements = ExternalGeometry.getSubValues();
+        
+    const std::vector<DocumentObject*> originalObjects = Objects;
+    const std::vector<std::string>     originalSubElements = SubElements;
+       
+    Objects.clear();
+    
+    SubElements.clear();    
+        
+    const std::vector< Constraint * > &constraints = Constraints.getValues();
+    std::vector< Constraint * > newConstraints(0);
+
+    for (std::vector<Constraint *>::const_iterator it = constraints.begin(); it != constraints.end(); ++it) {
+        if ((*it)->First > -3 && 
+            ((*it)->Second > -3 || (*it)->Second == Constraint::GeoUndef ) && 
+            ((*it)->Third > -3 || (*it)->Third == Constraint::GeoUndef) ) {
+            Constraint *copiedConstr = (*it)->clone();
+            
+            newConstraints.push_back(copiedConstr);
+        }
+    }
+         
     ExternalGeometry.setValues(Objects,SubElements);
     try {
         rebuildExternalGeometry();
@@ -3499,6 +3571,38 @@ void SketchObject::validateConstraints()
     }
 }
 
+std::string SketchObject::validateExpression(const App::ObjectIdentifier &path, boost::shared_ptr<const App::Expression> expr)
+{
+    const App::Property * prop = path.getProperty();
+
+    assert(expr != 0);
+
+    if (!prop)
+        return "Property not found";
+
+    if (prop == &Constraints) {
+        const Constraint * constraint = Constraints.getConstraint(path);
+
+        if (!constraint->isDriving)
+            return "Reference constraints cannot be set!";
+    }
+
+    std::set<App::ObjectIdentifier> deps;
+    expr->getDeps(deps);
+
+    for (std::set<App::ObjectIdentifier>::const_iterator i = deps.begin(); i != deps.end(); ++i) {
+        const App::Property * prop = (*i).getProperty();
+
+        if (prop == &Constraints) {
+            const Constraint * constraint = Constraints.getConstraint(*i);
+
+            if (!constraint->isDriving)
+                return "Reference constraint from this sketch cannot be used in this expression.";
+        }
+    }
+    return "";
+}
+
 //This function is necessary for precalculation of an angle when adding
 // an angle constraint. It is also used here, in SketchObject, to
 // lock down the type of tangency/perpendicularity.
@@ -3544,6 +3648,23 @@ double SketchObject::calculateAngleViaPoint(int GeoId1, int GeoId2, double px, d
     double ang = atan2(-tan2.X()*tan1.Y()+tan2.Y()*tan1.X(), tan2.X()*tan1.X() + tan2.Y()*tan1.Y());
     return ang;
 */
+}
+
+void SketchObject::constraintsRenamed(const std::map<App::ObjectIdentifier, App::ObjectIdentifier> &renamed)
+{
+    ExpressionEngine.renameExpressions(renamed);
+
+    getDocument()->renameObjectIdentifiers(renamed);
+}
+
+void SketchObject::constraintsRemoved(const std::set<App::ObjectIdentifier> &removed)
+{
+    std::set<App::ObjectIdentifier>::const_iterator i = removed.begin();
+
+    while (i != removed.end()) {
+        ExpressionEngine.setValue(*i, boost::shared_ptr<App::Expression>(), 0);
+        ++i;
+    }
 }
 
 //Tests if the provided point lies exactly in a curve (satisfies
@@ -3665,6 +3786,9 @@ void SketchObject::onDocumentRestored()
         if(Support.getValue()) {
             validateExternalLinks();
             rebuildExternalGeometry();            
+        }
+        else {
+            rebuildVertexIndex();
         }
         Constraints.acceptGeometry(getCompleteGeometry());
     }
@@ -3841,10 +3965,10 @@ bool SketchObject::AutoLockTangencyAndPerpty(Constraint *cstr, bool bForce, bool
 {
     try{
         //assert ( cstr->Type == Tangent  ||  cstr->Type == Perpendicular);
-        if(cstr->Value != 0.0 && ! bForce) /*tangency type already set. If not bForce - don't touch.*/
+        if(cstr->getValue() != 0.0 && ! bForce) /*tangency type already set. If not bForce - don't touch.*/
             return true;
         if(!bLock){
-            cstr->Value=0.0;//reset
+            cstr->setValue(0.0);//reset
         } else {
             //decide on tangency type. Write the angle value into the datum field of the constraint.
             int geoId1, geoId2, geoIdPt;
@@ -3880,7 +4004,7 @@ bool SketchObject::AutoLockTangencyAndPerpty(Constraint *cstr, bool bForce, bool
                 if(fabs(angleErr) > M_PI/2 )
                     angleDesire += M_PI;
 
-                cstr->Value = angleDesire + angleOffset; //external tangency. The angle stored is offset by Pi/2 so that a value of 0.0 is invalid and threated as "undecided".
+                cstr->setValue(angleDesire + angleOffset); //external tangency. The angle stored is offset by Pi/2 so that a value of 0.0 is invalid and threated as "undecided".
             }
         }
     } catch (Base::Exception& e){
@@ -3891,6 +4015,15 @@ bool SketchObject::AutoLockTangencyAndPerpty(Constraint *cstr, bool bForce, bool
     return true;
 }
 
+void SketchObject::setExpression(const App::ObjectIdentifier &path, boost::shared_ptr<App::Expression> expr, const char * comment)
+{
+    DocumentObject::setExpression(path, expr, comment);
+    
+    if(noRecomputes) // if we do not have a recompute, the sketch must be solved to update the DoF of the solver, constraints and UI
+        solve();
+}
+
+
 // Python Sketcher feature ---------------------------------------------------------
 
 namespace App {
@@ -3898,6 +4031,13 @@ namespace App {
 PROPERTY_SOURCE_TEMPLATE(Sketcher::SketchObjectPython, Sketcher::SketchObject)
 template<> const char* Sketcher::SketchObjectPython::getViewProviderName(void) const {
     return "SketcherGui::ViewProviderPython";
+}
+template<> PyObject* Sketcher::SketchObjectPython::getPyObject(void) {
+    if (PythonObject.is(Py::_None())) {
+        // ref counter is set to 1
+        PythonObject = Py::Object(new FeaturePythonPyT<SketchObjectPy>(this),true);
+    }
+    return Py::new_reference_to(PythonObject);
 }
 /// @endcond
 

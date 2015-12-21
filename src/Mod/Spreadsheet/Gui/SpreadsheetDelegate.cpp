@@ -22,14 +22,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "SpreadsheetDelegate.h"
+#include "PreCompiled.h"
+#ifndef _PreComp_
 #include <QItemDelegate>
 #include <QLineEdit>
+#endif
+
+#include "SpreadsheetDelegate.h"
+#include "LineEdit.h"
+#include <App/DocumentObject.h>
+#include <Mod/Spreadsheet/App/Sheet.h>
+#include <Gui/ExpressionCompleter.h>
 
 using namespace SpreadsheetGui;
 
-SpreadsheetDelegate::SpreadsheetDelegate(QWidget *parent) :
-    QItemDelegate(parent)
+SpreadsheetDelegate::SpreadsheetDelegate(Spreadsheet::Sheet * _sheet, QWidget *parent)
+    : QItemDelegate(parent)
+    , sheet(_sheet)
 {
 }
 
@@ -37,17 +46,24 @@ QWidget *SpreadsheetDelegate::createEditor(QWidget *parent,
                                           const QStyleOptionViewItem &,
                                           const QModelIndex &index) const
 {
-    QLineEdit *editor = new QLineEdit(parent);
+    SpreadsheetGui::LineEdit *editor = new SpreadsheetGui::LineEdit(parent);
+    editor->setIndex(index);
 
+    editor->setDocumentObject(sheet);
     connect(editor, SIGNAL(returnPressed()), this, SLOT(commitAndCloseEditor()));
     return editor;
 }
 
 void SpreadsheetDelegate::commitAndCloseEditor()
 {
-    QLineEdit *editor = qobject_cast<QLineEdit *>(sender());
-    emit commitData(editor);
-    emit closeEditor(editor);
+    Gui::ExpressionLineEdit *editor = qobject_cast<Gui::ExpressionLineEdit *>(sender());
+    if (editor->completerActive()) {
+        editor->hideCompleter();
+        return;
+    }
+
+    Q_EMIT commitData(editor);
+    Q_EMIT closeEditor(editor);
 }
 
 void SpreadsheetDelegate::setEditorData(QWidget *editor,

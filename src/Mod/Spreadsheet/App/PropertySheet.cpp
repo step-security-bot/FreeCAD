@@ -38,23 +38,15 @@
 #include <Base/PyObjectBase.h>
 #include "PropertySheet.h"
 #include "Sheet.h"
-#include "Expression.h"
+#include "SpreadsheetExpression.h"
 #include "Utils.h"
 #include <PropertySheetPy.h>
 
 using namespace App;
+using namespace Base;
 using namespace Spreadsheet;
 
-class ResolveExpressionVisitor : public ExpressionVisitor {
-public:
-
-    void visit(Expression * node) {
-        VariableExpression *expr = freecad_dynamic_cast<VariableExpression>(node);
-
-        if (expr)
-            expr->resolve();
-    }
-};
+namespace Spreadsheet {
 
 class RelabelDocumentObjectExpressionVisitor : public ExpressionVisitor {
 public:
@@ -80,7 +72,7 @@ private:
 class BuildDocDepsExpressionVisitor : public ExpressionVisitor {
 public:
 
-    BuildDocDepsExpressionVisitor(std::set<DocumentObject*> & _docDeps)
+    BuildDocDepsExpressionVisitor(std::set<App::DocumentObject*> & _docDeps)
         : docDeps(_docDeps)
     {
 
@@ -92,7 +84,7 @@ public:
         if (expr) {
             try {
                 const App::Property * prop = expr->getProperty();
-                App::DocumentObject * docObj = freecad_dynamic_cast<DocumentObject>(prop->getContainer());
+                App::DocumentObject * docObj = freecad_dynamic_cast<App::DocumentObject>(prop->getContainer());
 
                 if (docObj)
                     docDeps.insert(docObj);
@@ -127,6 +119,8 @@ private:
     std::string oldName;
     std::string newName;
 };
+
+}
 
 TYPESYSTEM_SOURCE(Spreadsheet::PropertySheet , App::Property);
 
@@ -224,7 +218,7 @@ PropertySheet::~PropertySheet()
     clear();
 }
 
-Property *PropertySheet::Copy(void) const
+App::Property *PropertySheet::Copy(void) const
 {
     return new PropertySheet(*this);
 }
@@ -266,9 +260,15 @@ void PropertySheet::Paste(const Property &from)
     while (icurr != data.end()) {
         Cell * cell = icurr->second;
 
-        if (cell->isMarked())
-            clear(ifrom->first);
-        ++icurr;
+        if (cell->isMarked()) {
+            std::map<CellAddress, Cell* >::iterator next = icurr;
+
+            ++next;
+            clear(icurr->first);
+            icurr = next;
+        }
+        else
+            ++icurr;
     }
 
     mergedCells = froms->mergedCells;
@@ -410,13 +410,13 @@ void PropertySheet::setStyle(CellAddress address, const std::set<std::string> &_
     nonNullCellAt(address)->setStyle(_style);
 }
 
-void PropertySheet::setForeground(CellAddress address, const Color &color)
+void PropertySheet::setForeground(CellAddress address, const App::Color &color)
 {
     assert(nonNullCellAt(address) != 0);
     nonNullCellAt(address)->setForeground(color);
 }
 
-void PropertySheet::setBackground(CellAddress address, const Color &color)
+void PropertySheet::setBackground(CellAddress address, const App::Color &color)
 {
     assert(nonNullCellAt(address) != 0);
     nonNullCellAt(address)->setBackground(color);
@@ -455,6 +455,15 @@ void PropertySheet::setAlias(CellAddress address, const std::string &alias)
         owner->aliasRemoved(address, oldAlias);
 
     cell->setAlias(alias);
+
+    if (oldAlias.size() > 0) {
+        std::map<App::ObjectIdentifier, App::ObjectIdentifier> m;
+
+        m[App::ObjectIdentifier(owner, oldAlias)] = App::ObjectIdentifier(owner, alias);
+
+        owner->getDocument()->renameObjectIdentifiers(m);
+    }
+
 }
 
 void PropertySheet::setComputedUnit(CellAddress address, const Base::Unit &unit)
@@ -501,7 +510,7 @@ void PropertySheet::clear(CellAddress address)
     rebuildDocDepList();
 }
 
-void PropertySheet::moveCell(CellAddress currPos, CellAddress newPos)
+void PropertySheet::moveCell(CellAddress currPos, CellAddress newPos, std::map<App::ObjectIdentifier, App::ObjectIdentifier> & renames)
 {
     std::map<CellAddress, Cell*>::const_iterator i = data.find(currPos);
     std::map<CellAddress, Cell*>::const_iterator j = data.find(newPos);
@@ -524,6 +533,8 @@ void PropertySheet::moveCell(CellAddress currPos, CellAddress newPos)
         data[newPos] = cell;
         addDependencies(newPos);
         setDirty(newPos);
+
+        renames[ObjectIdentifier(owner, currPos.toString())] = ObjectIdentifier(owner, newPos.toString());
 
         rebuildDocDepList();
     }
@@ -562,8 +573,9 @@ public:
         if (varExpr) {
             static const boost::regex e("(\\${0,1})([A-Za-z]+)(\\${0,1})([0-9]+)");
             boost::cmatch cm;
+            std::string s = varExpr->name();
 
-            if (boost::regex_match(varExpr->name().c_str(), cm, e)) {
+            if (boost::regex_match(s.c_str(), cm, e)) {
                 const boost::sub_match<const char *> colstr = cm[2];
                 const boost::sub_match<const char *> rowstr = cm[4];
                 int thisRow, thisCol;
@@ -574,7 +586,7 @@ public:
                 if (thisRow >= mRow || thisCol >= mCol) {
                     thisRow += mRowCount;
                     thisCol += mColCount;
-                    varExpr->setName(columnName(thisCol) + rowName(thisRow));
+                    varExpr->setPath(ObjectIdentifier(varExpr->getOwner(), columnName(thisCol) + rowName(thisRow)));
                     mChanged = true;
                 }
             }
@@ -585,11 +597,11 @@ public:
             CellAddress to(r.to());
 
             if (from.row() >= mRow || from.col() >= mCol) {
-                from = CellAddress(from.row() + mRowCount, from.col() + mColCount);
+                from = CellAddress(std::max(0, from.row() + mRowCount), std::max(0, from.col() + mColCount));
                 mChanged = true;
             }
             if (to.row() >= mRow || to.col() >= mCol) {
-                to = CellAddress(to.row() + mRowCount, to.col() + mColCount);
+                to = CellAddress(std::max(0, to.row() + mRowCount), std::max(0, to.col() + mColCount));
                 mChanged = true;
             }
             rangeExpr->setRange(Range(from, to));
@@ -606,6 +618,7 @@ private:
 void PropertySheet::insertRows(int row, int count)
 {
     std::vector<CellAddress> keys;
+    std::map<App::ObjectIdentifier, App::ObjectIdentifier> renames;
 
     /* Copy all keys from cells map */
     boost::copy( data | boost::adaptors::map_keys, std::back_inserter(keys));
@@ -632,8 +645,10 @@ void PropertySheet::insertRows(int row, int count)
         }
 
         if (i->row() >= row)
-            moveCell(*i, CellAddress(i->row() + count, i->col()));
+            moveCell(*i, CellAddress(i->row() + count, i->col()), renames);
     }
+
+    owner->getDocument()->renameObjectIdentifiers(renames);
 }
 
 /**
@@ -651,6 +666,7 @@ bool PropertySheet::rowSortFunc(const CellAddress & a, const CellAddress & b) {
 void PropertySheet::removeRows(int row, int count)
 {
     std::vector<CellAddress> keys;
+    std::map<App::ObjectIdentifier, App::ObjectIdentifier> renames;
 
     /* Copy all keys from cells map */
     boost::copy(data | boost::adaptors::map_keys, std::back_inserter(keys));
@@ -658,7 +674,7 @@ void PropertySheet::removeRows(int row, int count)
     /* Sort them */
     std::sort(keys.begin(), keys.end(), boost::bind(&PropertySheet::rowSortFunc, this, _1, _2));
 
-    RewriteExpressionVisitor visitor(CellAddress(row + count, CellAddress::MAX_COLUMNS), -count, 0);
+    RewriteExpressionVisitor visitor(CellAddress(row + count - 1, CellAddress::MAX_COLUMNS), -count, 0);
 
     Signaller signaller(*this);
     for (std::vector<CellAddress>::const_iterator i = keys.begin(); i != keys.end(); ++i) {
@@ -679,14 +695,16 @@ void PropertySheet::removeRows(int row, int count)
         if (i->row() >= row && i->row() < row + count)
             clear(*i);
         else if (i->row() >= row + count)
-            moveCell(*i, CellAddress(i->row() - count, i->col()));
+            moveCell(*i, CellAddress(i->row() - count, i->col()), renames);
     }
+
+    owner->getDocument()->renameObjectIdentifiers(renames);
 }
 
 void PropertySheet::insertColumns(int col, int count)
 {
-
     std::vector<CellAddress> keys;
+    std::map<App::ObjectIdentifier, App::ObjectIdentifier> renames;
 
     /* Copy all keys from cells map */
     boost::copy(data | boost::adaptors::map_keys, std::back_inserter(keys));
@@ -713,8 +731,10 @@ void PropertySheet::insertColumns(int col, int count)
         }
 
         if (i->col() >= col)
-            moveCell(*i, CellAddress(i->row(), i->col() + count));
+            moveCell(*i, CellAddress(i->row(), i->col() + count), renames);
     }
+
+    owner->getDocument()->renameObjectIdentifiers(renames);
 }
 
 /**
@@ -732,6 +752,7 @@ bool PropertySheet::colSortFunc(const CellAddress & a, const CellAddress & b) {
 void PropertySheet::removeColumns(int col, int count)
 {
     std::vector<CellAddress> keys;
+    std::map<App::ObjectIdentifier, App::ObjectIdentifier> renames;
 
     /* Copy all keys from cells map */
     boost::copy(data | boost::adaptors::map_keys, std::back_inserter(keys));
@@ -739,7 +760,7 @@ void PropertySheet::removeColumns(int col, int count)
     /* Sort them */
     std::sort(keys.begin(), keys.end(), boost::bind(&PropertySheet::colSortFunc, this, _1, _2));
 
-    RewriteExpressionVisitor visitor(CellAddress(CellAddress::MAX_ROWS, col + count), 0, -count);
+    RewriteExpressionVisitor visitor(CellAddress(CellAddress::MAX_ROWS, col + count - 1), 0, -count);
 
     Signaller signaller(*this);
     for (std::vector<CellAddress>::const_iterator i = keys.begin(); i != keys.end(); ++i) {
@@ -760,8 +781,10 @@ void PropertySheet::removeColumns(int col, int count)
         if (i->col() >= col && i->col() < col + count)
             clear(*i);
         else if (i->col() >= col + count)
-            moveCell(*i, CellAddress(i->row(), i->col() - count));
+            moveCell(*i, CellAddress(i->row(), i->col() - count), renames);
     }
+
+    owner->getDocument()->renameObjectIdentifiers(renames);
 }
 
 unsigned int PropertySheet::getMemSize() const
@@ -868,20 +891,16 @@ void PropertySheet::addDependencies(CellAddress key)
     if (expression == 0)
         return;
 
-    std::set<Path> expressionDeps;
-
-    // Resolve expression, if any
-    ResolveExpressionVisitor v;
-    cell->visit(v);
+    std::set<ObjectIdentifier> expressionDeps;
 
     // Get dependencies from expression
     expression->getDeps(expressionDeps);
 
-    std::set<Path>::const_iterator i = expressionDeps.begin();
+    std::set<ObjectIdentifier>::const_iterator i = expressionDeps.begin();
     while (i != expressionDeps.end()) {
         const Property * prop = i->getProperty();
-        const DocumentObject * docObj = i->getDocumentObject();
-        Document * doc = i->getDocument();
+        const App::DocumentObject * docObj = i->getDocumentObject();
+        App::Document * doc = i->getDocument();
 
         std::string docName = doc ? doc->Label.getValue() : i->getDocumentName().getString();
         std::string docObjName = docName + "#" + (docObj ? docObj->getNameInDocument() : i->getDocumentObjectName().getString());
@@ -890,7 +909,7 @@ void PropertySheet::addDependencies(CellAddress key)
         if (!prop)
             cell->setResolveException("Unresolved dependency");
         else {
-            DocumentObject * docObject = freecad_dynamic_cast<DocumentObject>(prop->getContainer());
+            App::DocumentObject * docObject = freecad_dynamic_cast<App::DocumentObject>(prop->getContainer());
 
             documentObjectName[docObject] = docObject->Label.getValue();
             documentName[docObject->getDocument()] = docObject->getDocument()->Label.getValue();
@@ -986,7 +1005,7 @@ void PropertySheet::removeDependencies(CellAddress key)
 
 void PropertySheet::recomputeDependants(const Property *prop)
 {
-    DocumentObject * owner = freecad_dynamic_cast<DocumentObject>(prop->getContainer());
+    App::DocumentObject * owner = freecad_dynamic_cast<App::DocumentObject>(prop->getContainer());
     const char * name = owner->getPropertyName(prop);
 
     assert(name != 0);
@@ -1014,7 +1033,7 @@ void PropertySheet::recomputeDependants(const Property *prop)
     }
 }
 
-void PropertySheet::invalidateDependants(const DocumentObject *docObj)
+void PropertySheet::invalidateDependants(const App::DocumentObject *docObj)
 {
     const char * docName = docObj->getDocument()->Label.getValue();
     const char * docObjName = docObj->getNameInDocument();
@@ -1042,7 +1061,7 @@ void PropertySheet::invalidateDependants(const DocumentObject *docObj)
     }
 }
 
-void PropertySheet::renamedDocumentObject(const DocumentObject * docObj)
+void PropertySheet::renamedDocumentObject(const App::DocumentObject * docObj)
 {
     // Touch to force recompute
     touch();
@@ -1063,7 +1082,7 @@ void PropertySheet::renamedDocumentObject(const DocumentObject * docObj)
     }
 }
 
-void PropertySheet::renamedDocument(const Document * doc)
+void PropertySheet::renamedDocument(const App::Document * doc)
 {
     // Touch to force recompute
     touch();
@@ -1085,12 +1104,17 @@ void PropertySheet::renamedDocument(const Document * doc)
     }
 }
 
+void PropertySheet::deletedDocumentObject(const App::DocumentObject *docObj)
+{
+    docDeps.erase(const_cast<App::DocumentObject*>(docObj));
+}
+
 void PropertySheet::documentSet()
 {
     documentName[owner->getDocument()] = owner->getDocument()->Label.getValue();
 }
 
-void PropertySheet::recomputeDependants(const DocumentObject *docObj)
+void PropertySheet::recomputeDependants(const App::DocumentObject *docObj)
 {
     const char * docName = docObj->getDocument()->Label.getValue();
     const char * docObjName = docObj->getNameInDocument();
