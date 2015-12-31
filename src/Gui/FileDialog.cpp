@@ -64,7 +64,7 @@ FileDialog::~FileDialog()
 void FileDialog::onSelectedFilter(const QString& filter)
 {
     QRegExp rx(QLatin1String("\\(\\*.(\\w+)"));
-    QString suf = selectedFilter();
+    QString suf = selectedNameFilter();
     if (rx.indexIn(suf) >= 0) {
         suf = rx.cap(1);
         setDefaultSuffix(suf.toLower());
@@ -168,13 +168,13 @@ QString FileDialog::getSaveFileName (QWidget * parent, const QString & caption, 
     dlg.setAcceptMode(QFileDialog::AcceptSave);
     dlg.setDirectory(dirName);
     dlg.setOptions(options);
-    dlg.setFilters(filter.split(QLatin1String(";;")));
-    dlg.onSelectedFilter(dlg.selectedFilter());
+    dlg.setNameFilters(filter.split(QLatin1String(";;")));
+    dlg.onSelectedFilter(dlg.selectedNameFilter());
     dlg.setNameFilterDetailsVisible(true);
     dlg.setConfirmOverwrite(true);
     if (dlg.exec() == QDialog::Accepted) {
         if (selectedFilter)
-            *selectedFilter = dlg.selectedFilter();
+            *selectedFilter = dlg.selectedNameFilter();
         file = dlg.selectedFiles().front();
     }
 #else
@@ -247,11 +247,11 @@ QString FileDialog::getOpenFileName(QWidget * parent, const QString & caption, c
     dlg.setAcceptMode(QFileDialog::AcceptOpen);
     dlg.setDirectory(dirName);
     dlg.setOptions(options);
-    dlg.setFilters(filter.split(QLatin1String(";;")));
+    dlg.setNameFilters(filter.split(QLatin1String(";;")));
     dlg.setNameFilterDetailsVisible(true);
     if (dlg.exec() == QDialog::Accepted) {
         if (selectedFilter)
-            *selectedFilter = dlg.selectedFilter();
+            *selectedFilter = dlg.selectedNameFilter();
         file = dlg.selectedFiles().front();
     }
 #else
@@ -305,11 +305,11 @@ QStringList FileDialog::getOpenFileNames (QWidget * parent, const QString & capt
     dlg.setAcceptMode(QFileDialog::AcceptOpen);
     dlg.setDirectory(dirName);
     dlg.setOptions(options);
-    dlg.setFilters(filter.split(QLatin1String(";;")));
+    dlg.setNameFilters(filter.split(QLatin1String(";;")));
     dlg.setNameFilterDetailsVisible(true);
     if (dlg.exec() == QDialog::Accepted) {
         if (selectedFilter)
-            *selectedFilter = dlg.selectedFilter();
+            *selectedFilter = dlg.selectedNameFilter();
         files = dlg.selectedFiles();
     }
 #else
@@ -396,7 +396,7 @@ void FileOptionsDialog::accept()
         QFileInfo fi(fn);
         QString ext = fi.suffix();
         ext.prepend(QLatin1String("*."));
-        QStringList filters = this->filters();
+        QStringList filters = this->nameFilters();
         bool ok=false;
         // Compare the given suffix with the suffixes of all filters
         QString filter;
@@ -412,14 +412,14 @@ void FileOptionsDialog::accept()
         if (!ok) {
             filter = tr("All files (*.*)");
             filters << filter;
-            setFilters(filters);
+            setNameFilters(filters);
         }
 
         // empty the line edit
         filename->blockSignals(true);
         filename->clear();
         filename->blockSignals(false);
-        selectFilter(filter);
+        selectNameFilter(filter);
 
         return;
     }
@@ -427,7 +427,7 @@ void FileOptionsDialog::accept()
         QFileInfo fi(fn);
         QString ext = fi.completeSuffix();
         QRegExp rx(QLatin1String("\\(\\*.(\\w+)"));
-        QString suf = selectedFilter();
+        QString suf = selectedNameFilter();
         if (rx.indexIn(suf) >= 0)
             suf = rx.cap(1);
         if (ext.isEmpty())
