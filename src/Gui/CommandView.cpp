@@ -1483,7 +1483,7 @@ void StdViewScreenShot::activated(int iMsg)
         fd.setFileMode(QFileDialog::AnyFile);
         fd.setAcceptMode(QFileDialog::AcceptSave);
         fd.setWindowTitle(QObject::tr("Save picture"));
-        fd.setFilters(filter);
+        fd.setNameFilters(filter);
         if (!selFilter.isEmpty())
             fd.selectNameFilter(selFilter);
 
@@ -1494,7 +1494,7 @@ void StdViewScreenShot::activated(int iMsg)
 
         fd.setOptionsWidget(FileOptionsDialog::ExtensionRight, opt);
         fd.setConfirmOverwrite(true);
-        opt->onSelectedFilter(fd.selectedFilter());
+        opt->onSelectedFilter(fd.selectedNameFilter());
         QObject::connect(&fd, SIGNAL(filterSelected(const QString&)),
                          opt, SLOT(onSelectedFilter(const QString&)));
 
