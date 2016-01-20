@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2015 Eivind Kvedalen (eivind@kvedalen.name)             *
- *   Copyright (c) 2006 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) Yorik van Havre          (yorik@uncreated.net 2015)     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -21,51 +20,49 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "PreCompiled.h"
-#ifndef _PreComp_
-# include <QIcon>
-# include <QImage>
-# include <QFileInfo>
-#endif
 
-#include "SpreadsheetView.h"
-#include <Mod/Spreadsheet/App/Sheet.h>
+#ifndef _FeatureViewSpreadsheet_h_
+#define _FeatureViewSpreadsheet_h_
 
-#include <Base/Console.h>
-#include <Base/Exception.h>
-#include <Base/FileInfo.h>
-#include <App/Application.h>
-#include <Gui/MainWindow.h>
-#include <Gui/Document.h>
-#include <Gui/Application.h>
-#include <Gui/BitmapFactory.h>
 
-using namespace SpreadsheetGui;
-using namespace Spreadsheet;
+#include <App/DocumentObject.h>
+#include <App/PropertyLinks.h>
+#include "FeatureView.h"
 
-/* module functions */
-static PyObject * 
-open(PyObject *self, PyObject *args) 
+namespace Drawing
 {
-    const char* Name;
-    const char* DocName=0;
-    if (!PyArg_ParseTuple(args, "s|s",&Name,&DocName))
-        return NULL; 
-    
-    PY_TRY {
-        Base::FileInfo file(Name);
-        App::Document *pcDoc = App::GetApplication().newDocument(DocName ? DocName : QT_TR_NOOP("Unnamed"));
-        Sheet *pcSheet = (Sheet *)pcDoc->addObject("Spreadsheet::Sheet", file.fileNamePure().c_str());
 
-        pcSheet->importFromFile(Name, '\t', '"', '\\');
-        pcSheet->execute();
-    } PY_CATCH;
+/** Base class of all View Features in the drawing module
+ */
+class DrawingExport FeatureViewSpreadsheet : public FeatureView
+{
+    PROPERTY_HEADER(Drawing::FeatureView);
 
-    Py_Return; 
-}
+public:
+    /// Constructor
+    FeatureViewSpreadsheet(void);
+    virtual ~FeatureViewSpreadsheet();
+    App::PropertyLink         Source;
+    App::PropertyString       CellStart;
+    App::PropertyString       CellEnd;
+    App::PropertyString       Font;
+    App::PropertyColor        Color;
+    App::PropertyFloat        LineWidth;
+    App::PropertyFloat        FontSize;
 
-/* registration table  */
-struct PyMethodDef SpreadsheetGui_Import_methods[] = {
-    {"open"       ,open ,       1}, /* method name, C func ptr, always-tuple */
-    {NULL, NULL}                   /* end of table marker */
+    /** @name methods overide Feature */
+    //@{
+    /// recalculate the Feature
+    virtual App::DocumentObjectExecReturn *execute(void);
+    //@}
+
+    /// returns the type name of the ViewProvider
+    virtual const char* getViewProviderName(void) const {
+        return "DrawingGui::ViewProviderDrawingView";
+    }
 };
+
+} //namespace Drawing
+
+
+#endif

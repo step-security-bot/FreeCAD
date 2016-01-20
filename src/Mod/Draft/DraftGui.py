@@ -625,7 +625,7 @@ class DraftToolBar:
         self.finishButton.setText(translate("draft", "&Finish"))
         self.finishButton.setToolTip(translate("draft", "Finishes the current drawing or editing operation (F)"))
         self.continueCmd.setToolTip(translate("draft", "If checked, command will not finish until you press the command button again"))
-        self.continueCmd.setText(translate("draft", "Con&tinue"))
+        self.continueCmd.setText(translate("draft", "Co&ntinue"))
         self.occOffset.setToolTip(translate("draft", "If checked, an OCC-style offset will be performed instead of the classic offset"))
         self.occOffset.setText(translate("draft", "&OCC-style offset"))
         self.addButton.setToolTip(translate("draft", "Add points to the current object"))
@@ -635,7 +635,7 @@ class DraftToolBar:
         self.symmetricButton.setToolTip(translate("draft", "Make Bezier node symmetric"))
         self.undoButton.setText(translate("draft", "&Undo"))
         self.undoButton.setToolTip(translate("draft", "Undo the last segment (CTRL+Z)"))
-        self.closeButton.setText(translate("draft", "&Close"))
+        self.closeButton.setText(translate("draft", "Cl&ose"))
         self.closeButton.setToolTip(translate("draft", "Finishes and closes the current line (C)"))
         self.wipeButton.setText(translate("draft", "&Wipe"))
         self.wipeButton.setToolTip(translate("draft", "Wipes the existing segments of this line and starts again from the last point (W)"))
@@ -654,7 +654,7 @@ class DraftToolBar:
         self.currentViewButton.setToolTip(translate("draft", "Select plane perpendicular to the current view"))
         self.resetPlaneButton.setText(translate("draft", "Auto"))
         self.resetPlaneButton.setToolTip(translate("draft", "Do not project points to a drawing plane"))
-        self.isCopy.setText(translate("draft", "&Copy"))
+        self.isCopy.setText(translate("draft", "C&opy"))
         self.isCopy.setToolTip(translate("draft", "If checked, objects will be copied instead of moved (C)"))
         self.SStringValue.setToolTip(translate("draft", "Text string to draw"))
         self.labelSString.setText(translate("draft", "String"))
@@ -1337,7 +1337,8 @@ class DraftToolBar:
 
     def undoSegment(self):
         "undo last line segment"
-        self.sourceCmd.undolast()
+        if hasattr(self.sourceCmd,"undolast"):
+            self.sourceCmd.undolast()
 
     def checkSpecialChars(self,txt):
         '''
@@ -1345,7 +1346,7 @@ class DraftToolBar:
         treated as shortcuts
         '''
         spec = False
-        if txt.endswith(" ") or txt.endswith("r"):
+        if txt.endswith("r"):
             self.isRelative.setChecked(not self.isRelative.isChecked())
             self.relativeMode = self.isRelative.isChecked()
             spec = True
@@ -1391,18 +1392,21 @@ class DraftToolBar:
             self.constrain("angle")
             self.displayPoint()
             spec = True
-        elif txt.endswith("c"):
+        elif txt.endswith("o"):
             if self.closeButton.isVisible():
                 self.closeLine()
             elif self.isCopy.isVisible():
                 self.isCopy.setChecked(not self.isCopy.isChecked())
-            elif self.continueCmd.isVisible():
+        elif txt.endswith("n"):
+            if self.continueCmd.isVisible():
                 self.continueCmd.setChecked(not self.continueCmd.isChecked())
             spec = True
         if spec:
             for i in [self.xValue,self.yValue,self.zValue]:
                 if (i.property("text") == txt):
                     i.setProperty("text",txt[:-1])
+                    i.setFocus()
+                    i.selectAll()
 
     def storeCurrentText(self,qstr):
         self.currEditText = self.textValue.text()
@@ -1478,7 +1482,19 @@ class DraftToolBar:
             else:
                 if dp:
                     self.zValue.setText(displayExternal(dp.z,self.DECIMALS,'Length'))
-
+                    
+            # set length and angle
+            if last and dp and plane:
+                self.lengthValue.setText(displayExternal(dp.Length,self.DECIMALS,'Length'))
+                a = math.degrees(-DraftVecUtils.angle(dp,plane.u,plane.axis))
+                self.angleValue.setText(displayExternal(a,self.DECIMALS,'Angle'))
+                if not mask:
+                    # automask
+                    if a in [0,180,-180]:
+                        mask = "x"
+                    elif a in [90,270,-90]:
+                        mask = "y"
+                
             # set masks
             if (mask == "x") or (self.mask == "x"):
                 self.xValue.setEnabled(True)
@@ -1504,12 +1520,6 @@ class DraftToolBar:
                 self.zValue.setEnabled(True)
                 self.xValue.setFocus()
                 self.xValue.selectAll()
-                
-            # set length and angle
-            if last and dp and plane:
-                self.lengthValue.setText(displayExternal(dp.Length,self.DECIMALS,'Length'))
-                a = math.degrees(-DraftVecUtils.angle(dp,plane.u,plane.axis))
-                self.angleValue.setText(displayExternal(a,self.DECIMALS,'Angle'))
                 
             
     def getDefaultColor(self,type,rgb=False):
@@ -1714,6 +1724,8 @@ class DraftToolBar:
         self.xValue.setText(displayExternal(v.x,self.DECIMALS,'Length'))
         self.yValue.setText(displayExternal(v.y,self.DECIMALS,'Length'))
         self.zValue.setText(displayExternal(v.z,self.DECIMALS,'Length'))
+        self.xValue.setFocus()
+        self.xValue.selectAll()
         
     def changeAngleValue(self,d):
         v = FreeCAD.Vector(self.x,self.y,self.z)
@@ -1723,6 +1735,8 @@ class DraftToolBar:
         self.xValue.setText(displayExternal(v.x,self.DECIMALS,'Length'))
         self.yValue.setText(displayExternal(v.y,self.DECIMALS,'Length'))
         self.zValue.setText(displayExternal(v.z,self.DECIMALS,'Length'))
+        self.xValue.setFocus()
+        self.xValue.selectAll()
         
     def toggleAngle(self,bool):
         self.alock = self.angleLock.isChecked()
