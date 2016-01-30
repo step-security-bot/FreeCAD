@@ -117,13 +117,24 @@ ObjectIdentifier::ObjectIdentifier(const App::PropertyContainer * _owner, const 
     , documentObjectNameSet(false)
     , propertyIndex(-1)
 {
+    if (owner) {
+        const DocumentObject * docObj = freecad_dynamic_cast<const DocumentObject>(owner);
+        if (!docObj)
+            throw Base::Exception("Property must be owned by a document object.");
+
+        const Document * doc = docObj->getDocument();
+
+        documentName = String(doc->getName(), false, true);
+        documentObjectName = String(docObj->getNameInDocument(), false, true);
+
+    }
     if (property.size() > 0)
         addComponent(Component::SimpleComponent(property));
 }
 
 /**
  * @brief Construct an ObjectIdentifier object given a property. The property is assumed to be single-valued.
- * @param prop Property to construct object idenfier for.
+ * @param prop Property to construct object identifier for.
  */
 
 ObjectIdentifier::ObjectIdentifier(const Property &prop)
@@ -132,6 +143,16 @@ ObjectIdentifier::ObjectIdentifier(const Property &prop)
     , documentObjectNameSet(false)
     , propertyIndex(-1)
 {
+    DocumentObject * docObj = freecad_dynamic_cast<DocumentObject>(prop.getContainer());
+
+    if (!docObj)
+        throw Base::TypeError("Property must be owned by a document object.");
+
+    Document * doc = docObj->getDocument();
+
+    documentName = String(doc->getName(), false, true);
+    documentObjectName = String(docObj->getNameInDocument(), false, true);
+
     addComponent(Component::SimpleComponent(String(owner->getPropertyName(&prop))));
 }
 
@@ -508,32 +529,41 @@ std::string ObjectIdentifier::Component::toString() const
  * @return Pointer to document object if a unique pointer is found, 0 otherwise.
  */
 
-App::DocumentObject * ObjectIdentifier::getDocumentObject(const App::Document * doc, const std::string & name) const
+App::DocumentObject * ObjectIdentifier::getDocumentObject(const App::Document * doc, const String & name, bool & byIdentifier) const
 {
-    DocumentObject * o1 = 0;
-    DocumentObject * o2 = 0;
+    DocumentObject * objectById = 0;
+    DocumentObject * objectByLabel = 0;
     std::vector<DocumentObject*> docObjects = doc->getObjects();
 
+    // No object found with matching label, try using name directly
+    objectById = doc->getObject(static_cast<const char*>(name));
+
+    if (name.isForceIdentifier())
+        return objectById;
+
     for (std::vector<DocumentObject*>::iterator j = docObjects.begin(); j != docObjects.end(); ++j) {
-        if (strcmp((*j)->Label.getValue(), name.c_str()) == 0) {
+        if (strcmp((*j)->Label.getValue(), static_cast<const char*>(name)) == 0) {
             // Found object with matching label
-            if (o1 != 0)
+            if (objectByLabel != 0)
                 return 0;
-            o1 = *j;
+            objectByLabel = *j;
         }
     }
 
-    // No object found with matching label, try using name directly
-    o2 = doc->getObject(name.c_str());
-
-    if (o1 == 0 && o2 == 0) // Not found at all
+    if (objectByLabel == 0 && objectById == 0) // Not found at all
         return 0;
-    else if (o1 == 0) // Found by name
-        return o2;
-    else if (o2 == 0) // Found by label
-        return o1;
-    else if (o1 == o2) // Found by both name and label, same object
-        return o1;
+    else if (objectByLabel == 0) { // Found by name
+        byIdentifier = true;
+        return objectById;
+    }
+    else if (objectById == 0) { // Found by label
+        byIdentifier = false;
+        return objectByLabel;
+    }
+    else if (objectByLabel == objectById) { // Found by both name and label, same object
+        byIdentifier = false;
+        return objectByLabel;
+    }
     else
         return 0; // Found by both name and label, two different objects
 }
@@ -574,11 +604,13 @@ void ObjectIdentifier::resolve() const
         }
     }
 
-    documentName = String(doc->Label.getValue());
+    documentName = String(doc->getName(), false, documentName.isForceIdentifier());
 
     /* Document object name specified? */
     if (documentObjectNameSet) {
-        docObject = getDocumentObject(doc, documentObjectName.getString());
+        bool dummy;
+
+        docObject = getDocumentObject(doc, documentObjectName, dummy);
         if (!docObject)
             return;
         if (components.size() > 0) {
@@ -591,23 +623,25 @@ void ObjectIdentifier::resolve() const
     else {
         /* Document object name not specified, resolve from path */
         if (components.size() == 1) {
-            documentObjectName = String(static_cast<const DocumentObject*>(owner)->getNameInDocument());
+            documentObjectName = String(static_cast<const DocumentObject*>(owner)->getNameInDocument(), false, documentObjectName.isForceIdentifier());
             propertyName = components[0].name.getString();
             propertyIndex = 0;
         }
         else if (components.size() >= 2) {
+            bool byIdentifier;
+
             if (!components[0].isSimple())
                 return;
 
-            docObject = getDocumentObject(doc, components[0].name);
+            docObject = getDocumentObject(doc, components[0].name, byIdentifier);
 
             if (docObject) {
-                documentObjectName = components[0].name;
+                documentObjectName = String(components[0].name, false, byIdentifier);
                 propertyName = components[1].name.getString();
                 propertyIndex = 1;
             }
             else {
-                documentObjectName = String(static_cast<const DocumentObject*>(owner)->getNameInDocument());
+                documentObjectName = String(static_cast<const DocumentObject*>(owner)->getNameInDocument(), false, true);
                 propertyName = components[0].name.getString();
                 propertyIndex = 0;
             }
@@ -625,21 +659,37 @@ void ObjectIdentifier::resolve() const
 
 Document * ObjectIdentifier::getDocument(String name) const
 {
-    App::Document * doc = 0;
-    const std::vector<App::Document*> docs = App::GetApplication().getDocuments();
-
     if (name.getString().size() == 0)
         name = getDocumentName();
 
+    App::Document * docById = App::GetApplication().getDocument(name);
+
+    if (name.isForceIdentifier())
+        return docById;
+
+    App::Document * docByLabel = 0;
+    const std::vector<App::Document*> docs = App::GetApplication().getDocuments();
+
     for (std::vector<App::Document*>::const_iterator i = docs.begin(); i != docs.end(); ++i) {
         if ((*i)->Label.getValue() == name.getString()) {
-            if (doc != 0)
+            /* Multiple hits for same label? */
+            if (docByLabel != 0)
                 return 0;
-            doc = *i;
+            docByLabel = *i;
         }
     }
 
-    return doc;
+    /* Not found on id? */
+    if (docById == 0)
+        return docByLabel; // Either not found at all, or on label
+    else {
+        /* Not found on label? */
+        if (docByLabel == 0) /* Then return doc by id */
+            return docById;
+
+        /* docByLabel and docById could be equal; that is ok */
+        return docByLabel == docById ? docById : 0;
+    }
 }
 
 /**
@@ -650,11 +700,12 @@ Document * ObjectIdentifier::getDocument(String name) const
 DocumentObject *ObjectIdentifier::getDocumentObject() const
 {
     const App::Document * doc = getDocument();
+    bool dummy;
 
     if (!doc)
         return 0;
 
-    return  getDocumentObject(doc, documentObjectName);
+    return  getDocumentObject(doc, documentObjectName, dummy);
 }
 
 /**
@@ -742,11 +793,12 @@ ObjectIdentifier &ObjectIdentifier::operator <<(const ObjectIdentifier::Componen
 Property *ObjectIdentifier::getProperty() const
 {
     const App::Document * doc = getDocument();
+    bool dummy;
 
     if (!doc)
         return 0;
 
-    App::DocumentObject * docObj = getDocumentObject(doc, documentObjectName);
+    App::DocumentObject * docObj = getDocumentObject(doc, documentObjectName, dummy);
 
     if (!docObj)
         return 0;

@@ -27,6 +27,8 @@ __url__ =    "http://www.freecadweb.org"
 
 import os,time,tempfile,uuid,FreeCAD,Part,Draft,Arch,math,DraftVecUtils
 
+DEBUG = False
+
 if open.__module__ == '__builtin__':
     pyopen = open # because we'll redefine open below
 
@@ -302,6 +304,7 @@ def insert(filename,docname,skip=[],only=[],root=None):
         GET_EXTRUSIONS = False
     if not SEPARATE_OPENINGS:
         SKIP.append("IfcOpeningElement")
+    CREATE_CLONES = p.GetBool("ifcCreateClones",True)
 
     try:
         import ifcopenshell
@@ -444,8 +447,13 @@ def insert(filename,docname,skip=[],only=[],root=None):
         # detect if this object is sharing its shape
         clone = None
         store = None
-        if product.Representation and MERGE_MODE_ARCH == 0 and archobj:
-            for s in product.Representation.Representations:
+        prepr = None
+        try:
+            prepr = product.Representation
+        except:
+            if DEBUG: print " ERROR unable to get object representation",
+        if prepr and (MERGE_MODE_ARCH == 0) and archobj and CREATE_CLONES:
+            for s in prepr.Representations:
                 if s.RepresentationIdentifier.upper() == "BODY":
                     if s.Items[0].is_a("IfcMappedItem"):
                         bid = s.Items[0].MappingSource.id()
@@ -908,16 +916,16 @@ def export(exportList,filename):
         if hasattr(obj,"Additions") and (shapetype == "extrusion"):
             for o in obj.Additions:
                 r2,p2,c2 = getRepresentation(ifcfile,context,o,forcebrep=True)
-                if DEBUG: print "      adding ",c2," : ",str(o.Label)
-                prod2 = ifcfile.createIfcBuildingElementProxy(ifcopenshell.guid.compress(uuid.uuid1().hex),history,str(o.Label),None,None,p2,r2,None,"ELEMENT")
+                if DEBUG: print "      adding ",c2," : ",o.Label
+                prod2 = ifcfile.createIfcBuildingElementProxy(ifcopenshell.guid.compress(uuid.uuid1().hex),history,o.Label.encode("utf8"),None,None,p2,r2,None,"ELEMENT")
                 ifcfile.createIfcRelAggregates(ifcopenshell.guid.compress(uuid.uuid1().hex),history,'Addition','',product,[prod2])
 
         # subtractions
         if hasattr(obj,"Subtractions") and (shapetype == "extrusion"):
             for o in obj.Subtractions:
                 r2,p2,c2 = getRepresentation(ifcfile,context,o,forcebrep=True,subtraction=True)
-                if DEBUG: print "      subtracting ",c2," : ",str(o.Label)
-                prod2 = ifcfile.createIfcOpeningElement(ifcopenshell.guid.compress(uuid.uuid1().hex),history,str(o.Label),None,None,p2,r2,None)
+                if DEBUG: print "      subtracting ",c2," : ",o.Label
+                prod2 = ifcfile.createIfcOpeningElement(ifcopenshell.guid.compress(uuid.uuid1().hex),history,o.Label.encode("utf8"),None,None,p2,r2,None)
                 ifcfile.createIfcRelVoidsElement(ifcopenshell.guid.compress(uuid.uuid1().hex),history,'Subtraction','',product,prod2)
 
         # properties
@@ -934,9 +942,9 @@ def export(exportList,filename):
                         val = "(".join(r[1:])
                         val = val.strip("'")
                         val = val.strip('"')
-                        if DEBUG: print "      property ",key," : ",str(val), " (", str(tp), ")"
+                        if DEBUG: print "      property ",key," : ",val.encode("utf8"), " (", str(tp), ")"
                         if tp in ["IfcLabel","IfcText","IfcIdentifier"]:
-                            val = str(val)
+                            val = val.encode("utf8")
                         elif tp == "IfcBoolean":
                             if val == ".T.":
                                 val = True
