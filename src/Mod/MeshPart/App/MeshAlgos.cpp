@@ -54,7 +54,7 @@ void MeshAlgos::offset(MeshCore::MeshKernel* Mesh, float fSize)
 
   unsigned int i = 0;
   // go throug all the Vertex normales
-  for(std::vector<Base::Vector3f>::iterator It= normals.begin();It != normals.end();It++,i++)
+  for(std::vector<Base::Vector3f>::iterator It= normals.begin();It != normals.end();++It,i++)
     // and move each mesh point in the normal direction
     Mesh->MovePoint(i,It->Normalize() * fSize);
   Mesh->RecalcBoundBox();
@@ -76,7 +76,7 @@ void MeshAlgos::offsetSpecial2(MeshCore::MeshKernel* Mesh, float fSize)
     unsigned int i = 0;
 
     // go throug all the Vertex normales
-    for(std::vector<Base::Vector3f>::iterator It= PointNormals.begin();It != PointNormals.end();It++,i++){
+    for(std::vector<Base::Vector3f>::iterator It= PointNormals.begin();It != PointNormals.end();++It,i++){
         builder.addSingleLine(Mesh->GetPoint(i),Mesh->GetPoint(i)+It->Normalize() * fSize);
         // and move each mesh point in the normal direction
         Mesh->MovePoint(i,It->Normalize() * fSize);
@@ -126,7 +126,7 @@ void MeshAlgos::offsetSpecial(MeshCore::MeshKernel* Mesh, float fSize, float zma
 
   unsigned int i = 0;
   // go throug all the Vertex normales
-  for(std::vector<Base::Vector3f>::iterator It= normals.begin();It != normals.end();It++,i++)
+  for(std::vector<Base::Vector3f>::iterator It= normals.begin();It != normals.end();++It,i++)
   {
     Base::Vector3f Pnt = Mesh->GetPoint(i);
 
@@ -172,8 +172,8 @@ MeshCore::MeshKernel* MeshAlgos::boolean(MeshCore::MeshKernel* pMesh1, MeshCore:
   GtsSurface * s1, * s2, * s3;
   GtsSurfaceInter * si;
   GNode * tree1, * tree2;
-  gboolean check_self_intersection = FALSE;
-  gboolean closed = TRUE, is_open1, is_open2;
+  gboolean check_self_intersection = false;
+  gboolean closed = true, is_open1, is_open2;
 
 
   // create a GTS surface
@@ -224,11 +224,11 @@ MeshCore::MeshKernel* MeshAlgos::boolean(MeshCore::MeshKernel* pMesh1, MeshCore:
 
   /* build bounding box tree for first surface */
   tree1 = gts_bb_tree_surface (s1);
-  is_open1 = gts_surface_volume (s1) < 0. ? TRUE : FALSE;
+  is_open1 = gts_surface_volume (s1) < 0. ? true : false;
 
   /* build bounding box tree for second surface */
   tree2 = gts_bb_tree_surface (s2);
-  is_open2 = gts_surface_volume (s2) < 0. ? TRUE : FALSE;
+  is_open2 = gts_surface_volume (s2) < 0. ? true : false;
 
   si = gts_surface_inter_new (gts_surface_inter_class (),
 			      s1, s2, tree1, tree2, is_open1, is_open2);
@@ -236,8 +236,8 @@ MeshCore::MeshKernel* MeshAlgos::boolean(MeshCore::MeshKernel* pMesh1, MeshCore:
   if (!closed) {
     gts_object_destroy (GTS_OBJECT (s1));
     gts_object_destroy (GTS_OBJECT (s2));
-    gts_bb_tree_destroy (tree1, TRUE);
-    gts_bb_tree_destroy (tree2, TRUE);  
+    gts_bb_tree_destroy (tree1, true);
+    gts_bb_tree_destroy (tree2, true);  
     throw"the intersection of 1 and  2 is not a closed curve\n";
   }
 
@@ -280,8 +280,8 @@ MeshCore::MeshKernel* MeshAlgos::boolean(MeshCore::MeshKernel* pMesh1, MeshCore:
       gts_object_destroy (GTS_OBJECT (s2));
       gts_object_destroy (GTS_OBJECT (s3));
       gts_object_destroy (GTS_OBJECT (si));
-      gts_bb_tree_destroy (tree1, TRUE);
-      gts_bb_tree_destroy (tree2, TRUE);  
+      gts_bb_tree_destroy (tree1, true);
+      gts_bb_tree_destroy (tree2, true);  
       throw "the resulting surface is self-intersecting\n";
     }
   }
@@ -301,8 +301,8 @@ MeshCore::MeshKernel* MeshAlgos::boolean(MeshCore::MeshKernel* pMesh1, MeshCore:
 //  gts_object_destroy (GTS_OBJECT (si));
 
   // destroy bounding box trees (including bounding boxes) 
-//  gts_bb_tree_destroy (tree1, TRUE);
-//  gts_bb_tree_destroy (tree2, TRUE);  
+//  gts_bb_tree_destroy (tree1, true);
+//  gts_bb_tree_destroy (tree2, true);  
   
 #endif
   return pMesh1;

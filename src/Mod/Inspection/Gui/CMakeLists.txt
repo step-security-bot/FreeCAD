@@ -2,10 +2,10 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
-    ${COIN3D_INCLUDE_DIR}
+    ${COIN3D_INCLUDE_DIRS}
     ${QT_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
 )
 
@@ -39,7 +39,6 @@ SET(InspectionGui_SRCS
     ${Inspection_QRC_SRCS}
     ${Dialogs_SRCS}
     AppInspectionGui.cpp
-    AppInspectionGuiPy.cpp
     Command.cpp
     PreCompiled.cpp
     PreCompiled.h

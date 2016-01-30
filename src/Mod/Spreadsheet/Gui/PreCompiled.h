@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) Eivind Kvedalen        (eivind@kvedalen.name) 2015      *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -21,14 +22,14 @@
  ***************************************************************************/
 
 
-#ifndef __PRECOMPILED_GUI__
-#define __PRECOMPILED_GUI__
+#ifndef SPREADSHEET_PRECOMPILED_H
+#define SPREADSHEET_PRECOMPILED_H
 
 #include <FCConfig.h>
 
 // Importing of App classes
 #ifdef FC_OS_WIN32
-# define SpreadsheetExport __declspec(dllimport)
+# define SpreadsheetExport    __declspec(dllimport)
 # define SpreadsheetGuiExport __declspec(dllexport)
 #else // for Linux
 # define SpreadsheetExport
@@ -38,9 +39,10 @@
 
 // here get the warnings of too long specifiers disabled (needed for VC6)
 #ifdef _MSC_VER
-# pragma warning( disable : 4251 )
-# pragma warning( disable : 4503 )
-# pragma warning( disable : 4786 )  // specifier longer then 255 chars
+# pragma warning(disable : 4005)
+# pragma warning(disable : 4251)
+# pragma warning(disable : 4503)
+# pragma warning(disable : 4786)  // specifier longer then 255 chars
 #endif
 
 #ifdef _PreComp_
@@ -76,4 +78,4 @@
 
 #endif //_PreComp_
 
-#endif // __PRECOMPILED_GUI__
+#endif // SPREADSHEET_PRECOMPILED_H

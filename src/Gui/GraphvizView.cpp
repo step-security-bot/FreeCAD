@@ -165,9 +165,9 @@ void GraphvizView::updateSvgItem(const App::Document &doc)
 #endif
     bool pathChanged = false;
 #ifdef FC_OS_WIN32
-    QString exe = QString::fromAscii("\"%1/dot\"").arg(path);
+    QString exe = QString::fromLatin1("\"%1/dot\"").arg(path);
 #else
-    QString exe = QString::fromAscii("%1/dot").arg(path);
+    QString exe = QString::fromLatin1("%1/dot").arg(path);
 #endif
     proc->setEnvironment(QProcess::systemEnvironment());
     do {
@@ -190,9 +190,9 @@ void GraphvizView::updateSvgItem(const App::Document &doc)
             }
             pathChanged = true;
 #ifdef FC_OS_WIN32
-            exe = QString::fromAscii("\"%1/dot\"").arg(path);
+            exe = QString::fromLatin1("\"%1/dot\"").arg(path);
 #else
-            exe = QString::fromAscii("%1/dot").arg(path);
+            exe = QString::fromLatin1("%1/dot").arg(path);
 #endif
         }
         else {
@@ -266,9 +266,9 @@ QByteArray GraphvizView::exportGraph(const QString& format)
 #endif
 
 #ifdef FC_OS_WIN32
-    QString exe = QString::fromAscii("\"%1/dot\"").arg(path);
+    QString exe = QString::fromLatin1("\"%1/dot\"").arg(path);
 #else
-    QString exe = QString::fromAscii("%1/dot").arg(path);
+    QString exe = QString::fromLatin1("%1/dot").arg(path);
 #endif
     proc.setEnvironment(QProcess::systemEnvironment());
     proc.start(exe, args);
@@ -288,12 +288,12 @@ bool GraphvizView::onMsg(const char* pMsg,const char** ppReturn)
 {
     if (strcmp("Save",pMsg) == 0 || strcmp("SaveAs",pMsg) == 0) {
         QList< QPair<QString, QString> > formatMap;
-        formatMap << qMakePair(tr("PNG format (*.png)"), QString::fromLatin1("png"));
-        formatMap << qMakePair(tr("Bitmap format (*.bmp)"), QString::fromLatin1("bmp"));
-        formatMap << qMakePair(tr("GIF format (*.gif)"), QString::fromLatin1("gif"));
-        formatMap << qMakePair(tr("JPG format (*.jpg)"), QString::fromLatin1("jpg"));
-        formatMap << qMakePair(tr("SVG format (*.svg)"), QString::fromLatin1("svg"));
-        formatMap << qMakePair(tr("PDF format (*.pdf)"), QString::fromLatin1("pdf"));
+        formatMap << qMakePair(QString::fromLatin1("%1 (*.png)").arg(tr("PNG format")), QString::fromLatin1("png"));
+        formatMap << qMakePair(QString::fromLatin1("%1 (*.bmp)").arg(tr("Bitmap format")), QString::fromLatin1("bmp"));
+        formatMap << qMakePair(QString::fromLatin1("%1 (*.gif)").arg(tr("GIF format")), QString::fromLatin1("gif"));
+        formatMap << qMakePair(QString::fromLatin1("%1 (*.jpg)").arg(tr("JPG format")), QString::fromLatin1("jpg"));
+        formatMap << qMakePair(QString::fromLatin1("%1 (*.svg)").arg(tr("SVG format")), QString::fromLatin1("svg"));
+        formatMap << qMakePair(QString::fromLatin1("%1 (*.pdf)").arg(tr("PDF format")), QString::fromLatin1("pdf"));
       //formatMap << qMakePair(tr("VRML format (*.vrml)"), QString::fromLatin1("vrml"));
 
         QStringList filter;
@@ -377,7 +377,7 @@ void GraphvizView::print()
 void GraphvizView::printPdf()
 {
     QStringList filter;
-    filter << tr("PDF format (*.pdf)");
+    filter << QString::fromLatin1("%1 (*.pdf)").arg(tr("PDF format"));
 
     QString selectedFilter;
     QString fn = Gui::FileDialog::getSaveFileName(this, tr("Export graph"), QString(), filter.join(QLatin1String(";;")), &selectedFilter);

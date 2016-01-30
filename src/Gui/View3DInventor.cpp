@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -36,6 +36,7 @@
 # include <QGLFormat>
 # include <QGLWidget>
 # include <QGLPixelBuffer>
+# include <QMessageBox>
 # include <QPainter>
 # include <QPrinter>
 # include <QPrintDialog>
@@ -43,6 +44,7 @@
 # include <QStackedWidget>
 # include <QTimer>
 # include <QUrl>
+# include <QMimeData>
 # include <Inventor/actions/SoWriteAction.h>
 # include <Inventor/actions/SoGetPrimitiveCountAction.h>
 # include <Inventor/nodes/SoDirectionalLight.h>
@@ -103,7 +105,7 @@ void GLOverlayWidget::paintEvent(QPaintEvent* ev)
 TYPESYSTEM_SOURCE_ABSTRACT(Gui::View3DInventor,Gui::MDIView);
 
 View3DInventor::View3DInventor(Gui::Document* pcDocument, QWidget* parent,
-                               const QGLWidget* sharewidget, Qt::WFlags wflags)
+                               const QGLWidget* sharewidget, Qt::WindowFlags wflags)
     : MDIView(pcDocument, parent, wflags), _viewerPy(0)
 {
     stack = new QStackedWidget(this);
@@ -251,8 +253,8 @@ void View3DInventor::OnChange(ParameterGrp::SubjectType &rCaller,ParameterGrp::M
     }
     else if (strcmp(Reason,"HeadlightDirection") == 0) {
         std::string pos = rGrp.GetASCII("HeadlightDirection");
-        QString flt = QString::fromAscii("([-+]?[0-9]+\\.?[0-9]+)");
-        QRegExp rx(QString::fromAscii("^\\(%1,%1,%1\\)$").arg(flt));
+        QString flt = QString::fromLatin1("([-+]?[0-9]+\\.?[0-9]+)");
+        QRegExp rx(QString::fromLatin1("^\\(%1,%1,%1\\)$").arg(flt));
         if (rx.indexIn(QLatin1String(pos.c_str())) > -1) {
             float x = rx.cap(1).toFloat();
             float y = rx.cap(2).toFloat();
@@ -276,8 +278,8 @@ void View3DInventor::OnChange(ParameterGrp::SubjectType &rCaller,ParameterGrp::M
     }
     else if (strcmp(Reason,"BacklightDirection") == 0) {
         std::string pos = rGrp.GetASCII("BacklightDirection");
-        QString flt = QString::fromAscii("([-+]?[0-9]+\\.?[0-9]+)");
-        QRegExp rx(QString::fromAscii("^\\(%1,%1,%1\\)$").arg(flt));
+        QString flt = QString::fromLatin1("([-+]?[0-9]+\\.?[0-9]+)");
+        QRegExp rx(QString::fromLatin1("^\\(%1,%1,%1\\)$").arg(flt));
         if (rx.indexIn(QLatin1String(pos.c_str())) > -1) {
             float x = rx.cap(1).toFloat();
             float y = rx.cap(2).toFloat();
@@ -450,7 +452,8 @@ void View3DInventor::print()
 
 void View3DInventor::printPdf()
 {
-    QString filename = FileDialog::getSaveFileName(this, tr("Export PDF"), QString(), tr("PDF file (*.pdf)"));
+    QString filename = FileDialog::getSaveFileName(this, tr("Export PDF"), QString(), 
+        QString::fromLatin1("%1 (*.pdf)").arg(tr("PDF file")));
     if (!filename.isEmpty()) {
         Gui::WaitCursor wc;
         QPrinter printer(QPrinter::ScreenResolution);
@@ -530,6 +533,13 @@ void View3DInventor::print(QPrinter* printer)
 #else
     QImage img;
     QPainter p(printer);
+    if (!p.isActive() && !printer->outputFileName().isEmpty()) {
+        qApp->setOverrideCursor(Qt::ArrowCursor);
+        QMessageBox::critical(this, tr("Opening file failed"),
+            tr("Can't open file '%1' for writing.").arg(printer->outputFileName()));
+        qApp->restoreOverrideCursor();
+        return;
+    }
     QRect rect = printer->pageRect();
 
     bool pbuffer = QGLPixelBuffer::hasOpenGLPbuffers();
@@ -701,6 +711,10 @@ bool View3DInventor::onMsg(const char* pMsg, const char** ppReturn)
         getGuiDocument()->saveAs();
         return true;
     }
+    else if (strcmp("SaveCopy",pMsg) == 0) {
+        getGuiDocument()->saveCopy();
+        return true;
+    }
     else
         return false;
 }
@@ -710,6 +724,8 @@ bool View3DInventor::onHasMsg(const char* pMsg) const
     if  (strcmp("Save",pMsg) == 0)
         return true;
     else if (strcmp("SaveAs",pMsg) == 0)
+        return true;
+    else if (strcmp("SaveCopy",pMsg) == 0)
         return true;
     else if (strcmp("Undo",pMsg) == 0) {
         App::Document* doc = getAppDocument();
@@ -879,33 +895,6 @@ void View3DInventor::dump(const char* filename)
         _viewer->dumpToFile(_viewer->getSceneGraph(), filename, true);
     else
         _viewer->dumpToFile(_viewer->getSceneGraph(), filename, false);
-}
-
-void View3DInventor::dumpSelection(const char* filename)
-{
-    if (!_pcDocument)
-        return;
-
-    SoSeparator* sep = new SoSeparator();
-    sep->ref();
-
-    std::vector<Gui::SelectionObject> sel = Selection().getSelectionEx();
-    for (std::vector<Gui::SelectionObject>::iterator it = sel.begin(); it != sel.end(); ++it) {
-        App::DocumentObject* obj = it->getObject();
-        Gui::ViewProvider* vp = _pcDocument->getViewProvider(obj);
-        if (vp)
-            sep->addChild(vp->getRoot());
-    }
-
-    SoGetPrimitiveCountAction action;
-    action.setCanApproximate(true);
-    action.apply(sep);
-
-    if ( action.getTriangleCount() > 100000 || action.getPointCount() > 30000 || action.getLineCount() > 10000 )
-        _viewer->dumpToFile(sep, filename, true);
-    else
-        _viewer->dumpToFile(sep, filename, false);
-    sep->unref();
 }
 
 void View3DInventor::windowStateChanged(MDIView* view)

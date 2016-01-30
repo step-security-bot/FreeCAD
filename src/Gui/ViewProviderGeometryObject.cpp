@@ -71,7 +71,7 @@ PROPERTY_SOURCE(Gui::ViewProviderGeometryObject, Gui::ViewProviderDocumentObject
 
 const App::PropertyIntegerConstraint::Constraints intPercent = {0,100,1};
 
-ViewProviderGeometryObject::ViewProviderGeometryObject() : pcBoundSwitch(0)
+ViewProviderGeometryObject::ViewProviderGeometryObject() : m_dragStart(false), pcBoundSwitch(0)
 {
     ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/View");
     unsigned long shcol = hGrp->GetUnsigned("DefaultShapeColor",3435973887UL); // light gray (204,204,204)
@@ -186,6 +186,27 @@ void ViewProviderGeometryObject::updateData(const App::Property* prop)
         pcTransform->translation.setValue(px,py,pz);
         pcTransform->center.setValue(0.0f,0.0f,0.0f);
         pcTransform->scaleFactor.setValue(1.0f,1.0f,1.0f);
+
+        // If this view provider is in edit mode also check whether it has
+        // an SoCenterballManip that must be updated (#0002150)
+        if (isEditing() && !m_dragStart) {
+            SoSearchAction sa;
+            sa.setType(SoCenterballManip::getClassTypeId());
+            sa.setInterest(SoSearchAction::FIRST);
+            sa.apply(pcRoot);
+
+            SoPath * path = sa.getPath();
+            if (path) {
+                // check if the name matches to avoid to get any other manipulator
+                SoCenterballManip * manip = static_cast<SoCenterballManip*>(path->getTail());
+                if (manip->getName() == SbName("ViewProviderGeometryObject")) {
+                    manip->rotation.setValue(q0,q1,q2,q3);
+                    manip->translation.setValue(px,py,pz);
+                    manip->center.setValue(0.0f,0.0f,0.0f);
+                    manip->scaleFactor.setValue(1.0f,1.0f,1.0f);
+                }
+            }
+        }
     }
 }
 
@@ -206,12 +227,13 @@ bool ViewProviderGeometryObject::setEdit(int ModNum)
 #if 1
     SoSearchAction sa;
     sa.setInterest(SoSearchAction::FIRST);
-    sa.setSearchingAll(FALSE);
+    sa.setSearchingAll(false);
     sa.setNode(this->pcTransform);
     sa.apply(pcRoot);
     SoPath * path = sa.getPath();
     if (path) {
         SoCenterballManip * manip = new SoCenterballManip;
+        manip->setName("ViewProviderGeometryObject");
         SoDragger* dragger = manip->getDragger();
         dragger->addStartCallback(dragStartCallback, this);
         dragger->addFinishCallback(dragFinishCallback, this);
@@ -314,7 +336,7 @@ void ViewProviderGeometryObject::setEditViewer(Gui::View3DInventorViewer* viewer
 {
     if (ModNum == (int)ViewProvider::Transform) {
         SoNode* root = viewer->getSceneGraph();
-        static_cast<SoFCUnifiedSelection*>(root)->selectionRole.setValue(FALSE);
+        static_cast<SoFCUnifiedSelection*>(root)->selectionRole.setValue(false);
     }
 }
 
@@ -323,7 +345,7 @@ void ViewProviderGeometryObject::unsetEditViewer(Gui::View3DInventorViewer* view
     int ModNum = this->getEditingMode();
     if (ModNum == (int)ViewProvider::Transform) {
         SoNode* root = viewer->getSceneGraph();
-        static_cast<SoFCUnifiedSelection*>(root)->selectionRole.setValue(TRUE);
+        static_cast<SoFCUnifiedSelection*>(root)->selectionRole.setValue(true);
     }
 }
 
@@ -468,7 +490,7 @@ void ViewProviderGeometryObject::dragMotionCallback(void * data, SoDragger * d)
             t -= c;
             newPlm.setPosition(t);
 
-            // #0001441: entering Transform mode degrades the Placemens rotation to single precision
+            // #0001441: entering Transform mode degrades the Placement rotation to single precision
             Base::Placement oldPlm = geometry->Placement.getValue();
             const Base::Vector3d& p1 = oldPlm.getPosition();
             const Base::Vector3d& p2 = newPlm.getPosition();
@@ -495,12 +517,16 @@ void ViewProviderGeometryObject::dragStartCallback(void *data, SoDragger *)
 {
     // This is called when a manipulator is about to manipulating
     Gui::Application::Instance->activeDocument()->openCommand("Transform");
+    ViewProviderGeometryObject* view = reinterpret_cast<ViewProviderGeometryObject*>(data);
+    view->m_dragStart = true;
 }
 
 void ViewProviderGeometryObject::dragFinishCallback(void *data, SoDragger *)
 {
     // This is called when a manipulator has done manipulating
     Gui::Application::Instance->activeDocument()->commitCommand();
+    ViewProviderGeometryObject* view = reinterpret_cast<ViewProviderGeometryObject*>(data);
+    view->m_dragStart = false;
 }
 
 SoPickedPointList ViewProviderGeometryObject::getPickedPoints(const SbVec2s& pos, const View3DInventorViewer& viewer,bool pickAll) const
@@ -575,7 +601,7 @@ void ViewProviderGeometryObject::setSelectable(bool selectable)
 {
     SoSearchAction sa;
     sa.setInterest(SoSearchAction::ALL);
-    sa.setSearchingAll(TRUE);
+    sa.setSearchingAll(true);
     sa.setType(Gui::SoFCSelection::getClassTypeId());
     sa.apply(pcRoot);
 

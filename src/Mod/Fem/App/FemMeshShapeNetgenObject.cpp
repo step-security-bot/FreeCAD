@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Jürgen Riegel (FreeCAD@juergen-riegel.net)         *
+ *   Copyright (c) 2013 JÃ¼rgen Riegel (FreeCAD@juergen-riegel.net)         *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -121,15 +121,15 @@ App::DocumentObjectExecReturn *FemMeshShapeNetgenObject::execute(void)
     const SMDS_MeshInfo& info = data->GetMeshInfo();
     int numFaces = data->NbFaces();
     int numNode = info.NbNodes();
-    int numTria = info.NbTriangles();
-    int numQuad = info.NbQuadrangles();
-    int numPoly = info.NbPolygons();
+  //int numTria = info.NbTriangles();
+  //int numQuad = info.NbQuadrangles();
+  //int numPoly = info.NbPolygons();
     int numVolu = info.NbVolumes();
-    int numTetr = info.NbTetras();
-    int numHexa = info.NbHexas();
-    int numPyrd = info.NbPyramids();
-    int numPris = info.NbPrisms();
-    int numHedr = info.NbPolyhedrons();
+  //int numTetr = info.NbTetras();
+  //int numHexa = info.NbHexas();
+  //int numPyrd = info.NbPyramids();
+  //int numPris = info.NbPrisms();
+  //int numHedr = info.NbPolyhedrons();
 
     Base::Console().Log("NetgenMesh: %i Nodes, %i Volumes, %i Faces\n",numNode,numVolu,numFaces);
 

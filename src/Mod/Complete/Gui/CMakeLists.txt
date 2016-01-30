@@ -1,11 +1,11 @@
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
-    ${COIN3D_INCLUDE_DIR}
+    ${COIN3D_INCLUDE_DIRS}
     ${QT_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
 )
 
 set(CompleteGui_LIBS
@@ -18,7 +18,6 @@ qt4_add_resources(Complete_QRC_SRCS Resources/Complete.qrc)
 SET(CompleteGui_SRCS
     ${Complete_QRC_SRCS}
     AppCompleteGui.cpp
-    AppCompleteGuiPy.cpp
     Command.cpp
     PreCompiled.cpp
     PreCompiled.h

@@ -119,17 +119,18 @@ private:
 };
 }
 
-CrossSections::CrossSections(const Base::BoundBox3d& bb, QWidget* parent, Qt::WFlags fl)
+CrossSections::CrossSections(const Base::BoundBox3d& bb, QWidget* parent, Qt::WindowFlags fl)
   : QDialog(parent, fl), bbox(bb)
 {
     ui = new Ui_CrossSections();
     ui->setupUi(this);
     ui->position->setRange(-DBL_MAX, DBL_MAX);
     ui->position->setDecimals(Base::UnitsApi::getDecimals());
+    ui->distance->setMaximum(DBL_MAX);
     ui->distance->setDecimals(Base::UnitsApi::getDecimals());
     vp = new ViewProviderCrossSections();
 
-    Base::Vector3d c = bbox.CalcCenter();
+    Base::Vector3d c = bbox.GetCenter();
     calcPlane(CrossSections::XY, c.z);
     ui->position->setValue(c.z);
 
@@ -239,28 +240,28 @@ void CrossSections::apply()
         App::Document* doc = (*it)->getDocument();
         std::string s = (*it)->getNameInDocument();
         s += "_cs";
-        app->runPythonCode(QString::fromAscii(
+        app->runPythonCode(QString::fromLatin1(
             "wires=list()\n"
             "shape=FreeCAD.getDocument(\"%1\").%2.Shape\n")
             .arg(QLatin1String(doc->getName()))
-            .arg(QLatin1String((*it)->getNameInDocument())).toAscii());
+            .arg(QLatin1String((*it)->getNameInDocument())).toLatin1());
 
         for (std::vector<double>::iterator jt = d.begin(); jt != d.end(); ++jt) {
-            app->runPythonCode(QString::fromAscii(
+            app->runPythonCode(QString::fromLatin1(
                 "for i in shape.slice(Base.Vector(%1,%2,%3),%4):\n"
                 "    wires.append(i)\n"
-                ).arg(a).arg(b).arg(c).arg(*jt).toAscii());
+                ).arg(a).arg(b).arg(c).arg(*jt).toLatin1());
             seq.next();
         }
 
-        app->runPythonCode(QString::fromAscii(
+        app->runPythonCode(QString::fromLatin1(
             "comp=Part.Compound(wires)\n"
             "slice=FreeCAD.getDocument(\"%1\").addObject(\"Part::Feature\",\"%2\")\n"
             "slice.Shape=comp\n"
             "slice.purgeTouched()\n"
             "del slice,comp,wires,shape")
             .arg(QLatin1String(doc->getName()))
-            .arg(QLatin1String(s.c_str())).toAscii());
+            .arg(QLatin1String(s.c_str())).toLatin1());
 
         seq.next();
     }
@@ -269,7 +270,7 @@ void CrossSections::apply()
 
 void CrossSections::on_xyPlane_clicked()
 {
-    Base::Vector3d c = bbox.CalcCenter();
+    Base::Vector3d c = bbox.GetCenter();
     ui->position->setValue(c.z);
     if (!ui->sectionsBox->isChecked()) {
         calcPlane(CrossSections::XY, c.z);
@@ -285,7 +286,7 @@ void CrossSections::on_xyPlane_clicked()
 
 void CrossSections::on_xzPlane_clicked()
 {
-    Base::Vector3d c = bbox.CalcCenter();
+    Base::Vector3d c = bbox.GetCenter();
     ui->position->setValue(c.y);
     if (!ui->sectionsBox->isChecked()) {
         calcPlane(CrossSections::XZ, c.y);
@@ -301,7 +302,7 @@ void CrossSections::on_xzPlane_clicked()
 
 void CrossSections::on_yzPlane_clicked()
 {
-    Base::Vector3d c = bbox.CalcCenter();
+    Base::Vector3d c = bbox.GetCenter();
     ui->position->setValue(c.x);
     if (!ui->sectionsBox->isChecked()) {
         calcPlane(CrossSections::YZ, c.x);
@@ -332,8 +333,8 @@ void CrossSections::on_sectionsBox_toggled(bool b)
     }
     else {
         CrossSections::Plane type = plane();
-        Base::Vector3d c = bbox.CalcCenter();
-        double value;
+        Base::Vector3d c = bbox.GetCenter();
+        double value = 0;
         switch (type) {
             case CrossSections::XY:
                 value = c.z;
@@ -362,7 +363,7 @@ void CrossSections::on_checkBothSides_toggled(bool b)
 void CrossSections::on_countSections_valueChanged(int v)
 {
     CrossSections::Plane type = plane();
-    double dist;
+    double dist = 0;
     switch (type) {
         case CrossSections::XY:
             dist = bbox.LengthZ() / v;

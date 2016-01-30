@@ -161,6 +161,17 @@ unsigned int PropertyPointKernel::getMemSize (void) const
     return sizeof(Base::Vector3f) * this->_cPoints->size();
 }
 
+PointKernel* PropertyPointKernel::startEditing()
+{
+    aboutToSetValue();
+    return static_cast<PointKernel*>(_cPoints);
+}
+
+void PropertyPointKernel::finishEditing()
+{
+    hasSetValue();
+}
+
 void PropertyPointKernel::removeIndices( const std::vector<unsigned long>& uIndices )
 {
     // We need a sorted array
@@ -183,7 +194,7 @@ void PropertyPointKernel::removeIndices( const std::vector<unsigned long>& uIndi
         else if (index != *pos)
             kernel.push_back( *it );
         else 
-            pos++;
+            ++pos;
     }
 
     setValue(kernel);

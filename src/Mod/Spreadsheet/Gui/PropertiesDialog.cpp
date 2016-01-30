@@ -20,13 +20,16 @@
  *                                                                         *
  ***************************************************************************/
 
+
+#include "PreCompiled.h"
 #include "PropertiesDialog.h"
 #include <Base/Tools.h>
-#include <Mod/Spreadsheet/App/Expression.h>
+#include <Mod/Spreadsheet/App/SpreadsheetExpression.h>
 #include <Mod/Spreadsheet/App/Range.h>
 #include <Gui/Command.h>
 #include "ui_PropertiesDialog.h"
 
+using namespace App;
 using namespace Spreadsheet;
 using namespace SpreadsheetGui;
 
@@ -90,9 +93,9 @@ PropertiesDialog::PropertiesDialog(Sheet *_sheet, const std::vector<Range> &_ran
     if (style.find("underline") != style.end())
         ui->styleUnderline->setChecked(true);
 
-    ui->displayUnit->setText(QString::fromStdString(displayUnit.stringRep));
+    ui->displayUnit->setText(Base::Tools::fromStdString(displayUnit.stringRep));
 
-    ui->alias->setText(QString::fromStdString(alias));
+    ui->alias->setText(Base::Tools::fromStdString(alias));
 
     // Colors
     connect(ui->foregroundColor, SIGNAL(colorChanged(QColor)), this, SLOT(foregroundColorChanged(QColor)));
@@ -174,7 +177,7 @@ void PropertiesDialog::styleChanged()
 
 void PropertiesDialog::displayUnitChanged(const QString & text)
 {
-    if (text == "") {
+    if (text.isEmpty()) {
         displayUnit = DisplayUnit();
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
         return;
@@ -182,7 +185,7 @@ void PropertiesDialog::displayUnitChanged(const QString & text)
 
     QPalette palette = ui->displayUnit->palette();
     try {
-        std::auto_ptr<UnitExpression> e(ExpressionParser::parseUnit(sheet, text.toUtf8().constData()));
+        std::auto_ptr<UnitExpression> e(Spreadsheet::ExpressionParser::parseUnit(sheet, text.toUtf8().constData()));
 
         displayUnit = DisplayUnit(text.toUtf8().constData(), e->getUnit(), e->getScaler());
         palette.setColor(QPalette::Text, Qt::black);
@@ -201,33 +204,25 @@ void PropertiesDialog::aliasChanged(const QString & text)
 {
     QPalette palette = ui->alias->palette();
 
-    if (text.indexOf(QRegExp("^[A-Za-z][_A-Za-z0-9]*$")) >= 0) {
+    aliasOk = true;
+
+    if (sheet->getAddressFromAlias(Base::Tools::toStdString(text)).size() > 0)
+        aliasOk = false;
+
+    if (text.indexOf(QRegExp(QString::fromLatin1("^[A-Za-z][_A-Za-z0-9]*$"))) >= 0) {
         try {
             CellAddress address(text.toUtf8().constData());
-
-            palette.setColor(QPalette::Text, Qt::red);
             aliasOk = false;
-            alias = "";
         }
-        catch (...) {
-            aliasOk = true;
-            palette.setColor(QPalette::Text, Qt::black);
-            alias = text.toStdString();
-        }
+        catch (...) { }
     }
     else {
-        if (text == "") {
-            aliasOk = true;
-            palette.setColor(QPalette::Text, Qt::black);
-        }
-        else {
+        if (!text.isEmpty())
             aliasOk = false;
-            ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-            palette.setColor(QPalette::Text, Qt::red);
-        }
-        alias = "";
     }
 
+    alias = aliasOk ? Base::Tools::toStdString(text) : "";
+    palette.setColor(QPalette::Text, aliasOk ? Qt::black : Qt::red);
     ui->alias->setPalette(palette);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(displayUnitOk && aliasOk);
 }
@@ -292,6 +287,12 @@ void PropertiesDialog::apply()
         else
             Gui::Command::abortCommand();
     }
+}
+
+void PropertiesDialog::selectAlias()
+{
+    ui->tabWidget->setCurrentIndex(4);
+    ui->alias->setFocus();
 }
 
 #include "moc_PropertiesDialog.cpp"

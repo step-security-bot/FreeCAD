@@ -8,7 +8,7 @@ include_directories(
     ${PYTHON_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
     ${QT_INCLUDE_DIR}
 )
 
@@ -17,8 +17,8 @@ set(Spreadsheet_LIBS
 )
 
 set(Spreadsheet_SRCS
-    Expression.cpp
-    Expression.h
+    SpreadsheetExpression.cpp
+    SpreadsheetExpression.h
     Cell.cpp
     Cell.h
     DisplayUnit.h
@@ -61,7 +61,7 @@ target_link_libraries(Spreadsheet ${Spreadsheet_LIBS})
 fc_target_copy_resource(Spreadsheet 
     ${CMAKE_SOURCE_DIR}/src/Mod/Spreadsheet
     ${CMAKE_BINARY_DIR}/Mod/Spreadsheet
-    Init.py)
+    Init.py TestSpreadsheet.py)
 
 SET_BIN_DIR(Spreadsheet Spreadsheet /Mod/Spreadsheet)
 SET_PYTHON_PREFIX_SUFFIX(Spreadsheet)

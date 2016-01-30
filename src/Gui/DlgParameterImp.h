@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2002 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2002 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -35,14 +35,14 @@ namespace Dialog {
 
 /**
  * The DlgParameterImp class implements a dialog showing all parameters in a list view.
- * \author Jürgen Riegel
+ * \author JÃ¼rgen Riegel
  */
 class DlgParameterImp : public QDialog, public Ui_DlgParameter
 { 
     Q_OBJECT
 
 public:
-    DlgParameterImp( QWidget* parent = 0, Qt::WFlags fl = 0 );
+    DlgParameterImp( QWidget* parent = 0, Qt::WindowFlags fl = 0 );
     ~DlgParameterImp();
 
     void accept();
@@ -186,7 +186,7 @@ private:
  * associated FCTreeLabel which controls the visibility 
  * and the functions of the Label.
  *
- * \author Jürgen Riegel
+ * \author JÃ¼rgen Riegel
  */
 class ParameterGroupItem : public QTreeWidgetItem
 {

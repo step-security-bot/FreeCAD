@@ -236,14 +236,14 @@ MACRO(SET_BIN_DIR ProjectName OutputName)
     if(WIN32)
         set_target_properties(${ProjectName} PROPERTIES DEBUG_OUTPUT_NAME ${OutputName}_d)
     else(WIN32)
-        # FreeCADBase, SMDS, Driver and MEFISTO2 libs don't depend on parts from CMAKE_INSTALL_LIBDIR
-        if(NOT ${ProjectName} MATCHES "^(FreeCADBase|SMDS|Driver|MEFISTO2)$")
+        # FreeCADBase, SMDS, Driver, MEFISTO2 and area libs don't depend on parts from CMAKE_INSTALL_LIBDIR
+        if(NOT ${ProjectName} MATCHES "^(FreeCADBase|SMDS|Driver|MEFISTO2|area)$")
             if(${ARGC} STREQUAL 4)
                 set_target_properties(${ProjectName} PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}${ARGV3})
             else(${ARGC} STREQUAL 4)
                 set_target_properties(${ProjectName} PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_LIBDIR})
-            endif(${ARGC} STREQUAL 4)
-        endif(NOT ${ProjectName} MATCHES "^(FreeCADBase|SMDS|Driver|MEFISTO2)$")
+            endif()
+        endif()
     endif(WIN32)
 ENDMACRO(SET_BIN_DIR)
 

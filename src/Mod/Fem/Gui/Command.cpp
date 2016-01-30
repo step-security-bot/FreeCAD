@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -93,7 +93,7 @@ CmdFemCreateAnalysis::CmdFemCreateAnalysis()
     sToolTipText    = QT_TR_NOOP("Create a FEM analysis");
     sWhatsThis      = "Fem_CreateAnalysis";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_Analysis";
+    sPixmap         = "fem-analysis";
 }
 
 void CmdFemCreateAnalysis::activated(int iMsg)
@@ -155,7 +155,7 @@ CmdFemAddPart::CmdFemAddPart()
     sToolTipText    = QT_TR_NOOP("Add a part to the Analysis");
     sWhatsThis      = "Fem_FemAddPart";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_AddFemMesh";
+    sPixmap         = "fem-add-fem-mesh";
 }
 
 void CmdFemAddPart::activated(int iMsg)
@@ -207,6 +207,51 @@ bool CmdFemAddPart::isActive(void)
 
 //=====================================================================================
 
+DEF_STD_CMD_A(CmdFemCreateSolver);
+
+CmdFemCreateSolver::CmdFemCreateSolver()
+  : Command("Fem_CreateSolver")
+{
+    sAppModule      = "Fem";
+    sGroup          = QT_TR_NOOP("Fem");
+    sMenuText       = QT_TR_NOOP("Add a solver to the Analysis");
+    sToolTipText    = QT_TR_NOOP("Add a solver to the Analysis");
+    sWhatsThis      = "Fem_CreateSolver";
+    sStatusTip      = sToolTipText;
+    sPixmap         = "fem-solver";
+}
+
+void CmdFemCreateSolver::activated(int iMsg)
+{
+#ifndef FCWithNetgen
+    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+            QObject::tr("Your FreeCAD is build without NETGEN support. Meshing will not work...."));
+    return;
+#endif 
+
+    Fem::FemAnalysis        *Analysis;
+
+    if(getConstraintPrerequisits(&Analysis))
+        return;
+
+    std::string FeatName = getUniqueObjectName("Solver");
+
+    openCommand("Create solver for FEM or CFD analysis");
+    doCommand(Doc,"App.activeDocument().addObject(\"Fem::FemSolverObject\",\"%s\")",FeatName.c_str());
+    doCommand(Doc,"App.activeDocument().%s.Member = App.activeDocument().%s.Member + [App.activeDocument().%s]",Analysis->getNameInDocument(),Analysis->getNameInDocument(),FeatName.c_str());
+    updateActive();
+
+    doCommand(Gui,"Gui.activeDocument().setEdit('%s')",FeatName.c_str());
+}
+
+bool CmdFemCreateSolver::isActive(void)
+{
+    return hasActiveDocument();
+}
+
+//=====================================================================================
+
+
 DEF_STD_CMD_A(CmdFemConstraintBearing);
 
 CmdFemConstraintBearing::CmdFemConstraintBearing()
@@ -218,7 +263,7 @@ CmdFemConstraintBearing::CmdFemConstraintBearing()
     sToolTipText    = QT_TR_NOOP("Create FEM constraint for a bearing");
     sWhatsThis      = "Fem_ConstraintBearing";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_ConstraintBearing";
+    sPixmap         = "fem-constraint-bearing";
 }
 
 void CmdFemConstraintBearing::activated(int iMsg)
@@ -240,7 +285,7 @@ void CmdFemConstraintBearing::activated(int iMsg)
 
 bool CmdFemConstraintBearing::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -256,7 +301,7 @@ CmdFemConstraintFixed::CmdFemConstraintFixed()
     sToolTipText    = QT_TR_NOOP("Create FEM constraint for a fixed geometric entity");
     sWhatsThis      = "Fem_ConstraintFixed";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_ConstraintFixed";
+    sPixmap         = "fem-constraint-fixed";
 }
 
 void CmdFemConstraintFixed::activated(int iMsg)
@@ -278,7 +323,7 @@ void CmdFemConstraintFixed::activated(int iMsg)
 
 bool CmdFemConstraintFixed::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -294,7 +339,7 @@ CmdFemConstraintForce::CmdFemConstraintForce()
     sToolTipText    = QT_TR_NOOP("Create FEM constraint for a force acting on a geometric entity");
     sWhatsThis      = "Fem_ConstraintForce";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_ConstraintForce";
+    sPixmap         = "fem-constraint-force";
 }
 
 void CmdFemConstraintForce::activated(int iMsg)
@@ -317,7 +362,7 @@ void CmdFemConstraintForce::activated(int iMsg)
 
 bool CmdFemConstraintForce::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -333,7 +378,7 @@ CmdFemConstraintPressure::CmdFemConstraintPressure()
     sToolTipText    = QT_TR_NOOP("Create FEM constraint for a pressure acting on a face");
     sWhatsThis      = "Fem_ConstraintPressure";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_ConstraintPressure";
+    sPixmap         = "fem-constraint-pressure";
 }
 
 void CmdFemConstraintPressure::activated(int iMsg)
@@ -357,7 +402,7 @@ void CmdFemConstraintPressure::activated(int iMsg)
 
 bool CmdFemConstraintPressure::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -373,7 +418,7 @@ CmdFemConstraintGear::CmdFemConstraintGear()
     sToolTipText    = QT_TR_NOOP("Create FEM constraint for a gear");
     sWhatsThis      = "Fem_ConstraintGear";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_ConstraintGear";
+    sPixmap         = "fem-constraint-gear";
 }
 
 void CmdFemConstraintGear::activated(int iMsg)
@@ -395,7 +440,7 @@ void CmdFemConstraintGear::activated(int iMsg)
 
 bool CmdFemConstraintGear::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 //=====================================================================================
@@ -411,7 +456,7 @@ CmdFemConstraintPulley::CmdFemConstraintPulley()
     sToolTipText    = QT_TR_NOOP("Create FEM constraint for a pulley");
     sWhatsThis      = "Fem_ConstraintPulley";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_ConstraintPulley";
+    sPixmap         = "fem-constraint-pulley";
 }
 
 void CmdFemConstraintPulley::activated(int iMsg)
@@ -438,7 +483,7 @@ void CmdFemConstraintPulley::activated(int iMsg)
 
 bool CmdFemConstraintPulley::isActive(void)
 {
-    return hasActiveDocument();
+    return FemGui::ActiveAnalysisObserver::instance()->hasActiveObject();
 }
 
 // #####################################################################################################
@@ -543,7 +588,7 @@ CmdFemDefineNodesSet::CmdFemDefineNodesSet()
     sToolTipText  = QT_TR_NOOP("Create node set by Poly");
     sWhatsThis    = "Create node set by Poly";
     sStatusTip    = QT_TR_NOOP("Create node set by Poly");
-    sPixmap       = "Fem_FemMesh_createnodebypoly";
+    sPixmap       = "fem-fem-mesh-create-node-by-poly";
 }
 
 void CmdFemDefineNodesSet::activated(int iMsg)
@@ -600,7 +645,7 @@ CmdFemCreateNodesSet::CmdFemCreateNodesSet()
     sToolTipText    = QT_TR_NOOP("Define/create a nodes set...");
     sWhatsThis      = "Fem_CreateNodesSet";
     sStatusTip      = sToolTipText;
-    sPixmap         = "Fem_FemMesh_createnodebypoly";
+    sPixmap         = "fem-fem-mesh-create-node-by-poly";
 }
 
 void CmdFemCreateNodesSet::activated(int iMsg)
@@ -643,6 +688,7 @@ void CreateFemCommands(void)
     Gui::CommandManager &rcCmdMgr = Gui::Application::Instance->commandManager();
     //rcCmdMgr.addCommand(new CmdFemCreateAnalysis());
     rcCmdMgr.addCommand(new CmdFemAddPart());
+    //rcCmdMgr.addCommand(new CmdFemCreateSolver()); // Solver will be extended and created in python
     rcCmdMgr.addCommand(new CmdFemCreateNodesSet());
     rcCmdMgr.addCommand(new CmdFemDefineNodesSet());
     rcCmdMgr.addCommand(new CmdFemConstraintBearing());

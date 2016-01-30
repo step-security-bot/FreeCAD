@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2002 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2002 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -229,17 +229,17 @@ Action * StdCmdFreezeViews::createAction(void)
     // add the action items
     saveView = pcAction->addAction(QObject::tr("Save views..."));
     pcAction->addAction(QObject::tr("Load views..."));
-    pcAction->addAction(QString::fromAscii(""))->setSeparator(true);
+    pcAction->addAction(QString::fromLatin1(""))->setSeparator(true);
     freezeView = pcAction->addAction(QObject::tr("Freeze view"));
-    freezeView->setShortcut(QString::fromAscii(sAccel));
+    freezeView->setShortcut(QString::fromLatin1(sAccel));
     clearView = pcAction->addAction(QObject::tr("Clear views"));
-    separator = pcAction->addAction(QString::fromAscii(""));
+    separator = pcAction->addAction(QString::fromLatin1(""));
     separator->setSeparator(true);
     offset = pcAction->actions().count();
 
     // allow up to 50 views
     for (int i=0; i<maxViews; i++)
-        pcAction->addAction(QString::fromAscii(""))->setVisible(false);
+        pcAction->addAction(QString::fromLatin1(""))->setVisible(false);
 
     return pcAction;
 }
@@ -266,7 +266,7 @@ void StdCmdFreezeViews::activated(int iMsg)
                 savedViews++;
                 QString viewnr = QString(QObject::tr("Restore view &%1")).arg(index+1);
                 (*it)->setText(viewnr);
-                (*it)->setToolTip(QString::fromAscii(ppReturn));
+                (*it)->setToolTip(QString::fromLatin1(ppReturn));
                 (*it)->setVisible(true);
                 if (index < 9) {
                     int accel = Qt::CTRL+Qt::Key_1;
@@ -286,8 +286,8 @@ void StdCmdFreezeViews::activated(int iMsg)
         // Activate a view
         QList<QAction*> acts = pcAction->actions();
         QString data = acts[iMsg]->toolTip();
-        QString send = QString::fromAscii("SetCamera %1").arg(data);
-        getGuiApplication()->sendMsgToActiveView(send.toAscii());
+        QString send = QString::fromLatin1("SetCamera %1").arg(data);
+        getGuiApplication()->sendMsgToActiveView(send.toLatin1());
     }
 }
 
@@ -295,7 +295,7 @@ void StdCmdFreezeViews::onSaveViews()
 {
     // Save the views to an XML file
     QString fn = FileDialog::getSaveFileName(getMainWindow(), QObject::tr("Save frozen views"),
-                                             QString(), QObject::tr("Frozen views (*.cam)"));
+                                             QString(), QString::fromLatin1("%1 (*.cam)").arg(QObject::tr("Frozen views")));
     if (fn.isEmpty())
         return;
     QFile file(fn);
@@ -316,14 +316,14 @@ void StdCmdFreezeViews::onSaveViews()
             // remove the first line because it's a comment like '#Inventor V2.1 ascii'
             QString viewPos;
             if ( !data.isEmpty() ) {
-                QStringList lines = data.split(QString::fromAscii("\n"));
+                QStringList lines = data.split(QString::fromLatin1("\n"));
                 if ( lines.size() > 1 ) {
                     lines.pop_front();
-                    viewPos = lines.join(QString::fromAscii(" "));
+                    viewPos = lines.join(QString::fromLatin1(" "));
                 }
             }
 
-            str << "    <Camera settings=\"" << viewPos.toAscii().constData() << "\"/>" << endl;
+            str << "    <Camera settings=\"" << viewPos.toLatin1().constData() << "\"/>" << endl;
         }
 
         str << "  </Views>" << endl;
@@ -345,7 +345,7 @@ void StdCmdFreezeViews::onRestoreViews()
 
     // Restore the views from an XML file
     QString fn = FileDialog::getOpenFileName(getMainWindow(), QObject::tr("Restore frozen views"),
-                                             QString(), QObject::tr("Frozen views (*.cam)"));
+                                             QString(), QString::fromLatin1("%1 (*.cam)").arg(QObject::tr("Frozen views")));
     if (fn.isEmpty())
         return;
     QFile file(fn);
@@ -364,7 +364,7 @@ void StdCmdFreezeViews::onRestoreViews()
     if (!xmlDocument.setContent(&file, true, &errorStr, &errorLine, &errorColumn)) {
         std::cerr << "Parse error in XML content at line " << errorLine
                   << ", column " << errorColumn << ": "
-                  << (const char*)errorStr.toAscii() << std::endl;
+                  << (const char*)errorStr.toLatin1() << std::endl;
         return;
     }
 
@@ -376,18 +376,18 @@ void StdCmdFreezeViews::onRestoreViews()
     }
 
     bool ok;
-    int scheme = root.attribute(QString::fromAscii("SchemaVersion")).toInt(&ok);
+    int scheme = root.attribute(QString::fromLatin1("SchemaVersion")).toInt(&ok);
     if (!ok) return;
     // SchemeVersion "1"
     if (scheme == 1) {
         // read the views, ignore the attribute 'Count'
-        QDomElement child = root.firstChildElement(QString::fromAscii("Views"));
-        QDomElement views = child.firstChildElement(QString::fromAscii("Camera"));
+        QDomElement child = root.firstChildElement(QString::fromLatin1("Views"));
+        QDomElement views = child.firstChildElement(QString::fromLatin1("Camera"));
         QStringList cameras;
         while (!views.isNull()) {
-            QString setting = views.attribute(QString::fromAscii("settings"));
+            QString setting = views.attribute(QString::fromLatin1("settings"));
             cameras << setting;
-            views = views.nextSiblingElement(QString::fromAscii("Camera"));
+            views = views.nextSiblingElement(QString::fromLatin1("Camera"));
         }
 
         // use this rather than the attribute 'Count' because it could be
@@ -671,7 +671,7 @@ void StdCmdDrawStyle::activated(int iMsg)
     std::list<MDIView*> views = doc->getMDIViews();
     std::list<MDIView*>::iterator viewIt;
     bool oneChangedSignal(false);
-    for (viewIt = views.begin(); viewIt != views.end(); viewIt++)
+    for (viewIt = views.begin(); viewIt != views.end(); ++viewIt)
     {
         View3DInventor* view = qobject_cast<View3DInventor*>(*viewIt);
         if (view)
@@ -737,7 +737,7 @@ void StdCmdToggleVisibility::activated(int iMsg)
 
         // in case a group object and an object of the group is selected then ignore the group object
         std::vector<App::DocumentObject*> ignore;
-        for (std::vector<App::DocumentObject*>::iterator ft=sel.begin();ft!=sel.end();ft++) {
+        for (std::vector<App::DocumentObject*>::iterator ft=sel.begin();ft!=sel.end();++ft) {
             if ((*ft)->getTypeId().isDerivedFrom(App::DocumentObjectGroup::getClassTypeId())) {
                 App::DocumentObjectGroup* grp = static_cast<App::DocumentObjectGroup*>(*ft);
                 std::vector<App::DocumentObject*> sub = grp->Group.getValues();
@@ -759,7 +759,7 @@ void StdCmdToggleVisibility::activated(int iMsg)
             sel = diff;
         }
 
-        for (std::vector<App::DocumentObject*>::const_iterator ft=sel.begin();ft!=sel.end();ft++) {
+        for (std::vector<App::DocumentObject*>::const_iterator ft=sel.begin();ft!=sel.end();++ft) {
             if (pcDoc && pcDoc->isShow((*ft)->getNameInDocument()))
                 doCommand(Gui,"Gui.getDocument(\"%s\").getObject(\"%s\").Visibility=False"
                              , (*it)->getName(), (*ft)->getNameInDocument());
@@ -802,7 +802,7 @@ void StdCmdToggleSelectability::activated(int iMsg)
             (App::DocumentObject::getClassTypeId(), (*it)->getName());
 
  
-        for (std::vector<App::DocumentObject*>::const_iterator ft=sel.begin();ft!=sel.end();ft++) {
+        for (std::vector<App::DocumentObject*>::const_iterator ft=sel.begin();ft!=sel.end();++ft) {
             ViewProvider *pr = pcDoc->getViewProviderByName((*ft)->getNameInDocument());
             if(pr->isDerivedFrom(ViewProviderGeometryObject::getClassTypeId())){
                     if (dynamic_cast<ViewProviderGeometryObject*>(pr)->Selectable.getValue())
@@ -844,7 +844,7 @@ void StdCmdShowSelection::activated(int iMsg)
     for (std::vector<App::Document*>::const_iterator it = docs.begin(); it != docs.end(); ++it) {
         const std::vector<App::DocumentObject*> sel = Selection().getObjectsOfType
             (App::DocumentObject::getClassTypeId(), (*it)->getName());
-        for(std::vector<App::DocumentObject*>::const_iterator ft=sel.begin();ft!=sel.end();ft++) {
+        for(std::vector<App::DocumentObject*>::const_iterator ft=sel.begin();ft!=sel.end();++ft) {
             doCommand(Gui,"Gui.getDocument(\"%s\").getObject(\"%s\").Visibility=True"
                          , (*it)->getName(), (*ft)->getNameInDocument());
         }
@@ -879,7 +879,7 @@ void StdCmdHideSelection::activated(int iMsg)
     for (std::vector<App::Document*>::const_iterator it = docs.begin(); it != docs.end(); ++it) {
         const std::vector<App::DocumentObject*> sel = Selection().getObjectsOfType
             (App::DocumentObject::getClassTypeId(), (*it)->getName());
-        for(std::vector<App::DocumentObject*>::const_iterator ft=sel.begin();ft!=sel.end();ft++) {
+        for(std::vector<App::DocumentObject*>::const_iterator ft=sel.begin();ft!=sel.end();++ft) {
             doCommand(Gui,"Gui.getDocument(\"%s\").getObject(\"%s\").Visibility=False"
                          , (*it)->getName(), (*ft)->getNameInDocument());
         }
@@ -1468,12 +1468,12 @@ void StdViewScreenShot::activated(int iMsg)
 
         Base::Reference<ParameterGrp> hExt = App::GetApplication().GetUserParameter().GetGroup("BaseApp")
                                    ->GetGroup("Preferences")->GetGroup("General");
-        QString ext = QString::fromAscii(hExt->GetASCII("OffscreenImageFormat").c_str());
+        QString ext = QString::fromLatin1(hExt->GetASCII("OffscreenImageFormat").c_str());
 
         QStringList filter;
         QString selFilter;
         for (QStringList::Iterator it = formats.begin(); it != formats.end(); ++it) {
-            filter << QString::fromAscii("%1 %2 (*.%3)").arg((*it).toUpper()).
+            filter << QString::fromLatin1("%1 %2 (*.%3)").arg((*it).toUpper()).
                 arg(QObject::tr("files")).arg((*it).toLower());
             if (ext == *it)
                 selFilter = filter.last();
@@ -1483,7 +1483,7 @@ void StdViewScreenShot::activated(int iMsg)
         fd.setFileMode(QFileDialog::AnyFile);
         fd.setAcceptMode(QFileDialog::AcceptSave);
         fd.setWindowTitle(QObject::tr("Save picture"));
-        fd.setFilters(filter);
+        fd.setNameFilters(filter);
         if (!selFilter.isEmpty())
             fd.selectNameFilter(selFilter);
 
@@ -1494,7 +1494,7 @@ void StdViewScreenShot::activated(int iMsg)
 
         fd.setOptionsWidget(FileOptionsDialog::ExtensionRight, opt);
         fd.setConfirmOverwrite(true);
-        opt->onSelectedFilter(fd.selectedFilter());
+        opt->onSelectedFilter(fd.selectedNameFilter());
         QObject::connect(&fd, SIGNAL(filterSelected(const QString&)),
                          opt, SLOT(onSelectedFilter(const QString&)));
 
@@ -1520,7 +1520,7 @@ void StdViewScreenShot::activated(int iMsg)
                 }
             }
 
-            hExt->SetASCII("OffscreenImageFormat", (const char*)format.toAscii());
+            hExt->SetASCII("OffscreenImageFormat", (const char*)format.toLatin1());
 
             // which background chosen
             const char* background;
@@ -2147,7 +2147,7 @@ static void selectionCallback(void * ud, SoEventCallback * cb)
     Gui::View3DInventorViewer* view  = reinterpret_cast<Gui::View3DInventorViewer*>(cb->getUserData());
     view->removeEventCallback(SoMouseButtonEvent::getClassTypeId(), selectionCallback, ud);
     SoNode* root = view->getSceneGraph();
-    static_cast<Gui::SoFCUnifiedSelection*>(root)->selectionRole.setValue(TRUE);
+    static_cast<Gui::SoFCUnifiedSelection*>(root)->selectionRole.setValue(true);
 
     std::vector<SbVec2f> picked = view->getGLPolygon();
     SoCamera* cam = view->getSoRenderManager()->getCamera();
@@ -2182,7 +2182,7 @@ static void selectionCallback(void * ud, SoEventCallback * cb)
                     App::PropertyGeometry* prop = static_cast<App::PropertyGeometry*>(*jt);
                     Base::BoundBox3d bbox = prop->getBoundingBox();
                     Base::Vector3d pt2d;
-                    pt2d = proj(bbox.CalcCenter());
+                    pt2d = proj(bbox.GetCenter());
                     if (polygon.Contains(Base::Vector2D(pt2d.x, pt2d.y))) {
                         Gui::Selection().addSelection(doc->getName(), (*it)->getNameInDocument());
                     }
@@ -2202,7 +2202,7 @@ void StdBoxSelection::activated(int iMsg)
             viewer->startSelection(View3DInventorViewer::Rubberband);
             viewer->addEventCallback(SoMouseButtonEvent::getClassTypeId(), selectionCallback);
             SoNode* root = viewer->getSceneGraph();
-            static_cast<Gui::SoFCUnifiedSelection*>(root)->selectionRole.setValue(FALSE);
+            static_cast<Gui::SoFCUnifiedSelection*>(root)->selectionRole.setValue(false);
         }
     }
 }
@@ -2298,9 +2298,9 @@ void StdCmdMeasureDistance::activated(int iMsg)
         Gui::View3DInventorViewer* viewer = view->getViewer();
         viewer->setEditing(true);
         viewer->setEditingCursor(QCursor(QPixmap(cursor_ruler), 7, 7));
-	
-	// Derives from QObject and we have a parent object, so we don't
-	// require a delete.
+
+        // Derives from QObject and we have a parent object, so we don't
+        // require a delete.
         PointMarker* marker = new PointMarker(viewer);
         viewer->addEventCallback(SoMouseButtonEvent::getClassTypeId(),
             ViewProviderMeasureDistance::measureDistanceCallback, marker);

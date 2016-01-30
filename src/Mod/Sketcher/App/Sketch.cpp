@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2010     *
+ *   Copyright (c) Juergen Riegel         (juergen.riegel@web.de) 2010     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -886,6 +886,8 @@ int Sketch::addConstraint(const Constraint *constraint)
             case EllipseFocus2: 
                 rtn = addInternalAlignmentEllipseFocus2(constraint->First,constraint->Second);
                 break;
+            default:
+                break;
         }
         break;
     case SnellsLaw:
@@ -910,6 +912,7 @@ int Sketch::addConstraint(const Constraint *constraint)
         }
         break;
     case None:
+    case NumConstraintTypes:
         break;
     }
 
@@ -1233,8 +1236,6 @@ int Sketch::addTangentConstraint(int geoId1, int geoId2)
             return ConstraintsCounter;
         }
     } else if (Geoms[geoId1].type == Ellipse) {
-        GCS::Ellipse &e = Ellipses[Geoms[geoId1].index];
-        
         if (Geoms[geoId2].type == Circle) {
             Base::Console().Error("Direct tangency constraint between circle and ellipse is not supported. Use tangent-via-point instead.");
             return -1;
@@ -1354,7 +1355,7 @@ int Sketch::addAngleAtPointConstraint(
             if (angleErr < -M_PI) angleErr += M_PI*2;
 
             //the autodetector
-            if(abs(angleErr) > M_PI/2 )
+            if(fabs(angleErr) > M_PI/2 )
                 angleDesire += M_PI;
 
             *angle = angleDesire;
@@ -1748,7 +1749,6 @@ int Sketch::addSnellsLawConstraint(int geoIdRay1, PointPos posRay1,
         return -1;
     }
     GCS::Point &p1 = Points[pointId1];
-    GCS::Point &p2 = Points[pointId2];
 
     // add the parameters (refractive indexes)   
     // n1 uses the place hold by n2divn1, so that is retrivable in updateNonDrivingConstraints
@@ -1757,7 +1757,7 @@ int Sketch::addSnellsLawConstraint(int geoIdRay1, PointPos posRay1,
     
     double n2divn1=*value;
     
-    if ( abs(n2divn1) >= 1.0 ){
+    if ( fabs(n2divn1) >= 1.0 ){
         *n2 = n2divn1;
         *n1 = 1.0;
     } else {
@@ -2097,10 +2097,10 @@ int Sketch::solve(void)
         isFine = true;
     }
     
-    int ret;
+    int ret = -1;
     bool valid_solution;
     std::string solvername;
-    int defaultsoltype;
+    int defaultsoltype = -1;
     
     if(isInitMove){
         solvername = "DogLeg"; // DogLeg is used for dragging (same as before)
@@ -2187,6 +2187,7 @@ int Sketch::solve(void)
                     GCSsys.undoSolution();
                     updateGeometry();
                     Base::Console().Warning("Invalid solution from %s solver.\n", solvername.c_str());
+                    ret = GCS::SuccessfulSolutionInvalid;
                 }else
                 {
                     updateNonDrivingConstraints();

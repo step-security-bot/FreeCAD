@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2002 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2002 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -56,9 +56,9 @@ std::list<DlgPreferencesImp::TGroupPages> DlgPreferencesImp::_pages;
  *  name 'name' and widget flags set to 'f'
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
+ *  true to construct a modal dialog.
  */
-DlgPreferencesImp::DlgPreferencesImp( QWidget* parent, Qt::WFlags fl )
+DlgPreferencesImp::DlgPreferencesImp( QWidget* parent, Qt::WindowFlags fl )
     : QDialog(parent, fl), ui(new Ui_DlgPreferences), canEmbedScrollArea(true)
 {
     ui->setupUi(this);
@@ -206,6 +206,40 @@ void DlgPreferencesImp::on_buttonBox_clicked(QAbstractButton* btn)
 {
     if (ui->buttonBox->standardButton(btn) == QDialogButtonBox::Apply)
         applyChanges();
+    else if (ui->buttonBox->standardButton(btn) == QDialogButtonBox::Reset)
+        restoreDefaults();
+}
+
+void DlgPreferencesImp::restoreDefaults()
+{
+    QMessageBox box(this);
+    box.setIcon(QMessageBox::Question);
+    box.setWindowTitle(tr("Clear user settings"));
+    box.setText(tr("Do you want to clear all your user settings?"));
+    box.setInformativeText(tr("If you agree all your settings will be cleared."));
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setDefaultButton(QMessageBox::No);
+
+    if (box.exec() == QMessageBox::Yes) {
+        // keep this parameter
+        bool saveParameter = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/General")->
+                              GetBool("SaveUserParameter", true);
+
+        ParameterManager* mgr = App::GetApplication().GetParameterSet("User parameter");
+        mgr->Clear();
+
+        App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/General")->
+                              SetBool("SaveUserParameter", saveParameter);
+
+#if 0
+        QList<PreferencePage*> pages = this->findChildren<PreferencePage*>();
+        for (QList<PreferencePage*>::iterator it = pages.begin(); it != pages.end(); ++it) {
+            (*it)->loadSettings();
+        }
+#else
+        reject();
+#endif
+    }
 }
 
 void DlgPreferencesImp::applyChanges()
@@ -224,7 +258,7 @@ void DlgPreferencesImp::applyChanges()
                 catch (const Base::Exception& e) {
                     ui->listBox->setCurrentRow(i);
                     tabWidget->setCurrentIndex(j);
-                    QMessageBox::warning(this, tr("Wrong parameter"), QString::fromAscii(e.what()));
+                    QMessageBox::warning(this, tr("Wrong parameter"), QString::fromLatin1(e.what()));
                     throw;
                 }
             }

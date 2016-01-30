@@ -15,40 +15,40 @@
 # include <Python.h>
 #endif
 
+#include <CXX/Extensions.hxx>
+#include <CXX/Objects.hxx>
+
 #include <Base/Console.h>
 #include "Sheet.h"
-#include "Expression.h"
+#include "SpreadsheetExpression.h"
 
 
-/* registration table  */
-static struct PyMethodDef Spreadsheet_methods[] = {
-    {NULL, NULL}                   /* end of table marker */
+namespace Spreadsheet {
+class Module : public Py::ExtensionModule<Module>
+{
+public:
+    Module() : Py::ExtensionModule<Module>("Spreadsheet")
+    {
+        initialize("This module is the Spreadsheet module."); // register with Python
+    }
+
+    virtual ~Module() {}
+
+private:
 };
+} // namespace Spreadsheet
 
 /* Python entry */
-extern "C" {
-void SpreadsheetExport initSpreadsheet() {
-    (void) Py_InitModule("Spreadsheet", Spreadsheet_methods);   /* mod name, table ptr */
-    Base::Console().Log("Loading Spreadsheet module... done\n");
-
+PyMODINIT_FUNC initSpreadsheet() {
     Spreadsheet::PropertySpreadsheetQuantity::init();
     Spreadsheet::PropertyColumnWidths::init();
     Spreadsheet::PropertyRowHeights::init();
     Spreadsheet::PropertySheet::init();
 
     Spreadsheet::Sheet::init();
-    Spreadsheet::Expression::init();
-    Spreadsheet::UnitExpression::init();
-    Spreadsheet::NumberExpression::init();
-    Spreadsheet::ConstantExpression::init();
-    Spreadsheet::FunctionExpression::init();
-    Spreadsheet::OperatorExpression::init();
-    Spreadsheet::VariableExpression::init();
-    Spreadsheet::ConditionalExpression::init();
-    Spreadsheet::StringExpression::init();
+    Spreadsheet::AggregateFunctionExpression::init();
     Spreadsheet::RangeExpression::init();
 
-    return;
+    new Spreadsheet::Module();
+    Base::Console().Log("Loading Spreadsheet module... done\n");
 }
-
-} // extern "C"

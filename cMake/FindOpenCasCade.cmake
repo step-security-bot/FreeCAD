@@ -67,6 +67,11 @@ else(OCE_FOUND) #look for OpenCASCADE
   endif(WIN32)
   if(OCC_LIBRARY)
     GET_FILENAME_COMPONENT(OCC_LIBRARY_DIR ${OCC_LIBRARY} PATH)
+    IF(NOT OCC_INCLUDE_DIR)
+      FIND_PATH(OCC_INCLUDE_DIR Standard_Version.hxx
+        ${OCC_LIBRARY_DIR}/../inc
+      )
+    ENDIF()
   endif(OCC_LIBRARY)
 endif(OCE_FOUND)
 
@@ -104,6 +109,7 @@ if(OCC_FOUND)
     TKSTL
     TKShHealing
     TKXSBase
+    TKBin
     TKBool
     TKBO
     TKBRep
@@ -133,5 +139,5 @@ if(OCC_FOUND)
   message(STATUS "-- OCE/OpenCASCADE include directory: ${OCC_INCLUDE_DIR}")
   message(STATUS "-- OCE/OpenCASCADE shared libraries directory: ${OCC_LIBRARY_DIR}")
 else(OCC_FOUND)
-    message(SEND_ERROR "Neither OpenCASCADE Community Edition nor OpenCasCade were found: will not build CAD modules!")
+  #message(SEND_ERROR "Neither OpenCASCADE Community Edition nor OpenCasCade were found: will not build CAD modules!")
 endif(OCC_FOUND)

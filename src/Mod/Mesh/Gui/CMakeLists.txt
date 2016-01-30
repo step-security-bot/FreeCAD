@@ -1,11 +1,11 @@
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
-    ${COIN3D_INCLUDE_DIR}
+    ${COIN3D_INCLUDE_DIRS}
     ${PYTHON_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
     ${QT_INCLUDE_DIR}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
 )
 
 set(MeshGui_LIBS
@@ -19,6 +19,8 @@ set(Mesh_MOC_HDRS
     DlgEvaluateMeshImp.h
     DlgRegularSolidImp.h
     DlgSettingsMeshView.h
+    DlgSettingsImportExportImp.h
+
     DlgSmoothing.h
     MeshEditor.h
     PropertyEditorMesh.h
@@ -32,6 +34,7 @@ set(Dialogs_UIC_SRCS
     DlgEvaluateMesh.ui
     DlgRegularSolid.ui
     DlgSettingsMeshView.ui
+    DlgSettingsImportExport.ui
     DlgSmoothing.ui
     RemoveComponents.ui
     Segmentation.ui
@@ -49,6 +52,8 @@ SET(Dialogs_SRCS
     DlgSettingsMeshView.ui
     DlgSettingsMeshView.cpp
     DlgSettingsMeshView.h
+    DlgSettingsImportExportImp.cpp
+    DlgSettingsImportExportImp.h
     DlgSmoothing.ui
     DlgSmoothing.cpp
     DlgSmoothing.h
@@ -127,6 +132,15 @@ fc_target_copy_resource(MeshGui
     ${CMAKE_SOURCE_DIR}/src/Mod/Mesh
     ${CMAKE_BINARY_DIR}/Mod/Mesh
     InitGui.py)
+
+SET(MeshGuiIcon_SVG
+    Resources/icons/Tree_Mesh.svg
+)
+
+fc_copy_sources(MeshGui "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/Mod/Mesh" ${MeshGuiIcon_SVG})
+
+INSTALL(FILES ${MeshGuiIcon_SVG} DESTINATION "${CMAKE_INSTALL_DATADIR}/Mod/Mesh/Resources/icons")
+
 
 SET_BIN_DIR(MeshGui MeshGui /Mod/Mesh)
 SET_PYTHON_PREFIX_SUFFIX(MeshGui)

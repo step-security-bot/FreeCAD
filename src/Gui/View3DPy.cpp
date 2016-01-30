@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -98,7 +98,6 @@ void View3DInventorPy::init_type()
     add_varargs_method("setAnimationEnabled",&View3DInventorPy::setAnimationEnabled,"setAnimationEnabled()");
     add_varargs_method("isAnimationEnabled",&View3DInventorPy::isAnimationEnabled,"isAnimationEnabled()");
     add_varargs_method("dump",&View3DInventorPy::dump,"dump()");
-    add_varargs_method("dumpSelection",&View3DInventorPy::dumpSelection,"dumpSelection()");
     add_varargs_method("dumpNode",&View3DInventorPy::dumpNode,"dumpNode(node)");
     add_varargs_method("setStereoType",&View3DInventorPy::setStereoType,"setStereoType()");
     add_varargs_method("getStereoType",&View3DInventorPy::getStereoType,"getStereoType()");
@@ -429,8 +428,17 @@ Py::Object View3DInventorPy::viewAxonometric(const Py::Tuple& args)
         //p1=App.Rotation(App.Vector(1,0,0),45)
         //p2=App.Rotation(App.Vector(0,0,1),-45)
         //p3=p2.multiply(p1)
+        //_view->getViewer()->setCameraOrientation(SbRotation
+        //    (0.353553f, -0.146447f, -0.353553f, 0.853553f));
+
+        //from math import sqrt, degrees, asin
+        //p1=App.Rotation(App.Vector(1,0,0),90)
+        //p2=App.Rotation(App.Vector(0,0,1),45)
+        //p3=App.Rotation(App.Vector(1,1,0),45)
+        //p3=App.Rotation(App.Vector(1,1,0),degrees(asin(-sqrt(1.0/3.0))))
+        //p4=p3.multiply(p2).multiply(p1)
         _view->getViewer()->setCameraOrientation(SbRotation
-            (0.353553f, -0.146447f, -0.353553f, 0.853553f));
+             (0.424708f, 0.17592f, 0.339851f, 0.820473f));
     }
     catch (const Base::Exception& e) {
         throw Py::Exception(e.what());
@@ -979,27 +987,6 @@ Py::Object View3DInventorPy::dump(const Py::Tuple& args)
 
     try {
         _view->dump(filename);
-        return Py::None();
-    }
-    catch (const Base::Exception& e) {
-        throw Py::Exception(e.what());
-    }
-    catch (const std::exception& e) {
-        throw Py::Exception(e.what());
-    }
-    catch(...) {
-        throw Py::Exception("Unknown C++ exception");
-    }
-}
-
-Py::Object View3DInventorPy::dumpSelection(const Py::Tuple& args)
-{
-    char* filename;
-    if (!PyArg_ParseTuple(args.ptr(), "s", &filename))
-        throw Py::Exception();
-
-    try {
-        _view->dumpSelection(filename);
         return Py::None();
     }
     catch (const Base::Exception& e) {

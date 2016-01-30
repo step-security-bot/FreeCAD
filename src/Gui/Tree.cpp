@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -221,9 +221,9 @@ void TreeWidget::onCreateGroup()
     if (this->contextItem->type() == DocumentType) {
         DocumentItem* docitem = static_cast<DocumentItem*>(this->contextItem);
         App::Document* doc = docitem->document()->getDocument();
-        QString cmd = QString::fromAscii("App.getDocument(\"%1\").addObject"
+        QString cmd = QString::fromLatin1("App.getDocument(\"%1\").addObject"
                               "(\"App::DocumentObjectGroup\",\"%2\")")
-                              .arg(QString::fromAscii(doc->getName())).arg(name);
+                              .arg(QString::fromLatin1(doc->getName())).arg(name);
         Gui::Document* gui = Gui::Application::Instance->getDocument(doc);
         gui->openCommand("Create group");
         Gui::Application::Instance->runPythonCode(cmd.toUtf8());
@@ -234,10 +234,10 @@ void TreeWidget::onCreateGroup()
             (this->contextItem);
         App::DocumentObject* obj = objitem->object()->getObject();
         App::Document* doc = obj->getDocument();
-        QString cmd = QString::fromAscii("App.getDocument(\"%1\").getObject(\"%2\")"
+        QString cmd = QString::fromLatin1("App.getDocument(\"%1\").getObject(\"%2\")"
                               ".newObject(\"App::DocumentObjectGroup\",\"%3\")")
-                              .arg(QString::fromAscii(doc->getName()))
-                              .arg(QString::fromAscii(obj->getNameInDocument()))
+                              .arg(QString::fromLatin1(doc->getName()))
+                              .arg(QString::fromLatin1(obj->getNameInDocument()))
                               .arg(name);
         Gui::Document* gui = Gui::Application::Instance->getDocument(doc);
         gui->openCommand("Create group");
@@ -838,7 +838,7 @@ DocumentItem::DocumentItem(const Gui::Document* doc, QTreeWidgetItem * parent)
     connectNewObject = doc->signalNewObject.connect(boost::bind(&DocumentItem::slotNewObject, this, _1));
     connectDelObject = doc->signalDeletedObject.connect(boost::bind(&DocumentItem::slotDeleteObject, this, _1));
     connectChgObject = doc->signalChangedObject.connect(boost::bind(&DocumentItem::slotChangeObject, this, _1));
-    connectRenObject = doc->signalRenamedObject.connect(boost::bind(&DocumentItem::slotRenameObject, this, _1));
+    connectRenObject = doc->signalRelabelObject.connect(boost::bind(&DocumentItem::slotRenameObject, this, _1));
     connectActObject = doc->signalActivatedObject.connect(boost::bind(&DocumentItem::slotActiveObject, this, _1));
     connectEdtObject = doc->signalInEdit.connect(boost::bind(&DocumentItem::slotInEdit, this, _1));
     connectResObject = doc->signalResetEdit.connect(boost::bind(&DocumentItem::slotResetEdit, this, _1));
@@ -995,18 +995,7 @@ void DocumentItem::slotChangeObject(const Gui::ViewProviderDocumentObject& view)
 
 void DocumentItem::slotRenameObject(const Gui::ViewProviderDocumentObject& obj)
 {
-    for (std::map<std::string,DocumentObjectItem*>::iterator it = ObjectMap.begin(); it != ObjectMap.end(); ++it) {
-        if (it->second->object() == &obj) {
-            DocumentObjectItem* item = it->second;
-            ObjectMap.erase(it);
-            std::string objectName = obj.getObject()->getNameInDocument();
-            ObjectMap[objectName] = item;
-            return;
-        }
-    }
-
-    // no such object found
-    Base::Console().Warning("DocumentItem::slotRenamedObject: Cannot rename unknown object.\n");
+    // Do nothing here because the Label is set in slotChangeObject
 }
 
 void DocumentItem::slotActiveObject(const Gui::ViewProviderDocumentObject& obj)
@@ -1375,9 +1364,9 @@ void DocumentObjectItem::displayStatusInfo()
 {
     App::DocumentObject* Obj = viewObject->getObject();
 
-    QString info = QString::fromAscii(Obj->getStatusString());
+    QString info = QString::fromLatin1(Obj->getStatusString());
     if ( Obj->mustExecute() == 1 )
-        info += QString::fromAscii(" (but must be executed)");
+        info += QString::fromLatin1(" (but must be executed)");
     getMainWindow()->showMessage( info );
 
     if (Obj->isError()) {

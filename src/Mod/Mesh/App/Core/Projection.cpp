@@ -287,7 +287,7 @@ bool MeshProjection::bboxInsideRectangle(const Base::BoundBox3f& bbox,
 
     if (bbox.IsCutPlane(base, normal)) {
         dir.Normalize();
-        Base::Vector3f cnt(bbox.CalcCenter());
+        Base::Vector3f cnt(bbox.GetCenter());
 
         return (fabs(cnt.DistanceToPlane(p1, dir)) +  fabs(cnt.DistanceToPlane(p2, dir))) <=
                (bbox.CalcDiagonalLength() + (p2 - p1).Length());
@@ -325,7 +325,7 @@ bool MeshProjection::connectLines(std::list< std::pair<Base::Vector3f, Base::Vec
         // get nearest line
         float  fMin  = fMaxDist * fMaxDist;
 
-        bool  bPos;
+        bool  bPos = false;
         for (it = cutLines.begin(); it != cutLines.end(); ++it) {
             float fD1 = Base::DistanceP2(curr, it->first);
             float fD2 = Base::DistanceP2(curr, it->second);
@@ -396,7 +396,7 @@ bool MeshProjection::projectLineOnMesh(const MeshFacetGrid& grid,
 
     // cut all facets with plane
     std::list< std::pair<Base::Vector3f, Base::Vector3f> > cutLine;
-    unsigned long start = 0, end = 0;
+    //unsigned long start = 0, end = 0;
     for (std::vector<unsigned long>::iterator it = facets.begin(); it != facets.end(); ++it) {
         Base::Vector3f e1, e2;
         MeshGeomFacet tria = kernel.GetFacet(*it);
@@ -418,7 +418,7 @@ bool MeshProjection::projectLineOnMesh(const MeshFacetGrid& grid,
                         else
                             cutLine.push_back(std::pair<Base::Vector3f, Base::Vector3f>(v1, e1));
 
-                        start = it - facets.begin();
+                        //start = it - facets.begin();
                     }
 
                     if (*it == f2) { // end facet
@@ -427,7 +427,7 @@ bool MeshProjection::projectLineOnMesh(const MeshFacetGrid& grid,
                         else
                             cutLine.push_back(std::pair<Base::Vector3f, Base::Vector3f>(v2, e1));
 
-                        end = it - facets.begin();
+                        //end = it - facets.begin();
                     }
                 }
             }

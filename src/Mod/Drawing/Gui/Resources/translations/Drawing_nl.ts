@@ -4,7 +4,7 @@
 <context>
     <name>CmdDrawingAnnotation</name>
     <message>
-        <location filename="../../Command.cpp" line="+475"/>
+        <location filename="../../Command.cpp" line="+476"/>
         <source>Drawing</source>
         <translation>Tekening</translation>
     </message>
@@ -198,9 +198,28 @@
     </message>
 </context>
 <context>
+    <name>CmdDrawingSpreadsheetView</name>
+    <message>
+        <location line="+62"/>
+        <source>Drawing</source>
+        <translation type="unfinished">Tekening</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Spreadsheet View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+2"/>
+        <source>Inserts a view of a selected spreadsheet in the active drawing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CmdDrawingSymbol</name>
     <message>
-        <location line="-110"/>
+        <location line="-176"/>
         <source>Drawing</source>
         <translation type="unfinished">Tekening</translation>
     </message>
@@ -269,9 +288,13 @@
         <translation>Exporteren als PDF</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>PDF file (*.pdf)</source>
-        <translation>PDF-bestand (*.pdf)</translation>
+        <translation type="obsolete">PDF-bestand (*.pdf)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>PDF file</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+16"/>
@@ -334,6 +357,16 @@ Do you want to continue?</source>
         <translation type="unfinished">The printer uses a different paper size than the drawing.
 Do you want to continue?</translation>
     </message>
+    <message>
+        <location line="+11"/>
+        <source>Opening file failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Can&apos;t open file &apos;%1&apos; for writing.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DrawingGui::TaskOrthoViews</name>
@@ -369,7 +402,17 @@ Do you want to continue?</translation>
         <translation type="unfinished">Spacing dx / dy   </translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+45"/>
+        <source>Show hidden lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Show smooth lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
         <source> Axis out and right</source>
         <translation type="unfinished"> Axis out and right</translation>
     </message>
@@ -562,17 +605,15 @@ Do you want to continue?</translation>
         <translation type="obsolete">Secundaire dx/dy</translation>
     </message>
     <message>
-        <location line="+125"/>
         <source>Show hidden</source>
-        <translation>Toon verborgen</translation>
+        <translation type="obsolete">Toon verborgen</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Show smooth</source>
-        <translation>Toon glad</translation>
+        <translation type="obsolete">Toon glad</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+143"/>
         <source>Axonometric</source>
         <translation>Axonometrisch</translation>
     </message>
@@ -580,7 +621,7 @@ Do you want to continue?</translation>
 <context>
     <name>DrawingGui::TaskProjection</name>
     <message>
-        <location filename="../../TaskDialog.cpp" line="+49"/>
+        <location filename="../../TaskDialog.cpp" line="+50"/>
         <source>Visible sharp edges</source>
         <translation>Zichtbare scherpe randen</translation>
     </message>
@@ -729,21 +770,20 @@ Do you want to continue?</translation>
         <translation type="obsolete">Tekening bekijker</translation>
     </message>
     <message>
-        <location line="-518"/>
-        <location line="+519"/>
         <source>Scalable Vector Graphics (*.svg *.svgz)</source>
-        <translation>Scalable Vector Graphics (*.svg *.svgz)</translation>
+        <translation type="obsolete">Scalable Vector Graphics (*.svg *.svgz)</translation>
     </message>
     <message>
-        <location line="-267"/>
+        <location line="-266"/>
         <location line="+78"/>
         <location line="+49"/>
         <location line="+186"/>
+        <location line="+116"/>
         <source>Wrong selection</source>
         <translation>Verkeerde selectie</translation>
     </message>
     <message>
-        <location line="-312"/>
+        <location line="-428"/>
         <source>Select a Part object.</source>
         <translation>Selecteer een onderdeel-object.</translation>
     </message>
@@ -760,25 +800,34 @@ Do you want to continue?</translation>
         <translation type="obsolete">Maak een pagina om aanzichten toe te voegen.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="-253"/>
+        <location line="+519"/>
+        <location line="+52"/>
+        <source>Scalable Vector Graphic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-310"/>
         <location line="+78"/>
         <location line="+80"/>
         <location line="+48"/>
         <location line="+45"/>
+        <location line="+175"/>
         <source>No page found</source>
         <translation type="unfinished">No page found</translation>
     </message>
     <message>
-        <location line="-250"/>
+        <location line="-425"/>
         <location line="+78"/>
         <location line="+80"/>
         <location line="+48"/>
         <location line="+45"/>
+        <location line="+175"/>
         <source>Create a page first.</source>
         <translation type="unfinished">Create a page first.</translation>
     </message>
     <message>
-        <location line="-182"/>
+        <location line="-357"/>
         <source>Select exactly one Part object.</source>
         <translation type="unfinished">Select exactly one Part object.</translation>
     </message>
@@ -789,26 +838,34 @@ Do you want to continue?</translation>
         <translation>Selecteer een pagina-object.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+6"/>
+        <source>All Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+110"/>
+        <source>Select exactly one Spreadsheet object.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>SVG (*.svg)</source>
-        <translation type="unfinished">SVG (*.svg)</translation>
+        <translation type="obsolete">SVG (*.svg)</translation>
     </message>
     <message>
         <source>SVG(*.svg)</source>
         <translation type="obsolete">SVG (*.svg)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>All Files (*.*)</source>
-        <translation>Alle bestanden (*.*)</translation>
+        <translation type="obsolete">Alle bestanden (*.*)</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-108"/>
         <source>Export page</source>
         <translation>Exporteer pagina</translation>
     </message>
     <message>
-        <location filename="../../ViewProviderPage.cpp" line="+157"/>
+        <location filename="../../ViewProviderPage.cpp" line="+152"/>
         <source>Show drawing</source>
         <translation>Toon tekening</translation>
     </message>
@@ -837,7 +894,7 @@ Do you want to continue?</translation>
         <translation type="obsolete">Onder</translation>
     </message>
     <message>
-        <location filename="../../TaskOrthoViews.cpp" line="+45"/>
+        <location filename="../../TaskOrthoViews.cpp" line="+48"/>
         <location line="+929"/>
         <source>Make axonometric...</source>
         <translation type="unfinished">Axonometrisch maken...</translation>

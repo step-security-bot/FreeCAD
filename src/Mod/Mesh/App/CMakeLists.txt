@@ -1,7 +1,5 @@
 if(WIN32)
-    add_definitions(-DFCAppMesh -DWM4_FOUNDATION_DLL_EXPORT -DEIGEN2_SUPPORT)
-else (Win32)
-    add_definitions(-DEIGEN2_SUPPORT)
+    add_definitions(-DFCAppMesh -DWM4_FOUNDATION_DLL_EXPORT)
 endif(WIN32)
 
 include_directories(
@@ -10,7 +8,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/3rdParty
     ${Boost_INCLUDE_DIRS}
     ${PYTHON_INCLUDE_DIRS}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
     ${QT_QTCORE_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
     ${EIGEN3_INCLUDE_DIR}

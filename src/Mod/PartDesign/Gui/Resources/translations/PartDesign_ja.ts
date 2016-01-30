@@ -12,7 +12,7 @@
         <translation type="obsolete">面取り...</translation>
     </message>
     <message>
-        <location filename="../../Command.cpp" line="+642"/>
+        <location filename="../../Command.cpp" line="+654"/>
         <source>PartDesign</source>
         <translation>パートデザイン</translation>
     </message>
@@ -138,7 +138,7 @@
 <context>
     <name>CmdPartDesignPad</name>
     <message>
-        <location line="-1047"/>
+        <location line="-1059"/>
         <source>PartDesign</source>
         <translation>パートデザイン</translation>
     </message>
@@ -156,7 +156,7 @@
 <context>
     <name>CmdPartDesignPocket</name>
     <message>
-        <location line="+78"/>
+        <location line="+84"/>
         <source>PartDesign</source>
         <translation>パートデザイン</translation>
     </message>
@@ -174,7 +174,7 @@
 <context>
     <name>CmdPartDesignPolarPattern</name>
     <message>
-        <location line="+808"/>
+        <location line="+814"/>
         <source>PartDesign</source>
         <translation>パートデザイン</translation>
     </message>
@@ -192,7 +192,7 @@
 <context>
     <name>CmdPartDesignRevolution</name>
     <message>
-        <location line="-740"/>
+        <location line="-746"/>
         <source>PartDesign</source>
         <translation>パートデザイン</translation>
     </message>
@@ -210,7 +210,7 @@
 <context>
     <name>CmdPartDesignScaled</name>
     <message>
-        <location line="+819"/>
+        <location line="+825"/>
         <source>PartDesign</source>
         <translation>パートデザイン</translation>
     </message>
@@ -407,7 +407,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgChamferParameters</name>
     <message>
-        <location line="+74"/>
+        <location line="+86"/>
         <source>Edit chamfer</source>
         <translation type="unfinished">面取りを編集</translation>
     </message>
@@ -415,7 +415,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgDraftParameters</name>
     <message>
-        <location filename="../../TaskDraftParameters.cpp" line="+400"/>
+        <location filename="../../TaskDraftParameters.cpp" line="+401"/>
         <source>Input error</source>
         <translation>入力エラー</translation>
     </message>
@@ -423,7 +423,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgFilletParameters</name>
     <message>
-        <location filename="../../TaskFilletParameters.cpp" line="+126"/>
+        <location filename="../../TaskFilletParameters.cpp" line="+138"/>
         <source>Edit fillet</source>
         <translation type="unfinished">フィレットを編集</translation>
     </message>
@@ -431,7 +431,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgLinearPatternParameters</name>
     <message>
-        <location filename="../../TaskLinearPatternParameters.cpp" line="+452"/>
+        <location filename="../../TaskLinearPatternParameters.cpp" line="+462"/>
         <source>Input error</source>
         <translation>入力エラー</translation>
     </message>
@@ -439,7 +439,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgMirroredParameters</name>
     <message>
-        <location filename="../../TaskMirroredParameters.cpp" line="+358"/>
+        <location filename="../../TaskMirroredParameters.cpp" line="+362"/>
         <source>Input error</source>
         <translation>入力エラー</translation>
     </message>
@@ -447,7 +447,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgMultiTransformParameters</name>
     <message>
-        <location filename="../../TaskMultiTransformParameters.cpp" line="+443"/>
+        <location filename="../../TaskMultiTransformParameters.cpp" line="+447"/>
         <source>Input error</source>
         <translation>入力エラー</translation>
     </message>
@@ -455,7 +455,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgPadParameters</name>
     <message>
-        <location filename="../../TaskPadParameters.cpp" line="+527"/>
+        <location filename="../../TaskPadParameters.cpp" line="+540"/>
         <source>Input error</source>
         <translation>入力エラー</translation>
     </message>
@@ -463,12 +463,12 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgPocketParameters</name>
     <message>
-        <location filename="../../TaskPocketParameters.cpp" line="+441"/>
+        <location filename="../../TaskPocketParameters.cpp" line="+468"/>
         <source>Edit pocket</source>
         <translation type="unfinished">ポケットを編集</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+16"/>
         <source>Input error</source>
         <translation>入力エラー</translation>
     </message>
@@ -476,7 +476,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgPolarPatternParameters</name>
     <message>
-        <location filename="../../TaskPolarPatternParameters.cpp" line="+396"/>
+        <location filename="../../TaskPolarPatternParameters.cpp" line="+404"/>
         <source>Input error</source>
         <translation>入力エラー</translation>
     </message>
@@ -484,7 +484,7 @@ Please check one or more edge entities first.</translation>
 <context>
     <name>PartDesignGui::TaskDlgScaledParameters</name>
     <message>
-        <location filename="../../TaskScaledParameters.cpp" line="+235"/>
+        <location filename="../../TaskScaledParameters.cpp" line="+243"/>
         <source>Input error</source>
         <translation>入力エラー</translation>
     </message>
@@ -558,7 +558,7 @@ Please check one or more edge entities first.</translation>
         <translation>半径:</translation>
     </message>
     <message>
-        <location filename="../../TaskFilletParameters.cpp" line="-74"/>
+        <location filename="../../TaskFilletParameters.cpp" line="-86"/>
         <source>Fillet parameters</source>
         <translation>フィレットパラメーター</translation>
     </message>
@@ -678,7 +678,7 @@ Please check one or more edge entities first.</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../../TaskLinearPatternParameters.cpp" line="-261"/>
+        <location filename="../../TaskLinearPatternParameters.cpp" line="-267"/>
         <location line="+57"/>
         <source>Select reference...</source>
         <translation type="unfinished">参照を選択...</translation>
@@ -699,7 +699,7 @@ Please check one or more edge entities first.</translation>
         <translation>開始位置</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+14"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -760,7 +760,7 @@ Please check one or more edge entities first.</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../../TaskMirroredParameters.cpp" line="-190"/>
+        <location filename="../../TaskMirroredParameters.cpp" line="-194"/>
         <location line="+40"/>
         <source>Select reference...</source>
         <translation type="unfinished">参照を選択...</translation>
@@ -813,7 +813,7 @@ Please check one or more edge entities first.</translation>
         <translation>ビューを更新</translation>
     </message>
     <message>
-        <location filename="../../TaskMultiTransformParameters.cpp" line="-372"/>
+        <location filename="../../TaskMultiTransformParameters.cpp" line="-376"/>
         <source>Edit</source>
         <translation>編集</translation>
     </message>
@@ -887,7 +887,7 @@ Please check one or more edge entities first.</translation>
     </message>
     <message>
         <location line="+27"/>
-        <location filename="../../TaskPadParameters.cpp" line="-398"/>
+        <location filename="../../TaskPadParameters.cpp" line="-408"/>
         <location line="+109"/>
         <location line="+106"/>
         <location line="+100"/>
@@ -948,12 +948,12 @@ Please check one or more edge entities first.</translation>
         <translation type="obsolete">TaskPadParameters</translation>
     </message>
     <message>
-        <location filename="../../TaskPadParameters.cpp" line="-371"/>
+        <location filename="../../TaskPadParameters.cpp" line="-374"/>
         <source>Pad parameters</source>
         <translation>押し出しパラメーター</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+73"/>
         <location line="+315"/>
         <source>No face selected</source>
         <translation>面が選択されていません</translation>
@@ -1032,8 +1032,8 @@ Please check one or more edge entities first.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../../TaskPocketParameters.cpp" line="-360"/>
-        <location line="+278"/>
+        <location filename="../../TaskPocketParameters.cpp" line="-368"/>
+        <location line="+281"/>
         <source>Dimension</source>
         <translation>寸法</translation>
     </message>
@@ -1049,8 +1049,8 @@ Please check one or more edge entities first.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../../TaskPocketParameters.cpp" line="-282"/>
-        <location line="+102"/>
+        <location filename="../../TaskPocketParameters.cpp" line="-285"/>
+        <location line="+105"/>
         <location line="+113"/>
         <location line="+80"/>
         <source>Face</source>
@@ -1067,7 +1067,7 @@ Please check one or more edge entities first.</translation>
         <translation>長さ</translation>
     </message>
     <message>
-        <location filename="../../TaskPocketParameters.cpp" line="-350"/>
+        <location filename="../../TaskPocketParameters.cpp" line="-353"/>
         <source>Pocket parameters</source>
         <translation>ポケットパラメーター</translation>
     </message>
@@ -1077,25 +1077,25 @@ Please check one or more edge entities first.</translation>
     </message>
     <message>
         <location line="+61"/>
-        <location line="+278"/>
+        <location line="+281"/>
         <source>To first</source>
         <translation>最初まで</translation>
     </message>
     <message>
-        <location line="-279"/>
-        <location line="+278"/>
+        <location line="-282"/>
+        <location line="+281"/>
         <source>Through all</source>
         <translation>貫通</translation>
     </message>
     <message>
-        <location line="-276"/>
-        <location line="+278"/>
+        <location line="-279"/>
+        <location line="+281"/>
         <source>Up to face</source>
         <translation>面まで</translation>
     </message>
     <message>
-        <location line="-284"/>
-        <location line="+109"/>
+        <location line="-287"/>
+        <location line="+112"/>
         <location line="+186"/>
         <source>No face selected</source>
         <translation>面が選択されていません</translation>
@@ -1141,7 +1141,7 @@ Please check one or more edge entities first.</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../../TaskPolarPatternParameters.cpp" line="-227"/>
+        <location filename="../../TaskPolarPatternParameters.cpp" line="-231"/>
         <location line="+52"/>
         <source>Select reference...</source>
         <translation type="unfinished">参照を選択...</translation>
@@ -1162,7 +1162,7 @@ Please check one or more edge entities first.</translation>
         <translation>開始位置</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+14"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -1256,12 +1256,12 @@ Please check one or more edge entities first.</translation>
         <translation>係数</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+14"/>
         <source>Occurrences</source>
         <translation>開始位置</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+14"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -1307,22 +1307,22 @@ Please check one or more edge entities first.</translation>
         <translation type="obsolete">The shape of the selected object is not a wire.</translation>
     </message>
     <message>
-        <location line="-651"/>
-        <location line="+80"/>
-        <location line="+72"/>
-        <location line="+80"/>
+        <location line="-661"/>
+        <location line="+84"/>
+        <location line="+74"/>
+        <location line="+84"/>
         <source>No valid sketches in this document</source>
         <translation>このドキュメントには有効なスケッチがありません</translation>
     </message>
     <message>
-        <location line="-231"/>
-        <location line="+152"/>
+        <location line="-241"/>
+        <location line="+158"/>
         <source>Please create a sketch or 2D object first</source>
         <translation>スケッチまたは 2D オブジェクトを作成してください</translation>
     </message>
     <message>
-        <location line="-72"/>
-        <location line="+152"/>
+        <location line="-74"/>
+        <location line="+158"/>
         <source>Please create a sketch or 2D object first. It must have a support face on a solid</source>
         <translation>まず最初にスケッチまたは2Dオブジェクトを作成してください。ソリッド上の支持面が無ければなりません。</translation>
     </message>
@@ -1366,7 +1366,23 @@ Please check one or more edge entities first.</translation>
         <translation>選択された部品の形状が空です</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="-481"/>
+        <location line="+158"/>
+        <source>No valid sketches selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-157"/>
+        <source>None of selected sketches/2D objects is valid for padding. Please select a valid sketch or 2D object that is not used by any other feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+158"/>
+        <source>None of selected sketches/2D objects is valid for revolving. Please select a valid sketch or 2D object that is not used by any other feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+393"/>
         <source>No chamfer possible on selected faces/edges</source>
         <translation>選択された面/エッジには面取を適用できません</translation>
     </message>
@@ -1417,30 +1433,30 @@ Create the sketch on a face.</source>
         <translation type="obsolete">ポケットフィーチャーにはスケッチサポートが必要です。スケッチを面の上で作成します。</translation>
     </message>
     <message>
-        <location filename="../../TaskPadParameters.cpp" line="+55"/>
-        <location filename="../../ViewProviderPad.cpp" line="+61"/>
+        <location filename="../../TaskPadParameters.cpp" line="+86"/>
+        <location filename="../../ViewProviderPad.cpp" line="+64"/>
         <source>Edit pad</source>
         <translation>パッドを編集</translation>
     </message>
     <message>
-        <location filename="../../ViewProviderPocket.cpp" line="+62"/>
+        <location filename="../../ViewProviderPocket.cpp" line="+65"/>
         <source>Edit pocket</source>
         <translation>ポケットを編集</translation>
     </message>
     <message>
-        <location filename="../../ViewProviderChamfer.cpp" line="+55"/>
+        <location filename="../../ViewProviderChamfer.cpp" line="+58"/>
         <source>Edit chamfer</source>
         <translation>面取りを編集</translation>
     </message>
     <message>
         <location line="+17"/>
-        <location filename="../../ViewProviderDraft.cpp" line="+72"/>
-        <location filename="../../ViewProviderFillet.cpp" line="+72"/>
-        <location filename="../../ViewProviderGroove.cpp" line="+89"/>
+        <location filename="../../ViewProviderDraft.cpp" line="+75"/>
+        <location filename="../../ViewProviderFillet.cpp" line="+75"/>
+        <location filename="../../ViewProviderGroove.cpp" line="+92"/>
         <location filename="../../ViewProviderPad.cpp" line="+23"/>
         <location filename="../../ViewProviderPocket.cpp" line="+17"/>
-        <location filename="../../ViewProviderRevolution.cpp" line="+89"/>
-        <location filename="../../ViewProviderTransformed.cpp" line="+175"/>
+        <location filename="../../ViewProviderRevolution.cpp" line="+92"/>
+        <location filename="../../ViewProviderTransformed.cpp" line="+179"/>
         <source>A dialog is already open in the task panel</source>
         <translation>タスクパネルで既にダイアログが開かれています</translation>
     </message>
@@ -1515,12 +1531,12 @@ Create the sketch on a face.</source>
         <translation>変換成功</translation>
     </message>
     <message>
-        <location filename="../../TaskGrooveParameters.cpp" line="+227"/>
+        <location filename="../../TaskGrooveParameters.cpp" line="+260"/>
         <source>Edit groove</source>
         <translation type="unfinished">グルーブを編集</translation>
     </message>
     <message>
-        <location filename="../../TaskRevolutionParameters.cpp" line="+171"/>
+        <location filename="../../TaskRevolutionParameters.cpp" line="+204"/>
         <source>Edit revolve</source>
         <translation type="unfinished">回転体を編集</translation>
     </message>

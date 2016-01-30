@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is Drawing of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -24,9 +24,6 @@
 #include "PreCompiled.h"
 
 #ifndef _PreComp_
-# ifdef FC_OS_WIN32
-#  include <windows.h>
-# endif
 #endif
 
 /// Here the FreeCAD includes sorted by Base,App,Gui......
@@ -53,7 +50,7 @@ ViewProviderDrawingView::ViewProviderDrawingView()
     sPixmap = "Page";
 
     // Do not show in property editor
-    DisplayMode.StatusBits.set(3, true);
+    DisplayMode.setStatus(App::Property::Hidden, true);
 }
 
 ViewProviderDrawingView::~ViewProviderDrawingView()
@@ -130,6 +127,18 @@ void ViewProviderDrawingView::updateData(const App::Property*)
 {
 }
 
+// Python viewprovider -----------------------------------------------------------------------
+
+namespace Gui {
+/// @cond DOXERR
+PROPERTY_SOURCE_TEMPLATE(DrawingGui::ViewProviderDrawingViewPython, DrawingGui::ViewProviderDrawingView)
+/// @endcond
+
+// explicit template instantiation
+template class DrawingGuiExport ViewProviderPythonFeatureT<DrawingGui::ViewProviderDrawingView>;
+}
+
+
 // ----------------------------------------------------------------------------
 
 PROPERTY_SOURCE(DrawingGui::ViewProviderDrawingClip, Gui::ViewProviderDocumentObjectGroup)
@@ -139,7 +148,7 @@ ViewProviderDrawingClip::ViewProviderDrawingClip()
     sPixmap = "Page";
 
     // Do not show in property editor
-    DisplayMode.StatusBits.set(3, true);
+    DisplayMode.setStatus(App::Property::Hidden, true);
 }
 
 ViewProviderDrawingClip::~ViewProviderDrawingClip()

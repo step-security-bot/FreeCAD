@@ -47,7 +47,7 @@ PROPERTY_SOURCE(FemGui::ViewProviderFemConstraintForce, FemGui::ViewProviderFemC
 
 ViewProviderFemConstraintForce::ViewProviderFemConstraintForce()
 {
-    sPixmap = "Fem_ConstraintForce";
+    sPixmap = "fem-constraint-force";
 }
 
 ViewProviderFemConstraintForce::~ViewProviderFemConstraintForce()
@@ -118,7 +118,6 @@ void ViewProviderFemConstraintForce::updateData(const App::Property* prop)
     if (pShapeSep->getNumChildren() == 0) {
         // Set up the nodes
         SoMultipleCopy* cp = new SoMultipleCopy();
-        cp->ref();
         cp->matrix.setNum(0);
         cp->addChild((SoNode*)createArrow(ARROWLENGTH, ARROWHEADRADIUS));
         pShapeSep->addChild(cp);

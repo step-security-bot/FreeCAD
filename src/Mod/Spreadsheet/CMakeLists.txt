@@ -1,4 +1,3 @@
-PYSIDE_WRAP_RC(Spreadsheet_QRC_SRCS Resources/Spreadsheet.qrc)
 
 add_subdirectory(App)
 if(BUILD_GUI)
@@ -9,6 +8,7 @@ INSTALL(
     FILES
         Init.py
         InitGui.py
+        TestSpreadsheet.py
     DESTINATION
         Mod/Spreadsheet
 )

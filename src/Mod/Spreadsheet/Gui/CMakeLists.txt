@@ -2,12 +2,12 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Boost_INCLUDE_DIRS}
-    ${COIN3D_INCLUDE_DIR}
+    ${COIN3D_INCLUDE_DIRS}
     ${QT_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
     ${SOQT_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
 )
 
 set(SpreadsheetGui_LIBS
@@ -16,6 +16,7 @@ set(SpreadsheetGui_LIBS
 )
 
 set(SpreadsheetGui_MOC_HDRS
+    LineEdit.h
     SpreadsheetView.h
     SheetModel.h
     SheetTableView.h
@@ -39,7 +40,6 @@ SET(SpreadsheetGui_RES_SRCS
     Resources/Spreadsheet.qrc
 )
 
-#fc_add_resources(SpreadsheetGui_QRC_SRCS ${SpreadsheetGui_RES_SRCS})
 qt4_add_resources(SpreadsheetGui_QRC_SRCS ${SpreadsheetGui_RES_SRCS})
 
 set(SpreadsheetGui_UIC_SRCS
@@ -51,10 +51,11 @@ qt4_wrap_ui(SpreadsheetGui_UIC_HDRS ${SpreadsheetGui_UIC_SRCS})
 
 SET(SpreadsheetGui_SRCS
 #   ${SpreadsheetGui_MOC_SRCS}
-#    ${SpreadsheetGui_QRC_SRCS}
+    ${SpreadsheetGui_QRC_SRCS}
     AppSpreadsheetGui.cpp
-    AppSpreadsheetGuiPy.cpp
     Command.cpp
+    LineEdit.h
+    LineEdit.cpp
     ViewProviderSpreadsheet.cpp
     ViewProviderSpreadsheet.h
     Resources/Spreadsheet.qrc

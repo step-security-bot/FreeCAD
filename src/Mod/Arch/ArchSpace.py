@@ -341,7 +341,7 @@ class _Space(ArchComponent.Component):
             sh = obj.Shape.copy()
             cutplane,v1,v2 = ArchCommands.getCutVolume(pl,sh)
             e = sh.section(cutplane)
-            e = DraftGeomUtils.sortEdges(e.Edges)
+            e = Part.__sortEdges__(e.Edges)
             w = Part.Wire(e)
             f = Part.Face(w)
             return f.Area
@@ -357,16 +357,16 @@ class _ViewProviderSpace(ArchComponent.ViewProviderComponent):
         vobj.LineWidth = 1
         vobj.LineColor = (1.0,0.0,0.0,1.0)
         vobj.DrawStyle = "Dotted"
-        vobj.addProperty("App::PropertyStringList", "Text",        "Arch",translate("Arch","The text to show. Use $area, $label, $tag, $floor, $walls, $ceiling to insert the respective data"))
-        vobj.addProperty("App::PropertyString",     "FontName",    "Arch",translate("Arch","The name of the font"))
-        vobj.addProperty("App::PropertyColor",      "TextColor",   "Arch",translate("Arch","The color of the area text"))
-        vobj.addProperty("App::PropertyLength",     "FontSize",    "Arch",translate("Arch","The size of the text font"))
-        vobj.addProperty("App::PropertyLength",     "FirstLine",  "Arch",translate("Arch","The size of the first line of text"))
-        vobj.addProperty("App::PropertyFloat",      "LineSpacing", "Arch",translate("Arch","The space between the lines of text"))
-        vobj.addProperty("App::PropertyVector",     "TextPosition","Arch",translate("Arch","The position of the text. Leave (0,0,0) for automatic position"))
-        vobj.addProperty("App::PropertyEnumeration","TextAlign",   "Arch",translate("Arch","The justification of the text"))
-        vobj.addProperty("App::PropertyInteger",    "Decimals",    "Arch",translate("Arch","The number of decimals to use for calculated texts"))
-        vobj.addProperty("App::PropertyBool",       "ShowUnit",    "Arch",translate("Arch","Show the unit suffix"))
+        vobj.addProperty("App::PropertyStringList",    "Text",        "Arch",translate("Arch","The text to show. Use $area, $label, $tag, $floor, $walls, $ceiling to insert the respective data"))
+        vobj.addProperty("App::PropertyString",        "FontName",    "Arch",translate("Arch","The name of the font"))
+        vobj.addProperty("App::PropertyColor",         "TextColor",   "Arch",translate("Arch","The color of the area text"))
+        vobj.addProperty("App::PropertyLength",        "FontSize",    "Arch",translate("Arch","The size of the text font"))
+        vobj.addProperty("App::PropertyLength",        "FirstLine",   "Arch",translate("Arch","The size of the first line of text"))
+        vobj.addProperty("App::PropertyFloat",         "LineSpacing", "Arch",translate("Arch","The space between the lines of text"))
+        vobj.addProperty("App::PropertyVectorDistance","TextPosition","Arch",translate("Arch","The position of the text. Leave (0,0,0) for automatic position"))
+        vobj.addProperty("App::PropertyEnumeration",   "TextAlign",   "Arch",translate("Arch","The justification of the text"))
+        vobj.addProperty("App::PropertyInteger",       "Decimals",    "Arch",translate("Arch","The number of decimals to use for calculated texts"))
+        vobj.addProperty("App::PropertyBool",          "ShowUnit",    "Arch",translate("Arch","Show the unit suffix"))
         vobj.TextColor = (0.0,0.0,0.0,1.0)
         vobj.Text = ["$label","$area"]
         vobj.TextAlign = ["Left","Center","Right"]
@@ -520,9 +520,28 @@ class _ViewProviderSpace(ArchComponent.ViewProviderComponent):
                     self.text1.justification = coin.SoAsciiText.LEFT
                     self.text2.justification = coin.SoAsciiText.LEFT
 
+    def setEdit(self,vobj,mode):
+        taskd = SpaceTaskPanel()
+        taskd.obj = self.Object
+        taskd.update()
+        FreeCADGui.Control.showDialog(taskd)
+        return True
 
 
+class SpaceTaskPanel(ArchComponent.ComponentTaskPanel):
+    "A modified version of the Arch component task panel"
 
+    def __init__(self):
+        ArchComponent.ComponentTaskPanel.__init__(self)
+        self.editButton = QtGui.QPushButton(self.form)
+        self.editButton.setObjectName("editButton")
+        self.editButton.setIcon(QtGui.QIcon(":/icons/Draft_Edit.svg"))
+        self.grid.addWidget(self.editButton, 4, 0, 1, 2)
+        self.editButton.setText(QtGui.QApplication.translate("Arch", "Set text position", None, QtGui.QApplication.UnicodeUTF8))
+        QtCore.QObject.connect(self.editButton, QtCore.SIGNAL("clicked()"), self.setTextPos)
+        
+    def setTextPos(self):
+        FreeCADGui.runCommand("Draft_Edit")
 
 
 if FreeCAD.GuiUp:

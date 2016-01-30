@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -32,11 +32,13 @@
 #include <Gui/Application.h>
 #include <Gui/WidgetFactory.h>
 #include <Gui/Language/Translator.h>
+#include "PropertyFemMeshItem.h"
 #include "DlgSettingsFemImp.h"
 #include "ViewProviderFemMesh.h"
 #include "ViewProviderFemMeshShape.h"
 #include "ViewProviderFemMeshShapeNetgen.h"
 #include "ViewProviderAnalysis.h"
+#include "ViewProviderSolver.h"
 #include "ViewProviderSetNodes.h"
 #include "ViewProviderSetElements.h"
 #include "ViewProviderSetFaces.h"
@@ -50,7 +52,6 @@
 #include "ViewProviderFemConstraintPulley.h"
 #include "ViewProviderResult.h"
 #include "Workbench.h"
-//#include "resources/qrc_Fem.cpp"
 
 // use a different name to CreateCommand()
 void CreateFemCommands(void);
@@ -62,20 +63,20 @@ void loadFemResource()
     Gui::Translator::instance()->refresh();
 }
 
-/* registration table  */
-extern struct PyMethodDef FemGui_Import_methods[];
+namespace FemGui {
+extern PyObject* initModule();
+}
 
 
 /* Python entry */
-extern "C" {
-void FemGuiExport initFemGui()  
+PyMODINIT_FUNC initFemGui()
 {
     if (!Gui::Application::Instance) {
         PyErr_SetString(PyExc_ImportError, "Cannot load Gui module in console application.");
         return;
     }
 
-    (void) Py_InitModule("FemGui", FemGui_Import_methods);   /* mod name, table ptr */
+    (void) FemGui::initModule();
     Base::Console().Log("Loading GUI of Fem module... done\n");
 
     // instantiating the commands
@@ -88,6 +89,8 @@ void FemGuiExport initFemGui()
     FemGui::ViewProviderFemMesh                ::init();
     FemGui::ViewProviderFemMeshShape           ::init();
     FemGui::ViewProviderFemMeshShapeNetgen     ::init();
+    FemGui::ViewProviderSolver                 ::init();
+    FemGui::ViewProviderSolverPython           ::init();
     FemGui::ViewProviderSetNodes               ::init();
     FemGui::ViewProviderSetElements            ::init();
     FemGui::ViewProviderSetFaces               ::init();
@@ -101,9 +104,7 @@ void FemGuiExport initFemGui()
     FemGui::ViewProviderFemConstraintPulley    ::init();
     FemGui::ViewProviderResult                 ::init();
     FemGui::ViewProviderResultPython           ::init();
-
-    Base::Interpreter().loadModule("MechanicalAnalysis");
-    Base::Interpreter().loadModule("MechanicalMaterial");
+    FemGui::PropertyFemMeshItem                ::init();
 
     // register preferences pages
     new Gui::PrefPageProducer<FemGui::DlgSettingsFemImp> ("FEM");
@@ -111,5 +112,3 @@ void FemGuiExport initFemGui()
      // add resources and reloads the translators
     loadFemResource();
 }
-
-} // extern "C" {

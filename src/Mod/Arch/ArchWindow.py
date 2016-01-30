@@ -391,6 +391,7 @@ class _CommandWindow:
         self.Thickness = p.GetFloat("WindowThickness",50)
         self.Width = p.GetFloat("WindowWidth",1000)
         self.Height = p.GetFloat("WindowHeight",1000)
+        self.RemoveExternal =  p.GetBool("archRemoveExternal",False)
         self.Preset = 0
         self.Sill = 0
         self.baseFace = None
@@ -431,10 +432,19 @@ class _CommandWindow:
                 FreeCADGui.addModule("Arch")
                 FreeCADGui.doCommand("win = Arch.makeWindow(FreeCAD.ActiveDocument."+obj.Name+")")
                 if host:
-                    FreeCADGui.doCommand("Arch.removeComponents(win,host=FreeCAD.ActiveDocument."+host.Name+")")
+                    if self.RemoveExternal:
+                        FreeCADGui.doCommand("Arch.removeComponents(win,host=FreeCAD.ActiveDocument."+host.Name+")")
+                    else:
+                        # make a new object to avoid circular references
+                        FreeCADGui.doCommand("host=Arch.make"+Draft.getType(host)+"(FreeCAD.ActiveDocument."+host.Name+")")
+                        FreeCADGui.doCommand("Arch.removeComponents(win,host)")
                     siblings = host.Proxy.getSiblings(host)
                     for sibling in siblings:
-                        FreeCADGui.doCommand("Arch.removeComponents(win,host=FreeCAD.ActiveDocument."+sibling.Name+")")
+                        if self.RemoveExternal:
+                            FreeCADGui.doCommand("Arch.removeComponents(win,host=FreeCAD.ActiveDocument."+sibling.Name+")")
+                        else:
+                            FreeCADGui.doCommand("host=Arch.make"+Draft.getType(sibling)+"(FreeCAD.ActiveDocument."+sibling.Name+")")
+                            FreeCADGui.doCommand("Arch.removeComponents(win,host)")
                 FreeCAD.ActiveDocument.commitTransaction()
                 FreeCAD.ActiveDocument.recompute()
                 return
@@ -474,10 +484,18 @@ class _CommandWindow:
         FreeCADGui.doCommand("win = Arch.makeWindowPreset(\"" + WindowPresets[self.Preset] + "\"," + wp + "placement=pl)")
         if obj:
             if Draft.getType(obj) in AllowedHosts:
-                FreeCADGui.doCommand("Arch.removeComponents(win,host=FreeCAD.ActiveDocument."+obj.Name+")")
+                if self.RemoveExternal:
+                    FreeCADGui.doCommand("Arch.removeComponents(win,host=FreeCAD.ActiveDocument."+obj.Name+")")
+                else:
+                    FreeCADGui.doCommand("host=Arch.make"+Draft.getType(obj)+"(FreeCAD.ActiveDocument."+obj.Name+")")
+                    FreeCADGui.doCommand("Arch.removeComponents(win,host)")
                 siblings = obj.Proxy.getSiblings(obj)
                 for sibling in siblings:
-                    FreeCADGui.doCommand("Arch.removeComponents(win,host=FreeCAD.ActiveDocument."+sibling.Name+")")
+                    if self.RemoveExternal:
+                        FreeCADGui.doCommand("Arch.removeComponents(win,host=FreeCAD.ActiveDocument."+sibling.Name+")")
+                    else:
+                        FreeCADGui.doCommand("host=Arch.make"+Draft.getType(sibling)+"(FreeCAD.ActiveDocument."+sibling.Name+")")
+                        FreeCADGui.doCommand("Arch.removeComponents(win,host)")
         FreeCAD.ActiveDocument.commitTransaction()
         FreeCAD.ActiveDocument.recompute()
         return
@@ -599,8 +617,7 @@ class _Window(ArchComponent.Component):
         ArchComponent.Component.__init__(self,obj)
         obj.addProperty("App::PropertyStringList","WindowParts","Arch",translate("Arch","the components of this window"))
         obj.addProperty("App::PropertyLength","HoleDepth","Arch",translate("Arch","The depth of the hole that this window makes in its host object. Keep 0 for automatic."))
-        # the following line creates problem when restoring saved files (wrongly attributes it to the window shape). Disabling for now...
-        #obj.addProperty("Part::PropertyPartShape","Subvolume","Arch",translate("Arch","an optional volume to be subtracted from hosts of this window"))
+        obj.addProperty("App::PropertyLink","Subvolume","Arch",translate("Arch","an optional object that defines a volume to be subtracted from hosts of this window"))
         obj.addProperty("App::PropertyLength","Width","Arch",translate("Arch","The width of this window (for preset windows only)"))
         obj.addProperty("App::PropertyLength","Height","Arch",translate("Arch","The height of this window (for preset windows only)"))
         obj.addProperty("App::PropertyVector","Normal","Arch",translate("Arch","The normal direction of this window"))
@@ -707,8 +724,12 @@ class _Window(ArchComponent.Component):
         # check if we have a custom subvolume
         if hasattr(obj,"Subvolume"):
             if obj.Subvolume:
-                if not obj.Subvolume.isNull():
-                    return obj.Subvolume
+                if obj.Subvolume.isDerivedFrom("Part::Feature"):
+                    if not obj.Subvolume.Shape.isNull():
+                        sh = obj.Subvolume.Shape.copy()   
+                        if plac:
+                            sh.Placement = plac
+                        return sh
 
         # getting extrusion depth
         base = None

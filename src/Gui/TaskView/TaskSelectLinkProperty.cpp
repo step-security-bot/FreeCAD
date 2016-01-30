@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2010 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2010 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -219,7 +219,7 @@ void TaskSelectLinkProperty::OnChange(Gui::SelectionSingleton::SubjectType &rCal
                     temp += "::";
                     temp += it->SubName;
                 }
-                new QListWidgetItem(QString::fromAscii(temp.c_str()), ui->listWidget);
+                new QListWidgetItem(QString::fromLatin1(temp.c_str()), ui->listWidget);
             }
             checkSelectionStatus();
     }

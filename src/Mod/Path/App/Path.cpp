@@ -34,10 +34,11 @@
 #include <Base/Stream.h>
 #include <Base/Exception.h>
 
-#include "Mod/Robot/App/kdl_cp/path_line.hpp"
-#include "Mod/Robot/App/kdl_cp/path_circle.hpp"
-#include "Mod/Robot/App/kdl_cp/rotational_interpolation_sa.hpp"
-#include "Mod/Robot/App/kdl_cp/utilities/error.h"
+// KDL stuff - at the moment, not used
+//#include "Mod/Robot/App/kdl_cp/path_line.hpp"
+//#include "Mod/Robot/App/kdl_cp/path_circle.hpp"
+//#include "Mod/Robot/App/kdl_cp/rotational_interpolation_sa.hpp"
+//#include "Mod/Robot/App/kdl_cp/utilities/error.h"
 
 #include "Path.h"
 
@@ -92,7 +93,7 @@ void Toolpath::insertCommand(const Command &Cmd, int pos)
 {
     if (pos == -1) {
         addCommand(Cmd);
-    } else if (pos <= vpcCommands.size()) {
+    } else if (pos <= static_cast<int>(vpcCommands.size())) {
         Command *tmp = new Command(Cmd);
         vpcCommands.insert(vpcCommands.begin()+pos,tmp);
     } else {
@@ -106,7 +107,7 @@ void Toolpath::deleteCommand(int pos)
     if (pos == -1) {
         //delete(*vpcCommands.rbegin()); // causes crash
         vpcCommands.pop_back();
-    } else if (pos <= vpcCommands.size()) {
+    } else if (pos <= static_cast<int>(vpcCommands.size())) {
         vpcCommands.erase (vpcCommands.begin()+pos);
     } else {
         throw Base::Exception("Index not in range");

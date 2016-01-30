@@ -30,10 +30,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 \**************************************************************************/
 
+#ifdef _MSC_VER
+#pragma warning(disable : 4267)
+#endif
+
 #include <Quarter/devices/SpaceNavigatorDevice.h>
 
-#include <QtGui/QApplication>
-#include <QtGui/QWidget>
+#include <QApplication>
+#include <QWidget>
 #include <QtCore/QEvent>
 
 #include <Inventor/events/SoEvent.h>

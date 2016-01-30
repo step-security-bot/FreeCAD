@@ -27,6 +27,10 @@
 #include "View.h"
 #include <QMainWindow>
 
+QT_BEGIN_NAMESPACE
+class QPrinter;
+QT_END_NAMESPACE
+
 namespace Gui 
 {
 class Document;
@@ -41,7 +45,7 @@ class Document;
  * @see TreeView
  * @see Gui::Document
  * @see Application
- * @author Jürgen Riegel, Werner Mayer
+ * @author JÃ¼rgen Riegel, Werner Mayer
  */
 class GuiExport MDIView : public QMainWindow, public BaseView
 {
@@ -56,7 +60,7 @@ public:
      * the view will attach to the active document. Be aware, there isn't
      * always an active document.
      */
-    MDIView(Gui::Document* pcDocument, QWidget* parent, Qt::WFlags wflags=0);
+    MDIView(Gui::Document* pcDocument, QWidget* parent, Qt::WindowFlags wflags=0);
     /** View destructor
      * Detach the view from the document, if attached.
      */

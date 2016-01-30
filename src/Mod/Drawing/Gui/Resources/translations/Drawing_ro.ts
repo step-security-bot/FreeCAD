@@ -4,7 +4,7 @@
 <context>
     <name>CmdDrawingAnnotation</name>
     <message>
-        <location filename="../../Command.cpp" line="+475"/>
+        <location filename="../../Command.cpp" line="+476"/>
         <source>Drawing</source>
         <translation>Desen</translation>
     </message>
@@ -198,9 +198,28 @@
     </message>
 </context>
 <context>
+    <name>CmdDrawingSpreadsheetView</name>
+    <message>
+        <location line="+62"/>
+        <source>Drawing</source>
+        <translation type="unfinished">Desen</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&amp;Spreadsheet View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+2"/>
+        <source>Inserts a view of a selected spreadsheet in the active drawing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CmdDrawingSymbol</name>
     <message>
-        <location line="-110"/>
+        <location line="-176"/>
         <source>Drawing</source>
         <translation type="unfinished">Desen</translation>
     </message>
@@ -269,9 +288,13 @@
         <translation>Export format PDF</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>PDF file (*.pdf)</source>
-        <translation>Fişier PDF (*.pdf)</translation>
+        <translation type="obsolete">Fişier PDF (*.pdf)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>PDF file</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+16"/>
@@ -334,6 +357,16 @@ Do you want to continue?</source>
         <translation type="unfinished">The printer uses a different paper size than the drawing.
 Do you want to continue?</translation>
     </message>
+    <message>
+        <location line="+11"/>
+        <source>Opening file failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Can&apos;t open file &apos;%1&apos; for writing.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DrawingGui::TaskOrthoViews</name>
@@ -369,7 +402,17 @@ Do you want to continue?</translation>
         <translation type="unfinished">Distanțează dx / dy   </translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+45"/>
+        <source>Show hidden lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Show smooth lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
         <source> Axis out and right</source>
         <translation type="unfinished"> Axa afară și dreaptă</translation>
     </message>
@@ -562,17 +605,15 @@ Do you want to continue?</translation>
         <translation type="obsolete">dx / dy secundar</translation>
     </message>
     <message>
-        <location line="+125"/>
         <source>Show hidden</source>
-        <translation>Arată ce este ascuns</translation>
+        <translation type="obsolete">Arată ce este ascuns</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Show smooth</source>
-        <translation>Arată neted</translation>
+        <translation type="obsolete">Arată neted</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+143"/>
         <source>Axonometric</source>
         <translation>Axonometric</translation>
     </message>
@@ -580,7 +621,7 @@ Do you want to continue?</translation>
 <context>
     <name>DrawingGui::TaskProjection</name>
     <message>
-        <location filename="../../TaskDialog.cpp" line="+49"/>
+        <location filename="../../TaskDialog.cpp" line="+50"/>
         <source>Visible sharp edges</source>
         <translation>Muchiile ascuțite vizibile</translation>
     </message>
@@ -729,21 +770,20 @@ Do you want to continue?</translation>
         <translation type="obsolete">Vizualizatorul de desen</translation>
     </message>
     <message>
-        <location line="-518"/>
-        <location line="+519"/>
         <source>Scalable Vector Graphics (*.svg *.svgz)</source>
-        <translation>Grafică vectorială scalabilă(*.svg *.svgz)</translation>
+        <translation type="obsolete">Grafică vectorială scalabilă(*.svg *.svgz)</translation>
     </message>
     <message>
-        <location line="-267"/>
+        <location line="-266"/>
         <location line="+78"/>
         <location line="+49"/>
         <location line="+186"/>
+        <location line="+116"/>
         <source>Wrong selection</source>
         <translation>Selecție greșită</translation>
     </message>
     <message>
-        <location line="-312"/>
+        <location line="-428"/>
         <source>Select a Part object.</source>
         <translation>Selecteaza un obiect tip piesă</translation>
     </message>
@@ -760,25 +800,34 @@ Do you want to continue?</translation>
         <translation type="obsolete">Creați o pagină pentru a insera vizualizările.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="-253"/>
+        <location line="+519"/>
+        <location line="+52"/>
+        <source>Scalable Vector Graphic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-310"/>
         <location line="+78"/>
         <location line="+80"/>
         <location line="+48"/>
         <location line="+45"/>
+        <location line="+175"/>
         <source>No page found</source>
         <translation type="unfinished">No page found</translation>
     </message>
     <message>
-        <location line="-250"/>
+        <location line="-425"/>
         <location line="+78"/>
         <location line="+80"/>
         <location line="+48"/>
         <location line="+45"/>
+        <location line="+175"/>
         <source>Create a page first.</source>
         <translation type="unfinished">Create a page first.</translation>
     </message>
     <message>
-        <location line="-182"/>
+        <location line="-357"/>
         <source>Select exactly one Part object.</source>
         <translation type="unfinished">Select exactly one Part object.</translation>
     </message>
@@ -789,26 +838,34 @@ Do you want to continue?</translation>
         <translation>Selectează un obiect pagină</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+6"/>
+        <source>All Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+110"/>
+        <source>Select exactly one Spreadsheet object.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>SVG (*.svg)</source>
-        <translation type="unfinished">SVG (*.svg)</translation>
+        <translation type="obsolete">SVG (*.svg)</translation>
     </message>
     <message>
         <source>SVG(*.svg)</source>
         <translation type="obsolete">SVG (*.SVG)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>All Files (*.*)</source>
-        <translation>Toate fișierele (*.*)</translation>
+        <translation type="obsolete">Toate fișierele (*.*)</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-108"/>
         <source>Export page</source>
         <translation>Exportă pagina</translation>
     </message>
     <message>
-        <location filename="../../ViewProviderPage.cpp" line="+157"/>
+        <location filename="../../ViewProviderPage.cpp" line="+152"/>
         <source>Show drawing</source>
         <translation>Arată desenul</translation>
     </message>
@@ -837,7 +894,7 @@ Do you want to continue?</translation>
         <translation type="obsolete">Partea de jos</translation>
     </message>
     <message>
-        <location filename="../../TaskOrthoViews.cpp" line="+45"/>
+        <location filename="../../TaskOrthoViews.cpp" line="+48"/>
         <location line="+929"/>
         <source>Make axonometric...</source>
         <translation type="unfinished">Fă axonometric...</translation>

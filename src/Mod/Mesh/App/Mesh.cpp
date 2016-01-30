@@ -679,7 +679,7 @@ unsigned long MeshObject::getPointDegree(const std::vector<unsigned long>& indic
     unsigned long countInvalids = std::count_if(pointDeg.begin(), pointDeg.end(),
         std::bind2nd(std::equal_to<unsigned long>(), 0));
 
-    point_degree = pointDeg;
+    point_degree.swap(pointDeg);
     return countInvalids;
 }
 
@@ -697,7 +697,7 @@ void MeshObject::offset(float fSize)
 
     unsigned int i = 0;
     // go through all the vertex normals
-    for (std::vector<Base::Vector3f>::iterator It= normals.begin();It != normals.end();It++,i++)
+    for (std::vector<Base::Vector3f>::iterator It= normals.begin();It != normals.end();++It,i++)
         // and move each mesh point in the normal direction
         _kernel.MovePoint(i,It->Normalize() * fSize);
     _kernel.RecalcBoundBox();
@@ -717,7 +717,7 @@ void MeshObject::offsetSpecial2(float fSize)
     unsigned int i = 0;
 
     // go through all the vertex normals
-    for (std::vector<Base::Vector3f>::iterator It= PointNormals.begin();It != PointNormals.end();It++,i++){
+    for (std::vector<Base::Vector3f>::iterator It= PointNormals.begin();It != PointNormals.end();++It,i++){
         builder.addSingleLine(_kernel.GetPoint(i),_kernel.GetPoint(i)+It->Normalize() * fSize);
         // and move each mesh point in the normal direction
         _kernel.MovePoint(i,It->Normalize() * fSize);
@@ -763,7 +763,7 @@ void MeshObject::offsetSpecial(float fSize, float zmax, float zmin)
 
     unsigned int i = 0;
     // go through all the vertex normals
-    for (std::vector<Base::Vector3f>::iterator It= normals.begin();It != normals.end();It++,i++) {
+    for (std::vector<Base::Vector3f>::iterator It= normals.begin();It != normals.end();++It,i++) {
         Base::Vector3f Pnt = _kernel.GetPoint(i);
         if (Pnt.z < zmax && Pnt.z > zmin) {
             Pnt.z = 0;
@@ -834,6 +834,26 @@ Base::Vector3d MeshObject::getPointNormal(unsigned long index) const
     return normal;
 }
 
+std::vector<Base::Vector3d> MeshObject::getPointNormals() const
+{
+    std::vector<Base::Vector3f> temp = _kernel.CalcVertexNormals();
+
+    std::vector<Base::Vector3d> normals;
+    normals.reserve(temp.size());
+    for (std::vector<Base::Vector3f>::iterator it = temp.begin(); it != temp.end(); ++it) {
+        Base::Vector3d normal = transformToOutside(*it);
+        // the normal is a vector, hence we must not apply the translation part
+        // of the transformation to the vector
+        normal.x -= _Mtrx[0][3];
+        normal.y -= _Mtrx[1][3];
+        normal.z -= _Mtrx[2][3];
+        normal.Normalize();
+        normals.push_back(normal);
+    }
+
+    return normals;
+}
+
 void MeshObject::crossSections(const std::vector<MeshObject::TPlane>& planes, std::vector<MeshObject::TPolylines> &sections,
                                float fMinEps, bool bConnectPolygons) const
 {
@@ -859,6 +879,9 @@ void MeshObject::cut(const Base::Polygon2D& polygon2d,
         break;
     case OUTER:
         inner = false;
+        break;
+    default:
+        inner = true;
         break;
     }
 

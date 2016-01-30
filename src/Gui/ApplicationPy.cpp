@@ -30,25 +30,32 @@
 # include <QPrinter>
 # include <QFileInfo>
 # include <Inventor/SoInput.h>
+# include <Inventor/actions/SoGetPrimitiveCountAction.h>
+# include <Inventor/nodes/SoSeparator.h>
 #endif
 
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/TranscodingException.hpp>
+#include <boost/regex.hpp>
 
 #include "Application.h"
 #include "BitmapFactory.h"
 #include "Command.h"
 #include "Document.h"
 #include "MainWindow.h"
+#include "Macro.h"
 #include "EditorView.h"
 #include "PythonEditor.h"
+#include "SoFCDB.h"
 #include "View3DInventor.h"
+#include "ViewProvider.h"
 #include "WidgetFactory.h"
 #include "Workbench.h"
 #include "WorkbenchManager.h"
 #include "Language/Translator.h"
 #include "DownloadManager.h"
 #include <App/DocumentObjectPy.h>
+#include <App/DocumentPy.h>
 #include <App/PropertyFile.h>
 #include <Base/Interpreter.h>
 #include <Base/Console.h>
@@ -134,6 +141,9 @@ PyMethodDef Application::Methods[] = {
   {"activeDocument",          (PyCFunction) Application::sActiveDocument,   1,
    "activeDocument() -> object or None\n\n"
    "Return the active document or None if no one exists"},
+  {"setActiveDocument",       (PyCFunction) Application::sSetActiveDocument,1,
+   "setActiveDocument(string or App.Document) -> None\n\n"
+   "Activate the specified document"},
   {"getDocument",             (PyCFunction) Application::sGetDocument,      1,
    "getDocument(string) -> object\n\n"
    "Get a document by its name"},
@@ -166,19 +176,71 @@ PyObject* Gui::Application::sActiveDocument(PyObject * /*self*/, PyObject *args,
     }
 }
 
-PyObject* Application::sGetDocument(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
+PyObject* Gui::Application::sSetActiveDocument(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
 {
-    char *pstr=0;
-    if (!PyArg_ParseTuple(args, "s", &pstr))     // convert args: Python->C 
-        return NULL;                             // NULL triggers exception
+    Document *pcDoc = 0;
 
-    Document *pcDoc = Instance->getDocument(pstr);
+    do {
+        char *pstr=0;
+        if (PyArg_ParseTuple(args, "s", &pstr)) {
+            pcDoc = Instance->getDocument(pstr);
+            if (!pcDoc) {
+                PyErr_Format(PyExc_NameError, "Unknown document '%s'", pstr);
+                return 0;
+            }
+            break;
+        }
+
+        PyErr_Clear();
+        PyObject* doc;
+        if (PyArg_ParseTuple(args, "O!", &(App::DocumentPy::Type), &doc)) {
+            pcDoc = Instance->getDocument(static_cast<App::DocumentPy*>(doc)->getDocumentPtr());
+            if (!pcDoc) {
+                PyErr_Format(PyExc_KeyError, "Unknown document instance");
+                return 0;
+            }
+            break;
+        }
+    }
+    while(false);
+
     if (!pcDoc) {
-        PyErr_Format(PyExc_NameError, "Unknown document '%s'", pstr);
+        PyErr_SetString(PyExc_TypeError, "Either string or App.Document expected");
         return 0;
     }
 
-    return pcDoc->getPyObject();
+    if (Instance->activeDocument() != pcDoc) {
+        Gui::MDIView* view = pcDoc->getActiveView();
+        getMainWindow()->setActiveWindow(view);
+    }
+    Py_Return;
+}
+
+PyObject* Application::sGetDocument(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
+{
+    char *pstr=0;
+    if (PyArg_ParseTuple(args, "s", &pstr)) {
+        Document *pcDoc = Instance->getDocument(pstr);
+        if (!pcDoc) {
+            PyErr_Format(PyExc_NameError, "Unknown document '%s'", pstr);
+            return 0;
+        }
+        return pcDoc->getPyObject();
+    }
+
+    PyErr_Clear();
+    PyObject* doc;
+    if (PyArg_ParseTuple(args, "O!", &(App::DocumentPy::Type), &doc)) {
+        Document *pcDoc = Instance->getDocument(static_cast<App::DocumentPy*>(doc)->getDocumentPtr());
+        if (!pcDoc) {
+            PyErr_Format(PyExc_KeyError, "Unknown document instance");
+            return 0;
+        }
+        return pcDoc->getPyObject();
+    }
+
+    PyErr_SetString(PyExc_TypeError, "Either string or App.Document exprected");
+    return 0;
 }
 
 PyObject* Application::sHide(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
@@ -395,46 +457,61 @@ PyObject* Application::sExport(PyObject * /*self*/, PyObject *args,PyObject * /*
             }
         }
 
-        // get the view that belongs to the found document
-        if (doc) {
-            QString fileName = QString::fromUtf8(Utf8Name.c_str());
-            QFileInfo fi;
-            fi.setFile(fileName);
-            QString ext = fi.suffix().toLower();
-            if (ext == QLatin1String("iv") || ext == QLatin1String("wrl") ||
-                ext == QLatin1String("vrml") || ext == QLatin1String("wrz") ||
-                ext == QLatin1String("svg") || ext == QLatin1String("idtf")) {
-                Gui::Document* gui_doc = Application::Instance->getDocument(doc);
-                std::list<MDIView*> view3d = gui_doc->getMDIViewsOfType(View3DInventor::getClassTypeId());
-                if (view3d.empty()) {
-                    PyErr_SetString(Base::BaseExceptionFreeCADError, "Cannot export to SVG because document doesn't have a 3d view");
-                    return 0;
-                }
-                else {
-                    QString cmd = QString::fromLatin1(
-                        "Gui.getDocument(\"%1\").mdiViewsOfType('Gui::View3DInventor')[0].dumpSelection(\"%2\")"
-                        ).arg(QLatin1String(doc->getName())).arg(fi.absoluteFilePath());
-                    Base::Interpreter().runString(cmd.toUtf8());
-                }
-            }
-            else if (ext == QLatin1String("pdf")) {
-                Gui::Document* gui_doc = Application::Instance->getDocument(doc);
-                if (gui_doc) {
-                    Gui::MDIView* view = gui_doc->getActiveView();
-                    if (view) {
-                        View3DInventor* view3d = qobject_cast<View3DInventor*>(view);
-                        if (view3d)
-                            view3d->viewAll();
-                        QPrinter printer(QPrinter::ScreenResolution);
-                        printer.setOutputFormat(QPrinter::PdfFormat);
-                        printer.setOutputFileName(fileName);
-                        view->print(&printer);
+        QString fileName = QString::fromUtf8(Utf8Name.c_str());
+        QFileInfo fi;
+        fi.setFile(fileName);
+        QString ext = fi.suffix().toLower();
+        if (ext == QLatin1String("iv") || ext == QLatin1String("wrl") ||
+            ext == QLatin1String("vrml") || ext == QLatin1String("wrz")) {
+
+            // build up the graph
+            SoSeparator* sep = new SoSeparator();
+            sep->ref();
+
+            for (Py::Sequence::iterator it = list.begin(); it != list.end(); ++it) {
+                PyObject* item = (*it).ptr();
+                if (PyObject_TypeCheck(item, &(App::DocumentObjectPy::Type))) {
+                    App::DocumentObject* obj = static_cast<App::DocumentObjectPy*>(item)->getDocumentObjectPtr();
+
+                    Gui::ViewProvider* vp = Gui::Application::Instance->getViewProvider(obj);
+                    if (vp) {
+                        sep->addChild(vp->getRoot());
                     }
                 }
             }
-            else {
-                Base::Console().Error("File type '%s' not supported\n", ext.toLatin1().constData());
+
+
+            SoGetPrimitiveCountAction action;
+            action.setCanApproximate(true);
+            action.apply(sep);
+
+            bool binary = false;
+            if (action.getTriangleCount() > 100000 ||
+                action.getPointCount() > 30000 ||
+                action.getLineCount() > 10000)
+                binary = true;
+
+            SoFCDB::writeToFile(sep, Utf8Name.c_str(), binary);
+            sep->unref();
+        }
+        else if (ext == QLatin1String("pdf")) {
+            // get the view that belongs to the found document
+            Gui::Document* gui_doc = Application::Instance->getDocument(doc);
+            if (gui_doc) {
+                Gui::MDIView* view = gui_doc->getActiveView();
+                if (view) {
+                    View3DInventor* view3d = qobject_cast<View3DInventor*>(view);
+                    if (view3d)
+                        view3d->viewAll();
+                    QPrinter printer(QPrinter::ScreenResolution);
+                    printer.setOutputFormat(QPrinter::PdfFormat);
+                    printer.setOutputFileName(fileName);
+                    view->print(&printer);
+                }
             }
+        }
+        else {
+            Base::Console().Error("File type '%s' not supported\n", ext.toLatin1().constData());
         }
     } PY_CATCH;
 
@@ -825,14 +902,61 @@ PyObject* Application::sAddCommand(PyObject * /*self*/, PyObject *args,PyObject 
     if (!PyArg_ParseTuple(args, "sO|s", &pName,&pcCmdObj,&pSource))     // convert args: Python->C 
         return NULL;                    // NULL triggers exception 
 
+    // get the call stack to find the Python module name
+    //
+    std::string module, group;
     try {
         Base::PyGILStateLocker lock;
-        Py::Object cmd(pcCmdObj);
-        if (cmd.hasAttr("GetCommands")) {
-            Application::Instance->commandManager().addCommand(new PythonGroupCommand(pName, pcCmdObj));
+        Py::Module mod(PyImport_ImportModule("inspect"), true);
+        Py::Callable inspect(mod.getAttr("stack"));
+        Py::Tuple args;
+        Py::List list(inspect.apply(args));
+        args = list.getItem(0);
+
+        // usually this is the file name of the calling script
+        std::string file = args.getItem(1).as_string();
+        Base::FileInfo fi(file);
+        // convert backslashes to slashes
+        file = fi.filePath();
+        module = fi.fileNamePure();
+
+        // for the group name get the directory name after 'Mod'
+        boost::regex rx("/Mod/(\\w+)/");
+        boost::smatch what;
+        if (boost::regex_search(file, what, rx)) {
+            group = what[1];
         }
         else {
-            Application::Instance->commandManager().addCommand(new PythonCommand(pName, pcCmdObj, pSource));
+            group = module;
+        }
+    }
+    catch (Py::Exception& e) {
+        e.clear();
+    }
+
+    try {
+        Base::PyGILStateLocker lock;
+
+        Py::Object cmd(pcCmdObj);
+        if (cmd.hasAttr("GetCommands")) {
+            Command* cmd = new PythonGroupCommand(pName, pcCmdObj);
+            if (!module.empty()) {
+                cmd->setAppModuleName(module.c_str());
+            }
+            if (!group.empty()) {
+                cmd->setGroupName(group.c_str());
+            }
+            Application::Instance->commandManager().addCommand(cmd);
+        }
+        else {
+            Command* cmd = new PythonCommand(pName, pcCmdObj, pSource);
+            if (!module.empty()) {
+                cmd->setAppModuleName(module.c_str());
+            }
+            if (!group.empty()) {
+                cmd->setGroupName(group.c_str());
+            }
+            Application::Instance->commandManager().addCommand(cmd);
         }
     }
     catch (const Base::Exception& e) {
@@ -866,22 +990,46 @@ PyObject* Application::sRunCommand(PyObject * /*self*/, PyObject *args,PyObject 
     }
 }
 
-PyObject* Application::sDoCommand(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
+PyObject* Application::sDoCommand(PyObject * /*self*/, PyObject *args, PyObject * /*kwd*/)
 {
-    char *pstr=0;
-    if (!PyArg_ParseTuple(args, "s", &pstr))     // convert args: Python->C 
-        return NULL;                             // NULL triggers exception
-    Command::doCommand(Command::Doc,pstr);
-    return Py_None;
+    char *sCmd=0;
+    if (!PyArg_ParseTuple(args, "s", &sCmd))
+        return NULL;
+
+    Gui::Application::Instance->macroManager()->addLine(MacroManager::App, sCmd);
+
+    PyObject *module, *dict;
+
+    Base::PyGILStateLocker locker;
+    module = PyImport_AddModule("__main__");
+    if (module == NULL)
+        return 0;
+    dict = PyModule_GetDict(module);
+    if (dict == NULL)
+        return 0;
+
+    return PyRun_String(sCmd, Py_file_input, dict, dict);
 }
 
-PyObject* Application::sDoCommandGui(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
+PyObject* Application::sDoCommandGui(PyObject * /*self*/, PyObject *args, PyObject * /*kwd*/)
 {
-    char *pstr=0;
-    if (!PyArg_ParseTuple(args, "s", &pstr))     // convert args: Python->C
-        return NULL;                             // NULL triggers exception
-    Command::runCommand(Command::Gui,pstr);
-    return Py_None;
+    char *sCmd=0;
+    if (!PyArg_ParseTuple(args, "s", &sCmd))
+        return NULL;
+
+    Gui::Application::Instance->macroManager()->addLine(MacroManager::Gui, sCmd);
+
+    PyObject *module, *dict;
+
+    Base::PyGILStateLocker locker;
+    module = PyImport_AddModule("__main__");
+    if (module == NULL)
+        return 0;
+    dict = PyModule_GetDict(module);
+    if (dict == NULL)
+        return 0;
+
+    return PyRun_String(sCmd, Py_file_input, dict, dict);
 }
 
 PyObject* Application::sAddModule(PyObject * /*self*/, PyObject *args,PyObject * /*kwd*/)
@@ -890,6 +1038,8 @@ PyObject* Application::sAddModule(PyObject * /*self*/, PyObject *args,PyObject *
     if (!PyArg_ParseTuple(args, "s", &pstr))     // convert args: Python->C
         return NULL;                             // NULL triggers exception
     Command::addModule(Command::Doc,pstr);
+
+    Py_INCREF(Py_None);
     return Py_None;
 }
 
@@ -898,5 +1048,7 @@ PyObject* Application::sShowDownloads(PyObject * /*self*/, PyObject *args,PyObje
     if (!PyArg_ParseTuple(args, ""))             // convert args: Python->C 
         return NULL;                             // NULL triggers exception 
     Gui::Dialog::DownloadManager::getInstance();
+
+    Py_INCREF(Py_None);
     return Py_None;
 }

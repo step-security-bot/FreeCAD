@@ -88,7 +88,7 @@ bool ViewProviderMirror::setEdit(int ModNum)
         float len = (float)bbox.CalcDiagonalLength();
         Base::Vector3d base = mf->Base.getValue();
         Base::Vector3d norm = mf->Normal.getValue();
-        Base::Vector3d cent = bbox.CalcCenter();
+        Base::Vector3d cent = bbox.GetCenter();
         base = cent.ProjToPlane(base, norm);
 
         // setup the graph for editing the mirror plane
@@ -119,7 +119,7 @@ bool ViewProviderMirror::setEdit(int ModNum)
         // translation and center fields are overridden.
         SoSearchAction sa;
         sa.setInterest(SoSearchAction::FIRST);
-        sa.setSearchingAll(FALSE);
+        sa.setSearchingAll(false);
         sa.setNode(trans);
         sa.apply(pcEditNode);
         SoPath * path = sa.getPath();
@@ -253,7 +253,7 @@ void ViewProviderFillet::updateData(const App::Property* prop)
             colFill.resize(fillMap.Extent(), static_cast<PartGui::ViewProviderPart*>(vpBase)->ShapeColor.getValue());
 
             bool setColor=false;
-            if (colBase.size() == baseMap.Extent()) {
+            if (static_cast<int>(colBase.size()) == baseMap.Extent()) {
                 applyColor(hist[0], colBase, colFill);
                 setColor = true;
             }
@@ -356,7 +356,7 @@ void ViewProviderChamfer::updateData(const App::Property* prop)
             colCham.resize(chamMap.Extent(), static_cast<PartGui::ViewProviderPart*>(vpBase)->ShapeColor.getValue());
 
             bool setColor=false;
-            if (colBase.size() == baseMap.Extent()) {
+            if (static_cast<int>(colBase.size()) == baseMap.Extent()) {
                 applyColor(hist[0], colBase, colCham);
                 setColor = true;
             }

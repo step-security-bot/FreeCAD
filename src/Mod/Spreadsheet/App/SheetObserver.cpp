@@ -37,26 +37,8 @@ using namespace App;
 
 SheetObserver::SheetObserver(App::Document * document, PropertySheet *_sheet)
     : DocumentObserver(document)
-    , sheet(_sheet)
     , refCount(1)
-{
-}
-
-/**
-  * Unimplemented.
-  *
-  */
-
-void SheetObserver::slotCreatedDocument(const App::Document &Doc)
-{
-}
-
-/**
-  * Unimplemented.
-  *
-  */
-
-void SheetObserver::slotDeletedDocument(const App::Document &Doc)
+    , sheet(_sheet)
 {
 }
 
@@ -78,6 +60,7 @@ void SheetObserver::slotCreatedObject(const DocumentObject &Obj)
 void SheetObserver::slotDeletedObject(const DocumentObject &Obj)
 {
     sheet->invalidateDependants(&Obj);
+    sheet->deletedDocumentObject(&Obj);
 }
 
 /**
@@ -87,12 +70,13 @@ void SheetObserver::slotDeletedObject(const DocumentObject &Obj)
 
 void SheetObserver::slotChangedObject(const DocumentObject &Obj, const Property &Prop)
 {
-    const char * name = Obj.getPropertyName(&Prop);
-    assert(name != 0);
-
     if (&Prop == &Obj.Label)
         sheet->renamedDocumentObject(&Obj);
     else {
+        const char * name = Obj.getPropertyName(&Prop);
+
+        if (name == 0)
+            return;
 
         if (isUpdating.find(name) != isUpdating.end())
             return;

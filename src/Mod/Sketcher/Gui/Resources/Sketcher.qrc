@@ -40,6 +40,7 @@
         <file>icons/Constraint_VerticalDistance_Driven.svg</file>
         <file>icons/Sketcher_AlterConstruction.svg</file>
         <file>icons/Sketcher_AlterFillet.svg</file>
+        <file>icons/Sketcher_Clone.svg</file>
         <file>icons/Sketcher_CloseShape.svg</file>
         <file>icons/Sketcher_Conics.svg</file>
         <file>icons/Sketcher_Conics_Constr.svg</file>
@@ -53,6 +54,7 @@
         <file>icons/Sketcher_ConstrainLock_Driven.svg</file>
         <file>icons/Sketcher_ConstrainParallel.svg</file>
         <file>icons/Sketcher_ConstrainVertical.svg</file>
+        <file>icons/Sketcher_Copy.svg</file>
         <file>icons/Sketcher_Create3PointArc.svg</file>
         <file>icons/Sketcher_Create3PointArc_Constr.svg</file>
         <file>icons/Sketcher_Create3PointCircle.svg</file>
@@ -119,8 +121,10 @@
         <file>icons/Sketcher_LeaveSketch.svg</file>
         <file>icons/Sketcher_MapSketch.svg</file>
         <file>icons/Sketcher_MergeSketch.svg</file>
+        <file>icons/Sketcher_MirrorSketch.svg</file>
         <file>icons/Sketcher_NewSketch.svg</file>
         <file>icons/Sketcher_ProfilesHexagon1.svg</file>
+        <file>icons/Sketcher_RectangularArray.svg</file>
         <file>icons/Sketcher_SelectConflictingConstraints.svg</file>
         <file>icons/Sketcher_SelectConstraints.svg</file>
         <file>icons/Sketcher_SelectElementsAssociatedWithConstraints.svg</file>
@@ -129,6 +133,7 @@
         <file>icons/Sketcher_SelectRedundantConstraints.svg</file>
         <file>icons/Sketcher_SelectVerticalAxis.svg</file>
         <file>icons/Sketcher_Sketch.svg</file>
+        <file>icons/Sketcher_Symmetry.svg</file>
         <file>icons/Sketcher_ToggleConstraint.svg</file>
         <file>icons/Sketcher_ToggleConstruction.svg</file>
         <file>icons/Sketcher_ToggleNormal.svg</file>

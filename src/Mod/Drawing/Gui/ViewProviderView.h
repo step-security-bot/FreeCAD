@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is Drawing of the FreeCAD CAx development system.           *
  *                                                                         *
@@ -60,6 +60,8 @@ public:
     virtual void finishRestoring();
     //@}
 };
+
+typedef Gui::ViewProviderPythonFeatureT<ViewProviderDrawingView> ViewProviderDrawingViewPython;
 
 class DrawingGuiExport ViewProviderDrawingClip : public Gui::ViewProviderDocumentObjectGroup
 {

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2005 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2005 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -61,6 +61,7 @@
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoMaterialBinding.h>
+#include <Inventor/nodes/SoNormalBinding.h>
 #include <Inventor/events/SoLocation2Event.h>
 #include <Inventor/SoPickedPoint.h>
 
@@ -99,14 +100,14 @@ SoFCUnifiedSelection::SoFCUnifiedSelection() : pcDocument(0)
     SO_NODE_ADD_FIELD(colorSelection, (SbColor(0.1f, 0.8f, 0.1f)));
     SO_NODE_ADD_FIELD(highlightMode,  (AUTO));
     SO_NODE_ADD_FIELD(selectionMode,  (ON));
-    SO_NODE_ADD_FIELD(selectionRole,  (TRUE));
+    SO_NODE_ADD_FIELD(selectionRole,  (true));
 
     SO_NODE_DEFINE_ENUM_VALUE(HighlightModes, AUTO);
     SO_NODE_DEFINE_ENUM_VALUE(HighlightModes, ON);
     SO_NODE_DEFINE_ENUM_VALUE(HighlightModes, OFF);
     SO_NODE_SET_SF_ENUM_TYPE (highlightMode, HighlightModes);
 
-    highlighted = FALSE;
+    highlighted = false;
     preSelection = -1;
 }
 
@@ -175,7 +176,7 @@ void SoFCUnifiedSelection::write(SoWriteAction * action)
     SoOutput * out = action->getOutput();
     if (out->getStage() == SoOutput::WRITE) {
         // Do not write out the fields of this class
-        if (this->writeHeader(out, TRUE, FALSE)) return;
+        if (this->writeHeader(out, true, false)) return;
         SoGroup::doAction((SoAction *)action);
         this->writeFooter(out);
     }
@@ -357,7 +358,7 @@ SoFCUnifiedSelection::handleEvent(SoHandleEventAction * action)
                 vpd = static_cast<ViewProviderDocumentObject*>(vp);
 
             //SbBool old_state = highlighted;
-            highlighted = FALSE;
+            highlighted = false;
             if (vpd && vpd->useNewSelectionModel() && vpd->isSelectable()) {
                 std::string documentName = vpd->getObject()->getDocument()->getName();
                 std::string objectName = vpd->getObject()->getNameInDocument();
@@ -372,7 +373,7 @@ SoFCUnifiedSelection::handleEvent(SoHandleEventAction * action)
                                            ,pp->getPoint()[1]
                                            ,pp->getPoint()[2]);
 
-                getMainWindow()->showMessage(QString::fromAscii(buf),3000);
+                getMainWindow()->showMessage(QString::fromLatin1(buf),3000);
 
                 if (Gui::Selection().setPreselect(documentName.c_str()
                                        ,objectName.c_str()
@@ -385,10 +386,10 @@ SoFCUnifiedSelection::handleEvent(SoHandleEventAction * action)
                     sa.setNode(vp->getRoot());
                     sa.apply(vp->getRoot());
                     if (sa.getPath()) {
-                        highlighted = TRUE;
+                        highlighted = true;
                         if (currenthighlight && currenthighlight->getTail() != sa.getPath()->getTail()) {
                             SoHighlightElementAction action;
-                            action.setHighlighted(FALSE);
+                            action.setHighlighted(false);
                             action.apply(currenthighlight);
                             currenthighlight->unref();
                             currenthighlight = 0;
@@ -469,7 +470,7 @@ SoFCUnifiedSelection::handleEvent(SoHandleEventAction * action)
                                                        ,pp->getPoint()[1]
                                                        ,pp->getPoint()[2]);
 
-                            getMainWindow()->showMessage(QString::fromAscii(buf),3000);
+                            getMainWindow()->showMessage(QString::fromLatin1(buf),3000);
                         }
                     }
                 }
@@ -507,7 +508,7 @@ SoFCUnifiedSelection::handleEvent(SoHandleEventAction * action)
                                                    ,pp->getPoint()[1]
                                                    ,pp->getPoint()[2]);
 
-                        getMainWindow()->showMessage(QString::fromAscii(buf),3000);
+                        getMainWindow()->showMessage(QString::fromLatin1(buf),3000);
                     }
                 }
 
@@ -569,7 +570,7 @@ void SoHighlightElementAction::initClass()
     SO_ACTION_ADD_METHOD(SoPointSet,callDoAction);
 }
 
-SoHighlightElementAction::SoHighlightElementAction () : _highlight(FALSE), _det(0)
+SoHighlightElementAction::SoHighlightElementAction () : _highlight(false), _det(0)
 {
     SO_ACTION_CONSTRUCTOR(SoHighlightElementAction);
 }
@@ -704,13 +705,14 @@ void SoVRMLAction::initClass()
     SO_ACTION_ADD_METHOD(SoCoordinate3,callDoAction);
     SO_ACTION_ADD_METHOD(SoMaterialBinding,callDoAction);
     SO_ACTION_ADD_METHOD(SoMaterial,callDoAction);
+    SO_ACTION_ADD_METHOD(SoNormalBinding,callDoAction);
     SO_ACTION_ADD_METHOD(SoGroup,callDoAction);
     SO_ACTION_ADD_METHOD(SoIndexedLineSet,callDoAction);
     SO_ACTION_ADD_METHOD(SoIndexedFaceSet,callDoAction);
     SO_ACTION_ADD_METHOD(SoPointSet,callDoAction);
 }
 
-SoVRMLAction::SoVRMLAction()
+SoVRMLAction::SoVRMLAction() : overrideMode(true)
 {
     SO_ACTION_CONSTRUCTOR(SoVRMLAction);
 }
@@ -719,7 +721,33 @@ SoVRMLAction::~SoVRMLAction()
 {
 }
 
-void SoVRMLAction::callDoAction(SoAction *action,SoNode *node)
+void SoVRMLAction::setOverrideMode(SbBool on)
 {
+    overrideMode = on;
+}
+
+SbBool SoVRMLAction::isOverrideMode() const
+{
+    return overrideMode;
+}
+
+void SoVRMLAction::callDoAction(SoAction *action, SoNode *node)
+{
+    if (node->getTypeId().isDerivedFrom(SoNormalBinding::getClassTypeId()) && action->isOfType(SoVRMLAction::getClassTypeId())) {
+        SoVRMLAction* vrmlAction = static_cast<SoVRMLAction*>(action);
+        if (vrmlAction->overrideMode) {
+            SoNormalBinding* bind = static_cast<SoNormalBinding*>(node);
+            vrmlAction->bindList.push_back(bind->value.getValue());
+            // this normal binding causes some problems for the part view provider
+            // See also #0002222: Number of normals in exported VRML is wrong
+            if (bind->value.getValue() == static_cast<int>(SoNormalBinding::PER_VERTEX_INDEXED))
+                bind->value = SoNormalBinding::OVERALL;
+        }
+        else if (!vrmlAction->bindList.empty()) {
+            static_cast<SoNormalBinding*>(node)->value = static_cast<SoNormalBinding::Binding>(vrmlAction->bindList.front());
+            vrmlAction->bindList.pop_front();
+        }
+    }
+
     node->doAction(action);
 }

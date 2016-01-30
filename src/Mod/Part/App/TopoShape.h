@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -124,10 +124,12 @@ public:
     void importStep(const char *FileName);
     void importBrep(const char *FileName);
     void importBrep(std::istream&);
+    void importBinary(std::istream&);
     void exportIges(const char *FileName) const;
     void exportStep(const char *FileName) const;
     void exportBrep(const char *FileName) const;
     void exportBrep(std::ostream&) const;
+    void exportBinary(std::ostream&);
     void exportStl (const char *FileName, double deflection) const;
     void exportFaceSet(double, double, std::ostream&) const;
     void exportLineSet(std::ostream&) const;

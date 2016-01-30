@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -39,6 +39,7 @@
 #include <Base/Exception.h>
 #include <App/Document.h>
 #include <App/DocumentObjectGroup.h>
+#include <App/DocumentObserver.h>
 #include <Gui/Action.h>
 #include <Gui/Application.h>
 #include <Gui/BitmapFactory.h>
@@ -53,6 +54,7 @@
 #include <Gui/WaitCursor.h>
 
 #include "../App/PartFeature.h"
+#include <Mod/Part/App/Part2DObject.h>
 #include "DlgPartImportStepImp.h"
 #include "DlgBooleanOperation.h"
 #include "DlgExtrusion.h"
@@ -564,18 +566,29 @@ void CmdPartCompJoinFeatures::languageChange()
     Gui::ActionGroup* pcAction = qobject_cast<Gui::ActionGroup*>(_pcAction);
     QList<QAction*> a = pcAction->actions();
 
-    QAction* cmd0 = a[0];
-    cmd0->setText(QApplication::translate("PartCompJoinFeatures", rcCmdMgr.getCommandByName("Part_JoinConnect")->getMenuText()));
-    cmd0->setToolTip(QApplication::translate("Part_JoinConnect", rcCmdMgr.getCommandByName("Part_JoinConnect")->getToolTipText()));
-    cmd0->setStatusTip(QApplication::translate("Part_JoinConnect", rcCmdMgr.getCommandByName("Part_JoinConnect")->getStatusTip()));
-    QAction* cmd1 = a[1];
-    cmd1->setText(QApplication::translate("PartCompJoinFeatures", rcCmdMgr.getCommandByName("Part_JoinEmbed")->getMenuText()));
-    cmd1->setToolTip(QApplication::translate("Part_JoinEmbed", rcCmdMgr.getCommandByName("Part_JoinEmbed")->getToolTipText()));
-    cmd1->setStatusTip(QApplication::translate("Part_JoinEmbed", rcCmdMgr.getCommandByName("Part_JoinEmbed")->getStatusTip()));
-    QAction* cmd2 = a[2];
-    cmd2->setText(QApplication::translate("PartCompJoinFeatures", rcCmdMgr.getCommandByName("Part_JoinCutout")->getMenuText()));
-    cmd2->setToolTip(QApplication::translate("Part_JoinCutout", rcCmdMgr.getCommandByName("Part_JoinCutout")->getToolTipText()));
-    cmd2->setStatusTip(QApplication::translate("Part_JoinCutout", rcCmdMgr.getCommandByName("Part_JoinCutout")->getStatusTip()));
+    Gui::Command* joinConnect = rcCmdMgr.getCommandByName("Part_JoinConnect");
+    if (joinConnect) {
+        QAction* cmd0 = a[0];
+        cmd0->setText(QApplication::translate("PartCompJoinFeatures", joinConnect->getMenuText()));
+        cmd0->setToolTip(QApplication::translate("Part_JoinConnect", joinConnect->getToolTipText()));
+        cmd0->setStatusTip(QApplication::translate("Part_JoinConnect", joinConnect->getStatusTip()));
+    }
+
+    Gui::Command* joinEmbed = rcCmdMgr.getCommandByName("Part_JoinEmbed");
+    if (joinEmbed) {
+        QAction* cmd1 = a[1];
+        cmd1->setText(QApplication::translate("PartCompJoinFeatures", joinEmbed->getMenuText()));
+        cmd1->setToolTip(QApplication::translate("Part_JoinEmbed", joinEmbed->getToolTipText()));
+        cmd1->setStatusTip(QApplication::translate("Part_JoinEmbed", joinEmbed->getStatusTip()));
+    }
+
+    Gui::Command* joinCutout = rcCmdMgr.getCommandByName("Part_JoinCutout");
+    if (joinCutout) {
+        QAction* cmd2 = a[2];
+        cmd2->setText(QApplication::translate("PartCompJoinFeatures", joinCutout->getMenuText()));
+        cmd2->setToolTip(QApplication::translate("Part_JoinCutout", joinCutout->getToolTipText()));
+        cmd2->setStatusTip(QApplication::translate("Part_JoinCutout", joinCutout->getStatusTip()));
+    }
 }
 
 bool CmdPartCompJoinFeatures::isActive(void)
@@ -605,9 +618,9 @@ CmdPartCompound::CmdPartCompound()
 void CmdPartCompound::activated(int iMsg)
 {
     unsigned int n = getSelection().countObjectsOfType(Part::Feature::getClassTypeId());
-    if (n < 2) {
+    if (n < 1) {
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-            QObject::tr("Select two shapes or more, please."));
+            QObject::tr("Select one shape or more, please."));
         return;
     }
 
@@ -632,7 +645,7 @@ void CmdPartCompound::activated(int iMsg)
 
 bool CmdPartCompound::isActive(void)
 {
-    return getSelection().countObjectsOfType(Part::Feature::getClassTypeId())>=2;
+    return getSelection().countObjectsOfType(Part::Feature::getClassTypeId())>=1;
 }
 
 //===========================================================================
@@ -701,11 +714,11 @@ CmdPartImport::CmdPartImport()
 void CmdPartImport::activated(int iMsg)
 {
     QStringList filter;
-    filter << QString::fromAscii("STEP (*.stp *.step)");
-    filter << QString::fromAscii("STEP with colors (*.stp *.step)");
-    filter << QString::fromAscii("IGES (*.igs *.iges)");
-    filter << QString::fromAscii("IGES with colors (*.igs *.iges)");
-    filter << QString::fromAscii("BREP (*.brp *.brep)");
+    filter << QString::fromLatin1("STEP (*.stp *.step)");
+    filter << QString::fromLatin1("STEP with colors (*.stp *.step)");
+    filter << QString::fromLatin1("IGES (*.igs *.iges)");
+    filter << QString::fromLatin1("IGES with colors (*.igs *.iges)");
+    filter << QString::fromLatin1("BREP (*.brp *.brep)");
 
     QString select;
     QString fn = Gui::FileDialog::getOpenFileName(Gui::getMainWindow(), QString(), QString(), filter.join(QLatin1String(";;")), &select);
@@ -760,11 +773,11 @@ CmdPartExport::CmdPartExport()
 void CmdPartExport::activated(int iMsg)
 {
     QStringList filter;
-    filter << QString::fromAscii("STEP (*.stp *.step)");
-    filter << QString::fromAscii("STEP with colors (*.stp *.step)");
-    filter << QString::fromAscii("IGES (*.igs *.iges)");
-    filter << QString::fromAscii("IGES with colors (*.igs *.iges)");
-    filter << QString::fromAscii("BREP (*.brp *.brep)");
+    filter << QString::fromLatin1("STEP (*.stp *.step)");
+    filter << QString::fromLatin1("STEP with colors (*.stp *.step)");
+    filter << QString::fromLatin1("IGES (*.igs *.iges)");
+    filter << QString::fromLatin1("IGES with colors (*.igs *.iges)");
+    filter << QString::fromLatin1("BREP (*.brp *.brep)");
 
     QString select;
     QString fn = Gui::FileDialog::getSaveFileName(Gui::getMainWindow(), QString(), QString(), filter.join(QLatin1String(";;")), &select);
@@ -806,18 +819,20 @@ CmdPartImportCurveNet::CmdPartImportCurveNet()
 void CmdPartImportCurveNet::activated(int iMsg)
 {
     QStringList filter;
-    filter << QObject::tr("All CAD Files (*.stp *.step *.igs *.iges *.brp *.brep)");
-    filter << QObject::tr("STEP (*.stp *.step)");
-    filter << QObject::tr("IGES (*.igs *.iges)");
-    filter << QObject::tr("BREP (*.brp *.brep)");
-    filter << QObject::tr("All Files (*.*)");
+    filter << QString::fromLatin1("%1 (*.stp *.step *.igs *.iges *.brp *.brep)")
+                 .arg(QObject::tr("All CAD Files"));
+    filter << QString::fromLatin1("STEP (*.stp *.step)");
+    filter << QString::fromLatin1("IGES (*.igs *.iges)");
+    filter << QString::fromLatin1("BREP (*.brp *.brep)");
+    filter << QString::fromLatin1("%1 (*.*)")
+                 .arg(QObject::tr("All Files"));
 
     QString fn = Gui::FileDialog::getOpenFileName(Gui::getMainWindow(), QString(), QString(), filter.join(QLatin1String(";;")));
     if (!fn.isEmpty()) {
         QFileInfo fi; fi.setFile(fn);
         openCommand("Part Import Curve Net");
-        doCommand(Doc,"f = App.activeDocument().addObject(\"Part::CurveNet\",\"%s\")", (const char*)fi.baseName().toAscii());
-        doCommand(Doc,"f.FileName = \"%s\"",(const char*)fn.toAscii());
+        doCommand(Doc,"f = App.activeDocument().addObject(\"Part::CurveNet\",\"%s\")", (const char*)fi.baseName().toLatin1());
+        doCommand(Doc,"f.FileName = \"%s\"",(const char*)fn.toLatin1());
         commitCommand();
         updateActive();
     }
@@ -862,7 +877,7 @@ void CmdPartMakeSolid::activated(int iMsg)
                     (*it)->Label.getValue());
             }
             else if (type == TopAbs_COMPOUND || type == TopAbs_COMPSOLID) {
-                str = QString::fromAscii(
+                str = QString::fromLatin1(
                     "__s__=App.ActiveDocument.%1.Shape.Faces\n"
                     "__s__=Part.Solid(Part.Shell(__s__))\n"
                     "__o__=App.ActiveDocument.addObject(\"Part::Feature\",\"%1_solid\")\n"
@@ -874,7 +889,7 @@ void CmdPartMakeSolid::activated(int iMsg)
                     .arg(QLatin1String((*it)->Label.getValue()));
             }
             else if (type == TopAbs_SHELL) {
-                str = QString::fromAscii(
+                str = QString::fromLatin1(
                     "__s__=App.ActiveDocument.%1.Shape\n"
                     "__s__=Part.Solid(__s__)\n"
                     "__o__=App.ActiveDocument.addObject(\"Part::Feature\",\"%1_solid\")\n"
@@ -892,7 +907,7 @@ void CmdPartMakeSolid::activated(int iMsg)
 
             try {
                 if (!str.isEmpty())
-                    doCommand(Doc, (const char*)str.toAscii());
+                    doCommand(Doc, (const char*)str.toLatin1());
             }
             catch (const Base::Exception& e) {
                 Base::Console().Error("Cannot convert %s because %s.\n",
@@ -933,7 +948,7 @@ void CmdPartReverseShape::activated(int iMsg)
     for (std::vector<App::DocumentObject*>::iterator it = objs.begin(); it != objs.end(); ++it) {
         const TopoDS_Shape& shape = static_cast<Part::Feature*>(*it)->Shape.getValue();
         if (!shape.IsNull()) {
-            QString str = QString::fromAscii(
+            QString str = QString::fromLatin1(
                 "__s__=App.ActiveDocument.%1.Shape.copy()\n"
                 "__s__.reverse()\n"
                 "__o__=App.ActiveDocument.addObject(\"Part::Feature\",\"%1_rev\")\n"
@@ -946,7 +961,7 @@ void CmdPartReverseShape::activated(int iMsg)
 
             try {
                 if (!str.isEmpty())
-                    doCommand(Doc, (const char*)str.toAscii());
+                    doCommand(Doc, (const char*)str.toLatin1());
             }
             catch (const Base::Exception& e) {
                 Base::Console().Error("Cannot convert %s because %s.\n",
@@ -1017,6 +1032,55 @@ void CmdPartExtrude::activated(int iMsg)
 bool CmdPartExtrude::isActive(void)
 {
     return (hasActiveDocument() && !Gui::Control().activeDialog());
+}
+
+//===========================================================================
+// Part_MakeFace
+//===========================================================================
+DEF_STD_CMD_A(CmdPartMakeFace);
+
+CmdPartMakeFace::CmdPartMakeFace()
+  : Command("Part_MakeFace")
+{
+    sAppModule    = "Part";
+    sGroup        = QT_TR_NOOP("Part");
+    sMenuText     = QT_TR_NOOP("Make face from sketch");
+    sToolTipText  = QT_TR_NOOP("Make face from selected sketches");
+    sWhatsThis    = "Part_MakeFace";
+    sStatusTip    = sToolTipText;
+}
+
+void CmdPartMakeFace::activated(int iMsg)
+{
+    std::vector<Part::Part2DObject*> sketches = Gui::Selection().getObjectsOfType<Part::Part2DObject>();
+    openCommand("Make face");
+
+    try {
+        App::DocumentT doc(sketches.front()->getDocument());
+        std::stringstream str;
+        str << doc.getDocumentPython()
+            << ".addObject(\"Part::Face\", \"Face\").Sources = (";
+        for (std::vector<Part::Part2DObject*>::iterator it = sketches.begin(); it != sketches.end(); ++it) {
+            App::DocumentObjectT obj(*it);
+            str << obj.getObjectPython() << ", ";
+        }
+
+        str << ")";
+
+        doCommand(Doc,str.str().c_str());
+        commitCommand();
+        updateActive();
+    }
+    catch (...) {
+        abortCommand();
+        throw;
+    }
+}
+
+bool CmdPartMakeFace::isActive(void)
+{
+    return (Gui::Selection().countObjectsOfType(Part::Part2DObject::getClassTypeId()) > 0 &&
+            !Gui::Control().activeDialog());
 }
 
 //===========================================================================
@@ -1835,6 +1899,7 @@ void CreatePartCommands(void)
     rcCmdMgr.addCommand(new CmdPartReverseShape());
     rcCmdMgr.addCommand(new CmdPartBoolean());
     rcCmdMgr.addCommand(new CmdPartExtrude());
+    rcCmdMgr.addCommand(new CmdPartMakeFace());
     rcCmdMgr.addCommand(new CmdPartMirror());
     rcCmdMgr.addCommand(new CmdPartRevolve());
     rcCmdMgr.addCommand(new CmdPartCrossSections());

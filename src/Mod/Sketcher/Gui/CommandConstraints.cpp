@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2010 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2010 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -65,13 +65,16 @@ ConstraintCreationMode constraintCreationMode=Driving;
 
 bool isCreateConstraintActive(Gui::Document *doc)
 {
-    if (doc)
+    if (doc) {
         // checks if a Sketch Viewprovider is in Edit and is in no special mode
-        if (doc->getInEdit() && doc->getInEdit()->isDerivedFrom(SketcherGui::ViewProviderSketch::getClassTypeId()))
+        if (doc->getInEdit() && doc->getInEdit()->isDerivedFrom(SketcherGui::ViewProviderSketch::getClassTypeId())) {
             if (dynamic_cast<SketcherGui::ViewProviderSketch*>(doc->getInEdit())
-                ->getSketchMode() == ViewProviderSketch::STATUS_NONE)
+                ->getSketchMode() == ViewProviderSketch::STATUS_NONE) {
                 if (Gui::Selection().countObjectsOfType(Sketcher::SketchObject::getClassTypeId()) > 0)
                     return true;
+            }
+        }
+    }
     return false;
 }
 
@@ -92,7 +95,7 @@ void openEditDatumDialog(Sketcher::SketchObject* sketch, int ConstrNbr)
         Ui::InsertDatum ui_ins_datum;
         ui_ins_datum.setupUi(&dlg);
 
-        double datum = Constr->Value;
+        double datum = Constr->getValue();
         Base::Quantity init_val;
 
         if (Constr->Type == Sketcher::Angle) {
@@ -132,6 +135,8 @@ void openEditDatumDialog(Sketcher::SketchObject* sketch, int ConstrNbr)
 
         ui_ins_datum.labelEdit->setValue(init_val);
         ui_ins_datum.labelEdit->selectNumber();
+        ui_ins_datum.labelEdit->bind(sketch->Constraints.createPath(ConstrNbr));
+        ui_ins_datum.name->setText(Base::Tools::fromStdString(Constr->Name));
 
         if (dlg.exec()) {
             Base::Quantity newQuant = ui_ins_datum.labelEdit->value();
@@ -142,7 +147,7 @@ void openEditDatumDialog(Sketcher::SketchObject* sketch, int ConstrNbr)
                 double newDatum = newQuant.getValue();
                 if (Constr->Type == Sketcher::Angle ||
                     ((Constr->Type == Sketcher::DistanceX || Constr->Type == Sketcher::DistanceY) &&
-                     Constr->FirstPos == Sketcher::none || Constr->Second != Sketcher::Constraint::GeoUndef)) {
+                     (Constr->FirstPos == Sketcher::none || Constr->Second != Sketcher::Constraint::GeoUndef))) {
                     // Permit negative values to flip the sign of the constraint
                     if (newDatum >= 0) // keep the old sign
                         newDatum = ((datum >= 0) ? 1 : -1) * std::abs(newDatum);
@@ -151,14 +156,30 @@ void openEditDatumDialog(Sketcher::SketchObject* sketch, int ConstrNbr)
                 }
 
                 try {
-                    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.setDatum(%i,App.Units.Quantity('%f %s'))",
-                                sketch->getNameInDocument(),
-                                ConstrNbr, newDatum, (const char*)newQuant.getUnit().getString().toUtf8());
+                    if (ui_ins_datum.labelEdit->hasExpression())
+                        ui_ins_datum.labelEdit->apply();
+                    else
+                        Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.setDatum(%i,App.Units.Quantity('%f %s'))",
+                                                sketch->getNameInDocument(),
+                                                ConstrNbr, newDatum, (const char*)newQuant.getUnit().getString().toUtf8());
+
+                    QString constraintName = ui_ins_datum.name->text().trimmed();
+                    if (Base::Tools::toStdString(constraintName) != sketch->Constraints[ConstrNbr]->Name) {
+                        std::string escapedstr = Base::Tools::escapedUnicodeFromUtf8(constraintName.toUtf8().constData());
+                        Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.renameConstraint(%d, u'%s')",
+                                                sketch->getNameInDocument(),
+                                                ConstrNbr, escapedstr.c_str());
+                    }
                     Gui::Command::commitCommand();
 
                     ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                     bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
                 
+                    if (sketch->noRecomputes && sketch->ExpressionEngine.depsAreTouched()) {
+                        sketch->ExpressionEngine.execute();
+                        sketch->solve();
+                    }
+
                     if(autoRecompute)
                         Gui::Command::updateActive();
                 }
@@ -485,7 +506,6 @@ int SketchSelection::setUp(void)
     std::vector<Gui::SelectionObject> selection = Gui::Selection().getSelectionEx();
 
     Sketcher::SketchObject *SketchObj=0;
-    Part::Feature          *SupportObj=0;
     std::vector<std::string> SketchSubNames;
     std::vector<std::string> SupportSubNames;
 
@@ -510,7 +530,6 @@ int SketchSelection::setUp(void)
             }
             // assume always a Part::Feature derived object as support
             assert(selection[1].getObject()->getTypeId().isDerivedFrom(Part::Feature::getClassTypeId()));
-            SupportObj = dynamic_cast<Part::Feature*>(selection[1].getObject());
             SketchSubNames  = selection[0].getSubNames();
             SupportSubNames = selection[1].getSubNames();
 
@@ -523,7 +542,6 @@ int SketchSelection::setUp(void)
             }
             // assume always a Part::Feature derived object as support
             assert(selection[0].getObject()->getTypeId().isDerivedFrom(Part::Feature::getClassTypeId()));
-            SupportObj = dynamic_cast<Part::Feature*>(selection[0].getObject());
             SketchSubNames  = selection[1].getSubNames();
             SupportSubNames = selection[0].getSubNames();
 
@@ -532,13 +550,6 @@ int SketchSelection::setUp(void)
             return -1;
         }
     }
-
-    // colect Sketch geos
-    for ( std::vector<std::string>::const_iterator it= SketchSubNames.begin();it!=SketchSubNames.end();++it){
-
-
-    }
-
 
     return Items.size();
 }
@@ -872,7 +883,6 @@ void CmdSketcherConstrainCoincident::activated(int iMsg)
     // get the needed lists and objects
     const std::vector<std::string> &SubNames = selection[0].getSubNames();
     Sketcher::SketchObject* Obj = dynamic_cast<Sketcher::SketchObject*>(selection[0].getObject());
-    const std::vector< Sketcher::Constraint * > &vals = Obj->Constraints.getValues();
 
     if (SubNames.size() < 2) {
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
@@ -901,19 +911,8 @@ void CmdSketcherConstrainCoincident::activated(int iMsg)
     for (std::size_t i=1; i<SubNames.size(); i++) {
         getIdsFromName(SubNames[i], Obj, GeoId2, PosId2);
 
-        // check if any of the coincident constraints exist
-        bool constraintExists=false;
-
-        for (std::vector< Sketcher::Constraint * >::const_iterator it= vals.begin(); it != vals.end(); ++it) {
-            if ((*it)->Type == Sketcher::Coincident && (
-               ((*it)->First == GeoId1 && (*it)->FirstPos == PosId1 &&
-                (*it)->Second == GeoId2 && (*it)->SecondPos == PosId2  ) ||
-               ((*it)->First == GeoId2 && (*it)->FirstPos == PosId2 &&
-                (*it)->Second == GeoId1 && (*it)->SecondPos == PosId1  ) ) ) {
-                constraintExists=true;
-                break;
-            }
-        }
+        // check if this coincidence is already enforced (even indirectly)
+        bool constraintExists=Obj->arePointsCoincident(GeoId1,PosId1,GeoId2,PosId2);
 
         if (!constraintExists) {
             constraintsAdded = true;
@@ -1159,7 +1158,7 @@ void CmdSketcherConstrainPointOnObject::activated(int iMsg)
     //count curves and points
     std::vector<SelIdPair> points;
     std::vector<SelIdPair> curves;
-    for (int i = 0  ;  i < SubNames.size()  ;  i++){
+    for (std::size_t i = 0  ;  i < SubNames.size()  ;  i++){
         SelIdPair id;
         getIdsFromName(SubNames[i], Obj, id.GeoId, id.PosId);
         if (isEdge(id.GeoId, id.PosId))
@@ -1168,13 +1167,13 @@ void CmdSketcherConstrainPointOnObject::activated(int iMsg)
             points.push_back(id);
     }
 
-    if (points.size() == 1 && curves.size() >= 1 ||
-        points.size() >= 1 && curves.size() == 1) {
+    if ((points.size() == 1 && curves.size() >= 1) ||
+        (points.size() >= 1 && curves.size() == 1)) {
 
         openCommand("add point on object constraint");
         int cnt = 0;
-        for (int iPnt = 0;  iPnt < points.size();  iPnt++) {
-            for (int iCrv = 0;  iCrv < curves.size();  iCrv++) {
+        for (std::size_t iPnt = 0;  iPnt < points.size();  iPnt++) {
+            for (std::size_t iCrv = 0;  iCrv < curves.size();  iCrv++) {
                 if (checkBothExternal(points[iPnt].GeoId, curves[iCrv].GeoId)){
                     showNoConstraintBetweenExternal();
                     continue;
@@ -1842,9 +1841,9 @@ void CmdSketcherConstrainPerpendicular::activated(int iMsg)
                 geo1->getTypeId() == Part::GeomArcOfEllipse::getClassTypeId() ) {
 
                 Base::Vector3d center;
-                double majord;
-                double minord;
-                double phi;
+                double majord = 0;
+                double minord = 0;
+                double phi = 0;
 
                 if( geo1->getTypeId() == Part::GeomEllipse::getClassTypeId() ){
                     const Part::GeomEllipse *ellipse = static_cast<const Part::GeomEllipse *>(geo1);
@@ -1866,7 +1865,6 @@ void CmdSketcherConstrainPerpendicular::activated(int iMsg)
                 const Part::GeomLineSegment *line = static_cast<const Part::GeomLineSegment *>(geo2);
 
                 Base::Vector3d point1=line->getStartPoint();
-                Base::Vector3d point2=line->getEndPoint();
 
                 Base::Vector3d direction=point1-center;
                 double tapprox=atan2(direction.y,direction.x)-phi; // we approximate the eccentric anomally by the polar
@@ -2300,7 +2298,7 @@ void CmdSketcherConstrainRadius::activated(int iMsg)
         // Create the non-driving radius constraints now
         openCommand("Add radius constraint");
         commandopened=true;
-        unsigned int constrSize;
+        unsigned int constrSize = 0;
         
         for (std::vector< std::pair<int, double> >::iterator it = externalGeoIdRadiusMap.begin(); it != externalGeoIdRadiusMap.end(); ++it) {
             Gui::Command::doCommand(
@@ -2426,16 +2424,28 @@ void CmdSketcherConstrainRadius::activated(int iMsg)
 
             ui_Datum.labelEdit->setValue(init_val);
             ui_Datum.labelEdit->selectNumber();
+            if (constrainEqual || geoIdRadiusMap.size() == 1)
+                ui_Datum.labelEdit->bind(Obj->Constraints.createPath(indexConstr));
+            else
+                ui_Datum.name->setDisabled(true);
 
             if (dlg.exec() == QDialog::Accepted) {
                 Base::Quantity newQuant = ui_Datum.labelEdit->value();
                 double newRadius = newQuant.getValue();
 
                 try {
-                    if (constrainEqual) {
+                    if (constrainEqual || geoIdRadiusMap.size() == 1) {
                         doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.setDatum(%i,App.Units.Quantity('%f %s'))",
                                     Obj->getNameInDocument(),
                                     indexConstr, newRadius, (const char*)newQuant.getUnit().getString().toUtf8());
+
+                        QString constraintName = ui_Datum.name->text().trimmed();
+                        if (Base::Tools::toStdString(constraintName) != Obj->Constraints[indexConstr]->Name) {
+                            std::string escapedstr = Base::Tools::escapedUnicodeFromUtf8(constraintName.toUtf8().constData());
+                            Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.renameConstraint(%d, u'%s')",
+                                                    Obj->getNameInDocument(),
+                                                    indexConstr, escapedstr.c_str());
+                        }
                     }
                     else {
                         for (std::size_t i=0; i<geoIdRadiusMap.size();i++) {
@@ -2444,11 +2454,17 @@ void CmdSketcherConstrainRadius::activated(int iMsg)
                                         indexConstr+i, newRadius, (const char*)newQuant.getUnit().getString().toUtf8());
                         }
                     }
+
                     commitCommand();
                     
                     ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                     bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
                 
+                    if (Obj->noRecomputes && Obj->ExpressionEngine.depsAreTouched()) {
+                        Obj->ExpressionEngine.execute();
+                        Obj->solve();
+                    }
+
                     if(autoRecompute)
                         Gui::Command::updateActive();
                     
@@ -3162,6 +3178,7 @@ void CmdSketcherConstrainSnellsLaw::activated(int iMsg)
         ui_Datum.labelEdit->setParamGrpPath(QByteArray("User parameter:BaseApp/History/SketcherRefrIndexRatio"));
         ui_Datum.labelEdit->setToLastUsedValue();
         ui_Datum.labelEdit->selectNumber();
+        // Unable to bind, because the constraint does not yet exist
 
         if (dlg.exec() != QDialog::Accepted) return;
         ui_Datum.labelEdit->pushToHistory();
@@ -3359,6 +3376,8 @@ void CmdSketcherConstrainInternalAlignment::activated(int iMsg)
                     case Sketcher::EllipseFocus2: 
                         focus2=true;
                         break;
+                    default:
+                        break;
                 }
             }
         }
@@ -3520,6 +3539,8 @@ void CmdSketcherConstrainInternalAlignment::activated(int iMsg)
                         break;
                     case Sketcher::EllipseFocus2: 
                         focus2=true;
+                        break;
+                    default:
                         break;
                 }
             }
@@ -3719,11 +3740,6 @@ void CmdSketcherToggleDrivingConstraint::activated(int iMsg)
             return;
         }
 
-        // make sure the selected object is the sketch in edit mode
-        const App::DocumentObject* obj = selection[0].getObject();
-        ViewProviderSketch* sketchView = static_cast<ViewProviderSketch*>
-            (Gui::Application::Instance->getViewProvider(obj));
-
         // undo command open
         openCommand("Toggle driving from/to non-driving");
 
@@ -3732,7 +3748,7 @@ void CmdSketcherToggleDrivingConstraint::activated(int iMsg)
         for (std::vector<std::string>::const_iterator it=SubNames.begin();it!=SubNames.end();++it){
             // only handle constraints
             if (it->size() > 10 && it->substr(0,10) == "Constraint") {
-                int ConstrId = std::atoi(it->substr(10,4000).c_str()) - 1;
+                int ConstrId = Sketcher::PropertyConstraintList::getIndexFromConstraintName(*it);
                 try {
                     // issue the actual commands to toggle
                     doCommand(Doc,"App.ActiveDocument.%s.toggleDriving(%d) ",selection[0].getFeatName(),ConstrId);

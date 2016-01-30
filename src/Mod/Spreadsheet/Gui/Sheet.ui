@@ -27,7 +27,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="cellContent">
+      <widget class="SpreadsheetGui::LineEdit" name="cellContent">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -45,6 +45,11 @@
    <class>SpreadsheetGui::SheetTableView</class>
    <extends>QTableView</extends>
    <header>SheetTableView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SpreadsheetGui::LineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>SpreadsheetView.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

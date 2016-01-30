@@ -1,7 +1,7 @@
 if(MSVC)
-    add_definitions(-DFCAppRobot -DHAVE_ACOSH -DHAVE_ASINH -DHAVE_ATANH -DEIGEN2_SUPPORT)
+    add_definitions(-DFCAppRobot -DHAVE_ACOSH -DHAVE_ASINH -DHAVE_ATANH)
 else(MSVC)
-    add_definitions(-DHAVE_LIMITS_H -DHAVE_CONFIG_H -DEIGEN2_SUPPORT -DEIGEN_NO_EIGEN2_DEPRECATED_WARNING)
+    add_definitions(-DHAVE_LIMITS_H -DHAVE_CONFIG_H)
 endif(MSVC)
 
 
@@ -16,7 +16,7 @@ include_directories(
     ${PYTHON_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
     ${QT_INCLUDE_DIR}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
 )
 link_directories(${OCC_LIBRARY_DIR})
 
@@ -45,7 +45,6 @@ SET(Python_SRCS
 
 SET(Mod_SRCS
     AppRobot.cpp
-    AppRobotPy.cpp
     PreCompiled.cpp
     PreCompiled.h
 )

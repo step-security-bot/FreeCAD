@@ -45,7 +45,7 @@ PROPERTY_SOURCE(FemGui::ViewProviderFemConstraintPressure, FemGui::ViewProviderF
 
 ViewProviderFemConstraintPressure::ViewProviderFemConstraintPressure()
 {
-    sPixmap = "Fem_ConstraintPressure";
+    sPixmap = "fem-constraint-pressure";
     ADD_PROPERTY(FaceColor,(0.0f,0.2f,0.8f));
 }
 
@@ -100,7 +100,6 @@ void ViewProviderFemConstraintPressure::updateData(const App::Property* prop)
     if (pShapeSep->getNumChildren() == 0) {
         // Set up the nodes
         SoMultipleCopy* cp = new SoMultipleCopy();
-        cp->ref();
         cp->matrix.setNum(0);
         cp->addChild((SoNode*)createArrow(ARROWLENGTH, ARROWHEADRADIUS));
         pShapeSep->addChild(cp);

@@ -26,6 +26,8 @@
 
 #include <QFileDialog>
 #include <QFileIconProvider>
+#include <QFileSystemModel>
+#include <QCompleter>
 
 class QButtonGroup;
 class QGridLayout;
@@ -62,6 +64,9 @@ public:
 
     void accept();
 
+private:
+    bool hasSuffix(const QString&) const;
+
 private Q_SLOTS:
     void onSelectedFilter(const QString&);
 };
@@ -83,7 +88,7 @@ public:
         ExtensionBottom   = 1
     };
 
-    FileOptionsDialog ( QWidget* parent, Qt::WFlags );
+    FileOptionsDialog ( QWidget* parent, Qt::WindowFlags );
     virtual ~FileOptionsDialog();
 
     void accept();
@@ -171,9 +176,12 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void chooseFile();
+    void editingFinished();
 
 private:
     QLineEdit *lineEdit;
+    QCompleter *completer;
+    QFileSystemModel *fs_model;
     QPushButton *button;
     Mode md;
     QString _filter;

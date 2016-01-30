@@ -101,7 +101,7 @@ void DlgEvaluateMeshImp::slotCreatedObject(const App::DocumentObject& Obj)
     // add new mesh object to the list
     if (Obj.getTypeId().isDerivedFrom(Mesh::Feature::getClassTypeId())) {
         QString label = QString::fromUtf8(Obj.Label.getValue());
-        QString name = QString::fromAscii(Obj.getNameInDocument());
+        QString name = QString::fromLatin1(Obj.getNameInDocument());
         meshNameButton->addItem(label, name);
     }
 }
@@ -110,7 +110,7 @@ void DlgEvaluateMeshImp::slotDeletedObject(const App::DocumentObject& Obj)
 {
     // remove mesh objects from the list
     if (Obj.getTypeId().isDerivedFrom(Mesh::Feature::getClassTypeId())) {
-        int index = meshNameButton->findData(QString::fromAscii(Obj.getNameInDocument()));
+        int index = meshNameButton->findData(QString::fromLatin1(Obj.getNameInDocument()));
         if (index > 0) {
             meshNameButton->removeItem(index);
             meshNameButton->setDisabled(meshNameButton->count() < 2);
@@ -141,15 +141,11 @@ void DlgEvaluateMeshImp::slotChangedObject(const App::DocumentObject& Obj, const
         if (Prop.getTypeId() == App::PropertyString::getClassTypeId() &&
             strcmp(Prop.getName(), "Label") == 0) {
                 QString label = QString::fromUtf8(Obj.Label.getValue());
-                QString name = QString::fromAscii(Obj.getNameInDocument());
+                QString name = QString::fromLatin1(Obj.getNameInDocument());
                 int index = meshNameButton->findData(name);
                 meshNameButton->setItemText(index, label);
         }
     }
-}
-
-void DlgEvaluateMeshImp::slotCreatedDocument(const App::Document& Doc)
-{
 }
 
 void DlgEvaluateMeshImp::slotDeletedDocument(const App::Document& Doc)
@@ -174,9 +170,9 @@ void DlgEvaluateMeshImp::slotDeletedDocument(const App::Document& Doc)
  *  name 'name' and widget flags set to 'f' 
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
+ *  true to construct a modal dialog.
  */
-DlgEvaluateMeshImp::DlgEvaluateMeshImp(QWidget* parent, Qt::WFlags fl)
+DlgEvaluateMeshImp::DlgEvaluateMeshImp(QWidget* parent, Qt::WindowFlags fl)
   : QDialog(parent, fl), d(new Private())
 {
     this->setupUi(this);
@@ -229,7 +225,7 @@ void DlgEvaluateMeshImp::setMesh(Mesh::Feature* m)
     refreshList();
 
     int ct = meshNameButton->count();
-    QString objName = QString::fromAscii(m->getNameInDocument());
+    QString objName = QString::fromLatin1(m->getNameInDocument());
     for (int i=1; i<ct; i++) {
         if (meshNameButton->itemData(i).toString() == objName) {
             meshNameButton->setCurrentIndex(i);
@@ -302,7 +298,7 @@ void DlgEvaluateMeshImp::refreshList()
         std::vector<App::DocumentObject*> objs = this->getDocument()->getObjectsOfType(Mesh::Feature::getClassTypeId());
         for (std::vector<App::DocumentObject*>::iterator it = objs.begin(); it != objs.end(); ++it) {
             items.push_back(qMakePair(QString::fromUtf8((*it)->Label.getValue()),
-                                      QString::fromAscii((*it)->getNameInDocument())));
+                                      QString::fromLatin1((*it)->getNameInDocument())));
         }
     }
 
@@ -327,9 +323,9 @@ void DlgEvaluateMeshImp::showInformation()
     analyzeAllTogether->setEnabled(true);
 
     const MeshKernel& rMesh = d->meshFeature->Mesh.getValue().getKernel();
-    textLabel4->setText(QString::fromAscii("%1").arg(rMesh.CountFacets()));
-    textLabel5->setText(QString::fromAscii("%1").arg(rMesh.CountEdges()));
-    textLabel6->setText(QString::fromAscii("%1").arg(rMesh.CountPoints()));
+    textLabel4->setText(QString::fromLatin1("%1").arg(rMesh.CountFacets()));
+    textLabel5->setText(QString::fromLatin1("%1").arg(rMesh.CountEdges()));
+    textLabel6->setText(QString::fromLatin1("%1").arg(rMesh.CountPoints()));
 }
 
 void DlgEvaluateMeshImp::cleanInformation()
@@ -1170,7 +1166,7 @@ bool DockEvaluateMeshImp::hasInstance()
  *  Constructs a DockEvaluateMeshImp which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'
  */
-DockEvaluateMeshImp::DockEvaluateMeshImp( QWidget* parent, Qt::WFlags fl )
+DockEvaluateMeshImp::DockEvaluateMeshImp( QWidget* parent, Qt::WindowFlags fl )
   : DlgEvaluateMeshImp( parent, fl )
 {
     // embed this dialog into a dockable widget container

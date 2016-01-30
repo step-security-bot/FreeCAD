@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is Drawing of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -24,9 +24,6 @@
 #include "PreCompiled.h"
 
 #ifndef _PreComp_
-# ifdef FC_OS_WIN32
-#  include <windows.h>
-# endif
 # include <QAction>
 # include <QMenu>
 # include <QTimer>
@@ -67,8 +64,8 @@ ViewProviderDrawingPage::ViewProviderDrawingPage()
     ADD_PROPERTY(HintOffsetY,(10.0));
 
     // do not show this in the property editor
-    Visibility.StatusBits.set(3, true);
-    DisplayMode.StatusBits.set(3, true);
+    Visibility.setStatus(App::Property::Hidden, true);
+    DisplayMode.setStatus(App::Property::Hidden, true);
 }
 
 ViewProviderDrawingPage::~ViewProviderDrawingPage()
@@ -152,8 +149,7 @@ bool ViewProviderDrawingPage::onDelete(const std::vector<std::string> & items)
 
 void ViewProviderDrawingPage::setupContextMenu(QMenu* menu, QObject* receiver, const char* member)
 {
-    QAction* act;
-    act = menu->addAction(QObject::tr("Show drawing"), receiver, member);
+    menu->addAction(QObject::tr("Show drawing"), receiver, member);
 }
 
 bool ViewProviderDrawingPage::setEdit(int ModNum)

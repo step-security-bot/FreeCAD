@@ -64,7 +64,7 @@ struct GroupMap_find {
  *  name 'name' and widget flags set to 'f'
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
+ *  true to construct a modal dialog.
  */
 DlgCustomToolbars::DlgCustomToolbars(DlgCustomToolbars::Type t, QWidget* parent)
     : CustomizeActionPage(parent), type(t)
@@ -93,10 +93,13 @@ DlgCustomToolbars::DlgCustomToolbars(DlgCustomToolbars::Type t, QWidget* parent)
         QString text = qApp->translate(it->second->className(), it->second->getGroupName());
         GroupMap::iterator jt;
         jt = std::find_if(groupMap.begin(), groupMap.end(), GroupMap_find(group));
-        if (jt != groupMap.end())
-            jt->second = text;
-        else
+        if (jt != groupMap.end()) {
+            if (jt->second.isEmpty())
+                jt->second = text;
+        }
+        else {
             groupMap.push_back(std::make_pair(group, text));
+        }
     }
 
     int index = 0;
@@ -110,7 +113,7 @@ DlgCustomToolbars::DlgCustomToolbars(DlgCustomToolbars::Type t, QWidget* parent)
     workbenches.sort();
     index = 1;
     workbenchBox->addItem(QApplication::windowIcon(), tr("Global"));
-    workbenchBox->setItemData(0, QVariant(QString::fromAscii("Global")), Qt::UserRole);
+    workbenchBox->setItemData(0, QVariant(QString::fromLatin1("Global")), Qt::UserRole);
     for (QStringList::Iterator it = workbenches.begin(); it != workbenches.end(); ++it) {
         QPixmap px = Application::Instance->workbenchIcon(*it);
         QString mt = Application::Instance->workbenchMenuText(*it);
@@ -138,7 +141,7 @@ DlgCustomToolbars::DlgCustomToolbars(DlgCustomToolbars::Type t, QWidget* parent)
     on_categoryBox_activated(categoryBox->currentIndex());
     Workbench* w = WorkbenchManager::instance()->active();
     if (w) {
-        QString name = QString::fromAscii(w->name().c_str());
+        QString name = QString::fromLatin1(w->name().c_str());
         int index = workbenchBox->findData(name);
         workbenchBox->setCurrentIndex(index);
     }
@@ -182,7 +185,7 @@ void DlgCustomToolbars::hideEvent(QHideEvent * event)
 {
     QVariant data = workbenchBox->itemData(workbenchBox->currentIndex(), Qt::UserRole);
     QString workbench = data.toString();
-    exportCustomToolbars(workbench.toAscii());
+    exportCustomToolbars(workbench.toLatin1());
 
     CustomizeActionPage::hideEvent(event);
 }
@@ -194,21 +197,35 @@ void DlgCustomToolbars::on_categoryBox_activated(int index)
     commandTreeWidget->clear();
 
     CommandManager & cCmdMgr = Application::Instance->commandManager();
-    std::vector<Command*> aCmds = cCmdMgr.getGroupCommands(group.toAscii());
+    std::vector<Command*> aCmds = cCmdMgr.getGroupCommands(group.toLatin1());
 
     // Create a separator item
     QTreeWidgetItem* sepitem = new QTreeWidgetItem(commandTreeWidget);
     sepitem->setText(1, tr("<Separator>"));
     sepitem->setData(1, Qt::UserRole, QByteArray("Separator"));
     sepitem->setSizeHint(0, QSize(32, 32));
-    for (std::vector<Command*>::iterator it = aCmds.begin(); it != aCmds.end(); ++it) {
-        QTreeWidgetItem* item = new QTreeWidgetItem(commandTreeWidget);
-        item->setText(1, qApp->translate((*it)->className(), (*it)->getMenuText()));
-        item->setToolTip(1, qApp->translate((*it)->className(), (*it)->getToolTipText()));
-        item->setData(1, Qt::UserRole, QByteArray((*it)->getName()));
-        item->setSizeHint(0, QSize(32, 32));
-        if ((*it)->getPixmap())
-            item->setIcon(0, BitmapFactory().iconFromTheme((*it)->getPixmap()));
+
+    if (group == QLatin1String("Macros")) {
+        for (std::vector<Command*>::iterator it = aCmds.begin(); it != aCmds.end(); ++it) {
+            QTreeWidgetItem* item = new QTreeWidgetItem(commandTreeWidget);
+            item->setText(1, QString::fromUtf8((*it)->getMenuText()));
+            item->setToolTip(1, QString::fromUtf8((*it)->getToolTipText()));
+            item->setData(1, Qt::UserRole, QByteArray((*it)->getName()));
+            item->setSizeHint(0, QSize(32, 32));
+            if ((*it)->getPixmap())
+                item->setIcon(0, BitmapFactory().iconFromTheme((*it)->getPixmap()));
+        }
+    }
+    else {
+        for (std::vector<Command*>::iterator it = aCmds.begin(); it != aCmds.end(); ++it) {
+            QTreeWidgetItem* item = new QTreeWidgetItem(commandTreeWidget);
+            item->setText(1, qApp->translate((*it)->className(), (*it)->getMenuText()));
+            item->setToolTip(1, qApp->translate((*it)->className(), (*it)->getToolTipText()));
+            item->setData(1, Qt::UserRole, QByteArray((*it)->getName()));
+            item->setSizeHint(0, QSize(32, 32));
+            if ((*it)->getPixmap())
+                item->setIcon(0, BitmapFactory().iconFromTheme((*it)->getPixmap()));
+        }
     }
 }
 
@@ -218,7 +235,7 @@ void DlgCustomToolbars::on_workbenchBox_activated(int index)
     QString workbench = data.toString();
     toolbarTreeWidget->clear();
 
-    QByteArray workbenchname = workbench.toAscii();
+    QByteArray workbenchname = workbench.toLatin1();
     importCustomToolbars(workbenchname);
 }
 
@@ -284,9 +301,9 @@ void DlgCustomToolbars::exportCustomToolbars(const QByteArray& workbench)
     CommandManager& rMgr = Application::Instance->commandManager();
     for (int i=0; i<toolbarTreeWidget->topLevelItemCount(); i++) {
         QTreeWidgetItem* toplevel = toolbarTreeWidget->topLevelItem(i);
-        QString groupName = QString::fromAscii("Custom_%1").arg(i+1);
+        QString groupName = QString::fromLatin1("Custom_%1").arg(i+1);
         QByteArray toolbarName = toplevel->text(0).toUtf8();
-        ParameterGrp::handle hToolGrp = hGrp->GetGroup(groupName.toAscii());
+        ParameterGrp::handle hToolGrp = hGrp->GetGroup(groupName.toLatin1());
         hToolGrp->SetASCII("Name", toolbarName.constData());
         hToolGrp->SetBool("Active", toplevel->checkState(0) == Qt::Checked);
 
@@ -335,7 +352,7 @@ void DlgCustomToolbars::on_moveActionRightButton_clicked()
 
     QVariant data = workbenchBox->itemData(workbenchBox->currentIndex(), Qt::UserRole);
     QString workbench = data.toString();
-    exportCustomToolbars(workbench.toAscii());
+    exportCustomToolbars(workbench.toLatin1());
 }
 
 /** Removes an action */
@@ -369,7 +386,7 @@ void DlgCustomToolbars::on_moveActionLeftButton_clicked()
 
     QVariant data = workbenchBox->itemData(workbenchBox->currentIndex(), Qt::UserRole);
     QString workbench = data.toString();
-    exportCustomToolbars(workbench.toAscii());
+    exportCustomToolbars(workbench.toLatin1());
 }
 
 /** Moves up an action */
@@ -407,7 +424,7 @@ void DlgCustomToolbars::on_moveActionUpButton_clicked()
 
     QVariant data = workbenchBox->itemData(workbenchBox->currentIndex(), Qt::UserRole);
     QString workbench = data.toString();
-    exportCustomToolbars(workbench.toAscii());
+    exportCustomToolbars(workbench.toLatin1());
 }
 
 /** Moves down an action */
@@ -445,13 +462,13 @@ void DlgCustomToolbars::on_moveActionDownButton_clicked()
 
     QVariant data = workbenchBox->itemData(workbenchBox->currentIndex(), Qt::UserRole);
     QString workbench = data.toString();
-    exportCustomToolbars(workbench.toAscii());
+    exportCustomToolbars(workbench.toLatin1());
 }
 
 void DlgCustomToolbars::on_newButton_clicked()
 {
     bool ok;
-    QString text = QString::fromAscii("Custom%1").arg(toolbarTreeWidget->topLevelItemCount()+1);
+    QString text = QString::fromLatin1("Custom%1").arg(toolbarTreeWidget->topLevelItemCount()+1);
     text = QInputDialog::getText(this, tr("New toolbar"), tr("Toolbar name:"), QLineEdit::Normal, text, &ok);
     if (ok) {
         // Check for duplicated name
@@ -471,7 +488,7 @@ void DlgCustomToolbars::on_newButton_clicked()
 
         QVariant data = workbenchBox->itemData(workbenchBox->currentIndex(), Qt::UserRole);
         QString workbench = data.toString();
-        exportCustomToolbars(workbench.toAscii());
+        exportCustomToolbars(workbench.toLatin1());
         addCustomToolbar(text);
     }
 }
@@ -488,7 +505,7 @@ void DlgCustomToolbars::on_deleteButton_clicked()
 
     QVariant data = workbenchBox->itemData(workbenchBox->currentIndex(), Qt::UserRole);
     QString workbench = data.toString();
-    exportCustomToolbars(workbench.toAscii());
+    exportCustomToolbars(workbench.toLatin1());
 }
 
 void DlgCustomToolbars::on_renameButton_clicked()
@@ -520,7 +537,7 @@ void DlgCustomToolbars::on_renameButton_clicked()
     if (renamed) {
         QVariant data = workbenchBox->itemData(workbenchBox->currentIndex(), Qt::UserRole);
         QString workbench = data.toString();
-        exportCustomToolbars(workbench.toAscii());
+        exportCustomToolbars(workbench.toLatin1());
     }
 }
 
@@ -538,7 +555,6 @@ void DlgCustomToolbars::onAddMacroAction(const QByteArray& macro)
         item->setToolTip(1, QString::fromUtf8(pCmd->getToolTipText()));
         item->setData(1, Qt::UserRole, macro);
         item->setSizeHint(0, QSize(32, 32));
-        item->setBackgroundColor(0, Qt::lightGray);
         if (pCmd->getPixmap())
             item->setIcon(0, BitmapFactory().iconFromTheme(pCmd->getPixmap()));
     }
@@ -579,7 +595,6 @@ void DlgCustomToolbars::onModifyMacroAction(const QByteArray& macro)
                 item->setToolTip(1, QString::fromUtf8(pCmd->getToolTipText()));
                 item->setData(1, Qt::UserRole, macro);
                 item->setSizeHint(0, QSize(32, 32));
-                item->setBackgroundColor(0, Qt::lightGray);
                 if (pCmd->getPixmap())
                     item->setIcon(0, BitmapFactory().iconFromTheme(pCmd->getPixmap()));
                 break;
@@ -630,7 +645,7 @@ void DlgCustomToolbars::changeEvent(QEvent *e)
  *  name 'name' and widget flags set to 'f'
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
+ *  true to construct a modal dialog.
  */
 DlgCustomToolbarsImp::DlgCustomToolbarsImp( QWidget* parent )
     : DlgCustomToolbars(DlgCustomToolbars::Toolbar, parent)
@@ -709,6 +724,7 @@ void DlgCustomToolbarsImp::setActionGroup(QAction* action, const QList<QAction*>
             QMenu* menu = tb->menu();
             if (!menu) {
                 tb->setPopupMode(QToolButton::MenuButtonPopup);
+                tb->setObjectName(QString::fromLatin1("qt_toolbutton_menubutton"));
                 QMenu* menu = new QMenu(tb);
                 menu->addActions(group);
                 tb->setMenu(menu);
@@ -732,7 +748,14 @@ void DlgCustomToolbarsImp::addCustomCommand(const QString& name, const QByteArra
         }
         else {
             CommandManager& mgr = Application::Instance->commandManager();
-            mgr.addTo(cmd, bars.front());
+            if (mgr.addTo(cmd, bars.front())) {
+                QAction* action = bars.front()->actions().last();
+                // See ToolBarManager::setup(ToolBarItem* , QToolBar* )
+                // We have to add the user data in order to identify the command in
+                // removeCustomCommand(), moveUpCustomCommand() or moveDownCustomCommand()
+                if (action && action->data().isNull())
+                    action->setData(cmd);
+            }
         }
     }
 }
@@ -871,7 +894,7 @@ void DlgCustomToolbarsImp::changeEvent(QEvent *e)
  *  name 'name' and widget flags set to 'f'
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
+ *  true to construct a modal dialog.
  */
 DlgCustomToolBoxbarsImp::DlgCustomToolBoxbarsImp( QWidget* parent )
     : DlgCustomToolbars(DlgCustomToolbars::Toolboxbar, parent)

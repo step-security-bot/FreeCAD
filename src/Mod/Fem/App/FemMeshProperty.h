@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2008     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2008     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -82,6 +82,7 @@ public:
     App::Property *Copy(void) const;
     void Paste(const App::Property &from);
     unsigned int getMemSize (void) const;
+    const char* getEditorName(void) const { return "FemGui::PropertyFemMeshItem"; }
     //@}
 
 private:

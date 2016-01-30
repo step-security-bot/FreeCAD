@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -155,7 +155,7 @@ void ViewProvider::eventCallback(void * ud, SoEventCallback * node)
         // Keyboard events
         if (ev->getTypeId().isDerivedFrom(SoKeyboardEvent::getClassTypeId())) {
             SoKeyboardEvent * ke = (SoKeyboardEvent *)ev;
-            const SbBool press = ke->getState() == SoButtonEvent::DOWN ? TRUE : FALSE;
+            const SbBool press = ke->getState() == SoButtonEvent::DOWN ? true : false;
             switch (ke->getKey()) {
             case SoKeyboardEvent::ESCAPE:
                 if (self->keyPressed (press, ke->getKey()))
@@ -175,7 +175,7 @@ void ViewProvider::eventCallback(void * ud, SoEventCallback * node)
 
             const SoMouseButtonEvent * const event = (const SoMouseButtonEvent *) ev;
             const int button = event->getButton();
-            const SbBool press = event->getState() == SoButtonEvent::DOWN ? TRUE : FALSE;
+            const SbBool press = event->getState() == SoButtonEvent::DOWN ? true : false;
 
             // call the virtual method
             if (self->mouseButtonPressed(button,press,ev->getPosition(),viewer))

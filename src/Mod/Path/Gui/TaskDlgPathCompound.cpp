@@ -66,10 +66,10 @@ TaskWidgetPathCompound::TaskWidgetPathCompound(ViewProviderPathCompound *Compoun
     Path::FeatureCompound* pcCompound = static_cast<Path::FeatureCompound*>(CompoundView->getObject());
     const std::vector<App::DocumentObject*> &Paths = pcCompound->Group.getValues();
     for (std::vector<App::DocumentObject*>::const_iterator it= Paths.begin();it!=Paths.end();++it) {
-        QString name = QString::fromAscii((*it)->getNameInDocument());
-        name += QString::fromAscii(" (");
+        QString name = QString::fromLatin1((*it)->getNameInDocument());
+        name += QString::fromLatin1(" (");
         name += QString::fromUtf8((*it)->Label.getValue());
-        name += QString::fromAscii(")");
+        name += QString::fromLatin1(")");
         ui->PathsList->addItem(name);
     }
 }
@@ -86,7 +86,7 @@ std::vector<std::string> TaskWidgetPathCompound::getList(void) const {
         QListWidgetItem* item = ui->PathsList->item(i);
         QString name = item->text();
         QStringList result;
-        result = name.split(QRegExp(QString::fromAscii("\\s+")));
+        result = name.split(QRegExp(QString::fromLatin1("\\s+")));
         std::cout << result[0].toStdString() << std::endl;
         names.push_back(result[0].toStdString());
     }
@@ -134,7 +134,7 @@ bool TaskDlgPathCompound::accept()
     Path::FeatureCompound* pcCompound = static_cast<Path::FeatureCompound*>(CompoundView->getObject());
     App::Document* pcDoc = static_cast<App::Document*>(pcCompound->getDocument());
     std::vector<std::string> names = parameter->getList();
-    for(int i = 0; i < names.size(); i++)
+    for(std::size_t i = 0; i < names.size(); i++)
     {
         App::DocumentObject* pcPath = static_cast<App::DocumentObject*>(pcDoc->getObject(names[i].c_str()));
         paths.push_back(pcPath);

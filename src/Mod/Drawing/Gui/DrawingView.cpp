@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2007 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2007 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is Drawing of the FreeCAD CAx development system.           *
  *                                                                         *
@@ -459,7 +459,7 @@ void DrawingView::printPdf()
     dlg.setFileMode(QFileDialog::AnyFile);
     dlg.setAcceptMode(QFileDialog::AcceptSave);
     dlg.setWindowTitle(tr("Export PDF"));
-    dlg.setFilters(QStringList() << tr("PDF file (*.pdf)"));
+    dlg.setNameFilters(QStringList() << QString::fromLatin1("%1 (*.pdf)").arg(tr("PDF file")));
 
     QGridLayout *gridLayout;
     QGridLayout *formLayout;
@@ -593,6 +593,13 @@ void DrawingView::print(QPrinter* printer)
     }
 
     QPainter p(printer);
+    if (!p.isActive() && !printer->outputFileName().isEmpty()) {
+        qApp->setOverrideCursor(Qt::ArrowCursor);
+        QMessageBox::critical(this, tr("Opening file failed"),
+            tr("Can't open file '%1' for writing.").arg(printer->outputFileName()));
+        qApp->restoreOverrideCursor();
+        return;
+    }
     QRect rect = printer->paperRect();
 #ifdef Q_OS_WIN32
     // On Windows the preview looks broken when using paperRect as render area.

@@ -1,11 +1,11 @@
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
-    ${COIN3D_INCLUDE_DIR}
+    ${COIN3D_INCLUDE_DIRS}
     ${QT_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
 )
 
 set(WebGui_LIBS
@@ -17,7 +17,6 @@ qt4_add_resources(Web_QRC_SRCS Resources/Web.qrc)
 SET(WebGui_SRCS
     ${Web_QRC_SRCS}
     AppWebGui.cpp
-    AppWebGuiPy.cpp
     Command.cpp
     PreCompiled.cpp
     PreCompiled.h

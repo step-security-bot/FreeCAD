@@ -228,7 +228,13 @@ PyObject*  MeshPy::writeInventor(PyObject *args)
 
     std::stringstream result;
     Base::InventorBuilder builder(result);
-    builder.addIndexedFaceSet(coords, indices, creaseangle);
+    builder.beginSeparator();
+    builder.addShapeHints(creaseangle);
+    builder.beginPoints();
+    builder.addPoints(coords);
+    builder.endPoints();
+    builder.addIndexedFaceSet(indices);
+    builder.endSeparator();
     builder.close();
 
     return Py::new_reference_to(Py::String(result.str()));
@@ -683,6 +689,22 @@ PyObject*  MeshPy::setPoint(PyObject *args)
     } PY_CATCH;
 
     Py_Return;
+}
+
+PyObject*  MeshPy::getPointNormals(PyObject *args)
+{
+    if (!PyArg_ParseTuple(args, ""))
+        return NULL;
+
+    PY_TRY {
+        std::vector<Base::Vector3d> normals = getMeshObjectPtr()->getPointNormals();
+        Py::Tuple ary(normals.size());
+        std::size_t numNormals = normals.size();
+        for (std::size_t i=0; i<numNormals; i++) {
+            ary.setItem(i, Py::Vector(normals[i]));
+        }
+        return Py::new_reference_to(ary);
+    } PY_CATCH;
 }
 
 PyObject* MeshPy::countSegments(PyObject *args)

@@ -23,6 +23,7 @@ SET(PathScripts_SRCS
     PathScripts/centroid_post.py
     PathScripts/comparams_post.py
     PathScripts/dumper_post.py
+    PathScripts/rml_post.py
     PathScripts/TooltableEditor.py
     PathScripts/PathProfile.py
     PathScripts/PathPocket.py
@@ -48,6 +49,13 @@ SET(PathScripts_SRCS
     PathScripts/DlgSettingsPath.ui
     PathScripts/PathKurveUtils.py
     PathScripts/PathKurve.py
+    PathScripts/slic3r_pre.py
+    PathScripts/PathFaceProfile.py
+    PathScripts/PathFacePocket.py
+    PathScripts/PathArray.py
+    PathScripts/PathCustom.py
+    PathScripts/PathInspect.py
+    PathScripts/PathSimpleCopy.py
 )
 
 ADD_CUSTOM_TARGET(PathScripts ALL

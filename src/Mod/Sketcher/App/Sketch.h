@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2010     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2010     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -377,6 +377,7 @@ protected:
 public:
     GCS::Algorithm defaultSolver;
     GCS::Algorithm defaultSolverRedundant;
+    inline void setDogLegGaussStep(GCS::DogLegGaussStep mode){GCSsys.dogLegGaussStep=mode;}
     inline void setDebugMode(GCS::DebugMode mode) {debugMode=mode;GCSsys.debugMode=mode;}
     inline GCS::DebugMode getDebugMode(void) {return debugMode;}
     inline void setMaxIter(int maxiter){GCSsys.maxIter=maxiter;}

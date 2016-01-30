@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -93,7 +93,7 @@ namespace App {
 /// @cond DOXERR
 PROPERTY_SOURCE_TEMPLATE(Drawing::FeatureViewPython, Drawing::FeatureView)
 template<> const char* Drawing::FeatureViewPython::getViewProviderName(void) const {
-    return "DrawingGui::ViewProviderDrawingView";
+    return "DrawingGui::ViewProviderDrawingViewPython";
 }
 /// @endcond
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2002 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2002 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -27,6 +27,7 @@
 
 #include "DlgSettingsDocumentImp.h"
 #include "PrefWidgets.h"
+#include "AutoSaver.h"
 
 using namespace Gui::Dialog;
 
@@ -40,6 +41,9 @@ DlgSettingsDocumentImp::DlgSettingsDocumentImp( QWidget* parent )
     : PreferencePage( parent )
 {
     this->setupUi(this);
+    prefSaveTransaction->hide();
+    prefDiscardTransaction->hide();
+
     prefCountBackupFiles->setMaximum(INT_MAX);
     prefCompression->setMinimum(Z_NO_COMPRESSION);
     prefCompression->setMaximum(Z_BEST_COMPRESSION);
@@ -73,6 +77,14 @@ void DlgSettingsDocumentImp::saveSettings()
     prefAuthor->onSave();
     prefSetAuthorOnSave->onSave();
     prefCompany->onSave();
+    prefRecovery->onSave();
+    prefAutoSaveEnabled->onSave();
+    prefAutoSaveTimeout->onSave();
+
+    int timeout = prefAutoSaveTimeout->value();
+    if (!prefAutoSaveEnabled->isChecked())
+        timeout = 0;
+    AutoSaver::instance()->setTimeout(timeout * 60000);
 }
 
 void DlgSettingsDocumentImp::loadSettings()
@@ -93,6 +105,9 @@ void DlgSettingsDocumentImp::loadSettings()
     prefAuthor->onRestore();
     prefSetAuthorOnSave->onRestore();
     prefCompany->onRestore();
+    prefRecovery->onRestore();
+    prefAutoSaveEnabled->onRestore();
+    prefAutoSaveTimeout->onRestore();
 }
 
 /**
@@ -113,36 +128,40 @@ void DlgSettingsDocumentImp::changeEvent(QEvent *e)
  */
 void DlgSettingsDocumentImp::onLicenseTypeChanged(int index)
 {
+    prefLicenseUrl->setReadOnly(true);
+
     switch (index) {
         case 0:
-            prefLicenseUrl->setText(QString::fromAscii("http://en.wikipedia.org/wiki/All_rights_reserved"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://en.wikipedia.org/wiki/All_rights_reserved"));
             break;
         case 1:
-            prefLicenseUrl->setText(QString::fromAscii("http://creativecommons.org/licenses/by/4.0/"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://creativecommons.org/licenses/by/4.0/"));
             break;
         case 2:
-            prefLicenseUrl->setText(QString::fromAscii("http://creativecommons.org/licenses/by-sa/4.0/"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://creativecommons.org/licenses/by-sa/4.0/"));
             break;
         case 3:
-            prefLicenseUrl->setText(QString::fromAscii("http://creativecommons.org/licenses/by-nd/4.0/"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://creativecommons.org/licenses/by-nd/4.0/"));
             break;
         case 4:
-            prefLicenseUrl->setText(QString::fromAscii("http://creativecommons.org/licenses/by-nc/4.0/"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://creativecommons.org/licenses/by-nc/4.0/"));
             break;
         case 5:
-            prefLicenseUrl->setText(QString::fromAscii("http://creativecommons.org/licenses/by-nc-sa/4.0/"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://creativecommons.org/licenses/by-nc-sa/4.0/"));
             break;
         case 6:
-            prefLicenseUrl->setText(QString::fromAscii("http://creativecommons.org/licenses/by-nc-nd/4.0/"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://creativecommons.org/licenses/by-nc-nd/4.0/"));
             break;
         case 7:
-            prefLicenseUrl->setText(QString::fromAscii("http://en.wikipedia.org/wiki/Public_domain"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://en.wikipedia.org/wiki/Public_domain"));
             break;
         case 8:
-            prefLicenseUrl->setText(QString::fromAscii("http://artlibre.org/licence/lal"));
+            prefLicenseUrl->setText(QString::fromLatin1("http://artlibre.org/licence/lal"));
             break;
         default:
-            prefLicenseUrl->setText(QString::fromAscii(""));
+            prefLicenseUrl->clear();
+            prefLicenseUrl->setReadOnly(false);
+            break;
     }
 }
 

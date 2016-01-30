@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -26,6 +26,9 @@
 # include <Python.h>
 #endif
 
+#include <CXX/Extensions.hxx>
+#include <CXX/Objects.hxx>
+
 #include <Base/Console.h>
 #include <Base/Interpreter.h>
 #include <Gui/Application.h>
@@ -48,13 +51,30 @@ void loadCompleteResource()
     Gui::Translator::instance()->refresh();
 }
 
-/* registration table  */
-extern struct PyMethodDef CompleteGui_Import_methods[];
+namespace CompleteGui {
+class Module : public Py::ExtensionModule<Module>
+{
+public:
+    Module() : Py::ExtensionModule<Module>("CompleteGui")
+    {
+        initialize("This module is the CompleteGui module."); // register with Python
+    }
+
+    virtual ~Module() {}
+
+private:
+};
+
+PyObject* initModule()
+{
+    return (new Module)->module().ptr();
+}
+
+} // namespace CompleteGui
 
 
 /* Python entry */
-extern "C" {
-void CompleteGuiExport initCompleteGui()
+PyMODINIT_FUNC initCompleteGui()
 {
     if (!Gui::Application::Instance) {
         PyErr_SetString(PyExc_ImportError, "Cannot load Gui module in console application.");
@@ -63,8 +83,8 @@ void CompleteGuiExport initCompleteGui()
 
     // try to load dependent modules, currently not (AssemblyGui, CamGui)
     char *modules[] = {"PartGui", "MeshGui", "MeshPartGui", "PointsGui", "DrawingGui", "RaytracingGui", "SketcherGui", "PartDesignGui", "ImageGui", "TestGui"};
-    char nModules = sizeof(modules) / sizeof(char*);
-    for (char i = 0; i < nModules; i++) {
+    size_t nModules = sizeof(modules) / sizeof(char*);
+    for (size_t i = 0; i < nModules; i++) {
         try {
             Base::Interpreter().loadModule(modules[i]);
         }
@@ -116,7 +136,7 @@ void CompleteGuiExport initCompleteGui()
     }
 #   endif
 
-    (void) Py_InitModule("CompleteGui", CompleteGui_Import_methods);   /* mod name, table ptr */
+    (void) CompleteGui::initModule();
     Base::Console().Log("Loading GUI of Complete module... done\n");
 
     // instantiating the commands
@@ -126,5 +146,3 @@ void CompleteGuiExport initCompleteGui()
      // add resources and reloads the translators
     loadCompleteResource();
 }
-
-} // extern "C" {

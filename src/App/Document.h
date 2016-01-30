@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) Jürgen Riegel          (juergen.riegel@web.de) 2002     *
+ *   Copyright (c) JÃ¼rgen Riegel          (juergen.riegel@web.de) 2002     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -106,8 +106,8 @@ public:
     boost::signal<void (const App::DocumentObject&)> signalDeletedObject;
     /// signal on changed Object
     boost::signal<void (const App::DocumentObject&, const App::Property&)> signalChangedObject;
-    /// signal on renamed Object
-    boost::signal<void (const App::DocumentObject&)> signalRenamedObject;
+    /// signal on relabeled Object
+    boost::signal<void (const App::DocumentObject&)> signalRelabelObject;
     /// signal on activated Object
     boost::signal<void (const App::DocumentObject&)> signalActivatedObject;
     /// signal on undo
@@ -139,6 +139,7 @@ public:
     /// Save the document to the file in Property Path
     bool save (void);
     bool saveAs(const char* file);
+    bool saveCopy(const char* file);
     /// Restore the document from the file in Property Path
     void restore (void);
     void exportObjects(const std::vector<App::DocumentObject*>&, std::ostream&);
@@ -160,8 +161,18 @@ public:
 
     /** @name Object handling  */
     //@{
-    /// Add a feature of sType with sName (ASCII) to this document and set it active. Unicode names are set through the Label propery
+    /** Add a feature of sType with sName (ASCII) to this document and set it active.
+     * Unicode names are set through the Label property.
+     */
     DocumentObject *addObject(const char* sType, const char* pObjectName=0);
+    /** Add an existing feature with sName (ASCII) to this document and set it active.
+     * Unicode names are set through the Label property.
+     * This is an overloaded function of the function above and can be used to create
+     * a feature outside and add it to the document afterwards.
+     * \note The passed feature must not yet be added to a document, otherwise an exception
+     * is raisedd.
+     */
+    void addObject(DocumentObject*, const char* pObjectName=0);
     /// Remove a feature out of the document
     void remObject(const char* sName);
     /** Copy an object from another document to this document
@@ -277,6 +288,9 @@ public:
     // set Changed
     //void setChanged(DocumentObject* change);
     //@}
+
+    /// Function called to signal that an object identifier has been renamed
+    void renameObjectIdentifiers(const std::map<App::ObjectIdentifier, App::ObjectIdentifier> & paths);
 
     virtual PyObject *getPyObject(void);
 

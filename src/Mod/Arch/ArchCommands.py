@@ -202,17 +202,19 @@ def makeComponent(baseobj=None,name="Component",delete=False):
 def fixDAG(obj):
     '''fixDAG(object): Fixes non-DAG problems in windows and rebars
     by removing supports and external geometry from underlying sketches'''
-    if Draft.getType(obj) in ["Window","Rebar"]:
-        if obj.Base:
-            if hasattr(obj.Base,"Support"):
-                if obj.Base.Support:
-                    FreeCAD.Console.PrintMessage(translate("Arch","removing sketch support to avoid cross-referencing"))
-                    obj.Base.Support = None
-            if hasattr(obj.Base,"ExternalGeometry"):
-                if obj.Base.ExternalGeometry:
-                    for g in obj.Base.ExternalGeometry:
-                        obj.Base.delExternal(0)
-                        FreeCAD.Console.PrintMessage(translate("Arch","removing sketch external reference to avoid cross-referencing"))
+    p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Arch")
+    if p.GetBool("archRemoveExternal",False):
+        if Draft.getType(obj) in ["Window","Rebar"]:
+            if obj.Base:
+                if hasattr(obj.Base,"Support"):
+                    if obj.Base.Support:
+                        FreeCAD.Console.PrintMessage(translate("Arch","removing sketch support to avoid cross-referencing"))
+                        obj.Base.Support = None
+                if hasattr(obj.Base,"ExternalGeometry"):
+                    if obj.Base.ExternalGeometry:
+                        for g in obj.Base.ExternalGeometry:
+                            obj.Base.delExternal(0)
+                            FreeCAD.Console.PrintMessage(translate("Arch","removing sketch external reference to avoid cross-referencing"))
 
 def copyProperties(obj1,obj2):
     '''copyProperties(obj1,obj2): Copies properties values from obj1 to obj2,
@@ -321,7 +323,7 @@ def closeHole(shape):
     for e in shape.Edges:
         if lut[e.hashCode()] == 1:
             bound.append(e)
-    bound = DraftGeomUtils.sortEdges(bound)
+    bound = Part.__sortEdges__(bound)
     try:
         nface = Part.Face(Part.Wire(bound))
         shell = Part.makeShell(shape.Faces+[nface])
@@ -498,11 +500,15 @@ def meshToShape(obj,mark=True,fast=True,tol=0.001,flat=False,cut=True):
             return newobj
     return None
 
-def removeCurves(shape,tolerance=5):
-    '''removeCurves(shape,tolerance=5): replaces curved faces in a shape
-    with faceted segments'''
+def removeCurves(shape,dae=False,tolerance=5):
+    '''removeCurves(shape,dae,tolerance=5): replaces curved faces in a shape
+    with faceted segments. If dae is True, DAE triangulation options are used'''
     import Mesh
-    t = shape.cleaned().tessellate(tolerance)
+    if dae:
+        import importDAE
+        t = importDAE.triangulate(shape.cleaned())
+    else:
+        t = shape.cleaned().tessellate(tolerance)
     m = Mesh.Mesh(t)
     return getShapeFromMesh(m)
 
@@ -649,7 +655,14 @@ def pruneIncluded(objectslist):
                     if parent.isDerivedFrom("Part::Feature"):
                         if not parent.isDerivedFrom("Part::Part2DObject"):
                             # don't consider 2D objects based on arch elements
-                            toplevel = False
+                            if hasattr(parent,"CloneOf"):
+                                if parent.CloneOf:
+                                    if parent.CloneOf.Name != obj.Name:
+                                        toplevel = False
+                                else:
+                                    toplevel = False
+                            else:
+                                toplevel = False
         if toplevel:
             newlist.append(obj)
     return newlist
@@ -1125,7 +1138,7 @@ class _CommandCheck:
         else:
             FreeCADGui.Selection.clearSelection()
             for i in result:
-                FreeCAD.Console.PrintWarning("Object "+i[0].Name+" ("+i[0].Label+") "+i[1])
+                FreeCAD.Console.PrintWarning("Object "+i[0].Name+" ("+i[0].Label+") "+i[1].decode("utf8"))
                 FreeCADGui.Selection.addSelection(i[0])
 
 

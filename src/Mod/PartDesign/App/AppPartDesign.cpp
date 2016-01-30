@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -39,7 +39,6 @@
 #include "FeatureDressUp.h"
 #include "FeatureChamfer.h"
 #include "FeatureDraft.h"
-#include "FeatureFace.h"
 #include "FeatureSubtractive.h"
 #include "FeatureAdditive.h"
 #include "FeatureTransformed.h"
@@ -50,15 +49,12 @@
 #include "FeatureMultiTransform.h"
 #include "FeatureHole.h"
 
-extern struct PyMethodDef PartDesign_methods[];
-
-PyDoc_STRVAR(module_PartDesign_doc,
-"This module is the PartDesign module.");
-
+namespace PartDesign {
+extern PyObject* initModule();
+}
 
 /* Python entry */
-extern "C" {
-void PartDesignExport init_PartDesign()
+PyMODINIT_FUNC init_PartDesign()
 {
     // load dependent module
     try {
@@ -69,7 +65,8 @@ void PartDesignExport init_PartDesign()
         PyErr_SetString(PyExc_ImportError, e.what());
         return;
     }
-    Py_InitModule3("_PartDesign", PartDesign_methods, module_PartDesign_doc);   /* mod name, table ptr */
+
+    (void)PartDesign::initModule();
     Base::Console().Log("Loading PartDesign module... done\n");
 
 
@@ -96,8 +93,5 @@ void PartDesignExport init_PartDesign()
     PartDesign::Revolution         ::init();
     PartDesign::Groove             ::init();
     PartDesign::Chamfer            ::init();
-    PartDesign::Face               ::init();
-    PartDesign::Draft		   ::init();
+    PartDesign::Draft           ::init();
 }
-
-} // extern "C"

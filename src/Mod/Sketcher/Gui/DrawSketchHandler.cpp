@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2010 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2010 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -428,16 +428,36 @@ void DrawSketchHandler::createAutoConstraints(const std::vector<AutoConstraint> 
                                        );
                 } break;
             case Sketcher::Horizontal: {
-                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addConstraint(Sketcher.Constraint('Horizontal',%i)) "
-                                        ,sketchgui->getObject()->getNameInDocument()
-                                        ,geoId1
-                                       );
+                
+                bool start_external;
+                bool mid_external;
+                bool end_external;
+                
+                dynamic_cast<Sketcher::SketchObject*>((sketchgui->getObject()))->isCoincidentWithExternalGeometry(geoId1, start_external, mid_external, end_external);
+                
+                if( !(start_external && end_external) ) {
+                    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addConstraint(Sketcher.Constraint('Horizontal',%i)) "
+                    ,sketchgui->getObject()->getNameInDocument()
+                    ,geoId1
+                    );
+                }
+
                 } break;
             case Sketcher::Vertical: {
-                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addConstraint(Sketcher.Constraint('Vertical',%i)) "
-                                        ,sketchgui->getObject()->getNameInDocument()
-                                        ,geoId1
-                                       );
+                
+                bool start_external;
+                bool mid_external;
+                bool end_external;
+                
+                dynamic_cast<Sketcher::SketchObject*>((sketchgui->getObject()))->isCoincidentWithExternalGeometry(geoId1, start_external, mid_external, end_external);
+                
+                if( !(start_external && end_external) ) {
+                    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addConstraint(Sketcher.Constraint('Vertical',%i)) "
+                    ,sketchgui->getObject()->getNameInDocument()
+                    ,geoId1
+                    );
+                }
+                
                 } break;
             case Sketcher::Tangent: {
                 Sketcher::SketchObject* Obj = dynamic_cast<Sketcher::SketchObject*>(sketchgui->getObject());
@@ -529,26 +549,26 @@ void DrawSketchHandler::renderSuggestConstraintsCursor(std::vector<AutoConstrain
         switch (it->Type)
         {
         case Horizontal:
-            iconType = QString::fromAscii("Constraint_Horizontal");
+            iconType = QString::fromLatin1("Constraint_Horizontal");
             break;
         case Vertical:
-            iconType = QString::fromAscii("Constraint_Vertical");
+            iconType = QString::fromLatin1("Constraint_Vertical");
             break;
         case Coincident:
-            iconType = QString::fromAscii("Constraint_PointOnPoint");
+            iconType = QString::fromLatin1("Constraint_PointOnPoint");
             break;
         case PointOnObject:
-            iconType = QString::fromAscii("Constraint_PointOnObject");
+            iconType = QString::fromLatin1("Constraint_PointOnObject");
             break;
         case Tangent:
-            iconType = QString::fromAscii("Constraint_Tangent");
+            iconType = QString::fromLatin1("Constraint_Tangent");
             break;
         default:
             break;
         }
 
         if (!iconType.isEmpty()) {
-            QPixmap icon = Gui::BitmapFactory().pixmap(iconType.toAscii()).scaledToWidth(iconSize);
+            QPixmap icon = Gui::BitmapFactory().pixmap(iconType.toLatin1()).scaledToWidth(iconSize);
             qp.drawPixmap(QPoint(baseIcon.width() + i * iconSize, baseIcon.height() - iconSize), icon);
         }
     }

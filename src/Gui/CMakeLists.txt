@@ -12,9 +12,10 @@ if (FREECAD_USE_3DCONNEXION)
     add_definitions(-D_USE_3DCONNEXION_SDK)
     if(APPLE)
         set(3DCONNEXION_LINKFLAGS "-F/Library/Frameworks -weak_framework 3DconnexionClient")
-        set(3DCONNEXION_INCLUDE_DIR ${3DCONNEXIONCLIENT_FRAMEWORK}/Headers )
+        set(3DCONNEXION_INCLUDE_DIR ${3DCONNEXIONCLIENT_FRAMEWORK}/Headers
+                                    ${3DCONNEXIONCLIENT_FRAMEWORK}/Headers/3DconnexionClient )
     endif(APPLE)
- endif(FREECAD_USE_3DCONNEXION)
+endif(FREECAD_USE_3DCONNEXION)
 
 if (BUILD_VR)
     add_definitions(-DBUILD_VR )
@@ -31,9 +32,9 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/TaskView
     ${CMAKE_CURRENT_BINARY_DIR}/Quarter
     ${Boost_INCLUDE_DIRS}
-    ${COIN3D_INCLUDE_DIR}
+    ${COIN3D_INCLUDE_DIRS}
     ${PYTHON_INCLUDE_DIRS}
-    ${XERCESC_INCLUDE_DIR}
+    ${XercesC_INCLUDE_DIRS}
     ${QT_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
     ${3DCONNEXION_INCLUDE_DIR}
@@ -42,17 +43,15 @@ include_directories(
 if(MSVC)
     set(FreeCADGui_LIBS
          FreeCADApp
-         debug ${COIN3D_LIBRARY_DEBUG}
-         optimized ${COIN3D_LIBRARY_RELEASE}
+         ${COIN3D_LIBRARIES}
          ${QT_LIBRARIES}
          ${QT_QTUITOOLS_LIBRARY}
          ${OPENGL_gl_LIBRARY}
     )
 else(MSVC)
     set(FreeCADGui_LIBS
-        FreeCADBase
         FreeCADApp
-        ${COIN3D_LIBRARY}
+        ${COIN3D_LIBRARIES}
         ${QT_LIBRARIES}
         ${Boost_LIBRARIES}
         ${OPENGL_gl_LIBRARY}
@@ -69,6 +68,13 @@ IF(SPNAV_FOUND)
         ${FreeCADGui_LIBS}
         ${SPNAV_LIBRARIES}
     )
+    find_package(X11 QUIET)
+    if (X11_FOUND)
+        set(FreeCADGui_LIBS
+            ${FreeCADGui_LIBS}
+            ${X11_X11_LIB}
+        )
+    endif(X11_FOUND)
 ENDIF(SPNAV_FOUND)
 
 IF(OCULUS_FOUND)
@@ -150,6 +156,7 @@ set(Gui_MOC_HDRS
     Action.h
     ActionFunction.h
     Assistant.h
+    AutoSaver.h
     CallTips.h
     CombiView.h
     Control.h
@@ -196,11 +203,15 @@ set(Gui_MOC_HDRS
     DlgUndoRedo.h
     DockWindow.h
     DockWindowManager.h
+    DocumentRecovery.h
     EditorView.h
+    ExpressionCompleter.h
+    DlgExpressionInput.h
     FileDialog.h
     Flag.h
     GraphicsViewZoom.h
     GraphvizView.h
+    GuiApplication.h
     GuiApplicationNativeEventAware.h
     HelpView.h
     InputVector.h
@@ -220,6 +231,7 @@ set(Gui_MOC_HDRS
     PythonEditor.h
     QuantitySpinBox.h
     QListWidgetCustom.h
+    QuantitySpinBox_p.h
     ReportView.h
     SceneInspector.h
     SelectionView.h
@@ -297,8 +309,10 @@ SET(Gui_UIC_SRCS
     DlgTreeWidget.ui
     DlgLocationAngle.ui
     DlgLocationPos.ui
+    DocumentRecovery.ui
     DownloadManager.ui
     DownloadItem.ui
+    DlgExpressionInput.ui
     MouseButtons.ui
     SceneInspector.ui
     InputVector.ui
@@ -358,6 +372,7 @@ SET(Dialog_CPP_SRCS
     DlgProjectUtility.cpp
     DlgPropertyLink.cpp
     DlgTipOfTheDayImp.cpp
+    DlgExpressionInput.cpp
     TaskDlgRelocation.cpp
     DlgUndoRedo.cpp
     InputVector.cpp
@@ -369,6 +384,7 @@ SET(Dialog_CPP_SRCS
     DownloadDialog.cpp
     DownloadItem.cpp
     DownloadManager.cpp
+    DocumentRecovery.cpp
 )
 
 SET(Dialog_HPP_SRCS
@@ -388,6 +404,7 @@ SET(Dialog_HPP_SRCS
     DlgProjectUtility.h
     DlgPropertyLink.h
     DlgTipOfTheDayImp.h
+    DlgExpressionInput.h
     TaskDlgRelocation.h
     DlgUndoRedo.h
     InputVector.h
@@ -399,6 +416,7 @@ SET(Dialog_HPP_SRCS
     DownloadDialog.h
     DownloadItem.h
     DownloadManager.h
+    DocumentRecovery.h
 )
 
 SET(Dialog_SRCS
@@ -424,8 +442,10 @@ SET(Dialog_SRCS
     DlgPropertyLink.ui
     DlgTipOfTheDay.ui
     DlgTreeWidget.ui
+    DlgExpressionInput.ui
     DownloadManager.ui
     DownloadItem.ui
+    DocumentRecovery.ui
     MouseButtons.ui
     InputVector.ui
     Placement.ui
@@ -720,6 +740,7 @@ SET(View3D_CPP_SRCS
     InventorNavigationStyle.cpp
     CADNavigationStyle.cpp
     BlenderNavigationStyle.cpp
+    MayaGestureNavigationStyle.cpp
     OpenCascadeNavigationStyle.cpp
     TouchpadNavigationStyle.cpp
     GestureNavigationStyle.cpp
@@ -882,6 +903,7 @@ SET(Widget_HPP_SRCS
     InputField.h
     ProgressBar.h
     QuantitySpinBox.h
+    QuantitySpinBox_p.h
     SpinBox.h
     Splashscreen.h
     WidgetFactory.h
@@ -950,11 +972,15 @@ SOURCE_GROUP("Selection" FILES ${Selection_SRCS})
 SET(FreeCADGui_CPP_SRCS
     Application.cpp
     ApplicationPy.cpp
+    AutoSaver.cpp
     BitmapFactory.cpp
     Document.cpp
     DocumentModel.cpp
     DocumentPyImp.cpp
+    ExpressionBinding.cpp
     GraphicsViewZoom.cpp
+    ExpressionCompleter.cpp
+    GuiApplication.cpp
     GuiApplicationNativeEventAware.cpp
     GuiConsole.cpp
     Macro.cpp
@@ -970,11 +996,15 @@ SET(FreeCADGui_CPP_SRCS
 )
 SET(FreeCADGui_SRCS 
     Application.h
+    AutoSaver.h
     BitmapFactory.h
     Document.h
     DocumentModel.h
+    ExpressionBinding.cpp
+    ExpressionCompleter.h
     FreeCADGuiInit.py
     GraphicsViewZoom.h
+    GuiApplication.h
     GuiApplicationNativeEventAware.h
     GuiConsole.h
     InventorAll.h

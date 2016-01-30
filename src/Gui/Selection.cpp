@@ -467,7 +467,7 @@ bool SelectionSingleton::setPreselect(const char* pDocName, const char* pObjectN
                                                        );
 
                     if (getMainWindow()) {
-                        getMainWindow()->showMessage(QString::fromAscii(buf),3000);
+                        getMainWindow()->showMessage(QString::fromLatin1(buf),3000);
                         Gui::MDIView* mdi = Gui::Application::Instance->activeDocument()->getActiveView();
                         mdi->setOverrideCursor(QCursor(Qt::ForbiddenCursor));
                     }
@@ -511,7 +511,7 @@ bool SelectionSingleton::setPreselect(const char* pDocName, const char* pObjectN
     //FIXME: We shouldn't replace the possibly defined edit cursor
     //with the arrow cursor. But it seems that we don't even have to.
     //if (getMainWindow()){
-    //    getMainWindow()->showMessage(QString::fromAscii(buf),3000);
+    //    getMainWindow()->showMessage(QString::fromLatin1(buf),3000);
     //    Gui::MDIView* mdi = Gui::Application::Instance->activeDocument()->getActiveView();
     //    mdi->restoreOverrideCursor();
     //}
@@ -542,7 +542,7 @@ void SelectionSingleton::setPreselectCoord( float x, float y, float z)
                                                        ,x,y,z);
 
     if (getMainWindow())
-        getMainWindow()->showMessage(QString::fromAscii(buf),3000);
+        getMainWindow()->showMessage(QString::fromLatin1(buf),3000);
 }
 
 void SelectionSingleton::rmvPreselect()
@@ -641,7 +641,7 @@ bool SelectionSingleton::addSelection(const char* pDocName, const char* pObjectN
         if (ActiveGate) {
             if (!ActiveGate->allow(temp.pDoc,temp.pObject,pSubName)) {
                 if (getMainWindow()) {
-                    getMainWindow()->showMessage(QString::fromAscii("Selection not allowed by filter"),5000);
+                    getMainWindow()->showMessage(QString::fromLatin1("Selection not allowed by filter"),5000);
                     Gui::MDIView* mdi = Gui::Application::Instance->activeDocument()->getActiveView();
                     mdi->setOverrideCursor(Qt::ForbiddenCursor);
                 }
@@ -923,17 +923,6 @@ void SelectionSingleton::slotDeletedObject(const App::DocumentObject& Obj)
     Selection().rmvSelection( Obj.getDocument()->getName(), Obj.getNameInDocument() );
 }
 
-void SelectionSingleton::slotRenamedObject(const App::DocumentObject& Obj)
-{
-    // compare internals with the document and change them if needed
-    App::Document* pDoc = Obj.getDocument();
-    for (std::list<_SelObj>::iterator it = _SelList.begin(); it != _SelList.end(); ++it) {
-        if (it->pDoc == pDoc) {
-            it->DocName = pDoc->getName();
-        }
-    }
-}
-
 
 //**************************************************************************
 // Construction/Destruction
@@ -946,7 +935,6 @@ SelectionSingleton::SelectionSingleton()
 {
     ActiveGate = 0;
     App::GetApplication().signalDeletedObject.connect(boost::bind(&Gui::SelectionSingleton::slotDeletedObject, this, _1));
-    App::GetApplication().signalRenamedObject.connect(boost::bind(&Gui::SelectionSingleton::slotRenamedObject, this, _1));
     CurrentPreselection.pDocName = 0;
     CurrentPreselection.pObjectName = 0;
     CurrentPreselection.pSubName = 0;
@@ -1001,7 +989,9 @@ PyMethodDef SelectionSingleton::Methods[] = {
     {"getSelection",         (PyCFunction) SelectionSingleton::sGetSelection, 1,
      "getSelection([string]) -- Return a list of selected objets\n"
      "Return a list of selected objects for a given document name. If no\n"
-     "document is given the complete selection is returned."},
+     "document name is given the selection for the active document is returned."},
+    {"getCompleteSelection", (PyCFunction) SelectionSingleton::sGetCompleteSelection, 1,
+     "getCompleteSelection() -- Return a list of selected objects of all documents."},
     {"getSelectionEx",         (PyCFunction) SelectionSingleton::sGetSelectionEx, 1,
      "getSelectionEx([string]) -- Return a list of SelectionObjects\n"
      "Return a list of SelectionObjects for a given document name. If no\n"
@@ -1119,10 +1109,27 @@ PyObject *SelectionSingleton::sGetSelection(PyObject * /*self*/, PyObject *args,
         return NULL;                             // NULL triggers exception
 
     std::vector<SelectionSingleton::SelObj> sel;
-    if (documentName)
-        sel = Selection().getSelection(documentName);
-    else
-        sel = Selection().getCompleteSelection();
+    sel = Selection().getSelection(documentName);
+
+    try {
+        Py::List list;
+        for (std::vector<SelectionSingleton::SelObj>::iterator it = sel.begin(); it != sel.end(); ++it) {
+            list.append(Py::asObject(it->pObject->getPyObject()));
+        }
+        return Py::new_reference_to(list);
+    }
+    catch (Py::Exception&) {
+        return 0;
+    }
+}
+
+PyObject *SelectionSingleton::sGetCompleteSelection(PyObject * /*self*/, PyObject *args, PyObject * /*kwd*/)
+{
+    if (!PyArg_ParseTuple(args, ""))     // convert args: Python->C 
+        return NULL;                             // NULL triggers exception
+
+    std::vector<SelectionSingleton::SelObj> sel;
+    sel = Selection().getCompleteSelection();
 
     try {
         Py::List list;

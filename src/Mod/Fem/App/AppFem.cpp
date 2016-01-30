@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -52,15 +52,14 @@
 #include "FemConstraintPulley.h"
 
 #include "FemResultObject.h"
+#include "FemSolverObject.h"
 
-extern struct PyMethodDef Fem_methods[];
-
-PyDoc_STRVAR(module_Fem_doc,
-"This module is the FEM module.");
+namespace Fem {
+extern PyObject* initModule();
+}
 
 /* Python entry */
-extern "C" {
-void AppFemExport initFem()
+PyMODINIT_FUNC initFem()
 {
     // load dependend module
     try {
@@ -71,7 +70,7 @@ void AppFemExport initFem()
         PyErr_SetString(PyExc_ImportError, e.what());
         return;
     }
-    PyObject* femModule = Py_InitModule3("Fem", Fem_methods, module_Fem_doc);   /* mod name, table ptr */
+    PyObject* femModule = Fem::initModule();
     Base::Console().Log("Loading Fem module... done\n");
 
     Fem::StdMeshers_Arithmetic1DPy              ::init_type(femModule);
@@ -118,6 +117,8 @@ void AppFemExport initFem()
  
     Fem::FemAnalysis                ::init();
     Fem::FemAnalysisPython          ::init();
+    Fem::DocumentObject             ::init();
+    Fem::FeaturePython              ::init();
     Fem::FemMesh                    ::init();
     Fem::FemMeshObject              ::init();
     Fem::FemMeshShapeObject         ::init();
@@ -140,6 +141,6 @@ void AppFemExport initFem()
 
     Fem::FemResultObject            ::init();
     Fem::FemResultObjectPython      ::init();
+    Fem::FemSolverObject            ::init();
+    Fem::FemSolverObjectPython      ::init();
 }
-
-} // extern "C"

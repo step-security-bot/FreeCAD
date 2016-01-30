@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2002 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2002 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -145,7 +145,7 @@ void StdCmdOpen::activated(int iMsg)
     }
     else {
         for (SelectModule::Dict::iterator it = dict.begin(); it != dict.end(); ++it) {
-            getGuiApplication()->open(it.key().toUtf8(), it.value().toAscii());
+            getGuiApplication()->open(it.key().toUtf8(), it.value().toLatin1());
         }
     }
 }
@@ -209,16 +209,21 @@ void StdCmdImport::activated(int iMsg)
     if (!fileList.isEmpty()) {
         hPath->SetASCII("FileImportFilter", selectedFilter.toLatin1().constData());
         SelectModule::Dict dict = SelectModule::importHandler(fileList, selectedFilter);
+
+        bool emptyDoc = (getActiveGuiDocument()->getDocument()->countObjects() == 0);
         // load the files with the associated modules
         for (SelectModule::Dict::iterator it = dict.begin(); it != dict.end(); ++it) {
             getGuiApplication()->importFrom(it.key().toUtf8(),
                 getActiveGuiDocument()->getDocument()->getName(),
-                it.value().toAscii());
+                it.value().toLatin1());
         }
 
-        std::list<Gui::MDIView*> views = getActiveGuiDocument()->getMDIViewsOfType(Gui::View3DInventor::getClassTypeId());
-        for (std::list<MDIView*>::iterator it = views.begin(); it != views.end(); ++it) {
-            (*it)->viewAll();
+        if (emptyDoc) {
+            // only do a view fit if the document was empty before. See also parameter 'AutoFitToView' in importFrom()
+            std::list<Gui::MDIView*> views = getActiveGuiDocument()->getMDIViewsOfType(Gui::View3DInventor::getClassTypeId());
+            for (std::list<MDIView*>::iterator it = views.begin(); it != views.end(); ++it) {
+                (*it)->viewAll();
+            }
         }
     }
 }
@@ -283,7 +288,7 @@ void StdCmdExport::activated(int iMsg)
         for (SelectModule::Dict::iterator it = dict.begin(); it != dict.end(); ++it) {
             getGuiApplication()->exportTo(it.key().toUtf8(),
                 getActiveGuiDocument()->getDocument()->getName(),
-                it.value().toAscii());
+                it.value().toLatin1());
         }
     }
 }
@@ -392,7 +397,7 @@ StdCmdNew::StdCmdNew()
 void StdCmdNew::activated(int iMsg)
 {
     QString cmd;
-    cmd = QString::fromAscii("App.newDocument(\"%1\")")
+    cmd = QString::fromLatin1("App.newDocument(\"%1\")")
         .arg(qApp->translate("StdCmdNew","Unnamed"));
     doCommand(Command::Doc,(const char*)cmd.toUtf8());
 }
@@ -477,6 +482,38 @@ bool StdCmdSaveAs::isActive(void)
 }
 
 //===========================================================================
+// Std_SaveCopy
+//===========================================================================
+DEF_STD_CMD_A(StdCmdSaveCopy);
+
+StdCmdSaveCopy::StdCmdSaveCopy()
+  :Command("Std_SaveCopy")
+{
+  sGroup        = QT_TR_NOOP("File");
+  sMenuText     = QT_TR_NOOP("Save a &Copy...");
+  sToolTipText  = QT_TR_NOOP("Save a copy of the active document under a new file name");
+  sWhatsThis    = "Std_SaveCopy";
+  sStatusTip    = QT_TR_NOOP("Save a copy of the active document under a new file name");
+  //sPixmap       = "document-save-as";
+}
+
+void StdCmdSaveCopy::activated(int iMsg)
+{
+#if 0
+  Gui::Document* pActiveDoc = getActiveGuiDocument();
+  if ( pActiveDoc )
+    pActiveDoc->saveCopy();
+  else
+#endif
+    doCommand(Command::Gui,"Gui.SendMsgToActiveView(\"SaveCopy\")");
+}
+
+bool StdCmdSaveCopy::isActive(void)
+{
+  return ( getActiveGuiDocument() ? true : false );
+}
+
+//===========================================================================
 // Std_Revert
 //===========================================================================
 DEF_STD_CMD_A(StdCmdRevert);
@@ -494,7 +531,6 @@ StdCmdRevert::StdCmdRevert()
 
 void StdCmdRevert::activated(int iMsg)
 {
-    App::Document* doc = App::GetApplication().getActiveDocument();
     QMessageBox msgBox;
     msgBox.setText(qApp->translate("Std_Revert","This will discard all the changes since last file save."));
     msgBox.setInformativeText(qApp->translate("Std_Revert","Are you sure?"));
@@ -716,7 +752,7 @@ Action * StdCmdUndo::createAction(void)
     Action *pcAction;
 
     pcAction = new UndoAction(this,getMainWindow());
-    pcAction->setShortcut(QString::fromAscii(sAccel));
+    pcAction->setShortcut(QString::fromLatin1(sAccel));
     applyCommandData(this->className(), pcAction);
     if (sPixmap)
         pcAction->setIcon(Gui::BitmapFactory().iconFromTheme(sPixmap));
@@ -759,7 +795,7 @@ Action * StdCmdRedo::createAction(void)
     Action *pcAction;
 
     pcAction = new RedoAction(this,getMainWindow());
-    pcAction->setShortcut(QString::fromAscii(sAccel));
+    pcAction->setShortcut(QString::fromLatin1(sAccel));
     applyCommandData(this->className(), pcAction);
     if (sPixmap)
         pcAction->setIcon(Gui::BitmapFactory().iconFromTheme(sPixmap));
@@ -894,7 +930,7 @@ void StdCmdDuplicateSelection::activated(int iMsg)
     if (objs.empty())
         return;
 
-    Base::FileInfo fi(Base::FileInfo::getTempFileName());
+    Base::FileInfo fi(App::Application::getTempFileName());
     {
         std::vector<App::DocumentObject*> sel; // selected
         std::vector<App::DocumentObject*> all; // object sub-graph
@@ -1009,7 +1045,6 @@ void StdCmdDelete::activated(int iMsg)
             if (vpedit) {
                 // check if the edited view provider is selected
                 for (std::vector<Gui::SelectionObject>::iterator ft = sel.begin(); ft != sel.end(); ++ft) {
-                    App::DocumentObject* obj = ft->getObject();
                     Gui::ViewProvider* vp = pGuiDoc->getViewProvider(ft->getObject());
                     if (vp == vpedit) {
                         if (!ft->getSubNames().empty()) {
@@ -1031,7 +1066,6 @@ void StdCmdDelete::activated(int iMsg)
                 // check if we can delete the object
                 for (std::vector<Gui::SelectionObject>::iterator ft = sel.begin(); ft != sel.end(); ++ft) {
                     App::DocumentObject* obj = ft->getObject();
-                    Gui::ViewProvider* vp = pGuiDoc->getViewProvider(ft->getObject());
                     std::vector<App::DocumentObject*> links = obj->getInList();
                     if (!links.empty()) {
                         // check if the referenced objects are groups or are selected too
@@ -1330,6 +1364,7 @@ void CreateDocCommands(void)
 
     rcCmdMgr.addCommand(new StdCmdSave());
     rcCmdMgr.addCommand(new StdCmdSaveAs());
+    rcCmdMgr.addCommand(new StdCmdSaveCopy());
     rcCmdMgr.addCommand(new StdCmdRevert());
     rcCmdMgr.addCommand(new StdCmdProjectInfo());
     rcCmdMgr.addCommand(new StdCmdProjectUtil());

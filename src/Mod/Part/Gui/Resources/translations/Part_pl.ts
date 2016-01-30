@@ -131,7 +131,7 @@
 <context>
     <name>CmdCheckGeometry</name>
     <message>
-        <location filename="../../Command.cpp" line="+1501"/>
+        <location filename="../../Command.cpp" line="+1650"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -251,7 +251,7 @@
 <context>
     <name>CmdPartBoolean</name>
     <message>
-        <location line="-840"/>
+        <location line="-889"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -297,7 +297,7 @@
 <context>
     <name>CmdPartBox2</name>
     <message>
-        <location filename="../../Command.cpp" line="-753"/>
+        <location filename="../../Command.cpp" line="-850"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -333,7 +333,7 @@
 <context>
     <name>CmdPartBuilder</name>
     <message>
-        <location line="+912"/>
+        <location line="+1058"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -369,7 +369,7 @@
 <context>
     <name>CmdPartCommon</name>
     <message>
-        <location line="-653"/>
+        <location line="-799"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -385,9 +385,27 @@
     </message>
 </context>
 <context>
+    <name>CmdPartCompJoinFeatures</name>
+    <message>
+        <location line="+163"/>
+        <source>Part</source>
+        <translation type="unfinished">Część</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Join objects...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Join walled objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CmdPartCompound</name>
     <message>
-        <location line="+162"/>
+        <location line="+92"/>
         <source>Part</source>
         <translation type="unfinished">Część</translation>
     </message>
@@ -425,7 +443,7 @@
 <context>
     <name>CmdPartCrossSections</name>
     <message>
-        <location filename="../../Command.cpp" line="+539"/>
+        <location filename="../../Command.cpp" line="+590"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -443,7 +461,7 @@
 <context>
     <name>CmdPartCut</name>
     <message>
-        <location line="-784"/>
+        <location line="-930"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -481,7 +499,7 @@
 <context>
     <name>CmdPartExport</name>
     <message>
-        <location filename="../../Command.cpp" line="+393"/>
+        <location filename="../../Command.cpp" line="+488"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -499,7 +517,7 @@
 <context>
     <name>CmdPartExtrude</name>
     <message>
-        <location line="+250"/>
+        <location line="+252"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -517,7 +535,7 @@
 <context>
     <name>CmdPartFillet</name>
     <message>
-        <location line="+52"/>
+        <location line="+101"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -535,7 +553,7 @@
 <context>
     <name>CmdPartFuse</name>
     <message>
-        <location line="-544"/>
+        <location line="-690"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -553,7 +571,7 @@
 <context>
     <name>CmdPartImport</name>
     <message>
-        <location line="+175"/>
+        <location line="+270"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -589,7 +607,7 @@
 <context>
     <name>CmdPartLoft</name>
     <message>
-        <location line="+407"/>
+        <location line="+458"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -609,9 +627,27 @@
     </message>
 </context>
 <context>
+    <name>CmdPartMakeFace</name>
+    <message>
+        <location line="-226"/>
+        <source>Part</source>
+        <translation type="unfinished">Część</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Make face from sketch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Make face from selected sketches</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CmdPartMakeSolid</name>
     <message>
-        <location line="-365"/>
+        <location line="-190"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -629,7 +665,7 @@
 <context>
     <name>CmdPartMirror</name>
     <message>
-        <location line="+267"/>
+        <location line="+316"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -665,7 +701,7 @@
 <context>
     <name>CmdPartPickCurveNet</name>
     <message>
-        <location line="-1086"/>
+        <location line="-1232"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -719,7 +755,7 @@
 <context>
     <name>CmdPartReverseShape</name>
     <message>
-        <location filename="../../Command.cpp" line="+615"/>
+        <location filename="../../Command.cpp" line="+712"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -737,7 +773,7 @@
 <context>
     <name>CmdPartRevolve</name>
     <message>
-        <location line="+108"/>
+        <location line="+157"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -777,7 +813,7 @@
 <context>
     <name>CmdPartSection</name>
     <message>
-        <location line="-835"/>
+        <location line="-886"/>
         <source>Make a section of two shapes</source>
         <translation>Utwórz iloraz dwóch obiektów</translation>
     </message>
@@ -869,7 +905,7 @@
 <context>
     <name>CmdPartSweep</name>
     <message>
-        <location filename="../../Command.cpp" line="+586"/>
+        <location filename="../../Command.cpp" line="+637"/>
         <source>Part</source>
         <translation>Część</translation>
     </message>
@@ -1207,7 +1243,7 @@
         <translation>Y:</translation>
     </message>
     <message>
-        <location filename="../../DlgExtrusion.cpp" line="+149"/>
+        <location filename="../../DlgExtrusion.cpp" line="+150"/>
         <source>Select a shape for extrusion, first.</source>
         <translation>Select a shape for extrusion, first.</translation>
     </message>
@@ -1418,11 +1454,25 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <source>Enable B-REP mode</source>
-        <translation type="unfinished">Enable B-REP mode</translation>
+        <source>Write solids and shells as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Groups of Trimmed Surfaces (type 144)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+10"/>
+        <source>Solids (type 186) and Shells (type 514) / B-REP mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable B-REP mode</source>
+        <translation type="obsolete">Enable B-REP mode</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>Import</source>
         <translation type="unfinished">Importuj</translation>
     </message>
@@ -1660,9 +1710,18 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
 <context>
     <name>PartGui::DlgPartImportIgesImp</name>
     <message>
-        <location filename="../../DlgPartImportIgesImp.cpp" line="+69"/>
         <source>IGES (*.igs *.iges);;All Files (*.*)</source>
-        <translation>IGES (*.igs *.iges);;Wszystkie pliki (*.*)</translation>
+        <translation type="obsolete">IGES (*.igs *.iges);;Wszystkie pliki (*.*)</translation>
+    </message>
+    <message>
+        <location filename="../../DlgPartImportIgesImp.cpp" line="+71"/>
+        <source>IGES</source>
+        <translation type="unfinished">IGES</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>All Files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1698,9 +1757,18 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
 <context>
     <name>PartGui::DlgPartImportStepImp</name>
     <message>
-        <location filename="../../DlgPartImportStepImp.cpp" line="+68"/>
         <source>STEP (*.stp *.step);;All Files (*.*)</source>
-        <translation>STEP (*.stp *.step);;Wszystkie pliki (*.*)</translation>
+        <translation type="obsolete">STEP (*.stp *.step);;Wszystkie pliki (*.*)</translation>
+    </message>
+    <message>
+        <location filename="../../DlgPartImportStepImp.cpp" line="+70"/>
+        <source>STEP</source>
+        <translation type="unfinished">STEP</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>All Files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2184,7 +2252,7 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
         <translation type="unfinished">Utwórz Bryłę</translation>
     </message>
     <message>
-        <location filename="../../DlgRevolution.cpp" line="+176"/>
+        <location filename="../../DlgRevolution.cpp" line="+177"/>
         <source>Select a shape for revolution, first.</source>
         <translation>Select a shape for revolution, first.</translation>
     </message>
@@ -2222,6 +2290,16 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
         <translation>Tesselacja</translation>
     </message>
     <message>
+        <location line="+61"/>
+        <source>Maximum angular deflection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message utf8="true">
+        <location line="+7"/>
+        <source> °</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Flat shading/Phong shading&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;With flat shading the surface normals are not defined per vertex that leads to a unreal appearance for curved surfaces while using Phong shading leads to a smoother appearance. &lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If this option is unset Phong shading is used, if it is set flat shading is used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Cieniowanie płaskie/Cieniowanie Phong&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Przy cieniowaniu płaskim powierzchnie nie są definiowane wektoro co może prowadzić do nierzeczywistego wyświetlania zakrzywionych powierzchni. Podczas gdy cieniowanie Phong prowadzi do łagodniejszego wyglądu krzywych.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Jeżeli ta opcja jest zaznaczona to użyte zostanie cieniowanie płaskie w przeciwnym wypadku zostanie użyte cieniowanie Phong.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -2230,7 +2308,7 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
         <translation type="obsolete">Nie definiuj normalnych przez wierzchołek</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="-20"/>
         <source>Defines the deviation of tessellation to the actual surface</source>
         <translation>Definiuje odchylenie teselacji rzeczywistej powierzchni</translation>
     </message>
@@ -2253,7 +2331,7 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
         <translation>Maksymalne dopuszczalne odchylenie w zależności od obwiedni modelu</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="-34"/>
         <source> %</source>
         <translation> %</translation>
     </message>
@@ -2396,6 +2474,16 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
         <source>The color of bounding boxes in the 3D view</source>
         <translation type="unfinished">Kolor okna zakreślania w widoku 3D</translation>
     </message>
+    <message>
+        <location line="+38"/>
+        <source>Annotations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Default text color</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PartGui::FaceColors</name>
@@ -2523,7 +2611,7 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
         <translation>z</translation>
     </message>
     <message>
-        <location filename="../../Mirroring.cpp" line="+121"/>
+        <location filename="../../Mirroring.cpp" line="+122"/>
         <source>Select a shape for mirroring, first.</source>
         <translation>Najpierw zaznacz kształt do lustrzanego odbicia.</translation>
     </message>
@@ -2544,7 +2632,7 @@ Wybierz najpierw prawidłowy kształt w polu rozwijanym.</translation>
 <context>
     <name>PartGui::ResultModel</name>
     <message>
-        <location filename="../../TaskCheckGeometry.cpp" line="+330"/>
+        <location filename="../../TaskCheckGeometry.cpp" line="+338"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
@@ -3145,23 +3233,23 @@ in the 3D view for the sweep path.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../Command.cpp" line="-974"/>
+        <location filename="../../Command.cpp" line="-1120"/>
         <location line="+77"/>
         <location line="+82"/>
-        <location line="+81"/>
+        <location line="+176"/>
         <location line="+50"/>
-        <location line="+908"/>
+        <location line="+959"/>
         <source>Wrong selection</source>
         <translation>Niewłaściwy wybór</translation>
     </message>
     <message>
-        <location line="-1197"/>
-        <location line="+290"/>
+        <location line="-1343"/>
+        <location line="+385"/>
         <source>Select two shapes please.</source>
         <translation>Proszę wybrać dwa kształty.</translation>
     </message>
     <message>
-        <location line="-280"/>
+        <location line="-375"/>
         <location line="+82"/>
         <location line="+82"/>
         <source>Non-solids selected</source>
@@ -3176,29 +3264,29 @@ Do you want to continue?</source>
         <translation type="unfinished">Użycie obiektów nie będących bryłami dla operacji logicznych może doprowadzić do nieoczekiwanych rezultatów. Czy chcesz kontynuować?</translation>
     </message>
     <message>
-        <location line="+264"/>
+        <location line="+160"/>
+        <source>Select one shape or more, please.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>All CAD Files (*.stp *.step *.igs *.iges *.brp *.brep)</source>
-        <translation>Wszystkie pliki CAD (STP *.step *.igs *.iges *.brp *.brep)</translation>
+        <translation type="obsolete">Wszystkie pliki CAD (STP *.step *.igs *.iges *.brp *.brep)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>STEP (*.stp *.step)</source>
-        <translation>STEP (*.stp *.step)</translation>
+        <translation type="obsolete">STEP (*.stp *.step)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>IGES (*.igs *.iges)</source>
-        <translation>IGES (*.igs *.iges)</translation>
+        <translation type="obsolete">IGES (*.igs *.iges)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>BREP (*.brp *.brep)</source>
-        <translation>BREP (*.brp *.brep)</translation>
+        <translation type="obsolete">BREP (*.brp *.brep)</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>All Files (*.*)</source>
-        <translation>Wszystkie pliki (*.*)</translation>
+        <translation type="obsolete">Wszystkie pliki (*.*)</translation>
     </message>
     <message>
         <location filename="../../CommandSimple.cpp" line="+59"/>
@@ -3235,7 +3323,7 @@ Do you want to continue?</source>
         <translation type="obsolete">Przekształć</translation>
     </message>
     <message>
-        <location filename="../../AppPartGui.cpp" line="+161"/>
+        <location filename="../../AppPartGui.cpp" line="+162"/>
         <location line="+1"/>
         <source>Part design</source>
         <translation>Projektowanie części</translation>
@@ -3252,14 +3340,23 @@ Do you want to continue?</source>
         <translation type="unfinished">Wyświetlanie</translation>
     </message>
     <message>
-        <location filename="../../Command.cpp" line="-366"/>
+        <location filename="../../Command.cpp" line="-258"/>
         <location line="+82"/>
-        <location line="+81"/>
         <source>Select two shapes or more, please.</source>
         <translation>Wybierz dwa lub więcej kszałtów, proszę.</translation>
     </message>
     <message>
-        <location line="+958"/>
+        <location line="+376"/>
+        <source>All CAD Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>All Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+804"/>
         <source>You have to select either two edges or two wires.</source>
         <translation>Należy wybrać dwie krawędzie lub dwie linie szkieletu.</translation>
     </message>
@@ -3269,7 +3366,7 @@ Do you want to continue?</source>
         <translation>Edytuj wygładzenie krawędzi</translation>
     </message>
     <message>
-        <location filename="../../ViewProviderExt.cpp" line="+687"/>
+        <location filename="../../ViewProviderExt.cpp" line="+697"/>
         <source>Set colors...</source>
         <translation>Ustaw kolory...</translation>
     </message>
@@ -3560,7 +3657,7 @@ Do you want to continue?</source>
         <translation>Nieprawidłowy</translation>
     </message>
     <message>
-        <location filename="../../TaskDimension.cpp" line="+546"/>
+        <location filename="../../TaskDimension.cpp" line="+552"/>
         <location line="+1040"/>
         <source>Selections</source>
         <translation type="unfinished">Zaznaczenia</translation>
@@ -3590,6 +3687,11 @@ Do you want to continue?</source>
         <location line="+5"/>
         <source>Clear All</source>
         <translation type="unfinished">Wyczyść wszystko</translation>
+    </message>
+    <message>
+        <location filename="../../ViewProviderSpline.cpp" line="+80"/>
+        <source>Show control points</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

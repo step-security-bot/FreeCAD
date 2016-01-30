@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2013 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2013 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -38,7 +38,7 @@ class DlgUnitsCalculator : public QDialog, public Ui_DlgUnitCalculator
     Q_OBJECT
 
 public:
-    DlgUnitsCalculator( QWidget* parent = 0, Qt::WFlags fl = 0 );
+    DlgUnitsCalculator( QWidget* parent = 0, Qt::WindowFlags fl = 0 );
     ~DlgUnitsCalculator();
 
 protected:

@@ -48,7 +48,7 @@ SubSystem::~SubSystem()
 
 void SubSystem::initialize(VEC_pD &params, MAP_pD_pD &reductionmap)
 {
-    csize = clist.size();
+    csize = static_cast<int>(clist.size());
 
     // tmpplist will contain the subset of parameters from params that are
     // relevant for the constraints listed in clist
@@ -72,7 +72,7 @@ void SubSystem::initialize(VEC_pD &params, MAP_pD_pD &reductionmap)
         int i=0;
         MAP_pD_I pindex;
         for (VEC_pD::const_iterator itt=tmpplist.begin();
-             itt != tmpplist.end(); itt++) {
+             itt != tmpplist.end(); ++itt) {
             MAP_pD_pD::const_iterator itr = reductionmap.find(*itt);
             if (itr != reductionmap.end()) {
                 MAP_pD_I::const_iterator itp = pindex.find(itr->second);
@@ -95,7 +95,7 @@ void SubSystem::initialize(VEC_pD &params, MAP_pD_pD &reductionmap)
     else
         plist = tmpplist;
 
-    psize = plist.size();
+    psize = static_cast<int>(plist.size());
     pvals.resize(psize);
     pmap.clear();
     for (int j=0; j < psize; j++) {
@@ -198,6 +198,11 @@ void SubSystem::setParams(Eigen::VectorXd &xIn)
     assert(xIn.size() == psize);
     for (int i=0; i < psize; i++)
         pvals[i] = xIn[i];
+}
+
+void SubSystem::getConstraintList(std::vector<Constraint *> &clist_)
+{
+    clist_= clist;
 }
 
 double SubSystem::error()

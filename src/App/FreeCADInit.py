@@ -36,9 +36,9 @@ import FreeCAD
 
 def InitApplications():
 	try:
-		import sys,os
+		import sys,os,traceback,cStringIO
 	except ImportError:
-		FreeCAD.PrintError("\n\nSeems the python standard libs are not installed, bailing out!\n\n")
+		FreeCAD.Console.PrintError("\n\nSeems the python standard libs are not installed, bailing out!\n\n")
 		raise
 	# Checking on FreeCAD module path ++++++++++++++++++++++++++++++++++++++++++
 	ModDir = FreeCAD.getHomePath()+'Mod'
@@ -52,6 +52,8 @@ def InitApplications():
 	HomeMod = os.path.realpath(HomeMod)
 	MacroDir = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro").GetString("MacroPath")
 	MacroMod = os.path.realpath(MacroDir+"/Mod")
+	SystemWideMacroDir = FreeCAD.getHomePath()+'Macro'
+	SystemWideMacroDir = os.path.realpath(SystemWideMacroDir)
 
 	#print FreeCAD.getHomePath()
 	if os.path.isdir(FreeCAD.getHomePath()+'src\\Tools'):
@@ -96,7 +98,12 @@ def InitApplications():
 					exec open(InstallFile).read()
 				except Exception, inst:
 					Log('Init:      Initializing ' + Dir + '... failed\n')
-					Err('During initialization the error ' + str(inst) + ' occurred in ' + InstallFile + '\n')
+					Log('-'*100+'\n')
+					output=cStringIO.StringIO()
+					traceback.print_exc(file=output)
+					Log(output.getvalue())
+					Log('-'*100+'\n')
+					Err('During initialization the error ' + str(inst).decode('ascii','replace') + ' occurred in ' + InstallFile + '\n')
 				else:
 					Log('Init:      Initializing ' + Dir + '... done\n')
 			else:
@@ -107,6 +114,16 @@ def InitApplications():
 	# new paths must be prepended to avoid to load a wrong version of a library
 	try:
 		os.environ["PATH"] = PathExtension + os.environ["PATH"]
+	except UnicodeDecodeError:
+		# See #0002238. FIXME: check again once ported to Python 3.x
+		Log('UnicodeDecodeError was raised when concatenating unicode string with PATH. Try to remove non-ascii paths...')
+		path = os.environ["PATH"].split(os.pathsep)
+		cleanpath=[]
+		for i in path:
+			if test_ascii(i):
+				cleanpath.append(i)
+		os.environ["PATH"] = PathExtension + os.pathsep.join(cleanpath)
+		Log('done\n')
 	except KeyError:
 		os.environ["PATH"] = PathExtension
 	path = os.environ["PATH"].split(os.pathsep)
@@ -115,6 +132,8 @@ def InitApplications():
 		Log("   " + i + "\n")
 	# add MacroDir to path (RFE #0000504)
 	sys.path.append(MacroDir)
+	# add SystemWideMacroDir to path
+	sys.path.append(SystemWideMacroDir)
 	# add special path for MacOSX (bug #0000307)
 	import platform
 	if len(platform.mac_ver()[0]) > 0:
@@ -126,6 +145,7 @@ Log = FreeCAD.Console.PrintLog
 Msg = FreeCAD.Console.PrintMessage
 Err = FreeCAD.Console.PrintError
 Wrn = FreeCAD.Console.PrintWarning
+test_ascii = lambda s: all(ord(c) < 128 for c in s)
 
 Log ('Init: starting App::FreeCADInit.py\n')
 
@@ -236,6 +256,7 @@ App.Units.Power         = App.Units.Unit(2,1,-3)
 
 # clean up namespace
 del(InitApplications)
+del(test_ascii)
 
 Log ('Init: App::FreeCADInit.py done\n')
 

@@ -34,9 +34,13 @@
 #include <Quarter/QuarterWidget.h>
 #include <Quarter/eventhandlers/EventFilter.h>
 
-#include <QtGui/QApplication>
+#ifdef _MSC_VER
+#pragma warning(disable : 4267)
+#endif
+
+#include <QApplication>
 #include <QtGui/QCursor>
-#include <QtGui/QMenu>
+#include <QMenu>
 #include <QtCore/QMap>
 
 #include <Inventor/nodes/SoCamera.h>
@@ -76,13 +80,13 @@ QuarterWidgetP::QuarterWidgetP(QuarterWidget * masterptr, const QGLWidget * shar
   initialsoeventmanager(false),
   headlight(NULL),
   cachecontext(NULL),
-  contextmenu(NULL),
   contextmenuenabled(true),
   autoredrawenabled(true),
   interactionmodeenabled(false),
   clearzbuffer(true),
   clearwindow(true),
-  addactions(true)
+  addactions(true),
+  contextmenu(NULL)
 {
   this->cachecontext = findCacheContext(masterptr, sharewidget);
 

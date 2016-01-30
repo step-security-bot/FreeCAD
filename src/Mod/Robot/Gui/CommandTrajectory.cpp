@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Jürgen Riegel (juergen.riegel@web.de)              *
+ *   Copyright (c) 2008 JÃ¼rgen Riegel (juergen.riegel@web.de)              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -115,14 +115,14 @@ void CmdRobotInsertWaypoint::activated(int iMsg)
 
     std::vector<Gui::SelectionSingleton::SelObj> Sel = getSelection().getSelection();
 
-    Robot::RobotObject *pcRobotObject;
+    Robot::RobotObject *pcRobotObject=0;
     if(Sel[0].pObject->getTypeId() == Robot::RobotObject::getClassTypeId())
         pcRobotObject = dynamic_cast<Robot::RobotObject*>(Sel[0].pObject);
     else if(Sel[1].pObject->getTypeId() == Robot::RobotObject::getClassTypeId())
         pcRobotObject = dynamic_cast<Robot::RobotObject*>(Sel[1].pObject);
     std::string RoboName = pcRobotObject->getNameInDocument();
 
-    Robot::TrajectoryObject *pcTrajectoryObject;
+    Robot::TrajectoryObject *pcTrajectoryObject=0;
     if(Sel[0].pObject->getTypeId() == Robot::TrajectoryObject::getClassTypeId())
         pcTrajectoryObject = dynamic_cast<Robot::TrajectoryObject*>(Sel[0].pObject);
     else if(Sel[1].pObject->getTypeId() == Robot::TrajectoryObject::getClassTypeId())
@@ -268,26 +268,26 @@ void CmdRobotSetDefaultValues::activated(int iMsg)
     bool ok;
     QString text = QInputDialog::getText(0, QObject::tr("set default speed"),
                                           QObject::tr("speed: (e.g. 1 m/s or 3 cm/s)"), QLineEdit::Normal,
-                                          QString::fromAscii("1 m/s"), &ok);
+                                          QString::fromLatin1("1 m/s"), &ok);
     if ( ok && !text.isEmpty() ) {
-        doCommand(Doc,"_DefSpeed = '%s'",text.toAscii().constData());
+        doCommand(Doc,"_DefSpeed = '%s'",text.toLatin1().constData());
     } 
 
     QStringList items;
-    items  << QString::fromAscii("False") << QString::fromAscii("True");
+    items  << QString::fromLatin1("False") << QString::fromLatin1("True");
 
     QString item = QInputDialog::getItem(0, QObject::tr("set default continuity"),
                                           QObject::tr("continuous ?"), items, 0, false, &ok);
     if (ok && !item.isEmpty())
-        doCommand(Doc,"_DefCont = %s",item.toAscii().constData());
+        doCommand(Doc,"_DefCont = %s",item.toLatin1().constData());
 
     text.clear();
 
     text = QInputDialog::getText(0, QObject::tr("set default acceleration"),
                                           QObject::tr("acceleration: (e.g. 1 m/s^2 or 3 cm/s^2)"), QLineEdit::Normal,
-                                          QString::fromAscii("1 m/s^2"), &ok);
+                                          QString::fromLatin1("1 m/s^2"), &ok);
     if ( ok && !text.isEmpty() ) {
-        doCommand(Doc,"_DefAccelaration = '%s'",text.toAscii().constData());
+        doCommand(Doc,"_DefAccelaration = '%s'",text.toLatin1().constData());
     } 
 
 

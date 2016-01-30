@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 JÃ¼rgen Riegel <juergen.riegel@web.de>              *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -38,6 +38,7 @@
 #include "Application.h"
 #include "Document.h"
 #include "Selection.h"
+#include "MainWindow.h"
 #include "MDIView.h"
 #include "TaskView/TaskAppearance.h"
 #include "ViewProviderDocumentObject.h"
@@ -85,10 +86,10 @@ void ViewProviderDocumentObject::onChanged(const App::Property* prop)
     }
     else if (prop == &Visibility) {
         // use this bit to check whether show() or hide() must be called
-        if (Visibility.StatusBits.test(8) == false) {
-            Visibility.StatusBits.set(8);
+        if (Visibility.testStatus(App::Property::User2) == false) {
+            Visibility.setStatus(App::Property::User2, true);
             Visibility.getValue() ? show() : hide();
-            Visibility.StatusBits.reset(8);
+            Visibility.setStatus(App::Property::User2, false);
         }
     }
 
@@ -98,10 +99,10 @@ void ViewProviderDocumentObject::onChanged(const App::Property* prop)
 void ViewProviderDocumentObject::hide(void)
 {
     // use this bit to check whether 'Visibility' must be adjusted
-    if (Visibility.StatusBits.test(8) == false) {
-        Visibility.StatusBits.set(8);
+    if (Visibility.testStatus(App::Property::User2) == false) {
+        Visibility.setStatus(App::Property::User2, true);
         Visibility.setValue(false);
-        Visibility.StatusBits.reset(8);
+        Visibility.setStatus(App::Property::User2, false);
     }
     ViewProvider::hide();
 }
@@ -109,10 +110,10 @@ void ViewProviderDocumentObject::hide(void)
 void ViewProviderDocumentObject::show(void)
 {
     // use this bit to check whether 'Visibility' must be adjusted
-    if (Visibility.StatusBits.test(8) == false) {
-        Visibility.StatusBits.set(8);
+    if (Visibility.testStatus(App::Property::User2) == false) {
+        Visibility.setStatus(App::Property::User2, true);
         Visibility.setValue(true);
-        Visibility.StatusBits.reset(8);
+        Visibility.setStatus(App::Property::User2, false);
     }
     ViewProvider::show();
 }
@@ -161,6 +162,26 @@ Gui::MDIView* ViewProviderDocumentObject::getActiveView() const
     App::Document* pAppDoc = pcObject->getDocument();
     Gui::Document* pGuiDoc = Gui::Application::Instance->getDocument(pAppDoc);
     return pGuiDoc->getActiveView();
+}
+
+Gui::MDIView* ViewProviderDocumentObject::getEditingView() const
+{
+    App::Document* pAppDoc = pcObject->getDocument();
+    Gui::Document* pGuiDoc = Gui::Application::Instance->getDocument(pAppDoc);
+    return pGuiDoc->getEditingViewOfViewProvider(const_cast<ViewProviderDocumentObject*>(this));
+}
+
+Gui::MDIView* ViewProviderDocumentObject::getInventorView() const
+{
+    App::Document* pAppDoc = pcObject->getDocument();
+    Gui::Document* pGuiDoc = Gui::Application::Instance->getDocument(pAppDoc);
+
+    Gui::MDIView* mdi = pGuiDoc->getEditingViewOfViewProvider(const_cast<ViewProviderDocumentObject*>(this));
+    if (!mdi) {
+        mdi = pGuiDoc->getViewOfViewProvider(const_cast<ViewProviderDocumentObject*>(this));
+    }
+
+    return mdi;
 }
 
 SoNode* ViewProviderDocumentObject::findFrontRootOfType(const SoType& type) const
