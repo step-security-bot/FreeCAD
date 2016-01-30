@@ -42,7 +42,7 @@ class ObjectArray:
 
     def __init__(self,obj):
         obj.addProperty("App::PropertyLink","Base","Path","The path to array")
-        obj.addProperty("App::PropertyVector","Offset","Path","The spacing between the array copies")
+        obj.addProperty("App::PropertyVectorDistance","Offset","Path","The spacing between the array copies")
         obj.addProperty("App::PropertyInteger","Copies","Path","The number of copies")
         obj.Proxy = self
 
@@ -123,11 +123,13 @@ class CommandPathArray:
         # if everything is ok, execute and register the transaction in the undo/redo stack
         FreeCAD.ActiveDocument.openTransaction("Create Array")
         FreeCADGui.addModule("PathScripts.PathArray")
+        FreeCADGui.addModule("PathScripts.PathUtils")
         FreeCADGui.doCommand('obj = FreeCAD.ActiveDocument.addObject("Path::FeaturePython","Array")')
         FreeCADGui.doCommand('PathScripts.PathArray.ObjectArray(obj)')
         FreeCADGui.doCommand('obj.Base = (FreeCAD.ActiveDocument.' + selection[0].Name + ')')
         #FreeCADGui.doCommand('PathScripts.PathArray.ViewProviderArray(obj.ViewObject)')
         FreeCADGui.doCommand('obj.ViewObject.Proxy = 0')
+        FreeCADGui.doCommand('PathScripts.PathUtils.addToProject(obj)')
         FreeCAD.ActiveDocument.commitTransaction()
         FreeCAD.ActiveDocument.recompute()
 

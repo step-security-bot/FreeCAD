@@ -58,20 +58,41 @@ class GCodeHighlighter(QtGui.QSyntaxHighlighter):
 
 
     def __init__(self, parent=None):
+        
+        def convertcolor(c):
+            return QtGui.QColor(int((c>>24)&0xFF),int((c>>16)&0xFF),int((c>>8)&0xFF))
 
         super(GCodeHighlighter, self).__init__(parent)
+        p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Editor")
+        colors = []
+        c = p.GetUnsigned("Number")
+        if c:
+            colors.append(convertcolor(c))
+        else:
+            colors.append(QtCore.Qt.red)
+        c = p.GetUnsigned("Keyword")
+        if c:
+            colors.append(convertcolor(c))
+        else:
+            colors.append(QtGui.QColor(0,170,0))
+        c = p.GetUnsigned("Define name")
+        if c:
+            colors.append(convertcolor(c))
+        else:
+            colors.append(QtGui.QColor(160,160,164))
+        
         self.highlightingRules = []
         numberFormat = QtGui.QTextCharFormat()
-        numberFormat.setForeground(QtGui.QColor(0,90,175))
+        numberFormat.setForeground(colors[0])
         self.highlightingRules.append((QtCore.QRegExp("[\\-0-9\\.]"),numberFormat))
         keywordFormat = QtGui.QTextCharFormat()
-        keywordFormat.setForeground(QtCore.Qt.darkCyan)
+        keywordFormat.setForeground(colors[1])
         keywordFormat.setFontWeight(QtGui.QFont.Bold)
         keywordPatterns = ["\\bG[0-9]+\\b", "\\bM[0-9]+\\b"]
         self.highlightingRules.extend([(QtCore.QRegExp(pattern), keywordFormat) for pattern in keywordPatterns])
         speedFormat = QtGui.QTextCharFormat()
         speedFormat.setFontWeight(QtGui.QFont.Bold)
-        speedFormat.setForeground(QtCore.Qt.green)
+        speedFormat.setForeground(colors[2])
         self.highlightingRules.append((QtCore.QRegExp("\\bF[0-9\\.]+\\b"),speedFormat))
 
     def highlightBlock(self, text):
@@ -96,22 +117,28 @@ class GCodeEditorDialog(QtGui.QDialog):
         # nice text editor widget for editing the gcode
         self.editor = QtGui.QTextEdit()
         font = QtGui.QFont()
-        font.setFamily("Courier")
+        p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Editor")
+        font.setFamily(p.GetString("Font","Courier"))
         font.setFixedPitch(True)
-        font.setPointSize(11)
+        font.setPointSize(p.GetInt("FontSize",10))
         self.editor.setFont(font)
         self.editor.setText("G01 X55 Y4.5 F300.0")
         self.highlighter = GCodeHighlighter(self.editor.document())
         layout.addWidget(self.editor)
-
+        
+        # Note
+        lab = QtGui.QLabel()
+        lab.setText(translate("PathInspect","<b>Note</b>: Pressing OK will commit any change you make above to the object, but if the object is parametric, these changes will be overridden on recompute."))
+        lab.setWordWrap(True)
+        layout.addWidget(lab)
+        
         # OK and Cancel buttons
         self.buttons = QtGui.QDialogButtonBox(
-            QtGui.QDialogButtonBox.Ok,
-            #QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel,
+            QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Cancel,
             QtCore.Qt.Horizontal, self)
         layout.addWidget(self.buttons)
         self.buttons.accepted.connect(self.accept)
-        #self.buttons.rejected.connect(self.reject)
+        self.buttons.rejected.connect(self.reject)
 
 
 def show(obj):
@@ -124,10 +151,13 @@ def show(obj):
             dia.editor.setText(obj.Path.toGCode())
             result = dia.exec_()
             # exec_() returns 0 or 1 depending on the button pressed (Ok or Cancel)
-            #if result:
-            #    return dia.editor.toPlainText()
-            #else:
-            #    return inputstring
+            if result:
+                import Path
+                p = Path.Path(dia.editor.toPlainText())
+                FreeCAD.ActiveDocument.openTransaction("Edit Path")
+                obj.Path = p
+                FreeCAD.ActiveDocument.commitTransaction()
+                FreeCAD.ActiveDocument.recompute()
 
 
 class CommandPathInspect:
@@ -135,7 +165,7 @@ class CommandPathInspect:
 
     def GetResources(self):
         return {'Pixmap'  : 'Path-Inspect',
-                'MenuText': QtCore.QT_TRANSLATE_NOOP("Path_Inspect","Inspect"),
+                'MenuText': QtCore.QT_TRANSLATE_NOOP("Path_Inspect","Inspect G-code"),
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Path_Inspect","Inspects the G-code contents of a path")}
 
     def IsActive(self):
