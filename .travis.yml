@@ -37,6 +37,7 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libxmuu-dev; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y oce-draw; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y pyside-tools; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y python-matplotlib; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y qt4-dev-tools; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y shiboken; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y swig; fi
