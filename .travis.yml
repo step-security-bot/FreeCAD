@@ -2,83 +2,71 @@ language: cpp
 
 os:
   - linux
-  #- osx
+  - osx
 
 compiler:
   - gcc
   - clang
 
-#dist: trusty
+#trusty
+sudo: required
+dist: trusty
 
-env:
-  global:
-    - secure: "YVpSrf0YXyQKgz9Xd4VSN+K1szHNrlomWhm3h9RzbIJOs14lbBO5GW2oQaXWFfF8j77Ur36H9oyGT89OdHRAgCe/j5p8z313w1TfU3oj8/5dW6c7jVCmZ6chq2wiaIIHD61nzQ9poA5hkE3u4Jv3Ql/cfoAYZDd0hWu3jZBIA/wIjc9NI0zlHRrcMuJkhz+HLBzz5nUEBesRalrxX48PAN0cSZK2+TlwU2h7gIG5WsWwGzUckCF2j/EJTefeJ37B3C6EaEEa+uIQj3I4cqVV1SV9xp5B/6O1+lNfWzn+LpBVyulSxdW0ZF2Tn0V0H7prBeAHbMSqYFVnr//rRsulVBaOEDETyjlJee0Sx60n9V7FZdDDTn7hjKw6pyru7wwRkvjjV6P3nB4S+Bc1nEQuSRtcWbVnt1gza4fhiBJYQ/arVOWx3r8w5Om0R05OGveE8nulcmKosP3musfjW3ITscUahxFpeVojuk8p0p15lS7xlvcw6MEdxRxntopslJMjDZVwX+UvFZUzSozuFSGPRRJjwmFNV+D7hE+w23BqTk01e0JqAl7ZPG0ZwQ5Kt8LWtlbL1GqjNBHSpPTWnhg5RkNa6a9ez9x5RVNf87mmxHX6Y0W9ogVsXgH7xirLU4q2Zjr47vwkw7UWkcxfa4o3KXRAOAY8BnTFi9NMWWh4TJc="
+before_install:
+  #linux
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y doxygen; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-filesystem-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-program-options-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-python-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-regex-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-signals-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-system-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-thread-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libcoin80-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libeigen3-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y liboce-foundation-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y liboce-modeling-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y liboce-ocaf-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y liboce-visualization-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libpyside-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libqtcore4; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libshiboken-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libxerces-c-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libxmuu-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y oce-draw; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y pyside-tools; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y python-matplotlib; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y qt4-dev-tools; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y shiboken; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y swig; fi
+  #travis trusty python-libpython version mismatch workaround
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo rm -rf /opt/python/2.7.10; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo rm -rf /opt/python/2.6.9; fi
 
-addons:
-  coverity_scan:
-    project:
-      name: "sasobadovinac/FreeCAD"
-      description: "Build submitted via Travis CI"
-    notification_email: saso.badovinac@gmail.com
-    build_command: "make -j2"
-    branch_pattern: coverity_scan
-  apt:
-    packages:
-      - doxygen
-      - libboost-dev
-      - libboost-filesystem-dev
-      - libboost-program-options-dev
-      - libboost-python-dev
-      - libboost-regex-dev
-      - libboost-signals-dev
-      - libboost-system-dev
-      - libboost-thread-dev
-      #- libcoin60
-      - libcoin60-dev
-      - libeigen3-dev
-      - liboce-foundation-dev
-      #- liboce-foundation1
-      - liboce-modeling-dev
-      #- liboce-modeling1
-      - liboce-ocaf-dev
-      #- liboce-ocaf-lite-dev
-      #- liboce-ocaf-lite1
-      #- liboce-ocaf1
-      - liboce-visualization-dev
-      #- liboce-visualization1
-      #- libopencascade-modeling-6.5.0
-      - libpyside-dev
-      - libqtcore4
-      - libshiboken-dev
-      - libxerces-c-dev
-      #- libxmu-dev
-      #- libxmu-headers
-      #- libxmu6
-      - libxmuu-dev
-      #- libxmuu1
-      - oce-draw
-      - pyside-tools
-      #- python-dev
-      #- python-pyside
-      - python-matplotlib
-      - qt4-dev-tools
-      #- qt4-qmake
-      - shiboken
-      - swig
-
-#before_install:
-#Patch the system - there is a bug related to invalid location of libs on ubuntu 12.04
-    #- sudo ln -s /usr/lib/x86_64-linux-gnu/ /usr/lib/i386-linux-gnu
+  #osx
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew tap homebrew/science; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew tap sanelson/freecad; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install eigen freetype qt homebrew/science/oce python boost-python pyside pyside-tools xerces-c orocos-kdl; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install --without-framework --without-soqt sanelson/freecad/coin; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install --HEAD pivy; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then pip install matplotlib; fi
 
 install:
-    - mkdir build && cd build && cmake ../
+  #linux
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then mkdir build && cd build && cmake ../; fi
+
+  #osx
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then mkdir build && cd build && cmake -DFREECAD_USE_EXTERNAL_KDL=ON -DFREECAD_CREATE_MAC_APP=ON ../; fi
 
 #before_script:
 
 script:
-    - if [[ $CC == gcc ]]; then export NPROC=3; else export NPROC=3; fi
-    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j$NPROC; fi
-    - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"; fi
+  - make -j2
+  #- PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"
+  - sudo make install
 
 #after_success:
 
