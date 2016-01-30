@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) Yorik van Havre          (yorik@uncreated.net 2015)     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -20,13 +20,49 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "PreCompiled.h"
-#ifndef _PreComp_
-# include <Python.h>
-#endif
+
+#ifndef _FeatureViewSpreadsheet_h_
+#define _FeatureViewSpreadsheet_h_
 
 
-/* registration table  */
-struct PyMethodDef MeshPartGui_Import_methods[] = {
-    {NULL, NULL}                   /* end of table marker */
+#include <App/DocumentObject.h>
+#include <App/PropertyLinks.h>
+#include "FeatureView.h"
+
+namespace Drawing
+{
+
+/** Base class of all View Features in the drawing module
+ */
+class DrawingExport FeatureViewSpreadsheet : public FeatureView
+{
+    PROPERTY_HEADER(Drawing::FeatureView);
+
+public:
+    /// Constructor
+    FeatureViewSpreadsheet(void);
+    virtual ~FeatureViewSpreadsheet();
+    App::PropertyLink         Source;
+    App::PropertyString       CellStart;
+    App::PropertyString       CellEnd;
+    App::PropertyString       Font;
+    App::PropertyColor        Color;
+    App::PropertyFloat        LineWidth;
+    App::PropertyFloat        FontSize;
+
+    /** @name methods overide Feature */
+    //@{
+    /// recalculate the Feature
+    virtual App::DocumentObjectExecReturn *execute(void);
+    //@}
+
+    /// returns the type name of the ViewProvider
+    virtual const char* getViewProviderName(void) const {
+        return "DrawingGui::ViewProviderDrawingView";
+    }
 };
+
+} //namespace Drawing
+
+
+#endif

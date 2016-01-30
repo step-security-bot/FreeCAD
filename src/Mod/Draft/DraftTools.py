@@ -2769,7 +2769,7 @@ class Trimex(Modifier):
             self.ctrl = hasMod(arg,MODSNAP)
             if self.extrudeMode:
                 arg["ShiftDown"] = False
-            if hasattr(FreeCADGui,"Snapper"):
+            elif hasattr(FreeCADGui,"Snapper"):
                 FreeCADGui.Snapper.setSelectMode(not self.ctrl)
             wp = not(self.extrudeMode and self.shift)
             self.point,cp,info = getPoint(self,arg,workingplane=wp)
@@ -4319,7 +4319,7 @@ class ToggleGrid():
     "The Draft ToggleGrid command definition"
 
     def GetResources(self):
-        return {'Pixmap'  : 'Snap_Grid',
+        return {'Pixmap'  : 'Draft_Grid',
                 'Accel' : "G,R",
                 'MenuText': QtCore.QT_TRANSLATE_NOOP("Draft_ToggleGrid", "Toggle Grid"),
                 'ToolTip' : QtCore.QT_TRANSLATE_NOOP("Draft_ToggleGrid", "Toggles the Draft grid on/off")}
