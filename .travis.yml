@@ -77,6 +77,7 @@ before_install:
     #- sudo apt-get install -y python-dev
 #depended from pyside-tools
     #- sudo apt-get install -y python-pyside
+    - sudo apt-get install -y python-matplotlib
     - sudo apt-get install -y qt4-dev-tools
 #depended from libqtcore4
     #- sudo apt-get install -y qt4-qmake
