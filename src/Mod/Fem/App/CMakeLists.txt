@@ -184,6 +184,8 @@ SET(FemConstraints_SRCS
     FemConstraintGear.h
     FemConstraintPulley.cpp
     FemConstraintPulley.h
+    FemConstraintDisplacement.h
+    FemConstraintDisplacement.cpp
 	)
 SOURCE_GROUP("Constraints" FILES ${FemConstraints_SRCS})
 

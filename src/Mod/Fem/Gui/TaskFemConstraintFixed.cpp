@@ -213,8 +213,23 @@ TaskDlgFemConstraintFixed::TaskDlgFemConstraintFixed(ViewProviderFemConstraintFi
 
 //==== calls from the TaskView ===============================================================
 
+void TaskDlgFemConstraintFixed::open()
+{
+    // a transaction is already open at creation time of the panel
+    if (!Gui::Command::hasPendingCommand()) {
+        QString msg = QObject::tr("Constraint fixed");
+        Gui::Command::openCommand((const char*)msg.toUtf8());
+        ConstraintView->setVisible(true);
+        Gui::Command::doCommand(Gui::Command::Doc,ViewProviderFemConstraint::gethideMeshShowPartStr((static_cast<Fem::Constraint*>(ConstraintView->getObject()))->getNameInDocument()).c_str()); //OvG: Hide meshes and show parts
+    }
+}
+
 bool TaskDlgFemConstraintFixed::accept()
 {
+    std::string name = ConstraintView->getObject()->getNameInDocument();
+    const TaskFemConstraintFixed* parameterFixed = static_cast<const TaskFemConstraintFixed*>(parameter);
+    std::string scale = parameterFixed->getScale();  //OvG: determine modified scale
+    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.Scale = %s", name.c_str(), scale.c_str()); //OvG: implement modified scale
     return TaskDlgFemConstraint::accept();
 }
 

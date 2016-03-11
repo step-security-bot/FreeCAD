@@ -37,6 +37,7 @@ class inp_writer:
     def __init__(self, analysis_obj, mesh_obj, mat_obj,
                  fixed_obj,
                  force_obj, pressure_obj,
+                 displacement_obj,
                  beamsection_obj, shellthickness_obj,
                  analysis_type=None, eigenmode_parameters=None,
                  dir_name=None):
@@ -47,6 +48,7 @@ class inp_writer:
         self.fixed_objects = fixed_obj
         self.force_objects = force_obj
         self.pressure_objects = pressure_obj
+        self.displacement_objects = displacement_obj
         if eigenmode_parameters:
             self.no_of_eigenfrequencies = eigenmode_parameters[0]
             self.eigenfrequeny_range_low = eigenmode_parameters[1]
@@ -62,6 +64,7 @@ class inp_writer:
         self.fc_ver = FreeCAD.Version()
         self.ccx_eall = 'Eall'
         self.ccx_elsets = []
+        self.fem_mesh_nodes = {}
 
     def write_calculix_input_file(self):
         self.mesh_object.FemMesh.writeABAQUS(self.file_name)
@@ -71,12 +74,14 @@ class inp_writer:
         inpfile.write('\n\n')
         self.write_element_sets_material_and_femelement_type(inpfile)
         self.write_node_sets_constraints_fixed(inpfile)
+        self.write_node_sets_constraints_displacement(inpfile)
         if self.analysis_type is None or self.analysis_type == "static":
             self.write_node_sets_constraints_force(inpfile)
         self.write_materials(inpfile)
         self.write_femelementsets(inpfile)
         self.write_step_begin(inpfile)
         self.write_constraints_fixed(inpfile)
+        self.write_constraints_displacement(inpfile)
         if self.analysis_type is None or self.analysis_type == "static":
             self.write_constraints_force(inpfile)
             self.write_constraints_pressure(inpfile)
@@ -144,6 +149,25 @@ class inp_writer:
                 for i in n:
                     f.write(str(i) + ',\n')
 
+    def write_node_sets_constraints_displacement(self, f):
+        f.write('\n***********************************************************\n')
+        f.write('** Node sets for prescribed displacement constraint\n')
+        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
+        for fobj in self.displacement_objects:
+            disp_obj = fobj['Object']
+            f.write('*NSET,NSET=' + disp_obj.Name + '\n')
+            for o, elem in disp_obj.References:
+                fo = o.Shape.getElement(elem)
+                n = []
+                if fo.ShapeType == 'Face':
+                    n = self.mesh_object.FemMesh.getNodesByFace(fo)
+                elif fo.ShapeType == 'Edge':
+                    n = self.mesh_object.FemMesh.getNodesByEdge(fo)
+                elif fo.ShapeType == 'Vertex':
+                    n = self.mesh_object.FemMesh.getNodesByVertex(fo)
+                for i in n:
+                    f.write(str(i) + ',\n')
+
     def write_node_sets_constraints_force(self, f):
         f.write('\n***********************************************************\n')
         f.write('** Node sets for loads\n')
@@ -198,11 +222,13 @@ class inp_writer:
             YM = FreeCAD.Units.Quantity(mat_obj.Material['YoungsModulus'])
             YM_in_MPa = YM.getValueAs('MPa')
             PR = float(mat_obj.Material['PoissonRatio'])
-            mat_name = mat_obj.Material['Name'][:80]
+            mat_info_name = mat_obj.Material['Name']
+            mat_name = mat_obj.Name
             # write material properties
+            f.write('**FreeCAD material name: ' + mat_info_name + '\n')
             f.write('*MATERIAL, NAME=' + mat_name + '\n')
             f.write('*ELASTIC \n')
-            f.write('{}, \n'.format(YM_in_MPa))
+            f.write('{},  '.format(YM_in_MPa))
             f.write('{0:.3f}\n'.format(PR))
             density = FreeCAD.Units.Quantity(mat_obj.Material['Density'])
             density_in_tone_per_mm3 = float(density.getValueAs('t/mm^3'))
@@ -218,7 +244,7 @@ class inp_writer:
                 if 'beamsection_obj'in ccx_elset:  # beam mesh
                     beamsec_obj = ccx_elset['beamsection_obj']
                     elsetdef = 'ELSET=' + ccx_elset['ccx_elset_name'] + ', '
-                    material = 'MATERIAL=' + ccx_elset['ccx_mat_name']
+                    material = 'MATERIAL=' + ccx_elset['mat_obj_name']
                     setion_def = '*BEAM SECTION, ' + elsetdef + material + ', SECTION=RECT\n'
                     setion_geo = str(beamsec_obj.Height.getValueAs('mm')) + ', ' + str(beamsec_obj.Width.getValueAs('mm')) + '\n'
                     f.write(setion_def)
@@ -226,14 +252,14 @@ class inp_writer:
                 elif 'shellthickness_obj'in ccx_elset:  # shell mesh
                     shellth_obj = ccx_elset['shellthickness_obj']
                     elsetdef = 'ELSET=' + ccx_elset['ccx_elset_name'] + ', '
-                    material = 'MATERIAL=' + ccx_elset['ccx_mat_name']
+                    material = 'MATERIAL=' + ccx_elset['mat_obj_name']
                     setion_def = '*SHELL SECTION, ' + elsetdef + material + '\n'
                     setion_geo = str(shellth_obj.Thickness.getValueAs('mm')) + '\n'
                     f.write(setion_def)
                     f.write(setion_geo)
                 else:  # solid mesh
                     elsetdef = 'ELSET=' + ccx_elset['ccx_elset_name'] + ', '
-                    material = 'MATERIAL=' + ccx_elset['ccx_mat_name']
+                    material = 'MATERIAL=' + ccx_elset['mat_obj_name']
                     setion_def = '*SOLID SECTION, ' + elsetdef + material + '\n'
                     f.write(setion_def)
 
@@ -260,6 +286,41 @@ class inp_writer:
                 f.write(fix_obj_name + ',5\n')
                 f.write(fix_obj_name + ',6\n')
             f.write('\n')
+
+    def write_constraints_displacement(self, f):
+        f.write('\n***********************************************************\n')
+        f.write('** Displacement constraint applied\n')
+        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
+        for disp_obj in self.displacement_objects:
+            disp_obj_name = disp_obj['Object'].Name
+            f.write('*BOUNDARY\n')
+            if disp_obj['Object'].xFix:
+                f.write(disp_obj_name + ',1\n')
+            elif not disp_obj['Object'].xFree:
+                f.write(disp_obj_name + ',1,1,' + str(disp_obj['Object'].xDisplacement) + '\n')
+            if disp_obj['Object'].yFix:
+                f.write(disp_obj_name + ',2\n')
+            elif not disp_obj['Object'].yFree:
+                f.write(disp_obj_name + ',2,2,' + str(disp_obj['Object'].yDisplacement) + '\n')
+            if disp_obj['Object'].zFix:
+                f.write(disp_obj_name + ',3\n')
+            elif not disp_obj['Object'].zFree:
+                f.write(disp_obj_name + ',3,3,' + str(disp_obj['Object'].zDisplacement) + '\n')
+
+            if self.beamsection_objects or self.shellthickness_objects:
+                if disp_obj['Object'].rotxFix:
+                    f.write(disp_obj_name + ',4\n')
+                elif not disp_obj['Object'].rotxFree:
+                    f.write(disp_obj_name + ',4,4,' + str(disp_obj['Object'].xRotation) + '\n')
+                if disp_obj['Object'].rotyFix:
+                    f.write(disp_obj_name + ',5\n')
+                elif not disp_obj['Object'].rotyFree:
+                    f.write(disp_obj_name + ',5,5,' + str(disp_obj['Object'].yRotation) + '\n')
+                if disp_obj['Object'].rotzFix:
+                    f.write(disp_obj_name + ',6\n')
+                elif not disp_obj['Object'].rotzFree:
+                    f.write(disp_obj_name + ',6,6,' + str(disp_obj['Object'].zRotation) + '\n')
+        f.write('\n')
 
     def write_constraints_force(self, f):
         f.write('\n***********************************************************\n')
@@ -511,7 +572,7 @@ class inp_writer:
     #                        'ccx_elset' : [e1, e2, e3, ... , en] or string self.ccx_eall
     #                        'ccx_elset_name' : 'ccx_identifier_elset'
     #                        'mat_obj_name' : 'mat_obj.Name'
-    #                        'ccx_mat_name' : 'mat_obj.Material['Name'][:80]'   !!! not unique !!!
+    #                        'ccx_mat_name' : 'mat_obj.Material['Name']'   !!! not unique !!!
     #                     },
     #                     {}, ... , {} ]
     def get_ccx_elsets_single_mat_single_beam(self):
@@ -522,7 +583,7 @@ class inp_writer:
         ccx_elset['ccx_elset'] = self.ccx_eall
         ccx_elset['ccx_elset_name'] = get_ccx_elset_beam_name(mat_obj.Name, beamsec_obj.Name)
         ccx_elset['mat_obj_name'] = mat_obj.Name
-        ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+        ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
         self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_single_mat_single_shell(self):
@@ -533,7 +594,7 @@ class inp_writer:
         ccx_elset['ccx_elset'] = self.ccx_eall
         ccx_elset['ccx_elset_name'] = get_ccx_elset_shell_name(mat_obj.Name, shellth_obj.Name)
         ccx_elset['mat_obj_name'] = mat_obj.Name
-        ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+        ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
         self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_single_mat_solid(self):
@@ -542,7 +603,7 @@ class inp_writer:
         ccx_elset['ccx_elset'] = self.ccx_eall
         ccx_elset['ccx_elset_name'] = get_ccx_elset_solid_name(mat_obj.Name)
         ccx_elset['mat_obj_name'] = mat_obj.Name
-        ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+        ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
         self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_single_mat_multiple_beam(self):
@@ -555,7 +616,7 @@ class inp_writer:
             ccx_elset['ccx_elset'] = beamsec_data['FEMElements']
             ccx_elset['ccx_elset_name'] = get_ccx_elset_beam_name(mat_obj.Name, beamsec_obj.Name, None, beamsec_data['ShortName'])
             ccx_elset['mat_obj_name'] = mat_obj.Name
-            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
             self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_single_mat_multiple_shell(self):
@@ -568,7 +629,7 @@ class inp_writer:
             ccx_elset['ccx_elset'] = shellth_data['FEMElements']
             ccx_elset['ccx_elset_name'] = get_ccx_elset_shell_name(mat_obj.Name, shellth_obj.Name, None, shellth_data['ShortName'])
             ccx_elset['mat_obj_name'] = mat_obj.Name
-            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
             self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_multiple_mat_single_beam(self):
@@ -581,7 +642,7 @@ class inp_writer:
             ccx_elset['ccx_elset'] = mat_data['FEMElements']
             ccx_elset['ccx_elset_name'] = get_ccx_elset_beam_name(mat_obj.Name, beamsec_obj.Name, mat_data['ShortName'])
             ccx_elset['mat_obj_name'] = mat_obj.Name
-            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
             self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_multiple_mat_single_shell(self):
@@ -594,7 +655,7 @@ class inp_writer:
             ccx_elset['ccx_elset'] = mat_data['FEMElements']
             ccx_elset['ccx_elset_name'] = get_ccx_elset_shell_name(mat_obj.Name, shellth_obj.Name, mat_data['ShortName'])
             ccx_elset['mat_obj_name'] = mat_obj.Name
-            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
             self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_multiple_mat_solid(self):
@@ -605,7 +666,7 @@ class inp_writer:
             ccx_elset['ccx_elset'] = mat_data['FEMElements']
             ccx_elset['ccx_elset_name'] = get_ccx_elset_solid_name(mat_obj.Name, None, mat_data['ShortName'])
             ccx_elset['mat_obj_name'] = mat_obj.Name
-            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+            ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
             self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_multiple_mat_multiple_beam(self):
@@ -624,7 +685,7 @@ class inp_writer:
                 ccx_elset['ccx_elset'] = elemids
                 ccx_elset['ccx_elset_name'] = get_ccx_elset_beam_name(mat_obj.Name, beamsec_obj.Name, mat_data['ShortName'], beamsec_data['ShortName'])
                 ccx_elset['mat_obj_name'] = mat_obj.Name
-                ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+                ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
                 self.ccx_elsets.append(ccx_elset)
 
     def get_ccx_elsets_multiple_mat_multiple_shell(self):
@@ -643,7 +704,7 @@ class inp_writer:
                 ccx_elset['ccx_elset'] = elemids
                 ccx_elset['ccx_elset_name'] = get_ccx_elset_shell_name(mat_obj.Name, shellth_obj.Name, mat_data['ShortName'], shellth_data['ShortName'])
                 ccx_elset['mat_obj_name'] = mat_obj.Name
-                ccx_elset['ccx_mat_name'] = mat_obj.Material['Name'][:80]
+                ccx_elset['ccx_mat_name'] = mat_obj.Material['Name']
                 self.ccx_elsets.append(ccx_elset)
 
     def get_femelement_sets(self, fem_objects):
@@ -775,14 +836,16 @@ class inp_writer:
         #  [ (nodeID, length), ... , (nodeID, length) ]  some nodes will have more than one entry
         node_length_table = []
         mesh_edge_length = 0
+        if not self.fem_mesh_nodes:
+            self.fem_mesh_nodes = self.mesh_object.FemMesh.Nodes
         # print(len(edge_table))
         for me in edge_table:
             if len(edge_table[me]) == 2:  # 2 node mesh edge
                 # end_node_length = mesh_edge_length / 2
                 #    ______
                 #  P1      P2
-                P1 = self.mesh_object.FemMesh.Nodes[edge_table[me][0]]
-                P2 = self.mesh_object.FemMesh.Nodes[edge_table[me][1]]
+                P1 = self.fem_mesh_nodes[edge_table[me][0]]
+                P2 = self.fem_mesh_nodes[edge_table[me][1]]
                 edge_vec = P2 - P1
                 mesh_edge_length = edge_vec.Length
                 # print(mesh_edge_length)
@@ -795,9 +858,9 @@ class inp_writer:
                 # middle_node_length = mesh_face_area * 2 / 3
                 #   _______ _______
                 # P1       P3      P2
-                P1 = self.mesh_object.FemMesh.Nodes[edge_table[me][0]]
-                P2 = self.mesh_object.FemMesh.Nodes[edge_table[me][1]]
-                P3 = self.mesh_object.FemMesh.Nodes[edge_table[me][2]]
+                P1 = self.fem_mesh_nodes[edge_table[me][0]]
+                P2 = self.fem_mesh_nodes[edge_table[me][1]]
+                P3 = self.fem_mesh_nodes[edge_table[me][2]]
                 edge_vec1 = P3 - P1
                 edge_vec2 = P2 - P3
                 mesh_edge_length = edge_vec1.Length + edge_vec2.Length
@@ -819,6 +882,8 @@ class inp_writer:
         #  [ (nodeID,Area), ... , (nodeID,Area) ]  some nodes will have more than one entry
         node_area_table = []
         mesh_face_area = 0
+        if not self.fem_mesh_nodes:
+            self.fem_mesh_nodes = self.mesh_object.FemMesh.Nodes
         for mf in face_table:
             if len(face_table[mf]) == 3:  # 3 node mesh face triangle
                 # corner_node_area = mesh_face_area / 3.0
@@ -827,9 +892,9 @@ class inp_writer:
                 #     /  \
                 #    /____\
                 #  P1      P2
-                P1 = self.mesh_object.FemMesh.Nodes[face_table[mf][0]]
-                P2 = self.mesh_object.FemMesh.Nodes[face_table[mf][1]]
-                P3 = self.mesh_object.FemMesh.Nodes[face_table[mf][2]]
+                P1 = self.fem_mesh_nodes[face_table[mf][0]]
+                P2 = self.fem_mesh_nodes[face_table[mf][1]]
+                P3 = self.fem_mesh_nodes[face_table[mf][2]]
 
                 mesh_face_area = getTriangleArea(P1, P2, P3)
                 corner_node_area = mesh_face_area / 3.0
@@ -853,12 +918,12 @@ class inp_writer:
                 #    /t1 \  /t2 \
                 #   /_____\/_____\
                 # P1      P4      P2
-                P1 = self.mesh_object.FemMesh.Nodes[face_table[mf][0]]
-                P2 = self.mesh_object.FemMesh.Nodes[face_table[mf][1]]
-                P3 = self.mesh_object.FemMesh.Nodes[face_table[mf][2]]
-                P4 = self.mesh_object.FemMesh.Nodes[face_table[mf][3]]
-                P5 = self.mesh_object.FemMesh.Nodes[face_table[mf][4]]
-                P6 = self.mesh_object.FemMesh.Nodes[face_table[mf][5]]
+                P1 = self.fem_mesh_nodes[face_table[mf][0]]
+                P2 = self.fem_mesh_nodes[face_table[mf][1]]
+                P3 = self.fem_mesh_nodes[face_table[mf][2]]
+                P4 = self.fem_mesh_nodes[face_table[mf][3]]
+                P5 = self.fem_mesh_nodes[face_table[mf][4]]
+                P6 = self.fem_mesh_nodes[face_table[mf][5]]
 
                 mesh_face_t1_area = getTriangleArea(P1, P4, P6)
                 mesh_face_t2_area = getTriangleArea(P2, P5, P4)
