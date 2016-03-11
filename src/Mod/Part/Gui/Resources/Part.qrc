@@ -63,6 +63,7 @@
         <file>icons/Part_JoinConnect.svg</file>
         <file>icons/Part_JoinCutout.svg</file>
         <file>icons/Part_JoinEmbed.svg</file>
+        <file>icons/PartWorkbench.svg</file>
         <file>translations/Part_af.qm</file>
         <file>translations/Part_de.qm</file>
         <file>translations/Part_fi.qm</file>
@@ -87,5 +88,7 @@
         <file>translations/Part_hu.qm</file>
         <file>translations/Part_pt-PT.qm</file>
         <file>translations/Part_sr.qm</file>
+        <file>translations/Part_el.qm</file>
+        <file>translations/Part_sl.qm</file>
     </qresource>
 </RCC> 
