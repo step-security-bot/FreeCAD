@@ -53,6 +53,7 @@ set(FemGui_MOC_HDRS
     TaskFemConstraintPressure.h
     TaskFemConstraintGear.h   
     TaskFemConstraintPulley.h
+    TaskFemConstraintDisplacement.h
     TaskTetParameter.h
     TaskAnalysisInfo.h
     TaskDriver.h
@@ -71,6 +72,7 @@ set(FemGui_UIC_SRCS
     TaskFemConstraintFixed.ui
     TaskFemConstraintForce.ui
     TaskFemConstraintPressure.ui
+    TaskFemConstraintDisplacement.ui
     TaskTetParameter.ui
     TaskAnalysisInfo.ui
     TaskDriver.ui
@@ -101,6 +103,9 @@ SET(FemGui_DLG_SRCS
     TaskFemConstraintGear.h
     TaskFemConstraintPulley.cpp
     TaskFemConstraintPulley.h
+    TaskFemConstraintDisplacement.ui
+    TaskFemConstraintDisplacement.cpp
+    TaskFemConstraintDisplacement.h
 )
 SOURCE_GROUP("Constraint-Dialogs" FILES ${FemGui_DLG_SRCS})
 
@@ -143,6 +148,8 @@ SET(FemGui_SRCS_ViewProvider
     ViewProviderFemConstraintGear.h
     ViewProviderFemConstraintPulley.cpp
     ViewProviderFemConstraintPulley.h
+    ViewProviderFemConstraintDisplacement.cpp
+    ViewProviderFemConstraintDisplacement.h
     ViewProviderResult.cpp
     ViewProviderResult.h
 )
@@ -218,7 +225,7 @@ fc_target_copy_resource(FemGui
     )
 
 SET(FemGuiIcon_SVG
-    Resources/icons/preferences-fem.svg
+    Resources/icons/FemWorkbench.svg
 )
 
 fc_copy_sources(FemGui "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DATADIR}/Mod/Fem" ${FemGuiIcon_SVG})
