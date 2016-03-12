@@ -55,7 +55,7 @@ else:
     #print("FreeCAD Gui not present. Draft module will have some features disabled.")
     gui = False
     
-arrowtypes = ["Dot","Circle","Arrow"]
+arrowtypes = ["Dot","Circle","Arrow","Tick"]
 
 #---------------------------------------------------------------------------
 # General functions
@@ -244,7 +244,9 @@ def dimSymbol(symbol=None,invert=False):
     if symbol == None:
         symbol = getParam("dimsymbol",0)
     from pivy import coin
-    if symbol == 1: 
+    if symbol == 0:
+        return coin.SoSphere()
+    elif symbol == 1: 
         marker = coin.SoMarkerSet()
         marker.markerIndex = coin.SoMarkerSet.CIRCLE_LINE_9_9
         return marker
@@ -263,8 +265,16 @@ def dimSymbol(symbol=None,invert=False):
         marker.addChild(c)
         return marker
     elif symbol == 3:
+        marker = coin.SoSeparator()
+        c = coin.SoCoordinate3()
+        c.point.setValues([(-1,-2,0),(0,2,0),(1,2,0),(0,-2,0)])
+        f = coin.SoFaceSet()
+        marker.addChild(c)
+        marker.addChild(f)
+        return marker
+    else:
         print("Draft.dimsymbol: Not implemented")
-    return coin.SoSphere()
+        return coin.SoSphere()
 
 def shapify(obj):
     '''shapify(object): transforms a parametric shape object into
@@ -301,6 +311,15 @@ def getGroupContents(objectslist,walls=False,addgroups=False):
     is a group, its content is appened to the list, which is returned. If walls is True,
     walls are also scanned for included windows. If addgroups is true, the group itself
     is also included in the list.'''
+    def getWindows(obj):
+        l = []
+        if getType(obj) in ["Wall","Structure"]:
+            for o in obj.OutList:
+                l.extend(getWindows(o))
+        elif (getType(obj) == "Window") or isClone(obj,"Window"):
+            l.append(obj)
+        return l
+        
     newlist = []
     if not isinstance(objectslist,list):
         objectslist = [objectslist]
@@ -317,10 +336,8 @@ def getGroupContents(objectslist,walls=False,addgroups=False):
             #print("adding ",obj.Name)
             newlist.append(obj)
             if walls:
-                if getType(obj) in ["Wall","Structure"]:
-                    for o in obj.OutList:
-                        if (getType(o) == "Window") or isClone(o,"Window"):
-                            newlist.append(o)
+                newlist.extend(getWindows(obj))
+                
     # cleaning possible duplicates
     cleanlist = []
     for obj in newlist:
@@ -1434,13 +1451,15 @@ def scale(objectslist,delta=Vector(1,1,1),center=Vector(0,0,0),copy=False,legacy
         return obj
 
 def offset(obj,delta,copy=False,bind=False,sym=False,occ=False):
-    '''offset(object,Vector,[copymode],[bind]): offsets the given wire by
-    applying the given Vector to its first vertex. If copymode is
+    '''offset(object,delta,[copymode],[bind]): offsets the given wire by
+    applying the given delta Vector to its first vertex. If copymode is
     True, another object is created, otherwise the same object gets
     offsetted. If bind is True, and provided the wire is open, the original
     and the offsetted wires will be bound by their endpoints, forming a face
     if sym is True, bind must be true too, and the offset is made on both
-    sides, the total width being the given delta length.'''
+    sides, the total width being the given delta length. If offsetting a 
+    BSpline, the delta must not be a Vector but a list of Vectors, one for
+    each node of the spline.'''
     import Part, DraftGeomUtils
     newwire = None
     delete = None
@@ -2458,6 +2477,8 @@ def clone(obj,delta=None):
     cl.Objects = obj
     if delta:
         cl.Placement.move(delta)
+    elif len(obj) == 1:
+        cl.Placement = obj[0].Placement
     formatObject(cl,obj[0])
     return cl
     
@@ -3278,8 +3299,10 @@ class _ViewProviderDraft:
         return
 
     def setEdit(self,vobj,mode=0):
-        FreeCADGui.runCommand("Draft_Edit")
-        return True
+        if mode == 0:
+            FreeCADGui.runCommand("Draft_Edit")
+            return True
+        return False
 
     def unsetEdit(self,vobj,mode=0):
         if FreeCAD.activeDraftCommand:
@@ -4392,6 +4415,7 @@ class _ViewProviderWire(_ViewProviderDraft):
         self.symbol = dimSymbol()
         self.pt.addChild(self.symbol)
         _ViewProviderDraft.attach(self,obj)
+        self.onChanged(obj,"EndArrow")
         
     def updateData(self, obj, prop):
         if prop == "Points":
@@ -4400,36 +4424,38 @@ class _ViewProviderWire(_ViewProviderDraft):
                 if hasattr(self,"coords"):
                     self.coords.translation.setValue((p.x,p.y,p.z))
                     if len(obj.Points) >= 2:
-                        v1 = obj.Points[-1].sub(obj.Points[-2])
-                        v1.normalize()
-                        import DraftGeomUtils
-                        v2 = DraftGeomUtils.getNormal(obj.Shape)
-                        v3 = v1.cross(v2)
-                        q = FreeCAD.Placement(DraftVecUtils.getPlaneRotation(v1,v3,v2)).Rotation.Q
-                        self.coords.rotation.setValue((q[0],q[1],q[2],q[3]))
+                        v1 = obj.Points[-2].sub(obj.Points[-1])
+                        if not DraftVecUtils.isNull(v1):
+                            v1.normalize()
+                            import DraftGeomUtils
+                            v2 = DraftGeomUtils.getNormal(obj.Shape)
+                            if DraftVecUtils.isNull(v2):
+                                v2 = Vector(0,0,1)
+                            v3 = v1.cross(v2).negative()
+                            q = FreeCAD.Placement(DraftVecUtils.getPlaneRotation(v1,v3,v2)).Rotation.Q
+                            self.coords.rotation.setValue((q[0],q[1],q[2],q[3]))
         return
 
-    def onChanged(self, vp, prop):
-        if prop == "EndArrow":
-            rn = vp.RootNode
-            if vp.EndArrow:
-                rn.addChild(self.pt)
-                self.onChanged(vp,"ArrowSize")
-            else:
-                rn.removeChild(self.pt)
-        elif prop == "ArrowSize":
-            if hasattr(vp,"ArrowSize"):
-                s = vp.ArrowSize
-            else:
-                s = getParam("arrowsize",0.1)
-            self.coords.scaleFactor.setValue((s,s,s))
-        elif prop == "ArrowType":
-            if hasattr(self,"pt"):
-                self.pt.removeChild(self.symbol)
-                s = arrowtypes.index(vp.ArrowType)
-                self.symbol = dimSymbol(s)
-                self.pt.addChild(self.symbol)
-        _ViewProviderDraft.onChanged(self,vp,prop)
+    def onChanged(self, vobj, prop):
+        if prop in ["EndArrow","ArrowSize","ArrowType","Visibility"]:
+            rn = vobj.RootNode
+            if hasattr(self,"pt") and hasattr(vobj,"EndArrow"):
+                if vobj.EndArrow and vobj.Visibility:
+                    self.pt.removeChild(self.symbol)
+                    s = arrowtypes.index(vobj.ArrowType)
+                    self.symbol = dimSymbol(s)
+                    self.pt.addChild(self.symbol)
+                    self.updateData(vobj.Object,"Points")
+                    if hasattr(vobj,"ArrowSize"):
+                        s = vobj.ArrowSize
+                    else:
+                        s = getParam("arrowsize",0.1)
+                    self.coords.scaleFactor.setValue((s,s,s))
+                    rn.addChild(self.pt)
+                else:
+                    self.pt.removeChild(self.symbol)
+                    rn.removeChild(self.pt)
+        _ViewProviderDraft.onChanged(self,vobj,prop)
         return
 
     def claimChildren(self):
@@ -5214,8 +5240,7 @@ class _Clone(_DraftObject):
                 obj.Placement = shapes[0].Placement
             else:
                 obj.Shape = Part.makeCompound(shapes)
-        if not DraftGeomUtils.isNull(pl):
-            obj.Placement = pl
+        obj.Placement = pl
             
     def getSubVolume(self,obj,placement=None):
         # this allows clones of arch windows to return a subvolume too

@@ -1208,6 +1208,54 @@ class _CommandComponent:
             FreeCAD.ActiveDocument.commitTransaction()
             FreeCAD.ActiveDocument.recompute()
 
+def makeIfcSpreadsheet(archobj=None):
+    ifc_container = None
+    for obj in FreeCAD.ActiveDocument.Objects :
+        if obj.Name == "IfcPropertiesContainer" :
+            ifc_container = obj
+    if not ifc_container :
+        ifc_container = FreeCAD.ActiveDocument.addObject('App::DocumentObjectGroup','IfcPropertiesContainer')
+    import Spreadsheet
+    ifc_spreadsheet = FreeCAD.ActiveDocument.addObject('Spreadsheet::Sheet','IfcProperties')
+    ifc_spreadsheet.set('A1', translate("Arch","Category"))
+    ifc_spreadsheet.set('B1', translate("Arch","Key"))
+    ifc_spreadsheet.set('C1', translate("Arch","Type"))
+    ifc_spreadsheet.set('D1', translate("Arch","Value"))
+    ifc_spreadsheet.set('E1', translate("Arch","Unit"))
+    ifc_container.addObject(ifc_spreadsheet)
+    if archobj :
+        if hasattr(obj,"IfcProperties") :
+            archobj.IfcProperties = ifc_spreadsheet
+            return ifc_spreadsheet
+        else :
+            FreeCAD.Console.PrintWarning(translate("Arch", "The object have not IfcProperties attribute. Cancel spreadsheet creation for object : ") + archobj.Label)
+            FreeCAD.ActiveDocument.removeObject(ifc_spreadsheet)
+    else :
+        return ifc_spreadsheet
+
+class _CommandIfcSpreadsheet:
+    "the Arch Schedule command definition"
+    def GetResources(self):
+        return {'Pixmap': 'Arch_Schedule',
+                'MenuText': QtCore.QT_TRANSLATE_NOOP("Arch_IfcSpreadsheet","Create IFC spreadsheet..."),
+                'Accel': "I, P",
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Arch_IfcSpreadsheet","Creates a spreadsheet to store ifc properties of an object.")}
+
+    def IsActive(self):
+        return not FreeCAD.ActiveDocument is None
+
+    def Activated(self):
+        sel = FreeCADGui.Selection.getSelection()
+        FreeCAD.ActiveDocument.openTransaction(translate("Arch","Create IFC properties spreadsheet"))
+        FreeCADGui.addModule("Arch")
+        FreeCADGui.Control.closeDialog()
+        if sel:
+            for o in sel:
+                FreeCADGui.doCommand("Arch.makeIfcSpreadsheet(FreeCAD.ActiveDocument."+o.Name+")")
+        else :
+            FreeCADGui.doCommand("Arch.makeIfcSpreadsheet()")
+        FreeCAD.ActiveDocument.commitTransaction()
+        FreeCAD.ActiveDocument.recompute()
 
 if FreeCAD.GuiUp:
     FreeCADGui.addCommand('Arch_Add',_CommandAdd())
@@ -1222,3 +1270,4 @@ if FreeCAD.GuiUp:
     FreeCADGui.addCommand('Arch_Survey',_CommandSurvey())
     FreeCADGui.addCommand('Arch_ToggleIfcBrepFlag',_ToggleIfcBrepFlag())
     FreeCADGui.addCommand('Arch_Component',_CommandComponent())
+    FreeCADGui.addCommand('Arch_IfcSpreadsheet',_CommandIfcSpreadsheet())

@@ -24,43 +24,18 @@
 
 class PathWorkbench ( Workbench ):
     "Path workbench"
-    Icon = """
-            /* XPM */
-            static char * Path_xpm[] = {
-            "16 16 9 1",
-            "   c None",
-            ".  c #262623",
-            "+  c #452F16",
-            "@  c #525451",
-            "#  c #7E5629",
-            "$  c #838582",
-            "%  c #BE823B",
-            "&  c #989A97",
-            "*  c #CFD1CE",
-            "  .@@@@@@@@@@.  ",
-            "  $**********$  ",
-            "  @$$$&&&&$$$@  ",
-            "    .$&&&&$.    ",
-            "    @******.    ",
-            "    @******.    ",
-            "    ...@@...    ",
-            "     .&&@.      ",
-            "     .@. .      ",
-            "       .&&.     ",
-            "     .$*$.      ",
-            "     .$. .      ",
-            "+###+  .@&.+###+",
-            "+%%%+ .$$. +%%%+",
-            "+%%%%#.. .#%%%%+",
-            ".++++++..++++++."};
-            """
-    MenuText = "Path"
-    ToolTip = "Path workbench"
+    def __init__(self):
+        self.__class__.Icon = FreeCAD.getResourceDir() + "Mod/Path/Resources/icons/PathWorkbench.svg"
+        self.__class__.MenuText = "Path"
+        self.__class__.ToolTip = "Path workbench"
 
     def Initialize(self):
         # load the builtin modules
         import Path
         import PathGui
+        from PySide import QtGui
+        FreeCADGui.addLanguagePath(":/translations")
+        FreeCADGui.addIconPath(":/icons")
         # load python modules
         from PathScripts import PathProfile
         from PathScripts import PathPocket
@@ -98,16 +73,19 @@ class PathWorkbench ( Workbench ):
 
 
         # Add commands to menu and toolbar
-        def QT_TRANSLATE_NOOP(scope, text): return text
-        self.appendToolbar(QT_TRANSLATE_NOOP("PathWorkbench","Commands for setting up Project"),projcmdlist)
-        self.appendToolbar(QT_TRANSLATE_NOOP("PathWorkbench","Partial Commands"),prepcmdlist)
-        self.appendToolbar(QT_TRANSLATE_NOOP("PathWorkbench","Operations"),opcmdlist)
-        self.appendToolbar(QT_TRANSLATE_NOOP("PathWorkbench","Commands for grouping,copying, and organizing operations"),modcmdlist)
+        def QT_TRANSLATE_NOOP(scope, text): 
+            return text
+        def translate(context,text):
+            return QtGui.QApplication.translate(context, text, None, QtGui.QApplication.UnicodeUTF8).encode("utf8")
+        self.appendToolbar(translate("Path","Project Setup"),projcmdlist)
+        self.appendToolbar(translate("Path","Partial Commands"),prepcmdlist)
+        self.appendToolbar(translate("Path","New Operations"),opcmdlist)
+        self.appendToolbar(translate("Path","Path Modification"),modcmdlist)
 
-        self.appendMenu([QT_TRANSLATE_NOOP("PathWorkbench","Path"),QT_TRANSLATE_NOOP("Path","Project Setup")],projcmdlist)
-        self.appendMenu([QT_TRANSLATE_NOOP("PathWorkbench","Path"),QT_TRANSLATE_NOOP("Path","Partial Commands")],prepcmdlist)
-        self.appendMenu([QT_TRANSLATE_NOOP("PathWorkbench","Path"),QT_TRANSLATE_NOOP("Path","New Operations")],opcmdlist)
-        self.appendMenu([QT_TRANSLATE_NOOP("PathWorkbench","Path"),QT_TRANSLATE_NOOP("Path","Path Modification")],modcmdlist)
+        self.appendMenu([translate("Path","Path"),translate("Path","Project Setup")],projcmdlist)
+        self.appendMenu([translate("Path","Path"),translate("Path","Partial Commands")],prepcmdlist)
+        self.appendMenu([translate("Path","Path"),translate("Path","New Operations")],opcmdlist)
+        self.appendMenu([translate("Path","Path"),translate("Path","Path Modification")],modcmdlist)
         
         # Add preferences pages
         import os
@@ -119,6 +97,8 @@ class PathWorkbench ( Workbench ):
         return "Gui::PythonWorkbench"
         
     def Activated(self):
+        # update the translation engine
+        FreeCADGui.updateLocale()
         Msg("Path workbench activated\n")
                 
     def Deactivated(self):

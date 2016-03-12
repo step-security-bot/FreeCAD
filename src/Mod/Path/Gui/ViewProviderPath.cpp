@@ -64,6 +64,7 @@
 using namespace Gui;
 using namespace PathGui;
 using namespace Path;
+using namespace PartGui;
 
 PROPERTY_SOURCE(PathGui::ViewProviderPath, Gui::ViewProviderGeometryObject)
 
@@ -104,7 +105,7 @@ ViewProviderPath::ViewProviderPath()
     pcDrawStyle->style = SoDrawStyle::LINES;
     pcDrawStyle->lineWidth = LineWidth.getValue();
 
-    pcLines = new SoIndexedLineSet;
+    pcLines = new PartGui::SoBrepEdgeSet();
     pcLines->ref();
     
     pcLineColor = new SoMaterial;
@@ -287,12 +288,14 @@ void ViewProviderPath::updateData(const App::Property* prop)
                 if (angle == 0)
                     angle = M_PI * 2;
                 int segments = 3/(deviation/angle); //we use a rather simple rule here, provisorily
+                double dZ = (next.z - last.z)/segments; //How far each sigment will helix in Z
                 for (int j = 1; j < segments; j++) {
                     //std::cout << "vector " << j << std::endl;
                     Base::Vector3d inter;
                     Base::Rotation rot(norm,(angle/segments)*j);
                     //std::cout << "angle " << (angle/segments)*j << std::endl;
                     rot.multVec((last - center),inter);
+                    inter.z = dZ * j; //Enable displaying helices
                     //std::cout << "result " << inter.x << " , " << inter.y << " , " << inter.z << std::endl;
                     points.push_back( center + inter);
                     colorindex.push_back(1);

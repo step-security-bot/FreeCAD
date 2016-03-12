@@ -165,13 +165,8 @@ PyDoc_STRVAR(Console_doc,
      "FreeCAD Console\n"
     );
 
-Application::Application(ParameterManager * /*pcSysParamMngr*/,
-                         ParameterManager * /*pcUserParamMngr*/,
-                         std::map<std::string,std::string> &mConfig)
-    ://_pcSysParamMngr(pcSysParamMngr),
-    //_pcUserParamMngr(pcUserParamMngr),
-    _mConfig(mConfig),
-    _pActiveDoc(0)
+Application::Application(std::map<std::string,std::string> &mConfig)
+  : _mConfig(mConfig), _pActiveDoc(0)
 {
     //_hApp = new ApplicationOCC;
     mpcPramManager["System parameter"] = _pcSysParamMngr;
@@ -448,10 +443,15 @@ Document* Application::openDocument(const char * FileName)
 
     newDoc->FileName.setValue(File.filePath());
 
-    // read the document
-    newDoc->restore();
-
-    return newDoc;
+    try {
+        // read the document
+        newDoc->restore();
+        return newDoc;
+    }
+    catch (...) {
+        closeDocument(newDoc->getName());
+        throw;
+    }
 }
 
 Document* Application::getActiveDocument(void) const
@@ -922,6 +922,7 @@ void Application::destruct(void)
     ScriptFactorySingleton::Destruct();
     InterpreterSingleton::Destruct();
     Base::Type::destruct();
+    ParameterManager::Terminate();
 }
 
 void Application::destructObserver(void)
@@ -1139,7 +1140,7 @@ void Application::initTypes(void)
     App ::ConditionalExpression     ::init();
     App ::StringExpression          ::init();
     App ::FunctionExpression        ::init();
-
+    App ::BooleanExpression         ::init();
 }
 
 void Application::initConfig(int argc, char ** argv)
@@ -1277,7 +1278,7 @@ void Application::initApplication(void)
 
     // creating the application
     if (!(mConfig["Verbose"] == "Strict")) Console().Log("Create Application\n");
-    Application::_pcSingleton = new Application(0,0,mConfig);
+    Application::_pcSingleton = new Application(mConfig);
 
     // set up Unit system default
     ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath
