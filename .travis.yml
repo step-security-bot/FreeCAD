@@ -28,14 +28,14 @@ addons:
 before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -y doxygen
-    - sudo apt-get install -y libboost-dev
-    - sudo apt-get install -y libboost-filesystem-dev
-    - sudo apt-get install -y libboost-program-options-dev
-    - sudo apt-get install -y libboost-python-dev
-    - sudo apt-get install -y libboost-regex-dev
-    - sudo apt-get install -y libboost-signals-dev
-    - sudo apt-get install -y libboost-system-dev
-    - sudo apt-get install -y libboost-thread-dev
+    - sudo apt-get install -y libboost1.55-dev
+    - sudo apt-get install -y libboost-filesystem1.55-dev
+    - sudo apt-get install -y libboost-program-options1.55-dev
+    - sudo apt-get install -y libboost-python1.55-dev
+    - sudo apt-get install -y libboost-regex1.55-dev
+    - sudo apt-get install -y libboost-signals1.55-dev
+    - sudo apt-get install -y libboost-system1.55-dev
+    - sudo apt-get install -y libboost-thread1.55-dev
 #depended from libcoin60-dev
     #- sudo apt-get install -y libcoin60
 #for precise
