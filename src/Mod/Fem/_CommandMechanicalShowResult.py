@@ -37,9 +37,9 @@ class _CommandMechanicalShowResult(FemCommands):
     def __init__(self):
         super(_CommandMechanicalShowResult, self).__init__()
         self.resources = {'Pixmap': 'fem-result',
-                          'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_Result", "Show result"),
+                          'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_ShowResult", "Show result"),
                           'Accel': "S, R",
-                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_Result", "Show result information of an analysis")}
+                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_ShowResult", "Show result information of an analysis")}
         self.is_active = 'with_results'
 
     def Activated(self):
@@ -48,6 +48,8 @@ class _CommandMechanicalShowResult(FemCommands):
         if not self.result_object:
             QtGui.QMessageBox.critical(None, "Missing prerequisite", "No result found in active Analysis")
             return
+
+        self.hide_parts_constraints_show_meshes()
 
         import _TaskPanelResultControl
         taskd = _TaskPanelResultControl._TaskPanelResultControl()
