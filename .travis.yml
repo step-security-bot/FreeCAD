@@ -16,14 +16,14 @@ before_install:
   #linux
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y doxygen; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-dev; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-filesystem-dev; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-program-options-dev; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-python-dev; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-regex-dev; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-signals-dev; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-system-dev; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-thread-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost1.55-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-filesystem1.55-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-program-options1.55-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-python1.55-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-regex1.55-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-signals1.55-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-system1.55-dev; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libboost-thread1.55-dev; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libcoin80-dev; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y libeigen3-dev; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -y liboce-foundation-dev; fi
@@ -67,6 +67,8 @@ script:
   - make -j2
   #- PYTHONPATH=$(pwd)/lib/ python -c "import sys, unittest, FreeCAD, TestApp; sys.exit(0 if unittest.TextTestRunner().run(TestApp.All()).wasSuccessful() else 1)"
   - sudo make install
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then /usr/local/bin/FreeCAD --run-test 0; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then /usr/local/FreeCAD.app/Contents/bin/FreeCAD --run-test 0; fi
 
 #after_success:
 
