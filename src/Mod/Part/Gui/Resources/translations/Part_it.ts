@@ -1048,7 +1048,7 @@
     <message>
         <location line="+9"/>
         <source>Count</source>
-        <translation>Conta</translation>
+        <translation>Num. di sezioni</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -1171,7 +1171,7 @@
 <context>
     <name>PartGui::DlgChamferEdges</name>
     <message>
-        <location filename="../../DlgFilletEdges.cpp" line="+1020"/>
+        <location filename="../../DlgFilletEdges.cpp" line="+1030"/>
         <source>Chamfer Edges</source>
         <translation>Smussa spigoli</translation>
     </message>
@@ -1285,7 +1285,7 @@
     <message>
         <location line="-69"/>
         <source>Select faces</source>
-        <translation>Selezionare facce</translation>
+        <translation>Seleziona facce</translation>
     </message>
     <message>
         <location line="-16"/>
@@ -1295,7 +1295,7 @@
     <message>
         <location line="+6"/>
         <source>Select edges</source>
-        <translation>Selezionare spigoli</translation>
+        <translation>Seleziona spigoli</translation>
     </message>
     <message>
         <location line="+47"/>
@@ -1328,7 +1328,7 @@
         <translation>Nessuna selezione</translation>
     </message>
     <message>
-        <location filename="../../DlgFilletEdges.cpp" line="-753"/>
+        <location filename="../../DlgFilletEdges.cpp" line="-763"/>
         <source>Length:</source>
         <translation>Larghezza:</translation>
     </message>
@@ -1349,12 +1349,12 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+545"/>
+        <location line="+555"/>
         <source>Start length</source>
         <translation>Valore iniziale</translation>
     </message>
     <message>
-        <location line="-544"/>
+        <location line="-554"/>
         <source>End length</source>
         <translation>Valore finale</translation>
     </message>
@@ -1365,17 +1365,17 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+542"/>
+        <location line="+552"/>
         <source>Start radius</source>
         <translation>Raggio iniziale</translation>
     </message>
     <message>
-        <location line="-541"/>
+        <location line="-551"/>
         <source>End radius</source>
         <translation>Raggio finale</translation>
     </message>
     <message>
-        <location line="+531"/>
+        <location line="+541"/>
         <source>Length</source>
         <translation>Lunghezza</translation>
     </message>
@@ -2333,7 +2333,7 @@ Selezionare prima una forma valida dal menù a tendina.</translation>
     <message>
         <location line="+3"/>
         <source>Maximum deviation depending on the model bounding box</source>
-        <translation>Massima deviazione dipendente dal riquadro di delimitazione del modello</translation>
+        <translation>Deviazione massima secondo il riquadro di delimitazione del modello</translation>
     </message>
     <message>
         <location line="-34"/>
@@ -3177,7 +3177,7 @@ Selezionare prima una forma valida dal menù a tendina.</translation>
     <message>
         <location line="+21"/>
         <source>Refine shape</source>
-        <translation type="unfinished">Affina una forma</translation>
+        <translation>Affina una forma</translation>
     </message>
     <message>
         <location line="+32"/>

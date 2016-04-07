@@ -169,22 +169,22 @@
       <translation>樓板高度</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="744"/>
+      <location filename="ArchRoof.py" line="714"/>
       <source>Roof</source>
       <translation>屋頂</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="130"/>
+      <location filename="ArchRoof.py" line="135"/>
       <source>Create Roof</source>
       <translation>建立屋頂</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="137"/>
+      <location filename="ArchRoof.py" line="577"/>
       <source>Unable to create a roof</source>
       <translation>無法建立屋頂</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="155"/>
+      <location filename="ArchRoof.py" line="160"/>
       <source>The face number of the base object used to build this roof</source>
       <translation>建立此屋頂之基礎物件面數</translation>
     </message>
@@ -366,7 +366,7 @@
     <message>
       <location filename="importDAE.py" line="101"/>
       <source>Error: Couldn't determine character encoding</source>
-      <translation>錯誤:無法定義字元編碼</translation>
+      <translation>錯誤：無法定義字元編碼</translation>
     </message>
     <message>
       <location filename="importDAE.py" line="190"/>
@@ -377,7 +377,7 @@
       <location filename="importIFClegacy.py" line="822"/>
       <source>Error: Couldn't determine character encoding
 </source>
-      <translation>錯誤:無法定義字元編碼</translation>
+      <translation>錯誤：無法定義字元編碼</translation>
     </message>
     <message>
       <location filename="importIFClegacy.py" line="115"/>
@@ -730,13 +730,13 @@
       <location filename="importIFClegacy.py" line="944"/>
       <source>Error: IfcOpenShell is not installed
 </source>
-      <translation>錯誤: 未安裝 IfcOpenShell</translation>
+      <translation>錯誤：未安裝 IfcOpenShell</translation>
     </message>
     <message>
       <location filename="importIFClegacy.py" line="951"/>
       <source>Error: your IfcOpenShell version is too old
 </source>
-      <translation>錯誤:IfcOpenShell為舊版</translation>
+      <translation>錯誤：IfcOpenShell為舊版</translation>
     </message>
     <message>
       <location filename="importOBJ.py" line="60"/>
@@ -807,7 +807,7 @@
     <message>
       <location filename="ArchWindow.py" line="631"/>
       <source>A material for this object</source>
-      <translation>此物件之材料</translation>
+      <translation>此物件之材質</translation>
     </message>
     <message>
       <location filename="ArchComponent.py" line="300"/>
@@ -915,7 +915,7 @@
       <translation type="unfinished">The offset between this panel and its baseline</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="745"/>
+      <location filename="ArchRoof.py" line="715"/>
       <source>Parameters of the profiles of the roof:
 * Angle : slope in degrees compared to the horizontal one.
 * Run : outdistance between the wall and the ridge sheathing.
@@ -940,12 +940,12 @@ If Angle = 0 then angle is calculated so that the height is the same one as the 
 If Run = 0 then Run is calculated so that the height is the same one as the relative profile.</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="746"/>
+      <location filename="ArchRoof.py" line="716"/>
       <source>Id</source>
       <translation type="unfinished">Id</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="746"/>
+      <location filename="ArchRoof.py" line="716"/>
       <source>IdRel</source>
       <translation type="unfinished">IdRel</translation>
     </message>
@@ -1102,57 +1102,57 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
 </translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="149"/>
+      <location filename="ArchRoof.py" line="154"/>
       <source>A list of angles for each roof pane</source>
       <translation type="unfinished">A list of angles for each roof pane</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="150"/>
+      <location filename="ArchRoof.py" line="155"/>
       <source>A list of horizontal length projections for each roof pane</source>
       <translation type="unfinished">A list of horizontal length projections for each roof pane</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="151"/>
+      <location filename="ArchRoof.py" line="156"/>
       <source>A list of IDs of relative profiles for each roof pane</source>
       <translation type="unfinished">A list of IDs of relative profiles for each roof pane</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="152"/>
+      <location filename="ArchRoof.py" line="157"/>
       <source>A list of thicknesses for each roof pane</source>
       <translation type="unfinished">A list of thicknesses for each roof pane</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="153"/>
+      <location filename="ArchRoof.py" line="158"/>
       <source>A list of overhangs for each roof pane</source>
       <translation type="unfinished">A list of overhangs for each roof pane</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="154"/>
+      <location filename="ArchRoof.py" line="159"/>
       <source>A list of calculated heights for each roof pane</source>
       <translation type="unfinished">A list of calculated heights for each roof pane</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="746"/>
+      <location filename="ArchRoof.py" line="716"/>
       <source>Angle (deg)</source>
       <translation>角度(度)</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="746"/>
+      <location filename="ArchRoof.py" line="716"/>
       <source>Run (mm)</source>
       <translation type="unfinished">Run (mm)</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="746"/>
+      <location filename="ArchRoof.py" line="716"/>
       <source>Thickness (mm)</source>
       <translation>厚度(mm)</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="746"/>
+      <location filename="ArchRoof.py" line="716"/>
       <source>Overhang (mm)</source>
       <translation>延伸 (mm)</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="746"/>
+      <location filename="ArchRoof.py" line="716"/>
       <source>Height (mm)</source>
       <translation>高(mm)</translation>
     </message>
@@ -1179,7 +1179,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="ArchMaterial.py" line="78"/>
       <source>Create material</source>
-      <translation type="unfinished">Create material</translation>
+      <translation>建立材質</translation>
     </message>
     <message>
       <location filename="ArchSchedule.py" line="124"/>
@@ -1199,7 +1199,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="ArchSchedule.py" line="134"/>
       <source>Material</source>
-      <translation>材料</translation>
+      <translation>材質</translation>
     </message>
     <message>
       <location filename="ArchSchedule.py" line="137"/>
@@ -1354,7 +1354,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="importGBXML.py" line="47"/>
       <source>This exporter can currently only export one site object</source>
-      <translation type="unfinished">This exporter can currently only export one site object</translation>
+      <translation>此匯出程式目前僅能匯出單一地點物件</translation>
     </message>
     <message>
       <location filename="ArchSectionPlane.py" line="625"/>
@@ -1452,7 +1452,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="ArchMaterial.ui" line="14"/>
       <source>Arch material</source>
-      <translation>建築材料</translation>
+      <translation>建築材質</translation>
     </message>
     <message>
       <location filename="ArchMaterial.ui" line="23"/>
@@ -1685,12 +1685,12 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="ArchMaterial.py" line="72"/>
       <source>Set material...</source>
-      <translation type="unfinished">Set material...</translation>
+      <translation>設定材質...</translation>
     </message>
     <message>
       <location filename="ArchMaterial.py" line="74"/>
       <source>Creates or edits the material definition of a selected object.</source>
-      <translation type="unfinished">Creates or edits the material definition of a selected object.</translation>
+      <translation>對所選物件建立或編輯材質定義</translation>
     </message>
   </context>
   <context>
@@ -1774,12 +1774,12 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
   <context>
     <name>Arch_Roof</name>
     <message>
-      <location filename="ArchRoof.py" line="106"/>
+      <location filename="ArchRoof.py" line="111"/>
       <source>Roof</source>
       <translation>屋頂</translation>
     </message>
     <message>
-      <location filename="ArchRoof.py" line="108"/>
+      <location filename="ArchRoof.py" line="113"/>
       <source>Creates a roof object from the selected wire.</source>
       <translation type="unfinished">Creates a roof object from the selected wire.</translation>
     </message>
@@ -1911,7 +1911,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="ArchCommands.py" line="1181"/>
       <source>Force an object to be exported as Brep or not</source>
-      <translation>是否強制將一物件以Brep格式輸出</translation>
+      <translation>是否強制將一物件以Brep格式匯出</translation>
     </message>
   </context>
   <context>
@@ -2020,12 +2020,12 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="ArchSchedule.ui" line="172"/>
       <source>Add material description</source>
-      <translation>新增材料說明</translation>
+      <translation>新增材質說明</translation>
     </message>
     <message>
       <location filename="ArchSchedule.ui" line="182"/>
       <source>Add material color</source>
-      <translation type="unfinished">Add material color</translation>
+      <translation>新增材質色彩</translation>
     </message>
     <message>
       <location filename="ArchSchedule.ui" line="192"/>
@@ -2035,7 +2035,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="ArchSchedule.ui" line="202"/>
       <source>Add material URL</source>
-      <translation type="unfinished">Add material URL</translation>
+      <translation>新增材質連結</translation>
     </message>
     <message>
       <location filename="ArchSchedule.ui" line="209"/>
@@ -2118,17 +2118,17 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-arch.ui" line="228"/>
       <source>2D rendering</source>
-      <translation>2D 彩現</translation>
+      <translation>2D 算繪</translation>
     </message>
     <message>
       <location filename="preferences-arch.ui" line="236"/>
       <source>Show debug information during 2D rendering</source>
-      <translation>於2D彩現時顯示除錯訊息</translation>
+      <translation>於2D算繪時顯示除錯訊息</translation>
     </message>
     <message>
       <location filename="preferences-arch.ui" line="239"/>
       <source>Show renderer debug messages</source>
-      <translation>顯示彩現器錯誤訊息</translation>
+      <translation>顯示算繪器錯誤訊息</translation>
     </message>
     <message>
       <location filename="preferences-arch.ui" line="272"/>
@@ -2143,22 +2143,22 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-archdefaults.ui" line="843"/>
       <source>Width:</source>
-      <translation>寬度:</translation>
+      <translation>寬度：</translation>
     </message>
     <message>
       <location filename="preferences-archdefaults.ui" line="725"/>
       <source>Height:</source>
-      <translation>高度:</translation>
+      <translation>高度：</translation>
     </message>
     <message>
       <location filename="preferences-archdefaults.ui" line="925"/>
       <source>Color:</source>
-      <translation>色彩:</translation>
+      <translation>色彩：</translation>
     </message>
     <message>
       <location filename="preferences-archdefaults.ui" line="804"/>
       <source>Length:</source>
-      <translation>長度:</translation>
+      <translation>長度：</translation>
     </message>
     <message>
       <location filename="preferences-archdefaults.ui" line="317"/>
@@ -2193,12 +2193,12 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-archdefaults.ui" line="586"/>
       <source>Frame color:</source>
-      <translation>外框顏色：</translation>
+      <translation>外框色彩：</translation>
     </message>
     <message>
       <location filename="preferences-archdefaults.ui" line="610"/>
       <source>Glass color:</source>
-      <translation>玻璃色彩:</translation>
+      <translation>玻璃色彩：</translation>
     </message>
     <message>
       <location filename="preferences-arch.ui" line="26"/>
@@ -2438,7 +2438,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-ifc.ui" line="47"/>
       <source>Show verbose information during import and export of IFC files</source>
-      <translation type="unfinished">Show verbose information during import and export of IFC files</translation>
+      <translation>當匯入及匯出IFC檔時顯示詳細資訊</translation>
     </message>
     <message>
       <location filename="preferences-ifc.ui" line="68"/>
@@ -2498,7 +2498,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-ifc.ui" line="169"/>
       <source>Root element:</source>
-      <translation type="unfinished">Root element:</translation>
+      <translation>基本元素：</translation>
     </message>
     <message>
       <location filename="preferences-ifc.ui" line="176"/>
@@ -2523,12 +2523,12 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-ifc.ui" line="256"/>
       <source>If several materials with the same name are found in the IFC file, they will be treated as one.</source>
-      <translation>若於IFC檔案中發現數個相同名稱之材料，其將會被整合為一個。</translation>
+      <translation>若於IFC檔案中發現數個相同名稱之材質，其將會被整合為一個。</translation>
     </message>
     <message>
       <location filename="preferences-ifc.ui" line="259"/>
       <source>Merge materials with same name</source>
-      <translation>合併相同名稱之材料</translation>
+      <translation>合併相同名稱之材質</translation>
     </message>
     <message>
       <location filename="preferences-dae.ui" line="64"/>
@@ -2588,12 +2588,12 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-dae.ui" line="181"/>
       <source>Segments per edge</source>
-      <translation type="unfinished">Segments per edge</translation>
+      <translation>每邊具多少片段</translation>
     </message>
     <message>
       <location filename="preferences-dae.ui" line="188"/>
       <source>The maximum number of segments per edge</source>
-      <translation type="unfinished">The maximum number of segments per edge</translation>
+      <translation>每邊對多具有多少片段</translation>
     </message>
     <message>
       <location filename="preferences-dae.ui" line="211"/>
@@ -2618,7 +2618,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-dae.ui" line="261"/>
       <source>Allows optimization</source>
-      <translation type="unfinished">Allows optimization</translation>
+      <translation>允許最佳化</translation>
     </message>
     <message>
       <location filename="preferences-dae.ui" line="264"/>
@@ -2663,7 +2663,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-arch.ui" line="103"/>
       <source>Two possible strategies to avoid circular dependencies: Create one more object (unchecked) or remove external geometry of base sketch (checked)</source>
-      <translation type="unfinished">Two possible strategies to avoid circular dependencies: Create one more object (unchecked) or remove external geometry of base sketch (checked)</translation>
+      <translation>兩種可能用來避免循環相依之策略：多建立一個物件(未確認)或移除外部基礎草圖之幾何(已確認)</translation>
     </message>
     <message>
       <location filename="preferences-arch.ui" line="106"/>
@@ -2673,12 +2673,12 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-ifc.ui" line="276"/>
       <source>Create clones when objects have shared geometry</source>
-      <translation type="unfinished">Create clones when objects have shared geometry</translation>
+      <translation>當物件間共享幾何時建立完全複製</translation>
     </message>
     <message>
       <location filename="preferences-ifc.ui" line="26"/>
       <source>Show this dialog when importing and exporting</source>
-      <translation type="unfinished">Show this dialog when importing and exporting</translation>
+      <translation>當匯入及匯出時顯示此對話窗</translation>
     </message>
     <message>
       <location filename="preferences-ifc.ui" line="296"/>
@@ -2688,7 +2688,7 @@ If Run = 0 then Run is calculated so that the height is the same one as the rela
     <message>
       <location filename="preferences-ifc.ui" line="299"/>
       <source>Import Ifc Properties in spreadsheet</source>
-      <translation type="unfinished">Import Ifc Properties in spreadsheet</translation>
+      <translation>於試算表中匯入IFC屬性</translation>
     </message>
   </context>
   <context>

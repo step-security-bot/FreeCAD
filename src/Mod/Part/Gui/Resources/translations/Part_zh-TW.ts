@@ -29,7 +29,7 @@
         <location line="-144"/>
         <location line="+200"/>
         <source>Length:</source>
-        <translation>長度:</translation>
+        <translation>長度：</translation>
     </message>
     <message>
         <location line="-192"/>
@@ -65,7 +65,7 @@
         <location line="-156"/>
         <location line="+171"/>
         <source>Limit:</source>
-        <translation>限制:</translation>
+        <translation>限制：</translation>
     </message>
     <message>
         <location line="-161"/>
@@ -363,7 +363,7 @@
     <message>
         <location line="+1"/>
         <source>Chamfer the selected edges of a shape</source>
-        <translation>所選造型邊緣進行倒角</translation>
+        <translation>所選造型邊進行倒角</translation>
     </message>
 </context>
 <context>
@@ -547,7 +547,7 @@
     <message>
         <location line="+1"/>
         <source>Fillet the selected edges of a shape</source>
-        <translation>將選定之圖形邊界倒圓角</translation>
+        <translation>將選定之圖形邊倒圓角</translation>
     </message>
 </context>
 <context>
@@ -803,7 +803,7 @@
     <message>
         <location line="+1"/>
         <source>Create a ruled surface from either two Edges or two wires</source>
-        <translation>由兩個邊緣或線建立直紋面</translation>
+        <translation>由兩個邊或線建立直紋面</translation>
     </message>
     <message>
         <source>Create a ruled surface from two curves</source>
@@ -856,7 +856,7 @@
     <message>
         <location line="+1"/>
         <source>Create simple copy</source>
-        <translation>建立一簡單複製</translation>
+        <translation>建立一不與原本物件連動之複製</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1033,7 +1033,7 @@
     <message>
         <location line="+9"/>
         <source>Position:</source>
-        <translation>位置:</translation>
+        <translation>位置：</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -1171,7 +1171,7 @@
 <context>
     <name>PartGui::DlgChamferEdges</name>
     <message>
-        <location filename="../../DlgFilletEdges.cpp" line="+1020"/>
+        <location filename="../../DlgFilletEdges.cpp" line="+1030"/>
         <source>Chamfer Edges</source>
         <translation type="unfinished">Chamfer Edges</translation>
     </message>
@@ -1196,7 +1196,7 @@
     <message>
         <location line="+117"/>
         <source>Length:</source>
-        <translation>長度:</translation>
+        <translation>長度：</translation>
     </message>
     <message>
         <location line="-110"/>
@@ -1206,7 +1206,7 @@
     <message>
         <location line="+20"/>
         <source>Note:This option works for planes only</source>
-        <translation>注意:此選項僅對平面有作用</translation>
+        <translation>注意：此選項僅對平面有作用</translation>
     </message>
     <message>
         <location line="+127"/>
@@ -1230,17 +1230,17 @@
     <message>
         <location line="-168"/>
         <source>X:</source>
-        <translation>X:</translation>
+        <translation>X：</translation>
     </message>
     <message>
         <location line="+52"/>
         <source>Z:</source>
-        <translation>Z:</translation>
+        <translation>Z：</translation>
     </message>
     <message>
         <location line="-26"/>
         <source>Y:</source>
-        <translation>Y:</translation>
+        <translation>Y：</translation>
     </message>
     <message>
         <location filename="../../DlgExtrusion.cpp" line="+150"/>
@@ -1270,17 +1270,17 @@
     <message>
         <location filename="../../DlgFilletEdges.ui" line="+14"/>
         <source>Fillet Edges</source>
-        <translation>圓角邊緣</translation>
+        <translation>圓角</translation>
     </message>
     <message>
         <location line="+37"/>
         <source>Fillet Parameter</source>
-        <translation>圓角參數</translation>
+        <translation>參數</translation>
     </message>
     <message>
         <location line="+91"/>
         <source>Radius:</source>
-        <translation>半徑:</translation>
+        <translation>半徑：</translation>
     </message>
     <message>
         <location line="-69"/>
@@ -1295,12 +1295,12 @@
     <message>
         <location line="+6"/>
         <source>Select edges</source>
-        <translation>選取邊界</translation>
+        <translation>選取邊</translation>
     </message>
     <message>
         <location line="+47"/>
         <source>Fillet type:</source>
-        <translation>類型:</translation>
+        <translation>類型：</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -1320,7 +1320,7 @@
     <message>
         <location line="+12"/>
         <source>Selected shape:</source>
-        <translation>選定之圖形:</translation>
+        <translation>選定之圖形：</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -1328,9 +1328,9 @@
         <translation>未選取</translation>
     </message>
     <message>
-        <location filename="../../DlgFilletEdges.cpp" line="-753"/>
+        <location filename="../../DlgFilletEdges.cpp" line="-763"/>
         <source>Length:</source>
-        <translation>長度:</translation>
+        <translation>長度：</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1349,14 +1349,14 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+545"/>
+        <location line="+555"/>
         <source>Start length</source>
-        <translation>長度起點</translation>
+        <translation>長度1</translation>
     </message>
     <message>
-        <location line="-544"/>
+        <location line="-554"/>
         <source>End length</source>
-        <translation>結束長度</translation>
+        <translation>長度2</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1365,17 +1365,17 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+542"/>
+        <location line="+552"/>
         <source>Start radius</source>
         <translation>起始半徑</translation>
     </message>
     <message>
-        <location line="-541"/>
+        <location line="-551"/>
         <source>End radius</source>
         <translation>終止半徑</translation>
     </message>
     <message>
-        <location line="+531"/>
+        <location line="+541"/>
         <source>Length</source>
         <translation>長度</translation>
     </message>
@@ -1387,13 +1387,13 @@
     <message>
         <location line="+106"/>
         <source>No edge selected</source>
-        <translation>無邊界被選取</translation>
+        <translation>無邊被選取</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>No edge entity is checked to fillet.
 Please check one or more edge entities first.</source>
-        <translation>未選擇邊緣實體產生圓角,請先選擇1或多個邊緣實體</translation>
+        <translation>未選擇實體之邊產生圓角,請先選擇1或多個實體之邊</translation>
     </message>
     <message>
         <location filename="../../DlgFilletEdges.ui" line="+40"/>
@@ -1409,7 +1409,7 @@ Please check one or more edge entities first.</source>
         <location filename="../../DlgFilletEdges.cpp" line="-248"/>
         <location line="+60"/>
         <source>Edge%1</source>
-        <translation>邊緣 %1</translation>
+        <translation>邊 %1</translation>
     </message>
     <message>
         <location line="+135"/>
@@ -1420,8 +1420,8 @@ Please check one or more edge entities first.</source>
         <location line="+1"/>
         <source>No valid shape is selected.
 Please select a valid shape in the drop-down box first.</source>
-        <translation>未選取有效之造型
-請先於下拉選單中選取有效之造型</translation>
+        <translation>未選取有效之造型。
+請先於下拉選單中選取有效之造型。</translation>
     </message>
 </context>
 <context>
@@ -1439,7 +1439,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+6"/>
         <source>Units for export of IGES</source>
-        <translation>輸出IGES檔所用之單位</translation>
+        <translation>匯出IGES檔所用之單位</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -1464,12 +1464,12 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+6"/>
         <source>Groups of Trimmed Surfaces (type 144)</source>
-        <translation type="unfinished">Groups of Trimmed Surfaces (type 144)</translation>
+        <translation>已修剪面之群組(類型 144)</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Solids (type 186) and Shells (type 514) / B-REP mode</source>
-        <translation type="unfinished">Solids (type 186) and Shells (type 514) / B-REP mode</translation>
+        <translation>實體(類型 186)殼(類型 514)/ B-REP模式</translation>
     </message>
     <message>
         <source>Enable B-REP mode</source>
@@ -1521,7 +1521,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+6"/>
         <source>Units for export of STEP</source>
-        <translation>輸出STEP檔所用之單位</translation>
+        <translation>匯出STEP檔所用之單位</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -1574,17 +1574,17 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+71"/>
         <source>X:</source>
-        <translation>X:</translation>
+        <translation>X：</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Z:</source>
-        <translation>Z:</translation>
+        <translation>Z：</translation>
     </message>
     <message>
         <location line="-7"/>
         <source>Y:</source>
-        <translation>Y:</translation>
+        <translation>Y：</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -1597,27 +1597,27 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+17"/>
         <source>Size:</source>
-        <translation>尺寸:</translation>
+        <translation>尺寸：</translation>
     </message>
     <message>
         <location line="+51"/>
         <source>Height:</source>
-        <translation>高度:</translation>
+        <translation>高度：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Width:</source>
-        <translation>寬度:</translation>
+        <translation>寬度：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Length:</source>
-        <translation>長度:</translation>
+        <translation>長度：</translation>
     </message>
     <message>
         <location line="-154"/>
         <source>Position:</source>
-        <translation>位置:</translation>
+        <translation>位置：</translation>
     </message>
     <message>
         <location line="+58"/>
@@ -1640,17 +1640,17 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+12"/>
         <source>Height:</source>
-        <translation>高度:</translation>
+        <translation>高度：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Radius:</source>
-        <translation>半徑:</translation>
+        <translation>半徑：</translation>
     </message>
     <message>
         <location line="-108"/>
         <source>Position:</source>
-        <translation>位置:</translation>
+        <translation>位置：</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -1660,17 +1660,17 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+7"/>
         <source>X:</source>
-        <translation>X:</translation>
+        <translation>X：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Z:</source>
-        <translation>Z:</translation>
+        <translation>Z：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Y:</source>
-        <translation>Y:</translation>
+        <translation>Y：</translation>
     </message>
     <message>
         <source>OK</source>
@@ -1876,14 +1876,14 @@ Please select a valid shape in the drop-down box first.</source>
         <location line="+81"/>
         <location line="+54"/>
         <source>Z:</source>
-        <translation>Z:</translation>
+        <translation>Z：</translation>
     </message>
     <message>
         <location line="-155"/>
         <location line="+81"/>
         <location line="+54"/>
         <source>X:</source>
-        <translation>X:</translation>
+        <translation>X：</translation>
     </message>
     <message>
         <source>Direction:</source>
@@ -1894,7 +1894,7 @@ Please select a valid shape in the drop-down box first.</source>
         <location line="+81"/>
         <location line="+54"/>
         <source>Y:</source>
-        <translation>Y:</translation>
+        <translation>Y：</translation>
     </message>
     <message>
         <location line="-1791"/>
@@ -1982,13 +1982,13 @@ Please select a valid shape in the drop-down box first.</source>
         <location line="+43"/>
         <location line="+107"/>
         <source>Width:</source>
-        <translation>寬度:</translation>
+        <translation>寬度：</translation>
     </message>
     <message>
         <location line="-100"/>
         <location line="+93"/>
         <source>Length:</source>
-        <translation>長度:</translation>
+        <translation>長度：</translation>
     </message>
     <message>
         <location line="-7"/>
@@ -1997,7 +1997,7 @@ Please select a valid shape in the drop-down box first.</source>
         <location line="+535"/>
         <location line="+239"/>
         <source>Height:</source>
-        <translation>高度:</translation>
+        <translation>高度：</translation>
     </message>
     <message>
         <location line="-954"/>
@@ -2013,21 +2013,21 @@ Please select a valid shape in the drop-down box first.</source>
         <location line="+122"/>
         <location line="+65"/>
         <source>Radius:</source>
-        <translation>半徑:</translation>
+        <translation>半徑：</translation>
     </message>
     <message>
         <location line="-940"/>
         <location line="+200"/>
         <location line="+254"/>
         <source>Radius 1:</source>
-        <translation>半徑 1:</translation>
+        <translation>半徑 1：</translation>
     </message>
     <message>
         <location line="-447"/>
         <location line="+200"/>
         <location line="+240"/>
         <source>Radius 2:</source>
-        <translation>半徑 2:</translation>
+        <translation>半徑 2：</translation>
     </message>
     <message>
         <location line="-377"/>
@@ -2043,7 +2043,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+137"/>
         <source>Radius 3:</source>
-        <translation>半徑 3:</translation>
+        <translation>半徑 3：</translation>
     </message>
     <message>
         <location line="+70"/>
@@ -2068,7 +2068,7 @@ Please select a valid shape in the drop-down box first.</source>
         <location line="+150"/>
         <location line="+882"/>
         <source>Polygon:</source>
-        <translation>多邊形:</translation>
+        <translation>多邊形：</translation>
     </message>
     <message>
         <location line="-862"/>
@@ -2079,27 +2079,27 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="-831"/>
         <source>X min/max:</source>
-        <translation>X 最小/最大:</translation>
+        <translation>X 最小/最大：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Y min/max:</source>
-        <translation>Y 最小/最大:</translation>
+        <translation>Y 最小/最大：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Z min/max:</source>
-        <translation>Z 最小/最大:</translation>
+        <translation>Z 最小/最大：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>X2 min/max:</source>
-        <translation>X2 最小/最大:</translation>
+        <translation>X2 最小/最大：</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Z2 min/max:</source>
-        <translation>Z2 最小/最大:</translation>
+        <translation>Z2 最小/最大：</translation>
     </message>
     <message>
         <location line="+181"/>
@@ -2119,7 +2119,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+88"/>
         <source>Growth:</source>
-        <translation>成長:</translation>
+        <translation>成長：</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2218,12 +2218,12 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+20"/>
         <source>Y:</source>
-        <translation>Y:</translation>
+        <translation>Y：</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>X:</source>
-        <translation>X:</translation>
+        <translation>X：</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2233,7 +2233,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+20"/>
         <source>Z:</source>
-        <translation>Z:</translation>
+        <translation>Z：</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -2319,7 +2319,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+3"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed and the nicer the appearance are.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed and the nicer the appearance are.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;曲面細分&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;定義曲面細分為網格之對大分割數量，較小的值也會使算繪器較慢，但有更好的呈現效果&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hint&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;Defining the normals per vertex is also called &lt;span style=&quot; font-style:italic;&quot;&gt;Phong shading&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-style:italic;&quot;&gt;&lt;span style=&quot; font-style:normal;&quot;&gt;while defining the normals per face is called &lt;/span&gt;Flat shading&lt;span style=&quot; font-style:normal;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -2530,7 +2530,7 @@ Please select a valid shape in the drop-down box first.</source>
         <location filename="../../TaskLoft.cpp" line="+73"/>
         <location line="+145"/>
         <source>Vertex/Edge/Wire/Face</source>
-        <translation>頂點/邊界/線/面</translation>
+        <translation>頂點/邊/線/面</translation>
     </message>
     <message>
         <location line="-144"/>
@@ -2546,7 +2546,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+0"/>
         <source>At least two vertices, edges, wires or faces are required.</source>
-        <translation>至少需要兩個頂點,邊界,線或面</translation>
+        <translation>至少需要兩個頂點,邊,線或面</translation>
     </message>
     <message>
         <location line="+33"/>
@@ -2577,7 +2577,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+8"/>
         <source>Mirror plane:</source>
-        <translation>鏡射平面:</translation>
+        <translation>鏡射平面：</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2685,7 +2685,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+52"/>
         <source>Select one or more edges</source>
-        <translation>選擇1或更多的邊緣</translation>
+        <translation>選擇1個或更多的邊</translation>
     </message>
     <message>
         <location line="+52"/>
@@ -2700,7 +2700,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+52"/>
         <source>Select two vertices to create an edge</source>
-        <translation>選擇兩頂點建立邊緣</translation>
+        <translation>選擇兩頂點建立邊</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2710,7 +2710,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+7"/>
         <source>Select a closed set of edges</source>
-        <translation>選擇封閉之邊緣組</translation>
+        <translation>選擇封閉之邊群組</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2739,7 +2739,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="-281"/>
         <source>Vertex/Edge/Wire/Face</source>
-        <translation>頂點/邊界/線/面</translation>
+        <translation>頂點/邊/線/面</translation>
     </message>
     <message>
         <location line="+129"/>
@@ -2755,7 +2755,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="-139"/>
         <source>Select one or more connected edges you want to sweep along.</source>
-        <translation>選取您想要獨立掃略之一或多條相連邊緣</translation>
+        <translation>選取您想要獨立掃略之一或多條相連邊</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -2765,7 +2765,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+0"/>
         <source>At least one edge or wire is required.</source>
-        <translation>只少需要一個邊界或線</translation>
+        <translation>只少需要一個邊或線</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -2790,7 +2790,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+2"/>
         <source>Select one or more connected edges in the 3d view and press &apos;Done&apos;</source>
-        <translation>於3D視圖中選取一或多條相連的邊緣後按下「完成」</translation>
+        <translation>於3D視圖中選取一或多條相連的邊後按下「完成」</translation>
     </message>
     <message>
         <location line="+24"/>
@@ -2993,7 +2993,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+19"/>
         <source>Faces:</source>
-        <translation>面:</translation>
+        <translation>面：</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -3146,7 +3146,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+6"/>
         <source>Edge from vertices</source>
-        <translation>由頂點產生邊緣</translation>
+        <translation>由頂點產生邊</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -3156,7 +3156,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+7"/>
         <source>Face from edges</source>
-        <translation>由邊緣產生面</translation>
+        <translation>由邊產生面</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -3176,7 +3176,7 @@ Please select a valid shape in the drop-down box first.</source>
     <message>
         <location line="+21"/>
         <source>Refine shape</source>
-        <translation type="unfinished">調整造型</translation>
+        <translation>調整造型</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -3215,7 +3215,7 @@ Please select a valid shape in the drop-down box first.</source>
         <location filename="../../TaskSweep.cpp" line="+42"/>
         <source>Select one or more profiles and select an edge or wire
 in the 3D view for the sweep path.</source>
-        <translation>於3D檢視中選取一或多個輪廓,並選取一個邊緣或線作為掃掠路徑</translation>
+        <translation>於3D檢視中選取一或多個輪廓,並選取一個邊或線作為掃掠路徑</translation>
     </message>
 </context>
 <context>
@@ -3310,7 +3310,7 @@ Do you want to continue?</source>
     <message>
         <location line="+1"/>
         <source>Enter tolerance for sewing shape:</source>
-        <translation>輸入縫合圖形公差:</translation>
+        <translation>輸入縫合圖形公差：</translation>
     </message>
     <message>
         <location filename="../../ViewProviderMirror.cpp" line="+77"/>
@@ -3320,7 +3320,7 @@ Do you want to continue?</source>
     <message>
         <location line="+300"/>
         <source>Edit chamfer edges</source>
-        <translation>編輯邊緣倒腳</translation>
+        <translation>編輯邊之倒角</translation>
     </message>
     <message>
         <location line="+141"/>
@@ -3372,12 +3372,12 @@ Do you want to continue?</source>
     <message>
         <location line="+804"/>
         <source>You have to select either two edges or two wires.</source>
-        <translation>您必須選擇兩個邊緣或兩條線</translation>
+        <translation>您必須選擇兩個邊或兩條線</translation>
     </message>
     <message>
         <location filename="../../ViewProviderMirror.cpp" line="-325"/>
         <source>Edit fillet edges</source>
-        <translation>編輯圓角邊緣</translation>
+        <translation>編輯邊之圓角</translation>
     </message>
     <message>
         <location filename="../../ViewProviderExt.cpp" line="+697"/>
@@ -3417,7 +3417,7 @@ Do you want to continue?</source>
     <message>
         <location line="+1"/>
         <source>Edge</source>
-        <translation>邊緣</translation>
+        <translation>邊</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3497,7 +3497,7 @@ Do you want to continue?</source>
     <message>
         <location line="+1"/>
         <source>Free Edge</source>
-        <translation>自由邊緣</translation>
+        <translation>自由邊</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3517,7 +3517,7 @@ Do you want to continue?</source>
     <message>
         <location line="+1"/>
         <source>Redundant Edge</source>
-        <translation>多餘邊緣</translation>
+        <translation>多餘之邊</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3607,7 +3607,7 @@ Do you want to continue?</source>
     <message>
         <location line="+4"/>
         <source>Out Of Enum Range: </source>
-        <translation type="unfinished">Out Of Enum Range: </translation>
+        <translation>超出列舉範圍：</translation>
     </message>
     <message>
         <location line="+12"/>
