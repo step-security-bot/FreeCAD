@@ -1871,19 +1871,15 @@ Especifique otro directorio, por favor.</translation>
     </message>
     <message>
         <source>Or&amp;thographic rendering</source>
-        <translation type="unfinished">Or&amp;thographic rendering</translation>
+        <translation>Renderizado ortogonal</translation>
     </message>
     <message>
         <source>Perspective renderin&amp;g</source>
-        <translation type="unfinished">Perspective renderin&amp;g</translation>
+        <translation>Renderizado en perspectiva</translation>
     </message>
 </context>
 <context>
     <name>Gui::Dialog::DlgSettings3DViewImp</name>
-    <message>
-        <source>%1 navigation</source>
-        <translation>%1 navegación</translation>
-    </message>
     <message>
         <source>Anti-aliasing</source>
         <translation>Suavizado de bordes</translation>
@@ -2706,6 +2702,42 @@ The &apos;Status&apos; column shows whether the document could be recovered.</so
     <message>
         <source>Finish</source>
         <translation>Terminado</translation>
+    </message>
+    <message>
+        <source>Cleanup...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished">Borrar</translation>
+    </message>
+    <message>
+        <source>Cleanup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete the selected transient directories?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When deleting the selected transient directory you won&apos;t be able to recover any files afterwards.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete all transient directories?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When deleting all transient directory you won&apos;t be able to recover any files afterwards.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Transient directories deleted.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4813,10 +4845,6 @@ Be aware the point where you click matters.</source>
         <translation>Estilos de navegación</translation>
     </message>
     <message>
-        <source>%1 navigation</source>
-        <translation>%1 navegación</translation>
-    </message>
-    <message>
         <source>Move annotation</source>
         <translation>Mover anotación</translation>
     </message>
@@ -6547,7 +6575,7 @@ Be aware the point where you click matters.</source>
     </message>
     <message>
         <source>&amp;What&apos;s This?</source>
-        <translation>&amp;Qué es esto?</translation>
+        <translation>¿&amp;Qué es esto?</translation>
     </message>
     <message>
         <source>What&apos;s This</source>
