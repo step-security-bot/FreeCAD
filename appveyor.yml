@@ -30,7 +30,7 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12
+  - cmake -DFREECAD_LIBPACK_USE=OFF -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12
     -DFREECAD_USE_EXTERNAL_PIVY=ON
     -DFREECAD_USE_FREETYPE=ON
     -G "%generator%" ..
