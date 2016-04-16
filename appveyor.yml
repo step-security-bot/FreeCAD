@@ -26,7 +26,7 @@ install:
   - cmd: mkdir libpack
   - cmd: cd libpack
   - ps: Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.15/LibPack_11.1_x64_VC12.7z
-  - 7z x LibPack_11.1_x64_VC12.7z
+  - 7z x LibPack_11.1_x64_VC12.7z > NUL
 
 build_script:
   - cmd: cd C:\projects\freecad
