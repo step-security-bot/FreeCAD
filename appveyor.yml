@@ -34,6 +34,9 @@ build_script:
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12
     -DFREECAD_USE_EXTERNAL_PIVY=ON
     -DFREECAD_USE_FREETYPE=ON
+    -DBOOST_ROOT=C:\Libraries\boost
+    -DBOOST_LIBRARYDIR=C:\Libraries\boost\lib64-msvc-12.0
+    -DBoost_USE_STATIC_LIBS=ON
     -G "%generator%" ..
   - msbuild /m:4 FreeCAD_Trunk.sln
 
