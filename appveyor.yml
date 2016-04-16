@@ -24,7 +24,7 @@ shallow_clone: true
 #install:
 
 build_script:
-  - cmd: C:\projects\freecad\BuildAll.bat
+  - cmd: CALL C:\projects\freecad\BuildAll.bat
 
 #after_build:
 
