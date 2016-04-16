@@ -24,7 +24,11 @@ shallow_clone: true
 #install:
 
 build_script:
-  - cmd: CALL BuildAll.bat
+  - cmd: cd C:\projects\freecad
+  - cmd: mkdir cmake-build
+  - cmd: cd cmake-build
+  - cmd: cmake
+  - cmd: msbuild /m:4
 
 #after_build:
 
