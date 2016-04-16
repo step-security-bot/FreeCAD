@@ -23,21 +23,18 @@ environment:
 # scripts that run after cloning repository
 install:
   - cd C:\projects\freecad
-  - ps: Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.15/LibPack_11.1_x64_VC12.7z
-  - 7z x LibPack_11.1_x64_VC12.7z > NUL
+  - ps: Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.16-dev-vtk-Libpack/FreeCADLibs_11.1.1_x64_VC12.7z
+  - 7z x FreeCADLibs_11.1.1_x64_VC12.7z > NUL
 
 build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
   - mkdir bin
-  - xcopy C:\projects\freecad\FreeCADLibs_11.1_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
-  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12
+#  - xcopy C:\projects\freecad\FreeCADLibs_11.1_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
+  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.1.1_x64_VC12
     -DFREECAD_USE_EXTERNAL_PIVY=ON
     -DFREECAD_USE_FREETYPE=ON
-    -DBOOST_ROOT=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12\bin
-    -DBOOST_LIBRARYDIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12\lib
-    -DBoost_USE_STATIC_LIBS=ON
     -G "%generator%" ..
   - msbuild /m:4 FreeCAD_Trunk.sln
 
