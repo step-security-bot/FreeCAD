@@ -30,12 +30,13 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
+  - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.1_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12
     -DFREECAD_USE_EXTERNAL_PIVY=ON
     -DFREECAD_USE_FREETYPE=ON
-    -DBOOST_ROOT=C:\Libraries\boost
-    -DBOOST_LIBRARYDIR=C:\Libraries\boost\lib64-msvc-12.0
+    -DBOOST_ROOT=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12\bin
+    -DBOOST_LIBRARYDIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12\lib
     -DBoost_USE_STATIC_LIBS=ON
     -G "%generator%" ..
   - msbuild /m:4 FreeCAD_Trunk.sln
