@@ -21,14 +21,19 @@ shallow_clone: true
 #before_build:
 
 # scripts that run after cloning repository
-#install:
+install:
+  - cmd: cd C:\projects\freecad
+  - cmd: mkdir libpack
+  - cmd: cd libpack
+  - ps: Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.15/LibPack_11.1_x64_VC12.7z
+  - 7z x LibPack_11.1_x64_VC12.7z
 
 build_script:
   - cmd: cd C:\projects\freecad
-  - cmd: mkdir cmake-build
-  - cmd: cd cmake-build
+  - cmd: mkdir build
+  - cmd: cd build
   - cmd: cmake ..
-  - cmd: msbuild /m:4
+  - cmd: msbuild /m:4 FreeCAD_Trunk.sln
 
 #after_build:
 
