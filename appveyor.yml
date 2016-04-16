@@ -30,9 +30,9 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - cmake -FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12
-    -FREECAD_USE_EXTERNAL_PIVY:BOOL=ON
-    -FREECAD_USE_FREETYPE:BOOL=ON
+  - cmake -DFREECAD_LIBPACK_USE=OFF -FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.1_x64_VC12
+    -FREECAD_USE_EXTERNAL_PIVY=ON
+    -FREECAD_USE_FREETYPE=ON
     -G "%generator%" ..
   - xcopy C:\projects\freecad\FreeCADLibs_11.1_x64_VC12\bin C:\projects\freecad\build /E /Q
   - msbuild /m:4 FreeCAD_Trunk.sln
