@@ -25,8 +25,8 @@ install:
   - cd C:\projects\freecad
   - ps: Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.16-dev-vtk-Libpack/FreeCADLibs_11.1.1_x64_VC12.7z
   - 7z x FreeCADLibs_11.1.1_x64_VC12.7z > NUL
-  - 7z x BoostPython.7z -oC:\projects\freecad\FreeCADLibs_11.1.1_x64_VC12\lib *.lib -r
-  - 7z x BoostPython.7z -oC:\projects\freecad\FreeCADLibs_11.1.1_x64_VC12\bin *.dll -r
+  - 7z x BoostPython.7z -oC:\projects\freecad\FreeCADLibs_11.1.1_x64_VC12\lib *.lib -r -y
+  - 7z x BoostPython.7z -oC:\projects\freecad\FreeCADLibs_11.1.1_x64_VC12\bin *.dll -r -y
 
 build_script:
   - cd C:\projects\freecad
