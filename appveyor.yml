@@ -33,6 +33,9 @@ build_script:
   - mkdir build
   - cd build
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.2_x64_VC12
+    -DFREECAD_USE_EXTERNAL_PIVY=ON
+    -DFREECAD_USE_FREETYPE=ON
+    -DBOOST_LIBRARYDIR=C:\projects\freecad\FreeCADLibs_11.2_x64_VC12\lib
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.2_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
