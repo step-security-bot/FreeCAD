@@ -36,6 +36,7 @@ build_script:
     -DFREECAD_USE_EXTERNAL_PIVY=ON
     -DFREECAD_USE_FREETYPE=ON
     -DBOOST_DIR=C:\Libraries\boost
+    -DBOOST_INCLUDE_DIR=C:\Libraries\boost\include
     -DBOOST_LIBRARY_DIR=C:\Libraries\boost\lib64-msvc-12.0
     -G "%generator%" ..
   - mkdir bin
