@@ -27,16 +27,12 @@ install:
   - cd C:\projects\freecad
   - ps: Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.16/FreeCADLibs_11.2_x64_VC12.7z
   - 7z x FreeCADLibs_11.2_x64_VC12.7z > nul
-#  - 7z x BoostPython.7z -oC:\projects\freecad\FreeCADLibs_11.1.1_x64_VC12\lib *.lib -r -y
-#  - 7z x BoostPython.7z -oC:\projects\freecad\FreeCADLibs_11.1.1_x64_VC12\bin *.dll -r -y
 
 build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.2_x64_VC12
-    -DFREECAD_USE_EXTERNAL_PIVY=ON
-    -DFREECAD_USE_FREETYPE=ON
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.2_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
