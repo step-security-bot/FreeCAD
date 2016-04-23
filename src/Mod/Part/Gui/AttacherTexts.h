@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright (c) 2013 Jürgen Riegel (FreeCAD@juergen-riegel.net)         *
+ *   Copyright (c) Victor Titov (DeepSOIC)                                 *
+ *                                           (vv.titov@gmail.com) 2016     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -20,37 +21,39 @@
  *                                                                         *
  ***************************************************************************/
 
+/**
+  * AttacherTexts.h, .cpp - files that contain user-friendly translatable names
+  * of attachment modes, as well as help texts, and the like.
+  */
 
-#ifndef FEM_ViewProviderResult_H
-#define FEM_ViewProviderResult_H
-
-#include <Gui/ViewProviderDocumentObject.h>
-#include <Gui/ViewProviderPythonFeature.h>
-
-namespace FemGui
-{
-
-class FemGuiExport ViewProviderResult : public Gui::ViewProviderDocumentObject
-{
-    PROPERTY_HEADER(FemGui::ViewProviderResult);
-
-public:
-    /// constructor
-    ViewProviderResult();
-
-    /// destructor
-    virtual ~ViewProviderResult();
-
-    // shows solid in the tree
-    virtual bool isShow(void) const
-    { return true; }
-    
-    bool doubleClicked(void);
-};
-
-typedef Gui::ViewProviderPythonFeatureT<ViewProviderResult> ViewProviderResultPython;
-
-} //namespace FemGui
+#ifndef PARTATTACHERTEXTS_H
+#define PARTATTACHERTEXTS_H
 
 
-#endif // FEM_ViewProviderResult_H
+#include <vector>
+#include <QString>
+#include <QStringList>
+#include <Mod/Part/App/Attacher.h>
+
+namespace AttacherGui {
+
+typedef std::vector<QString> TextSet;
+
+/**
+ * @brief getUIStrings
+ * @param attacherType
+ * @param mmode
+ * @return vector of two QStrings:
+ * first is the name of attachment mode. e.g. "Tangent to surface";
+ * second is tooltip-style explanation of the mode, like "Plane is tangent to a surface at vertex."
+ */
+TextSet PartGuiExport getUIStrings(Base::Type attacherType, Attacher::eMapMode mmode);
+
+
+QString PartGuiExport getShapeTypeText(Attacher::eRefType type);
+
+QStringList PartGuiExport getRefListForMode(Attacher::AttachEngine &attacher, Attacher::eMapMode mmode);
+
+}
+
+#endif
