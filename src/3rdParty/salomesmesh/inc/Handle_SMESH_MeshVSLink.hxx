@@ -34,7 +34,8 @@
 #include <Standard.hxx>
 #endif
 #ifndef _Handle_MeshVS_DataSource3D_HeaderFile
-#include <Handle_MeshVS_DataSource3D.hxx>
+//#include <Handle_MeshVS_DataSource3D.hxx>
+#include <MeshVS_DataSource3D.hxx>
 #endif
 
 class Standard_Transient;
