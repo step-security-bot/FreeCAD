@@ -90,9 +90,9 @@
 # include <GeomFill_SectionLaw.hxx>
 # include <GeomFill_Sweep.hxx>
 # include <GeomLib.hxx>
-# include <Handle_Law_BSpFunc.hxx>
-# include <Handle_Law_BSpline.hxx>
-# include <Handle_TopTools_HSequenceOfShape.hxx>
+# include <Law_BSpFunc.hxx>
+# include <Law_BSpline.hxx>
+# include <TopTools_HSequenceOfShape.hxx>
 # include <Law_BSpFunc.hxx>
 # include <Law_Constant.hxx>
 # include <Law_Linear.hxx>
@@ -473,6 +473,9 @@ void TopoShape::convertTogpTrsf(const Base::Matrix4D& mtrx, gp_Trsf& trsf)
 
 void TopoShape::convertToMatrix(const gp_Trsf& trsf, Base::Matrix4D& mtrx)
 {
+
+/* vejmarie everyting _CSFDB is unknown
+
     gp_Mat m = trsf._CSFDB_Getgp_Trsfmatrix();
     gp_XYZ p = trsf._CSFDB_Getgp_Trsfloc();
     Standard_Real scale = trsf._CSFDB_Getgp_Trsfscale();
@@ -494,6 +497,7 @@ void TopoShape::convertToMatrix(const gp_Trsf& trsf, Base::Matrix4D& mtrx)
     mtrx[0][3] = p._CSFDB_Getgp_XYZx();
     mtrx[1][3] = p._CSFDB_Getgp_XYZy();
     mtrx[2][3] = p._CSFDB_Getgp_XYZz();
+*/
 }
 
 void TopoShape::setTransform(const Base::Matrix4D& rclTrf)
