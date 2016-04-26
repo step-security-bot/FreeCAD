@@ -30,22 +30,15 @@
 #ifndef _Standard_HeaderFile
 #include <Standard.hxx>
 #endif
-/*
-#ifndef _Handle_SMESH_MeshVSLink_HeaderFile
-#include <Handle_SMESH_MeshVSLink.hxx>
-#endif
-*/
 #ifndef _TColStd_PackedMapOfInteger_HeaderFile
 #include <TColStd_PackedMapOfInteger.hxx>
 #endif
-/*
 #ifndef _Handle_TColStd_HArray2OfInteger_HeaderFile
-#include <Handle_TColStd_HArray2OfInteger.hxx>
+#include <TColStd_HArray2OfInteger.hxx>
 #endif
 #ifndef _Handle_TColStd_HArray2OfReal_HeaderFile
-#include <Handle_TColStd_HArray2OfReal.hxx>
+#include <TColStd_HArray2OfReal.hxx>
 #endif
-*/
 #ifndef _MeshVS_DataSource3D_HeaderFile
 #include <MeshVS_DataSource3D.hxx>
 #endif
@@ -61,11 +54,9 @@
 #ifndef _Standard_Address_HeaderFile
 #include <Standard_Address.hxx>
 #endif
-/*
 #ifndef _Handle_TColStd_HArray1OfInteger_HeaderFile
-#include <Handle_TColStd_HArray1OfInteger.hxx>
+#include <TColStd_HArray1OfInteger.hxx>
 #endif
-*/
 #ifndef _Standard_Real_HeaderFile
 #include <Standard_Real.hxx>
 #endif
@@ -131,6 +122,7 @@ class SMESH_MeshVSLink : public MeshVS_DataSource3D {
 
 	// Type management
 	//
+	// vejmarie declaration issue with OCCT7
 	Standard_EXPORT const Handle(Standard_Type)& DynamicType() const;
 
   protected:
@@ -151,8 +143,7 @@ class SMESH_MeshVSLink : public MeshVS_DataSource3D {
 	TColStd_PackedMapOfInteger myElements;
 	TColStd_PackedMapOfInteger myGroups;
 };
-
+#include <SMESH_MeshVSLink.ixx>
 // other Inline functions and methods (like "C++: function call" methods)
 //
-
 #endif
