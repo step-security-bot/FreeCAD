@@ -23,6 +23,7 @@
 
 #include "PreCompiled.h"
 #ifndef _PreComp_
+# include <Geom_Geometry.hxx>
 # include <Geom_ConicalSurface.hxx>
 # include <Geom_Circle.hxx>
 # include <GC_MakeConicalSurface.hxx>
@@ -31,6 +32,7 @@
 # include <gp_Lin.hxx>
 # include <Geom_Line.hxx>
 # include <Geom_TrimmedCurve.hxx>
+
 # include <Standard_Failure.hxx>
 #endif
 
@@ -66,10 +68,10 @@ int ConePy::PyInit(PyObject* args, PyObject* kwds)
     char* keywords_n[] = {NULL};
     if (PyArg_ParseTupleAndKeywords(args, kwds, "", keywords_n)) {
 	// vejmarie this casting fail WARNING
-        // const Handle_Geom_ConicalSurface& s = static_cast<const Handle_Geom_ConicalSurface&>
-        //     (getGeometryPtr()->handle());
-        // s->SetRadius(1.0);
-        // return 0;
+         Handle_Geom_ConicalSurface s = Handle_Geom_ConicalSurface::DownCast
+             (getGeometryPtr()->handle());
+         s->SetRadius(1.0);
+         return 0;
     }
 
     PyObject *pV1, *pV2;
