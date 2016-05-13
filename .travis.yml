@@ -153,7 +153,7 @@ install:
 ###
 # Building VTK
 ###
-    - wget "http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz"
+    - curl -O "http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz"
     - gunzip VTK-7.0.0.tar.gz
     - tar xf VTK-7.0.0.tar
     - rm VTK-7.0.0.tar
@@ -167,7 +167,7 @@ install:
 # Building OCCT
 ###
     - cd ../..
-    - wget "http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz"
+    - curl -O "http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz"
     - mv "index.html?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz" occt.tgz
     - gunzip occt.tgz
     - tar xf occt.tar
