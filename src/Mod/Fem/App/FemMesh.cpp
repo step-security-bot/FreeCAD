@@ -68,6 +68,8 @@
 #include <StdMeshers_QuadraticMesh.hxx>
 
 # include <TopoDS_Face.hxx>
+# include <TopoDS_Solid.hxx>
+# include <TopoDS_Shape.hxx>
 
 //to simplify parsing input files we use the boost lib
 #include <boost/tokenizer.hpp>
@@ -83,16 +85,18 @@ TYPESYSTEM_SOURCE(Fem::FemMesh , Base::Persistence);
 
 FemMesh::FemMesh()
 {
-    //Base::Console().Log("FemMesh::FemMesh():%p (id=%i)\n",this,StatCount);
+    // Base::Console().Log("FemMesh::FemMesh():%p (id=%i)\n",this,StatCount);
     myGen = new SMESH_Gen();
     // create a mesh allways with new StudyId to avoid overlapping destruction
     myMesh = myGen->CreateMesh(StatCount++,false);
+    // myMesh = myGen->CreateMesh(0,true);
+    // Base::Console().Log("FemMesh::FemMesh():%p (id=%i)\n",this,StatCount);
 
 }
 
 FemMesh::FemMesh(const FemMesh& mesh)
 {
-    //Base::Console().Log("FemMesh::FemMesh(mesh):%p (id=%i)\n",this,StatCount);
+    Base::Console().Log("FemMesh::FemMesh(mesh):%p (id=%i)\n",this,StatCount);
     myGen = new SMESH_Gen();
     myMesh = myGen->CreateMesh(StatCount++,false);
     copyMeshData(mesh);
@@ -114,7 +118,10 @@ FemMesh::~FemMesh()
 
 FemMesh &FemMesh::operator=(const FemMesh& mesh)
 {
+    Base::Console().Log("Start Copy through equal sign\n");
     if (this != &mesh) {
+	myGen = new SMESH_Gen();
+	myMesh = myGen->CreateMesh(0,true);
         copyMeshData(mesh);
     }
     return *this;
@@ -122,26 +129,18 @@ FemMesh &FemMesh::operator=(const FemMesh& mesh)
 
 void FemMesh::copyMeshData(const FemMesh& mesh)
 {
-    //const SMDS_MeshInfo& info = mesh.myMesh->GetMeshDS()->GetMeshInfo();
-    //int numPoly = info.NbPolygons();
-    //int numVolu = info.NbVolumes();
-    //int numTetr = info.NbTetras();
-    //int numHexa = info.NbHexas();
-    //int numPyrd = info.NbPyramids();
-    //int numPris = info.NbPrisms();
-    //int numHedr = info.NbPolyhedrons();
-
+    SMESH_Mesh *test;
     _Mtrx = mesh._Mtrx;
 
     SMESHDS_Mesh* meshds = this->myMesh->GetMeshDS();
-    meshds->ClearMesh();
-
+    
     SMDS_NodeIteratorPtr aNodeIter = mesh.myMesh->GetMeshDS()->nodesIterator();
     for (;aNodeIter->more();) {
         const SMDS_MeshNode* aNode = aNodeIter->next();
-        meshds->AddNodeWithID(aNode->X(),aNode->Y(),aNode->Z(), aNode->GetID());
+        double temp[3];
+        aNode->GetXYZ(temp);
+        meshds->AddNodeWithID(temp[0],temp[1],temp[2], aNode->GetID());
     }
-
     SMDS_EdgeIteratorPtr aEdgeIter = mesh.myMesh->GetMeshDS()->edgesIterator();
     for (;aEdgeIter->more();) {
         const SMDS_MeshEdge* aEdge = aEdgeIter->next();
@@ -559,7 +558,6 @@ std::set<int> FemMesh::getNodesBySolid(const TopoDS_Solid &solid) const
                 result.insert(aNode->GetID());
         }
     }
-
     return result;
 }
 
@@ -873,6 +871,7 @@ void FemMesh::read(const char *FileName)
     }
     else if (File.hasExtension("dat") ) {
         // read brep-file
+	// vejmarie disable
         myMesh->DATToMesh(File.filePath().c_str());
     }
     else if (File.hasExtension("bdf") ) {

@@ -25,10 +25,12 @@
 #define PART_CROSSSECTION_H
 
 #include <list>
+#include <TopTools_IndexedMapOfShape.hxx>
+
 
 class TopoDS_Shape;
 class TopoDS_Wire;
-class TopTools_IndexedMapOfShape;
+// class TopTools_IndexedMapOfShape;
 
 namespace Part {
 
