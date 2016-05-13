@@ -161,9 +161,7 @@ install:
     - mkdir build
     - cd build
     - cmake .. -DVTK_Group_Rendering:BOOL=OFF -DVTK_Group_StandAlone:BOOL=ON -DVTK_RENDERING_BACKEND=None
-    - make -j 2
-    - cd ..
-    - tar -zcf build_VTK-7.0.0.tar.gz build
+
 #    - curl -O "https://github.com/sasobadovinac/FreeCAD/releases/download/0.17/build_VTK-7.0.0.tar.gz"
 #    - tar -zxf build_VTK-7.0.0.tar.gz
 #    - ls
@@ -206,7 +204,9 @@ script:
 ####
 #  Install FreeCAD and run unit tests.  Test failures will fail the build
 ###
-     - if [ 1 != 1 ]; then make -j2; fi
+    - make -j2
+    - cd ..
+    - tar -zcf build_VTK-7.0.0.tar.gz build
 #    - sudo make -j2 install
 #    - ${INSTALLED_APP_PATH} --run-test 0
 #    - ${INSTALLED_APP_PATH} --log-file /tmp/FreeCAD_installed.log &
@@ -238,5 +238,3 @@ deploy:
   file: "build_VTK-7.0.0.tar.gz"
   overwrite: true
   skip_cleanup: true
-  on:
-    tags: true
