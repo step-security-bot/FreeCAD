@@ -162,51 +162,53 @@ install:
     - cd build
     - cmake .. -DVTK_Group_Rendering:BOOL=OFF -DVTK_Group_StandAlone:BOOL=ON -DVTK_RENDERING_BACKEND=None
     - make -j 2
-    - sudo make install
+    - cd ..
+    - tar -zcf build_VTK-7.0.0.tar.gz build
+#    - sudo make install
 ###
 # Building OCCT
 ###
-    - cd ../..
-    - curl -O "http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz"
-    - mv "index.html?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz" occt.tgz
-    - gunzip occt.tgz
-    - tar xf occt.tar
-    - rm occt.tar
-    - cd occt-b007701
-    - mkdir build
-    - cd build
-    - cmake .. -DUSE_VTK:BOOL=OFF
-    - sudo make -j 2
-    - sudo make install
+#    - cd ../..
+#    - curl -O "http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz"
+#    - mv "index.html?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz" occt.tgz
+#    - gunzip occt.tgz
+#    - tar xf occt.tar
+#    - rm occt.tar
+#    - cd occt-b007701
+#    - mkdir build
+#    - cd build
+#    - cmake .. -DUSE_VTK:BOOL=OFF
+#    - sudo make -j 2
+#    - sudo make install
 
 ###
 # Building Netgen
 ###
 
-    - cd ../..
-    - git clone https://github.com/vejmarie/Netgen
-    - cd Netgen/netgen-5.3.1
-    - ./configure --with-tcl=/usr/lib/tcl8.5 --with-tk=/usr/lib/tk8.5  --enable-occ  --enable-shared --enable-nglib CXXFLAGS="-DNGLIB_EXPORTS -std=gnu++11"
-    - make -j 2
-    - sudo make install
-    - cd ../..
-    - sudo cp -rf Netgen/netgen-5.3.1 /usr/share/netgen
+#    - cd ../..
+#    - git clone https://github.com/vejmarie/Netgen
+#    - cd Netgen/netgen-5.3.1
+#    - ./configure --with-tcl=/usr/lib/tcl8.5 --with-tk=/usr/lib/tk8.5  --enable-occ  --enable-shared --enable-nglib CXXFLAGS="-DNGLIB_EXPORTS -std=gnu++11"
+#    - make -j 2
+#    - sudo make install
+#    - cd ../..
+#    - sudo cp -rf Netgen/netgen-5.3.1 /usr/share/netgen
 
 ####
 #  Build FreeCAD with cmake options set above for each platform
 ###
-    - mkdir build && cd build && cmake ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ../
+#    - mkdir build && cd build && cmake ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ../
 
 script:
 ####
 #  Install FreeCAD and run unit tests.  Test failures will fail the build
 ###
-    - sudo make -j2 install
-    - ${INSTALLED_APP_PATH} --run-test 0
-    - ${INSTALLED_APP_PATH} --log-file /tmp/FreeCAD_installed.log &
-    - sleep 10 && pkill FreeCAD
-    - cat /tmp/FreeCAD_installed.log
-    - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
+#    - sudo make -j2 install
+#    - ${INSTALLED_APP_PATH} --run-test 0
+#    - ${INSTALLED_APP_PATH} --log-file /tmp/FreeCAD_installed.log &
+#    - sleep 10 && pkill FreeCAD
+#    - cat /tmp/FreeCAD_installed.log
+#    - grep --file=../.log_errors /tmp/FreeCAD_installed.log ; [ $? == 1 ] && echo "No errors from .log_errors file found in the log after start from /usr/local/bin" || ( echo "Error from .log_errors found!" && false )
 
 after_success:
 ####
@@ -215,13 +217,13 @@ after_success:
 #
 #  GH_TOKEN must be set in order to deploy releases to GitHub
 ##
-- |
-  if [ "${TRAVIS_OS_NAME}" == "osx" -a "${TRAVIS_PULL_REQUEST}" == "false" ]; then
-     brew install jq node && npm install -g appdmg
-     export VSN=$(python ${TRAVIS_BUILD_DIR}/src/Tools/ArchiveNameFromVersionHeader.py ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)
-     export DEPLOYMENT_ARCHIVE=${VSN}.dmg
-     appdmg ${TRAVIS_BUILD_DIR}/src/MacAppBundle/DiskImage/layout.json "${DEPLOYMENT_ARCHIVE}"
-     deployContext=$(create_helper_context repo=${TRAVIS_REPO_SLUG} auth_token=${GH_TOKEN} release=${DEPLOY_RELEASE})
-     gitHub_deploy_asset_to_release_named $deployContext ${DEPLOYMENT_ARCHIVE}
-     gitHub_prune_assets_for_release_named $deployContext "-OSX-" 3
-  fi
+#- |
+#  if [ "${TRAVIS_OS_NAME}" == "osx" -a "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+#     brew install jq node && npm install -g appdmg
+#     export VSN=$(python ${TRAVIS_BUILD_DIR}/src/Tools/ArchiveNameFromVersionHeader.py ${TRAVIS_BUILD_DIR}/build/src/Build/Version.h)
+    - export DEPLOYMENT_ARCHIVE=build_VTK-7.0.0.tar.gz
+#     appdmg ${TRAVIS_BUILD_DIR}/src/MacAppBundle/DiskImage/layout.json "${DEPLOYMENT_ARCHIVE}"
+    - deployContext=$(create_helper_context repo=${TRAVIS_REPO_SLUG} auth_token=${GH_TOKEN} release=${DEPLOY_RELEASE})
+    - gitHub_deploy_asset_to_release_named $deployContext ${DEPLOYMENT_ARCHIVE} replace
+#     gitHub_prune_assets_for_release_named $deployContext "-OSX-" 3
+#  fi
