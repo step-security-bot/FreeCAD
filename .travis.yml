@@ -247,5 +247,4 @@ deploy:
   overwrite: true
   skip_cleanup: true
   on:
-    tags: false
     all_branches: true
