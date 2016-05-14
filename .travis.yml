@@ -162,15 +162,15 @@ install:
 #    - cd build
 #    - cmake .. -DVTK_Group_Rendering:BOOL=OFF -DVTK_Group_StandAlone:BOOL=ON -DVTK_RENDERING_BACKEND=None
 
-    - curl -O "https://github.com/sasobadovinac/FreeCAD/releases/download/0.17/build_VTK-7.0.0.tar.gz"
-    - tar -zxf build_VTK-7.0.0.tar.gz
-    - ls
-    - cd build
-    - sudo make install
+#    - curl -O "https://github.com/sasobadovinac/FreeCAD/releases/download/0.17/build_VTK-7.0.0.tar.gz"
+#    - tar -zxf build_VTK-7.0.0.tar.gz
+#    - ls
+#    - cd build
+#    - sudo make install
 ###
 # Building OCCT
 ###
-    - cd ..
+#    - cd ..
     - curl -o occt.tgz "http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz"
     - gunzip occt.tgz
     - tar xf occt.tar
