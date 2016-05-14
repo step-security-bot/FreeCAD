@@ -167,7 +167,7 @@ install:
     - tar -zxf build_VTK-7.0.0.tar.gz
     - ls
     - cd build
-    - sudo make install
+    - sudo install
 ###
 # Building OCCT
 ###
@@ -186,7 +186,7 @@ install:
     - tar -zxf build_occt.tar.gz
     - ls
     - cd build
-    - sudo make install
+    - sudo install
 
 ###
 # Building Netgen
@@ -197,7 +197,7 @@ install:
     - cd Netgen/netgen-5.3.1
     - ./configure --with-tcl=/usr/lib/tcl8.5 --with-tk=/usr/lib/tk8.5  --enable-occ  --enable-shared --enable-nglib CXXFLAGS="-DNGLIB_EXPORTS -std=gnu++11"
     - make -j 2
-    - sudo make install
+    - sudo install
     - cd ../..
     - sudo cp -rf Netgen/netgen-5.3.1 /usr/share/netgen
 
