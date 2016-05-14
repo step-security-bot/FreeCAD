@@ -153,32 +153,32 @@ install:
 ###
 # Building VTK
 ###
-    - curl -O "http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz"
-    - gunzip VTK-7.0.0.tar.gz
-    - tar xf VTK-7.0.0.tar
-    - rm VTK-7.0.0.tar
-    - cd VTK-7.0.0
-    - mkdir build
-    - cd build
-    - cmake .. -DVTK_Group_Rendering:BOOL=OFF -DVTK_Group_StandAlone:BOOL=ON -DVTK_RENDERING_BACKEND=None
-
-#    - curl -O "https://github.com/sasobadovinac/FreeCAD/releases/download/0.17/build_VTK-7.0.0.tar.gz"
-#    - tar -zxf build_VTK-7.0.0.tar.gz
-#    - ls
+#    - curl -O "http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz"
+#    - gunzip VTK-7.0.0.tar.gz
+#    - tar xf VTK-7.0.0.tar
+#    - rm VTK-7.0.0.tar
+#    - cd VTK-7.0.0
+#    - mkdir build
 #    - cd build
-#    - sudo make install
+#    - cmake .. -DVTK_Group_Rendering:BOOL=OFF -DVTK_Group_StandAlone:BOOL=ON -DVTK_RENDERING_BACKEND=None
+
+    - curl -O "https://github.com/sasobadovinac/FreeCAD/releases/download/0.17/build_VTK-7.0.0.tar.gz"
+    - tar -zxf build_VTK-7.0.0.tar.gz
+    - ls
+    - cd build
+    - sudo make install
 ###
 # Building OCCT
 ###
-#    - cd ../..
-#    - curl -o occt.tgz "http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz"
-#    - gunzip occt.tgz
-#    - tar xf occt.tar
-#    - rm occt.tar
-#    - cd occt-b007701
-#    - mkdir build
-#    - cd build
-#    - cmake .. -DUSE_VTK:BOOL=OFF
+    - cd ..
+    - curl -o occt.tgz "http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=b00770133187b83761e651df50051b2fa3433858;sf=tgz"
+    - gunzip occt.tgz
+    - tar xf occt.tar
+    - rm occt.tar
+    - cd occt-b007701
+    - mkdir build
+    - cd build
+    - cmake .. -DUSE_VTK:BOOL=OFF
 #    - sudo make -j 2
 #    - sudo make install
 
@@ -206,7 +206,8 @@ script:
 ###
     - make -j2
     - cd ..
-    - tar -zcf build_VTK-7.0.0.tar.gz build
+    - tar -zcf build_occt.tar.gz build
+    - ls
 #    - sudo make -j2 install
 #    - ${INSTALLED_APP_PATH} --run-test 0
 #    - ${INSTALLED_APP_PATH} --log-file /tmp/FreeCAD_installed.log &
@@ -235,8 +236,9 @@ script:
 deploy:
   provider: releases
   api_key: "${GH_TOKEN}"
-  file: "build_VTK-7.0.0.tar.gz"
+  file: "build_occt.tar.gz"
   overwrite: true
   skip_cleanup: true
   on:
+    tags: false
     all_branches: true
