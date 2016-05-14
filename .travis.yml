@@ -238,3 +238,5 @@ deploy:
   file: "build_VTK-7.0.0.tar.gz"
   overwrite: true
   skip_cleanup: true
+  on:
+    all_branches: true
