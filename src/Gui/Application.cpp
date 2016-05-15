@@ -439,6 +439,7 @@ Application::Application(bool GUIenabled)
     PythonStdin                 ::init_type();
     View3DInventorPy            ::init_type();
     View3DInventorViewerPy      ::init_type();
+    AbstractSplitViewPy         ::init_type();
 
     d = new ApplicationP;
 
@@ -1823,6 +1824,12 @@ void Application::runApplication(void)
     }
     catch (const Base::SystemExitException&) {
         Base::Console().Message("System exit\n");
+        throw;
+    }
+    catch (const std::exception& e) {
+        // catching nasty stuff coming out of the event loop
+        App::Application::destructObserver();
+        Base::Console().Error("Event loop left through unhandled exception: %s\n", e.what());
         throw;
     }
     catch (...) {
