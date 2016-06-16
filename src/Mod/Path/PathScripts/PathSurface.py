@@ -121,7 +121,7 @@ class ObjectSurface:
 
     def onChanged(self, obj, prop):
         if prop == "UserLabel":
-            obj.Label = obj.UserLabel + " (" + obj.ToolDescription + ")"
+            obj.Label = obj.UserLabel + " :" + obj.ToolDescription
 
     def _waterline(self, obj, s, bb):
         import ocl
@@ -258,6 +258,8 @@ class ObjectSurface:
         FreeCAD.Console.PrintWarning(
             translate("PathSurface", "Hold on.  This might take a minute.\n"))
         output = ""
+        if obj.Comment != "":
+            output += '(' + str(obj.Comment)+')\n'
 
         toolLoad = PathUtils.getLastToolLoad(obj)
         if toolLoad is None or toolLoad.ToolNumber == 0:
@@ -275,9 +277,9 @@ class ObjectSurface:
             obj.ToolDescription = toolLoad.Name
 
         if obj.UserLabel == "":
-            obj.Label = obj.Name + " (" + obj.ToolDescription + ")"
+            obj.Label = obj.Name + " :" + obj.ToolDescription
         else:
-            obj.Label = obj.UserLabel + " (" + obj.ToolDescription + ")"
+            obj.Label = obj.UserLabel + " :" + obj.ToolDescription
 
         if obj.Base:
             for b in obj.Base:
@@ -312,9 +314,15 @@ class ObjectSurface:
                 elif obj.Algorithm == 'OCL Waterline':
                     output = self._waterline(obj, s, bb)
 
-        path = Path.Path(output)
-        obj.Path = path
+        if obj.Active:
+            path = Path.Path(output)
+            obj.Path = path
+            obj.ViewObject.Visibility = True
 
+        else:
+            path = Path.Path("(inactive operation)")
+            obj.Path = path
+            obj.ViewObject.Visibility = False
 
 class ViewProviderSurface:
 
@@ -418,12 +426,15 @@ class TaskPanel:
                 self.obj.StartDepth = self.form.startDepth.text()
             if hasattr(self.obj, "FinalDepth"):
                 self.obj.FinalDepth = self.form.finalDepth.text()
+            if hasattr(self.obj, "FinishDepth"):
+                self.obj.FinishDepth = self.form.finishDepth.text()
+            if hasattr(self.obj, "StepDown"):
+                self.obj.StepDown = self.form.stepDown.value()
+
             if hasattr(self.obj, "SafeHeight"):
                 self.obj.SafeHeight = self.form.safeHeight.text()
             if hasattr(self.obj, "ClearanceHeight"):
                 self.obj.ClearanceHeight = self.form.clearanceHeight.text()
-            if hasattr(self.obj, "StepDown"):
-                self.obj.StepDown = self.form.stepDown.value()
             if hasattr(self.obj, "Algorithm"):
                 self.obj.Algorithm = str(
                     self.form.algorithmSelect.currentText())
@@ -433,11 +444,19 @@ class TaskPanel:
     def setFields(self):
         self.form.startDepth.setText(str(self.obj.StartDepth.Value))
         self.form.finalDepth.setText(str(self.obj.FinalDepth.Value))
+        self.form.finishDepth.setText(str(self.obj.FinishDepth.Value))
+        self.form.stepDown.setValue(self.obj.StepDown)
+
         self.form.safeHeight.setText(str(self.obj.SafeHeight.Value))
         self.form.clearanceHeight.setText(str(self.obj.ClearanceHeight.Value))
 
         for i in self.obj.Base:
             self.form.baseList.addItem(i[0].Name)
+
+        index = self.form.algorithmSelect.findText(
+                self.obj.Algorithm, QtCore.Qt.MatchFixedString)
+        if index >= 0:
+            self.form.algorithmSelect.setCurrentIndex(index)
 
     def open(self):
         self.s = SelObserver()
@@ -517,16 +536,25 @@ class TaskPanel:
     def setupUi(self):
 
         # Connect Signals and Slots
-        self.form.startDepth.editingFinished.connect(self.getFields)
-        self.form.finalDepth.editingFinished.connect(self.getFields)
-        self.form.safeHeight.editingFinished.connect(self.getFields)
-        self.form.clearanceHeight.editingFinished.connect(self.getFields)
 
+        #Base Geometry
         self.form.addBase.clicked.connect(self.addBase)
         self.form.deleteBase.clicked.connect(self.deleteBase)
         self.form.reorderBase.clicked.connect(self.reorderBase)
-
         self.form.baseList.itemSelectionChanged.connect(self.itemActivated)
+
+        # Depths
+        self.form.startDepth.editingFinished.connect(self.getFields)
+        self.form.finalDepth.editingFinished.connect(self.getFields)
+        self.form.finishDepth.editingFinished.connect(self.getFields)
+        self.form.stepDown.editingFinished.connect(self.getFields)
+
+        # Heights
+        self.form.safeHeight.editingFinished.connect(self.getFields)
+        self.form.clearanceHeight.editingFinished.connect(self.getFields)
+
+        # Operation
+        self.form.algorithmSelect.currentIndexChanged.connect(self.getFields)
 
         sel = FreeCADGui.Selection.getSelectionEx()
         self.setFields()

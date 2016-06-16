@@ -24,6 +24,7 @@
 
 import FreeCAD
 import Path
+import numpy
 from FreeCAD import Vector
 from PathScripts import PathUtils
 from PathScripts.PathUtils import depth_params
@@ -32,6 +33,14 @@ if FreeCAD.GuiUp:
     import FreeCADGui
     from PySide import QtCore, QtGui
     from DraftTools import translate
+    # Qt tanslation handling
+    try:
+        _encoding = QtGui.QApplication.UnicodeUTF8
+        def translate(context, text, disambig=None):
+            return QtGui.QApplication.translate(context, text, disambig, _encoding)
+    except AttributeError:
+        def translate(context, text, disambig=None):
+            return QtGui.QApplication.translate(context, text, disambig)
 else:
     def translate(ctxt, txt):
         return txt
@@ -41,16 +50,6 @@ __author__ = "sliptonic (Brad Collette)"
 __url__ = "http://www.freecadweb.org"
 
 """Path Profile object and FreeCAD command"""
-
-# Qt tanslation handling
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def translate(context, text, disambig=None):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def translate(context, text, disambig=None):
-        return QtGui.QApplication.translate(context, text, disambig)
-
 
 class ObjectProfile:
 
@@ -99,6 +98,7 @@ class ObjectProfile:
         obj.addProperty("App::PropertyDistance", "RollRadius", "Profile", "Radius at start and end")
         obj.addProperty("App::PropertyDistance", "OffsetExtra", "Profile", "Extra value to stay away from final profile- good for roughing toolpath")
         obj.addProperty("App::PropertyLength", "SegLen", "Profile", "Tesselation  value for tool paths made from beziers, bsplines, and ellipses")
+        obj.addProperty("App::PropertyAngle", "PlungeAngle", "Profile", "Plunge angle with which the tool enters the work piece. Straight down is 90 degrees, if set small enough or zero the tool will descent exactly one layer depth down per turn")
 
         obj.addProperty("App::PropertyVectorList", "locs", "Tags", "List of holding tag locations")
 
@@ -126,7 +126,7 @@ class ObjectProfile:
 
     def onChanged(self, obj, prop):
         if prop == "UserLabel":
-             obj.Label = obj.UserLabel + " (" + obj.ToolDescription + ")"
+            obj.Label = obj.UserLabel + " :" + obj.ToolDescription
 
     def addprofilebase(self, obj, ss, sub=""):
         baselist = obj.Base
@@ -170,7 +170,8 @@ class ObjectProfile:
     def _buildPathOCC(self, obj, wire):
         import DraftGeomUtils
         output = ""
-        output += '(' + str(obj.Comment)+')\n'
+        if obj.Comment != "":
+            output += '(' + str(obj.Comment)+')\n'
 
         if obj.Direction == 'CCW':
             clockwise = False
@@ -184,7 +185,7 @@ class ObjectProfile:
                 wire, obj.Side, self.radius, clockwise,
                 obj.ClearanceHeight.Value, obj.StepDown, obj.StartDepth.Value,
                 obj.FinalDepth.Value, FirstEdge, PathClosed, obj.SegLen.Value,
-                self.vertFeed, self.horizFeed)
+                self.vertFeed, self.horizFeed, PlungeAngle=obj.PlungeAngle.Value)
 
         return output
 
@@ -193,6 +194,8 @@ class ObjectProfile:
         import math
         import area
         output = ""
+        if obj.Comment != "":
+            output += '(' + str(obj.Comment)+')\n'
 
         if obj.StartPoint and obj.UseStartPoint:
             startpoint = obj.StartPoint
@@ -279,9 +282,9 @@ print "y - " + str(point.y)
             obj.ToolDescription = toolLoad.Name
 
         if obj.UserLabel == "":
-            obj.Label = obj.Name + " (" + obj.ToolDescription + ")"
+            obj.Label = obj.Name + " :" + obj.ToolDescription
         else:
-            obj.Label = obj.UserLabel + " (" + obj.ToolDescription + ")"
+            obj.Label = obj.UserLabel + " :" + obj.ToolDescription
 
 
         if obj.Base:
@@ -290,15 +293,18 @@ print "y - " + str(point.y)
             wires = []
 
             for b in obj.Base:
-                # we only consider the outer wire if this is a Face
-                # Horizontal and vertical faces are handled differently
-                shape = getattr(b[0].Shape, b[1])
-                if abs(shape.normalAt(0, 0).z) == 1:  # horizontal face
-                    hfaces.append(shape)
+                for sub in b[1]:
+                    # we only consider the outer wire if this is a Face
+                    # Horizontal and vertical faces are handled differently
+                    shape = getattr(b[0].Shape, sub)
+                    if numpy.isclose(shape.normalAt(0, 0).z, 1):  # horizontal face
+                        hfaces.append(shape)
 
-                elif abs(shape.normalAt(0, 0).z) == 0:  # vertical face
-                    vfaces.append(shape)
-
+                    elif numpy.isclose(shape.normalAt(0, 0).z, 0):  # vertical face
+                        vfaces.append(shape)
+                    else:
+                        FreeCAD.Console.PrintError(translate("Path", "Face doesn't appear to be parallel or perpendicular to the XY plane. No path will be generated for: \n"))
+                        FreeCAD.Console.PrintError(b[0].Name + "." + sub + "\n")
             for h in hfaces:
                 wires.append(h.OuterWire)
 
@@ -443,9 +449,6 @@ class CommandPathProfile:
         return FreeCAD.ActiveDocument is not None
 
     def Activated(self):
-        # import Path
-        # from PathScripts import PathProject, PathUtils, PathKurveUtils
-
         ztop = 10.0
         zbottom = 0.0
 
@@ -467,6 +470,7 @@ class CommandPathProfile:
         FreeCADGui.doCommand('obj.OffsetExtra = 0.0')
         FreeCADGui.doCommand('obj.Direction = "CW"')
         FreeCADGui.doCommand('obj.UseComp = False')
+        FreeCADGui.doCommand('obj.PlungeAngle = 90.0')
         FreeCADGui.doCommand('PathScripts.PathUtils.addToProject(obj)')
 
         FreeCAD.ActiveDocument.commitTransaction()
@@ -510,6 +514,8 @@ class TaskPanel:
                 self.obj.SegLen = self.form.segLen.value()
             if hasattr(self.obj, "RollRadius"):
                 self.obj.RollRadius = self.form.rollRadius.value()
+            if hasattr(self.obj, "PlungeAngle"):
+                self.obj.PlungeAngle = str(self.form.plungeAngle.value())
             if hasattr(self.obj, "UseComp"):
                 self.obj.UseComp = self.form.useCompensation.isChecked()
             if hasattr(self.obj, "UseStartPoint"):
@@ -524,7 +530,7 @@ class TaskPanel:
                 self.obj.Direction = str(self.form.direction.currentText())
         self.obj.Proxy.execute(self.obj)
 
-    def setFields(self): 
+    def setFields(self):
         self.form.startDepth.setText(str(self.obj.StartDepth.Value))
         self.form.finalDepth.setText(str(self.obj.FinalDepth.Value))
         self.form.safeHeight.setText(str(self.obj.SafeHeight.Value))
@@ -533,6 +539,7 @@ class TaskPanel:
         self.form.extraOffset.setValue(self.obj.OffsetExtra.Value)
         self.form.segLen.setValue(self.obj.SegLen.Value)
         self.form.rollRadius.setValue(self.obj.RollRadius.Value)
+        self.form.plungeAngle.setValue(self.obj.PlungeAngle.Value)
         self.form.useCompensation.setChecked(self.obj.UseComp)
         self.form.useStartPoint.setChecked(self.obj.UseStartPoint)
         self.form.useEndPoint.setChecked(self.obj.UseEndPoint)
@@ -553,7 +560,8 @@ class TaskPanel:
             self.form.direction.setCurrentIndex(index)
 
         for i in self.obj.Base:
-            self.form.baseList.addItem(i[0].Name + "." + i[1])
+            for sub in i[1]:
+                self.form.baseList.addItem(i[0].Name + "." + sub)
 
         for i in range(len(self.obj.locs)):
             item = QtGui.QTreeWidgetItem(self.form.tagTree)
@@ -586,15 +594,16 @@ class TaskPanel:
             FreeCAD.Console.PrintError(translate("PathProject", "Please select faces from one solid\n"))
             return
 
-          #  if s.HasSubObjects:
         for i in sel.SubElementNames:
             self.obj.Proxy.addprofilebase(self.obj, sel.Object, i)
-            #else:
-                #self.obj.Proxy.addprofilebase(self.obj, s.Object)
+
         self.setFields()  # defaults may have changed.  Reload.
         self.form.baseList.clear()
+
         for i in self.obj.Base:
-            self.form.baseList.addItem(i[0].Name + "." + i[1])
+            for sub in i[1]:
+                self.form.baseList.addItem(i[0].Name + "." + sub)
+
 
     def deleteBase(self):
         dlist = self.form.baseList.selectedItems()
