@@ -534,7 +534,7 @@ def loadTexture(filename,size=None):
             #else:   
             #    p = QtGui.QImage(filename)
             size = coin.SbVec2s(p.width(), p.height())
-            buffersize = p.numBytes()
+            buffersize = p.byteCount()
             numcomponents = int (float(buffersize) / ( size[0] * size[1] ))
 
             img = coin.SoSFImage()
@@ -2754,12 +2754,12 @@ def upgrade(objects,delete=False,force=None):
         """makes a shell with the given objects"""
         faces = []
         for obj in objectslist:
-            faces.append(obj.Shape.Faces)
+            faces.extend(obj.Shape.Faces)
         sh = Part.makeShell(faces)
         if sh:
             if sh.Faces:
-                newob = FreeCAD.ActiveDocument.addObject("Part::Feature","Shell")
-                newob.Shape = sh
+                newobj = FreeCAD.ActiveDocument.addObject("Part::Feature","Shell")
+                newobj.Shape = sh
                 addList.append(newobj)
                 deleteList.extend(objectslist)
                 return newobj
@@ -3606,6 +3606,7 @@ class _ViewProviderDimension(_ViewProviderDraft):
             if FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Units").GetInt("UserSchema",0) == 5:
                 s = FreeCAD.Units.Quantity(l,FreeCAD.Units.Length).UserString
                 self.string = s.replace("' ","'- ")
+                self.string = s.replace("+"," ")
             elif hasattr(obj.ViewObject,"Decimals"):
                 self.string = DraftGui.displayExternal(l,obj.ViewObject.Decimals,'Length',su)
             else:
