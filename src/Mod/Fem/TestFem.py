@@ -164,7 +164,7 @@ class FemTest(unittest.TestCase):
             fcc_print(sf_content)
             fcc_print("Stats read from {}.frd file".format(fea.base_name))
             fcc_print(stats)
-            return True
+            return False
         return False
 
     def test_new_analysis(self):
