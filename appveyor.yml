@@ -27,6 +27,7 @@ install:
   - cd C:\projects\freecad
   - ps: Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.17-med-test/FreeCADLibs_11.5.1_x64_VC12.7z
   - 7z x FreeCADLibs_11.5.1_x64_VC12.7z > nul
+  - dir
   - cmake --version
   #- ps: Start-FileDownload https://cmake.org/files/v3.5/cmake-3.5.1-win32-x86.zip
   #- 7z x cmake-3.5.1-win32-x86.zip > nul
@@ -37,11 +38,11 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.5.1_x64_VC12
+  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.5_x64_VC12
     -DBUILD_FEM_NETGEN=OFF
     -G "%generator%" ..
   - mkdir bin
-  - xcopy C:\projects\freecad\FreeCADLibs_11.5.1_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
+  - xcopy C:\projects\freecad\FreeCADLibs_11.5_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
   - echo %NUMBER_OF_PROCESSORS%
   - msbuild /m FreeCAD_Trunk.sln
 
