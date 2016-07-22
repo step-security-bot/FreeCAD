@@ -117,7 +117,7 @@ class FemTest(unittest.TestCase):
 
     def create_pressure_constraint(self):
         self.pressure_constraint = self.active_doc.addObject("Fem::ConstraintPressure", "FemConstraintPressure")
-        self.pressure_constraint.References = [(self.box, "Face2")]
+        self.pressure_constraint.References = [(self.box, "Face")]
         self.pressure_constraint.Pressure = 1000.0
         self.pressure_constraint.Reversed = False
 
@@ -164,7 +164,7 @@ class FemTest(unittest.TestCase):
             fcc_print(sf_content)
             fcc_print("Stats read from {}.frd file".format(fea.base_name))
             fcc_print(stats)
-            return False
+            return True
         return False
 
     def test_new_analysis(self):

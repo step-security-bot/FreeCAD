@@ -50,12 +50,12 @@ build_script:
   - msbuild /m FreeCAD_Trunk.sln
 
 #after_build:
-  - cd C:\projects\freecad\build\bin\
-  - FreeCADCmd.exe --run-test 0
 
 #artifacts:
 
-test: off  # to avoid discovering tests
+test:
+  - cd C:\projects\freecad\build\bin\
+  - FreeCADCmd.exe --run-test 0
 
 #
 # The following section automatically uploads artifacts
