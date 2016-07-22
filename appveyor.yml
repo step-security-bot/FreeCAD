@@ -38,7 +38,7 @@ build_script:
   - mkdir build
   - cd build
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.5_x64_VC12
-    -DBUILD_FEM_NETGEN
+    -DBUILD_FEM_NETGEN=OFF
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.5_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
