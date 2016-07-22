@@ -47,6 +47,8 @@ build_script:
   - msbuild /m FreeCAD_Trunk.sln
 
 #after_build:
+  - cd C:\projects\freecad\build\bin\
+  - FreeCADCmd.exe --run-test 0
 
 #artifacts:
 
