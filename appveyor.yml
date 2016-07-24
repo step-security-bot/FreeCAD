@@ -27,7 +27,8 @@ install:
   - cd C:\projects\freecad
   - ps: Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.16/FreeCADLibs_11.3_x64_VC12.7z
   - 7z x FreeCADLibs_11.3_x64_VC12.7z > nul
-  - cmake --version
+  - python --version
+  #- cmake --version
   #- ps: Start-FileDownload https://cmake.org/files/v3.5/cmake-3.5.1-win32-x86.zip
   #- 7z x cmake-3.5.1-win32-x86.zip > nul
   #- set PATH=C:\projects\freecad\cmake-3.5.1-win32-x86\bin;%PATH%
