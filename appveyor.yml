@@ -25,8 +25,8 @@ shallow_clone: true
 # scripts that run after cloning repository
 install:
   - cd C:\projects\freecad
-  #- ps: Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.16/FreeCADLibs_11.3_x64_VC12.7z
-  #- 7z x FreeCADLibs_11.3_x64_VC12.7z > nul
+  - ps: Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.16/FreeCADLibs_11.3_x64_VC12.7z
+  - 7z x FreeCADLibs_11.3_x64_VC12.7z > nul
   - ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.1.1.zip
   - 7z x v3.1.1.zip
   - python --version
