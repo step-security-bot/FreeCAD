@@ -1,13 +1,15 @@
 #version:
 
 environment:
+  #global:
+  #  - CLCACHE_DIR=C:\projects\clcache
   matrix:
     - generator: "Visual Studio 12 Win64"
       ARCH: "Win64"
       Compiler: "MSVC2013"
 
 cache:
-  - 'C:\Users\appveyor\clcache'
+  - '%HOME%\clcache'
 
 configuration:
   #- Debug
