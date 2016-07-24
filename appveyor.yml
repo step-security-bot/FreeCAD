@@ -35,6 +35,7 @@ install:
   - python --version
   - cd clcache-3.1.1
   - dir
+  - pip install py2exe
   - python setup.py py2exe
   - dir
   - cd dist
