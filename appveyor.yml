@@ -29,11 +29,16 @@ install:
   #- 7z x FreeCADLibs_11.3_x64_VC12.7z > nul
   - ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.1.1.zip
   - 7z x v3.1.1.zip
-  - dir
   - python --version
   - set PATH=C:\\Python33;%PATH%
   - set PATH=C:\\Python33\\Scripts;%PATH%
   - python --version
+  - cd clcache-3.1.1
+  - dir
+  - python setup.py py2exe
+  - dir
+  - cd dist
+  - dir
   - set PATH=C:\\Python27;%PATH%
   - set PATH=C:\\Python27\\Scripts;%PATH%
   - python --version
