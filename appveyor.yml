@@ -40,6 +40,9 @@ install:
   - dir
   - cd dist
   - dir
+  - ren clcache.exe cl.exe
+  - dir
+  - set PATH=C:\projects\freecad\clcache-3.1.1\dist;%PATH%
   - set PATH=C:\\Python27;%PATH%
   - set PATH=C:\\Python27\\Scripts;%PATH%
   - python --version
@@ -53,11 +56,11 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  #- cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
-  #  -G "%generator%" ..
+  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
+    -G "%generator%" ..
   - mkdir bin
-  #- xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
-  #- msbuild /m FreeCAD_Trunk.sln
+  - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
+  - msbuild /m FreeCAD_Trunk.sln
 
 #after_build:
 
