@@ -66,6 +66,8 @@ install:
   - xcopy C:\projects\freecad\clcache-3.1.1\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   - dir
   - set CLCACHE_CL="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl_original.exe"
+  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - cl.exe -s
   #- cmake --version
   #- ps: Start-FileDownload https://cmake.org/files/v3.5/cmake-3.5.1-win32-x86.zip
   #- 7z x cmake-3.5.1-win32-x86.zip > nul
@@ -76,14 +78,13 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  #- cl.exe --help
-  - "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe" -s
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
   - msbuild /m FreeCAD_Trunk.sln
-  - "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe" -s
+  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - cl.exe -s
 
 #after_build:
 
