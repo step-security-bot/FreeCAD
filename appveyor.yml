@@ -1,15 +1,13 @@
 #version:
 
 environment:
-  #global:
-  #  - CLCACHE_DIR=C:\projects\clcache
   matrix:
     - generator: "Visual Studio 12 Win64"
       ARCH: "Win64"
       Compiler: "MSVC2013"
 
 cache:
-  - '%HOME%\clcache'
+  - C:\projects\clcache
 
 configuration:
   #- Debug
@@ -48,6 +46,7 @@ install:
   - set PATH=C:\\projects\\freecad\\clcache-3.1.1\\dist;%PATH%
   - cl.exe --help
   - cl.exe -s
+  - set CLCACHE_DIR=C:\projects\clcache
   - set PATH=C:\\Python27;%PATH%
   - set PATH=C:\\Python27\\Scripts;%PATH%
   - python --version
