@@ -34,7 +34,6 @@ install:
       ren FreeCADLibs_11.5_x64_VC12 FreeCADLibs;
     }
     elseif ($env:ARCH -eq 'Win32') {
-    if [ "${ARCH}" == "Win32" ]; then
       Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.17-med-test/FreeCADLibs_11.5.1_x86_VC12.7z;
       7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul;
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs;
