@@ -28,16 +28,14 @@ shallow_clone: true
 # scripts that run after cloning repository
 install:
   - cd C:\projects\freecad
-  - if [%ARCH%] == ["Win64"] (
+  - if [%ARCH%] == [Win64] (
       powershell -Command "Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.17-med-test/FreeCADLibs_11.5.1_x64_VC12.7z" &&
       7z x FreeCADLibs_11.5.1_x64_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x64_VC12 FreeCADLibs)
-  - |
-    if ["%ARCH%"] == ["Win32"]; then
-      ps: Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.17-med-test/FreeCADLibs_11.5.1_x86_VC12.7z
-      7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul
-      ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs
-    fi
+  - if [%ARCH%] == [Win32] (
+      powershell -Command "Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.17-med-test/FreeCADLibs_11.5.1_x86_VC12.7z" &&
+      7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
+      ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
   - dir
 
 build_script:
