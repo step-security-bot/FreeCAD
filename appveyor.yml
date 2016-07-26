@@ -29,7 +29,7 @@ shallow_clone: true
 install:
   - cd C:\projects\freecad
   - ps: |
-    if (%env:ARCH -eg "Win64")
+    if (%env:ARCH -eq "Win64")
     {
       ps: Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.17-med-test/FreeCADLibs_11.5.1_x64_VC12.7z
       7z x FreeCADLibs_11.5.1_x64_VC12.7z > nul
