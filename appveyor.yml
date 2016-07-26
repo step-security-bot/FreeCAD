@@ -40,7 +40,7 @@ install:
   - dir
   - 7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul
   - dir
-  - ren FreeCADLibs_11.5.1_x86_VC12 FreeCADLibs
+  - ren FreeCADLibs* FreeCADLibs
   - dir
 
 build_script:
