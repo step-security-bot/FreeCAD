@@ -2,9 +2,9 @@
 
 environment:
   matrix:
-    #- generator: "Visual Studio 12 Win64"
-    #  ARCH: "Win64"
-    #  Compiler: "MSVC2013"
+    - generator: "Visual Studio 12 Win64"
+      ARCH: "Win64"
+      Compiler: "MSVC2013"
     - generator: "Visual Studio 12"
       ARCH: "Win32"
       Compiler: "MSVC2013"
@@ -28,7 +28,7 @@ shallow_clone: true
 # scripts that run after cloning repository
 install:
   - cd C:\projects\freecad
-  - if [%ARCH%] == [Win6] (
+  - if [%ARCH%] == [Win64] (
       powershell -Command "Start-FileDownload https://github.com/sgrogan/FreeCAD/releases/download/0.17-med-test/FreeCADLibs_11.5.1_x64_VC12.7z" &&
       7z x FreeCADLibs_11.5.1_x64_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x64_VC12 FreeCADLibs)
