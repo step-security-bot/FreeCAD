@@ -49,23 +49,31 @@ build_script:
   - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\build\bin /E /Q
   - msbuild /m FreeCAD_Trunk.sln
 
-#after_build:
+after_build:
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
   - cd C:\projects\freecad\build
   - dir
-  - 7z a FreeCAD_0.17_%ARCH%.7z build\bin > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z build\data > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z build\lib > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z build\Mod > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z bin > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z data > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z lib > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z Mod > nul
+  - dir
 
 artifacts:
   - path: build/FreeCAD_0.17_%ARCH%.7z
 
 test: off  # to avoid discovering tests
 
-#
-# The following section automatically uploads artifacts
-# whenever a tag is created on the master branch.
-#
 #deploy:
+  #- release: myproduct-v$(appveyor_build_version)
+    #description: 'Release description'
+    #provider: GitHub
+    #auth_token:
+    #  secure: abc
+    #artifact: build/FreeCAD_0.17_%ARCH%.7z
+    #draft: false
+    #prerelease: true
+    #on:
+      # branch: master
+      #appveyor_repo_tag: false
