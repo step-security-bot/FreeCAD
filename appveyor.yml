@@ -54,14 +54,15 @@ after_build:
   - FreeCADCmd.exe --run-test 0
   - cd C:\projects\freecad\build
   - dir
-  - 7z a FreeCAD_0.17_%ARCH%.7z bin > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z data > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z lib > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z Mod > nul
+  - 7z a FreeCAD_0.17_%ARCH%.zip bin > nul
+  - 7z a FreeCAD_0.17_%ARCH%.zip data > nul
+  - 7z a FreeCAD_0.17_%ARCH%.zip lib > nul
+  - 7z a FreeCAD_0.17_%ARCH%.zip Mod > nul
   - dir
 
 artifacts:
-  - path: build/FreeCAD_0.17_%ARCH%.7z
+  - path: FreeCAD_0.17_%ARCH%.zip
+    name: testbuild
 
 test: off  # to avoid discovering tests
 
