@@ -50,15 +50,17 @@ build_script:
   - msbuild /m FreeCAD_Trunk.sln
 
 #after_build:
-  - cd C:\projects\freecad\build
-  - dir
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
+  - cd C:\projects\freecad\build
+  - dir
+  - 7z a FreeCAD_0.17_%ARCH%.7z build\bin > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z build\data > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z build\lib > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z build\Mod > nul
 
-#artifacts:
-#  - path: build
-#    name: build
-#    type: zip
+artifacts:
+  - path: build/FreeCAD_0.17_%ARCH%.7z
 
 test: off  # to avoid discovering tests
 
