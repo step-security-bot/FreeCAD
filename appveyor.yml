@@ -54,27 +54,24 @@ after_build:
   - FreeCADCmd.exe --run-test 0
   - cd C:\projects\freecad\build
   - dir
-  - 7z a FreeCAD_0.17_%ARCH%.zip bin > nul
-  - 7z a FreeCAD_0.17_%ARCH%.zip data > nul
-  - 7z a FreeCAD_0.17_%ARCH%.zip lib > nul
-  - 7z a FreeCAD_0.17_%ARCH%.zip Mod > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z bin > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z data > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z lib > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z Mod > nul
   - dir
 
 artifacts:
-  - path: FreeCAD_0.17_%ARCH%.zip
-    name: testbuild
+  - path: build/FreeCAD_0.17_%ARCH%.7z
 
 test: off  # to avoid discovering tests
 
-#deploy:
-  #- release: myproduct-v$(appveyor_build_version)
-    #description: 'Release description'
-    #provider: GitHub
-    #auth_token:
-    #  secure: abc
-    #artifact: build/FreeCAD_0.17_%ARCH%.7z
-    #draft: false
-    #prerelease: true
-    #on:
-      # branch: master
-      #appveyor_repo_tag: false
+deploy:
+  - release: 0.17_pre
+    provider: GitHub
+    auth_token:
+      secure: %GH_TOKEN%
+    artifact: build/FreeCAD_0.17_%ARCH%.7z
+    draft: false
+    prerelease: true
+    on:
+      appveyor_repo_tag: false
