@@ -69,7 +69,7 @@ deploy:
   - release: 0.17_pre
     provider: GitHub
     auth_token:
-      secure: ${GH_TOKEN}
+      secure: 7MOtnVSy1z3knLlRg6uJiTbxTZ8nwIfB4WL5dIIp70eyF0eh06lfnGXfjtWKDFGM
     artifact: build/FreeCAD_0.17_%ARCH%.7z
     draft: false
     prerelease: true
