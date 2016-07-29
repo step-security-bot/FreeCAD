@@ -53,7 +53,10 @@ build_script:
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
 
-#artifacts:
+artifacts:
+  - path: build
+    name: build
+    type: zip
 
 test: off  # to avoid discovering tests
 
