@@ -56,8 +56,9 @@ after_build:
   - del /F /S /Q *.pdb
   - del /F /S /Q *debug.dll
   - del /F /S /Q *.cxx
-  - rd bin/swig /s /q
-  - rd lib/Release /s /q
+  - del /F /S /Q *_d.pyd
+  - rd bin\swig /s /q
+  - rd lib\Release /s /q
   - cd C:\projects\freecad
   - dir
   - 7z a FreeCAD_0.17_%ARCH%.7z build\bin > nul
