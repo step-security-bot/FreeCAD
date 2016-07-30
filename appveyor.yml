@@ -52,12 +52,12 @@ build_script:
 after_build:
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
-  - cd C:\projects\freecad\build
+  - cd C:\projects\freecad
   - dir
-  - 7z a FreeCAD_0.17_%ARCH%.7z bin > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z data > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z lib > nul
-  - 7z a FreeCAD_0.17_%ARCH%.7z Mod > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z build\bin > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z build\data > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z build\lib > nul
+  - 7z a FreeCAD_0.17_%ARCH%.7z build\Mod > nul
   - dir
 
 artifacts:
