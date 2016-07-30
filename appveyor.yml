@@ -50,7 +50,7 @@ build_script:
   - msbuild /m FreeCAD_Trunk.sln
 
 after_build:
-  - cd C:\projects\freecad\build\bin\
+  - cd C:\projects\freecad\build\bin
   - FreeCADCmd.exe --run-test 0
   - ren SMESHDS.dll *.bak
   - ren SMDS.dll *.bak
@@ -71,6 +71,7 @@ after_build:
   - del /F /S /Q *_d.pyd
   - del /F /S /Q *d.dll
   - del /F /S /Q *d?.dll
+  - cd C:\projects\freecad\build\bin
   - ren *.bak *.dll
   - cd C:\projects\freecad
   - dir
