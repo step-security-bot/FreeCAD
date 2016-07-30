@@ -61,7 +61,7 @@ after_build:
   - dir
 
 artifacts:
-  - path: build\FreeCAD_0.17_%ARCH%.7z
+  - path: FreeCAD_0.17_%ARCH%.7z
     name: FreeCAD
 
 test: off  # to avoid discovering tests
