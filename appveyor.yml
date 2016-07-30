@@ -52,6 +52,16 @@ build_script:
 after_build:
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
+  - ren SMESHDS.dll *.bak
+  - ren SMDS.dll *.bak
+  - ren TKStdL.dll *.bak
+  - ren TKCDF.dll *.bak
+  - ren medC.dll *.bak
+  - ren TKV3d.dll *.bak
+  - ren TKG3d.dll *.bak
+  - ren TKG2d.dll *.bak
+  - ren libeay32MD.dll *.bak
+  - ren ssleay32MD.dll *.bak
   - cd C:\projects\freecad\build
   - rd bin\swig /s /q
   - rd lib\Release /s /q
@@ -61,16 +71,7 @@ after_build:
   - del /F /S /Q *_d.pyd
   - del /F /S /Q *d.dll
   - del /F /S /Q *d?.dll
-  - copy C:\projects\freecad\FreeCADLibs\bin\SMESHDS.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\SMDS.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\TKStdL.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\TKCDF.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\medC.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\TKV3d.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\TKG3d.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\TKG2d.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\libeay32MD.dll C:\projects\freecad\build\bin
-  - copy C:\projects\freecad\FreeCADLibs\bin\ssleay32MD.dll C:\projects\freecad\build\bin
+  - ren *.bak *.dll
   - cd C:\projects\freecad
   - dir
   - 7z a FreeCAD_0.17_%ARCH%.7z build\bin > nul
