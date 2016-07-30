@@ -61,7 +61,7 @@ after_build:
   - dir
 
 artifacts:
-  - path: FreeCAD_0.17_%ARCH%.7z
+  - path: build\FreeCAD_0.17_%ARCH%.7z
 
 test: off  # to avoid discovering tests
 
@@ -70,7 +70,7 @@ deploy:
     provider: GitHub
     auth_token:
       secure: 7MOtnVSy1z3knLlRg6uJiTbxTZ8nwIfB4WL5dIIp70eyF0eh06lfnGXfjtWKDFGM
-    artifact: FreeCAD_0.17_%ARCH%.7z
+    artifact: build\FreeCAD_0.17_%ARCH%.7z
     draft: false
     prerelease: true
     force_update: true
