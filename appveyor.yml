@@ -52,6 +52,12 @@ build_script:
 after_build:
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
+  - cd C:\projects\freecad\build
+  - del /F /S /Q *.pdb
+  - del /F /S /Q *debug.dll
+  - del /F /S /Q *.cxx
+  - rd bin/swig /s /q
+  - rd lib/Release /s /q
   - cd C:\projects\freecad
   - dir
   - 7z a FreeCAD_0.17_%ARCH%.7z build\bin > nul
@@ -61,7 +67,7 @@ after_build:
   - dir
 
 artifacts:
-  - path: FreeCAD_0.17_Win64.7z, FreeCAD_0.17_Win32.7z
+  - path: FreeCAD_0.17_*.7z
     name: testbuild
 
 test: off  # to avoid discovering tests
