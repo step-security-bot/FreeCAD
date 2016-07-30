@@ -61,10 +61,8 @@ after_build:
   - dir
 
 artifacts:
-  - if [%ARCH%] == [Win64] (
-      path: FreeCAD_0.17_Win64.7z)
-  - if [%ARCH%] == [Win32] (
-      path: FreeCAD_0.17_Win32.7z)
+  - if [%ARCH%] == [Win64] (path: FreeCAD_0.17_Win64.7z)
+  - if [%ARCH%] == [Win32] (path: FreeCAD_0.17_Win32.7z)
     name: testbuild
 
 test: off  # to avoid discovering tests
