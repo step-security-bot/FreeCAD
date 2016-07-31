@@ -43,7 +43,7 @@ install:
   - dir
   - ren clcache.exe cl.exe
   - dir
-  #- set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
+  - set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
   #- cl.exe --help
   #- cl.exe -s
   - cd C:\projects
@@ -54,10 +54,10 @@ install:
   - set PATH=C:\\Python27;%PATH%
   - set PATH=C:\\Python27\\Scripts;%PATH%
   - python --version
-  #- cl.exe --help
-  #- cl.exe -s
-  #- cd C:\projects
-  #- dir
+  - cl.exe --help
+  - cl.exe -s
+  - cd C:\projects
+  - dir
   #
   #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   #- dir
@@ -69,18 +69,13 @@ install:
   - set CLCACHE_CL="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe"
   #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   #- cl.exe -s
-  #- cmake --version
-  #- ps: Start-FileDownload https://cmake.org/files/v3.5/cmake-3.5.1-win32-x86.zip
-  #- 7z x cmake-3.5.1-win32-x86.zip > nul
-  #- set PATH=C:\projects\freecad\cmake-3.5.1-win32-x86\bin;%PATH%
-  #- cmake --version
 
 build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - set CC=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
-  - set CXX=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
+  #- set CC=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
+  #- set CXX=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
     -G "%generator%" ..
   - mkdir bin
