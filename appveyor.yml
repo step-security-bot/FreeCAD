@@ -28,22 +28,22 @@ install:
   - cd C:\projects\freecad
   - ps: Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.16/FreeCADLibs_11.3_x64_VC12.7z
   - 7z x FreeCADLibs_11.3_x64_VC12.7z > nul
-  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.1.1.zip
-  - 7z x v3.1.1.zip > nul
+  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.2.0.zip
+  - 7z x v3.2.0.zip > nul
   - python --version
   - set PATH=C:\\Python33;%PATH%
   - set PATH=C:\\Python33\\Scripts;%PATH%
   - python --version
-  - cd clcache-3.1.1
+  - cd clcache-3.2.0
   - dir
-  - pip install py2exe
-  - python setup.py py2exe
+  - pip install pyinstaller
+  - pyinstaller --onefile clcache.py
   - dir
   - cd dist
   - dir
   - ren clcache.exe cl.exe
   - dir
-  #- set PATH=C:\\projects\\freecad\\clcache-3.1.1\\dist;%PATH%
+  #- set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
   #- cl.exe --help
   #- cl.exe -s
   - cd C:\projects
@@ -64,7 +64,7 @@ install:
   #- ren cl.exe cl_original.exe
   #- ren cl.exe.config cl_original.exe.config
   #- dir
-  #- xcopy C:\projects\freecad\clcache-3.1.1\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  #- xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   #- dir
   - set CLCACHE_CL="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe"
   #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
@@ -79,16 +79,16 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  #- set CC=C:\projects\freecad\clcache-3.1.1\dist\cl.exe
-  #- set CXX=C:\projects\freecad\clcache-3.1.1\dist\cl.exe
+  #- set CC=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
+  #- set CXX=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
-    -CMAKE_C_COMPILER=C:\projects\freecad\clcache-3.1.1\dist\cl.exe
-    -CMAKE_CXX_COMPILER=C:\projects\freecad\clcache-3.1.1\dist\cl.exe
+    -CMAKE_C_COMPILER=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
+    -CMAKE_CXX_COMPILER=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
   - msbuild /m FreeCAD_Trunk.sln
-  - cd C:\projects\freecad\clcache-3.1.1\dist
+  - cd C:\projects\freecad\clcache-3.2.0\dist
   - cl.exe -s
 
 #after_build:
