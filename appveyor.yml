@@ -75,8 +75,8 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - export CC=clcache.bat
-  - export CXX=clcache.bat
+  - set CC=C:\projects\freecad\clcache.bat
+  - set CXX=C:\projects\freecad\clcache.bat
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
     -G "%generator%" ..
   - mkdir bin
