@@ -79,11 +79,11 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  #- set CC=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
-  #- set CXX=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
+  - set CC=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
+  - set CXX=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
-    -CMAKE_C_COMPILER=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
-    -CMAKE_CXX_COMPILER=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
+    #-CMAKE_C_COMPILER=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
+    #-CMAKE_CXX_COMPILER=C:\projects\freecad\clcache-3.2.0\dist\cl.exe
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
