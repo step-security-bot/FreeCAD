@@ -67,7 +67,7 @@ install:
   #- xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   #- dir
   - set CLCACHE_CL="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe"
-  #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   - clcache.exe --help
   - clcache.exe -s
 
@@ -78,7 +78,6 @@ build_script:
   #- set CC=clcache.bat
   #- set CXX=clcache.bat
   - cmake -D FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
-    -D CMAKE_VERBOSE_MAKEFILE=ON
     -D CMAKE_C_COMPILER=clcache.exe
     -D CMAKE_CXX_COMPILER=clcache.exe
     -G "%generator%" ..
