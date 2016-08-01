@@ -31,8 +31,8 @@ install:
   - ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.2.0.zip
   - 7z x v3.2.0.zip > nul
   #- python --version
-  - set PATH=C:\\Python35;%PATH%
-  - set PATH=C:\\Python35\\Scripts;%PATH%
+  - set PATH=C:\\Python33;%PATH%
+  - set PATH=C:\\Python33\\Scripts;%PATH%
   - python --version
   - cd clcache-3.2.0
   - dir
@@ -78,8 +78,8 @@ build_script:
   #- set CC=clcache.bat
   #- set CXX=clcache.bat
   - cmake -D FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
-    -D CMAKE_C_COMPILER=clcache.exe
-    -D CMAKE_CXX_COMPILER=clcache.exe
+    -D CMAKE_C_COMPILER=C:\projects\freecad\clcache-3.2.0\dist\clcache.exe
+    -D CMAKE_CXX_COMPILER=C:\projects\freecad\clcache-3.2.0\dist\clcache.exe
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
