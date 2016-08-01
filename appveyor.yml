@@ -43,7 +43,7 @@ install:
   - dir
   #- ren clcache.exe cl.exe
   #- dir
-  - set PATH=C:\\projects\\freecad\\dist;%PATH%
+  - set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
   #- cl.exe --help
   #- cl.exe -s
   #- cd C:\projects
