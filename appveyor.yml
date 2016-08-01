@@ -34,16 +34,16 @@ install:
   - set PATH=C:\\Python35;%PATH%
   - set PATH=C:\\Python35\\Scripts;%PATH%
   - python --version
-  #- cd clcache-3.2.0
-  #- dir
-  #- pip install pyinstaller
-  #- pyinstaller --onefile clcache.py
-  #- dir
-  #- cd dist
-  #- dir
+  - cd clcache-3.2.0
+  - dir
+  - pip install pyinstaller
+  - pyinstaller --onefile clcache.py
+  - dir
+  - cd dist
+  - dir
   #- ren clcache.exe cl.exe
   #- dir
-  - set PATH=C:\\projects\\freecad;%PATH%
+  - set PATH=C:\\projects\\freecad\\dist;%PATH%
   #- cl.exe --help
   #- cl.exe -s
   #- cd C:\projects
@@ -68,8 +68,8 @@ install:
   #- dir
   - set CLCACHE_CL="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl.exe"
   #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - clcache.bat --help
-  - clcache.bat -s
+  - clcache.exe --help
+  - clcache.exe -s
 
 build_script:
   - cd C:\projects\freecad
@@ -77,9 +77,10 @@ build_script:
   - cd build
   #- set CC=clcache.bat
   #- set CXX=clcache.bat
-  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
-    -D CMAKE_C_COMPILER=clcache.bat
-    -D CMAKE_CXX_COMPILER=clcache.bat
+  - cmake -D FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
+    -D CMAKE_VERBOSE_MAKEFILE=ON
+    -D CMAKE_C_COMPILER=clcache.exe
+    -D CMAKE_CXX_COMPILER=clcache.exe
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
