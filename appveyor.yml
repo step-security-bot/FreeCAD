@@ -50,6 +50,7 @@ install:
   #- cd C:\projects
   #- dir
   - set CLCACHE_DIR=C:\projects\clcache
+  - set CLCACHE_LOG=1
   #- set CLCACHE_HARDLINK=1
   #- set CLCACHE_NODIRECT=1
   #- set PATH=C:\\Python27;%PATH%
@@ -76,8 +77,8 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  #- set CC=C:\projects\freecad\clcache.bat
-  #- set CXX=C:\projects\freecad\clcache.bat
+  - set CC=C:\projects\freecad\clcache.bat
+  - set CXX=C:\projects\freecad\clcache.bat
   - cmake -D FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
     -D CMAKE_C_COMPILER=C:\projects\freecad\clcache.bat
     -D CMAKE_CXX_COMPILER=C:\projects\freecad\clcache.bat
