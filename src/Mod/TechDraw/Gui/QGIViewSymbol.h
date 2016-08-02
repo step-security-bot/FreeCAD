@@ -32,7 +32,6 @@
 #include <QGraphicsSvgItem>
 
 #include "QGIView.h"
-#include "QGCustomSvg.h"
 
 namespace TechDraw {
 class DrawViewSymbol;
@@ -40,6 +39,7 @@ class DrawViewSymbol;
 
 namespace TechDrawGui
 {
+class QGCustomSvg;
 
 class TechDrawGuiExport QGIViewSymbol : public QGIView
 {
@@ -54,7 +54,6 @@ public:
     void setViewSymbolFeature(TechDraw::DrawViewSymbol *obj);
 
     virtual void draw() override;
-    virtual QRectF boundingRect() const override;
 
 protected:
     virtual void drawSvg();

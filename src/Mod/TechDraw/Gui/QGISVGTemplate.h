@@ -23,18 +23,17 @@
 #ifndef DRAWINGGUI_QGRAPHICSITEMSVGTEMPLATE_H
 #define DRAWINGGUI_QGRAPHICSITEMSVGTEMPLATE_H
 
-#include "QGITemplate.h"
-#include <QGraphicsSvgItem>
-#include <QSvgRenderer>
-
 QT_BEGIN_NAMESPACE
 class QGraphicsScene;
-class QGraphicsSceneMouseEvent;
+class QGraphicsSvgItem;
+class QSvgRenderer;
 QT_END_NAMESPACE
 
 namespace TechDraw {
 class DrawSVGTemplate;
 }
+
+#include "QGITemplate.h"
 
 namespace TechDrawGui
 {
@@ -55,9 +54,6 @@ public:
     void draw();
     virtual void updateView(bool update = false);
 
-Q_SIGNALS:
-    void dirty();
-
 protected:
     void openFile(const QFile &file);
     void load (const QString & fileName);
@@ -65,8 +61,8 @@ protected:
 
 protected:
     TechDraw::DrawSVGTemplate * getSVGTemplate();
-    QGraphicsSvgItem m_svgItem;
-    QSvgRenderer m_svgRender;
+    QGraphicsSvgItem *m_svgItem;
+    QSvgRenderer *m_svgRender;
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 };  // class QGISVGTemplate
 

@@ -30,11 +30,6 @@
 #include <App/PropertyUnits.h>
 #include <App/FeaturePython.h>
 
-namespace TechDrawGeometry
-{
-    class BaseGeom;
-}
-
 namespace TechDraw
 {
 
@@ -52,7 +47,7 @@ public:
     App::PropertyLength Width;
     App::PropertyLength Height;
     App::PropertyEnumeration Orientation;
-    App::PropertyString PaperSize;
+    //App::PropertyString PaperSize;
 
     App::PropertyMap EditableTexts;
 

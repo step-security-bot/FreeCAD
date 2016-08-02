@@ -15,6 +15,7 @@
 # include <Interface_Static.hxx>
 # include <IGESControl_Controller.hxx>
 # include <STEPControl_Controller.hxx>
+# include <Standard_Version.hxx>
 # include <OSD.hxx>
 # include <sstream>
 #endif
@@ -124,6 +125,9 @@ PyMODINIT_FUNC initPart()
     PyObject* partModule = Part::initModule();
     Base::Console().Log("Loading Part module... done\n");
 
+    Py::Object module(partModule);
+    module.setAttr("OCC_VERSION", Py::String(OCC_VERSION_STRING_EXT));
+
     // Python exceptions
     //
     PyObject* OCCError = 0;
@@ -216,6 +220,19 @@ PyMODINIT_FUNC initPart()
     Py_INCREF(brepModule);
     PyModule_AddObject(partModule, "BRepOffsetAPI", brepModule);
     Base::Interpreter().addType(&Part::BRepOffsetAPI_MakePipeShellPy::Type,brepModule,"MakePipeShell");
+
+    try{
+        //import all submodules of BOPTools, to make them easy to browse in Py console.
+        //It's done in this weird manner instead of bt.caMemberFunction("importAll"),
+        //because the latter crashed when importAll failed with exception.
+        Base::Interpreter().runString("__import__('BOPTools').importAll()");
+
+        Py::Object bt = Base::Interpreter().runStringObject("__import__('BOPTools')");
+        module.setAttr(std::string("BOPTools"),bt);
+    } catch (Base::PyException &err){
+        Base::Console().Error("Failed to import BOPTools package:\n");
+        err.ReportException();
+    }
 
     Part::TopoShape             ::init();
     Part::PropertyPartShape     ::init();

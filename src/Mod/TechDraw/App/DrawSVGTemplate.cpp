@@ -48,7 +48,7 @@
 #include "DrawPage.h"
 #include "DrawSVGTemplate.h"
 
-#include "DrawSVGTemplatePy.h"
+#include <Mod/TechDraw/App/DrawSVGTemplatePy.h>
 
 using namespace TechDraw;
 using namespace std;
@@ -75,16 +75,6 @@ DrawSVGTemplate::DrawSVGTemplate()
 DrawSVGTemplate::~DrawSVGTemplate()
 {
 }
-
-/*
-std::string DrawSVGTemplate::getSvgIdForEditable(const std::string &editableName)
-{
-    if (editableSvgIds.count(editableName)) {
-        return editableSvgIds[editableName];
-    } else {
-        return "";
-    }
-}*/
 
 PyObject *DrawSVGTemplate::getPyObject(void)
 {

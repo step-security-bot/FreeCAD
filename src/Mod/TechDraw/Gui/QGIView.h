@@ -24,12 +24,14 @@
 #define DRAWINGGUI_QGRAPHICSITEMVIEW_H
 
 #include <QGraphicsItemGroup>
-#include <QObject>
 #include <QPen>
 #include <QFont>
-#include <App/PropertyLinks.h>
 
-#include "../App/DrawView.h"
+#include <App/PropertyLinks.h>
+#include <Base/Parameter.h>
+
+#include <Mod/TechDraw/App/DrawView.h>
+
 
 QT_BEGIN_NAMESPACE
 class QGraphicsScene;
@@ -73,11 +75,12 @@ public:
     virtual void toggleCache(bool state);
     virtual void updateView(bool update = false);
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0 );
-    //virtual QPainterPath shape(void) const;
+    virtual QRectF boundingRect() const override;
 
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 
 protected:
+    QGIView* getQGIVByName(std::string name);
 
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
     // Mouse handling
@@ -87,6 +90,13 @@ protected:
     virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     virtual QRectF customChildrenBoundingRect(void);
+    void dumpRect(char* text, QRectF r);
+
+    QColor getNormalColor(void);
+    QColor getPreColor(void);
+    QColor getSelectColor(void);
+    QString getPrefFont(void);
+    Base::Reference<ParameterGrp> getParmGroupCol(void);
 
     TechDraw::DrawView *viewObj;
     std::string viewName;
@@ -109,6 +119,6 @@ protected:
     QPen m_decorPen;
 };
 
-} // namespace MDIViewPageGui
+} // namespace
 
 #endif // DRAWINGGUI_QGRAPHICSITEMVIEW_H

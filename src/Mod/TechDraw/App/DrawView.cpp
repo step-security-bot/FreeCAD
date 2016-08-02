@@ -42,7 +42,7 @@
 #include "DrawViewCollection.h"
 #include "DrawViewClip.h"
 
-#include "DrawViewPy.h"  // generated from DrawViewPy.xml
+#include <Mod/TechDraw/App/DrawViewPy.h>  // generated from DrawViewPy.xml
 
 using namespace TechDraw;
 
@@ -58,9 +58,8 @@ const char* DrawView::ScaleTypeEnums[]= {"Document",
 
 PROPERTY_SOURCE(TechDraw::DrawView, App::DocumentObject)
 
-
-
 DrawView::DrawView(void)
+  : autoPos(true)
 {
     static const char *group = "Drawing view";
     ADD_PROPERTY_TYPE(X ,(0),group,App::Prop_None,"X position of the view on the page in modelling units (mm)");
@@ -70,10 +69,10 @@ DrawView::DrawView(void)
     ScaleType.setEnums(ScaleTypeEnums);
     ADD_PROPERTY_TYPE(ScaleType,((long)0),group, App::Prop_None, "Scale Type");
     ADD_PROPERTY_TYPE(Scale ,(1.0),group,App::Prop_None,"Scale factor of the view");
-    Scale.setStatus(App::Property::ReadOnly,true);
 
-    autoPos = true;
-
+    if (isRestoring()) {
+        autoPos = false;
+    }
 }
 
 DrawView::~DrawView()
@@ -119,14 +118,13 @@ void DrawView::onChanged(const App::Property* prop)
                 TechDraw::DrawPage *page = findParentPage();
                 if(page) {
                     if(std::abs(page->Scale.getValue() - Scale.getValue()) > FLT_EPSILON) {
-                        Scale.setValue(page->Scale.getValue()); // Recalculate scale from page
+                        Scale.setValue(page->Scale.getValue()); // Reset scale from page
                         Scale.touch();
                     }
                 }
                 Scale.setStatus(App::Property::ReadOnly,true);
                 App::GetApplication().signalChangePropertyEditor(Scale);
-            } else if (ScaleType.isValue("Custom") &&
-                Scale.testStatus(App::Property::ReadOnly)) {
+            } else if ( ScaleType.isValue("Custom") ) {
                 Scale.setStatus(App::Property::ReadOnly,false);
                 App::GetApplication().signalChangePropertyEditor(Scale);
             }

@@ -49,7 +49,7 @@
 #include <Base/Console.h>
 #include <Base/Parameter.h>
 
-#include "../App/DrawViewAnnotation.h"
+#include <Mod/TechDraw/App/DrawViewAnnotation.h>
 #include "QGIViewAnnotation.h"
 #include "QGCustomText.h"
 
@@ -161,10 +161,5 @@ void QGIViewAnnotation::drawAnnotation()
     QString qs = QString::fromUtf8(ss.str().c_str());
     m_textItem->setHtml(qs);
     m_textItem->setPos(0.,0.);
-}
-
-QRectF QGIViewAnnotation::boundingRect() const
-{
-    return childrenBoundingRect();
 }
 

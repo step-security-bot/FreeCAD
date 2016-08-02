@@ -35,27 +35,26 @@
 #include <QPainterPathStroker>
 #include <QPainter>
 #include <QTextOption>
-#endif // #ifndef _PreComp_
-
-
 #include <QBitmap>
 #include <QImage>
-#include <QPainter>
 #include <QString>
 #include <QSvgRenderer>
+#endif // #ifndef _PreComp_
 
 #include <App/Application.h>
 #include <App/Document.h>
 #include <App/DocumentObject.h>
 #include <App/Material.h>
 #include <Base/Console.h>
-#include <Base/Parameter.h>
 
-#include "../App/DrawUtil.h"
-#include "../App/DrawViewPart.h"
-#include "../App/DrawHatch.h"
+#include <Mod/TechDraw/App/DrawUtil.h>
+#include <Mod/TechDraw/App/DrawViewPart.h>
+#include <Mod/TechDraw/App/DrawHatch.h>
 
 #include "ZVALUE.h"
+#include "QGIFace.h"
+#include "QGIEdge.h"
+#include "QGIVertex.h"
 #include "QGIViewPart.h"
 
 using namespace TechDrawGui;
@@ -73,13 +72,6 @@ QGIViewPart::QGIViewPart()
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemSendsScenePositionChanges, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
-
-
-
-    Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter()
-        .GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("Mod/Drawing/Colors");
-    App::Color fcColor = App::Color((uint32_t) hGrp->GetUnsigned("HiddenColor", 0x08080800));
-    m_colHid = fcColor.asValue<QColor>();
 }
 
 QGIViewPart::~QGIViewPart()
@@ -110,6 +102,7 @@ QVariant QGIViewPart::itemChange(GraphicsItemChange change, const QVariant &valu
     return QGIView::itemChange(change, value);
 }
 
+//obs?
 void QGIViewPart::tidy()
 {
     //Delete any leftover items
@@ -247,30 +240,19 @@ void QGIViewPart::updateView(bool update)
 
     TechDraw::DrawViewPart *viewPart = dynamic_cast<TechDraw::DrawViewPart *>(getViewObject());
 
-    if(update ||
+    if (update ||
        viewPart->isTouched() ||
        viewPart->Source.isTouched() ||
        viewPart->Direction.isTouched() ||
+       viewPart->XAxisDirection.isTouched() ||
        viewPart->Tolerance.isTouched() ||
        viewPart->Scale.isTouched() ||
-       viewPart->ShowHiddenLines.isTouched()) {
-        // Remove all existing graphical representations (QGIxxxx)  otherwise BRect only grows, never shrinks?
-        // is this where selection messes up?
-        prepareGeometryChange();
-        QList<QGraphicsItem*> items = childItems();
-        for(QList<QGraphicsItem*>::iterator it = items.begin(); it != items.end(); ++it) {
-            if (dynamic_cast<QGIEdge *> (*it) ||
-                dynamic_cast<QGIFace *>(*it) ||
-                dynamic_cast<QGIVertex *>(*it)) {
-                removeFromGroup(*it);
-                scene()->removeItem(*it);
-
-                // We store these and delete till later to prevent rendering crash ISSUE
-                deleteItems.append(*it);
-            }
-        }
+       viewPart->ShowHiddenLines.isTouched() ||
+       viewPart->ShowSmoothLines.isTouched() ||
+       viewPart->ShowSeamLines.isTouched() ) {
         draw();
-    } else if(viewPart->LineWidth.isTouched() ||
+    } else if (update ||
+              viewPart->LineWidth.isTouched() ||
               viewPart->HiddenWidth.isTouched()) {
         QList<QGraphicsItem*> items = childItems();
         for(QList<QGraphicsItem*>::iterator it = items.begin(); it != items.end(); ++it) {
@@ -290,7 +272,6 @@ void QGIViewPart::updateView(bool update)
 void QGIViewPart::draw() {
     drawViewPart();
     drawBorder();
-    QGIView::draw();
 }
 
 void QGIViewPart::drawViewPart()
@@ -306,6 +287,7 @@ void QGIViewPart::drawViewPart()
     float lineWidthHid = viewPart->HiddenWidth.getValue() * lineScaleFactor;
 
     prepareGeometryChange();
+    removePrimitives();                      //clean the slate
 
 #if MOD_TECHDRAW_HANDLE_FACES
     // Draw Faces
@@ -331,7 +313,6 @@ void QGIViewPart::drawViewPart()
     const std::vector<TechDrawGeometry::BaseGeom *> &geoms = viewPart->getEdgeGeometry();
     std::vector<TechDrawGeometry::BaseGeom *>::const_iterator itEdge = geoms.begin();
     QGIEdge* item;
-
     for(int i = 0 ; itEdge != geoms.end(); itEdge++, i++) {
         bool showEdge = false;
         if ((*itEdge)->visible) {
@@ -349,7 +330,7 @@ void QGIViewPart::drawViewPart()
         if (showEdge) {
             item = new QGIEdge(i);
             addToGroup(item);                                                   //item is at scene(0,0), not group(0,0)
-            item->setPos(0.0,0.0);
+            item->setPos(0.0,0.0);                                              //now at group(0,0)
             item->setPath(drawPainterPath(*itEdge));
             item->setStrokeWidth(lineWidth);
             item->setZValue(ZVALUE::EDGE);
@@ -408,6 +389,21 @@ QGIFace* QGIViewPart::drawFace(TechDrawGeometry::Face* f, int idx)
     //dumpPath(faceId.str().c_str(),facePath);
 
     return gFace;
+}
+
+//! Remove all existing QGIPrimPath items(Vertex,Edge,Face)
+void QGIViewPart::removePrimitives()
+{
+    QList<QGraphicsItem*> children = childItems();
+    for (auto& c:children) {
+         QGIPrimPath* prim = dynamic_cast<QGIPrimPath*>(c);
+         if (prim) {
+            removeFromGroup(prim);
+            scene()->removeItem(prim);
+//            deleteItems.append(prim);         //pretty sure we could just delete here since not in scene anymore
+            delete prim;
+         }
+     }
 }
 
 // As called by arc of ellipse case:
@@ -578,12 +574,6 @@ TechDraw::DrawHatch* QGIViewPart::faceIsHatched(int i,std::vector<TechDraw::Draw
     return result;
 }
 
-QRectF QGIViewPart::boundingRect() const
-{
-    //return childrenBoundingRect().adjusted(-2.,-2.,2.,6.);             //just a bit bigger than the children need
-    return childrenBoundingRect();
-}
-
 void QGIViewPart::dumpPath(const char* text,QPainterPath path)
 {
         QPainterPath::Element elem;
@@ -603,4 +593,9 @@ void QGIViewPart::dumpPath(const char* text,QPainterPath path)
             Base::Console().Message(">>>>> element %d: type:%d/%s pos(%.3f,%.3f) M:%d L:%d C:%d\n",iElem,
                                     elem.type,typeName,elem.x,elem.y,elem.isMoveTo(),elem.isLineTo(),elem.isCurveTo());
         }
+}
+
+QRectF QGIViewPart::boundingRect() const
+{
+    return childrenBoundingRect();
 }

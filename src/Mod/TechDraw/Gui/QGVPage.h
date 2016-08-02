@@ -26,8 +26,6 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 
-#include "ViewProviderPage.h"
-
 namespace TechDraw {
 class DrawViewPart;
 class DrawProjGroup;
@@ -37,7 +35,6 @@ class DrawTemplate;
 class DrawViewAnnotation;
 class DrawViewSymbol;
 class DrawViewClip;
-class DrawHatch;
 class DrawViewCollection;
 class DrawViewSpreadsheet;
 }
@@ -47,6 +44,7 @@ namespace TechDrawGui
 class QGIView;
 class QGIViewDimension;
 class QGITemplate;
+class ViewProviderPage;
 
 class TechDrawGuiExport QGVPage : public QGraphicsView
 {
@@ -55,7 +53,7 @@ class TechDrawGuiExport QGVPage : public QGraphicsView
 public:
     enum RendererType { Native, OpenGL, Image };
 
-    QGVPage(ViewProviderPage *vp, QGraphicsScene& s, QWidget *parent = 0);
+    QGVPage(ViewProviderPage *vp, QGraphicsScene* s, QWidget *parent = 0);
     ~QGVPage();
 
     void setRenderer(RendererType type = Native);
@@ -79,24 +77,21 @@ public:
     const std::vector<QGIView *> & getViews() const { return views; }
     int addView(QGIView * view);
     void setViews(const std::vector<QGIView *> &view) {views = view; }
-    void setPageFeature(TechDraw::DrawPage *page);
     void setPageTemplate(TechDraw::DrawTemplate *pageTemplate);
 
     QGITemplate * getTemplate() const;
     void removeTemplate();
 
-    /// Getter for DrawPage feature
-    TechDraw::DrawPage * getDrawPage() { return pageGui->getPageObject(); }
+    TechDraw::DrawPage * getDrawPage();
 
-    void toggleEdit(bool enable);
+    void toggleMarkers(bool enable);
+    void toggleHatch(bool enable);
 
     /// Renders the page to SVG with filename.
     void saveSvg(QString filename);
 
 public Q_SLOTS:
     void setHighQualityAntialiasing(bool highQualityAntialiasing);
-    void setViewBackground(bool enable);
-    void setViewOutline(bool enable);
 
 protected:
     void wheelEvent(QWheelEvent *event);
@@ -115,8 +110,6 @@ private:
     RendererType m_renderer;
 
     bool drawBkg;
-    QGraphicsRectItem *m_backgroundItem;
-    QGraphicsRectItem *m_outlineItem;
     QBrush* bkgBrush;
     QImage m_image;
     ViewProviderPage *pageGui;
