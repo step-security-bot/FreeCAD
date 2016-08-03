@@ -20,6 +20,11 @@ if(COMMAND cmake_policy)
     endif(POLICY CMP0050)
 endif(COMMAND cmake_policy)
 
+find_program(CCACHE_PROGRAM clcache.bat)  #This check should occur before project()
+if(CCACHE_PROGRAM)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+endif()
+
 # include local  modules
 include(AddFileDependencies)
 include(cMake/FreeCadMacros.cmake)
@@ -595,7 +600,7 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     SET(_boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS})
 
-    find_package(Boost ${BOOST_MIN_VERSION} 
+    find_package(Boost ${BOOST_MIN_VERSION}
         COMPONENTS filesystem program_options regex signals system thread REQUIRED)
 
     IF(NOT Boost_FOUND)
@@ -1038,4 +1043,3 @@ if (${CMAKE_BUILD_TOOL} MATCHES "make")
             "Now run 'make' to build ${PACKAGE_NAME}\n"
             "=======================================\n")
 endif()
-
