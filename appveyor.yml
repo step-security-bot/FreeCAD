@@ -4,7 +4,7 @@ environment:
   matrix:
     - generator: "Visual Studio 12 Win64"
       ARCH: "Win64"
-      Compiler: "clcache"
+      Compiler: "MSVC2013"
 
 cache:
   - C:\projects\clcache
@@ -41,9 +41,9 @@ install:
   - dir
   - cd dist
   - dir
-  #- ren clcache.exe cl.exe
-  #- dir
-  - set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
+  - ren clcache.exe cl.exe
+  - dir
+  #- set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
   #- set PATH=C:\\projects\\freecad;%PATH%
   #- cl.exe --help
   #- cl.exe -s
@@ -69,9 +69,9 @@ install:
   #- xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   #- dir
   #- set CLCACHE_CL="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl_original.exe"
-  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - clcache.exe --help
-  - clcache.exe -s
+  #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  #- clcache.exe --help
+  #- clcache.exe -s
 
 build_script:
   - cd C:\projects\freecad
@@ -81,11 +81,24 @@ build_script:
   #- set CXX=C:\\\\projects\\\\freecad\\\\clcache.bat
   - cmake -D FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
     -G "%generator%" ..
+  #-
+  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - dir
+  - ren cl.exe cl_original.exe
+  - ren cl.exe.config cl_original.exe.config
+  - dir
+  - xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - dir
+  - set CLCACHE_CL="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\cl_original.exe"
+  - cl.exe --help
+  - cl.exe -s
+  - cd C:\projects\freecad\build
+  #-
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
   - msbuild /m FreeCAD_Trunk.sln
-  #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - clcache.exe -s
+  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - cl.exe -s
 
 #after_build:
 
