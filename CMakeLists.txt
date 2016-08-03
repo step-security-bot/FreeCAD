@@ -20,7 +20,7 @@ if(COMMAND cmake_policy)
     endif(POLICY CMP0050)
 endif(COMMAND cmake_policy)
 
-find_program(CCACHE_PROGRAM clcache.bat PATHS C:/projects/freecad)  #This check should occur before project()
+find_program(CCACHE_PROGRAM clcache PATHS C:/projects/freecad/clcache-3.2.0/dist)  #This check should occur before project()
 if(CCACHE_PROGRAM)
     MESSAGE(STATUS "${CCACHE_PROGRAM}")
     set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
