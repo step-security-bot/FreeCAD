@@ -4,7 +4,7 @@ environment:
   matrix:
     - generator: "Visual Studio 12 Win64"
       ARCH: "Win64"
-      #Compiler: "MSVC2013"
+      Compiler: "clcache"
 
 cache:
   - C:\projects\clcache
