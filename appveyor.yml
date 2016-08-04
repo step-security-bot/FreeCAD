@@ -2,7 +2,7 @@
 
 environment:
   global:
-    CLCACHE_CL: "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\bin\\x86_amd64\\cl_original.exe"
+    - CLCACHE_CL: "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\bin\\x86_amd64\\cl_original.exe"
   matrix:
     - generator: "Visual Studio 12 Win64"
       ARCH: "Win64"
@@ -76,8 +76,7 @@ install:
   #- clcache.exe -s
 
 build_script:
-  - set FOO=BAR
-  - echo %FOO%
+  - echo %CLCACHE_CL%
   - cd C:\projects\freecad
   - mkdir build
   - cd build
