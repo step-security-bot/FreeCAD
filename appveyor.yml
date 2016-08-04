@@ -52,7 +52,7 @@ install:
   #- cd C:\projects
   #- dir
   - set CLCACHE_DIR=C:\projects\clcache
-  - set CLCACHE_LOG=1
+  #- set CLCACHE_LOG=1
   #- set CLCACHE_HARDLINK=1
   #- set CLCACHE_NODIRECT=1
   #- set PATH=C:\\Python27;%PATH%
