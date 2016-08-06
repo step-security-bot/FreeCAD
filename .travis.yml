@@ -66,7 +66,7 @@ before_install:
 #    - sudo rm -rf /opt/python/2.6.9
 
 install:
-    - mkdir build && cd build && cmake -DPYTHON_EXECUTABLE=/usr/bin/python ../
+    - mkdir build && cd build && cmake -DBUILD_FEM_NETGEN=ON -DPYTHON_EXECUTABLE=/usr/bin/python -DCMAKE_BUILD_TYPE=Release ../
 
 #before_script:
 
