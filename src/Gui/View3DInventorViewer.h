@@ -156,6 +156,7 @@ public:
     int getFeedbackSize(void) const;
 
     void setRenderType(const RenderType type);
+    RenderType getRenderType() const;
     void renderToFramebuffer(QGLFramebufferObject*);
 
     virtual void setViewing(SbBool enable);
@@ -341,7 +342,8 @@ public:
     NavigationStyle* navigationStyle() const;
 
     void setDocument(Gui::Document *pcDocument);
-    
+    Gui::Document* getDocument();
+
     virtual PyObject *getPyObject(void);
 
 protected:
@@ -353,6 +355,10 @@ protected:
     virtual void setSeekMode(SbBool enable);
     virtual void afterRealizeHook(void);
     virtual bool processSoEvent(const SoEvent * ev);
+    void dropEvent (QDropEvent * e);
+    void dragEnterEvent (QDragEnterEvent * e);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e);
     SbBool processSoEventBase(const SoEvent * const ev);
     void printDimension();
     void selectAll();
@@ -420,6 +426,7 @@ private:
     SbBool allowredir;
 
     std::string overrideMode;
+    Gui::Document* guiDocument = nullptr;
     
     ViewerEventFilter* viewerEventFilter;
     

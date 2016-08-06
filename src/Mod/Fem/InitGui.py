@@ -46,16 +46,19 @@ class FemWorkbench (Workbench):
         import Fem
         import FemGui
 
-        import _CommandMechanicalShowResult
-        import _CommandQuickAnalysis
-        import _CommandPurgeFemResults
-        import _CommandSolverJobControl
-        import _CommandFemFromShape
-        import _CommandNewMechanicalAnalysis
-        import _CommandFemShellThickness
-        import _CommandFemBeamSection
+        import _CommandShowResult
+        import _CommandRunSolver
+        import _CommandPurgeResults
+        import _CommandControlSolver
+
+        import _CommandMeshFromShape
+        import _CommandAnalysis
+        import _CommandShellThickness
+        import _CommandBeamSection
         import _CommandMechanicalMaterial
-        import _CommandFemSolverCalculix
+        import _CommandSolverCalculix
+        import _CommandSolverZ88
+        import _CommandConstraintSelfWeight
 
         import subprocess
         from platform import system
@@ -74,7 +77,6 @@ class FemWorkbench (Workbench):
                     FreeCAD.Console.PrintError("CalculiX ccx binary not found! Please set it manually in FEM preferences.\n")
             except Exception as e:
                 FreeCAD.Console.PrintError(e.message)
-        fem_prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem")
 
         import os
         working_dir = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem").GetString("WorkingDir")

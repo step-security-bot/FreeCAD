@@ -90,9 +90,9 @@
 # include <GeomFill_SectionLaw.hxx>
 # include <GeomFill_Sweep.hxx>
 # include <GeomLib.hxx>
-# include <Handle_Law_BSpFunc.hxx>
-# include <Handle_Law_BSpline.hxx>
-# include <Handle_TopTools_HSequenceOfShape.hxx>
+# include <Law_BSpFunc.hxx>
+# include <Law_BSpline.hxx>
+# include <TopTools_HSequenceOfShape.hxx>
 # include <Law_BSpFunc.hxx>
 # include <Law_Constant.hxx>
 # include <Law_Linear.hxx>
@@ -257,123 +257,6 @@ Data::Segment* TopoShape::getSubElement(const char* Type, unsigned long n) const
     return new ShapeSegment(getSubShape(temp.c_str()));
 }
 
-void TopoShape::getLinesFromSubelement(const Data::Segment* element,
-                                       std::vector<Base::Vector3d> &Points,
-                                       std::vector<Line> &lines) const
-{
-}
-
-void TopoShape::getFacesFromSubelement(const Data::Segment* element,
-                                       std::vector<Base::Vector3d> &Points,
-                                       std::vector<Base::Vector3d> &PointNormals,
-                                       std::vector<Facet> &faces) const
-{
-    if (element->getTypeId() == ShapeSegment::getClassTypeId()) {
-        const TopoDS_Shape& shape = static_cast<const ShapeSegment*>(element)->Shape;
-        if (shape.IsNull() || shape.ShapeType() != TopAbs_FACE)
-            return;
-    
-        TopLoc_Location aLoc;
-        // doing the meshing and checking the result
-        Handle(Poly_Triangulation) aPoly = BRep_Tool::Triangulation(TopoDS::Face(shape),aLoc);
-        if (aPoly.IsNull())
-            return;
-
-        // geting the transformation of the shape/face
-        gp_Trsf myTransf;
-        Standard_Boolean identity = true;
-        if (!aLoc.IsIdentity())  {
-            identity = false;
-            myTransf = aLoc.Transformation();
-        }
-
-        Standard_Integer i;
-        // geting size and create the array
-        int nbNodesInFace = aPoly->NbNodes();
-        int nbTriInFace = aPoly->NbTriangles();
-        Points.resize(nbNodesInFace);
-        PointNormals.resize(nbNodesInFace); // fills up already the array
-        faces.resize(nbTriInFace);
-
-        // check orientation
-        TopAbs_Orientation orient = shape.Orientation();
-
-        // cycling through the poly mesh
-        const Poly_Array1OfTriangle& Triangles = aPoly->Triangles();
-        const TColgp_Array1OfPnt& Nodes = aPoly->Nodes();
-        for (i=1; i<=nbTriInFace; i++) {
-            // Get the triangle
-            Standard_Integer N1,N2,N3;
-            Triangles(i).Get(N1,N2,N3);
-
-            // change orientation of the triangles
-            if (orient != TopAbs_FORWARD) {
-                Standard_Integer tmp = N1;
-                N1 = N2;
-                N2 = tmp;
-            }
-
-            gp_Pnt V1 = Nodes(N1);
-            gp_Pnt V2 = Nodes(N2);
-            gp_Pnt V3 = Nodes(N3);
-
-            // transform the vertices to the place of the face
-            if (!identity) {
-                V1.Transform(myTransf);
-                V2.Transform(myTransf);
-                V3.Transform(myTransf);
-            }
-
-            // Calculate triangle normal
-            gp_Vec v1(V1.X(),V1.Y(),V1.Z()),v2(V2.X(),V2.Y(),V2.Z()),v3(V3.X(),V3.Y(),V3.Z());
-            gp_Vec Normal = (v2-v1)^(v3-v1);
-
-            //Standard_Real Area = 0.5 * Normal.Magnitude();
-
-            // add the triangle normal to the vertex normal for all points of this triangle
-            PointNormals[N1-1] += Base::Vector3d(Normal.X(),Normal.Y(),Normal.Z());
-            PointNormals[N2-1] += Base::Vector3d(Normal.X(),Normal.Y(),Normal.Z());
-            PointNormals[N3-1] += Base::Vector3d(Normal.X(),Normal.Y(),Normal.Z());
-
-            Points[N1-1].Set(V1.X(),V1.Y(),V1.Z());
-            Points[N2-1].Set(V2.X(),V2.Y(),V2.Z());
-            Points[N3-1].Set(V3.X(),V3.Y(),V3.Z());
-
-            int j = i - 1;
-            N1--;
-            N2--;
-            N3--;
-            faces[j].I1 = N1;
-            faces[j].I2 = N2;
-            faces[j].I3 = N3;
-        }
-
-        // normalize all vertex normals
-        for (i=0; i < nbNodesInFace; i++) {
-            gp_Dir clNormal;
-            try {
-                Handle_Geom_Surface Surface = BRep_Tool::Surface(TopoDS::Face(shape));
-
-                gp_Pnt vertex(Base::convertTo<gp_Pnt>(Points[i]));
-                GeomAPI_ProjectPointOnSurf ProPntSrf(vertex, Surface);
-                Standard_Real fU, fV;
-                ProPntSrf.Parameters(1, fU, fV);
-
-                GeomLProp_SLProps clPropOfFace(Surface, fU, fV, 2, gp::Resolution());
-
-                clNormal = clPropOfFace.Normal();
-                Base::Vector3d temp = Base::convertTo<Base::Vector3d>(clNormal);
-                if (temp * Points[i] < 0)
-                    temp = -temp;
-                Points[i] = temp;
-            }
-            catch (...) {
-            }
-            Points[i].Normalize();
-        }
-    }
-}
-
 TopoDS_Shape TopoShape::getSubShape(const char* Type) const
 {
     if (!Type)
@@ -473,6 +356,29 @@ void TopoShape::convertTogpTrsf(const Base::Matrix4D& mtrx, gp_Trsf& trsf)
 
 void TopoShape::convertToMatrix(const gp_Trsf& trsf, Base::Matrix4D& mtrx)
 {
+#if OCC_VERSION_HEX >= 0x070000
+    gp_Mat m = trsf.VectorialPart();
+    gp_XYZ p = trsf.TranslationPart();
+    Standard_Real scale = trsf.ScaleFactor();
+
+    // set Rotation matrix
+    mtrx[0][0] = scale * m(1,1);
+    mtrx[0][1] = scale * m(1,2);
+    mtrx[0][2] = scale * m(1,3);
+
+    mtrx[1][0] = scale * m(2,1);
+    mtrx[1][1] = scale * m(2,2);
+    mtrx[1][2] = scale * m(2,3);
+
+    mtrx[2][0] = scale * m(3,1);
+    mtrx[2][1] = scale * m(3,2);
+    mtrx[2][2] = scale * m(3,3);
+
+    // set pos vector
+    mtrx[0][3] = p.X();
+    mtrx[1][3] = p.Y();
+    mtrx[2][3] = p.Z();
+#else
     gp_Mat m = trsf._CSFDB_Getgp_Trsfmatrix();
     gp_XYZ p = trsf._CSFDB_Getgp_Trsfloc();
     Standard_Real scale = trsf._CSFDB_Getgp_Trsfscale();
@@ -494,6 +400,7 @@ void TopoShape::convertToMatrix(const gp_Trsf& trsf, Base::Matrix4D& mtrx)
     mtrx[0][3] = p._CSFDB_Getgp_XYZx();
     mtrx[1][3] = p._CSFDB_Getgp_XYZy();
     mtrx[2][3] = p._CSFDB_Getgp_XYZz();
+#endif
 }
 
 void TopoShape::setTransform(const Base::Matrix4D& rclTrf)
@@ -1484,6 +1391,44 @@ TopoDS_Compound TopoShape::slices(const Base::Vector3d& dir, const std::vector<d
     }
 
     return comp;
+}
+
+TopoDS_Shape TopoShape::generalFuse(const std::vector<TopoDS_Shape> &sOthers, Standard_Real tolerance, std::vector<TopTools_ListOfShape>* mapInOut) const
+{
+    if (this->_Shape.IsNull())
+        Standard_Failure::Raise("Base shape is null");
+#if OCC_VERSION_HEX < 0x060900
+    throw Base::AttributeError("GFA is available only in OCC 6.9.0 and up.");
+#else
+    BRepAlgoAPI_BuilderAlgo mkGFA;
+    TopTools_ListOfShape GFAArguments;
+    GFAArguments.Append(this->_Shape);
+    for (const TopoDS_Shape &it: sOthers) {
+        if (it.IsNull())
+            throw Base::Exception("Tool shape is null");
+        if (tolerance > 0.0)
+            // workaround for http://dev.opencascade.org/index.php?q=node/1056#comment-520
+            GFAArguments.Append(BRepBuilderAPI_Copy(it).Shape());
+        else
+            GFAArguments.Append(it);
+    }
+    mkGFA.SetArguments(GFAArguments);
+    if (tolerance > 0.0)
+        mkGFA.SetFuzzyValue(tolerance);
+#if OCC_VERSION_HEX >= 0x070000
+    mkGFA.SetNonDestructive(Standard_True);
+#endif
+    mkGFA.Build();
+    if (!mkGFA.IsDone())
+        throw Base::Exception("MultiFusion failed");
+    TopoDS_Shape resShape = mkGFA.Shape();
+    if (mapInOut){
+        for(TopTools_ListIteratorOfListOfShape it(GFAArguments); it.More(); it.Next()){
+            mapInOut->push_back(mkGFA.Modified(it.Value()));
+        }
+    }
+    return resShape;
+#endif
 }
 
 TopoDS_Shape TopoShape::makePipe(const TopoDS_Shape& profile) const
@@ -2643,4 +2588,92 @@ void TopoShape::getPoints(std::vector<Base::Vector3d> &Points,
     // if no faces are found then the normals can be cleared
     if (!hasFaces)
         Normals.clear();
+}
+
+void TopoShape::getLinesFromSubelement(const Data::Segment* element,
+                                       std::vector<Base::Vector3d> &Points,
+                                       std::vector<Line> &lines) const
+{
+}
+
+void TopoShape::getFacesFromSubelement(const Data::Segment* element,
+                                       std::vector<Base::Vector3d> &Points,
+                                       std::vector<Base::Vector3d> &PointNormals,
+                                       std::vector<Facet> &faces) const
+{
+    if (element->getTypeId() == ShapeSegment::getClassTypeId()) {
+        const TopoDS_Shape& shape = static_cast<const ShapeSegment*>(element)->Shape;
+        if (shape.IsNull() || shape.ShapeType() != TopAbs_FACE)
+            return;
+        std::set<MeshVertex> vertices;
+        Standard_Real x1, y1, z1;
+        Standard_Real x2, y2, z2;
+        Standard_Real x3, y3, z3;
+
+        Handle_StlMesh_Mesh aMesh = new StlMesh_Mesh();
+#if OCC_VERSION_HEX >= 0x060801
+        StlTransfer::RetrieveMesh(shape, aMesh);
+#else
+        throw Base::AttributeError("getFacesFromSubelement is available only in OCC 6.8.1 and up.");
+#endif
+
+        StlMesh_MeshExplorer xp(aMesh);
+        for (Standard_Integer nbd=1;nbd<=aMesh->NbDomains();nbd++) {
+            for (xp.InitTriangle (nbd); xp.MoreTriangle (); xp.NextTriangle ()) {
+                xp.TriangleVertices (x1,y1,z1,x2,y2,z2,x3,y3,z3);
+                Data::ComplexGeoData::Facet face;
+                std::set<MeshVertex>::iterator it;
+
+                // 1st vertex
+                MeshVertex v1(x1,y1,z1);
+                it = vertices.find(v1);
+                if (it == vertices.end()) {
+                    v1.i = vertices.size();
+                    face.I1 = v1.i;
+                    vertices.insert(v1);
+                }
+                else {
+                    face.I1 = it->i;
+                }
+
+                // 2nd vertex
+                MeshVertex v2(x2,y2,z2);
+                it = vertices.find(v2);
+                if (it == vertices.end()) {
+                    v2.i = vertices.size();
+                    face.I2 = v2.i;
+                    vertices.insert(v2);
+                }
+                else {
+                    face.I2 = it->i;
+                }
+
+                // 3rd vertex
+                MeshVertex v3(x3,y3,z3);
+                it = vertices.find(v3);
+                if (it == vertices.end()) {
+                    v3.i = vertices.size();
+                    face.I3 = v3.i;
+                    vertices.insert(v3);
+                }
+                else {
+                    face.I3 = it->i;
+                }
+
+                // make sure that we don't insert invalid facets
+                if (face.I1 != face.I2 &&
+                    face.I2 != face.I3 &&
+                    face.I3 != face.I1)
+                    faces.push_back(face);
+            }
+        }
+
+        (void)PointNormals; // leave this empty
+        std::vector<gp_Pnt> points;
+        points.resize(vertices.size());
+        for (std::set<MeshVertex>::iterator it = vertices.begin(); it != vertices.end(); ++it)
+            points[it->i] = it->toPoint();
+        for (std::vector<gp_Pnt>::iterator it = points.begin(); it != points.end(); ++it)
+            Points.push_back(Base::Vector3d(it->X(),it->Y(),it->Z()));
+    }
 }

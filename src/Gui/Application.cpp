@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2004 Jürgen Riegel <juergen.riegel@web.de>              *
+ *   Copyright (c) 2004 Juergen Riegel <juergen.riegel@web.de>             *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -88,6 +88,7 @@
 #include "SpaceballEvent.h"
 #include "Control.h"
 #include "DocumentRecovery.h"
+#include "TransactionObject.h"
 #include "TaskView/TaskView.h"
 
 #include "SplitView3DInventor.h"
@@ -103,7 +104,13 @@
 #include "ViewProviderAnnotation.h"
 #include "ViewProviderMeasureDistance.h"
 #include "ViewProviderPlacement.h"
+#include "ViewProviderOriginFeature.h"
 #include "ViewProviderPlane.h"
+#include "ViewProviderLine.h"
+#include "ViewProviderGeoFeatureGroup.h"
+#include "ViewProviderOriginGroup.h"
+#include "ViewProviderPart.h"
+#include "ViewProviderOrigin.h"
 #include "ViewProviderMaterialObject.h"
 
 #include "Language/Translator.h"
@@ -319,6 +326,15 @@ struct PyMethodDef FreeCADGui_methods[] = {
     {NULL, NULL}  /* sentinel */
 };
 
+
+Gui::MDIView* Application::activeView(void) const
+{
+	if (activeDocument())
+		return activeDocument()->getActiveView();
+	else
+		return NULL;
+}
+
 } // namespace Gui
 
 Application::Application(bool GUIenabled)
@@ -424,6 +440,7 @@ Application::Application(bool GUIenabled)
     PythonStdin                 ::init_type();
     View3DInventorPy            ::init_type();
     View3DInventorViewerPy      ::init_type();
+    AbstractSplitViewPy         ::init_type();
 
     d = new ApplicationP;
 
@@ -590,10 +607,13 @@ void Application::exportTo(const char* FileName, const char* DocName, const char
             }
 
             std::stringstream str;
+            std::set<App::DocumentObject*> unique_objs;
             str << "__objs__=[]" << std::endl;
             for (std::vector<App::DocumentObject*>::iterator it = sel.begin(); it != sel.end(); ++it) {
-                str << "__objs__.append(FreeCAD.getDocument(\"" << DocName << "\").getObject(\""
-                    << (*it)->getNameInDocument() << "\"))" << std::endl;
+                if (unique_objs.insert(*it).second) {
+                    str << "__objs__.append(FreeCAD.getDocument(\"" << DocName << "\").getObject(\""
+                        << (*it)->getNameInDocument() << "\"))" << std::endl;
+                }
             }
 
             str << "import " << Module << std::endl;
@@ -831,6 +851,7 @@ void Application::setActiveDocument(Gui::Document* pcDocument)
         return;
     }
 
+#ifdef FC_DEBUG
     // May be useful for error detection
     if (d->activeDocument) {
         App::Document* doc = d->activeDocument->getDocument();
@@ -839,6 +860,7 @@ void Application::setActiveDocument(Gui::Document* pcDocument)
     else {
         Base::Console().Log("No active document\n");
     }
+#endif
 
     // notify all views attached to the application (not views belong to a special document)
     for(list<Gui::BaseView*>::iterator It=d->passive.begin();It!=d->passive.end();++It)
@@ -914,9 +936,11 @@ void Application::onUpdate(void)
 /// Gets called if a view gets activated, this manages the whole activation scheme
 void Application::viewActivated(MDIView* pcView)
 {
+#ifdef FC_DEBUG
     // May be useful for error detection
     Base::Console().Log("Active view is %s (at %p)\n",
                  (const char*)pcView->windowTitle().toUtf8(),pcView);
+#endif
 
     signalActivateView(pcView);
 
@@ -1341,29 +1365,20 @@ CommandManager &Application::commandManager(void)
 
 void Application::runCommand(bool bForce, const char* sCmd,...)
 {
-    // temp buffer
-    size_t format_len = std::strlen(sCmd)+4024;
-    char* format = (char*) malloc(format_len);
-    va_list namelessVars;
-    va_start(namelessVars, sCmd);  // Get the "..." vars
-    vsnprintf(format, format_len, sCmd, namelessVars);
-    va_end(namelessVars);
+    va_list ap;
+    va_start(ap, sCmd);
+    QString s;
+    const QString cmd = s.vsprintf(sCmd, ap);
+    va_end(ap);
+
+    QByteArray format = cmd.toLatin1();
 
     if (bForce)
-        d->macroMngr->addLine(MacroManager::App,format);
+        d->macroMngr->addLine(MacroManager::App, format.constData());
     else
-        d->macroMngr->addLine(MacroManager::Gui,format);
+        d->macroMngr->addLine(MacroManager::Gui, format.constData());
 
-    try { 
-        Base::Interpreter().runString(format);
-    }
-    catch (...) {
-        // free memory to avoid a leak if an exception occurred
-        free (format);
-        throw;
-    }
-
-    free (format);
+    Base::Interpreter().runString(format.constData());
 }
 
 bool Application::runPythonCode(const char* cmd, bool gui, bool pyexc)
@@ -1529,7 +1544,14 @@ void Application::initTypes(void)
     Gui::ViewProviderPythonFeature              ::init();
     Gui::ViewProviderPythonGeometry             ::init();
     Gui::ViewProviderPlacement                  ::init();
+    Gui::ViewProviderOriginFeature              ::init();
     Gui::ViewProviderPlane                      ::init();
+    Gui::ViewProviderLine                       ::init();
+    Gui::ViewProviderGeoFeatureGroup            ::init();
+    Gui::ViewProviderGeoFeatureGroupPython      ::init();
+    Gui::ViewProviderOriginGroup                ::init();
+    Gui::ViewProviderPart                       ::init();
+    Gui::ViewProviderOrigin                     ::init();
     Gui::ViewProviderMaterialObject             ::init();
     Gui::ViewProviderMaterialObjectPython       ::init();
 
@@ -1542,6 +1564,10 @@ void Application::initTypes(void)
     Gui::PythonBaseWorkbench                    ::init();
     Gui::PythonBlankWorkbench                   ::init();
     Gui::PythonWorkbench                        ::init();
+
+    // register transaction type
+    new App::TransactionProducer<TransactionViewProvider>
+            (ViewProviderDocumentObject::getClassTypeId());
 }
 
 void Application::runApplication(void)
@@ -1554,6 +1580,8 @@ void Application::runApplication(void)
     // if application not yet created by the splasher
     int argc = App::Application::GetARGC();
     GUISingleApplication mainApp(argc, App::Application::GetARGV());
+    // http://forum.freecadweb.org/viewtopic.php?f=3&t=15540
+    mainApp.setAttribute(Qt::AA_DontShowIconsInMenus, false);
 
     // check if a single or multiple instances can run
     it = cfg.find("SingleInstance");
@@ -1799,6 +1827,12 @@ void Application::runApplication(void)
     }
     catch (const Base::SystemExitException&) {
         Base::Console().Message("System exit\n");
+        throw;
+    }
+    catch (const std::exception& e) {
+        // catching nasty stuff coming out of the event loop
+        App::Application::destructObserver();
+        Base::Console().Error("Event loop left through unhandled exception: %s\n", e.what());
         throw;
     }
     catch (...) {

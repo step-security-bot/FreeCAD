@@ -83,6 +83,7 @@
 # include <QTimer>
 # include <QStatusBar>
 # include <QBitmap>
+# include <QMimeData>
 #endif
 
 #include <sstream>
@@ -127,6 +128,7 @@
 
 #include "SoTouchEvents.h"
 #include "WinNativeGestureRecognizers.h"
+#include "Document.h"
 
 //#define FC_LOGGING_CB
 
@@ -513,16 +515,16 @@ void View3DInventorViewer::init()
     } catch (...) {
         Base::Console().Warning("Failed to set up gestures. Unknown error.\n");
     }
-    
+
     //create the cursors
     QBitmap cursor = QBitmap::fromData(QSize(ROTATE_WIDTH, ROTATE_HEIGHT), rotate_bitmap);
     QBitmap mask = QBitmap::fromData(QSize(ROTATE_WIDTH, ROTATE_HEIGHT), rotate_mask_bitmap);
     spinCursor = QCursor(cursor, mask, ROTATE_HOT_X, ROTATE_HOT_Y);
-    
+
     cursor = QBitmap::fromData(QSize(ZOOM_WIDTH, ZOOM_HEIGHT), zoom_bitmap);
     mask = QBitmap::fromData(QSize(ZOOM_WIDTH, ZOOM_HEIGHT), zoom_mask_bitmap);
     zoomCursor = QCursor(cursor, mask, ZOOM_HOT_X, ZOOM_HOT_Y);
-    
+
     cursor = QBitmap::fromData(QSize(PAN_WIDTH, PAN_HEIGHT), pan_bitmap);
     mask = QBitmap::fromData(QSize(PAN_WIDTH, PAN_HEIGHT), pan_mask_bitmap);
     panCursor = QCursor(cursor, mask, PAN_HOT_X, PAN_HOT_Y);
@@ -566,8 +568,14 @@ View3DInventorViewer::~View3DInventorViewer()
 void View3DInventorViewer::setDocument(Gui::Document* pcDocument)
 {
     // write the document the viewer belongs to to the selection node
+    guiDocument = pcDocument;
     selectionRoot->pcDocument = pcDocument;
 }
+
+Document* View3DInventorViewer::getDocument() {
+    return guiDocument;
+}
+
 
 void View3DInventorViewer::initialize()
 {
@@ -626,7 +634,7 @@ void View3DInventorViewer::removeViewProvider(ViewProvider* pcProvider)
 
     SoSeparator* root = pcProvider->getRoot();
 
-    if (root) {
+    if (root && (pcViewProviderRoot->findChild(root) != -1)) {
         pcViewProviderRoot->removeChild(root);
         _ViewProviderMap.erase(root);
     }
@@ -641,6 +649,7 @@ void View3DInventorViewer::removeViewProvider(ViewProvider* pcProvider)
 
     _ViewProviderSet.erase(pcProvider);
 }
+
 
 SbBool View3DInventorViewer::setEditingViewProvider(Gui::ViewProvider* p, int ModNum)
 {
@@ -682,8 +691,9 @@ void View3DInventorViewer::setOverrideMode(const std::string& mode)
 
     overrideMode = mode;
 
-    for (std::set<ViewProvider*>::iterator it = _ViewProviderSet.begin(); it != _ViewProviderSet.end(); ++it)
-        (*it)->setOverrideMode(mode);
+    auto views = getDocument()->getViewProvidersOfType(Gui::ViewProvider::getClassTypeId());
+    for (auto view : views)
+        view->setOverrideMode(mode);
 }
 
 /// update override mode. doesn't affect providers
@@ -857,7 +867,7 @@ void View3DInventorViewer::setSceneGraph(SoNode* root)
 
     SoSearchAction sa;
     sa.setNode(this->backlight);
-    //we want the rendered scene with all lights and cameras, viewer->getSceneGraph would return 
+    //we want the rendered scene with all lights and cameras, viewer->getSceneGraph would return
     //the geometry scene only
     SoNode* scene = this->getSoRenderManager()->getSceneGraph();
     if (scene && scene->getTypeId().isDerivedFrom(SoSeparator::getClassTypeId())) {
@@ -1260,6 +1270,11 @@ void View3DInventorViewer::setRenderType(const RenderType type)
     }
 }
 
+View3DInventorViewer::RenderType View3DInventorViewer::getRenderType() const
+{
+    return this->renderType;
+}
+
 void View3DInventorViewer::renderToFramebuffer(QGLFramebufferObject* fbo)
 {
     static_cast<QGLWidget*>(this->viewport())->makeCurrent();
@@ -1274,7 +1289,7 @@ void View3DInventorViewer::renderToFramebuffer(QGLFramebufferObject* fbo)
 
     const QColor col = this->backgroundColor();
     glViewport(0, 0, width, height);
-    glClearColor(col.redF(), col.greenF(), col.blueF(), 1.0f);
+    glClearColor(col.redF(), col.greenF(), col.blueF(), col.alphaF());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glDepthRange(0.1,1.0);
@@ -1461,7 +1476,7 @@ void View3DInventorViewer::renderScene(void)
 
     for (std::list<GLGraphicsItem*>::iterator it = this->graphicsItems.begin(); it != this->graphicsItems.end(); ++it)
         (*it)->paintGL();
-    
+
     //fps rendering
     if (fpsEnabled) {
         std::stringstream stream;
@@ -2739,4 +2754,45 @@ PyObject *View3DInventorViewer::getPyObject(void)
 
     Py_INCREF(_viewerPy);
     return _viewerPy;
+}
+/**
+ * Drops the event \a e and loads the files into the given document.
+ */
+void View3DInventorViewer::dropEvent (QDropEvent * e)
+{
+    const QMimeData* data = e->mimeData();
+    if (data->hasUrls() && selectionRoot && selectionRoot->pcDocument) {
+        getMainWindow()->loadUrls(selectionRoot->pcDocument->getDocument(), data->urls());
+    }
+    else {
+        inherited::dropEvent(e);
+    }
+}
+
+void View3DInventorViewer::dragEnterEvent (QDragEnterEvent * e)
+{
+    // Here we must allow uri drags and check them in dropEvent
+    const QMimeData* data = e->mimeData();
+    if (data->hasUrls()) {
+        e->accept();
+    }
+    else {
+        inherited::dragEnterEvent(e);
+    }
+}
+
+void View3DInventorViewer::dragMoveEvent(QDragMoveEvent *e)
+{
+    const QMimeData* data = e->mimeData();
+    if (data->hasUrls() && selectionRoot && selectionRoot->pcDocument) {
+        e->accept();
+    }
+    else {
+        inherited::dragMoveEvent(e);
+    }
+}
+
+void View3DInventorViewer::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    inherited::dragLeaveEvent(e);
 }
