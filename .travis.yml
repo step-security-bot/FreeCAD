@@ -27,39 +27,7 @@ addons:
 
 before_install:
     - sudo apt-get update -qq
-    - sudo apt-get install -y doxygen
-    - sudo apt-get install -y libboost1.55-dev
-    - sudo apt-get install -y libboost-filesystem1.55-dev
-    - sudo apt-get install -y libboost-program-options1.55-dev
-    - sudo apt-get install -y libboost-python1.55-dev
-    - sudo apt-get install -y libboost-regex1.55-dev
-    - sudo apt-get install -y libboost-signals1.55-dev
-    - sudo apt-get install -y libboost-system1.55-dev
-    - sudo apt-get install -y libboost-thread1.55-dev
-    - sudo apt-get install -y libcoin80-dev
-    - sudo apt-get install -y libeigen3-dev
-    - sudo apt-get install -y liboce-foundation-dev
-    - sudo apt-get install -y liboce-modeling-dev
-    - sudo apt-get install -y liboce-ocaf-dev
-    - sudo apt-get install -y liboce-visualization-dev
-    - sudo apt-get install -y libpyside-dev
-    - sudo apt-get install -y libqtcore4
-    - sudo apt-get install -y libshiboken-dev
-    - sudo apt-get install -y libxerces-c-dev
-    - sudo apt-get install -y libxmuu-dev
-    - sudo apt-get install -y oce-draw
-    - sudo apt-get install -y pyside-tools
-    - sudo apt-get install -y python-matplotlib
-    - sudo apt-get install -y qt4-dev-tools
-    - sudo apt-get install -y shiboken
-    - sudo apt-get install -y swig
-    - sudo apt-get install -y netgen
-    - sudo apt-get install -y netgen-headers
-    - sudo apt-get install -y libvtk6-dev
-    - sudo apt-get install -y libmed-dev
-    - sudo apt-get install -y libmedc-dev
-    - sudo apt-get install -y libproj-dev
-    #- sudo apt-get install -y asciidoc
+    - sudo apt-get install -y doxygen libboost1.55-dev libboost-filesystem1.55-dev libboost-program-options1.55-dev libboost-python1.55-dev libboost-regex1.55-dev libboost-signals1.55-dev libboost-system1.55-dev libboost-thread1.55-dev libcoin80-dev libeigen3-dev liboce-foundation-dev liboce-modeling-dev liboce-ocaf-dev liboce-visualization-dev libpyside-dev libqtcore4 libshiboken-dev libxerces-c-dev libxmuu-dev oce-draw pyside-tools python-matplotlib qt4-dev-tools shiboken swig netgen netgen-headers libvtk6-dev libmed-dev libmedc-dev
 
 #travis trusty python-libpython version mismatch workaround
 #    - sudo rm -rf /opt/python/2.7.10
