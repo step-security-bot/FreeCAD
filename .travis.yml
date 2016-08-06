@@ -58,6 +58,7 @@ before_install:
     - sudo apt-get install -y libvtk6-dev
     - sudo apt-get install -y libmed-dev
     - sudo apt-get install -y libmedc-dev
+    - sudo apt-get install -y libproj-dev
     #- sudo apt-get install -y asciidoc
 
 #travis trusty python-libpython version mismatch workaround
