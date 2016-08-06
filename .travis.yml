@@ -2,11 +2,9 @@ language: cpp
 
 os:
   - linux
-  #- osx
 
 compiler:
   - gcc
-  #- clang
 
 #trusty
 sudo: required
@@ -27,11 +25,8 @@ addons:
 
 before_install:
     - sudo apt-get update -qq
-    - sudo apt-get install -y doxygen libboost1.55-dev libboost-filesystem1.55-dev libboost-program-options1.55-dev libboost-python1.55-dev libboost-regex1.55-dev libboost-signals1.55-dev libboost-system1.55-dev libboost-thread1.55-dev libcoin80-dev libeigen3-dev liboce-foundation-dev liboce-modeling-dev liboce-ocaf-dev liboce-visualization-dev libpyside-dev libqtcore4 libshiboken-dev libxerces-c-dev libxmuu-dev oce-draw pyside-tools python-matplotlib qt4-dev-tools shiboken swig netgen netgen-headers libvtk6-dev libmed-dev libmedc-dev asciidoc
-
-#travis trusty python-libpython version mismatch workaround
-#    - sudo rm -rf /opt/python/2.7.10
-#    - sudo rm -rf /opt/python/2.6.9
+    - sudo apt-get install -y doxygen libboost1.55-dev libboost-filesystem1.55-dev libboost-program-options1.55-dev libboost-python1.55-dev libboost-regex1.55-dev libboost-signals1.55-dev libboost-system1.55-dev libboost-thread1.55-dev libcoin80-dev libeigen3-dev liboce-foundation-dev liboce-modeling-dev liboce-ocaf-dev liboce-visualization-dev libpyside-dev libqtcore4 libshiboken-dev libxerces-c-dev libxmuu-dev oce-draw pyside-tools python-matplotlib qt4-dev-tools shiboken swig netgen netgen-headers libvtk6-dev libmed-dev libmedc-dev
+    - sudo find /usr/lib -name libpq.so -exec ln -s {} /usr/lib/libpq.so ';'
 
 install:
     - mkdir build && cd build && cmake -DPYTHON_EXECUTABLE=/usr/bin/python ../
