@@ -58,14 +58,14 @@ before_install:
     - sudo apt-get install -y libvtk6-dev
     - sudo apt-get install -y libmed-dev
     - sudo apt-get install -y libmedc-dev
-    - sudo apt-get install -y asciidoc
+    #- sudo apt-get install -y asciidoc
 
 #travis trusty python-libpython version mismatch workaround
 #    - sudo rm -rf /opt/python/2.7.10
 #    - sudo rm -rf /opt/python/2.6.9
 
 install:
-    - mkdir build && cd build && cmake -DBUILD_FEM_NETGEN=ON -DPYTHON_EXECUTABLE=/usr/bin/python -DCMAKE_BUILD_TYPE:-Release ../
+    - mkdir build && cd build && cmake -DBUILD_FEM_NETGEN=ON -DPYTHON_EXECUTABLE=/usr/bin/python ../
 
 #before_script:
 
