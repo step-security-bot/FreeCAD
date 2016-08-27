@@ -43,7 +43,7 @@ install:
   - dir
   - ren clcache.exe cl.exe
   - dir
-  #- set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
+  - set PATH=C:/projects/freecad/clcache-3.2.0/dist;%PATH%
   - set PATH=C:\\projects\\freecad;%PATH%
   #- cl.exe --help
   #- cl.exe -s
@@ -70,15 +70,15 @@ install:
   #- dir
   #- set CLCACHE_CL="C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
   ##- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - clcache.bat --help
-  - clcache.bat -s
+  - cl.exe --help
+  - cl.exe -s
 
 build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - set CC=C:/projects/freecad/clcache.bat
-  - set CXX=C:/projects/freecad/clcache.bat
+  #- set CC=C:/projects/freecad/clcache.bat
+  #- set CXX=C:/projects/freecad/clcache.bat
   - cmake -D FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs_11.3_x64_VC12
     -G "%generator%" ..
   #-
@@ -96,10 +96,10 @@ build_script:
   #-
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
-  - echo %CLCACHE_CL%
+  #- echo %CLCACHE_CL%
   - msbuild /m FreeCAD_Trunk.sln
   - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - clcache.bat -s
+  - cl.exe -s
 
 #after_build:
 
