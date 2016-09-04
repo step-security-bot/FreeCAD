@@ -40,7 +40,7 @@ class _FemSolverCalculix():
         obj.addProperty("App::PropertyString", "SolverType", "Base", "Type of the solver", 1)  # the 1 set the property to ReadOnly
         obj.SolverType = str(self.Type)
 
-        fem_prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem")
+        fem_prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem/General")
         ccx_prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem/Ccx")
 
         obj.addProperty("App::PropertyPath", "WorkingDir", "Fem", "Working directory for calculations")
@@ -65,7 +65,6 @@ class _FemSolverCalculix():
         obj.EigenmodesCount = (noe, 1, 100, 1)
 
         obj.addProperty("App::PropertyFloatConstraint", "EigenmodeLowLimit", "Fem", "Low frequency limit for eigenmode calculations")
-        # Not yet in prefs, so it will always default to 0.0
         ell = ccx_prefs.GetFloat("EigenmodeLowLimit", 0.0)
         obj.EigenmodeLowLimit = (ell, 0.0, 1000000.0, 10000.0)
 

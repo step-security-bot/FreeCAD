@@ -126,22 +126,22 @@ class _TaskPanelMechanicalMaterial:
         webbrowser.open("http://matweb.com")
 
     def check_material_keys(self):
-        if not 'YoungsModulus' in self.material:
+        if 'YoungsModulus' not in self.material:
             print('YoungsModulus not found in material data of: ' + self.material['Name'])
             self.material['YoungsModulus'] = '0 MPa'
-        if not 'Density' in self.material:
+        if 'Density' not in self.material:
             print('Density not found in material data of: ' + self.material['Name'])
             self.material['Density'] = '0 kg/m^3'
-        if not 'PoissonRatio' in self.material:
+        if 'PoissonRatio' not in self.material:
             print('PoissonRatio not found in material data of: ' + self.material['Name'])
             self.material['PoissonRatio'] = '0'
-        if not 'ThermalConductivity' in self.material:
+        if 'ThermalConductivity' not in self.material:
             print('ThermalConductivity not found in material data of: ' + self.material['Name'])
             self.material['ThermalConductivity'] = '0 W/m/K'
-        if not 'ThermalExpansionCoefficient' in self.material:
+        if 'ThermalExpansionCoefficient' not in self.material:
             print('ThermalExpansionCoefficient not found in material data of: ' + self.material['Name'])
             self.material['ThermalExpansionCoefficient'] = '0 um/m/K'
-        if not 'SpecificHeat' in self.material:
+        if 'SpecificHeat' not in self.material:
             print('SpecificHeat not found in material data of: ' + self.material['Name'])
             self.material['SpecificHeat'] = '0 J/kg/K'
 
@@ -292,20 +292,20 @@ class _TaskPanelMechanicalMaterial:
         self.materials = {}
         self.pathList = []
         self.form.cb_materials.clear()
-        self.fem_preferences = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem")
-        use_built_in_materials = self.fem_preferences.GetBool("UseBuiltInMaterials", True)
+        self.fem_prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem/General")
+        use_built_in_materials = self.fem_prefs.GetBool("UseBuiltInMaterials", True)
         if use_built_in_materials:
             system_mat_dir = FreeCAD.getResourceDir() + "/Mod/Material/StandardMaterial"
             self.add_mat_dir(system_mat_dir, ":/icons/freecad.svg")
 
-        use_mat_from_config_dir = self.fem_preferences.GetBool("UseMaterialsFromConfigDir", True)
+        use_mat_from_config_dir = self.fem_prefs.GetBool("UseMaterialsFromConfigDir", True)
         if use_mat_from_config_dir:
             user_mat_dirname = FreeCAD.getUserAppDataDir() + "Materials"
             self.add_mat_dir(user_mat_dirname, ":/icons/preferences-general.svg")
 
-        use_mat_from_custom_dir = self.fem_preferences.GetBool("UseMaterialsFromCustomDir", True)
+        use_mat_from_custom_dir = self.fem_prefs.GetBool("UseMaterialsFromCustomDir", True)
         if use_mat_from_custom_dir:
-            custom_mat_dir = self.fem_preferences.GetString("CustomMaterialsDir", "")
+            custom_mat_dir = self.fem_prefs.GetString("CustomMaterialsDir", "")
             self.add_mat_dir(custom_mat_dir, ":/icons/user.svg")
 
     def references_list_right_clicked(self, QPos):

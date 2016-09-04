@@ -34,6 +34,7 @@
 # include <TopExp_Explorer.hxx>
 # include <Inventor/events/SoMouseButtonEvent.h>
 # include <Standard_Version.hxx>
+# include <TopoDS_TCompound.hxx>
 #endif
 
 #include <Base/Console.h>
@@ -350,9 +351,28 @@ CmdPartCommon::CmdPartCommon()
 void CmdPartCommon::activated(int iMsg)
 {
     std::vector<Gui::SelectionObject> Sel = getSelection().getSelectionEx(0, Part::Feature::getClassTypeId());
-    if (Sel.size() < 2) {
+
+    //test if selected object is a compound, and if it is, look how many children it has...
+    std::size_t numShapes = 0;
+    if (Sel.size() == 1){
+        numShapes = 1; //to be updated later in code, if
+        Gui::SelectionObject selobj = Sel[0];
+        if (selobj.getObject()->isDerivedFrom(Part::Feature::getClassTypeId())){
+            TopoDS_Shape sh = static_cast<Part::Feature*>(selobj.getObject())->Shape.getValue();
+            if (sh.ShapeType() == TopAbs_COMPOUND) {
+                numShapes = 0;
+                TopoDS_Iterator it(sh);
+                for (; it.More(); it.Next()) {
+                    ++numShapes;
+                }
+            }
+        }
+    } else {
+        numShapes = Sel.size();
+    }
+    if (numShapes < 2) {
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-            QObject::tr("Select two shapes or more, please."));
+            QObject::tr("Select two shapes or more, please. Or, select one compound containing two or more shapes to compute common between."));
         return;
     }
 
@@ -409,7 +429,7 @@ void CmdPartCommon::activated(int iMsg)
 
 bool CmdPartCommon::isActive(void)
 {
-    return getSelection().countObjectsOfType(Part::Feature::getClassTypeId())>=2;
+    return getSelection().countObjectsOfType(Part::Feature::getClassTypeId())>=1;
 }
 
 //===========================================================================
@@ -432,9 +452,28 @@ CmdPartFuse::CmdPartFuse()
 void CmdPartFuse::activated(int iMsg)
 {
     std::vector<Gui::SelectionObject> Sel = getSelection().getSelectionEx(0, Part::Feature::getClassTypeId());
-    if (Sel.size() < 2) {
+
+    //test if selected object is a compound, and if it is, look how many children it has...
+    std::size_t numShapes = 0;
+    if (Sel.size() == 1){
+        numShapes = 1; //to be updated later in code
+        Gui::SelectionObject selobj = Sel[0];
+        if (selobj.getObject()->isDerivedFrom(Part::Feature::getClassTypeId())){
+            TopoDS_Shape sh = static_cast<Part::Feature*>(selobj.getObject())->Shape.getValue();
+            if (sh.ShapeType() == TopAbs_COMPOUND) {
+                numShapes = 0;
+                TopoDS_Iterator it(sh);
+                for (; it.More(); it.Next()) {
+                    ++numShapes;
+                }
+            }
+        }
+    } else {
+        numShapes = Sel.size();
+    }
+    if (numShapes < 2) {
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-            QObject::tr("Select two shapes or more, please."));
+            QObject::tr("Select two shapes or more, please. Or, select one compound containing two or more shapes to be fused."));
         return;
     }
 
@@ -491,7 +530,7 @@ void CmdPartFuse::activated(int iMsg)
 
 bool CmdPartFuse::isActive(void)
 {
-    return getSelection().countObjectsOfType(Part::Feature::getClassTypeId())>=2;
+    return getSelection().countObjectsOfType(Part::Feature::getClassTypeId())>=1;
 }
 
 //===========================================================================
@@ -1435,8 +1474,8 @@ CmdPartOffset::CmdPartOffset()
 {
     sAppModule    = "Part";
     sGroup        = QT_TR_NOOP("Part");
-    sMenuText     = QT_TR_NOOP("Offset...");
-    sToolTipText  = QT_TR_NOOP("Utility to offset");
+    sMenuText     = QT_TR_NOOP("3D Offset...");
+    sToolTipText  = QT_TR_NOOP("Part_Offset: Utility to offset in 3D");
     sWhatsThis    = "Part_Offset";
     sStatusTip    = sToolTipText;
     sPixmap       = "Part_Offset";
@@ -1465,6 +1504,147 @@ void CmdPartOffset::activated(int iMsg)
 }
 
 bool CmdPartOffset::isActive(void)
+{
+    Base::Type partid = Base::Type::fromName("Part::Feature");
+    bool objectsSelected = Gui::Selection().countObjectsOfType(partid) == 1;
+    return (objectsSelected && !Gui::Control().activeDialog());
+}
+
+
+//===========================================================================
+// Part_Offset2D
+//===========================================================================
+
+DEF_STD_CMD_A(CmdPartOffset2D);
+
+CmdPartOffset2D::CmdPartOffset2D()
+  : Command("Part_Offset2D")
+{
+    sAppModule    = "Part";
+    sGroup        = QT_TR_NOOP("Part");
+    sMenuText     = QT_TR_NOOP("2D Offset...");
+    sToolTipText  = QT_TR_NOOP("Part_Offset2D: Utility to offset planar shapes");
+    sWhatsThis    = "Part_Offset2D";
+    sStatusTip    = sToolTipText;
+    sPixmap       = "Part_Offset2D";
+}
+
+void CmdPartOffset2D::activated(int iMsg)
+{
+    App::DocumentObject* shape = getSelection().getObjectsOfType(Part::Feature::getClassTypeId()).front();
+    std::string offset = getUniqueObjectName("Offset2D");
+
+    openCommand("Make 2D Offset");
+    doCommand(Doc,"App.ActiveDocument.addObject(\"Part::Offset2D\",\"%s\")",offset.c_str());
+    doCommand(Doc,"App.ActiveDocument.%s.Source = App.ActiveDocument.%s" ,offset.c_str(), shape->getNameInDocument());
+    doCommand(Doc,"App.ActiveDocument.%s.Value = 1.0",offset.c_str());
+    updateActive();
+    //if (isActiveObjectValid())
+    //    doCommand(Gui,"Gui.ActiveDocument.hide(\"%s\")",shape->getNameInDocument());
+    doCommand(Gui,"Gui.ActiveDocument.setEdit('%s')",offset.c_str());
+
+    //commitCommand();
+    adjustCameraPosition();
+
+    copyVisual(offset.c_str(), "ShapeColor", shape->getNameInDocument());
+    copyVisual(offset.c_str(), "LineColor" , shape->getNameInDocument());
+    copyVisual(offset.c_str(), "PointColor", shape->getNameInDocument());
+}
+
+bool CmdPartOffset2D::isActive(void)
+{
+    Base::Type partid = Base::Type::fromName("Part::Feature");
+    bool objectsSelected = Gui::Selection().countObjectsOfType(partid) == 1;
+    return (objectsSelected && !Gui::Control().activeDialog());
+}
+
+//===========================================================================
+// Part_CompOffset (dropdown toolbar button for Offset features)
+//===========================================================================
+
+DEF_STD_CMD_ACL(CmdPartCompOffset);
+
+CmdPartCompOffset::CmdPartCompOffset()
+  : Command("Part_CompOffset")
+{
+    sAppModule      = "Part";
+    sGroup          = QT_TR_NOOP("Part");
+    sMenuText       = QT_TR_NOOP("Offset:");
+    sToolTipText    = QT_TR_NOOP("Tools to offset shapes (construct parallel shapes)");
+    sWhatsThis      = "Part_CompOffset";
+    sStatusTip      = sToolTipText;
+}
+
+void CmdPartCompOffset::activated(int iMsg)
+{
+    Gui::CommandManager &rcCmdMgr = Gui::Application::Instance->commandManager();
+    if (iMsg==0)
+        rcCmdMgr.runCommandByName("Part_Offset");
+    else if (iMsg==1)
+        rcCmdMgr.runCommandByName("Part_Offset2D");
+    else
+        return;
+
+    // Since the default icon is reset when enabing/disabling the command we have
+    // to explicitly set the icon of the used command.
+    Gui::ActionGroup* pcAction = qobject_cast<Gui::ActionGroup*>(_pcAction);
+    QList<QAction*> a = pcAction->actions();
+
+    assert(iMsg < a.size());
+    pcAction->setIcon(a[iMsg]->icon());
+}
+
+Gui::Action * CmdPartCompOffset::createAction(void)
+{
+    Gui::ActionGroup* pcAction = new Gui::ActionGroup(this, Gui::getMainWindow());
+    pcAction->setDropDownMenu(true);
+    applyCommandData(this->className(), pcAction);
+
+    QAction* cmd0 = pcAction->addAction(QString());
+    cmd0->setIcon(Gui::BitmapFactory().pixmap("Part_Offset"));
+    QAction* cmd1 = pcAction->addAction(QString());
+    cmd1->setIcon(Gui::BitmapFactory().pixmap("Part_Offset2D"));
+
+    _pcAction = pcAction;
+    languageChange();
+
+    pcAction->setIcon(cmd0->icon());
+    int defaultId = 0;
+    pcAction->setProperty("defaultAction", QVariant(defaultId));
+
+    return pcAction;
+}
+
+void CmdPartCompOffset::languageChange()
+{
+    Command::languageChange();
+
+    if (!_pcAction)
+        return;
+
+    Gui::CommandManager &rcCmdMgr = Gui::Application::Instance->commandManager();
+
+    Gui::ActionGroup* pcAction = qobject_cast<Gui::ActionGroup*>(_pcAction);
+    QList<QAction*> a = pcAction->actions();
+
+    Gui::Command* cmdOffset = rcCmdMgr.getCommandByName("Part_Offset");
+    if (cmdOffset) {
+        QAction* cmd0 = a[0];
+        cmd0->setText(QApplication::translate("Part_Offset", cmdOffset->getMenuText()));
+        cmd0->setToolTip(QApplication::translate("Part_Offset", cmdOffset->getToolTipText()));
+        cmd0->setStatusTip(QApplication::translate("Part_Offset", cmdOffset->getStatusTip()));
+    }
+
+    Gui::Command* cmdOffset2D = rcCmdMgr.getCommandByName("Part_Offset2D");
+    if (cmdOffset2D) {
+        QAction* cmd1 = a[1];
+        cmd1->setText(QApplication::translate("Part_Offset", cmdOffset2D->getMenuText()));
+        cmd1->setToolTip(QApplication::translate("Part_Offset", cmdOffset2D->getToolTipText()));
+        cmd1->setStatusTip(QApplication::translate("Part_Offset", cmdOffset2D->getStatusTip()));
+    }
+}
+
+bool CmdPartCompOffset::isActive(void)
 {
     Base::Type partid = Base::Type::fromName("Part::Feature");
     bool objectsSelected = Gui::Selection().countObjectsOfType(partid) == 1;
@@ -1722,9 +1902,9 @@ void CmdPartRuledSurface::activated(int iMsg)
         const Part::Feature* part1 = static_cast<const Part::Feature*>(result[0].getObject());
         const Part::Feature* part2 = static_cast<const Part::Feature*>(result[1].getObject());
         const Part::TopoShape& shape1 = part1->Shape.getValue();
-        curve1 = shape1._Shape;
+        curve1 = shape1.getShape();
         const Part::TopoShape& shape2 = part2->Shape.getValue();
-        curve2 = shape2._Shape;
+        curve2 = shape2.getShape();
         obj1 = part1->getNameInDocument();
         obj2 = part2->getNameInDocument();
 
@@ -2037,6 +2217,8 @@ void CreatePartCommands(void)
     rcCmdMgr.addCommand(new CmdPartLoft());
     rcCmdMgr.addCommand(new CmdPartSweep());
     rcCmdMgr.addCommand(new CmdPartOffset());
+    rcCmdMgr.addCommand(new CmdPartOffset2D());
+    rcCmdMgr.addCommand(new CmdPartCompOffset());
     rcCmdMgr.addCommand(new CmdPartThickness());
     rcCmdMgr.addCommand(new CmdCheckGeometry());
     rcCmdMgr.addCommand(new CmdColorPerFace());

@@ -100,9 +100,9 @@ void QGIView::alignTo(QGraphicsItem*item, const QString &alignment)
 
 QVariant QGIView::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+    QPointF newPos(0.0,0.0);
     if(change == ItemPositionChange && scene()) {
-        QPointF newPos = value.toPointF();
-
+        newPos = value.toPointF();
         if(locked){
             newPos.setX(pos().x());
             newPos.setY(pos().y());
@@ -113,17 +113,17 @@ QVariant QGIView::itemChange(GraphicsItemChange change, const QVariant &value)
             QGraphicsItem*item = alignHash.begin().value();
             QString alignMode   = alignHash.begin().key();
 
-            if(alignMode == QString::fromAscii("Vertical")) {
+            if(alignMode == QString::fromLatin1("Vertical")) {
                 newPos.setX(item->pos().x());
-            } else if(alignMode == QString::fromAscii("Horizontal")) {
+            } else if(alignMode == QString::fromLatin1("Horizontal")) {
                 newPos.setY(item->pos().y());
-            } else if(alignMode == QString::fromAscii("45slash")) {
+            } else if(alignMode == QString::fromLatin1("45slash")) {
                 double dist = ( (newPos.x() - item->pos().x()) +
                                 (item->pos().y() - newPos.y()) ) / 2.0;
 
                 newPos.setX( item->pos().x() + dist);
                 newPos.setY( item->pos().y() - dist );
-            } else if(alignMode == QString::fromAscii("45backslash")) {
+            } else if(alignMode == QString::fromLatin1("45backslash")) {
                 double dist = ( (newPos.x() - item->pos().x()) +
                                 (newPos.y() - item->pos().y()) ) / 2.0;
 
@@ -163,6 +163,7 @@ void QGIView::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 void QGIView::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     if(!locked && isSelected()) {
+        getViewObject()->setMouseMove(true);
         if (!isInnerView()) {
             double tempX = x(),
                    tempY = getY();
@@ -172,6 +173,7 @@ void QGIView::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
             getViewObject()->X.setValue(x());
             getViewObject()->Y.setValue(getYInClip(y()));
         }
+        getViewObject()->setMouseMove(false);
     }
     QGraphicsItem::mouseReleaseEvent(event);
 }
@@ -213,15 +215,19 @@ void QGIView::setPosition(qreal x, qreal y)
 
 double QGIView::getYInClip(double y)
 {
-    QGCustomClip* parentClip = dynamic_cast<QGCustomClip*>(parentItem());
+    auto parentClip( dynamic_cast<QGCustomClip*>( parentItem() ) );
     if (parentClip) {
-        QGIViewClip* parentView = dynamic_cast<QGIViewClip*>(parentClip->parentItem());
-        TechDraw::DrawViewClip* parentFeat = dynamic_cast<TechDraw::DrawViewClip*>(parentView->getViewObject());
-        double newY = parentFeat->Height.getValue() - y;
-        return newY;
-    } else {
-        Base::Console().Log("Logic Error - getYInClip called for child (%s) not in Clip\n",getViewName());
+        auto parentView( dynamic_cast<QGIViewClip*>( parentClip->parentItem() ) );
+        if (parentView) {
+            auto parentFeat( dynamic_cast<TechDraw::DrawViewClip*>(parentView->getViewObject()) );
+            if (parentFeat) {
+                return parentFeat->Height.getValue() - y;
+            }
+        }
     }
+
+    Base::Console().Log( "Logic Error - getYInClip called for child "
+                         "(%s) not in Clip\n", getViewName() );
     return 0;
 }
 
@@ -355,7 +361,7 @@ void QGIView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 
 QRectF QGIView::customChildrenBoundingRect() {
     QList<QGraphicsItem*> children = childItems();
-    int dimItemType = QGraphicsItem::UserType + 106;  // TODO: Magic number warning. make include file for custom types?
+    int dimItemType = QGraphicsItem::UserType + 106;  // TODO: Magic number warning.
     int borderItemType = QGraphicsItem::UserType + 136;  // TODO: Magic number warning
     int labelItemType = QGraphicsItem::UserType + 135;  // TODO: Magic number warning
     QRectF result;

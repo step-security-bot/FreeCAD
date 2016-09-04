@@ -103,6 +103,7 @@ SET(FemScripts_SRCS
     ccxDatReader.py
     ccxFrdReader.py
     convert2TetGen.py
+    importInpMesh.py
     importZ88Mesh.py
     Init.py
     InitGui.py
@@ -197,6 +198,8 @@ SET(FemConstraints_SRCS
     FemConstraintFixed.h
     FemConstraintForce.cpp
     FemConstraintForce.h
+    FemConstraintFluidBoundary.cpp
+    FemConstraintFluidBoundary.h
     FemConstraintPressure.cpp
     FemConstraintPressure.h
     FemConstraintGear.cpp

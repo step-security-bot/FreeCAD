@@ -38,6 +38,7 @@
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Vec.hxx>
+#include <gp_Ax2.hxx>
 #include <Geom_BSplineCurve.hxx>
 #include <Geom_BezierCurve.hxx>
 #include <GeomConvert_BSplineCurveToBezierCurve.hxx>
@@ -130,6 +131,39 @@ Base::Vector2D BaseGeom::getEndPoint()
     return verts[1];
 }
 
+
+double BaseGeom::minDist(Base::Vector2D p)
+{
+    double minDist = -1.0;
+    gp_Pnt pnt(p.fX,p.fY,0.0);
+    TopoDS_Vertex v = BRepBuilderAPI_MakeVertex(pnt);
+    BRepExtrema_DistShapeShape extss(occEdge, v);
+    if (extss.IsDone()) {
+        int count = extss.NbSolution();
+        if (count != 0) {
+            minDist = extss.Value();
+        }
+    }
+    return minDist;
+}
+
+//!find point on me nearest to p
+Base::Vector2D BaseGeom::nearPoint(Base::Vector2D p)
+{
+    gp_Pnt pnt(p.fX,p.fY,0.0);
+    Base::Vector2D result(0.0,0.0);
+    TopoDS_Vertex v = BRepBuilderAPI_MakeVertex(pnt);
+    BRepExtrema_DistShapeShape extss(occEdge, v);
+    if (extss.IsDone()) {
+        int count = extss.NbSolution();
+        if (count != 0) {
+            gp_Pnt p1;
+            p1 = extss.PointOnShape1(1);
+            result =  Base::Vector2D(p1.X(),p1.Y());
+        }
+    }
+    return result;
+}
 
 //! Convert 1 OCC edge into 1 BaseGeom (static factory method)
 BaseGeom* BaseGeom::baseFactory(TopoDS_Edge edge)
@@ -255,6 +289,8 @@ Circle::Circle(const TopoDS_Edge &e)
 
     gp_Circ circ = c.Circle();
     const gp_Pnt& p = circ.Location();
+    //const gp_Ax2& p1 = circ.Position();
+    //const gp_Pnt& l = p1.Location();
 
     radius = circ.Radius();
     center = Base::Vector2D(p.X(), p.Y());
@@ -308,17 +344,20 @@ bool AOC::isOnArc(Base::Vector3d p)
 
 double AOC::distToArc(Base::Vector3d p)
 {
-    double minDist = -1.0;
-    gp_Pnt pnt(p.x,p.y,p.z);
-    TopoDS_Vertex v = BRepBuilderAPI_MakeVertex(pnt);
-    BRepExtrema_DistShapeShape extss(occEdge, v);
-    if (extss.IsDone()) {
-        int count = extss.NbSolution();
-        if (count != 0) {
-            minDist = extss.Value();
-        }
-    }
-    return minDist;
+    Base::Vector2D p2(p.x,p.y);
+    double result = minDist(p2);
+    return result;
+//    double minDist = -1.0;
+//    gp_Pnt pnt(p.x,p.y,p.z);
+//    TopoDS_Vertex v = BRepBuilderAPI_MakeVertex(pnt);
+//    BRepExtrema_DistShapeShape extss(occEdge, v);
+//    if (extss.IsDone()) {
+//        int count = extss.NbSolution();
+//        if (count != 0) {
+//            minDist = extss.Value();
+//        }
+//    }
+//    return minDist;
 }
 
 
@@ -384,9 +423,13 @@ BSpline::BSpline(const TopoDS_Edge &e)
     BRepAdaptor_Curve c(e);
     occEdge = e;
     Handle_Geom_BSplineCurve spline = c.BSpline();
+    bool fail = false;
+    double f,l;
+    gp_Pnt s,m,ePt;
+    //if startpoint == endpoint conversion to BSpline will fail
 
     if (spline->Degree() > 3) {                                        //if spline is too complex, approximate it
-        Standard_Real tol3D = 0.001;
+        Standard_Real tol3D = 0.001;                                   //1/1000 of a mm? screen can't resolve this
         Standard_Integer maxDegree = 3, maxSegment = 10;
         Handle_BRepAdaptor_HCurve hCurve = new BRepAdaptor_HCurve(c);
         // approximate the curve using a tolerance
@@ -395,7 +438,20 @@ BSpline::BSpline(const TopoDS_Edge &e)
         if (approx.IsDone() && approx.HasResult()) {
             spline = approx.Curve();
         } else {
-            throw Base::Exception("Geometry::BSpline - could not approximate curve");
+            if (approx.HasResult()) {                   //result, but not within tolerance
+                spline = approx.Curve();
+                Base::Console().Log("Geometry::BSpline - result not within tolerance\n");
+            } else {
+                fail = true;
+                f = c.FirstParameter();
+                l = c.LastParameter();
+                s = c.Value(f);
+                m = c.Value((l+f)/2.0);
+                ePt = c.Value(l);
+                Base::Console().Log("Error - Geometry::BSpline - from:(%.3f,%.3f) to:(%.3f,%.3f) poles: %d\n",
+                                     s.X(),s.Y(),ePt.X(),ePt.Y(),spline->NbPoles());
+                //throw Base::Exception("Geometry::BSpline - could not approximate curve");
+            }
         }
     }
 
@@ -403,21 +459,28 @@ BSpline::BSpline(const TopoDS_Edge &e)
 
     BezierSegment tempSegment;
     gp_Pnt controlPoint;
-
-    for (Standard_Integer i = 1; i <= crt.NbArcs(); ++i) {
-        Handle_Geom_BezierCurve bezier = crt.Arc(i);
-        if (bezier->Degree() > 3) {
-            throw Base::Exception("Geometry::BSpline - converted curve degree > 3");
-        }
-        tempSegment.poles = bezier->NbPoles();
-        // Note: We really only need to keep the pnts[0] for the first Bezier segment,
-        // assuming this only gets used as in QGIViewPart::drawPainterPath
-        // ...it also gets used in GeometryObject::calcBoundingBox(), similar note applies
-        for (int pole = 1; pole <= tempSegment.poles; ++pole) {
-            controlPoint = bezier->Pole(pole);
-            tempSegment.pnts[pole - 1] = Base::Vector2D(controlPoint.X(), controlPoint.Y());
-        }
+    if (fail) {
+        tempSegment.poles = 3;
+        tempSegment.pnts[0] = Base::Vector2D(s.X(),s.Y());
+        tempSegment.pnts[1] = Base::Vector2D(m.X(),m.Y());
+        tempSegment.pnts[2] = Base::Vector2D(ePt.X(),ePt.Y());
         segments.push_back(tempSegment);
+    } else {
+        for (Standard_Integer i = 1; i <= crt.NbArcs(); ++i) {
+            Handle_Geom_BezierCurve bezier = crt.Arc(i);
+            if (bezier->Degree() > 3) {
+                throw Base::Exception("Geometry::BSpline - converted curve degree > 3");
+            }
+            tempSegment.poles = bezier->NbPoles();
+            // Note: We really only need to keep the pnts[0] for the first Bezier segment,
+            // assuming this only gets used as in QGIViewPart::drawPainterPath
+            // ...it also gets used in GeometryObject::calcBoundingBox(), similar note applies
+            for (int pole = 1; pole <= tempSegment.poles; ++pole) {
+                controlPoint = bezier->Pole(pole);
+                tempSegment.pnts[pole - 1] = Base::Vector2D(controlPoint.X(), controlPoint.Y());
+            }
+            segments.push_back(tempSegment);
+        }
     }
 }
 
@@ -436,6 +499,15 @@ bool BSpline::isLine()
 
 
 //**** Vertex
+Vertex::Vertex(double x, double y)
+{
+    pnt = Base::Vector2D(x, y);
+    extractType = ExtractionType::Plain;       //obs?
+    visible = false;
+    ref3D = -1;                        //obs. never used.
+    isCenter = false;
+}
+
 bool Vertex::isEqual(Vertex* v, double tol)
 {
     bool result = false;

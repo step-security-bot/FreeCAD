@@ -1012,9 +1012,9 @@ void unexpection_error_handler()
     // try to throw an exception and give the user chance to save their work
 #if !defined(_DEBUG)
     throw Base::Exception("Unexpected error occurred! Please save your work under a new file name and restart the application!");
-#endif
-
+#else
     terminate();
+#endif
 }
 
 #ifdef _MSC_VER // Microsoft compiler
@@ -1096,6 +1096,7 @@ void Application::initTypes(void)
     App ::PropertyAngle             ::init();
     App ::PropertyDistance          ::init();
     App ::PropertyLength            ::init();
+    App ::PropertyArea              ::init();
     App ::PropertySpeed             ::init();
     App ::PropertyAcceleration      ::init();
     App ::PropertyForce             ::init();

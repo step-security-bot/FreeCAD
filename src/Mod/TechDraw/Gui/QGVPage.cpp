@@ -318,7 +318,7 @@ void QGVPage::addDimToParent(QGIViewDimension* dim, QGIView* parent)
 
 QGIView * QGVPage::findView(App::DocumentObject *obj) const
 {
-  if(scene()) {
+  if(obj) {
     const std::vector<QGIView *> qviews = views;
     for(std::vector<QGIView *>::const_iterator it = qviews.begin(); it != qviews.end(); ++it) {
           TechDraw::DrawView *fview = (*it)->getViewObject();
@@ -442,7 +442,7 @@ void QGVPage::toggleMarkers(bool enable)
         }
         QGISVGTemplate* itemTemplate = dynamic_cast<QGISVGTemplate*> (*it);
         if (itemTemplate) {
-            std::vector<TemplateTextField *> textFields = itemTemplate->getTestFields();
+            std::vector<TemplateTextField *> textFields = itemTemplate->getTextFields();
             for (auto& t:textFields) {
                 if (enable) {
                     t->show();
@@ -464,8 +464,7 @@ void QGVPage::toggleHatch(bool enable)
             int faceItemType = QGraphicsItem::UserType + 104;
             for (auto& c:partChildren) {
                 if (c->type() == faceItemType) {
-                    QGIFace* f = dynamic_cast<QGIFace*>(c);
-                    f->toggleSvg(enable);
+                    static_cast<QGIFace*>(c)->toggleSvg(enable);
                 }
             }
         }

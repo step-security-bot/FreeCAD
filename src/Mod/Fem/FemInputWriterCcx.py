@@ -44,8 +44,7 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
                  selfweight_obj, force_obj, pressure_obj,
                  temperature_obj, heatflux_obj, initialtemperature_obj,
                  beamsection_obj, shellthickness_obj,
-                 analysis_type=None, eigenmode_parameters=None,
-                 dir_name=None
+                 analysis_type=None, dir_name=None
                  ):
 
         FemInputWriter.FemInputWriter.__init__(
@@ -57,8 +56,7 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
             selfweight_obj, force_obj, pressure_obj,
             temperature_obj, heatflux_obj, initialtemperature_obj,
             beamsection_obj, shellthickness_obj,
-            analysis_type, eigenmode_parameters,
-            dir_name)
+            analysis_type, dir_name)
         self.file_name = self.dir_name + '/' + self.mesh_object.Name + '.inp'
         print('FemInputWriterCcx --> self.dir_name  -->  ' + self.dir_name)
         print('FemInputWriterCcx --> self.file_name  -->  ' + self.file_name)
@@ -95,28 +93,45 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
         if self.contact_objects:
             self.write_constraints_contact(inpfile)
 
-        # steps and constraints dependent on steps
-        if self.analysis_type == "thermomech":
+        # step begin
+        if self.analysis_type == "frequency":
+            self.write_step_begin_static_frequency(inpfile)
+            self.write_analysis_frequency(inpfile)
+        elif self.analysis_type == "static":
+            self.write_step_begin_static_frequency(inpfile)
+        elif self.analysis_type == "thermomech":
             self.write_step_begin_thermomech(inpfile)
             self.write_analysis_thermomech(inpfile)
-        else:
-            self.write_step_begin_static_frequency(inpfile)
+
+        # constraints depend on step used in all analysis types
         if self.fixed_objects:
             self.write_constraints_fixed(inpfile)
         if self.displacement_objects:
             self.write_constraints_displacement(inpfile)
-        if self.analysis_type == "thermomech":
-            self.write_constraints_temperature(inpfile)
-            self.write_constraints_heatflux(inpfile)
-        if self.analysis_type is None or self.analysis_type == "static":
+
+        # constraints depend on step and depending on analysis type
+        if self.analysis_type == "frequency":
+            pass
+        elif self.analysis_type == "static":
             if self.selfweight_objects:
                 self.write_constraints_selfweight(inpfile)
             if self.force_objects:
                 self.write_constraints_force(inpfile)
             if self.pressure_objects:
                 self.write_constraints_pressure(inpfile)
-        elif self.analysis_type == "frequency":
-            self.write_analysis_frequency(inpfile)
+        elif self.analysis_type == "thermomech":
+            if self.selfweight_objects:
+                self.write_constraints_selfweight(inpfile)
+            if self.force_objects:
+                self.write_constraints_force(inpfile)
+            if self.pressure_objects:
+                self.write_constraints_pressure(inpfile)
+            if self.temperature_objects:
+                self.write_constraints_temperature(inpfile)
+            if self.heatflux_objects:
+                self.write_constraints_heatflux(inpfile)
+
+        # output and step end
         self.write_outputs_types(inpfile)
         self.write_step_end(inpfile)
 
@@ -264,62 +279,53 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
         f.write('** Materials\n')
         f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
         f.write('** Young\'s modulus unit is MPa = N/mm2\n')
-        f.write('** Density\'s unit is t/mm^3\n')
-        f.write('** Thermal conductivity unit is kW/mm/K = t*mm/K*s^3\n')
-        f.write('** Specific Heat unit is kJ/t/K = mm^2/s^2/K\n')
+        if self.analysis_type == "frequency" or self.selfweight_objects:
+            f.write('** Density\'s unit is t/mm^3\n')
+        if self.analysis_type == "thermomech":
+            f.write('** Thermal conductivity unit is kW/mm/K = t*mm/K*s^3\n')
+            f.write('** Specific Heat unit is kJ/t/K = mm^2/s^2/K\n')
         for femobj in self.material_objects:  # femobj --> dict, FreeCAD document object is femobj['Object']
             mat_obj = femobj['Object']
-            # get material properties - Currently in SI units: M/kg/s/Kelvin
-            YM_in_MPa = 1
-            TC_in_WmK = 1
-            TEC_in_mmK = 1
-            SH_in_JkgK = 1
-            PR = 1
-            density_in_tonne_per_mm3 = 1
-            try:
-                YM = FreeCAD.Units.Quantity(mat_obj.Material['YoungsModulus'])
-                YM_in_MPa = float(YM.getValueAs('MPa'))
-            except:
-                FreeCAD.Console.PrintError("No YoungsModulus defined for material: default used\n")
-            try:
-                PR = float(mat_obj.Material['PoissonRatio'])
-            except:
-                FreeCAD.Console.PrintError("No PoissonRatio defined for material: default used\n")
-            try:
-                TC = FreeCAD.Units.Quantity(mat_obj.Material['ThermalConductivity'])
-                TC_in_WmK = float(TC.getValueAs('W/m/K'))  # SvdW: Add factor to force units to results' base units of t/mm/s/K - W/m/K results in no factor needed
-            except:
-                FreeCAD.Console.PrintError("No ThermalConductivity defined for material: default used\n")
-            try:
-                TEC = FreeCAD.Units.Quantity(mat_obj.Material['ThermalExpansionCoefficient'])
-                TEC_in_mmK = float(TEC.getValueAs('mm/mm/K'))
-            except:
-                FreeCAD.Console.PrintError("No ThermalExpansionCoefficient defined for material: default used\n")
-            try:
-                SH = FreeCAD.Units.Quantity(mat_obj.Material['SpecificHeat'])
-                SH_in_JkgK = float(SH.getValueAs('J/kg/K')) * 1e+06  # SvdW: Add factor to force units to results' base units of t/mm/s/K
-            except:
-                FreeCAD.Console.PrintError("No SpecificHeat defined for material: default used\n")
             mat_info_name = mat_obj.Material['Name']
             mat_name = mat_obj.Name
+            # get material properties, Currently in SI units: M/kg/s/Kelvin
+            YM = FreeCAD.Units.Quantity(mat_obj.Material['YoungsModulus'])
+            YM_in_MPa = float(YM.getValueAs('MPa'))
+            PR = float(mat_obj.Material['PoissonRatio'])
+            if self.analysis_type == "frequency" or self.selfweight_objects:
+                density = FreeCAD.Units.Quantity(mat_obj.Material['Density'])
+                density_in_tonne_per_mm3 = float(density.getValueAs('t/mm^3'))
+            if self.analysis_type == "thermomech":
+                TC = FreeCAD.Units.Quantity(mat_obj.Material['ThermalConductivity'])
+                TC_in_WmK = float(TC.getValueAs('W/m/K'))  # SvdW: Add factor to force units to results' base units of t/mm/s/K - W/m/K results in no factor needed
+                TEC = FreeCAD.Units.Quantity(mat_obj.Material['ThermalExpansionCoefficient'])
+                TEC_in_mmK = float(TEC.getValueAs('mm/mm/K'))
+                SH = FreeCAD.Units.Quantity(mat_obj.Material['SpecificHeat'])
+                SH_in_JkgK = float(SH.getValueAs('J/kg/K')) * 1e+06  # SvdW: Add factor to force units to results' base units of t/mm/s/K
             # write material properties
-            f.write('**FreeCAD material name: ' + mat_info_name + '\n')
+            f.write('** FreeCAD material name: ' + mat_info_name + '\n')
             f.write('*MATERIAL, NAME=' + mat_name + '\n')
             f.write('*ELASTIC \n')
             f.write('{0:.0f}, {1:.3f}\n'.format(YM_in_MPa, PR))
-            try:
-                density = FreeCAD.Units.Quantity(mat_obj.Material['Density'])
-                density_in_tonne_per_mm3 = float(density.getValueAs('t/mm^3'))
-            except:
-                FreeCAD.Console.PrintError("No Density defined for material: default used\n")
-            f.write('*DENSITY \n')
-            f.write('{0:.3e}, \n'.format(density_in_tonne_per_mm3))
-            f.write('*CONDUCTIVITY \n')
-            f.write('{0:.3f}, \n'.format(TC_in_WmK))
-            f.write('*EXPANSION \n')
-            f.write('{0:.3e}, \n'.format(TEC_in_mmK))
-            f.write('*SPECIFIC HEAT \n')
-            f.write('{0:.3e}, \n'.format(SH_in_JkgK))
+            if self.analysis_type == "frequency" or self.selfweight_objects:
+                f.write('*DENSITY \n')
+                f.write('{0:.3e}, \n'.format(density_in_tonne_per_mm3))
+            if self.analysis_type == "thermomech":
+                f.write('*CONDUCTIVITY \n')
+                f.write('{0:.3f}, \n'.format(TC_in_WmK))
+                f.write('*EXPANSION \n')
+                f.write('{0:.3e}, \n'.format(TEC_in_mmK))
+                f.write('*SPECIFIC HEAT \n')
+                f.write('{0:.3e}, \n'.format(SH_in_JkgK))
+
+    def write_constraints_initialtemperature(self, f):
+        f.write('\n***********************************************************\n')
+        f.write('** Initial temperature constraint\n')
+        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
+        f.write('*INITIAL CONDITIONS,TYPE=TEMPERATURE\n')
+        for itobj in self.initialtemperature_objects:  # Should only be one
+            inittemp_obj = itobj['Object']
+            f.write('Nall,{}\n'.format(inittemp_obj.initialTemperature))  # OvG: Initial temperature
 
     def write_femelementsets(self, f):
         f.write('\n***********************************************************\n')
@@ -395,9 +401,37 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
             f.write(self.solver_obj.IterationsControlParameterIter + '\n')
             f.write(self.solver_obj.IterationsControlParameterCutb + '\n')
 
+    def write_analysis_frequency(self, f):
+        f.write('\n***********************************************************\n')
+        f.write('** Frequency analysis\n')
+        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
+        f.write('*FREQUENCY\n')
+        f.write('{},{},{}\n'.format(self.solver_obj.EigenmodesCount, self.solver_obj.EigenmodeLowLimit, self.solver_obj.EigenmodeHighLimit))
+
+    def write_analysis_thermomech(self, f):
+        f.write('\n***********************************************************\n')
+        f.write('** Coupled temperature displacement analysis\n')
+        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
+        thermomech_analysis = '*COUPLED TEMPERATURE-DISPLACEMENT'
+        if self.solver_obj.MatrixSolverType == "default":
+            pass
+        elif self.solver_obj.MatrixSolverType == "spooles":
+            thermomech_analysis += ', SOLVER=SPOOLES'
+        elif self.solver_obj.MatrixSolverType == "iterativescaling":
+            thermomech_analysis += ', SOLVER=ITERATIVE SCALING'
+        elif self.solver_obj.MatrixSolverType == "iterativecholesky":
+            thermomech_analysis += ', SOLVER=ITERATIVE CHOLESKY'
+        if self.solver_obj.SteadyState:
+            thermomech_analysis += ', STEADY STATE'
+            self.solver_obj.TimeInitialStep = 1.0  # Set time to 1 and ignore user inputs for steady state
+            self.solver_obj.TimeEnd = 1.0
+        thermomech_time = '{},{}'.format(self.solver_obj.TimeInitialStep, self.solver_obj.TimeEnd)  # OvG: 1.0 increment, total time 1 for steady state will cut back automatically
+        f.write(thermomech_analysis + '\n')
+        f.write(thermomech_time + '\n')
+
     def write_constraints_fixed(self, f):
         f.write('\n***********************************************************\n')
-        f.write('** Constraints\n')
+        f.write('** Fixed Constraints\n')
         f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
         for femobj in self.fixed_objects:  # femobj --> dict, FreeCAD document object is femobj['Object']
             fix_obj_name = femobj['Object'].Name
@@ -478,19 +512,9 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
             f.write('*MPC\n')
             f.write('PLANE,' + fric_obj_name + '\n')
 
-    def write_constraints_temperature(self, f):
-        f.write('\n***********************************************************\n')
-        f.write('** Fixed temperature constraint applied\n')
-        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
-        for ftobj in self.temperature_objects:
-            fixedtemp_obj = ftobj['Object']
-            f.write('*BOUNDARY\n')
-            f.write('{},11,11,{}\n'.format(fixedtemp_obj.Name, fixedtemp_obj.Temperature))
-            f.write('\n')
-
     def write_constraints_selfweight(self, f):
         f.write('\n***********************************************************\n')
-        f.write('** Self weight\n')
+        f.write('** Self weight Constraint\n')
         f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
         for femobj in self.selfweight_objects:  # femobj --> dict, FreeCAD document object is femobj['Object']
             selwei_obj_name = femobj['Object'].Name
@@ -498,15 +522,16 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
             f.write('*DLOAD\n')
             f.write('Eall,GRAV,9810,0,0,-1\n')
             f.write('\n')
-        # die grav (erdbeschleunigung) ist fuer alle gleich
-        # die verschidene density wurde in den material sets geschrieben !
+        # grav (erdbeschleunigung) is equal for all elements
+        # should be only one constraint
+        # different elment sets for different density are written in the material element sets allready
 
     def write_constraints_force(self, f):
         # check shape type of reference shape and get node loads
         self.get_constraints_force_nodeloads()
         # write node loads to file
         f.write('\n***********************************************************\n')
-        f.write('** Node loads\n')
+        f.write('** Node loads Constraints\n')
         f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
         f.write('*CLOAD\n')
         for femobj in self.force_objects:  # femobj --> dict, FreeCAD document object is femobj['Object']
@@ -546,6 +571,16 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
                         for i in v:
                             f.write("{},P{},{}\n".format(i[0], i[1], rev * prs_obj.Pressure))
 
+    def write_constraints_temperature(self, f):
+        f.write('\n***********************************************************\n')
+        f.write('** Fixed temperature constraint applied\n')
+        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
+        for ftobj in self.temperature_objects:
+            fixedtemp_obj = ftobj['Object']
+            f.write('*BOUNDARY\n')
+            f.write('{},11,11,{}\n'.format(fixedtemp_obj.Name, fixedtemp_obj.Temperature))
+            f.write('\n')
+
     def write_constraints_heatflux(self, f):
         f.write('\n***********************************************************\n')
         f.write('** Heatflux constraints\n')
@@ -561,43 +596,6 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
                         f.write("** Heat flux on face {}\n".format(elem))
                         for i in v:
                             f.write("{},F{},{},{}\n".format(i[0], i[1], heatflux_obj.AmbientTemp, heatflux_obj.FilmCoef * 0.001))  # SvdW add factor to force heatflux to units system of t/mm/s/K # OvG: Only write out the VolumeIDs linked to a particular face
-
-    def write_analysis_frequency(self, f):
-        f.write('\n***********************************************************\n')
-        f.write('** Frequency analysis\n')
-        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
-        f.write('*FREQUENCY\n')
-        f.write('{},{},{}\n'.format(self.no_of_eigenfrequencies, self.eigenfrequeny_range_low, self.eigenfrequeny_range_high))
-
-    def write_analysis_thermomech(self, f):
-        f.write('\n***********************************************************\n')
-        f.write('** Coupled temperature displacement analysis\n')
-        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
-        thermomech_analysis = '*COUPLED TEMPERATURE-DISPLACEMENT'
-        if self.solver_obj.MatrixSolverType == "default":
-            pass
-        elif self.solver_obj.MatrixSolverType == "spooles":
-            thermomech_analysis += ', SOLVER=SPOOLES'
-        elif self.solver_obj.MatrixSolverType == "iterativescaling":
-            thermomech_analysis += ', SOLVER=ITERATIVE SCALING'
-        elif self.solver_obj.MatrixSolverType == "iterativecholesky":
-            thermomech_analysis += ', SOLVER=ITERATIVE CHOLESKY'
-        if self.solver_obj.SteadyState:
-            thermomech_analysis += ', STEADY STATE'
-            self.solver_obj.TimeInitialStep = 1.0  # Set time to 1 and ignore user inputs for steady state
-            self.solver_obj.TimeEnd = 1.0
-        thermomech_time = '{},{}'.format(self.solver_obj.TimeInitialStep, self.solver_obj.TimeEnd)  # OvG: 1.0 increment, total time 1 for steady state will cut back automatically
-        f.write(thermomech_analysis + '\n')
-        f.write(thermomech_time + '\n')
-
-    def write_constraints_initialtemperature(self, f):
-        f.write('\n***********************************************************\n')
-        f.write('** Initial temperature constraint\n')
-        f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
-        f.write('*INITIAL CONDITIONS,TYPE=TEMPERATURE\n')
-        for itobj in self.initialtemperature_objects:  # Should only be one
-            inittemp_obj = itobj['Object']
-            f.write('Nall,{}\n'.format(inittemp_obj.initialTemperature))  # OvG: Initial temperature
 
     def write_outputs_types(self, f):
         f.write('\n***********************************************************\n')
