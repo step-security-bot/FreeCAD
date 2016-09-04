@@ -39,6 +39,10 @@
 #include <boost/graph/planar_face_traversal.hpp>
 #include <boost/ref.hpp>
 
+#include <TopoDS_Vertex.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopoDS_Wire.hxx>
+
 namespace TechDraw {
 using namespace boost;
 
@@ -51,29 +55,50 @@ typedef adjacency_list
     >
     graph;
 
-struct WalkerEdge {
+class WalkerEdge
+{
+public:
+    static bool weCompare(WalkerEdge i, WalkerEdge j);
+
     std::size_t v1;
     std::size_t v2;
     int idx;
 };
 
-typedef std::vector<WalkerEdge>  edgelist;
-typedef std::vector<edgelist> facelist ;
+class ewWire
+{
+public:
+    bool isEqual(ewWire w);
+
+    std::vector<WalkerEdge>  wedges;      //[WE] representing 1 wire
+    void push_back(WalkerEdge w);
+    void clear() {wedges.clear();};
+};
+
+class ewWireList
+{
+public:
+    ewWireList removeDuplicates();
+
+    std::vector<ewWire> wires;
+    void push_back(ewWire e);
+};
+
 
 
 class edgeVisitor : public planar_face_traversal_visitor
 {
 public:
-  template <typename Edge>
-  void next_edge(Edge e);
-  void begin_face();
-  void end_face();
-  facelist getResult(void);
-  void setGraph(graph& g);
+    template <typename Edge>
+    void next_edge(Edge e);
+    void begin_face();
+    void end_face();
+    ewWireList getResult(void);     //a list of many wires
+    void setGraph(graph& g);
 
 private:
-    TechDraw::edgelist faceEdges;
-    TechDraw::facelist graphFaces;
+    ewWire wireEdges;
+    ewWireList graphWires;
     TechDraw::graph m_g;
 };
 
@@ -84,15 +109,31 @@ public:
     virtual ~EdgeWalker();
 
     bool loadEdges(std::vector<TechDraw::WalkerEdge> edges);
+    bool loadEdges(std::vector<TopoDS_Edge> edges);
     bool setSize(int size);
     bool perform();
-    facelist getResult();
+    ewWireList getResult();
+    std::vector<TopoDS_Wire> getResultWires();
+    std::vector<TopoDS_Wire> getResultNoDups();
+
+    std::vector<TopoDS_Vertex> makeUniqueVList(std::vector<TopoDS_Edge> edges);
+    std::vector<WalkerEdge>    makeWalkerEdges(std::vector<TopoDS_Edge> edges,
+                                               std::vector<TopoDS_Vertex> verts);
+    int findUniqueVert(TopoDS_Vertex vx, std::vector<TopoDS_Vertex> &uniqueVert);
+    std::vector<TopoDS_Wire> sortStrip(std::vector<TopoDS_Wire> fw, bool includeBiggest);
+    std::vector<TopoDS_Wire> sortWiresBySize(std::vector<TopoDS_Wire>& w, bool reverse = false);
+    TopoDS_Wire makeCleanWire(std::vector<TopoDS_Edge> edges, double tol = 0.10);
+
+
+protected:
+    static bool wireCompare(const TopoDS_Wire& w1, const TopoDS_Wire& w2);
+    std::vector<TopoDS_Edge> saveInEdges;
 
 private:
     edgeVisitor m_eV;
     TechDraw::graph m_g;
 };
 
-}  //end namespace
+}  //end namespace TechDraw
 
 #endif //TECHDRAW_EDGEWALKER_H

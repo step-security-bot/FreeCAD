@@ -661,17 +661,19 @@ class Component:
                         if not placement.isNull():
                             obj.Placement = placement
                     else:
-                        FreeCAD.Console.PrintWarning(obj.Label + " " + translate("Arch","has no solid")+"\n")
                         if allownosolid:
                             obj.Shape = shape
                             if not placement.isNull():
                                 obj.Placement = placement
+                        else:
+                            FreeCAD.Console.PrintWarning(obj.Label + " " + translate("Arch","has no solid")+"\n")
                 else:
-                    FreeCAD.Console.PrintWarning(obj.Label + " " + translate("Arch","has an invalid shape")+"\n")
                     if allowinvalid:
                         obj.Shape = shape
                         if not placement.isNull():
                             obj.Placement = placement
+                    else:
+                        FreeCAD.Console.PrintWarning(obj.Label + " " + translate("Arch","has an invalid shape")+"\n")
             else:
                 FreeCAD.Console.PrintWarning(obj.Label + " " + translate("Arch","has a null shape")+"\n")
 
@@ -770,7 +772,7 @@ class ViewProviderComponent:
                     if Draft.getType(self.Object) == "Wall":
                         if Draft.getType(s) == "Roof":
                             continue
-                    if (Draft.getType(s) == "Window") or Draft.isCloneOf(s,"Window"):
+                    if (Draft.getType(s) == "Window") or Draft.isClone(s,"Window"):
                         if not swalW:
                             continue
                     c.append(s)
