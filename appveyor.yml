@@ -2,8 +2,6 @@
 
 environment:
   global:
-    CC: "C:/projects/freecad/clcache.bat"
-    CXX: "C:/projects/freecad/clcache.bat"
     CLCACHE_CL: "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
   matrix:
     - generator: "Visual Studio 12 Win64"
@@ -38,15 +36,15 @@ install:
   - set PATH=C:\\Python35;%PATH%
   - set PATH=C:\\Python35\\Scripts;%PATH%
   - python --version
-  #- cd clcache-3.2.0
-  #- dir
-  #- pip install pyinstaller
-  #- pyinstaller --onefile clcache.py
-  #- dir
-  #- cd dist
-  #- dir
-  #- ren clcache.exe cl.exe
-  #- dir
+  - cd clcache-3.2.0
+  - dir
+  - pip install pyinstaller
+  - pyinstaller --onefile clcache.py
+  - dir
+  - cd dist
+  - dir
+  - ren clcache.exe cl.exe
+  - dir
   #- set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
   #- set PATH=C:\\projects\\freecad;%PATH%
   #- cl.exe --help
@@ -70,13 +68,12 @@ install:
   - ren cl.exe cl_original.exe
   - ren cl.exe.config cl_original.exe.config
   - dir
-  #- xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  #- dir
+  - xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - dir
   #- set CLCACHE_CL="C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
-  #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - cd C:/projects/freecad/
-  - clcache.bat --help
-  - clcache.bat -s
+  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - cl.exe --help
+  - cl.exe -s
 
 build_script:
   - cd C:\projects\freecad
@@ -103,9 +100,8 @@ build_script:
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
   #- echo %CLCACHE_CL%
   - msbuild /m FreeCAD_Trunk.sln
-  #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - cd C:/projects/freecad/
-  - clcache.bat -s
+  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - cl.exe -s
 
 #after_build:
 
