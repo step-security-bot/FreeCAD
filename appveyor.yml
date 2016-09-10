@@ -1,6 +1,9 @@
 #version:
 
 environment:
+  global:
+    PATH: "C:/projects/freecad/clcache-3.2.0/dist";%PATH%
+    #CLCACHE_CL: "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
   matrix:
     - generator: "Visual Studio 12 Win64"
       ARCH: "Win64"
@@ -61,14 +64,14 @@ install:
   #- cd C:\projects
   #- dir
   #
-  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - dir
-  - ren cl.exe cl_original.exe
-  - ren cl.exe.config cl_original.exe.config
-  - dir
-  - xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - dir
-  - set CLCACHE_CL="C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
+  #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  #- dir
+  #- ren cl.exe cl_original.exe
+  #- ren cl.exe.config cl_original.exe.config
+  #- dir
+  #- xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  #- dir
+  #- set CLCACHE_CL="C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
   #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   - cl.exe --help
   - cl.exe -s
@@ -98,8 +101,8 @@ build_script:
   - xcopy C:\projects\freecad\FreeCADLibs_11.3_x64_VC12\bin C:\projects\freecad\build\bin /E /Q
   #- echo %CLCACHE_CL%
   - msbuild /m FreeCAD_Trunk.sln
-  - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  #- cd C:/projects/freecad/clcache-3.2.0/dist
+  #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
+  - cd C:/projects/freecad/clcache-3.2.0/dist
   - cl.exe -s
 
 #after_build:
