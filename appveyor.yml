@@ -2,8 +2,8 @@
 
 environment:
   global:
-    CC: "C:/projects/freecad/clcache-3.2.0/dist/cl.exe"
-    CXX: "C:/projects/freecad/clcache-3.2.0/dist/cl.exe"
+    CC: "C:/projects/freecad/clcache.bat"
+    CXX: "C:/projects/freecad/clcache.bat"
     CLCACHE_CL: "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
   matrix:
     - generator: "Visual Studio 12 Win64"
@@ -38,15 +38,15 @@ install:
   - set PATH=C:\\Python35;%PATH%
   - set PATH=C:\\Python35\\Scripts;%PATH%
   - python --version
-  - cd clcache-3.2.0
-  - dir
-  - pip install pyinstaller
-  - pyinstaller --onefile clcache.py
-  - dir
-  - cd dist
-  - dir
-  - ren clcache.exe cl.exe
-  - dir
+  #- cd clcache-3.2.0
+  #- dir
+  #- pip install pyinstaller
+  #- pyinstaller --onefile clcache.py
+  #- dir
+  #- cd dist
+  #- dir
+  #- ren clcache.exe cl.exe
+  #- dir
   #- set PATH=C:\\projects\\freecad\\clcache-3.2.0\\dist;%PATH%
   #- set PATH=C:\\projects\\freecad;%PATH%
   #- cl.exe --help
@@ -74,9 +74,9 @@ install:
   #- dir
   #- set CLCACHE_CL="C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
   #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - cd C:/projects/freecad/clcache-3.2.0/dist
-  - cl.exe --help
-  - cl.exe -s
+  - cd C:/projects/freecad/
+  - clcache.bat --help
+  - clcache.bat -s
 
 build_script:
   - cd C:\projects\freecad
@@ -104,8 +104,8 @@ build_script:
   #- echo %CLCACHE_CL%
   - msbuild /m FreeCAD_Trunk.sln
   #- cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
-  - cd C:/projects/freecad/clcache-3.2.0/dist
-  - cl.exe -s
+  - cd C:/projects/freecad/
+  - clcache.bat -s
 
 #after_build:
 
