@@ -2,7 +2,7 @@
 
 environment:
   global:
-    PATH: "C:/projects/freecad/clcache-3.2.0/dist;"&%PATH%
+    PATH: "C:/projects/freecad/clcache-3.2.0/dist;" &%PATH%
     #CLCACHE_CL: "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
   matrix:
     - generator: "Visual Studio 12 Win64"
