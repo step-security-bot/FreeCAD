@@ -43,7 +43,7 @@ install:
   - ren clcache.exe cl.exe
   - set CLCACHE_DIR=C:\projects\clcache
   #- set CLCACHE_LOG=1
-  #- set CLCACHE_HARDLINK=1
+  - set CLCACHE_HARDLINK=1
   #- set CLCACHE_NODIRECT=1
   #- set CLCACHE_OBJECT_CACHE_TIMEOUT_MS=20000
   - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
