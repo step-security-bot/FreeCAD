@@ -133,9 +133,13 @@ void CmdPartDesignBody::activated(int iMsg)
 {
     if ( !PartDesignGui::assureModernWorkflow( getDocument() ) )
         return;
+    App::Part *actPart = PartDesignGui::getActivePart ();
+    App::Part* partOfBaseFeature = nullptr;
+
     std::vector<App::DocumentObject*> features =
         getSelection().getObjectsOfType(Part::Feature::getClassTypeId());
     App::DocumentObject* baseFeature = nullptr;
+
 
     if (!features.empty()) {
         if (features.size() == 1) {
@@ -146,15 +150,28 @@ void CmdPartDesignBody::activated(int iMsg)
                 QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Bad base feature"),
                         QObject::tr("Body can't be based on a PartDesign feature."));
                 baseFeature = nullptr;
-
             }
-            
-            if ( baseFeature->isDerivedFrom ( Part::BodyBase::getClassTypeId() ) )  {
+            else if (PartDesign::Body::findBodyOf ( baseFeature )){
+                QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Bad base feature"),
+                        QObject::tr("%1 already belongs to a body, can't use it as base feature for another body.")
+                                     .arg(QString::fromUtf8(baseFeature->Label.getValue())));
+                baseFeature = nullptr;
+            }
+            else if ( baseFeature->isDerivedFrom ( Part::BodyBase::getClassTypeId() ) )  {
                 // Prevent creating bodies based on bodies
                 QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Bad base feature"),
                         QObject::tr("Body can't be based on annother body."));
                 baseFeature = nullptr;
+            } else {
 
+                partOfBaseFeature = App::Part::getPartOfObject(baseFeature);
+                if (partOfBaseFeature != 0  &&  partOfBaseFeature != actPart){
+                    //prevent cross-part mess
+                    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Bad base feature"),
+                            QObject::tr("Base feature (%1) belongs to other part.")
+                                         .arg(QString::fromUtf8(baseFeature->Label.getValue())));
+                    baseFeature = nullptr;
+                };
             }
 
         } else {
@@ -164,8 +181,6 @@ void CmdPartDesignBody::activated(int iMsg)
         }
     }
 
-    // first check if Part is already created:
-    App::Part *actPart = PartDesignGui::getActivePart ();
 
     openCommand("Add a Body");
 
@@ -174,6 +189,11 @@ void CmdPartDesignBody::activated(int iMsg)
     // add the Body feature itself, and make it active
     doCommand(Doc,"App.activeDocument().addObject('PartDesign::Body','%s')", bodyName.c_str());
     if (baseFeature) {
+        if (partOfBaseFeature){
+            //withdraw base feature from Part, otherwise visibility mandess results
+            doCommand(Doc,"App.activeDocument().%s.removeObject(App.activeDocument().%s)",
+                    partOfBaseFeature->getNameInDocument(), baseFeature->getNameInDocument());
+        }
         doCommand(Doc,"App.activeDocument().%s.BaseFeature = App.activeDocument().%s",
                 bodyName.c_str(), baseFeature->getNameInDocument());
     }
@@ -567,22 +587,57 @@ void CmdPartDesignMoveFeature::activated(int iMsg)
     std::vector<App::DocumentObject*> features = getSelection().getObjectsOfType(Part::Feature::getClassTypeId());
     if (features.empty()) return;
 
+    // Check if all features are valid to move
+    if (std::any_of(std::begin(features), std::end(features), [](App::DocumentObject* obj){return !PartDesignGui::isFeatureMovable(obj); }))
+    {
+        //show messagebox and cancel
+        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Features cannot be moved"),
+            QObject::tr("Some of the selected features have dependencies in the source body"));
+        return;
+    }
+
+    // Collect dependenies of the selected features
+    std::vector<App::DocumentObject*> dependencies = PartDesignGui::collectMovableDependencies(features);
+    if (!dependencies.empty())
+        features.insert(std::end(features), std::begin(dependencies), std::end(dependencies));
+
     // Create a list of all bodies in this part
     std::vector<App::DocumentObject*> bodies = getDocument()->getObjectsOfType(Part::BodyBase::getClassTypeId());
 
-    // Ask user to select the target body
+    std::set<App::DocumentObject*> source_bodies;
+    for (auto feat : features) {
+        PartDesign::Body* source = PartDesign::Body::findBodyOf(feat);
+        source_bodies.insert(static_cast<App::DocumentObject*>(source));
+    }
+
+    std::vector<App::DocumentObject*> target_bodies;
+    for (auto body : bodies) {
+        if (!source_bodies.count(body))
+            target_bodies.push_back(body);
+    }
+
+    if (target_bodies.empty())
+    {
+        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Features cannot be moved"),
+            QObject::tr("There are no other bodies to move to"));
+        return;
+    }
+
+    // Ask user to select the target body (remove source bodies from list)
     bool ok;
     QStringList items;
-    for (std::vector<App::DocumentObject*>::iterator it = bodies.begin(); it != bodies.end(); ++it)
-        items.push_back(QString::fromUtf8((*it)->Label.getValue()));
+    for (auto body : target_bodies) {
+        items.push_back(QString::fromUtf8(body->Label.getValue()));
+    }
     QString text = QInputDialog::getItem(Gui::getMainWindow(),
-        qApp->translate(className(), "Select body"),
-        qApp->translate(className(), "Select a body from the list"),
+        qApp->translate("PartDesign_MoveFeature", "Select body"),
+        qApp->translate("PartDesign_MoveFeature", "Select a body from the list"),
         items, 0, false, &ok);
     if (!ok) return;
     int index = items.indexOf(text);
+    if (index < 0) return;
 
-    PartDesign::Body* target = static_cast<PartDesign::Body*>(bodies[index]);
+    PartDesign::Body* target = static_cast<PartDesign::Body*>(target_bodies[index]);
 
     openCommand("Move an object");
 
@@ -613,7 +668,8 @@ void CmdPartDesignMoveFeature::activated(int iMsg)
         // If we removed the tip of the source body, make the new tip visible
         if ( featureWasTip ) {
             App::DocumentObject * sourceNewTip = source->Tip.getValue();
-            doCommand(Gui,"Gui.activeDocument().show(\"%s\")", sourceNewTip->getNameInDocument());
+            if (sourceNewTip)
+                doCommand(Gui,"Gui.activeDocument().show(\"%s\")", sourceNewTip->getNameInDocument());
         }
 
         // Hide old tip and show new tip (the moved feature) of the target body
@@ -638,6 +694,9 @@ void CmdPartDesignMoveFeature::activated(int iMsg)
                         arg( QString::fromLatin1( sketch->Label.getValue () ) ) );
             }
         }
+
+        //relink origin for sketches and datums (coordinates)
+        PartDesignGui::relinkToOrigin(feat, target);
     }
 
     updateActive();
@@ -646,7 +705,6 @@ void CmdPartDesignMoveFeature::activated(int iMsg)
 bool CmdPartDesignMoveFeature::isActive(void)
 {
     return hasActiveDocument () && !PartDesignGui::isLegacyWorkflow ( getDocument () );
-    return hasActiveDocument ();
 }
 
 DEF_STD_CMD_A(CmdPartDesignMoveFeatureInTree);
@@ -709,8 +767,8 @@ void CmdPartDesignMoveFeatureInTree::activated(int iMsg)
     }
 
     QString text = QInputDialog::getItem(Gui::getMainWindow(),
-        qApp->translate(className(), "Select feature"),
-        qApp->translate(className(), "Select a feature from the list"),
+        qApp->translate("PartDesign_MoveFeatureInTree", "Select feature"),
+        qApp->translate("PartDesign_MoveFeatureInTree", "Select a feature from the list"),
         items, 0, false, &ok);
     if (!ok) return;
     int index = items.indexOf(text);

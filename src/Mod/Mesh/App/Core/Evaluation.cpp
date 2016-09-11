@@ -508,7 +508,7 @@ void MeshEvalPointManifolds::GetFacetIndices (std::vector<unsigned long> &facets
 bool MeshEvalSingleFacet::Evaluate ()
 {
   // get all non-manifolds
-  MeshEvalTopology::Evaluate();
+  (void)MeshEvalTopology::Evaluate();
 /*
   // for each (multiple) single linked facet there should
   // exist two valid facets sharing the same edge 
@@ -1070,7 +1070,7 @@ bool MeshEigensystem::Evaluate()
     for (MeshPointArray::_TConstIterator it = aclPoints.begin(); it!=aclPoints.end(); ++it) {
         // u-Richtung
         clVect = *it - _cC;
-        clProj.ProjToLine(clVect, _cU);
+        clProj.ProjectToLine(clVect, _cU);
         clVect = clVect + clProj;
         fH = clVect.Length();
       
@@ -1083,7 +1083,7 @@ bool MeshEigensystem::Evaluate()
 
         // v-Richtung
         clVect = *it - _cC;
-        clProj.ProjToLine(clVect, _cV);
+        clProj.ProjectToLine(clVect, _cV);
         clVect = clVect + clProj;
         fH = clVect.Length();
   
@@ -1096,7 +1096,7 @@ bool MeshEigensystem::Evaluate()
 
         // w-Richtung
         clVect = *it - _cC;
-        clProj.ProjToLine(clVect, _cW);
+        clProj.ProjectToLine(clVect, _cW);
         clVect = clVect + clProj;
         fH = clVect.Length();
   

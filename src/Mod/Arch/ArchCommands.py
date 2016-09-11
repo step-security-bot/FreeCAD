@@ -54,22 +54,27 @@ def getDefaultColor(objectType):
     '''getDefaultColor(string): returns a color value for the given object
     type (Wall, Structure, Window, WindowGlass)'''
     p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Arch")
+    transparency = 0.0
     if objectType == "Wall":
         c = p.GetUnsigned("WallColor",4294967295)
     elif objectType == "Structure":
         c = p.GetUnsigned("StructureColor",2847259391)
     elif objectType == "WindowGlass":
         c = p.GetUnsigned("WindowGlassColor",1772731135)
+        transparency = p.GetInt("WindowTransparency",85)/100.0
     elif objectType == "Rebar":
         c = p.GetUnsigned("RebarColor",3111475967)
     elif objectType == "Panel":
         c = p.GetUnsigned("PanelColor",3416289279)
+    elif objectType == "Construction":
+        c = Draft.getParam("constructioncolor",746455039)
+        transparency = 0.80
     else:
         c = p.GetUnsigned("WindowsColor",810781695)
     r = float((c>>24)&0xFF)/255.0
     g = float((c>>16)&0xFF)/255.0
     b = float((c>>8)&0xFF)/255.0
-    result = (r,g,b,1.0)
+    result = (r,g,b,transparency)
     return result
 
 def addComponents(objectsList,host):
@@ -143,7 +148,7 @@ def removeComponents(objectsList,host=None):
                     fixDAG(o)
                     if FreeCAD.GuiUp:
                         if not Draft.getType(o) in ["Window","Roof"]:
-                            o.ViewObject.hide()
+                            setAsSubcomponent(o)
             host.Subtractions = s
     else:
         for o in objectsList:
@@ -198,6 +203,21 @@ def makeComponent(baseobj=None,name="Component",delete=False):
         elif isinstance(baseobj,Part.Shape):
             obj.Shape = baseobj
     return obj
+
+def setAsSubcomponent(obj):
+    '''Sets the given object properly to become a subcomponent (addition, subtraction)
+    of an Arch component'''
+    Draft.ungroup(obj)
+    if FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Arch").GetBool("applyConstructionStyle",True):
+        if FreeCAD.GuiUp:
+            color = getDefaultColor("Construction")
+            if hasattr(obj.ViewObject,"LineColor"):
+                obj.ViewObject.LineColor = color
+            if hasattr(obj.ViewObject,"ShapeColor"):
+                obj.ViewObject.ShapeColor = color
+            if hasattr(obj.ViewObject,"Transparency"):
+                obj.ViewObject.Transparency = int(color[3]*100)
+            obj.ViewObject.hide()
 
 def fixDAG(obj):
     '''fixDAG(object): Fixes non-DAG problems in windows and rebars
@@ -364,7 +384,7 @@ def getCutVolume(cutplane,shapes):
     u = p.Vertexes[1].Point.sub(p.Vertexes[0].Point).normalize()
     v = u.cross(ax)
     if not bb.isCutPlane(ce,ax):
-        FreeCAD.Console.PrintMessage(translate("Arch","No objects are cut by the plane\n"))
+        #FreeCAD.Console.PrintMessage(translate("Arch","No objects are cut by the plane\n"))
         return None,None,None
     else:
         corners = [FreeCAD.Vector(bb.XMin,bb.YMin,bb.ZMin),
@@ -730,6 +750,9 @@ def survey(callback=False):
                     for o in newsels:
                         if o.Object.isDerivedFrom("Part::Feature"):
                             n = o.Object.Label
+                            showUnit = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Arch").GetBool("surveyUnits",True)
+                            t = ""
+                            u = FreeCAD.Units.Quantity()
                             if not o.HasSubObjects:
                                 # entire object
                                 anno = FreeCAD.ActiveDocument.addObject("App::AnnotationLabel","surveyLabel")
@@ -738,27 +761,29 @@ def survey(callback=False):
                                 else:
                                     anno.BasePosition = o.Object.Shape.BoundBox.Center
                                 FreeCAD.SurveyObserver.labels.append(anno.Name)
-                                t = ""
                                 if o.Object.Shape.Solids:
-                                    t = FreeCAD.Units.Quantity(o.Object.Shape.Volume,FreeCAD.Units.Volume)
-                                    t = t.getUserPreferred()[0]
+                                    u = FreeCAD.Units.Quantity(o.Object.Shape.Volume,FreeCAD.Units.Volume)
+                                    t = u.getUserPreferred()[0]
                                     t = t.encode("utf8").replace("^3","³")
                                     anno.LabelText = "v " + t
                                     FreeCAD.Console.PrintMessage("Object: " + n + ", Element: Whole, Volume: " + t.decode("utf8") + "\n")
                                 elif o.Object.Shape.Faces:
-                                    t = FreeCAD.Units.Quantity(o.Object.Shape.Area,FreeCAD.Units.Area)
-                                    t = t.getUserPreferred()[0]
+                                    u = FreeCAD.Units.Quantity(o.Object.Shape.Area,FreeCAD.Units.Area)
+                                    t = u.getUserPreferred()[0]
                                     t = t.encode("utf8").replace("^2","²")
                                     anno.LabelText = "a " + t
                                     FreeCAD.Console.PrintMessage("Object: " + n + ", Element: Whole, Area: " + t.decode("utf8") + "\n")
                                 else:
-                                    t = FreeCAD.Units.Quantity(o.Object.Shape.Length,FreeCAD.Units.Length)
-                                    t = t.getUserPreferred()[0]
+                                    u = FreeCAD.Units.Quantity(o.Object.Shape.Length,FreeCAD.Units.Length)
+                                    t = u.getUserPreferred()[0]
                                     t = t.encode("utf8")
                                     anno.LabelText = "l " + t
                                     FreeCAD.Console.PrintMessage("Object: " + n + ", Element: Whole, Length: " + t.decode("utf8") + "\n")
                                 if FreeCAD.GuiUp and t:
-                                    QtGui.qApp.clipboard().setText(t)
+                                    if showUnit:
+                                        QtGui.qApp.clipboard().setText(t)
+                                    else:
+                                        QtGui.qApp.clipboard().setText(str(u.Value))
                             else:
                                 # single element(s)
                                 for el in o.SubElementNames:
@@ -772,27 +797,29 @@ def survey(callback=False):
                                         else:
                                             anno.BasePosition = e.BoundBox.Center
                                     FreeCAD.SurveyObserver.labels.append(anno.Name)
-                                    t = ""
                                     if "Face" in el:
-                                        t = FreeCAD.Units.Quantity(e.Area,FreeCAD.Units.Area)
-                                        t = t.getUserPreferred()[0]
+                                        u = FreeCAD.Units.Quantity(e.Area,FreeCAD.Units.Area)
+                                        t = u.getUserPreferred()[0]
                                         t = t.encode("utf8").replace("^2","²")
                                         anno.LabelText = "a " + t
                                         FreeCAD.Console.PrintMessage("Object: " + n + ", Element: " + el + ", Area: "+ t.decode("utf8")  + "\n")
                                     elif "Edge" in el:
-                                        t = FreeCAD.Units.Quantity(e.Length,FreeCAD.Units.Length)
-                                        t = t.getUserPreferred()[0]
+                                        u= FreeCAD.Units.Quantity(e.Length,FreeCAD.Units.Length)
+                                        t = u.getUserPreferred()[0]
                                         t = t.encode("utf8")
                                         anno.LabelText = "l " + t
                                         FreeCAD.Console.PrintMessage("Object: " + n + ", Element: " + el + ", Length: " + t.decode("utf8") + "\n")
                                     elif "Vertex" in el:
-                                        t = FreeCAD.Units.Quantity(e.Z,FreeCAD.Units.Length)
-                                        t = t.getUserPreferred()[0]
+                                        u = FreeCAD.Units.Quantity(e.Z,FreeCAD.Units.Length)
+                                        t = u.getUserPreferred()[0]
                                         t = t.encode("utf8")
                                         anno.LabelText = "z " + t
                                         FreeCAD.Console.PrintMessage("Object: " + n + ", Element: " + el + ", Zcoord: " + t.decode("utf8") + "\n")
                                     if FreeCAD.GuiUp and t:
-                                        QtGui.qApp.clipboard().setText(t)
+                                        if showUnit:
+                                            QtGui.qApp.clipboard().setText(t)
+                                        else:
+                                            QtGui.qApp.clipboard().setText(str(u.Value))
 
                     FreeCAD.SurveyObserver.selection.extend(newsels)
 
@@ -885,13 +912,12 @@ def rebuildArchShape(objects=None):
                                                 solid = Part.Solid(solid)
                                             #print "rebuilt solid: isValid is ",solid.isValid()
                                             if solid.isValid():
-                                                print "Success"
                                                 obj.Base.Shape = solid
                                                 success = True
                     except:
                         pass
         if not success:
-            print "Failed"
+            print "Failed to rebuild a valid solid for object ",obj.Name
     FreeCAD.ActiveDocument.recompute()
 
 
@@ -913,21 +939,39 @@ def getExtrusionData(shape):
     for i1, f1 in enumerate(faces):
         for i2, f2 in enumerate(faces):
             if f1[0].hashCode() != f2[0].hashCode():
-                if round(f1[1].getAngle(f2[1]),8) == 3.14159265:
+                if round(f1[1].getAngle(f2[1]),4) == 3.1416:
                     pairs.append([i1,i2])
     if not pairs:
         return None
-    for p in pairs:
-        hc = [faces[p[0]][0].hashCode(),faces[p[1]][0].hashCode()]
-        ok = True
+    valids = []
+    for pair in pairs:
+        hc = [faces[pair[0]][0].hashCode(),faces[pair[1]][0].hashCode()]
         # check if other normals are all at 90 degrees
+        ok = True
         for f in faces:
             if f[0].hashCode() not in hc:
-                if round(f[1].getAngle(faces[p[0]][1]),8) != 1.57079633:
+                if round(f[1].getAngle(faces[pair[0]][1]),4) != 1.5708:
                     ok = False
         if ok:
-            return [faces[p[0]][0],faces[p[1]][0].CenterOfMass.sub(faces[p[0]][0].CenterOfMass)]
+            valids.append([faces[pair[0]][0],faces[pair[1]][0].CenterOfMass.sub(faces[pair[0]][0].CenterOfMass)])
+    for v in valids:
+        # prefer vertical extrusions
+        if v[1].getAngle(FreeCAD.Vector(0,0,1)) < 0.0001:
+            return v
+    # otherwise return the first found
+    if valids:
+        return valids[0]
     return None
+
+def printMessage( message ):
+    FreeCAD.Console.PrintMessage( message )
+    if FreeCAD.GuiUp :
+        reply = QtGui.QMessageBox.information( None , "" , message.decode('utf8') )
+
+def printWarning( message ):
+    FreeCAD.Console.PrintMessage( message )
+    if FreeCAD.GuiUp :
+        reply = QtGui.QMessageBox.warning( None , "" , message.decode('utf8') )
 
 
 # command definitions ###############################################
@@ -1257,6 +1301,32 @@ class _CommandIfcSpreadsheet:
         FreeCAD.ActiveDocument.commitTransaction()
         FreeCAD.ActiveDocument.recompute()
 
+
+class _ToggleSubcomponentDisplay:
+    "the Toggle SubcomponentDisplay command definition"
+    def GetResources(self):
+        return {'Pixmap'  : 'Arch_ToggleSubcomponentDisplay',
+                'MenuText': QtCore.QT_TRANSLATE_NOOP("Arch_ToggleSubcomponentDisplay","Toggle subcomponents"),
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Arch_ToggleSubcomponentDisplay","Shows or hides the subcomponents of this object")}
+
+    def IsActive(self):
+        return bool(FreeCADGui.Selection.getSelection())
+
+    def Activated(self):
+        mode = None
+        for obj in FreeCADGui.Selection.getSelection():
+            if hasattr(obj, "Subtractions"):
+                for sub in obj.Subtractions:
+                    if not (Draft.getType(sub) in ["Window","Roof"]):
+                        if mode == None:
+                            # take the first sub as base
+                            mode = sub.ViewObject.isVisible()
+                        if mode == True:
+                            sub.ViewObject.hide()
+                        else:
+                            sub.ViewObject.show()
+
+
 if FreeCAD.GuiUp:
     FreeCADGui.addCommand('Arch_Add',_CommandAdd())
     FreeCADGui.addCommand('Arch_Remove',_CommandRemove())
@@ -1271,3 +1341,4 @@ if FreeCAD.GuiUp:
     FreeCADGui.addCommand('Arch_ToggleIfcBrepFlag',_ToggleIfcBrepFlag())
     FreeCADGui.addCommand('Arch_Component',_CommandComponent())
     FreeCADGui.addCommand('Arch_IfcSpreadsheet',_CommandIfcSpreadsheet())
+    FreeCADGui.addCommand('Arch_ToggleSubcomponentDisplay',_ToggleSubcomponentDisplay())

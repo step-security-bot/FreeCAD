@@ -138,6 +138,7 @@ public:
     void setBacklight(SbBool on);
     SbBool isBacklight(void) const;
     void setSceneGraph (SoNode *root);
+    SbBool searchNode(SoNode*) const;
 
     void setAnimationEnabled(const SbBool enable);
     SbBool isAnimationEnabled(void) const;
@@ -156,6 +157,7 @@ public:
     int getFeedbackSize(void) const;
 
     void setRenderType(const RenderType type);
+    RenderType getRenderType() const;
     void renderToFramebuffer(QGLFramebufferObject*);
 
     virtual void setViewing(SbBool enable);
@@ -354,6 +356,10 @@ protected:
     virtual void setSeekMode(SbBool enable);
     virtual void afterRealizeHook(void);
     virtual bool processSoEvent(const SoEvent * ev);
+    void dropEvent (QDropEvent * e);
+    void dragEnterEvent (QDragEnterEvent * e);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e);
     SbBool processSoEventBase(const SoEvent * const ev);
     void printDimension();
     void selectAll();

@@ -33,7 +33,8 @@
 #include <Gui/WidgetFactory.h>
 #include <Gui/Language/Translator.h>
 #include "PropertyFemMeshItem.h"
-#include "DlgSettingsFemImp.h"
+#include "DlgSettingsFemGeneralImp.h"
+#include "DlgSettingsFemCcxImp.h"
 #include "ViewProviderFemMesh.h"
 #include "ViewProviderFemMeshShape.h"
 #include "ViewProviderFemMeshShapeNetgen.h"
@@ -47,12 +48,30 @@
 #include "ViewProviderFemConstraintBearing.h"
 #include "ViewProviderFemConstraintFixed.h"
 #include "ViewProviderFemConstraintForce.h"
+#include "ViewProviderFemConstraintFluidBoundary.h"
 #include "ViewProviderFemConstraintPressure.h"
 #include "ViewProviderFemConstraintGear.h"
 #include "ViewProviderFemConstraintPulley.h"
 #include "ViewProviderFemConstraintDisplacement.h"
+#include "ViewProviderFemConstraintTemperature.h"
+#include "ViewProviderFemConstraintHeatflux.h"
+#include "ViewProviderFemConstraintInitialTemperature.h"
+#include "ViewProviderFemConstraintPlaneRotation.h"
+#include "ViewProviderFemConstraintContact.h"
 #include "ViewProviderResult.h"
 #include "Workbench.h"
+
+#ifdef FC_USE_VTK
+#include "ViewProviderFemPostObject.h"
+#include "ViewProviderFemPostPipeline.h"
+#include "ViewProviderFemPostFunction.h"
+#include "ViewProviderFemPostFilter.h"
+#endif
+
+#ifdef FC_USE_VTK
+#include "ViewProviderFemPostObject.h"
+#endif
+
 
 // use a different name to CreateCommand()
 void CreateFemCommands(void);
@@ -100,16 +119,37 @@ PyMODINIT_FUNC initFemGui()
     FemGui::ViewProviderFemConstraintBearing      ::init();
     FemGui::ViewProviderFemConstraintFixed        ::init();
     FemGui::ViewProviderFemConstraintForce        ::init();
+    FemGui::ViewProviderFemConstraintFluidBoundary          ::init();
     FemGui::ViewProviderFemConstraintPressure     ::init();
     FemGui::ViewProviderFemConstraintGear         ::init();
     FemGui::ViewProviderFemConstraintPulley       ::init();
     FemGui::ViewProviderFemConstraintDisplacement ::init();
+    FemGui::ViewProviderFemConstraintHeatflux     ::init();
+    FemGui::ViewProviderFemConstraintTemperature  ::init();
+    FemGui::ViewProviderFemConstraintInitialTemperature  ::init();
+    FemGui::ViewProviderFemConstraintPlaneRotation::init();
+    FemGui::ViewProviderFemConstraintContact      ::init();
     FemGui::ViewProviderResult                    ::init();
     FemGui::ViewProviderResultPython              ::init();
     FemGui::PropertyFemMeshItem                   ::init();
 
+#ifdef FC_USE_VTK
+    FemGui::ViewProviderFemPostObject          ::init();
+    FemGui::ViewProviderFemPostPipeline        ::init();
+    FemGui::ViewProviderFemPostFunction        ::init();
+    FemGui::ViewProviderFemPostFunctionProvider::init();
+    FemGui::ViewProviderFemPostPlaneFunction   ::init();
+    FemGui::ViewProviderFemPostSphereFunction  ::init();
+    FemGui::ViewProviderFemPostClip            ::init();
+    FemGui::ViewProviderFemPostScalarClip      ::init();
+    FemGui::ViewProviderFemPostWarpVector      ::init();
+    FemGui::ViewProviderFemPostCut             ::init();
+#endif
+
+
     // register preferences pages
-    new Gui::PrefPageProducer<FemGui::DlgSettingsFemImp> ("FEM");
+    new Gui::PrefPageProducer<FemGui::DlgSettingsFemGeneralImp> (QT_TRANSLATE_NOOP("QObject","FEM"));
+    new Gui::PrefPageProducer<FemGui::DlgSettingsFemCcxImp> (QT_TRANSLATE_NOOP("QObject","FEM"));
 
      // add resources and reloads the translators
     loadFemResource();

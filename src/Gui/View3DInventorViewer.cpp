@@ -83,6 +83,7 @@
 # include <QTimer>
 # include <QStatusBar>
 # include <QBitmap>
+# include <QMimeData>
 #endif
 
 #include <sstream>
@@ -599,6 +600,16 @@ void View3DInventorViewer::OnChange(Gui::SelectionSingleton::SubjectType& rCalle
 }
 /// @endcond
 
+SbBool View3DInventorViewer::searchNode(SoNode* node) const
+{
+    SoSearchAction searchAction;
+    searchAction.setNode(node);
+    searchAction.setInterest(SoSearchAction::FIRST);
+    searchAction.apply(this->getSceneGraph());
+    SoPath* selectionPath = searchAction.getPath();
+    return selectionPath ? true : false;
+}
+
 SbBool View3DInventorViewer::hasViewProvider(ViewProvider* pcProvider) const
 {
     return _ViewProviderSet.find(pcProvider) != _ViewProviderSet.end();
@@ -830,7 +841,8 @@ void View3DInventorViewer::setNavigationType(Base::Type t)
 
     NavigationStyle* ns = static_cast<NavigationStyle*>(base);
     ns->operator = (*this->navigation);
-    delete this->navigation;
+    if (this->navigation)
+        ns->operator = (*this->navigation);
     this->navigation = ns;
     this->navigation->setViewer(this);
 }
@@ -1269,6 +1281,11 @@ void View3DInventorViewer::setRenderType(const RenderType type)
     }
 }
 
+View3DInventorViewer::RenderType View3DInventorViewer::getRenderType() const
+{
+    return this->renderType;
+}
+
 void View3DInventorViewer::renderToFramebuffer(QGLFramebufferObject* fbo)
 {
     static_cast<QGLWidget*>(this->viewport())->makeCurrent();
@@ -1283,7 +1300,7 @@ void View3DInventorViewer::renderToFramebuffer(QGLFramebufferObject* fbo)
 
     const QColor col = this->backgroundColor();
     glViewport(0, 0, width, height);
-    glClearColor(col.redF(), col.greenF(), col.blueF(), 1.0f);
+    glClearColor(col.redF(), col.greenF(), col.blueF(), col.alphaF());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glDepthRange(0.1,1.0);
@@ -2748,4 +2765,45 @@ PyObject *View3DInventorViewer::getPyObject(void)
 
     Py_INCREF(_viewerPy);
     return _viewerPy;
+}
+/**
+ * Drops the event \a e and loads the files into the given document.
+ */
+void View3DInventorViewer::dropEvent (QDropEvent * e)
+{
+    const QMimeData* data = e->mimeData();
+    if (data->hasUrls() && selectionRoot && selectionRoot->pcDocument) {
+        getMainWindow()->loadUrls(selectionRoot->pcDocument->getDocument(), data->urls());
+    }
+    else {
+        inherited::dropEvent(e);
+    }
+}
+
+void View3DInventorViewer::dragEnterEvent (QDragEnterEvent * e)
+{
+    // Here we must allow uri drags and check them in dropEvent
+    const QMimeData* data = e->mimeData();
+    if (data->hasUrls()) {
+        e->accept();
+    }
+    else {
+        inherited::dragEnterEvent(e);
+    }
+}
+
+void View3DInventorViewer::dragMoveEvent(QDragMoveEvent *e)
+{
+    const QMimeData* data = e->mimeData();
+    if (data->hasUrls() && selectionRoot && selectionRoot->pcDocument) {
+        e->accept();
+    }
+    else {
+        inherited::dragMoveEvent(e);
+    }
+}
+
+void View3DInventorViewer::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    inherited::dragLeaveEvent(e);
 }

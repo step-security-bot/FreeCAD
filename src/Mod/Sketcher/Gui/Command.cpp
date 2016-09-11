@@ -79,14 +79,14 @@ namespace SketcherGui {
     };
 
 
-    Attacher::eMapMode SuggestAutoMapMode(Attacher::eSuggestResult* pMsgId = 0,
+    Attacher::eMapMode SuggestAutoMapMode(Attacher::SuggestResult::eSuggestResult* pMsgId = 0,
                                       QString* message = 0,
                                       std::vector<Attacher::eMapMode>* allmodes = 0){
         //convert pointers into valid references, to avoid checking for null pointers everywhere
-        Attacher::eSuggestResult buf;
+        Attacher::SuggestResult::eSuggestResult buf;
         if (pMsgId == 0)
             pMsgId = &buf;
-        Attacher::eSuggestResult &msg = *pMsgId;
+        Attacher::SuggestResult::eSuggestResult &msg = *pMsgId;
         QString buf2;
         if (message == 0)
             message = &buf2;
@@ -95,23 +95,26 @@ namespace SketcherGui {
         App::PropertyLinkSubList tmpSupport;
         Gui::Selection().getAsPropertyLinkSubList(tmpSupport);
 
+        Attacher::SuggestResult sugr;
         AttachEngine3D eng;
         eng.setUp(tmpSupport);
-        Attacher::eMapMode ret;
-        ret = eng.listMapModes(msg, allmodes);
+        eng.suggestMapModes(sugr);
+        if (allmodes)
+            *allmodes = sugr.allApplicableModes;
+        msg = sugr.message;
         switch(msg){
-            case Attacher::srOK:
+            case Attacher::SuggestResult::srOK:
             break;
-            case Attacher::srNoModesFit:
+            case Attacher::SuggestResult::srNoModesFit:
                 msg_str = QObject::tr("There are no modes that accept the selected set of subelements");
             break;
-            case Attacher::srLinkBroken:
+            case Attacher::SuggestResult::srLinkBroken:
                 msg_str = QObject::tr("Broken link to support subelements");
             break;
-            case Attacher::srUnexpectedError:
+            case Attacher::SuggestResult::srUnexpectedError:
                 msg_str = QObject::tr("Unexpected error");
             break;
-            case Attacher::srIncompatibleGeometry:
+            case Attacher::SuggestResult::srIncompatibleGeometry:
                 if(tmpSupport.getSubValues()[0].substr(0,4) == std::string("Face"))
                     msg_str = QObject::tr("Face is non-planar");
                 else
@@ -122,7 +125,7 @@ namespace SketcherGui {
                 assert(0/*no message for eSuggestResult enum item*/);
         }
 
-        return ret;
+        return sugr.bestFitMode;
     }
 } //namespace SketcherGui
 
@@ -147,13 +150,13 @@ void CmdSketcherNewSketch::activated(int iMsg)
     Attacher::eMapMode mapmode = Attacher::mmDeactivated;
     bool bAttach = false;
     if (Gui::Selection().hasSelection()){
-        Attacher::eSuggestResult msgid = Attacher::srOK;
+        Attacher::SuggestResult::eSuggestResult msgid = Attacher::SuggestResult::srOK;
         QString msg_str;
         std::vector<Attacher::eMapMode> validModes;
         mapmode = SuggestAutoMapMode(&msgid, &msg_str, &validModes);
-        if (msgid == Attacher::srOK)
+        if (msgid == Attacher::SuggestResult::srOK)
             bAttach = true;
-        if (msgid != Attacher::srOK && msgid != Attacher::srNoModesFit){
+        if (msgid != Attacher::SuggestResult::srOK && msgid != Attacher::SuggestResult::srNoModesFit){
             QMessageBox::warning(Gui::getMainWindow(),
                 QObject::tr("Sketch mapping"),
                 QObject::tr("Can't map the skecth to selected object. %1.").arg(msg_str));
@@ -166,13 +169,13 @@ void CmdSketcherNewSketch::activated(int iMsg)
             items.push_back(QObject::tr("Don't attach"));
             int iSugg = 0;//index of the auto-suggested mode in the list of valid modes
             for (size_t i = 0  ;  i < validModes.size()  ;  ++i){
-                items.push_back(QString::fromLatin1(AttachEngine::eMapModeStrings[validModes[i]]));
+                items.push_back(QString::fromLatin1(AttachEngine::getModeName(validModes[i]).c_str()));
                 if (validModes[i] == mapmode)
                     iSugg = items.size()-1;
             }
             QString text = QInputDialog::getItem(Gui::getMainWindow(),
-                qApp->translate(className(), "Sketch attachment"),
-                qApp->translate(className(), "Select the method to attach this sketch to selected object"),
+                qApp->translate("Sketcher_NewSketch", "Sketch attachment"),
+                qApp->translate("Sketcher_NewSketch", "Select the method to attach this sketch to selected object"),
                 items, iSugg, false, &ok);
             if (!ok) return;
             int index = items.indexOf(text);
@@ -201,7 +204,7 @@ void CmdSketcherNewSketch::activated(int iMsg)
         openCommand("Create a Sketch on Face");
         doCommand(Doc,"App.activeDocument().addObject('Sketcher::SketchObject','%s')",FeatName.c_str());
         if (mapmode >= 0 && mapmode < Attacher::mmDummy_NumberOfModes)
-            doCommand(Gui,"App.activeDocument().%s.MapMode = \"%s\"",FeatName.c_str(),AttachEngine::eMapModeStrings[mapmode]);
+            doCommand(Gui,"App.activeDocument().%s.MapMode = \"%s\"",FeatName.c_str(),AttachEngine::getModeName(mapmode).c_str());
         else
             assert(0 /* mapmode index out of range */);
         doCommand(Gui,"App.activeDocument().%s.Support = %s",FeatName.c_str(),supportString.c_str());
@@ -253,7 +256,7 @@ void CmdSketcherNewSketch::activated(int iMsg)
         openCommand("Create a new Sketch");
         doCommand(Doc,"App.activeDocument().addObject('Sketcher::SketchObject','%s')",FeatName.c_str());
         doCommand(Doc,"App.activeDocument().%s.Placement = App.Placement(App.Vector(%f,%f,%f),App.Rotation(%f,%f,%f,%f))",FeatName.c_str(),p.x,p.y,p.z,r[0],r[1],r[2],r[3]);
-        doCommand(Doc,"App.activeDocument().%s.MapMode = \"%s\"",FeatName.c_str(),AttachEngine::eMapModeStrings[int(Attacher::mmDeactivated)]);
+        doCommand(Doc,"App.activeDocument().%s.MapMode = \"%s\"",FeatName.c_str(),AttachEngine::getModeName(Attacher::mmDeactivated).c_str());
         doCommand(Gui,"Gui.activeDocument().activeView().setCamera('%s')",camstring.c_str());
         doCommand(Gui,"Gui.activeDocument().setEdit('%s')",FeatName.c_str());
     }
@@ -447,15 +450,15 @@ void CmdSketcherMapSketch::activated(int iMsg)
         std::vector<Attacher::eMapMode> validModes;
 
         //check that selection is valid for at least some mapping mode.
-        Attacher::eSuggestResult msgid = Attacher::srOK;
+        Attacher::SuggestResult::eSuggestResult msgid = Attacher::SuggestResult::srOK;
         suggMapMode = SuggestAutoMapMode(&msgid, &msg_str, &validModes);
 
         App::Document* doc = App::GetApplication().getActiveDocument();
         std::vector<App::DocumentObject*> sketches = doc->getObjectsOfType(Part::Part2DObject::getClassTypeId());
         if (sketches.empty()) {
             QMessageBox::warning(Gui::getMainWindow(),
-                qApp->translate(className(), "No sketch found"),
-                qApp->translate(className(), "The document doesn't have a sketch"));
+                qApp->translate("Sketcher_MapSketch", "No sketch found"),
+                qApp->translate("Sketcher_MapSketch", "The document doesn't have a sketch"));
             return;
         }
 
@@ -464,8 +467,8 @@ void CmdSketcherMapSketch::activated(int iMsg)
         for (std::vector<App::DocumentObject*>::iterator it = sketches.begin(); it != sketches.end(); ++it)
             items.push_back(QString::fromUtf8((*it)->Label.getValue()));
         QString text = QInputDialog::getItem(Gui::getMainWindow(),
-            qApp->translate(className(), "Select sketch"),
-            qApp->translate(className(), "Select a sketch from the list"),
+            qApp->translate("Sketcher_MapSketch", "Select sketch"),
+            qApp->translate("Sketcher_MapSketch", "Select a sketch from the list"),
             items, 0, false, &ok);
         if (!ok) return;
         int index = items.indexOf(text);
@@ -514,30 +517,30 @@ void CmdSketcherMapSketch::activated(int iMsg)
         int iSugg = 0;//index of the auto-suggested mode in the list of valid modes
         int iCurr = 0;//index of current mode in the list of valid modes
         for (size_t i = 0  ;  i < validModes.size()  ;  ++i){
-            items.push_back(QString::fromLatin1(AttachEngine::eMapModeStrings[validModes[i]]));
+            items.push_back(QString::fromLatin1(AttachEngine::getModeName(validModes[i]).c_str()));
             if (validModes[i] == curMapMode) {
                 iCurr = items.size() - 1;
                 items.back().append(bCurIncompatible?
-                                        qApp->translate(className()," (incompatible with selection)")
+                                        qApp->translate("Sketcher_MapSketch"," (incompatible with selection)")
                                       :
-                                        qApp->translate(className()," (current)")  );
+                                        qApp->translate("Sketcher_MapSketch"," (current)")  );
             }
             if (validModes[i] == suggMapMode){
                 iSugg = items.size() - 1;
                 if(iSugg == 1){
                     iSugg = 0;//redirect deactivate to detach
                 } else {
-                    items.back().append(qApp->translate(className()," (suggested)"));
+                    items.back().append(qApp->translate("Sketcher_MapSketch"," (suggested)"));
                 }
             }
         }
         // * execute the dialog
         text = QInputDialog::getItem(Gui::getMainWindow()
-            ,qApp->translate(className(), "Sketch attachment")
+            ,qApp->translate("Sketcher_MapSketch", "Sketch attachment")
             ,bCurIncompatible?
-              qApp->translate(className(), "Current attachment mode is incompatible with the new selection. Select the method to attach this sketch to selected objects.")
+              qApp->translate("Sketcher_MapSketch", "Current attachment mode is incompatible with the new selection. Select the method to attach this sketch to selected objects.")
               :
-              qApp->translate(className(), "Select the method to attach this sketch to selected objects.")
+              qApp->translate("Sketcher_MapSketch", "Select the method to attach this sketch to selected objects.")
             ,items
             , bCurIncompatible ? iSugg : iCurr
             , false
@@ -561,19 +564,19 @@ void CmdSketcherMapSketch::activated(int iMsg)
             std::string supportString = support.getPyReprString();
 
             openCommand("Attach Sketch");
-            doCommand(Gui,"App.activeDocument().%s.MapMode = \"%s\"",featName.c_str(),AttachEngine::eMapModeStrings[suggMapMode]);
+            doCommand(Gui,"App.activeDocument().%s.MapMode = \"%s\"",featName.c_str(),AttachEngine::getModeName(suggMapMode).c_str());
             doCommand(Gui,"App.activeDocument().%s.Support = %s",featName.c_str(),supportString.c_str());
             commitCommand();
         } else {
             openCommand("Detach Sketch");
-            doCommand(Gui,"App.activeDocument().%s.MapMode = \"%s\"",featName.c_str(),AttachEngine::eMapModeStrings[suggMapMode]);
+            doCommand(Gui,"App.activeDocument().%s.MapMode = \"%s\"",featName.c_str(),AttachEngine::getModeName(suggMapMode).c_str());
             doCommand(Gui,"App.activeDocument().%s.Support = None",featName.c_str());
             commitCommand();
         }
     } catch (ExceptionWrongInput &e) {
         QMessageBox::warning(Gui::getMainWindow(),
-                             qApp->translate(className(), "Map sketch"),
-                             qApp->translate(className(), "Can't map a sketch to support:\n"
+                             qApp->translate("Sketcher_MapSketch", "Map sketch"),
+                             qApp->translate("Sketcher_MapSketch", "Can't map a sketch to support:\n"
                                          "%1").arg(e.ErrMsg.length() ? e.ErrMsg : msg_str));
     }
 }
@@ -602,8 +605,10 @@ void CmdSketcherViewSketch::activated(int iMsg)
 {
     Gui::Document *doc = getActiveGuiDocument();
     SketcherGui::ViewProviderSketch* vp = dynamic_cast<SketcherGui::ViewProviderSketch*>(doc->getInEdit());
-    doCommand(Gui,"Gui.ActiveDocument.ActiveView.setCameraOrientation(App.ActiveDocument.%s.Placement.Rotation.Q)"
-                 ,vp->getObject()->getNameInDocument());
+    if (vp) {
+        doCommand(Gui,"Gui.ActiveDocument.ActiveView.setCameraOrientation(App.ActiveDocument.%s.Placement.Rotation.Q)"
+                     ,vp->getObject()->getNameInDocument());
+    }
 }
 
 bool CmdSketcherViewSketch::isActive(void)

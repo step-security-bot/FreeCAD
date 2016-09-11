@@ -114,12 +114,12 @@ void UnifiedDatumCommand(Gui::Command &cmd, Base::Type type, std::string name)
             if (support.getSize() > 0) {
                 Part::AttachableObject* pcDatum = static_cast<Part::AttachableObject*>(cmd.getDocument()->getObject(FeatName.c_str()));
                 pcDatum->attacher().references.Paste(support);
-                eSuggestResult msg;
-                eMapMode suggMode = pcDatum->attacher().listMapModes(msg);
-                if (msg == srOK) {
+                SuggestResult sugr;
+                pcDatum->attacher().suggestMapModes(sugr);
+                if (sugr.message == Attacher::SuggestResult::srOK) {
                     //fits some mode. Populate support property.
                     cmd.doCommand(Gui::Command::Doc,"App.activeDocument().%s.Support = %s",FeatName.c_str(),support.getPyReprString().c_str());
-                    cmd.doCommand(Gui::Command::Doc,"App.activeDocument().%s.MapMode = '%s'",FeatName.c_str(),AttachEngine::eMapModeStrings[suggMode]);
+                    cmd.doCommand(Gui::Command::Doc,"App.activeDocument().%s.MapMode = '%s'",FeatName.c_str(),AttachEngine::getModeName(sugr.bestFitMode).c_str());
                 } else {
                     QMessageBox::information(Gui::getMainWindow(),QObject::tr("Invalid selection"), QObject::tr("There are no attachment modes that fit seleted objects. Select something else."));
                 }
@@ -423,7 +423,7 @@ void CmdPartDesignNewSketch::activated(int iMsg)
         openCommand("Create a Sketch on Face");
         doCommand(Doc,"App.activeDocument().addObject('Sketcher::SketchObject','%s')",FeatName.c_str());
         doCommand(Doc,"App.activeDocument().%s.Support = %s",FeatName.c_str(),supportString.c_str());
-        doCommand(Doc,"App.activeDocument().%s.MapMode = '%s'",FeatName.c_str(),Attacher::AttachEngine::eMapModeStrings[Attacher::mmFlatFace]);
+        doCommand(Doc,"App.activeDocument().%s.MapMode = '%s'",FeatName.c_str(),Attacher::AttachEngine::getModeName(Attacher::mmFlatFace).c_str());
         doCommand(Doc,"App.activeDocument().%s.addFeature(App.activeDocument().%s)",
                        pcActiveBody->getNameInDocument(), FeatName.c_str());
         doCommand(Gui,"App.activeDocument().recompute()");  // recompute the sketch placement based on its support
@@ -511,7 +511,7 @@ void CmdPartDesignNewSketch::activated(int iMsg)
             Gui::Command::openCommand("Create a new Sketch");
             Gui::Command::doCommand(Doc,"App.activeDocument().addObject('Sketcher::SketchObject','%s')",FeatName.c_str());
             Gui::Command::doCommand(Doc,"App.activeDocument().%s.Support = %s",FeatName.c_str(),supportString.c_str());
-            Gui::Command::doCommand(Doc,"App.activeDocument().%s.MapMode = '%s'",FeatName.c_str(),Attacher::AttachEngine::eMapModeStrings[Attacher::mmFlatFace]);
+            Gui::Command::doCommand(Doc,"App.activeDocument().%s.MapMode = '%s'",FeatName.c_str(),Attacher::AttachEngine::getModeName(Attacher::mmFlatFace).c_str());
             Gui::Command::updateActive(); // Make sure the Support's Placement property is updated
             Gui::Command::doCommand(Doc,"App.activeDocument().%s.addFeature(App.activeDocument().%s)",
                         pcActiveBody->getNameInDocument(), FeatName.c_str());
@@ -726,29 +726,28 @@ void prepareProfileBased(Gui::Command* cmd, const std::string& which,
     
     //if a profie is selected we can make our life easy and fast
     auto selection = cmd->getSelection().getSelectionEx();
-    if(!selection.empty() && selection.front().hasSubNames()) {
-        
+    if (!selection.empty() && selection.front().hasSubNames()) {
         base_worker(selection.front().getObject(), selection.front().getSubNames().front());
         return;
     }
-    
+
     //no face profile was selected, do he extended sketch logic
-    
+
     bool bNoSketchWasSelected = false;
     // Get a valid sketch from the user
     // First check selections
     std::vector<App::DocumentObject*> sketches = cmd->getSelection().getObjectsOfType(Part::Part2DObject::getClassTypeId());
-    if (sketches.size() == 0) {//no sketches were selected. Let user pick an object from valid ones available in document
+    if (sketches.empty()) {//no sketches were selected. Let user pick an object from valid ones available in document
         sketches = cmd->getDocument()->getObjectsOfType(Part::Part2DObject::getClassTypeId());
         bNoSketchWasSelected = true;
     }
     
-    if(sketches.empty()) {
-            QMessageBox::warning(Gui::getMainWindow(), QObject::tr("No sketch to work on"),
-                QObject::tr("No sketch is available in the document"));
-            return;
+    if (sketches.empty()) {
+        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("No sketch to work on"),
+            QObject::tr("No sketch is available in the document"));
+        return;
     }
-    
+
     std::vector<PartDesignGui::TaskFeaturePick::featureStatus> status;
     std::vector<App::DocumentObject*>::iterator firstFreeSketch;
     int freeSketches = validateSketches(sketches, status, firstFreeSketch);
@@ -778,7 +777,7 @@ void prepareProfileBased(Gui::Command* cmd, const std::string& which,
         
     // TODO Clean this up (2015-10-20, Fat-Zer)
     auto* pcActiveBody = PartDesignGui::getBody(false);
-    if(pcActiveBody && !bNoSketchWasSelected && ext) {
+    if (pcActiveBody && !bNoSketchWasSelected && ext) {
 
         auto* pcActivePart = PartDesignGui::getPartFor(pcActiveBody, false);
 
@@ -805,7 +804,7 @@ void prepareProfileBased(Gui::Command* cmd, const std::string& which,
     
     // Show sketch choose dialog and let user pick sketch if no sketch was selected and no free one available or
     // multiple free ones are available
-    if ( bNoSketchWasSelected && (freeSketches != 1) ) {
+    if (bNoSketchWasSelected && (freeSketches != 1) ) {
 
         Gui::TaskView::TaskDialog *dlg = Gui::Control().activeDialog();
         PartDesignGui::TaskDlgFeaturePick *pickDlg = qobject_cast<PartDesignGui::TaskDlgFeaturePick *>(dlg);
@@ -827,21 +826,20 @@ void prepareProfileBased(Gui::Command* cmd, const std::string& which,
 
         Gui::Selection().clearSelection();
         pickDlg = new PartDesignGui::TaskDlgFeaturePick(sketches, status, accepter, sketch_worker);
-        if(!bNoSketchWasSelected && ext)
+        if (!bNoSketchWasSelected && ext)
             pickDlg->showExternal(true);
 
         Gui::Control().showDialog(pickDlg);
     }
     else {
         std::vector<App::DocumentObject*> theSketch;
-        if(!bNoSketchWasSelected)
+        if (!bNoSketchWasSelected)
             theSketch.push_back(sketches[0]);
         else
             theSketch.push_back(*firstFreeSketch);
-        
+
         sketch_worker(theSketch);
     }
-
 }
 
 void finishProfileBased(const Gui::Command* cmd, const Part::Feature* sketch, const std::string& FeatName)
@@ -870,6 +868,14 @@ CmdPartDesignPad::CmdPartDesignPad()
 
 void CmdPartDesignPad::activated(int iMsg)
 {
+    App::Document *doc = getDocument();
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(
+        /*messageIfNot = */ PartDesignGui::assureModernWorkflow(doc));
+
+    // No PartDesign feature without Body past FreeCAD 0.16
+    if (!pcActiveBody && PartDesignGui::isModernWorkflow(doc))
+        return;
+
     Gui::Command* cmd = this;
     auto worker = [cmd](Part::Feature* profile, std::string FeatName) {
 
@@ -919,6 +925,14 @@ CmdPartDesignPocket::CmdPartDesignPocket()
 
 void CmdPartDesignPocket::activated(int iMsg)
 {
+    App::Document *doc = getDocument();
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(
+        /*messageIfNot = */ PartDesignGui::assureModernWorkflow(doc));
+
+    // No PartDesign feature without Body past FreeCAD 0.16
+    if (!pcActiveBody && PartDesignGui::isModernWorkflow(doc))
+        return;
+
     Gui::Command* cmd = this;
     auto worker = [cmd](Part::Feature* sketch, std::string FeatName) {
 
@@ -956,6 +970,14 @@ CmdPartDesignRevolution::CmdPartDesignRevolution()
 
 void CmdPartDesignRevolution::activated(int iMsg)
 {
+    App::Document *doc = getDocument();
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(
+        /*messageIfNot = */ PartDesignGui::assureModernWorkflow(doc));
+
+    // No PartDesign feature without Body past FreeCAD 0.16
+    if (!pcActiveBody && PartDesignGui::isModernWorkflow(doc))
+        return;
+
     Gui::Command* cmd = this;
     auto worker = [cmd](Part::Feature* sketch, std::string FeatName) {
 
@@ -999,6 +1021,13 @@ CmdPartDesignGroove::CmdPartDesignGroove()
 
 void CmdPartDesignGroove::activated(int iMsg)
 {
+    App::Document *doc = getDocument();
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(
+        /*messageIfNot = */ PartDesignGui::assureModernWorkflow(doc));
+
+    if (!pcActiveBody && PartDesignGui::isModernWorkflow(doc))
+        return;
+
     Gui::Command* cmd = this;
     auto worker = [cmd](Part::Feature* sketch, std::string FeatName) {
 
@@ -1042,6 +1071,12 @@ CmdPartDesignAdditivePipe::CmdPartDesignAdditivePipe()
 
 void CmdPartDesignAdditivePipe::activated(int iMsg)
 {
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(/*messageIfNot = */ true);
+
+    // No PartDesign feature without Body past FreeCAD 0.13
+    if (!pcActiveBody)
+        return;
+
     Gui::Command* cmd = this;
     auto worker = [cmd](Part::Feature* sketch, std::string FeatName) {
 
@@ -1082,6 +1117,12 @@ CmdPartDesignSubtractivePipe::CmdPartDesignSubtractivePipe()
 
 void CmdPartDesignSubtractivePipe::activated(int iMsg)
 {
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(/*messageIfNot = */ true);
+
+    // No PartDesign feature without Body past FreeCAD 0.13
+    if (!pcActiveBody)
+        return;
+
     Gui::Command* cmd = this;
     auto worker = [cmd](Part::Feature* sketch, std::string FeatName) {
 
@@ -1122,6 +1163,12 @@ CmdPartDesignAdditiveLoft::CmdPartDesignAdditiveLoft()
 
 void CmdPartDesignAdditiveLoft::activated(int iMsg)
 {
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(/*messageIfNot = */ true);
+
+    // No PartDesign feature without Body past FreeCAD 0.13
+    if (!pcActiveBody)
+        return;
+
     Gui::Command* cmd = this;
     auto worker = [cmd](Part::Feature* sketch, std::string FeatName) {
 
@@ -1162,6 +1209,12 @@ CmdPartDesignSubtractiveLoft::CmdPartDesignSubtractiveLoft()
 
 void CmdPartDesignSubtractiveLoft::activated(int iMsg)
 {
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(/*messageIfNot = */ true);
+
+    // No PartDesign feature without Body past FreeCAD 0.13
+    if (!pcActiveBody)
+        return;
+
     Gui::Command* cmd = this;
     auto worker = [cmd](Part::Feature* sketch, std::string FeatName) {
 
@@ -1217,7 +1270,7 @@ bool dressupGetSelected(Gui::Command* cmd, const std::string& which,
 
     const Part::TopoShape& TopShape = base->Shape.getShape();
 
-    if (TopShape._Shape.IsNull()){
+    if (TopShape.getShape().IsNull()){
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
             QObject::tr("Shape of the selected Part is empty"));
         return false;

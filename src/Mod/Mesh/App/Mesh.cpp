@@ -35,6 +35,7 @@
 #include <Base/Reader.h>
 #include <Base/Interpreter.h>
 #include <Base/Sequencer.h>
+#include <Base/Tools.h>
 #include <Base/ViewProj.h>
 
 #include "Core/Builder.h"
@@ -340,13 +341,60 @@ void MeshObject::save(const char* file, MeshCore::MeshIO::Format f,
     MeshCore::MeshOutput aWriter(this->_kernel, mat);
     if (objectname)
         aWriter.SetObjectName(objectname);
+
+    // go through the segment list and put them to the exporter when
+    // the "save" flag is set
+    std::vector<MeshCore::Group> groups;
+    for (std::size_t index = 0; index < this->_segments.size(); index++) {
+        if (this->_segments[index].isSaved()) {
+            MeshCore::Group g;
+            g.indices = this->_segments[index].getIndices();
+            g.name = this->_segments[index].getName();
+            groups.push_back(g);
+        }
+    }
+    aWriter.SetGroups(groups);
+    if (mat && mat->library.empty()) {
+        Base::FileInfo fi(file);
+        const_cast<MeshCore::Material*>(mat)->library = fi.fileNamePure() + ".mtl";
+    }
+
     aWriter.Transform(this->_Mtrx);
-    aWriter.SaveAny(file, f);
+    if (aWriter.SaveAny(file, f)) {
+        if (mat && f == MeshCore::MeshIO::OBJ) {
+            Base::FileInfo fi(file);
+            std::string fn = fi.dirPath() + "/" + mat->library;
+            fi.setFile(fn);
+            Base::ofstream str(fi, std::ios::out | std::ios::binary);
+            aWriter.SaveMTL(str);
+            str.close();
+        }
+    }
 }
 
-void MeshObject::save(std::ostream& out) const
+void MeshObject::save(std::ostream& str, MeshCore::MeshIO::Format f,
+                      const MeshCore::Material* mat,
+                      const char* objectname) const
 {
-    _kernel.Write(out);
+    MeshCore::MeshOutput aWriter(this->_kernel, mat);
+    if (objectname)
+        aWriter.SetObjectName(objectname);
+
+    // go through the segment list and put them to the exporter when
+    // the "save" flag is set
+    std::vector<MeshCore::Group> groups;
+    for (std::size_t index = 0; index < this->_segments.size(); index++) {
+        if (this->_segments[index].isSaved()) {
+            MeshCore::Group g;
+            g.indices = this->_segments[index].getIndices();
+            g.name = this->_segments[index].getName();
+            groups.push_back(g);
+        }
+    }
+    aWriter.SetGroups(groups);
+
+    aWriter.Transform(this->_Mtrx);
+    aWriter.SaveFormat(str, f);
 }
 
 bool MeshObject::load(const char* file, MeshCore::Material* mat)
@@ -356,10 +404,28 @@ bool MeshObject::load(const char* file, MeshCore::Material* mat)
     if (!aReader.LoadAny(file))
         return false;
 
+    swapKernel(kernel, aReader.GetGroupNames());
+    return true;
+}
+
+bool MeshObject::load(std::istream& str, MeshCore::MeshIO::Format f, MeshCore::Material* mat)
+{
+    MeshCore::MeshKernel kernel;
+    MeshCore::MeshInput aReader(kernel, mat);
+    if (!aReader.LoadFormat(str, f))
+        return false;
+
+    swapKernel(kernel, aReader.GetGroupNames());
+    return true;
+}
+
+void MeshObject::swapKernel(MeshCore::MeshKernel& kernel,
+                            const std::vector<std::string>& g)
+{
     _kernel.Swap(kernel);
     // Some file formats define several objects per file (e.g. OBJ).
     // Now we mark each object as an own segment so that we can break
-    // the object into its orriginal objects again.
+    // the object into its original objects again.
     this->_segments.clear();
     const MeshCore::MeshFacetArray& faces = _kernel.GetFacets();
     MeshCore::MeshFacetArray::_TConstIterator it;
@@ -384,6 +450,13 @@ bool MeshObject::load(const char* file, MeshCore::Material* mat)
         this->_segments.push_back(Segment(this,segment,true));
     }
 
+    // apply the group names to the segments
+    if (this->_segments.size() == g.size()) {
+        for (std::size_t index = 0; index < this->_segments.size(); index++) {
+            this->_segments[index].setName(g[index]);
+        }
+    }
+
 #ifndef FC_DEBUG
     try {
         MeshCore::MeshEvalNeighbourhood nb(_kernel);
@@ -403,8 +476,11 @@ bool MeshObject::load(const char* file, MeshCore::Material* mat)
         Base::Console().Log("Check for defects in mesh data structure failed\n");
     }
 #endif
+}
 
-    return true;
+void MeshObject::save(std::ostream& out) const
+{
+    _kernel.Write(out);
 }
 
 void MeshObject::load(std::istream& in)
@@ -1023,9 +1099,11 @@ void MeshObject::refine()
     unsigned long cnt = _kernel.CountFacets();
     MeshCore::MeshFacetIterator cF(_kernel);
     MeshCore::MeshTopoAlgorithm topalg(_kernel);
+
+    // x < 30 deg => cos(x) > sqrt(3)/2 or x > 120 deg => cos(x) < -0.5
     for (unsigned long i=0; i<cnt; i++) {
         cF.Set(i);
-        if (!cF->IsDeformed())
+        if (!cF->IsDeformed(0.86f, -0.5f))
             topalg.InsertVertexAndSwapEdge(i, cF->GetGravityPoint(), 0.1f);
     }
 
@@ -1178,6 +1256,10 @@ void MeshObject::removeNonManifolds()
         f_fix.Fixup();
         deletedFacets(f_fix.GetDeletedFaces());
     }
+}
+
+void MeshObject::removeNonManifoldPoints()
+{
     MeshCore::MeshEvalPointManifolds p_eval(_kernel);
     if (!p_eval.Evaluate()) {
         std::vector<unsigned long> faces;
@@ -1309,19 +1391,22 @@ void MeshObject::validateIndices()
         this->_segments.clear();
 }
 
-void MeshObject::validateDeformations(float fMaxAngle)
+void MeshObject::validateDeformations(float fMaxAngle, float fEps)
 {
     unsigned long count = _kernel.CountFacets();
-    MeshCore::MeshFixDeformedFacets eval(_kernel, fMaxAngle);
+    MeshCore::MeshFixDeformedFacets eval(_kernel,
+                                         Base::toRadians(30.0f),
+                                         Base::toRadians(120.0f),
+                                         fMaxAngle, fEps);
     eval.Fixup();
     if (_kernel.CountFacets() < count)
         this->_segments.clear();
 }
 
-void MeshObject::validateDegenerations()
+void MeshObject::validateDegenerations(float fEps)
 {
     unsigned long count = _kernel.CountFacets();
-    MeshCore::MeshFixDegeneratedFacets eval(_kernel);
+    MeshCore::MeshFixDegeneratedFacets eval(_kernel, fEps);
     eval.Fixup();
     if (_kernel.CountFacets() < count)
         this->_segments.clear();
@@ -1532,6 +1617,9 @@ MeshObject* MeshObject::createCube(float length, float width, float height, floa
 void MeshObject::addSegment(const Segment& s)
 {
     addSegment(s.getIndices());
+    this->_segments.back().setName(s.getName());
+    this->_segments.back().save(s.isSaved());
+    this->_segments.back()._modifykernel = s._modifykernel;
 }
 
 void MeshObject::addSegment(const std::vector<unsigned long>& inds)

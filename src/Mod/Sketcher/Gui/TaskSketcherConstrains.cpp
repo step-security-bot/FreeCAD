@@ -123,22 +123,14 @@ public:
             case Sketcher::Symmetric:
                 break;
             case Sketcher::Distance:
-                name = QString::fromLatin1("%1 (%2)").arg(name).arg(Base::Quantity(constraint->getPresentationValue(),Base::Unit::Length).getUserString());
-                break;
             case Sketcher::DistanceX:
-                name = QString::fromLatin1("%1 (%2)").arg(name).arg(Base::Quantity(constraint->getPresentationValue(),Base::Unit::Length).getUserString());
-                break;
             case Sketcher::DistanceY:
-                name = QString::fromLatin1("%1 (%2)").arg(name).arg(Base::Quantity(constraint->getPresentationValue(),Base::Unit::Length).getUserString());
-                break;
             case Sketcher::Radius:
-                name = QString::fromLatin1("%1 (%2)").arg(name).arg(Base::Quantity(constraint->getPresentationValue(),Base::Unit::Length).getUserString());
-                break;
             case Sketcher::Angle:
-                name = QString::fromLatin1("%1 (%2)").arg(name).arg(Base::Quantity(Base::toDegrees<double>(constraint->getPresentationValue()),Base::Unit::Angle).getUserString());
+                name = QString::fromLatin1("%1 (%2)").arg(name).arg(constraint->getPresentationValue().getUserString());
                 break;
             case Sketcher::SnellsLaw: {
-                double v = constraint->getPresentationValue();
+                double v = constraint->getPresentationValue().getValue();
                 double n1 = 1.0;
                 double n2 = 1.0;
                 if (fabs(v) >= 1) {
@@ -328,6 +320,9 @@ protected:
         options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter);
 
         ConstraintItem * item = dynamic_cast<ConstraintItem*>(view->item(index.row()));
+        if (!item)
+            return;
+
         App::ObjectIdentifier path = item->sketch->Constraints.createPath(item->ConstraintNbr);
         App::PropertyExpressionEngine::ExpressionInfo expr_info = item->sketch->getExpression(path);
 
@@ -370,9 +365,8 @@ void ConstraintView::contextMenuEvent (QContextMenuEvent* event)
     bool isToggleDriving = false;
 
     // Non-driving-constraints/measurements
-    if (item) {
-        ConstraintItem *it = dynamic_cast<ConstraintItem*>(item);
-
+    ConstraintItem *it = dynamic_cast<ConstraintItem*>(item);
+    if (it) {
         // if its the right constraint
         if ((it->constraintType() == Sketcher::Distance ||
              it->constraintType() == Sketcher::DistanceX ||
@@ -424,11 +418,10 @@ void ConstraintView::updateDrivingStatus()
 {
     QListWidgetItem* item = currentItem();
     
-    if (item){
-        ConstraintItem *it = dynamic_cast<ConstraintItem*>(item);
-        
+    ConstraintItem *it = dynamic_cast<ConstraintItem*>(item);
+    if (it) {
         onUpdateDrivingStatus(item, !it->isDriving());
-    }    
+    }
 }
 
 void ConstraintView::modifyCurrentItem()
@@ -631,7 +624,7 @@ void TaskSketcherConstrains::on_listWidgetConstraints_itemSelectionChanged(void)
 void TaskSketcherConstrains::on_listWidgetConstraints_itemActivated(QListWidgetItem *item)
 {
     ConstraintItem *it = dynamic_cast<ConstraintItem*>(item);
-    if (!item) return;
+    if (!it) return;
 
     // if its the right constraint
     if (it->constraintType() == Sketcher::Distance ||
@@ -658,12 +651,12 @@ void TaskSketcherConstrains::on_listWidgetConstraints_updateDrivingStatus(QListW
 
 void TaskSketcherConstrains::on_listWidgetConstraints_itemChanged(QListWidgetItem *item)
 {
-    if (!item || inEditMode)
+    const ConstraintItem *it = dynamic_cast<const ConstraintItem*>(item);
+    if (!it || inEditMode)
         return;
 
     inEditMode = true;
 
-    const ConstraintItem *it = dynamic_cast<const ConstraintItem*>(item);
     const Sketcher::SketchObject * sketch = sketchView->getSketchObject();
     const std::vector< Sketcher::Constraint * > &vals = sketch->Constraints.getValues();
     const Sketcher::Constraint* v = vals[it->ConstraintNbr];

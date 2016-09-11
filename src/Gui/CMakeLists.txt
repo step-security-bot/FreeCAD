@@ -204,6 +204,7 @@ set(Gui_MOC_HDRS
     DlgToolbarsImp.h
     DlgWorkbenchesImp.h
     TaskDlgRelocation.h
+    TaskCSysDragger.h
     DlgUndoRedo.h
     DockWindow.h
     DockWindowManager.h
@@ -382,6 +383,7 @@ SET(Dialog_CPP_SRCS
     DlgExpressionInput.cpp
     TaskDlgRelocation.cpp
     DlgCheckableMessageBox.cpp
+    TaskCSysDragger.cpp
     DlgUndoRedo.cpp
     InputVector.cpp
     Placement.cpp
@@ -415,6 +417,7 @@ SET(Dialog_HPP_SRCS
     DlgTipOfTheDayImp.h
     DlgExpressionInput.h
     TaskDlgRelocation.h
+    TaskCSysDragger.h
     DlgUndoRedo.h
     InputVector.h
     Placement.h
@@ -890,6 +893,7 @@ SET(Inventor_CPP_SRCS
     SoAxisCrossKit.cpp
     SoTextLabel.cpp
     SoTouchEvents.cpp
+    SoFCCSysDragger.cpp
 )
 SET(Inventor_SRCS
     ${Inventor_CPP_SRCS}
@@ -913,6 +917,7 @@ SET(Inventor_SRCS
     SoAxisCrossKit.h
     SoTextLabel.h
     SoTouchEvents.h
+    SoFCCSysDragger.h
 )
 SOURCE_GROUP("View3D\\Inventor" FILES ${Inventor_SRCS})
 
@@ -1028,6 +1033,7 @@ SET(FreeCADGui_CPP_SRCS
     Utilities.cpp
     WaitCursor.cpp
     ManualAlignment.cpp
+    TransactionObject.cpp
     WinNativeGestureRecognizers.cpp
 )
 SET(FreeCADGui_SRCS 
@@ -1055,6 +1061,7 @@ SET(FreeCADGui_SRCS
     Utilities.h
     WaitCursor.h
     ManualAlignment.h
+    TransactionObject.h
     WinNativeGestureRecognizers.h
 )
 

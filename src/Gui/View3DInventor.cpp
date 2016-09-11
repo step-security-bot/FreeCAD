@@ -192,6 +192,7 @@ View3DInventor::View3DInventor(Gui::Document* pcDocument, QWidget* parent,
     OnChange(*hGrp,"DimensionsVisible");
     OnChange(*hGrp,"Dimensions3dVisible");
     OnChange(*hGrp,"DimensionsDeltaVisible");
+    OnChange(*hGrp,"PickRadius");
 
     stopSpinTimer = new QTimer(this);
     connect(stopSpinTimer, SIGNAL(timeout()), this, SLOT(stopAnimating()));
@@ -395,6 +396,10 @@ void View3DInventor::OnChange(ParameterGrp::SubjectType &rCaller,ParameterGrp::M
       else
         _viewer->turnDeltaDimensionsOff();
     } 
+    else if (strcmp(Reason, "PickRadius") == 0)
+    {
+        _viewer->setPickRadius(rGrp.GetFloat("PickRadius", 5.0f));
+    }
     else{
         unsigned long col1 = rGrp.GetUnsigned("BackgroundColor",3940932863UL);
         unsigned long col2 = rGrp.GetUnsigned("BackgroundColor2",859006463UL); // default color (dark blue)
@@ -618,7 +623,7 @@ bool View3DInventor::onMsg(const char* pMsg, const char** ppReturn)
     else if(strcmp("SetStereoOff",pMsg) == 0 ) {
         _viewer->setStereoMode(Quarter::SoQTQuarterAdaptor::MONO );
         return true;
-   }
+    }
     else if(strcmp("Example1",pMsg) == 0 ) {
         SoSeparator * root = new SoSeparator;
         Texture3D(root);
@@ -946,7 +951,7 @@ void View3DInventor::dropEvent (QDropEvent * e)
 
 void View3DInventor::dragEnterEvent (QDragEnterEvent * e)
 {
-    // Here we must allow uri drafs and check them in dropEvent
+    // Here we must allow uri drags and check them in dropEvent
     const QMimeData* data = e->mimeData();
     if (data->hasUrls())
         e->accept();

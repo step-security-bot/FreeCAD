@@ -69,7 +69,9 @@ generate_from_xml(RectangularTrimmedSurfacePy)
 generate_from_xml(SurfaceOfExtrusionPy)
 generate_from_xml(SurfaceOfRevolutionPy)
 generate_from_xml(PartFeaturePy)
+generate_from_xml(AttachableObjectPy)
 generate_from_xml(Part2DObjectPy)
+generate_from_xml(AttachEnginePy)
 generate_from_xml(TopoShapePy)
 generate_from_xml(TopoShapeCompoundPy)
 generate_from_xml(TopoShapeCompSolidPy)
@@ -122,6 +124,8 @@ SET(Features_SRCS
     FeatureMirroring.h
     FeatureRevolution.cpp
     FeatureRevolution.h
+    FeatureOffset.cpp
+    FeatureOffset.h
     PartFeatures.cpp
     PartFeatures.h
     PartFeature.cpp
@@ -216,8 +220,12 @@ SET(Python_SRCS
     SurfaceOfRevolutionPyImp.cpp
     PartFeaturePy.xml
     PartFeaturePyImp.cpp
+    AttachableObjectPy.xml
+    AttachableObjectPyImp.cpp
     Part2DObjectPy.xml
     Part2DObjectPyImp.cpp
+    AttachEnginePy.xml
+    AttachEnginePyImp.cpp
     TopoShapePy.xml
     TopoShapePyImp.cpp
     TopoShapeCompSolidPy.xml
@@ -281,6 +289,19 @@ SET(Part_Scripts
     TestPartApp.py
     MakeBottle.py
     JoinFeatures.py
+    AttachmentEditor/__init__.py
+    AttachmentEditor/Commands.py
+    AttachmentEditor/FrozenClass.py
+    AttachmentEditor/TaskAttachmentEditor.py
+    AttachmentEditor/TaskAttachmentEditor.ui
+    BOPTools/__init__.py
+    BOPTools/GeneralFuseResult.py
+    BOPTools/JoinAPI.py
+    BOPTools/JoinFeatures.py
+    BOPTools/ShapeMerge.py
+    BOPTools/SplitAPI.py
+    BOPTools/SplitFeatures.py
+    BOPTools/Utils.py
 )
 
 add_library(Part SHARED ${Part_SRCS})

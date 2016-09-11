@@ -192,7 +192,7 @@ Part::Feature* ProfileBased::getVerifiedObject(bool silent) const {
     return static_cast<Part::Feature*>(result);
 }
 
-TopoDS_Face ProfileBased::getVerifiedFace(bool silent) const {
+TopoDS_Shape ProfileBased::getVerifiedFace(bool silent) const {
 
     App::DocumentObject* result = Profile.getValue();
     const char* err = nullptr;
@@ -203,7 +203,7 @@ TopoDS_Face ProfileBased::getVerifiedFace(bool silent) const {
         if (result->getTypeId().isDerivedFrom(Part::Part2DObject::getClassTypeId())) {
             
             auto wires = getProfileWires();
-            return TopoDS::Face(makeFace(wires));
+            return makeFace(wires);
         }
         else if(result->getTypeId().isDerivedFrom(Part::Feature::getClassTypeId())) {
             if(Profile.getSubValues().empty())
@@ -294,7 +294,7 @@ const TopoDS_Face ProfileBased::getSupportFace() const {
             assert(sub.size()==1);
             // get the selected sub shape (a Face)
             const Part::TopoShape &shape = part->Shape.getShape();
-            if (shape._Shape.IsNull())
+            if (shape.getShape().IsNull())
                 throw Base::Exception("Sketch support shape is empty!");
 
             TopoDS_Shape sh = shape.getSubShape(sub[0].c_str());
@@ -898,7 +898,9 @@ void ProfileBased::remapSupportShape(const TopoDS_Shape& newShape)
 
     // here we must reset the placement otherwise the geometric matching doesn't work
     Part::TopoShape shape = this->Shape.getValue();
-    shape._Shape.Location(TopLoc_Location());
+    TopoDS_Shape sh = shape.getShape();
+    sh.Location(TopLoc_Location());
+    shape.setShape(sh);
 
     std::vector<App::DocumentObject*> refs = this->getInList();
     for (std::vector<App::DocumentObject*>::iterator it = refs.begin(); it != refs.end(); ++it) {
@@ -1233,16 +1235,18 @@ Base::Vector3d ProfileBased::getProfileNormal() const {
         SketchOrientation.multVec(SketchVector,SketchVector);
     }
     else {
-        TopoDS_Face face = getVerifiedFace(true);
-        BRepAdaptor_Surface adapt(face);
-        double u = adapt.FirstUParameter() + (adapt.LastUParameter() - adapt.FirstUParameter())/2.;
-        double v = adapt.FirstVParameter() + (adapt.LastVParameter() - adapt.FirstVParameter())/2.;
-        BRepLProp_SLProps prop(adapt,u,v,2,Precision::Confusion());
-        if(prop.IsNormalDefined()) {
-            gp_Pnt pnt; gp_Vec vec;
-            // handles the orientation state of the shape
-            BRepGProp_Face(face).Normal(u,v,pnt,vec);
-            SketchVector = Base::Vector3d(vec.X(), vec.Y(), vec.Z());
+        TopoDS_Shape shape = getVerifiedFace(true);
+        if(shape.ShapeType() == TopAbs_FACE) {
+            BRepAdaptor_Surface adapt(TopoDS::Face(shape));
+            double u = adapt.FirstUParameter() + (adapt.LastUParameter() - adapt.FirstUParameter())/2.;
+            double v = adapt.FirstVParameter() + (adapt.LastVParameter() - adapt.FirstVParameter())/2.;
+            BRepLProp_SLProps prop(adapt,u,v,2,Precision::Confusion());
+            if(prop.IsNormalDefined()) {
+                gp_Pnt pnt; gp_Vec vec;
+                // handles the orientation state of the shape
+                BRepGProp_Face(TopoDS::Face(shape)).Normal(u,v,pnt,vec);
+                SketchVector = Base::Vector3d(vec.X(), vec.Y(), vec.Z());
+            }
         }
     }
     

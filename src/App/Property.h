@@ -27,7 +27,11 @@
 // Std. configurations
 
 #include <Base/Persistence.h>
+#ifndef BOOST_105400
 #include <boost/any.hpp>
+#else
+#include <boost_any_1_55.hpp>
+#endif
 #include <string>
 #include <bitset>
 
@@ -133,6 +137,11 @@ public:
     }
     inline void setStatus(Status pos, bool on) {
         StatusBits.set(static_cast<size_t>(pos), on);
+    }
+    ///Sets property editable/grayed out in property editor
+    void setReadOnly(bool readOnly);
+    inline bool isReadOnly() const {
+        return testStatus(App::Property::ReadOnly);
     }
     //@}
 

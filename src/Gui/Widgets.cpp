@@ -380,49 +380,49 @@ void AccelLineEdit::keyPressEvent ( QKeyEvent * e)
     // If a modifier is pressed without any other key, return.
     // AltGr is not a modifier but doesn't have a QtSring representation.
     switch(key) {
-	case Qt::Key_Backspace:
-	    if (state == Qt::NoModifier){
-	        keyPressedCount = 0;
-                setText(tr("none"));
-	    }   
-	case Qt::Key_Control:
-        case Qt::Key_Shift:
-	case Qt::Key_Alt:
-	case Qt::Key_Meta:
-	case Qt::Key_AltGr:
-            return; 
-        
-
-	default:
-	     break;
+    case Qt::Key_Backspace:
+        if (state == Qt::NoModifier) {
+            keyPressedCount = 0;
+            setText(tr("none"));
+        }
+    case Qt::Key_Control:
+    case Qt::Key_Shift:
+    case Qt::Key_Alt:
+    case Qt::Key_Meta:
+    case Qt::Key_AltGr:
+        return;
+    default:
+        break;
     }
 
     // 4 keys are allowed for QShortcut
     switch(keyPressedCount) {
-	case 4:
-	    keyPressedCount = 0;
-	case 0:
-	    txtLine.clear();
-	    break;
-	default:
-            txtLine += QString::fromLatin1(",");
-	    break;
+    case 4:
+        keyPressedCount = 0;
+        txtLine.clear();
+        break;
+    case 0:
+        txtLine.clear();
+        break;
+    default:
+        txtLine += QString::fromLatin1(",");
+        break;
     }
-    
+
     // Handles modifiers applying a mask.
     if ((state & Qt::ControlModifier) == Qt::ControlModifier) {
         QKeySequence ks(Qt::CTRL);
         txtLine += ks.toString(QKeySequence::NativeText);
     }
-    if (( state & Qt::AltModifier) == Qt::AltModifier) {
+    if ((state & Qt::AltModifier) == Qt::AltModifier) {
         QKeySequence ks(Qt::ALT);
         txtLine += ks.toString(QKeySequence::NativeText);
     }
-    if (( state & Qt::ShiftModifier) == Qt::ShiftModifier) {
+    if ((state & Qt::ShiftModifier) == Qt::ShiftModifier) {
         QKeySequence ks(Qt::SHIFT);
         txtLine += ks.toString(QKeySequence::NativeText);
     }
-    if (( state & Qt::MetaModifier) == Qt::MetaModifier) {
+    if ((state & Qt::MetaModifier) == Qt::MetaModifier) {
         QKeySequence ks(Qt::META);
         txtLine += ks.toString(QKeySequence::NativeText);
     }
@@ -430,9 +430,9 @@ void AccelLineEdit::keyPressEvent ( QKeyEvent * e)
     // Handles normal keys
     QKeySequence ks(key);
     txtLine += ks.toString(QKeySequence::NativeText);
- 
+
     setText(txtLine);
-    keyPressedCount ++ ;
+    keyPressedCount++;
 }
 
 // ------------------------------------------------------------------------------
@@ -1151,32 +1151,33 @@ public:
         QStringList lines;
         if (edit) {
             QString inputText = edit->toPlainText();
-            lines = inputText.split(QString::fromLatin1("\n"));
+            if (!inputText.isEmpty()) // let pass empty input, regardless of the type, so user can void the value
+                lines = inputText.split(QString::fromLatin1("\n"));
         }
-
-        if (type == 1) { // floats
-            bool ok;
-            int line=1;
-            for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it, ++line) {
-                it->toDouble(&ok);
-                if (!ok) {
-                    QMessageBox::critical(this, tr("Invalid input"), tr("Input in line %1 is not a number").arg(line));
-                    return;
+        if (!lines.isEmpty()) {
+            if (type == 1) { // floats
+                bool ok;
+                int line=1;
+                for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it, ++line) {
+                    it->toDouble(&ok);
+                    if (!ok) {
+                        QMessageBox::critical(this, tr("Invalid input"), tr("Input in line %1 is not a number").arg(line));
+                        return;
+                    }
+                }
+            }
+            else if (type == 2) { // integers
+                bool ok;
+                int line=1;
+                for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it, ++line) {
+                    it->toInt(&ok);
+                    if (!ok) {
+                        QMessageBox::critical(this, tr("Invalid input"), tr("Input in line %1 is not a number").arg(line));
+                        return;
+                    }
                 }
             }
         }
-        else if (type == 2) { // integers
-            bool ok;
-            int line=1;
-            for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it, ++line) {
-                it->toInt(&ok);
-                if (!ok) {
-                    QMessageBox::critical(this, tr("Invalid input"), tr("Input in line %1 is not a number").arg(line));
-                    return;
-                }
-            }
-        }
-
         QDialog::accept();
     }
 };
@@ -1196,6 +1197,8 @@ LabelEditor::LabelEditor (QWidget * parent)
 
     connect(lineEdit, SIGNAL(textChanged(const QString &)),
             this, SIGNAL(textChanged(const QString &)));
+    connect(lineEdit, SIGNAL(textChanged(const QString &)),
+            this, SLOT(validateText(const QString &)));
 
     button = new QPushButton(QLatin1String("..."), this);
     button->setFixedWidth(2*button->fontMetrics().width(QLatin1String(" ... ")));
@@ -1247,6 +1250,15 @@ void LabelEditor::changeText()
         QString text = QString::fromUtf8("[%1]").arg(list.join(QLatin1String(",")));
         lineEdit->setText(text);
     }
+}
+
+/**
+ * Validates if the input of the lineedit is a valid list.
+ */
+void LabelEditor::validateText(const QString& s)
+{
+    if ( s.startsWith(QString::fromUtf8("[")) && s.endsWith(QString::fromUtf8("]")) )
+        this->plainText = s.mid(1,s.size()-2).replace(QString::fromUtf8(","),QString::fromUtf8("\n"));
 }
 
 /**

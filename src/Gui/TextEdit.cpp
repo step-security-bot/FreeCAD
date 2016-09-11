@@ -39,7 +39,7 @@ using namespace Gui;
  *  Constructs a TextEdit which is a child of 'parent'.
  */
 TextEdit::TextEdit(QWidget* parent)
-    : QPlainTextEdit(parent), listBox(0)
+    : QPlainTextEdit(parent), cursorPosition(0), listBox(0)
 {
     //Note: Set the correct context to this shortcut as we may use several instances of this
     //class at a time
@@ -442,6 +442,15 @@ void TextEditor::OnChange(Base::Subject<const char*> &rCaller,const char* sReaso
         QFontMetrics metric(font());
         int fontSize = metric.width(QLatin1String("0"));
         setTabStopWidth(tabWidth * fontSize);
+    }
+
+    // Enables/Disables Line number in the Macro Editor from Edit->Preferences->Editor menu.
+    QRect cr = contentsRect();
+    bool show = hPrefGrp->GetBool( "EnableLineNumber", true );
+    if(show) {
+        lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+    } else {
+        lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), 0, cr.height()));
     }
 }
 

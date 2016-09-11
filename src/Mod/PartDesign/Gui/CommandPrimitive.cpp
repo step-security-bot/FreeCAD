@@ -33,6 +33,7 @@
 #include <App/Document.h>
 #include <Gui/Command.h>
 #include <Gui/Action.h>
+#include <Gui/Control.h>
 #include <Gui/MainWindow.h>
 #include <Gui/BitmapFactory.h>
 #include <Gui/Application.h>
@@ -61,6 +62,9 @@ void CmdPrimtiveCompAdditive::activated(int iMsg)
 
     PartDesign::Body *pcActiveBody = PartDesignGui::getBody(/*messageIfNot = */true);
     if (!pcActiveBody) return;
+
+    Gui::ActionGroup* pcAction = qobject_cast<Gui::ActionGroup*>(_pcAction);
+    pcAction->setIcon(pcAction->actions().at(iMsg)->icon());
 
     std::string FeatName;
     std::string CSName = getUniqueObjectName("CoordinateSystem");;
@@ -226,10 +230,7 @@ void CmdPrimtiveCompAdditive::languageChange()
 
 bool CmdPrimtiveCompAdditive::isActive(void)
 {
-    if (getActiveGuiDocument())
-        return true;
-    else
-        return false;
+    return (hasActiveDocument() && !Gui::Control().activeDialog());
 }
 
 DEF_STD_CMD_ACL(CmdPrimtiveCompSubtractive);
@@ -250,6 +251,9 @@ void CmdPrimtiveCompSubtractive::activated(int iMsg)
 {
     PartDesign::Body *pcActiveBody = PartDesignGui::getBody(/*messageIfNot = */true);
     if (!pcActiveBody) return;
+
+    Gui::ActionGroup* pcAction = qobject_cast<Gui::ActionGroup*>(_pcAction);
+    pcAction->setIcon(pcAction->actions().at(iMsg)->icon());
 
     //check if we already have a feature as subtractive ones work only if we have
     //something to subtract from.
@@ -426,10 +430,7 @@ void CmdPrimtiveCompSubtractive::languageChange()
 
 bool CmdPrimtiveCompSubtractive::isActive(void)
 {
-    if (getActiveGuiDocument())
-        return true;
-    else
-        return false;
+    return (hasActiveDocument() && !Gui::Control().activeDialog());
 }
 
 //===========================================================================

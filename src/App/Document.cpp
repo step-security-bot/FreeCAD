@@ -71,10 +71,10 @@ recompute path. Also enables more complicated dependencies beyond trees.
 
 
 #include "Document.h"
-#include "DocumentPy.h"
 #include "Application.h"
 #include "DocumentObject.h"
 #include "MergeDocuments.h"
+#include <App/DocumentPy.h>
 
 #include <Base/Console.h>
 #include <Base/Exception.h>
@@ -135,10 +135,7 @@ struct DocumentP
     std::map<std::string,DocumentObject*> objectMap;
     DocumentObject* activeObject;
     Transaction *activeUndoTransaction;
-    Transaction *activeTransaction; ///< FIXME: has no effect (2015-09-01, Fat-Zer)
     int iTransactionMode;
-    int iTransactionCount;
-    std::map<int,Transaction*> mTransactions;
     std::map<Vertex,DocumentObject*> vertexMap;
     bool rollback;
     bool undoing; ///< document in the middle of undo or redo
@@ -153,9 +150,7 @@ struct DocumentP
     DocumentP() {
         activeObject = 0;
         activeUndoTransaction = 0;
-        activeTransaction = 0;
         iTransactionMode = 0;
-        iTransactionCount = 0;
         rollback = false;
         undoing = false;
         closable = true;
@@ -825,7 +820,7 @@ void Document::onChanged(const Property* prop)
     }
 }
 
-void Document::onBeforeChangeProperty(const DocumentObject *Who, const Property *What)
+void Document::onBeforeChangeProperty(const TransactionalObject *Who, const Property *What)
 {
     if (d->activeUndoTransaction && !d->rollback)
         d->activeUndoTransaction->addObjectChange(Who,What);
@@ -833,66 +828,13 @@ void Document::onBeforeChangeProperty(const DocumentObject *Who, const Property 
 
 void Document::onChangedProperty(const DocumentObject *Who, const Property *What)
 {
-    if (d->activeTransaction && !d->rollback)
-        d->activeTransaction->addObjectChange(Who,What);
     signalChangedObject(*Who, *What);
 }
 
 void Document::setTransactionMode(int iMode)
 {
-    /*  if(_iTransactionMode == 0 && iMode == 1)
-        beginTransaction();
-
-      if(activTransaction && iMode == 0)
-        endTransaction();
-      */
     d->iTransactionMode = iMode;
 }
-
-#if 0
-/// starts a new transaction
-int  Document::beginTransaction(void)
-{
-    if (activTransaction)
-        endTransaction();
-
-    iTransactionCount++;
-
-    activTransaction = new Transaction(iTransactionCount);
-    d->mTransactions[iTransactionCount] = activTransaction;
-
-    return iTransactionCount;
-}
-
-/// revert all changes to the document since beginTransaction()
-void Document::rollbackTransaction(void)
-{
-    // ToDo
-    assert(0);
-    endTransaction();
-}
-
-/// ends the open Transaction
-int  Document::endTransaction(void)
-{
-    activTransaction = 0;
-    return iTransactionCount;
-}
-
-/// returns the named Transaction
-const Transaction *Document::getTransaction(int pos) const
-{
-    if (pos == -1)
-        return activTransaction;
-    else {
-        std::map<int,Transaction*>::const_iterator Pos(d->mTransactions.find(pos));
-        if (Pos != d->mTransactions.end())
-            return Pos->second;
-        else
-            return 0;
-    }
-}
-#endif
 
 //--------------------------------------------------------------------------
 // constructor
@@ -1446,7 +1388,8 @@ bool Document::save (void)
                     fn = str.str();
                 }
 
-                fi.renameFile(fn.c_str());
+                if (fi.renameFile(fn.c_str()) == false)
+                    Base::Console().Warning("Cannot rename project file to backup file\n");
             }
             else {
                 fi.deleteFile();
@@ -1468,10 +1411,14 @@ void Document::restore (void)
     // clean up if the document is not empty
     // !TODO mind exeptions while restoring!
     clearUndos();
+    // first notify the objects to being deleted and then delete them in a second loop (#0002521)
+    // FIXME: To delete every object individually is inefficient. Add a new signal 'signalClear'
+    // and then clear everything in one go.
     for (std::vector<DocumentObject*>::iterator obj = d->objectArray.begin(); obj != d->objectArray.end(); ++obj) {
-        // NOTE don't call unsetupObject () here due to it is intended to do some manipulations
-        //      on other objects, but here we are wiping out document completely
         signalDeletedObject(*(*obj));
+        signalTransactionRemove(*(*obj), 0);
+    }
+    for (std::vector<DocumentObject*>::iterator obj = d->objectArray.begin(); obj != d->objectArray.end(); ++obj) {
         delete *obj;
     }
     d->objectArray.clear();
@@ -1959,9 +1906,6 @@ DocumentObject * Document::addObject(const char* sType, const char* pObjectName,
 
     // do no transactions if we do a rollback!
     if (!d->rollback) {
-        // Transaction stuff
-        if (d->activeTransaction)
-            d->activeTransaction->addObjectNew(pcObject);
         // Undo stuff
         if (d->activeUndoTransaction)
             d->activeUndoTransaction->addObjectDel(pcObject);
@@ -1995,6 +1939,12 @@ DocumentObject * Document::addObject(const char* sType, const char* pObjectName,
     // mark the object as new (i.e. set status bit 2) and send the signal
     pcObject->StatusBits.set(2);
     signalNewObject(*pcObject);
+
+    // do no transactions if we do a rollback!
+    if (!d->rollback && d->activeUndoTransaction) {
+        signalTransactionAppend(*pcObject, d->activeUndoTransaction);
+    }
+
     signalActivatedObject(*pcObject);
 
     // return the Object
@@ -2011,9 +1961,6 @@ void Document::addObject(DocumentObject* pcObject, const char* pObjectName)
 
     // do no transactions if we do a rollback!
     if (!d->rollback) {
-        // Transaction stuff
-        if (d->activeTransaction)
-            d->activeTransaction->addObjectNew(pcObject);
         // Undo stuff
         if (d->activeUndoTransaction)
             d->activeUndoTransaction->addObjectDel(pcObject);
@@ -2040,6 +1987,12 @@ void Document::addObject(DocumentObject* pcObject, const char* pObjectName)
     // mark the object as new (i.e. set status bit 2) and send the signal
     pcObject->StatusBits.set(2);
     signalNewObject(*pcObject);
+
+    // do no transactions if we do a rollback!
+    if (!d->rollback && d->activeUndoTransaction) {
+        signalTransactionAppend(*pcObject, d->activeUndoTransaction);
+    }
+
     signalActivatedObject(*pcObject);
 }
 
@@ -2052,16 +2005,19 @@ void Document::_addObject(DocumentObject* pcObject, const char* pObjectName)
     pcObject->pcNameInDocument = &(d->objectMap.find(ObjectName)->first);
 
     // do no transactions if we do a rollback!
-    if(!d->rollback){
-        // Transaction stuff
-        if (d->activeTransaction)
-            d->activeTransaction->addObjectNew(pcObject);
+    if (!d->rollback) {
         // Undo stuff
         if (d->activeUndoTransaction)
             d->activeUndoTransaction->addObjectDel(pcObject);
     }
+
     // send the signal
     signalNewObject(*pcObject);
+
+    // do no transactions if we do a rollback!
+    if (!d->rollback && d->activeUndoTransaction) {
+        signalTransactionAppend(*pcObject, d->activeUndoTransaction);
+    }
 
     d->activeObject = pcObject;
     signalActivatedObject(*pcObject);
@@ -2086,8 +2042,19 @@ void Document::remObject(const char* sName)
     if (!d->undoing && !d->rollback) {
         pos->second->unsetupObject();
     }
+
     signalDeletedObject(*(pos->second));
     pos->second->StatusBits.reset (ObjectStatus::Delete); // Unset the bit to be on the safe side
+
+    // do no transactions if we do a rollback!
+    if (!d->rollback && d->activeUndoTransaction) {
+        // in this case transaction delete or save the object
+        signalTransactionRemove(*pos->second, d->activeUndoTransaction);
+    }
+    else {
+        // if not saved in undo -> delete object
+        signalTransactionRemove(*pos->second, 0);
+    }
 
     if (!d->vertexMap.empty()) {
         // recompute of document is running
@@ -2109,22 +2076,16 @@ void Document::remObject(const char* sName)
     }
 
     // do no transactions if we do a rollback!
-    if(!d->rollback){
-
-        // Transaction stuff
-        if (d->activeTransaction)
-            d->activeTransaction->addObjectDel(pos->second);
-
+    if (!d->rollback) {
         // Undo stuff
         if (d->activeUndoTransaction) {
             // in this case transaction delete or save the object
             d->activeUndoTransaction->addObjectNew(pos->second);
-            // set name cache false
-            //pos->second->pcNameInDocument = 0;
         }
-        else
+        else {
             // if not saved in undo -> delete object
             delete pos->second;
+        }
     }
 
     for (std::vector<DocumentObject*>::iterator obj = d->objectArray.begin(); obj != d->objectArray.end(); ++obj) {
@@ -2161,31 +2122,37 @@ void Document::_remObject(DocumentObject* pcObject)
     pcObject->StatusBits.reset (ObjectStatus::Delete); // Unset the bit to be on the safe side
 
     //remove the tip if needed
-    if(Tip.getValue() == pcObject) {
+    if (Tip.getValue() == pcObject) {
         Tip.setValue(nullptr);
         TipName.setValue("");
     }
 
     // do no transactions if we do a rollback!
-    if(!d->rollback){
-        // Transaction stuff
-        if (d->activeTransaction)
-            d->activeTransaction->addObjectDel(pcObject);
-
+    if (!d->rollback) {
         // Undo stuff
-        if (d->activeUndoTransaction)
+        if (d->activeUndoTransaction) {
+            signalTransactionRemove(*pcObject, d->activeUndoTransaction);
             d->activeUndoTransaction->addObjectNew(pcObject);
+        }
     }
+    else {
+        // for a rollback delete the object
+        signalTransactionRemove(*pcObject, 0);
+    }
+
     // remove from map
     d->objectMap.erase(pos);
-    //// set name cache false
-    //pcObject->pcNameInDocument = 0;
 
     for (std::vector<DocumentObject*>::iterator it = d->objectArray.begin(); it != d->objectArray.end(); ++it) {
         if (*it == pcObject) {
             d->objectArray.erase(it);
             break;
         }
+    }
+
+    // for a rollback delete the object
+    if (d->rollback) {
+        delete pcObject;
     }
 }
 

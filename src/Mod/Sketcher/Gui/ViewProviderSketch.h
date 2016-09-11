@@ -99,6 +99,11 @@ public:
     virtual ~ViewProviderSketch();
 
     App::PropertyBool Autoconstraints;
+    App::PropertyPythonObject TempoVis;
+    App::PropertyBool HideDependent;
+    App::PropertyBool ShowLinks;
+    App::PropertyBool ShowSupport;
+    App::PropertyBool RestoreCamera;
 
     /// Draw all constraint icons
     /*! Except maybe the radius and lock ones? */
@@ -388,7 +393,6 @@ protected:
     bool relative;
 
     std::string oldWb;
-    int antiAliasing;
 
     Gui::Rubberband* rubberband;
     App::Part*          parentPart = nullptr;

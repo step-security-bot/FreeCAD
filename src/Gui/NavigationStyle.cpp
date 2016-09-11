@@ -63,10 +63,12 @@ struct NavigationStyleP {
     NavigationStyleP()
     {
         this->animationsteps = 0;
+        this->animationdelta = 0;
         this->sensitivity = 2.0f;
         this->resetcursorpos = false;
         this->dragPointFound = false;
         this->dragAtCursor = false;
+        this->animsensor = 0;
     }
     static void viewAnimationCB(void * data, SoSensor * sensor);
 };
@@ -309,7 +311,7 @@ SbBool NavigationStyle::lookAtPoint(const SbVec2s screenpos)
 
     SoRayPickAction rpaction(viewer->getSoRenderManager()->getViewportRegion());
     rpaction.setPoint(screenpos);
-    rpaction.setRadius(2);
+    rpaction.setRadius(viewer->getPickRadius());
     rpaction.apply(viewer->getSoRenderManager()->getSceneGraph());
 
     SoPickedPoint * picked = rpaction.getPickedPoint();
@@ -463,6 +465,8 @@ void NavigationStyleP::viewAnimationCB(void * data, SoSensor * sensor)
         SbRotation slerp = SbRotation::slerp(that->spinRotation, PRIVATE(that)->endRotation, step);
         SbVec3f focalpoint = (1.0f-step)*PRIVATE(that)->focal1 + step*PRIVATE(that)->focal2;
         SoCamera* cam = that->viewer->getSoRenderManager()->getCamera();
+        if (!cam) return; // no camera
+
         SbVec3f direction;
         cam->orientation.setValue(slerp);
         cam->orientation.getValue().multVec(SbVec3f(0, 0, -1), direction);
@@ -992,7 +996,7 @@ void NavigationStyle::saveCursorPosition(const SoEvent * const ev)
     if (PRIVATE(this)->dragAtCursor) {
         SoRayPickAction rpaction(viewer->getSoRenderManager()->getViewportRegion());
         rpaction.setPoint(this->localPos);
-        rpaction.setRadius(2);
+        rpaction.setRadius(viewer->getPickRadius());
         rpaction.apply(viewer->getSoRenderManager()->getSceneGraph());
 
         SoPickedPoint * picked = rpaction.getPickedPoint();
@@ -1056,6 +1060,7 @@ SbBool NavigationStyle::handleEventInForeground(const SoEvent* const e)
 {
     SoHandleEventAction action(viewer->getSoRenderManager()->getViewportRegion());
     action.setEvent(e);
+    action.setPickRadius(viewer->getPickRadius());
     action.apply(viewer->foregroundroot);
     return action.isHandled();
 }

@@ -273,7 +273,7 @@ App::DocumentObjectExecReturn *Draft::execute(void)
 
         do {
             success = true;
-            mkDraft.Init(baseShape._Shape);
+            mkDraft.Init(baseShape.getShape());
 
             for (std::vector<std::string>::iterator it=SubVals.begin(); it != SubVals.end(); ++it) {
                 TopoDS_Face face = TopoDS::Face(baseShape.getSubShape(it->c_str()));
@@ -302,7 +302,7 @@ App::DocumentObjectExecReturn *Draft::execute(void)
         if (shape.IsNull())
             return new App::DocumentObjectExecReturn("Resulting shape is null");
 
-        this->Shape.setValue(shape);
+        this->Shape.setValue(getSolid(shape));
         return App::DocumentObject::StdReturn;
     }
     catch (Standard_Failure) {

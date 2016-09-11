@@ -36,10 +36,6 @@ using namespace PartDesign;
 const char* PartDesign::Thickness::ModeEnums[] = {"Skin","Pipe", "RectoVerso",NULL};
 const char* PartDesign::Thickness::JoinEnums[] = {"Arc", "Intersection",NULL};
 
-namespace PartDesign {
-    const App::PropertyQuantityConstraint::Constraints quantityRange  = {0.0,FLT_MAX,0.1};
-}
-
 PROPERTY_SOURCE(PartDesign::Thickness, PartDesign::DressUp)
 
 Thickness::Thickness()
@@ -89,8 +85,8 @@ App::DocumentObjectExecReturn *Thickness::execute(void)
         join = 2;
 
     if (fabs(thickness) > 2*tol)
-        this->Shape.setValue(TopShape.makeThickSolid(closingFaces, thickness, tol, false, false, mode, join));
+        this->Shape.setValue(getSolid(TopShape.makeThickSolid(closingFaces, thickness, tol, false, false, mode, join)));
     else
-        this->Shape.setValue(TopShape._Shape);
+        this->Shape.setValue(getSolid(TopShape.getShape()));
     return App::DocumentObject::StdReturn;
 }

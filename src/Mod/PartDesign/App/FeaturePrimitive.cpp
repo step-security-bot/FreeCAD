@@ -54,7 +54,6 @@ using namespace PartDesign;
 
 namespace PartDesign {
 
-const App::PropertyQuantityConstraint::Constraints apexRange   = {0.0,90.0,0.1};
 const App::PropertyQuantityConstraint::Constraints torusRangeV = {-180.0,180.0,1.0};
 const App::PropertyQuantityConstraint::Constraints angleRangeU = {0.0,360.0,1.0};
 const App::PropertyQuantityConstraint::Constraints angleRangeV = {-90.0,90.0,1.0};
@@ -104,7 +103,7 @@ App::DocumentObjectExecReturn* FeaturePrimitive::execute(const TopoDS_Shape& pri
              AddSubShape.setValue(primitiveShape);
              
              if(getAddSubType() == FeatureAddSub::Additive)
-                 Shape.setValue(primitiveShape);
+                 Shape.setValue(getSolid(primitiveShape));
              else 
                  return new App::DocumentObjectExecReturn("Cannot subtract primitive feature without base feature");   
              
@@ -123,7 +122,7 @@ App::DocumentObjectExecReturn* FeaturePrimitive::execute(const TopoDS_Shape& pri
                 return new App::DocumentObjectExecReturn("Resulting shape is not a solid");
             
             boolOp = refineShapeIfActive(boolOp);
-            Shape.setValue(boolOp);
+            Shape.setValue(getSolid(boolOp));
             AddSubShape.setValue(primitiveShape);
         }
         else if(getAddSubType() == FeatureAddSub::Subtractive) {
@@ -138,7 +137,7 @@ App::DocumentObjectExecReturn* FeaturePrimitive::execute(const TopoDS_Shape& pri
                 return new App::DocumentObjectExecReturn("Resulting shape is not a solid");
             
             boolOp = refineShapeIfActive(boolOp);
-            Shape.setValue(boolOp);
+            Shape.setValue(getSolid(boolOp));
             AddSubShape.setValue(primitiveShape);
         }
         

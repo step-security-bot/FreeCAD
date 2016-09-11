@@ -64,7 +64,12 @@ using namespace Gui;
 /* TRANSLATOR FemGui::TaskFemConstraint */
 
 TaskFemConstraint::TaskFemConstraint(ViewProviderFemConstraint *ConstraintView,QWidget *parent,const char* pixmapname)
-    : TaskBox(Gui::BitmapFactory().pixmap(pixmapname),tr("FEM constraint parameters"),true, parent),ConstraintView(ConstraintView)
+    : TaskBox(Gui::BitmapFactory().pixmap(pixmapname),tr("FEM constraint parameters"),true, parent)
+    , proxy(nullptr)
+    , ConstraintView(ConstraintView)
+    , buttonBox(nullptr)
+    , okButton(nullptr)
+    , cancelButton(nullptr)
 {
     selectionMode = selref;
 
@@ -116,7 +121,7 @@ const std::string TaskFemConstraint::getReferences(const std::vector<std::string
 }
 
 const std::string TaskFemConstraint::getScale() const //OvG: Return pre-calculated scale for constraint display
-{   
+{
     std::string result;
     Fem::Constraint* pcConstraint = static_cast<Fem::Constraint*>(ConstraintView->getObject());
     result = boost::lexical_cast<std::string>(pcConstraint->Scale.getValue());
