@@ -32,11 +32,11 @@ clone_depth: 1600
 install:
   - cd C:\projects\freecad
   - if [%ARCH%] == [Win64] (
-      powershell -Command "Start-FileDownload https://github.com/FreeCAD/FreeCAD-ports-cache/releases/download/v0.17/FreeCADLibs_11.3_x64_VC12.7z" &&
+      powershell -Command "Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.16/FreeCADLibs_11.3_x64_VC12.7z" &&
       7z x FreeCADLibs_11.3_x64_VC12.7z > nul &&
       ren FreeCADLibs_11.3_x64_VC12 FreeCADLibs)
   - if [%ARCH%] == [Win32] (
-      powershell -Command "Start-FileDownload https://github.com/FreeCAD/FreeCAD-ports-cache/releases/download/v0.17/FreeCADLibs_11.3_x86_VC12.7z" &&
+      powershell -Command "Start-FileDownload https://github.com/FreeCAD/FreeCAD/releases/download/0.16/FreeCADLibs_11.3_x86_VC12.7z" &&
       7z x FreeCADLibs_11.3_x86_VC12.7z > nul &&
       ren FreeCADLibs_11.3_x86_VC12 FreeCADLibs)
   - ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.2.0.zip
