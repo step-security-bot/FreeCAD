@@ -6,7 +6,7 @@ environment:
   matrix:
     - generator: "Visual Studio 12 Win64"
       ARCH: "Win64"
-      #Compiler: "MSVC2013"
+      Compiler: "MSVC2013"
 
 cache:
   - C:\projects\clcache
@@ -45,6 +45,7 @@ install:
   #- set CLCACHE_LOG=1
   #- set CLCACHE_HARDLINK=1
   #- set CLCACHE_NODIRECT=1
+  #- set CLCACHE_OBJECT_CACHE_TIMEOUT_MS=20000
   - cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64"
   - ren cl.exe cl_original.exe
   - ren cl.exe.config cl_original.exe.config
