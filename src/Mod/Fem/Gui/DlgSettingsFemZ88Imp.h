@@ -1,8 +1,7 @@
  /**************************************************************************
- *   Copyright (c) 2015 FreeCAD Developers                                 *
- *   Author: Przemo Firszt <przemo@firszt.eu>                              *
+ *   Copyright (c) 2016 FreeCAD Developers                                 *
  *   Author: Bernd Hahnebach <bernd@bimstatik.ch>                          *
- *   Based on src/Mod/Fem/Gui/DlgSettingsFemGeneralImp.h                   *
+ *   Based on src/Mod/Fem/Gui/DlgSettingsFemCcx.h                          *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -24,21 +23,21 @@
  ***************************************************************************/
 
 
-#ifndef FEMGUI_DLGSETTINGSFEMCCXIMP_H
-#define FEMGUI_DLGSETTINGSFEMCCXIMP_H
+#ifndef FEMGUI_DLGSETTINGSFEMZ88IMP_H
+#define FEMGUI_DLGSETTINGSFEMZ88IMP_H
 
-#include "ui_DlgSettingsFemCcx.h"
+#include "ui_DlgSettingsFemZ88.h"
 #include <Gui/PropertyPage.h>
 
 namespace FemGui {
 
-class DlgSettingsFemCcxImp : public Gui::Dialog::PreferencePage, public Ui_DlgSettingsFemCcxImp
+class DlgSettingsFemZ88Imp : public Gui::Dialog::PreferencePage, public Ui_DlgSettingsFemZ88Imp
 {
     Q_OBJECT
 
 public:
-    DlgSettingsFemCcxImp( QWidget* parent = 0 );
-    ~DlgSettingsFemCcxImp();
+    DlgSettingsFemZ88Imp( QWidget* parent = 0 );
+    ~DlgSettingsFemZ88Imp();
 
 protected:
     void saveSettings();
@@ -48,4 +47,4 @@ protected:
 
 } // namespace FemGui
 
-#endif // FEMGUI_DLGSETTINGSFEMCCXIMP_H
+#endif // FEMGUI_DLGSETTINGSFEMZ88IMP_H
