@@ -4,11 +4,11 @@ environment:
   matrix:
     - generator: "Visual Studio 12 Win64"
       ARCH: "Win64"
-      Compiler: "MSVC2013"
+      #Compiler: "MSVC2013"
       CLCACHE_CL: "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/cl_original.exe"
     - generator: "Visual Studio 12"
       ARCH: "Win32"
-      Compiler: "MSVC2013"
+      #Compiler: "MSVC2013"
       CLCACHE_CL: "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/cl_original.exe"
 
 cache:
