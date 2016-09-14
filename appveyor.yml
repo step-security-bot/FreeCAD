@@ -41,11 +41,12 @@ install:
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
   - ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.2.0.zip
   - 7z x v3.2.0.zip > nul
+  - ren clcache-3.2.0 clcache-bin
   - python --version
   - set PATH=C:\\Python35;%PATH%
   - set PATH=C:\\Python35\\Scripts;%PATH%
   - python --version
-  - cd clcache-3.2.0
+  - cd clcache-bin
   - pip install pyinstaller
   - pyinstaller --onefile clcache.py
   - cd dist
@@ -59,12 +60,11 @@ install:
   - if [%ARCH%] == [Win32] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - ren cl.exe cl_original.exe
   - ren cl.exe.config cl_original.exe.config
-  - if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
-  - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-3.2.0\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
+  - if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
+  - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cl.exe --help
-  #- cl.exe -C
-  #- cl.exe -z
-  - cl.exe -c
+  - cl.exe -C
+  - cl.exe -z
   - cl.exe -s
 
 build_script:
@@ -79,10 +79,11 @@ build_script:
   - msbuild /m FreeCAD_Trunk.sln
 
 after_build:
-  - cd "C:\projects\freecad\clcache-3.2.0\dist"
-  - cl.exe -s
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
+  - cd "C:\projects\freecad\clcache-bin\dist"
+  - cl.exe -s
+  - cl.exe -c
 
 #artifacts:
 
