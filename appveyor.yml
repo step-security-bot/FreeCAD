@@ -64,6 +64,7 @@ install:
   - cl.exe --help
   #- cl.exe -C
   #- cl.exe -z
+  - cl.exe -c
   - cl.exe -s
 
 build_script:
