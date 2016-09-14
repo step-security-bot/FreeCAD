@@ -54,8 +54,8 @@ install:
   - set CLCACHE_DIR=C:\projects\clcache
   #- set CLCACHE_LOG=1
   #- set CLCACHE_HARDLINK=1
-  #- set CLCACHE_NODIRECT=1
-  - set CLCACHE_OBJECT_CACHE_TIMEOUT_MS=200000
+  - set CLCACHE_NODIRECT=1
+  #- set CLCACHE_OBJECT_CACHE_TIMEOUT_MS=20000
   - if [%ARCH%] == [Win64] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
   - if [%ARCH%] == [Win32] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - ren cl.exe cl_original.exe
@@ -65,6 +65,7 @@ install:
   - cl.exe --help
   #- cl.exe -C
   #- cl.exe -z
+  #- cl.exe -c
   - cl.exe -s
 
 build_script:
@@ -83,7 +84,6 @@ after_build:
   - FreeCADCmd.exe --run-test 0
   - cd "C:\projects\freecad\clcache-bin\dist"
   - cl.exe -s
-  - cl.exe -c
 
 #artifacts:
 
