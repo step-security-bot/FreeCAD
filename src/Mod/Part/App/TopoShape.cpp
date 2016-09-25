@@ -923,19 +923,19 @@ Base::BoundBox3d TopoShape::getBoundBox(void) const
     return box;
 }
 
-void TopoShape::Save (Base::Writer & writer) const
+void TopoShape::Save (Base::Writer & ) const
 {
 }
 
-void TopoShape::Restore(Base::XMLReader &reader)
+void TopoShape::Restore(Base::XMLReader &)
 {
 }
 
-void TopoShape::SaveDocFile (Base::Writer &writer) const
+void TopoShape::SaveDocFile (Base::Writer &) const
 {
 }
 
-void TopoShape::RestoreDocFile(Base::Reader &reader)
+void TopoShape::RestoreDocFile(Base::Reader &)
 {
 }
 
@@ -1396,11 +1396,15 @@ TopoDS_Compound TopoShape::slices(const Base::Vector3d& dir, const std::vector<d
     return comp;
 }
 
-TopoDS_Shape TopoShape::generalFuse(const std::vector<TopoDS_Shape> &sOthers, Standard_Real tolerance, std::vector<TopTools_ListOfShape>* mapInOut) const
+TopoDS_Shape TopoShape::generalFuse(const std::vector<TopoDS_Shape> &sOthers, Standard_Real tolerance,
+                                    std::vector<TopTools_ListOfShape>* mapInOut) const
 {
     if (this->_Shape.IsNull())
         Standard_Failure::Raise("Base shape is null");
 #if OCC_VERSION_HEX < 0x060900
+    (void)sOthers;
+    (void)tolerance;
+    (void)mapInOut;
     throw Base::AttributeError("GFA is available only in OCC 6.9.0 and up.");
 #else
     BRepAlgoAPI_BuilderAlgo mkGFA;
@@ -1520,6 +1524,7 @@ TopoDS_Shape TopoShape::makeTube() const
 #else 
 static Handle(Law_Function) CreateBsFunction (const Standard_Real theFirst, const Standard_Real theLast, const Standard_Real theRadius)
 {
+    (void)theRadius;
     //Handle_Law_BSpline aBs;
     //Handle_Law_BSpFunc aFunc = new Law_BSpFunc (aBs, theFirst, theLast);
     Handle_Law_Constant aFunc = new Law_Constant();
@@ -2129,7 +2134,10 @@ TopoDS_Shape TopoShape::makeOffset2D(double offset, short joinType, bool fill, b
                         throw Base::Exception("BRepOffsetAPI_MakeOffset has crashed! (Unknown exception caught)");
                     }
 
-                    TopoDS_Shape offsetWire = mkOffset.Shape();
+                    //Copying shape to fix strange orientation behavior, OCC7.0.0. See bug #2699
+                    // http://www.freecadweb.org/tracker/view.php?id=2699
+                    TopoDS_Shape offsetWire = BRepBuilderAPI_Copy(mkOffset.Shape()).Shape();
+
                     if (offsetWire.IsNull())
                         throw Base::Exception("makeOffset2D: result of offset is null!");
                     ShapeExtend_Explorer xp; //using this explorer allows to avoid checking output type
@@ -2181,7 +2189,9 @@ TopoDS_Shape TopoShape::makeOffset2D(double offset, short joinType, bool fill, b
                 throw Base::Exception("BRepOffsetAPI_MakeOffset has crashed! (Unknown exception caught)");
             }
 
-            offsetWire = mkOffset.Shape();
+            //Copying shape to fix strange orientation behavior, OCC7.0.0. See bug #2699
+            // http://www.freecadweb.org/tracker/view.php?id=2699
+            offsetWire = BRepBuilderAPI_Copy(mkOffset.Shape()).Shape();
         } else {
             offsetWire = sourceWire;
         }
@@ -2320,13 +2330,13 @@ TopoDS_Shape TopoShape::makeOffset2D(double offset, short joinType, bool fill, b
 
             mkWire.Build();
 
-            wires.push_front(TopoDS::Wire(mkWire.Wire().Reversed())); //not sure, why need reversing here. Found by trial-and-error
+            wires.push_front(mkWire.Wire());
             largestWire = &wires.front();
         }
 
         //make the face
         //TODO: replace all this reverseness alchemy with a common direction-tolerant face-with-holes-making code
-        BRepBuilderAPI_MakeFace mkFace(*largestWire);
+        BRepBuilderAPI_MakeFace mkFace(TopoDS::Wire(offset < 0 ? (*largestWire) : (*largestWire).Reversed()));
         for(TopoDS_Wire &w : wires){
             if (&w != largestWire)
                 mkFace.Add(TopoDS::Wire(w.Reversed()));
@@ -2670,7 +2680,7 @@ const double MeshVertex::MESH_MIN_PT_DIST = gp::Resolution();
 
 void TopoShape::getFaces(std::vector<Base::Vector3d> &aPoints,
                          std::vector<Facet> &aTopo,
-                         float accuracy, uint16_t flags) const
+                         float accuracy, uint16_t /*flags*/) const
 {
     if (this->_Shape.IsNull())
         return;
@@ -2804,7 +2814,7 @@ void TopoShape::setFaces(const std::vector<Base::Vector3d> &Points,
 
 void TopoShape::getPoints(std::vector<Base::Vector3d> &Points,
                           std::vector<Base::Vector3d> &Normals,
-                          float Accuracy, uint16_t flags) const
+                          float Accuracy, uint16_t /*flags*/) const
 {
     if (_Shape.IsNull())
         return;
@@ -2914,6 +2924,9 @@ void TopoShape::getLinesFromSubelement(const Data::Segment* element,
                                        std::vector<Base::Vector3d> &Points,
                                        std::vector<Line> &lines) const
 {
+    (void)element;
+    (void)Points;
+    (void)lines;
 }
 
 void TopoShape::getFacesFromSubelement(const Data::Segment* element,
