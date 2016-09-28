@@ -20,21 +20,42 @@
 # *                                                                         *
 # ***************************************************************************
 
-__title__ = "FemConstraintSelfWeight"
+__title__ = "_ViewProviderFemMaterialMechanicalNonlinear"
 __author__ = "Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
 
-import FreeCAD
-import FemGui
-import _FemConstraintSelfWeight
+from pivy import coin
 
 
-def makeFemConstraintSelfWeight(name="FemConstraintSelfWeight"):
-    '''makeFemFemConstraintSelfWeight([name]): creates an self weight object to define a gravity load'''
-    obj = FemGui.getActiveAnalysis().Document.addObject("Fem::FeaturePython", name)
-    _FemConstraintSelfWeight._FemConstraintSelfWeight(obj)
-    if FreeCAD.GuiUp:
-        import _ViewProviderFemConstraintSelfWeight
-        _ViewProviderFemConstraintSelfWeight._ViewProviderFemConstraintSelfWeight(obj.ViewObject)
-    return obj
+class _ViewProviderFemMaterialMechanicalNonlinear:
+    "A View Provider for the FemMaterialMechanicalNonlinear object"
+    def __init__(self, vobj):
+        vobj.Proxy = self
+
+    def getIcon(self):
+        return ":/icons/fem-material-nonlinear.svg"
+
+    def attach(self, vobj):
+        self.ViewObject = vobj
+        self.Object = vobj.Object
+        self.standard = coin.SoGroup()
+        vobj.addDisplayMode(self.standard, "Standard")
+
+    def getDisplayModes(self, obj):
+        return ["Standard"]
+
+    def getDefaultDisplayMode(self):
+        return "Standard"
+
+    def updateData(self, obj, prop):
+        return
+
+    def onChanged(self, vobj, prop):
+        return
+
+    def __getstate__(self):
+        return None
+
+    def __setstate__(self, state):
+        return None

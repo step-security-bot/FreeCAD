@@ -20,21 +20,22 @@
 # *                                                                         *
 # ***************************************************************************
 
-__title__ = "FemConstraintSelfWeight"
+__title__ = "FemMaterialMechanicalNonlinear"
 __author__ = "Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
 
 import FreeCAD
 import FemGui
-import _FemConstraintSelfWeight
+import _FemMaterialMechanicalNonlinear
 
 
-def makeFemConstraintSelfWeight(name="FemConstraintSelfWeight"):
-    '''makeFemFemConstraintSelfWeight([name]): creates an self weight object to define a gravity load'''
+def makeFemMaterialMechanicalNonlinear(base_material, name="MechanicalMaterialNonlinear"):
+    '''makeFemMaterialMechanicalNonlinear(base_material, [name]): creates an nonlinear material object'''
     obj = FemGui.getActiveAnalysis().Document.addObject("Fem::FeaturePython", name)
-    _FemConstraintSelfWeight._FemConstraintSelfWeight(obj)
+    _FemMaterialMechanicalNonlinear._FemMaterialMechanicalNonlinear(obj)
+    obj.LinearBaseMaterial = base_material
     if FreeCAD.GuiUp:
-        import _ViewProviderFemConstraintSelfWeight
-        _ViewProviderFemConstraintSelfWeight._ViewProviderFemConstraintSelfWeight(obj.ViewObject)
+        import _ViewProviderFemMaterialMechanicalNonlinear
+        _ViewProviderFemMaterialMechanicalNonlinear._ViewProviderFemMaterialMechanicalNonlinear(obj.ViewObject)
     return obj

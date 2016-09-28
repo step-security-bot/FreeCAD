@@ -20,21 +20,29 @@
 # *                                                                         *
 # ***************************************************************************
 
-__title__ = "FemConstraintSelfWeight"
+__title__ = "the fem nonlinear mechanical material object"
 __author__ = "Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
 
-import FreeCAD
-import FemGui
-import _FemConstraintSelfWeight
+class _FemMaterialMechanicalNonlinear:
+    "The FemMaterialMechanicalNonlinear object"
+    def __init__(self, obj):
+        obj.Proxy = self
+        self.Type = "FemMaterialMechanicalNonlinear"
 
+        obj.addProperty("App::PropertyLink", "LinearBaseMaterial", "Base", "Set the linear material the nonlinear build uppon.")
 
-def makeFemConstraintSelfWeight(name="FemConstraintSelfWeight"):
-    '''makeFemFemConstraintSelfWeight([name]): creates an self weight object to define a gravity load'''
-    obj = FemGui.getActiveAnalysis().Document.addObject("Fem::FeaturePython", name)
-    _FemConstraintSelfWeight._FemConstraintSelfWeight(obj)
-    if FreeCAD.GuiUp:
-        import _ViewProviderFemConstraintSelfWeight
-        _ViewProviderFemConstraintSelfWeight._ViewProviderFemConstraintSelfWeight(obj.ViewObject)
-    return obj
+        choices_nonlinear_material_models = ["simple hardening"]
+        obj.addProperty("App::PropertyEnumeration", "MaterialModelNonlinearity", "Fem", "Set the type on nonlinear material model")
+        obj.MaterialModelNonlinearity = choices_nonlinear_material_models
+        obj.MaterialModelNonlinearity = choices_nonlinear_material_models[0]
+
+        obj.addProperty("App::PropertyString", "YieldPoint1", "Fem", "Set stress and strain for yield point one, separated by a comma.")
+        obj.YieldPoint1 = "235.0, 0.0"
+
+        obj.addProperty("App::PropertyString", "YieldPoint2", "Fem", "Set stress and strain for yield point one, separated by a comma.")
+        obj.YieldPoint2 = "241.0, 0.025"
+
+    def execute(self, obj):
+        return
