@@ -20,41 +20,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "PreCompiled.h"
-#ifndef _PreComp_
-#include <assert.h>
-#include <QGraphicsScene>
-#include <QMenu>
-#include <QMouseEvent>
-#include <QGraphicsSceneHoverEvent>
-#include <QStyleOptionGraphicsItem>
-#include <QPainterPathStroker>
-#include <QPainter>
+#ifndef _DrawGuiUtil_h_
+#define _DrawGuiUtil_h_
+
+#include <string>
+
+namespace TechDrawGui
+{
+
+/// Convenient utility functions for TechDraw Gui Module
+class TechDrawExport DrawGuiUtil {
+    public:
+    static TechDraw::DrawPage* findPage(Gui::Command* cmd);
+    static bool needPage(Gui::Command* cmd);
+    static bool needView(Gui::Command* cmd);
+};
+
+} //end namespace TechDrawGui
 #endif
-
-#include "QGIDimLines.h"
-
-using namespace TechDrawGui;
-
-QGIDimLines::QGIDimLines()
-{
-    setCacheMode(QGraphicsItem::NoCache);
-    setAcceptHoverEvents(false);
-    setFlag(QGraphicsItem::ItemIsSelectable, false);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
-
-    m_width = 0.5;
-}
-
-void QGIDimLines::draw()
-{
-}
-
-//probably don't need this paint
-void QGIDimLines::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    QStyleOptionGraphicsItem myOption(*option);
-    myOption.state &= ~QStyle::State_Selected;
-
-    QGIPrimPath::paint (painter, &myOption, widget);
-}
