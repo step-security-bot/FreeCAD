@@ -47,8 +47,11 @@ install:
   - set PATH=C:\\Python35\\Scripts;%PATH%
   - python --version
   - cd clcache-bin
-  - pip install pyinstaller
-  - pyinstaller --onefile clcache.py
+  #- pip install pyinstaller
+  #- pyinstaller --onefile clcache.py
+  - pip install cx_Freeze
+  - cxfreeze clcache.py
+  - dir
   - cd dist
   - ren clcache.exe cl.exe
   - set CLCACHE_DIR=C:\projects\clcache
