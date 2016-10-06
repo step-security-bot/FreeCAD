@@ -50,9 +50,10 @@ install:
   #- pip install pyinstaller
   #- pyinstaller --onefile clcache.py
   - pip install cx_Freeze
-  - cd C:\Python34\Scripts\
+  - cd C:\Python34\Scripts
   - python.exe cxfreeze-postinstall
-  - C:\Python34\Scripts\cxfreeze --version
+  - cd C:\projects\freecad\clcache-bin
+  - cxfreeze clcache.py --target-dir dist
   - dir
   - cd dist
   - ren clcache.exe cl.exe
