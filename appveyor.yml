@@ -54,9 +54,10 @@ install:
   - python.exe cxfreeze-postinstall
   - cd C:\projects\freecad\clcache-bin
   - cxfreeze clcache.py --target-dir dist
-  - dir
   - cd dist
+  - dir
   - ren clcache.exe cl.exe
+  - cl.exe --help
   - set CLCACHE_DIR=C:\projects\clcache
   #- set CLCACHE_LOG=1
   ##- set CLCACHE_HARDLINK=1
