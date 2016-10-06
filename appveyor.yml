@@ -57,7 +57,6 @@ install:
   - cd dist
   - dir
   - ren clcache.exe cl.exe
-  - cl.exe --help
   - set CLCACHE_DIR=C:\projects\clcache
   #- set CLCACHE_LOG=1
   ##- set CLCACHE_HARDLINK=1
@@ -67,8 +66,8 @@ install:
   - if [%ARCH%] == [Win32] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - ren cl.exe cl_original.exe
   - ren cl.exe.config cl_original.exe.config
-  - if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
-  - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
+  - if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-bin\dist\*.* "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
+  - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\*.* "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cl.exe --help
   - cl.exe -M 536870912
   #- cl.exe -C
