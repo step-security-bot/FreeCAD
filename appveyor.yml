@@ -43,8 +43,8 @@ install:
   - 7z x v3.3.0.zip > nul
   - ren clcache-3.3.0 clcache-bin
   - python --version
-  - set PATH=C:\\Python35;%PATH%
-  - set PATH=C:\\Python35\\Scripts;%PATH%
+  - set PATH=C:\\Python33;%PATH%
+  - set PATH=C:\\Python33\\Scripts;%PATH%
   - python --version
   - cd clcache-bin
   #- pip install pyinstaller
