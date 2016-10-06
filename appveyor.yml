@@ -50,7 +50,7 @@ install:
   #- pip install pyinstaller
   #- pyinstaller --onefile clcache.py
   - pip install cx_Freeze
-  - cxfreeze clcache.py
+  - C:\Python34\Scripts\cxfreeze clcache.py
   - dir
   - cd dist
   - ren clcache.exe cl.exe
