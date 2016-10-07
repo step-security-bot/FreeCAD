@@ -127,29 +127,10 @@ DrawViewDimension::~DrawViewDimension()
 void DrawViewDimension::onChanged(const App::Property* prop)
 {
     if (!isRestoring()) {
-        if (prop == &References2D  ||
-            prop == &Font        ||
-            prop == &Fontsize    ||
-            prop == &FormatSpec  ||
-            //prop == &CentreLines ||
-            prop == &LineWidth) {
-            try {
-                App::DocumentObjectExecReturn *ret = recompute();
-                delete ret;
-            }
-            catch (...) {
-            }
-        }
         if (prop == &MeasureType) {
             if (MeasureType.isValue("True") && !measurement->has3DReferences()) {
                 Base::Console().Warning("Dimension %s missing Reference to 3D model. Must be Projected.\n", getNameInDocument());
                 MeasureType.setValue("Projected");
-            }
-            try {
-                App::DocumentObjectExecReturn *ret = recompute();
-                delete ret;
-            }
-            catch (...) {
             }
         }
         if (prop == &References3D) {                                       //have to rebuild the Measurement object
@@ -176,14 +157,15 @@ void DrawViewDimension::onDocumentRestored()
 short DrawViewDimension::mustExecute() const
 {
     bool result = 0;
-    if (References2D.isTouched() ||
-        Type.isTouched() ||
-        MeasureType.isTouched()) {
-        result =  1;
-    } else {
-        result = 0;
+    if (!isRestoring()) {
+        result =  (References2D.isTouched() ||
+                  Type.isTouched() ||
+                  MeasureType.isTouched());
     }
-    return result;
+    if (result) {
+        return result;
+    }
+    return DrawView::mustExecute();
 }
 
 App::DocumentObjectExecReturn *DrawViewDimension::execute(void)
@@ -209,7 +191,10 @@ std::string  DrawViewDimension::getFormatedValue() const
     } else {
         qVal.setUnit(Base::Unit::Length);
     }
-    QString userStr = qVal.getUserString();
+    QString userStr = qVal.getUserString();                           //this handles mm to inch/km/parsec etc and decimal positions
+    QRegExp rx2(QString::fromUtf8("\\D*$"));
+    QString userVal = userStr;
+    userVal.remove(rx2);
 
     QRegExp rx(QString::fromUtf8("%(\\w+)%"));                        //any word bracketed by %
     QStringList list;
@@ -220,13 +205,27 @@ std::string  DrawViewDimension::getFormatedValue() const
         pos += rx.matchedLength();
     }
 
+    QString repl = userVal;
+    if (showUnits()) {
+        repl = userStr;
+    }
+
     for(QStringList::const_iterator it = list.begin(); it != list.end(); ++it) {
         if(*it == QString::fromUtf8("%value%")){
-            str.replace(*it,userStr);
+            str.replace(*it,repl);
 //        } else {                                                       //insert additional placeholder replacement logic here
         }
     }
     return str.toUtf8().constData();
+}
+
+bool DrawViewDimension::showUnits() const
+{
+    bool result = false;
+    Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter()
+        .GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("Mod/TechDraw/Dimensions");
+    result = hGrp->GetBool("ShowUnits", true);
+    return result;
 }
 
 double DrawViewDimension::getDimValue() const
