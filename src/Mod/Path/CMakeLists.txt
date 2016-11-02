@@ -9,6 +9,7 @@ INSTALL(
     FILES
         Init.py
         InitGui.py
+        PathCommands.py
     DESTINATION
         Mod/Path
 )
@@ -24,6 +25,8 @@ SET(PathScripts_SRCS
     PathScripts/linuxcnc_post.py
     PathScripts/centroid_post.py
     PathScripts/comparams_post.py
+    PathScripts/dynapath_post.py
+    PathScripts/generic_post.py
     PathScripts/dumper_post.py
     PathScripts/rml_post.py
     PathScripts/TooltableEditor.py
@@ -44,12 +47,12 @@ SET(PathScripts_SRCS
     PathScripts/PathStock.py
     PathScripts/PathPlane.py
     PathScripts/PathPost.py
+    PathScripts/PathPostProcessor.py
     PathScripts/PathLoadTool.py
     PathScripts/PathToolLenOffset.py
     PathScripts/PathComment.py
     PathScripts/PathStop.py
     PathScripts/PathFromShape.py
-    PathScripts/DlgSettingsPath.ui
     PathScripts/PathKurveUtils.py
     PathScripts/PathAreaUtils.py
     PathScripts/slic3r_pre.py
@@ -64,6 +67,9 @@ SET(PathScripts_SRCS
     PathScripts/PathRemote.py
     PathScripts/PathSanity.py
     PathScripts/PathToolLibraryManager.py
+    PathScripts/DogboneDressup.py
+    PathScripts/PathPreferencesPathJob.py
+    PathScripts/PathPreferences.py
 )
 
 SET(PathScripts_NC_SRCS

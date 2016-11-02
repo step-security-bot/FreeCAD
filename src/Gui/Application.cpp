@@ -1630,9 +1630,14 @@ void Application::runApplication(void)
     QIcon::setThemeName(QLatin1String("FreeCAD-default"));
 #endif
 
-//#if defined(FC_OS_LINUX)
-//    FileDialog::setWorkingDirectory(QDir::currentPath());
-//#endif
+#if defined(FC_OS_LINUX)
+    // See #0001588
+    QString path = FileDialog::restoreLocation();
+    FileDialog::setWorkingDirectory(QDir::currentPath());
+    FileDialog::saveLocation(path);
+#else
+    FileDialog::setWorkingDirectory(FileDialog::restoreLocation());
+#endif
 
     Application app(true);
     MainWindow mw;

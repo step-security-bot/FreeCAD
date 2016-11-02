@@ -42,6 +42,9 @@
         <file>icons/Path-MachineMill.svg</file>
         <file>icons/Path-OperationA.svg</file>
         <file>icons/Path-OperationB.svg</file>
+        <file>icons/Path-Profile-Edges.svg</file>
+        <file>icons/Path-Profile-Face.svg</file>
+        <file>icons/Path-SelectLoop.svg</file>
         <file>translations/Path_de.qm</file>
         <file>translations/Path_af.qm</file>
         <file>translations/Path_zh-CN.qm</file>
@@ -82,5 +85,8 @@
         <file>panels/DlgJobChooser.ui</file>
         <file>panels/ContourEdit.ui</file>
         <file>panels/ProfileEdgesEdit.ui</file>
+        <file>panels/DogboneEdit.ui</file>
+        <file>panels/DlgSelectPostProcessor.ui</file>
+        <file>preferences/PathJob.ui</file>
     </qresource>
 </RCC>

@@ -158,6 +158,7 @@ QString FileDialog::getSaveFileName (QWidget * parent, const QString & caption, 
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::MoviesLocation));
     urls << QUrl::fromLocalFile(getWorkingDirectory());
+    urls << QUrl::fromLocalFile(restoreLocation());
     urls << QUrl::fromLocalFile(QDir::currentPath());
 
     QString file;
@@ -238,6 +239,7 @@ QString FileDialog::getOpenFileName(QWidget * parent, const QString & caption, c
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::MoviesLocation));
     urls << QUrl::fromLocalFile(getWorkingDirectory());
+    urls << QUrl::fromLocalFile(restoreLocation());
     urls << QUrl::fromLocalFile(QDir::currentPath());
 
     QString file;
@@ -297,6 +299,7 @@ QStringList FileDialog::getOpenFileNames (QWidget * parent, const QString & capt
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::MoviesLocation));
     urls << QUrl::fromLocalFile(getWorkingDirectory());
+    urls << QUrl::fromLocalFile(restoreLocation());
     urls << QUrl::fromLocalFile(QDir::currentPath());
 
     QStringList files;
@@ -330,6 +333,8 @@ QStringList FileDialog::getOpenFileNames (QWidget * parent, const QString & capt
     return files;
 }
 
+QString FileDialog::workingDirectory;
+
 /**
  * Returns the working directory for the file dialog. This path can be used in
  * combination with getSaveFileName(), getOpenFileName(), getOpenFileNames() or
@@ -337,14 +342,7 @@ QStringList FileDialog::getOpenFileNames (QWidget * parent, const QString & capt
  */
 QString FileDialog::getWorkingDirectory()
 {
-    std::string path = App::GetApplication().Config()["UserHomePath"];
-    Base::Reference<ParameterGrp> hPath = App::GetApplication().GetUserParameter().GetGroup("BaseApp")
-                               ->GetGroup("Preferences")->GetGroup("General");
-    std::string dir = hPath->GetASCII("FileOpenSavePath", path.c_str());
-    QFileInfo fi(QString::fromUtf8(dir.c_str()));
-    if (!fi.exists())
-        dir = path;
-    return QString::fromUtf8(dir.c_str());
+    return workingDirectory;
 }
 
 /**
@@ -363,6 +361,32 @@ void FileDialog::setWorkingDirectory(const QString& dir)
             dirName = info.absoluteFilePath();
     }
 
+    workingDirectory = dirName;
+    saveLocation(dirName);
+}
+
+/*!
+ * \brief Return the last location where a file save or load dialog was used.
+ * \return QString
+ */
+QString FileDialog::restoreLocation()
+{
+    std::string path = App::GetApplication().Config()["UserHomePath"];
+    Base::Reference<ParameterGrp> hPath = App::GetApplication().GetUserParameter().GetGroup("BaseApp")
+                               ->GetGroup("Preferences")->GetGroup("General");
+    std::string dir = hPath->GetASCII("FileOpenSavePath", path.c_str());
+    QFileInfo fi(QString::fromUtf8(dir.c_str()));
+    if (!fi.exists())
+        dir = path;
+    return QString::fromUtf8(dir.c_str());
+}
+
+/*!
+ * \brief Save the last location where a file save or load dialog was used.
+ * \param dirName
+ */
+void FileDialog::saveLocation(const QString& dirName)
+{
     Base::Reference<ParameterGrp> hPath = App::GetApplication().GetUserParameter().GetGroup("BaseApp")
                                ->GetGroup("Preferences")->GetGroup("General");
     hPath->SetASCII("FileOpenSavePath", dirName.toUtf8());

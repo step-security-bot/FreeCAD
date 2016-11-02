@@ -25,10 +25,11 @@
 import FreeCAD
 import Path
 from PySide import QtCore, QtGui
+from PathScripts.PathPostProcessor import PostProcessor
+from PathScripts.PathPreferences import PathPreferences
+import Draft
 import os
 import glob
-#import PathLoadTool
-import Draft
 
 
 FreeCADGui = None
@@ -47,27 +48,20 @@ except AttributeError:
     def translate(context, text, disambig=None):
         return QtGui.QApplication.translate(context, text, disambig)
 
-
 class ObjectPathJob:
 
     def __init__(self, obj):
-        path = FreeCAD.getHomePath() + ("Mod/Path/PathScripts/")
-        posts = glob.glob(path + '/*_post.py')
-        allposts = [ str(os.path.split(os.path.splitext(p)[0])[1][:-5]) for p in posts]
-
-        grp = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro")
-        path = grp.GetString("MacroPath", FreeCAD.getUserAppDataDir())
-        posts = glob.glob(path + '/*_post.py')
-
-        allposts.extend([ str(os.path.split(os.path.splitext(p)[0])[1][:-5]) for p in posts])
-
         #        obj.addProperty("App::PropertyFile", "PostProcessor", "CodeOutput", "Select the Post Processor file for this project")
         obj.addProperty("App::PropertyFile", "OutputFile", "CodeOutput", QtCore.QT_TRANSLATE_NOOP("App::Property","The NC output file for this project"))
+        obj.OutputFile = PathPreferences.defaultOutputFile()
         obj.setEditorMode("OutputFile", 0)  # set to default mode
 
         obj.addProperty("App::PropertyString", "Description", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property","An optional description for this job"))
         obj.addProperty("App::PropertyEnumeration", "PostProcessor", "Output", QtCore.QT_TRANSLATE_NOOP("App::Property","Select the Post Processor"))
-        obj.PostProcessor = allposts
+        obj.PostProcessor = PathPreferences.allEnabledPostProcessors([''])
+        obj.PostProcessor = PathPreferences.defaultPostProcessor()
+        obj.addProperty("App::PropertyString", "PostProcessorArgs", "Output", QtCore.QT_TRANSLATE_NOOP("App::Property", "Arguments for the Post Processor (specific to the script)"))
+        obj.PostProcessorArgs = PathPreferences.defaultPostProcessorArgs()
         obj.addProperty("App::PropertyString",    "MachineName", "Output", QtCore.QT_TRANSLATE_NOOP("App::Property","Name of the Machine that will use the CNC program"))
 
         obj.addProperty("Path::PropertyTooltable", "Tooltable", "Base", QtCore.QT_TRANSLATE_NOOP("App::Property","The tooltable used for this CNC program"))
@@ -101,27 +95,24 @@ class ObjectPathJob:
         mode = 2
         obj.setEditorMode('Placement', mode)
 
-        if prop == "PostProcessor":
-            postname = obj.PostProcessor + "_post"
+        if prop == "PostProcessor" and obj.PostProcessor:
+            processor = PostProcessor.load(obj.PostProcessor)
+            if processor.units:
+                obj.MachineUnits = processor.units
+            if processor.machineName:
+                obj.MachineName = processor.machineName
+            if processor.cornerMax:
+                obj.X_Max = processor.cornerMax['x']
+                obj.Y_Max = processor.cornerMax['y']
+                obj.Z_Max = processor.cornerMax['z']
+            if processor.cornerMin:
+                obj.X_Min = processor.cornerMin['x']
+                obj.Y_Min = processor.cornerMin['y']
+                obj.Z_Min = processor.cornerMin['z']
+            self.tooltip = processor.tooltip
+            self.tooltipArgs = processor.tooltipArgs
 
-            exec "import %s as current_post" % postname
-            if hasattr(current_post, "UNITS"):
-                if current_post.UNITS == "G21":
-                    obj.MachineUnits = "Metric"
-                else:
-                    obj.MachineUnits = "Inch"
-            if hasattr(current_post, "MACHINE_NAME"):
-                obj.MachineName = current_post.MACHINE_NAME
-
-            if hasattr(current_post, "CORNER_MAX"):
-                obj.X_Max = current_post.CORNER_MAX['x']
-                obj.Y_Max = current_post.CORNER_MAX['y']
-                obj.Z_Max = current_post.CORNER_MAX['z']
-
-            if hasattr(current_post, "CORNER_MIN"):
-                obj.X_Min = current_post.CORNER_MIN['x']
-                obj.Y_Min = current_post.CORNER_MIN['y']
-                obj.Z_Min = current_post.CORNER_MIN['z']
+            self.PostProcessorArgs = ''
 
     # def getToolControllers(self, obj):
     #     '''returns a list of ToolControllers for the current job'''
@@ -164,12 +155,15 @@ class ViewProviderJob:
     def __setstate__(self, state):  # mandatory
         return None
 
+    def deleteObjectsOnReject(self):
+        return hasattr(self, 'deleteOnReject') and self.deleteOnReject
+
     def setEdit(self, vobj, mode=0):
         FreeCADGui.Control.closeDialog()
-        taskd = TaskPanel()
-        taskd.obj = vobj.Object
+        taskd = TaskPanel(vobj.Object, self.deleteObjectsOnReject())
         FreeCADGui.Control.showDialog(taskd)
         taskd.setupUi()
+        self.deleteOnReject = False
         return True
 
     def getIcon(self):
@@ -210,7 +204,6 @@ obj = FreeCAD.ActiveDocument.addObject("Path::FeatureCompoundPython", "Job")
 PathScripts.PathJob.ObjectPathJob(obj)
 PathLoadTool.CommandPathLoadTool.Create(obj.Name)
 tl = obj.Group[0]
-obj.ViewObject.startEditing()
 tool = Path.Tool()
 tool.Diameter = 5.0
 tool.Name = "Default Tool"
@@ -219,28 +212,28 @@ tool.ToolType = "EndMill"
 tool.Material = "HighSpeedSteel"
 obj.Tooltable.addTools(tool)
 tl.ToolNumber = 1
+obj.ViewObject.Proxy.deleteOnReject = True
+obj.ViewObject.startEditing()
 '''
         FreeCADGui.doCommand(snippet)
         FreeCAD.ActiveDocument.commitTransaction()
 
 
 class TaskPanel:
-    def __init__(self):
+    def __init__(self, obj, deleteOnReject):
+        FreeCAD.ActiveDocument.openTransaction(translate("Path_Job", "Edit Job"))
+        self.obj = obj
+        self.deleteOnReject = deleteOnReject
         self.form = FreeCADGui.PySideUic.loadUi(":/panels/JobEdit.ui")
         #self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Path/JobEdit.ui")
-        path = FreeCAD.getHomePath() + ("Mod/Path/PathScripts/")
-        posts = glob.glob(path + '/*_post.py')
-        allposts = [ str(os.path.split(os.path.splitext(p)[0])[1][:-5]) for p in posts]
 
-        grp = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro")
-        path = grp.GetString("MacroPath", FreeCAD.getUserAppDataDir())
-        posts = glob.glob(path + '/*_post.py')
-
-        allposts.extend([ str(os.path.split(os.path.splitext(p)[0])[1][:-5]) for p in posts])
-
-        for post in allposts:
+        currentPostProcessor = obj.PostProcessor
+        postProcessors = PathPreferences.allEnabledPostProcessors(['', currentPostProcessor])
+        for post in postProcessors:
             self.form.cboPostProcessor.addItem(post)
-        self.updating = False
+        # update the enumeration values, just to make sure all selections are valid
+        self.obj.PostProcessor = postProcessors
+        self.obj.PostProcessor = currentPostProcessor
 
         self.form.cboBaseObject.addItem("")
         for o in FreeCAD.ActiveDocument.Objects:
@@ -248,25 +241,48 @@ class TaskPanel:
                 self.form.cboBaseObject.addItem(o.Name)
 
 
+        self.postProcessorDefaultTooltip = self.form.cboPostProcessor.toolTip()
+        self.postProcessorArgsDefaultTooltip = self.form.cboPostProcessorArgs.toolTip()
+
     def accept(self):
         self.getFields()
         FreeCADGui.ActiveDocument.resetEdit()
         FreeCADGui.Control.closeDialog()
+        FreeCAD.ActiveDocument.commitTransaction()
         FreeCAD.ActiveDocument.recompute()
 
     def reject(self):
         FreeCADGui.Control.closeDialog()
+        FreeCAD.ActiveDocument.abortTransaction()
+        if self.deleteOnReject:
+            FreeCAD.ActiveDocument.openTransaction(translate("Path_Job", "Uncreate Job"))
+            for child in self.obj.Group:
+                FreeCAD.ActiveDocument.removeObject(child.Name)
+            FreeCAD.ActiveDocument.removeObject(self.obj.Name)
+            FreeCAD.ActiveDocument.commitTransaction()
         FreeCAD.ActiveDocument.recompute()
+
+    def updateTooltips(self):
+        if hasattr(self.obj, "Proxy") and hasattr(self.obj.Proxy, "tooltip") and self.obj.Proxy.tooltip:
+            self.form.cboPostProcessor.setToolTip(self.obj.Proxy.tooltip)
+            if hasattr(self.obj.Proxy, "tooltipArgs") and self.obj.Proxy.tooltipArgs:
+                self.form.cboPostProcessorArgs.setToolTip(self.obj.Proxy.tooltipArgs)
+                self.form.cboPostProcessorArgs.setText(self.obj.PostProcessorArgs)
+            else:
+                self.form.cboPostProcessorArgs.setToolTip(self.postProcessorArgsDefaultTooltip)
+                self.form.cboPostProcessorArgs.setText('')
+        else:
+            self.form.cboPostProcessor.setToolTip(self.postProcessorDefaultTooltip)
+            self.form.cboPostProcessorArgs.setToolTip(self.postProcessorArgsDefaultTooltip)
+            self.form.cboPostProcessorArgs.setText('')
 
     def getFields(self):
         '''sets properties in the object to match the form'''
         if self.obj:
-            if hasattr(self.obj, "PostProcessor"):
-                self.obj.PostProcessor = str(self.form.cboPostProcessor.currentText())
-            if hasattr(self.obj, "Label"):
-                self.obj.Label = str(self.form.leLabel.text())
-            if hasattr(self.obj, "OutputFile"):
-                self.obj.OutputFile = str(self.form.leOutputFile.text())
+            self.obj.PostProcessor = str(self.form.cboPostProcessor.currentText())
+            self.obj.PostProcessorArgs = str(self.form.cboPostProcessorArgs.displayText())
+            self.obj.Label = str(self.form.leLabel.text())
+            self.obj.OutputFile = str(self.form.leOutputFile.text())
 
             oldlist = self.obj.Group
             newlist = []
@@ -284,7 +300,16 @@ class TaskPanel:
                 selObj = Draft.clone(selObj)
             self.obj.Base = selObj
 
+            self.updateTooltips()
+
         self.obj.Proxy.execute(self.obj)
+
+    def selectComboBoxText(self, widget, text):
+        index = widget.findText(text, QtCore.Qt.MatchFixedString)
+        if index >= 0:
+            widget.blockSignals(True)
+            widget.setCurrentIndex(index)
+            widget.blockSignals(False)
 
     def setFields(self):
         '''sets fields in the form to match the object'''
@@ -292,23 +317,24 @@ class TaskPanel:
         self.form.leLabel.setText(self.obj.Label)
         self.form.leOutputFile.setText(self.obj.OutputFile)
 
-        postindex = self.form.cboPostProcessor.findText(
-                self.obj.PostProcessor, QtCore.Qt.MatchFixedString)
-        if postindex >= 0:
-            self.form.cboPostProcessor.blockSignals(True)
-            self.form.cboPostProcessor.setCurrentIndex(postindex)
-            self.form.cboPostProcessor.blockSignals(False)
+        self.selectComboBoxText(self.form.cboPostProcessor, self.obj.PostProcessor)
+        self.obj.Proxy.onChanged(self.obj, "PostProcessor")
+        self.updateTooltips()
 
         for child in self.obj.Group:
             self.form.PathsList.addItem(child.Name)
 
-        if self.obj.Base is not None:
+        baseindex = -1
+        if self.obj.Base:
             baseindex = self.form.cboBaseObject.findText(self.obj.Base.Name, QtCore.Qt.MatchFixedString)
-            print baseindex
-            if baseindex >= 0:
-                self.form.cboBaseObject.blockSignals(True)
-                self.form.cboBaseObject.setCurrentIndex(baseindex)
-                self.form.cboBaseObject.blockSignals(False)
+        else:
+            for o in FreeCADGui.Selection.getCompleteSelection():
+                baseindex = self.form.cboBaseObject.findText(o.Name, QtCore.Qt.MatchFixedString)
+        print baseindex
+        if baseindex >= 0:
+            self.form.cboBaseObject.blockSignals(True)
+            self.form.cboBaseObject.setCurrentIndex(baseindex)
+            self.form.cboBaseObject.blockSignals(False)
 
 
     def open(self):
@@ -316,12 +342,9 @@ class TaskPanel:
 
     def setFile(self):
         filename = QtGui.QFileDialog.getSaveFileName(self.form, translate("PathJob", "Select Output File", None), None, translate("Path Job", "All Files (*.*)", None))
-        if filename:
+        if filename and filename[0]:
             self.obj.OutputFile = str(filename[0])
             self.setFields()
-
-    def getStandardButtons(self):
-        return int(QtGui.QDialogButtonBox.Ok)
 
     def setupUi(self):
         # Connect Signals and Slots
