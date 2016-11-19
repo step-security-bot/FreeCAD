@@ -32,10 +32,21 @@ if FreeCAD.GuiUp:
     from DraftTools import translate
     from PySide.QtCore import QT_TRANSLATE_NOOP
 else:
+    # \cond
     def translate(ctxt,txt):
         return txt
     def QT_TRANSLATE_NOOP(ctxt,txt):
         return txt
+    # \endcond
+    
+## @package ArchStructure
+#  \ingroup ARCH
+#  \brief The Structure object and tools
+#
+#  This module provides tools to build Structure objects.
+#  Structure elements are beams, columns, slabs, and other
+#  elements that have a structural function, that is, that
+#  support other parts of the building.
 
 __title__="FreeCAD Structure"
 __author__ = "Yorik van Havre"
@@ -480,6 +491,8 @@ class _Structure(ArchComponent.Component):
                                 except:
                                     FreeCAD.Console.PrintError(translate("Arch","Facemaker returned an error")+"\n")
                                     return None
+                                if len(baseface.Faces) > 1:
+                                    baseface = baseface.Faces[0]
                                 normal = baseface.normalAt(0,0)
                         if not baseface:
                             for w in obj.Base.Shape.Wires:
@@ -540,8 +553,9 @@ class _Structure(ArchComponent.Component):
                     if obj.Tool:
                         nodes = obj.Tool.Shape
                     elif extdata[1].Length > 0:
-                        import Part
-                        nodes = Part.Line(nodes.CenterOfMass,nodes.CenterOfMass.add(extdata[1])).toShape()
+                        if hasattr(nodes,"CenterOfMass"):
+                            import Part
+                            nodes = Part.Line(nodes.CenterOfMass,nodes.CenterOfMass.add(extdata[1])).toShape()
             offset = FreeCAD.Vector()
             if hasattr(obj,"NodesOffset"):
                 offset = FreeCAD.Vector(0,0,obj.NodesOffset.Value)

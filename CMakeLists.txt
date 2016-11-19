@@ -158,6 +158,13 @@ OPTION(FREECAD_USE_EXTERNAL_KDL "Use system installed orocos-kdl instead of the 
 OPTION(FREECAD_USE_FREETYPE "Builds the features using FreeType libs" ON)
 OPTION(FREECAD_BUILD_DEBIAN "Prepare for a build of a Debian package" OFF)
 
+# https://blog.kitware.com/constraining-values-with-comboboxes-in-cmake-cmake-gui/
+set(FREECAD_USE_OCC_VARIANT "Community Edition"  CACHE STRING  "Official OpenCASCADE version or community edition")
+set_property(CACHE FREECAD_USE_OCC_VARIANT PROPERTY STRINGS
+             "Official Version"
+             "Community Edition"
+)
+
 if(APPLE)
     OPTION(FREECAD_CREATE_MAC_APP "Create app bundle on install" OFF)
 
@@ -566,7 +573,32 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # Salome SMESH sources are under src/3rdParty now
     IF(BUILD_SMESH)
         #if we use smesh we definitly also need vtk, no matter of external or internal smesh
-        find_package(VTK REQUIRED) #don't check VERSION 6 as this would exclude version 7
+        set (VTK_COMPONENTS
+            vtkCommonCore
+            vtkCommonDataModel
+            vtkFiltersVerdict
+            vtkIOXML
+            vtkFiltersCore
+            vtkFiltersGeneral
+            vtkIOLegacy
+            vtkFiltersExtraction
+            vtkFiltersSources
+            vtkFiltersGeometry
+        )
+        # On Linux vtkParallelMPI package is required
+        if (UNIX AND NOT APPLE)
+            set (VTK_COMPONENTS
+                ${VTK_COMPONENTS}
+                vtkIOMPIParallel
+                vtkParallelMPI)
+        endif()
+
+        # For Debian testing you may have to only allow a certain list of components:
+        # http://forum.freecadweb.org/viewtopic.php?f=4&t=15646&start=10#p141693
+        #
+        #find_package(VTK COMPONENTS ${VTK_COMPONENTS} REQUIRED NO_MODULE) #don't check VERSION 6 as this would exclude version 7
+        find_package(VTK REQUIRED NO_MODULE) #don't check VERSION 6 as this would exclude version 7
+
         set(BUILD_FEM_VTK ON)
         if(${VTK_MAJOR_VERSION} LESS 6)
             message( FATAL_ERROR "Found VTK version is <6, this is not compatible" )
@@ -576,7 +608,7 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
                 set(VTK_OPTIONS -DVTK_NO_QUAD_POLY)
             endif()
             if(${VTK_MINOR_VERSION} EQUAL 0)
-                message(WARNING "VTK <6.0 cannot be used with c++11, FEM postprocessing is disabled")
+                message(WARNING "VTK equal to 6.0 cannot be used with c++11, FEM postprocessing is disabled")
                 set(BUILD_FEM_VTK OFF)
             endif()
         endif()
