@@ -49,13 +49,13 @@ install:
   - set PATH=C:\\Python34\\Scripts;%PATH%
   - python --version
   - cd clcache-bin
-  #- pip install pyinstaller
-  #- pyinstaller --onefile clcache.py
-  - pip install cx_Freeze
-  - cd C:\Python34\Scripts
-  - python.exe cxfreeze-postinstall
-  - cd C:\projects\freecad\clcache-bin
-  - cxfreeze clcache.py --silent --target-dir dist
+  - pip install pyinstaller
+  - pyinstaller --onefile clcache.py
+  #- pip install cx_Freeze
+  #- cd C:\Python34\Scripts
+  #- python.exe cxfreeze-postinstall
+  #- cd C:\projects\freecad\clcache-bin
+  #- cxfreeze clcache.py --silent --target-dir dist
   - cd dist
   - dir
   - ren clcache.exe cl.exe
@@ -68,8 +68,8 @@ install:
   - if [%ARCH%] == [Win32] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - ren cl.exe cl_original.exe
   - ren cl.exe.config cl_original.exe.config
-  - if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-bin\dist\*.* "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
-  - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\*.* "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
+  - if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
+  - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cl.exe --help
   - cl.exe -M 536870912
   #- cl.exe -C
