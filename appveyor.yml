@@ -41,9 +41,9 @@ install:
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
   #- ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.3.1.zip
   #- 7z x v3.3.1.zip > nul
-  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/17bc49576a34daef9c3005f378750a29d97e3d0f.zip
-  - 7z x 17bc49576a34daef9c3005f378750a29d97e3d0f.zip > nul
-  - ren clcache-17bc49576a34daef9c3005f378750a29d97e3d0f clcache-bin
+  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/f05e95c88a5a37747830c6c3ac4958a6261f8443.zip
+  - 7z x f05e95c88a5a37747830c6c3ac4958a6261f8443.zip > nul
+  - ren clcache-f05e95c88a5a37747830c6c3ac4958a6261f8443 clcache-bin
   - python --version
   - set PATH=C:\\Python34;%PATH%
   - set PATH=C:\\Python34\\Scripts;%PATH%
@@ -72,8 +72,8 @@ install:
   - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cl.exe --help
   #- cl.exe -M 1073741824
-  #- cl.exe -C
-  #- cl.exe -z
+  - cl.exe -C
+  - cl.exe -z
   #- cl.exe -c
   - cl.exe -s
 
