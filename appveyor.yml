@@ -49,6 +49,7 @@ install:
   - set PATH=C:\\Python34\\Scripts;%PATH%
   - python --version
   - cd clcache-bin
+  - pip install xxhash
   - pip install pyinstaller
   - pyinstaller --onefile clcache.py
   #- pip install cx_Freeze
