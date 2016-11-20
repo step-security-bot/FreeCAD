@@ -22,7 +22,7 @@ include_directories(
     ${XercesC_INCLUDE_DIRS}
     ${SMESH_INCLUDE_DIR}
     ${NETGEN_INCLUDE_DIRS}
-    ${VTK_INCLUDE_DIR}
+    ${VTK_INCLUDE_DIRS}
 )
 
 link_directories(${OCC_LIBRARY_DIR})
@@ -43,15 +43,7 @@ if(BUILD_FEM_NETGEN)
     )
 endif(BUILD_FEM_NETGEN)
 
-if(BUILD_FEM_VTK)
-    set(Fem_LIBS
-        ${Fem_LIBS}
-        ${VTK_LIBRARIES}
-    )
-endif(BUILD_FEM_VTK)
-
 generate_from_xml(FemMeshPy)
-
 
 SET(Python_SRCS
     FemMeshPy.xml
@@ -240,6 +232,8 @@ if(BUILD_FEM_VTK)
         FemPostFilter.cpp
         FemPostFunction.h
         FemPostFunction.cpp
+        FemVTKTools.h
+        FemVTKTools.cpp
     )
     SOURCE_GROUP("PostObjects" FILES ${FemPost_SRCS})
 endif(BUILD_FEM_VTK)

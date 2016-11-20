@@ -147,11 +147,11 @@ QPainterPath QGIViewPart::drawPainterPath(TechDrawGeometry::BaseGeom *baseGeom) 
         case TechDrawGeometry::ARCOFCIRCLE: {
           TechDrawGeometry::AOC  *geom = static_cast<TechDrawGeometry::AOC *>(baseGeom);
 
-          //double x = geom->center.fX - geom->radius;
-          //double y = geom->center.fY - geom->radius;
           pathArc(path, geom->radius, geom->radius, 0., geom->largeArc, geom->cw,
                   geom->endPnt.fX, geom->endPnt.fY,
                   geom->startPnt.fX, geom->startPnt.fY);
+//          double x = geom->center.fX - geom->radius;
+//          double y = geom->center.fY - geom->radius;
           //Base::Console().Message("TRACE -drawPainterPath - making an ARCOFCIRCLE @(%.3f,%.3f) R:%.3f\n",x, y, geom->radius);
         } break;
         case TechDrawGeometry::ELLIPSE: {
@@ -169,7 +169,7 @@ QPainterPath QGIViewPart::drawPainterPath(TechDrawGeometry::BaseGeom *baseGeom) 
           pathArc(path, geom->major, geom->minor, geom->angle, false, false,
                   startX, startY, endX, endY);
 
-          //Base::Console().Message("TRACE -drawPainterPath - making an ELLIPSE @(%.3f,%.3f) R1:%.3f R2:%.3f\n",x, y, geom->major, geom->minor);
+          //Base::Console().Message("TRACE -drawPainterPath - making an ELLIPSE @(%.3f,%.3f) R1:%.3f R2:%.3f\n",geom->center.fX,geom->center.fY, geom->major, geom->minor);
         } break;
         case TechDrawGeometry::ARCOFELLIPSE: {
           TechDrawGeometry::AOE *geom = static_cast<TechDrawGeometry::AOE *>(baseGeom);
@@ -179,6 +179,33 @@ QPainterPath QGIViewPart::drawPainterPath(TechDrawGeometry::BaseGeom *baseGeom) 
                         geom->startPnt.fX, geom->startPnt.fY);
           //Base::Console().Message("TRACE -drawPainterPath - making an ARCOFELLIPSE R1:%.3f R2:%.3f From: (%.3f,%.3f) To: (%.3f,%.3f)\n",geom->major, geom->minor,geom->startPnt.fX, geom->startPnt.fY,geom->endPnt.fX, geom->endPnt.fY);
 
+        } break;
+        case TechDrawGeometry::BEZIER: {
+          TechDrawGeometry::BezierSegment *geom = static_cast<TechDrawGeometry::BezierSegment *>(baseGeom);
+
+          // Move painter to the beginning
+          path.moveTo(geom->pnts[0].fX, geom->pnts[0].fY);
+          //Base::Console().Message("TRACE -drawPainterPath - making an BEZIER From: (%.3f,%.3f)\n",geom->pnts[0].fX,geom->pnts[0].fY);
+
+          if ( geom->poles == 2 ) {
+              // Degree 1 bezier = straight line...
+              path.lineTo(geom->pnts[1].fX, geom->pnts[1].fY);
+
+          } else if ( geom->poles == 3 ) {
+              path.quadTo(geom->pnts[1].fX, geom->pnts[1].fY,
+                          geom->pnts[2].fX, geom->pnts[2].fY);
+
+          } else if ( geom->poles == 4 ) {
+              path.cubicTo(geom->pnts[1].fX, geom->pnts[1].fY,
+                           geom->pnts[2].fX, geom->pnts[2].fY,
+                           geom->pnts[3].fX, geom->pnts[3].fY);
+          } else {                                                 //can only handle lines,quads,cubes
+              Base::Console().Error("Bad pole count (%d) for BezierSegment\n",geom->poles);
+              auto itBez = geom->pnts.begin() + 1;
+              for (; itBez != geom->pnts.end();itBez++)  {
+                path.lineTo((*itBez).fX, (*itBez).fY);         //show something for debugging
+              }
+          }
         } break;
         case TechDrawGeometry::BSPLINE: {
           TechDrawGeometry::BSpline *geom = static_cast<TechDrawGeometry::BSpline *>(baseGeom);
@@ -250,8 +277,6 @@ void QGIViewPart::updateView(bool update)
         viewPart->isTouched() ||
         viewPart->Source.isTouched() ||
         viewPart->Direction.isTouched() ||
-        viewPart->XAxisDirection.isTouched() ||
-        viewPart->Tolerance.isTouched() ||
         viewPart->Scale.isTouched() ||
         viewPart->HardHidden.isTouched() ||
         viewPart->SmoothVisible.isTouched() ||
@@ -289,6 +314,9 @@ void QGIViewPart::drawViewPart()
 {
     auto viewPart( dynamic_cast<TechDraw::DrawViewPart *>(getViewObject()) );
     if ( viewPart == nullptr ) {
+        return;
+    }
+    if (!viewPart->hasGeometry()) {
         return;
     }
 
@@ -363,10 +391,10 @@ void QGIViewPart::drawViewPart()
             }
             item->setPrettyNormal();
             //debug a path
-            //QPainterPath edgePath=drawPainterPath(*itEdge);
-            //std::stringstream edgeId;
-            //edgeId << "QGIVP.edgePath" << i;
-            //dumpPath(edgeId.str().c_str(),edgePath);
+//            QPainterPath edgePath=drawPainterPath(*itEdge);
+//            std::stringstream edgeId;
+//            edgeId << "QGIVP.edgePath" << i;
+//            dumpPath(edgeId.str().c_str(),edgePath);
          }
     }
 
@@ -394,9 +422,11 @@ void QGIViewPart::drawViewPart()
         }
     }
     //draw section line
-    if (viewPart->ShowSectionLine.getValue() &&
-        viewPart->getSectionRef() ) {
-        drawSectionLine(true);
+    if (viewPart->ShowSectionLine.getValue()) {
+        auto refs = viewPart->getSectionRefs();
+        for (auto& r:refs) {
+            drawSectionLine(r, true);
+        }
     }
     //draw center lines
     drawCenterLines(true);
@@ -464,10 +494,9 @@ void QGIViewPart::removeDecorations()
      }
 }
 
-void QGIViewPart::drawSectionLine(bool b)
+void QGIViewPart::drawSectionLine(TechDraw::DrawViewSection* viewSection, bool b)
 {
     TechDraw::DrawViewPart *viewPart = static_cast<TechDraw::DrawViewPart *>(getViewObject());
-    TechDraw::DrawViewSection *viewSection = viewPart->getSectionRef();
     if (!viewPart ||
         !viewSection)  {
         return;
@@ -475,32 +504,38 @@ void QGIViewPart::drawSectionLine(bool b)
     if (b) {
         QGISectionLine* sectionLine = new QGISectionLine();
         addToGroup(sectionLine);
-        sectionLine->setSymbol(const_cast<char*>(viewPart->SymbolSection.getValue()));
-        Base::Vector3d sectionDir(0,1,0);
-        Base::Vector3d up(0,1,0);
-        Base::Vector3d down(0,-1,0);
-        Base::Vector3d right(1,0,0);
-        Base::Vector3d left(-1,0,0);
-        bool horiz = viewPart->HorizSectionLine.getValue();
-        bool normal = viewPart->ArrowUpSection.getValue();
-        if (horiz && normal) {
-            sectionDir = up;
-        } else if (horiz && !normal) {
-            sectionDir = down;
-        } else if (!horiz && normal) {
-            sectionDir = right;
-        } else if (!horiz && !normal) {
-            sectionDir = left;
+        sectionLine->setSymbol(const_cast<char*>(viewSection->SectionSymbol.getValue()));
+
+        //TODO: handle oblique section lines?
+        //find smallest internal angle(normalDir,get?Dir()) and use -1*get?Dir() +/- angle
+        //Base::Vector3d normalDir = viewSection->SectionNormal.getValue();
+        Base::Vector3d arrowDir(0,1,0);                //for drawing only, not geom
+        Base::Vector3d lineDir(1,0,0);
+        bool horiz = false;
+        if (viewSection->SectionDirection.isValue("Right")) {
+            arrowDir = Base::Vector3d(1,0,0);
+            lineDir = Base::Vector3d(0,1,0);
+        } else if (viewSection->SectionDirection.isValue("Left")) {
+            arrowDir = Base::Vector3d(-1,0,0);
+            lineDir = Base::Vector3d(0,-1,0);
+        } else if (viewSection->SectionDirection.isValue("Up")) {
+            arrowDir = Base::Vector3d(0,1,0);
+            lineDir = Base::Vector3d(1,0,0);
+            horiz = true;
+        } else if (viewSection->SectionDirection.isValue("Down")) {
+            arrowDir = Base::Vector3d(0,-1,0);
+            lineDir = Base::Vector3d(-1,0,0);
+            horiz = true;
         }
-        sectionLine->setDirection(sectionDir.x,sectionDir.y);
+        sectionLine->setDirection(arrowDir.x,arrowDir.y);
 
         Base::Vector3d org = viewSection->SectionOrigin.getValue();
         double scale = viewPart->Scale.getValue();
         Base::Vector3d pOrg = scale * viewPart->projectPoint(org);
-        pOrg.y = -1 * pOrg.y;
-        //now project pOrg onto sectionDir
+        //pOrg.y = -1 * pOrg.y;
+        //now project pOrg onto arrowDir
         Base::Vector3d displace;
-        displace.ProjectToLine(pOrg, sectionDir);
+        displace.ProjectToLine(pOrg, arrowDir);
         Base::Vector3d offset = pOrg + displace;
 
         sectionLine->setPos(offset.x,offset.y);
@@ -752,7 +787,7 @@ void QGIViewPart::dumpPath(const char* text,QPainterPath path)
             } else if (elem.isCurveTo()) {
                 typeName = "CurveTo";
             } else {
-                typeName = "Unknown";
+                typeName = "CurveData";
             }
             Base::Console().Message(">>>>> element %d: type:%d/%s pos(%.3f,%.3f) M:%d L:%d C:%d\n",iElem,
                                     elem.type,typeName,elem.x,elem.y,elem.isMoveTo(),elem.isLineTo(),elem.isCurveTo());

@@ -25,7 +25,6 @@
 
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Compound.hxx>
-#include <HLRBRep_Data.hxx>
 #include <gp_Pnt.hxx>
 
 #include <Base/Vector3D.h>
@@ -33,7 +32,6 @@
 #include <vector>
 
 #include "Geometry.h"
-//#include "DrawViewPart.h"
 
 namespace TechDraw
 {
@@ -48,22 +46,26 @@ namespace TechDrawGeometry
 TopoDS_Shape TechDrawExport mirrorShape(const TopoDS_Shape &input,
                         const gp_Pnt& inputCenter,
                         double scale);
+TopoDS_Shape TechDrawExport scaleShape(const TopoDS_Shape &input,
+                                       double scale);
 
-//! Returns the centroid of shape, as viewed according to direction and xAxis
+//! Returns the centroid of shape, as viewed according to direction
 gp_Pnt TechDrawExport findCentroid(const TopoDS_Shape &shape,
-                        const Base::Vector3d &direction,
-                        const Base::Vector3d &xAxis);
+                        const Base::Vector3d &direction);
+
+gp_Ax2 TechDrawExport getViewAxis(const Base::Vector3d origin,
+                                  const Base::Vector3d& direction,
+                                  const bool flip=true);
 
 class TechDrawExport GeometryObject
 {
 public:
     /// Constructor
-    GeometryObject(TechDraw::DrawViewPart* parent);
+    GeometryObject(const std::string& parent);
     virtual ~GeometryObject();
 
     void clear();
 
-    void setTolerance(double value);
     void setScale(double value);
 
     //! Returns 2D bounding box
@@ -71,17 +73,17 @@ public:
 
     const std::vector<Vertex *>   & getVertexGeometry() const { return vertexGeom; };
     const std::vector<BaseGeom *> & getEdgeGeometry() const { return edgeGeom; };
-    const std::vector<BaseGeom *> getVisibleFaceEdges() const;
+    const std::vector<BaseGeom *> getVisibleFaceEdges(bool smooth, bool seam) const;
     const std::vector<Face *>     & getFaceGeometry() const { return faceGeom; };
 
     void projectShape(const TopoDS_Shape &input,
                                  const gp_Pnt& inputCenter,
-                                 const Base::Vector3d &direction,
-                                 const Base::Vector3d &xAxis);
+                                 const Base::Vector3d &direction);
     void extractGeometry(edgeClass category, bool visible);
     void addFaceGeom(Face * f);
     void clearFaceGeom();
     void setIsoCount(int i) { m_isoCount = i; }
+    void setParentName(std::string n);                          //for debug messages
 
 protected:
     //HLR output
@@ -98,21 +100,8 @@ protected:
 
     void addGeomFromCompound(TopoDS_Shape edgeCompound, edgeClass category, bool visible);
 
-    /// Helper for calcBoundingBox()
-    /*! Note that the name of this function isn't totally accurate due to
-     *  TechDraw::Bsplines being composed of BezierSegments.
-     */
-    Base::BoundBox3d boundingBoxOfBspline(const BSpline *spline) const;
 
-    /// Helper for calcBoundingBox()
-    /*!
-     * AOE = arc of ellipse.  Defaults allow this to be used for regular
-     * ellipses as well as arcs.
-     */
-    Base::BoundBox3d boundingBoxOfAoe(const Ellipse *aoe, double start = 0,
-                                      double end = 2 * M_PI, bool cw = false) const;
-
-    /// Helper for boundingBoxOf(Aoc|Aoe)()
+    //similar function in Geometry?
     /*!
      * Returns true iff angle theta is in [first, last], where the arc goes
      * clockwise (cw=true) or counterclockwise (cw=false) from first to last.
@@ -126,10 +115,9 @@ protected:
 
     bool findVertex(Base::Vector2D v);
 
-    double Tolerance;
     double Scale;
 
-    TechDraw::DrawViewPart* m_parent;
+    std::string m_parentName;
     int m_isoCount;
 };
 
