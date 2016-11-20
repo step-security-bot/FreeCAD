@@ -71,7 +71,7 @@ install:
   - if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
   - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cl.exe --help
-  - cl.exe -M 1073741824
+  #- cl.exe -M 1073741824
   #- cl.exe -C
   #- cl.exe -z
   #- cl.exe -c
