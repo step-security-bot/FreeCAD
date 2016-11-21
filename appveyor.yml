@@ -52,7 +52,7 @@ install:
   #- pip install xxhash
   #- pip install pyinstaller
   ##- pyinstaller --onefile clcache.py
-  - pip install cx_Freeze 4.3.3
+  - pip install cx_Freeze==4.3.3
   - cd C:\Python34\Scripts
   - python.exe cxfreeze-postinstall
   - cd C:\projects\freecad\clcache-bin
