@@ -52,7 +52,7 @@ install:
   #- pip install xxhash
   - pip install pyinstaller
   - pyinstaller --onefile clcache.py
-  - pyinstaller --onefile clcachesrv.py
+  - python clcachesrv.py start
   #- pip install cx_Freeze==4.3.3
   #- cd C:\Python34\Scripts
   #- python.exe cxfreeze-postinstall
@@ -60,7 +60,6 @@ install:
   #- cxfreeze clcache.py --silent --target-dir dist
   - cd dist
   - dir
-  - sc.exe create <clcachesrv> binPath= "clcachesrv.exe"
   - ren clcache.exe cl.exe
   - set CLCACHE_DIR=C:\projects\clcache
   - set CLCACHE_SERVER=1
