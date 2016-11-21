@@ -51,7 +51,7 @@ install:
   - cd clcache-bin
   #- pip install xxhash
   #- pip install pyinstaller
-  #- pyinstaller --onefile clcache.py
+  ##- pyinstaller --onefile clcache.py
   - pip install cx_Freeze
   - cd C:\Python34\Scripts
   - python.exe cxfreeze-postinstall
