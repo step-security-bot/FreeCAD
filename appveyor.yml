@@ -52,7 +52,7 @@ install:
   #- pip install xxhash
   - pip install pyinstaller
   - pyinstaller --onefile clcache.py
-  - pythonw.exe clcachesrv.py
+  - clcachesrv.py
   #- pip install cx_Freeze==4.3.3
   #- cd C:\Python34\Scripts
   #- python.exe cxfreeze-postinstall
