@@ -45,15 +45,15 @@ install:
   - 7z x 17bc49576a34daef9c3005f378750a29d97e3d0f.zip > nul
   - ren clcache-17bc49576a34daef9c3005f378750a29d97e3d0f clcache-bin
   - python --version
-  - set PATH=C:\\Python35;%PATH%
-  - set PATH=C:\\Python35\\Scripts;%PATH%
+  - set PATH=C:\\Python34;%PATH%
+  - set PATH=C:\\Python34\\Scripts;%PATH%
   - python --version
   - cd clcache-bin
   #- pip install xxhash
   #- pip install pyinstaller
   ##- pyinstaller --onefile clcache.py
-  - pip install cx_Freeze
-  - cd C:\Python35\Scripts
+  - pip install cx_Freeze 4.3.3
+  - cd C:\Python34\Scripts
   - python.exe cxfreeze-postinstall
   - cd C:\projects\freecad\clcache-bin
   - cxfreeze clcache.py --silent --target-dir dist
