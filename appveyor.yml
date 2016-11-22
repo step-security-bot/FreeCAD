@@ -54,7 +54,7 @@ install:
   - pyinstaller --onefile clcache.py
   - cd server
   - python -m venv .
-  - pip install -r requirements.txt
+  - Scripts\pip install -r requirements.txt
   - clcachesrv.py
   - cd..
   #- clcachesrv.py
