@@ -56,7 +56,7 @@ install:
   - python -m venv .
   - Scripts\pip install -r requirements.txt
   - cd..
-  - Start-Process server\Scripts\python server\clcachesrv.py
+  - ps: Start-Process server\Scripts\python server\clcachesrv.py
   #- clcachesrv.py
   #- pip install cx_Freeze==4.3.3
   #- cd C:\Python34\Scripts
