@@ -93,7 +93,7 @@ build_script:
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\build\bin /E /Q
   - set CLCACHE_SERVER=1
-  - ps: Start-Process server\Scripts\python server\clcachesrv.py
+  - ps: Start-Process C:\projects\freecad\clcache-bin\server\Scripts\python C:\projects\freecad\clcache-bin\server\clcachesrv.py
   - msbuild /m FreeCAD_Trunk.sln
 
 after_build:
