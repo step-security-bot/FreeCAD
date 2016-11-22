@@ -56,7 +56,6 @@ install:
   - python -m venv .
   - Scripts\pip install -r requirements.txt
   - cd..
-  - ps: Start-Process server\Scripts\python server\clcachesrv.py
   #- clcachesrv.py
   #- pip install cx_Freeze==4.3.3
   #- cd C:\Python34\Scripts
@@ -67,7 +66,7 @@ install:
   - dir
   - ren clcache.exe cl.exe
   - set CLCACHE_DIR=C:\projects\clcache
-  - set CLCACHE_SERVER=1
+  #- set CLCACHE_SERVER=1
   #- set CLCACHE_LOG=1
   #- set CLCACHE_HARDLINK=1
   #- set CLCACHE_NODIRECT=1
@@ -93,6 +92,7 @@ build_script:
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\build\bin /E /Q
+  - ps: Start-Process server\Scripts\python server\clcachesrv.py && set CLCACHE_SERVER=1
   - msbuild /m FreeCAD_Trunk.sln
 
 after_build:
