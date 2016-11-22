@@ -41,9 +41,9 @@ install:
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
   #- ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.3.1.zip
   #- 7z x v3.3.1.zip > nul
-  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/a333d166e903d48691e85024bba7024ddacc2b30.zip
-  - 7z x a333d166e903d48691e85024bba7024ddacc2b30.zip > nul
-  - ren clcache-a333d166e903d48691e85024bba7024ddacc2b30 clcache-bin
+  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/17bc49576a34daef9c3005f378750a29d97e3d0f.zip
+  - 7z x 17bc49576a34daef9c3005f378750a29d97e3d0f.zip > nul
+  - ren clcache-17bc49576a34daef9c3005f378750a29d97e3d0f clcache-bin
   - python --version
   - set PATH=C:\\Python34;%PATH%
   - set PATH=C:\\Python34\\Scripts;%PATH%
@@ -52,8 +52,7 @@ install:
   #- pip install xxhash
   - pip install pyinstaller
   - pyinstaller --onefile clcache.py
-  - pip install pypiwin32
-  - clcachesrv.py
+  #- clcachesrv.py
   #- pip install cx_Freeze==4.3.3
   #- cd C:\Python34\Scripts
   #- python.exe cxfreeze-postinstall
@@ -63,7 +62,7 @@ install:
   - dir
   - ren clcache.exe cl.exe
   - set CLCACHE_DIR=C:\projects\clcache
-  - set CLCACHE_SERVER=1
+  #- set CLCACHE_SERVER=1
   #- set CLCACHE_LOG=1
   #- set CLCACHE_HARDLINK=1
   #- set CLCACHE_NODIRECT=1
