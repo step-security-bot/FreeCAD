@@ -23,6 +23,7 @@
 
 #include "PreCompiled.h"
 #ifndef _PreComp_
+# include <sstream>
 #endif
 
 #include "GeometryPyCXX.h"
@@ -92,6 +93,13 @@ namespace Base {
 Vector2dPy::Vector2dPy(Py::PythonClassInstance *self, Py::Tuple &args, Py::Dict &kwds)
     : Py::PythonClass<Vector2dPy>::PythonClass(self, args, kwds)
 {
+    double x=0,y=0;
+    if (!PyArg_ParseTuple(args.ptr(), "|dd", &x, &y)) {
+        throw Py::Exception();
+    }
+
+    v.x = x;
+    v.y = y;
 }
 
 Vector2dPy::~Vector2dPy()
@@ -100,12 +108,25 @@ Vector2dPy::~Vector2dPy()
 
 void Vector2dPy::init_type(void)
 {
-    behaviors().name( "Vector2dPy" );
+    behaviors().name( "Vector2d" );
     behaviors().doc( "Vector2d class" );
     behaviors().supportGetattro();
     behaviors().supportSetattro();
+    behaviors().supportRepr();
     // Call to make the type ready for use
     behaviors().readyType();
+}
+
+Py::Object Vector2dPy::repr()
+{
+    Py::Float x(v.x);
+    Py::Float y(v.y);
+    std::stringstream str;
+    str << "Vector2 (";
+    str << (std::string)x.repr() << ", "<< (std::string)y.repr();
+    str << ")";
+
+    return Py::String(str.str());
 }
 
 Py::Object Vector2dPy::getattro(const Py::String &name_)

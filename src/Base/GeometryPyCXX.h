@@ -56,7 +56,8 @@ public:
     static void init_type(void);
     Py::Object getattro(const Py::String &name_);
     int setattro(const Py::String &name_, const Py::Object &value);
-    inline const Vector2d& getValue() const {
+    virtual Py::Object repr();
+    inline const Vector2d& value() const {
         return v;
     }
     inline void setValue(const Vector2d& n) {
@@ -74,6 +75,8 @@ private:
 }
 
 namespace Py {
+
+typedef PythonClassObject<Base::Vector2dPy> Vector2d;
 
 // Implementing the vector class in the fashion of the PyCXX library.
 class BaseExport Vector : public Object
