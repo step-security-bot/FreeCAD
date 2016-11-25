@@ -80,8 +80,8 @@ install:
   - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cl.exe --help
   - cl.exe -M 2147483648
-  - cl.exe -C
-  - cl.exe -z
+  #- cl.exe -C
+  #- cl.exe -z
   - cl.exe -s
 
 build_script:
