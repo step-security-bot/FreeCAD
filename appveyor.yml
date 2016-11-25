@@ -94,7 +94,7 @@ build_script:
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\build\bin /E /Q
   - msbuild /m FreeCAD_Trunk.sln
-  - msbuild FreeCAD_Trunk.sln /t:Clean
+  #- msbuild FreeCAD_Trunk.sln /t:Clean
   - msbuild /m FreeCAD_Trunk.sln
 
 after_build:
