@@ -55,7 +55,7 @@ install:
   - cd server
   - python -m venv .
   - Scripts\pip install -r requirements.txt
-  - ps: Start-Process C:\projects\freecad\clcache-bin\server\Scripts\python C:\projects\freecad\clcache-bin\server\clcachesrv.py
+  #- ps: Start-Process C:\projects\freecad\clcache-bin\server\Scripts\python C:\projects\freecad\clcache-bin\server\clcachesrv.py
   - cd..
   #- clcachesrv.py
   #- pip install cx_Freeze==4.3.3
@@ -106,7 +106,7 @@ after_build:
   - python showprofilereport.py
   - cd "C:\projects\freecad\clcache-bin\dist"
   - cl.exe -s
-  - cl.exe -c
+  #- cl.exe -c
 
 #artifacts:
 
