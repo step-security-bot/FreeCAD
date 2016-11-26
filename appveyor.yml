@@ -67,7 +67,7 @@ install:
   - dir
   - ren clcache.exe cl.exe
   - set CLCACHE_DIR=C:\projects\clcache
-  - set CLCACHE_SERVER=1
+  #- set CLCACHE_SERVER=1
   #- set CLCACHE_LOG=1
   - set CLCACHE_PROFILE=1
   #- set CLCACHE_HARDLINK=1
@@ -83,8 +83,8 @@ install:
   - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\showprofilereport.py "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cl.exe --help
   - cl.exe -M 2147483648
-  #- cl.exe -C
-  #- cl.exe -z
+  - cl.exe -C
+  - cl.exe -z
   - cl.exe -s
 
 build_script:
