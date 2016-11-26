@@ -57,7 +57,6 @@ install:
   - Scripts\pip install -r requirements.txt
   - ps: Start-Process C:\projects\freecad\clcache-bin\server\Scripts\python C:\projects\freecad\clcache-bin\server\clcachesrv.py
   - cd..
-  #- clcachesrv.py
   #- pip install cx_Freeze==4.3.3
   #- cd C:\Python34\Scripts
   #- python.exe cxfreeze-postinstall
@@ -67,7 +66,7 @@ install:
   - dir
   - ren clcache.exe cl.exe
   - set CLCACHE_DIR=C:\projects\clcache
-  #- set CLCACHE_SERVER=1
+  - set CLCACHE_SERVER=1
   #- set CLCACHE_LOG=1
   - set CLCACHE_PROFILE=1
   #- set CLCACHE_HARDLINK=1
@@ -79,12 +78,10 @@ install:
   - ren cl.exe.config cl_original.exe.config
   - if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
   - if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\dist\cl.exe "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
-  #- if [%ARCH%] == [Win64] ( xcopy C:\projects\freecad\clcache-bin\showprofilereport.py "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
-  #- if [%ARCH%] == [Win32] ( xcopy C:\projects\freecad\clcache-bin\showprofilereport.py "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cl.exe --help
   - cl.exe -M 2147483648
-  #- cl.exe -C
-  #- cl.exe -z
+  - cl.exe -C
+  - cl.exe -z
   - cl.exe -s
 
 build_script:
@@ -101,8 +98,6 @@ build_script:
 after_build:
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
-  #- if [%ARCH%] == [Win64] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
-  #- if [%ARCH%] == [Win32] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - cd C:\projects\freecad\build
   - python C:\projects\freecad\clcache-bin\showprofilereport.py
   - cd "C:\projects\freecad\clcache-bin\dist"
