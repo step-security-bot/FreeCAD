@@ -55,16 +55,18 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
     Gui::ToolBarItem* root = StdWorkbench::setupToolBars();
     Gui::ToolBarItem* fem = new Gui::ToolBarItem(root);
     fem->setCommand("FEM");
-    *fem << "Fem_Analysis"
+    *fem << "Fem_FemMesh2Mesh"
+         << "Fem_Analysis"
          << "Fem_SolverCalculix"
          // << "Fem_SolverZ88"
-         << "Fem_MeshFromShape"
+         << "Fem_MeshNetgenFromShape"
+         << "Fem_MeshGmshFromShape"
          << "Fem_MechanicalMaterial"
          << "Fem_MaterialMechanicalNonlinear"
          << "Fem_BeamSection"
          << "Fem_ShellThickness"
          << "Separator"
-         << "Fem_CreateNodesSet"
+         //<< "Fem_CreateNodesSet"
          << "Separator"
          << "Fem_ConstraintFixed"
          << "Fem_ConstraintDisplacement"
@@ -75,12 +77,11 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
          << "Fem_ConstraintSelfWeight"
          << "Fem_ConstraintForce"
          << "Fem_ConstraintPressure"
-         << "Separator"
-         << "Fem_ConstraintBearing"
-         << "Fem_ConstraintGear"
-         << "Fem_ConstraintPulley"
-         << "Separator"         
-         << "Fem_ConstraintFluidBoundary"
+         //<< "Separator"
+         //<< "Fem_ConstraintBearing"
+         //<< "Fem_ConstraintGear"
+         //<< "Fem_ConstraintPulley"
+         //<< "Fem_ConstraintFluidBoundary"
          << "Separator"
          << "Fem_ConstraintTemperature"
          << "Fem_ConstraintHeatflux"
@@ -113,13 +114,21 @@ Gui::MenuItem* Workbench::setupMenuBar() const
 {
     Gui::MenuItem* root = StdWorkbench::setupMenuBar();
     Gui::MenuItem* item = root->findItem("&Windows");
+
+    Gui::MenuItem* util = new Gui::MenuItem;
+    util->setCommand("&Utilities");
+    *util << "Fem_FemMesh2Mesh";
+
     Gui::MenuItem* fem = new Gui::MenuItem;
     root->insertItem(item, fem);
     fem->setCommand("&FEM");
-    *fem << "Fem_Analysis"
+    *fem << util
+         << "Separator"
+         << "Fem_Analysis"
          << "Fem_SolverCalculix"
          << "Fem_SolverZ88"
-         << "Fem_MeshFromShape"
+         << "Fem_MeshNetgenFromShape"
+         << "Fem_MeshGmshFromShape"
          << "Fem_MechanicalMaterial"
          << "Fem_MaterialMechanicalNonlinear"
          << "Fem_BeamSection"

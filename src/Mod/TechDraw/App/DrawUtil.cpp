@@ -37,16 +37,18 @@
 
 
 #include <BRep_Tool.hxx>
+#include <gp_Ax3.hxx>
 #include <gp_Pnt.hxx>
 #include <Precision.hxx>
-#include <BRepLProp_CLProps.hxx>
-#include <TopExp_Explorer.hxx>
 #include <BRepAdaptor_Curve.hxx>
+#include <BRepExtrema_DistShapeShape.hxx>
+#include <BRepGProp.hxx>
+#include <BRepLProp_CLProps.hxx>
 #include <BRepLProp_CurveTool.hxx>
+#include <TopExp_Explorer.hxx>
 #include <TopTools_IndexedMapOfShape.hxx>
 #include <TopExp.hxx>
 #include <TopExp_Explorer.hxx>
-#include <BRepGProp.hxx>
 #include <GProp_GProps.hxx>
 
 #endif
@@ -139,6 +141,23 @@ bool DrawUtil::isZeroEdge(TopoDS_Edge e)
     }
     return result;
 }
+double DrawUtil::simpleMinDist(TopoDS_Shape s1, TopoDS_Shape s2)
+{
+    Standard_Real minDist = -1;
+
+    BRepExtrema_DistShapeShape extss(s1, s2);
+    if (!extss.IsDone()) {
+        Base::Console().Message("DU::simpleMinDist - BRepExtrema_DistShapeShape failed");
+        return -1;
+    }
+    int count = extss.NbSolution();
+    if (count != 0) {
+        minDist = extss.Value();
+    } else {
+        minDist = -1;
+    }
+    return minDist;
+}
 
 //! assumes 2d on XY
 //! quick angle for straight edges
@@ -210,7 +229,6 @@ double DrawUtil::angleWithX(TopoDS_Edge e, TopoDS_Vertex v)
     }
     return result;
 }
-
 
 bool DrawUtil::isFirstVert(TopoDS_Edge e, TopoDS_Vertex v)
 {
@@ -285,6 +303,32 @@ int DrawUtil::vectorCompare(const Base::Vector3d& v1, const Base::Vector3d& v2)
     return result;
 }
 
+//!convert fromPoint in coordinate system fromSystem to reference coordinate system
+Base::Vector3d DrawUtil::toR3(const gp_Ax2 fromSystem, const Base::Vector3d fromPoint)
+{
+    gp_Pnt gFromPoint(fromPoint.x,fromPoint.y,fromPoint.z);
+    gp_Pnt gToPoint;
+    gp_Trsf T;
+    gp_Ax3 gRef;
+    gp_Ax3 gFrom(fromSystem);
+    T.SetTransformation (gFrom, gRef);
+    gToPoint = gFromPoint.Transformed(T);
+    Base::Vector3d toPoint(gToPoint.X(),gToPoint.Y(),gToPoint.Z());
+    return toPoint;
+}
+
+//! check if direction is parallel to stdZ
+bool DrawUtil::checkZParallel(const Base::Vector3d direction)
+{
+    bool result = false;
+    Base::Vector3d stdZ(0.0,0.0,1.0);
+    double dot = fabs(direction.Dot(stdZ));
+    double mag = direction.Length() * 1;   //stdZ.Length() == 1
+    if (DrawUtil::fpCompare(dot,mag)) {
+        result = true;
+    }
+    return result;
+}
 
 //based on Function provided by Joe Dowsett, 2014
 double DrawUtil::sensibleScale(double working_scale)

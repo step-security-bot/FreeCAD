@@ -27,6 +27,8 @@
 
 #include <QString>
 #include <QByteArray>
+
+#include <gp_Ax2.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Vertex.hxx>
 #include <TopoDS_Edge.hxx>
@@ -47,6 +49,7 @@ class TechDrawExport DrawUtil {
         static std::string makeGeomName(std::string geomType, int index);
         static bool isSamePoint(TopoDS_Vertex v1, TopoDS_Vertex v2);
         static bool isZeroEdge(TopoDS_Edge e);
+        static double simpleMinDist(TopoDS_Shape s1, TopoDS_Shape s2);
         static double sensibleScale(double working_scale);
         static double angleWithX(TopoDS_Edge e, bool reverse);
         static double angleWithX(TopoDS_Edge e, TopoDS_Vertex v);
@@ -56,6 +59,8 @@ class TechDrawExport DrawUtil {
         static Base::Vector3d vertex2Vector(const TopoDS_Vertex& v);
         static std::string formatVector(const Base::Vector3d& v);
         static int vectorCompare(const Base::Vector3d& v1, const Base::Vector3d& v2);
+        static Base::Vector3d toR3(const gp_Ax2 fromSystem, const Base::Vector3d fromPoint);
+        static bool checkZParallel(const Base::Vector3d direction);
 
 
         //debugging routines

@@ -27,12 +27,9 @@ __url__ = "http://www.freecadweb.org"
 ## @package CommandControlSolver
 #  \ingroup FEM
 
-import FreeCAD
 from FemCommands import FemCommands
-
-if FreeCAD.GuiUp:
-    import FreeCADGui
-    from PySide import QtCore
+import FreeCADGui
+from PySide import QtCore
 
 
 class _CommandControlSolver(FemCommands):
@@ -53,5 +50,4 @@ class _CommandControlSolver(FemCommands):
         FreeCADGui.ActiveDocument.setEdit(solver_obj, 0)
 
 
-if FreeCAD.GuiUp:
-    FreeCADGui.addCommand('Fem_ControlSolver', _CommandControlSolver())
+FreeCADGui.addCommand('Fem_ControlSolver', _CommandControlSolver())

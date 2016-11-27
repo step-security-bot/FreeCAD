@@ -27,12 +27,9 @@ __url__ = "http://www.freecadweb.org"
 ## @package CommandRunSolver
 #  \ingroup FEM
 
-import FreeCAD
 from FemCommands import FemCommands
-
-if FreeCAD.GuiUp:
-    import FreeCADGui
-    from PySide import QtCore, QtGui
+import FreeCADGui
+from PySide import QtCore, QtGui
 
 
 class _CommandRunSolver(FemCommands):
@@ -90,5 +87,4 @@ class _CommandRunSolver(FemCommands):
         tp.restore_result_dialog()
 
 
-if FreeCAD.GuiUp:
-    FreeCADGui.addCommand('Fem_RunSolver', _CommandRunSolver())
+FreeCADGui.addCommand('Fem_RunSolver', _CommandRunSolver())

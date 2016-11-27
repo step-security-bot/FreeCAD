@@ -29,10 +29,8 @@ __url__ = "http://www.freecadweb.org"
 
 import FreeCAD
 from FemCommands import FemCommands
-
-if FreeCAD.GuiUp:
-    import FreeCADGui
-    from PySide import QtCore
+import FreeCADGui
+from PySide import QtCore
 
 
 class _CommandSolverZ88(FemCommands):
@@ -51,5 +49,4 @@ class _CommandSolverZ88(FemCommands):
         FreeCADGui.doCommand("FemGui.getActiveAnalysis().Member = FemGui.getActiveAnalysis().Member + [FemSolverZ88.makeFemSolverZ88()]")
 
 
-if FreeCAD.GuiUp:
-    FreeCADGui.addCommand('Fem_SolverZ88', _CommandSolverZ88())
+FreeCADGui.addCommand('Fem_SolverZ88', _CommandSolverZ88())

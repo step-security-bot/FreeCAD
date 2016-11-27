@@ -29,11 +29,9 @@ __url__ = "http://www.freecadweb.org"
 
 import FreeCAD
 from FemCommands import FemCommands
-
-if FreeCAD.GuiUp:
-    import FreeCADGui
-    import FemGui
-    from PySide import QtCore
+import FreeCADGui
+import FemGui
+from PySide import QtCore
 
 
 class _CommandMaterialMechanicalNonlinear(FemCommands):
@@ -76,5 +74,4 @@ class _CommandMaterialMechanicalNonlinear(FemCommands):
             if solver_object and solver_object.SolverType == 'FemSolverCalculix':
                 solver_object.MaterialNonlinearity = "nonlinear"
 
-if FreeCAD.GuiUp:
-    FreeCADGui.addCommand('Fem_MaterialMechanicalNonlinear', _CommandMaterialMechanicalNonlinear())
+FreeCADGui.addCommand('Fem_MaterialMechanicalNonlinear', _CommandMaterialMechanicalNonlinear())

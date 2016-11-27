@@ -1,6 +1,6 @@
 # ***************************************************************************
 # *                                                                         *
-# *   Copyright (c) 2013-2015 - Juergen Riegel <FreeCAD@juergen-riegel.net> *
+# *   Copyright (c) 2016 - Bernd Hahnebach <bernd@bimstatik.org>            *
 # *                                                                         *
 # *   This program is free software; you can redistribute it and/or modify  *
 # *   it under the terms of the GNU Lesser General Public License (LGPL)    *
@@ -20,42 +20,45 @@
 # *                                                                         *
 # ***************************************************************************
 
-__title__ = "Command Mesh From Shape"
-__author__ = "Juergen Riegel"
+__title__ = "Command GMSH Mesh From Shape"
+__author__ = "Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
-## @package CommandMeshFromShape
+## @package CommandMeshGmshFromShape
 #  \ingroup FEM
 
 import FreeCAD
 from FemCommands import FemCommands
+import FreeCADGui
+import FemGui
+from PySide import QtCore
 
-if FreeCAD.GuiUp:
-    import FreeCADGui
-    from PySide import QtCore
 
-
-class _CommandMeshFromShape(FemCommands):
-    # the Fem_MeshFromShape command definition
+class _CommandMeshGmshFromShape(FemCommands):
+    # the Fem_MeshGmshFromShape command definition
     def __init__(self):
-        super(_CommandMeshFromShape, self).__init__()
-        self.resources = {'Pixmap': 'fem-fem-mesh-from-shape',
-                          'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_MeshFromShape", "FEM mesh from shape"),
-                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_MeshFromShape", "Create a FEM volume mesh from a solid shape")}
+        super(_CommandMeshGmshFromShape, self).__init__()
+        self.resources = {'Pixmap': 'fem-fem-mesh-gmsh-from-shape',
+                          'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_MeshGmshFromShape", "FEM mesh from shape by GMSH"),
+                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_MeshGmshFromShape", "Create a FEM mesh from a shape by GMSH mesher")}
         self.is_active = 'with_part_feature'
 
     def Activated(self):
-        FreeCAD.ActiveDocument.openTransaction("Create FEM mesh")
+        FreeCAD.ActiveDocument.openTransaction("Create FEM mesh by GMSH")
         FreeCADGui.addModule("FemGui")
         sel = FreeCADGui.Selection.getSelection()
         if (len(sel) == 1):
             if(sel[0].isDerivedFrom("Part::Feature")):
-                FreeCADGui.doCommand("App.activeDocument().addObject('Fem::FemMeshShapeNetgenObject', '" + sel[0].Name + "_Mesh')")
-                FreeCADGui.doCommand("App.activeDocument().ActiveObject.Shape = App.activeDocument()." + sel[0].Name)
-                FreeCADGui.doCommand("Gui.activeDocument().setEdit(App.ActiveDocument.ActiveObject.Name)")
+                mesh_obj_name = sel[0].Name + "_Mesh"
+                FreeCADGui.addModule("FemMeshGmsh")
+                FreeCADGui.doCommand("FemMeshGmsh.makeFemMeshGmsh('" + mesh_obj_name + "')")
+                FreeCADGui.doCommand("App.ActiveDocument.ActiveObject.Part = App.ActiveDocument." + sel[0].Name)
+                if FemGui.getActiveAnalysis():
+                    FreeCADGui.addModule("FemGui")
+                    FreeCADGui.doCommand("FemGui.getActiveAnalysis().Member = FemGui.getActiveAnalysis().Member + [App.ActiveDocument.ActiveObject]")
+                FreeCADGui.doCommand("Gui.ActiveDocument.setEdit(App.ActiveDocument.ActiveObject.Name)")
 
         FreeCADGui.Selection.clearSelection()
 
 
-if FreeCAD.GuiUp:
-    FreeCADGui.addCommand('Fem_MeshFromShape', _CommandMeshFromShape())
+FreeCADGui.addCommand('Fem_MeshGmshFromShape', _CommandMeshGmshFromShape())

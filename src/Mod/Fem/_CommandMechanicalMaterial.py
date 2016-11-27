@@ -29,11 +29,9 @@ __url__ = "http://www.freecadweb.org"
 
 import FreeCAD
 from FemCommands import FemCommands
-
-if FreeCAD.GuiUp:
-    import FreeCADGui
-    import FemGui
-    from PySide import QtCore
+import FreeCADGui
+import FemGui
+from PySide import QtCore
 
 
 class _CommandMechanicalMaterial(FemCommands):
@@ -57,5 +55,4 @@ class _CommandMechanicalMaterial(FemCommands):
         FreeCADGui.doCommand("Gui.activeDocument().setEdit(App.ActiveDocument.ActiveObject.Name)")
 
 
-if FreeCAD.GuiUp:
-    FreeCADGui.addCommand('Fem_MechanicalMaterial', _CommandMechanicalMaterial())
+FreeCADGui.addCommand('Fem_MechanicalMaterial', _CommandMechanicalMaterial())

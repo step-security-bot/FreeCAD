@@ -29,10 +29,8 @@ __url__ = "http://www.freecadweb.org"
 
 import FreeCAD
 from FemCommands import FemCommands
-
-if FreeCAD.GuiUp:
-    import FreeCADGui
-    from PySide import QtCore
+import FreeCADGui
+from PySide import QtCore
 
 
 class _CommandBeamSection(FemCommands):
@@ -51,5 +49,4 @@ class _CommandBeamSection(FemCommands):
         FreeCADGui.doCommand("FemGui.getActiveAnalysis().Member = FemGui.getActiveAnalysis().Member + [FemBeamSection.makeFemBeamSection()]")
 
 
-if FreeCAD.GuiUp:
-    FreeCADGui.addCommand('Fem_BeamSection', _CommandBeamSection())
+FreeCADGui.addCommand('Fem_BeamSection', _CommandBeamSection())
