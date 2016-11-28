@@ -12,32 +12,13 @@
       Constructor="true">
     <Documentation>
       <Author Licence="LGPL" Name="Werner Mayer" EMail="wmayer@users.sourceforge.net" />
-      <UserDocu>Describes a portion of an parabola</UserDocu>
+      <UserDocu>Describes a portion of a parabola</UserDocu>
     </Documentation>
-    <!--
     <Attribute Name="Focal" ReadOnly="false">
       <Documentation>
         <UserDocu>The focal length of the parabola.</UserDocu>
       </Documentation>
       <Parameter Name="Focal" Type="Float"/>
-    </Attribute>      
-    <Attribute Name="AngleXU" ReadOnly="false">
-      <Documentation>
-        <UserDocu>The angle between the X axis and the major axis of the parabola.</UserDocu>
-      </Documentation>
-      <Parameter Name="AngleXU" Type="Float"/>
-    </Attribute> 
-    <Attribute Name="Center" ReadOnly="false">
-      <Documentation>
-        <UserDocu>Center of the parabola.</UserDocu>
-      </Documentation>
-      <Parameter Name="Center" Type="Object"/>
-    </Attribute>
-    <Attribute Name="Axis" ReadOnly="false">
-      <Documentation>
-        <UserDocu>The axis direction of the parabola</UserDocu>
-      </Documentation>
-      <Parameter Name="Axis" Type="Object"/>
     </Attribute>
     <Attribute Name="Parabola" ReadOnly="true">
       <Documentation>
@@ -45,6 +26,5 @@
       </Documentation>
       <Parameter Name="Parabola" Type="Object"/>
     </Attribute>
-    -->
   </PythonExport>
 </GenerateModel>

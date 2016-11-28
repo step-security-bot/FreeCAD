@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2008 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) 2016 Werner Mayer <wmayer[at]users.sourceforge.net>     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -55,7 +55,7 @@ using namespace Part;
 // returns a string which represents the object e.g. when printed in python
 std::string BSplineCurve2dPy::representation(void) const
 {
-    return "<BSplineCurve object>";
+    return "<BSplineCurve2d object>";
 }
 
 PyObject *BSplineCurve2dPy::PyMake(struct _typeobject *, PyObject *, PyObject *)  // Python wrapper

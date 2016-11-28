@@ -23,7 +23,7 @@
 
 #include "PreCompiled.h"
 #ifndef _PreComp_
-# include <BRepBuilderAPI_MakeEdge.hxx>
+# include <BRepBuilderAPI_MakeEdge2d.hxx>
 # include <BRepBuilderAPI_MakeVertex.hxx>
 # include <Geom2dConvert_CompCurveToBSplineCurve.hxx>
 # include <Geom2dAPI_Interpolate.hxx>
@@ -68,6 +68,19 @@
 #include <Base/Tools.h>
 
 #include "Geometry2d.h"
+#include <Mod/Part/App/Geom2d/Circle2dPy.h>
+#include <Mod/Part/App/Geom2d/Ellipse2dPy.h>
+#include <Mod/Part/App/Geom2d/Hyperbola2dPy.h>
+#include <Mod/Part/App/Geom2d/Parabola2dPy.h>
+#include <Mod/Part/App/Geom2d/ArcOfCircle2dPy.h>
+#include <Mod/Part/App/Geom2d/ArcOfEllipse2dPy.h>
+#include <Mod/Part/App/Geom2d/ArcOfHyperbola2dPy.h>
+#include <Mod/Part/App/Geom2d/ArcOfParabola2dPy.h>
+#include <Mod/Part/App/Geom2d/BezierCurve2dPy.h>
+#include <Mod/Part/App/Geom2d/BSplineCurve2dPy.h>
+#include <Mod/Part/App/Geom2d/Line2dSegmentPy.h>
+#include <Mod/Part/App/Geom2d/Line2dPy.h>
+#include <Mod/Part/App/Geom2d/OffsetCurve2dPy.h>
 
 using namespace Part;
 
@@ -89,12 +102,12 @@ unsigned int Geometry2d::getMemSize (void) const
     return sizeof(Geometry2d);
 }
 
-void Geometry2d::Save(Base::Writer &writer) const
+void Geometry2d::Save(Base::Writer & /*writer*/) const
 {
     throw Base::NotImplementedError("Save");
 }
 
-void Geometry2d::Restore(Base::XMLReader &reader)
+void Geometry2d::Restore(Base::XMLReader & /*reader*/)
 {
     throw Base::NotImplementedError("Restore");
 }
@@ -122,11 +135,13 @@ Geom2dPoint::~Geom2dPoint()
 {
 }
 
-TopoDS_Shape Geom2dPoint::toShape(const Handle_Geom_Surface& hSurface) const
+TopoDS_Shape Geom2dPoint::toShape() const
 {
     Handle_Geom2d_CartesianPoint c = Handle_Geom2d_CartesianPoint::DownCast(handle());
     gp_Pnt2d xy = c->Pnt2d();
-    gp_Pnt pnt = hSurface->Value(xy.X(), xy.Y());
+    gp_Pnt pnt;
+    pnt.SetX(xy.X());
+    pnt.SetY(xy.Y());
     BRepBuilderAPI_MakeVertex mkBuilder(pnt);
     return mkBuilder.Shape();
 }
@@ -210,10 +225,10 @@ Geom2dCurve::~Geom2dCurve()
 {
 }
 
-TopoDS_Shape Geom2dCurve::toShape(const Handle_Geom_Surface& hSurface) const
+TopoDS_Shape Geom2dCurve::toShape() const
 {
     Handle_Geom2d_Curve c = Handle_Geom2d_Curve::DownCast(handle());
-    BRepBuilderAPI_MakeEdge mkBuilder(c, hSurface);
+    BRepBuilderAPI_MakeEdge2d mkBuilder(c);
     return mkBuilder.Shape();
 }
 
@@ -372,8 +387,7 @@ void Geom2dBezierCurve::Restore(Base::XMLReader &/*reader*/)
 
 PyObject *Geom2dBezierCurve::getPyObject(void)
 {
-    return 0;
-    //return new BezierCurvePy((GeomBezierCurve*)this->clone());
+    return new BezierCurve2dPy(static_cast<Geom2dBezierCurve*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -571,8 +585,7 @@ void Geom2dBSplineCurve::Restore(Base::XMLReader &/*reader*/)
 
 PyObject *Geom2dBSplineCurve::getPyObject(void)
 {
-    return 0;
-    //return new BSplineCurvePy((GeomBSplineCurve*)this->clone());
+    return new BSplineCurve2dPy(static_cast<Geom2dBSplineCurve*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -587,14 +600,14 @@ Geom2dConic::~Geom2dConic()
 {
 }
 
-Base::Vector2d Geom2dConic::getCenter(void) const
+Base::Vector2d Geom2dConic::getLocation(void) const
 {
     Handle_Geom2d_Conic conic = Handle_Geom2d_Conic::DownCast(handle());
     const gp_Pnt2d& loc = conic->Location();
     return Base::Vector2d(loc.X(),loc.Y());
 }
 
-void Geom2dConic::setCenter(const Base::Vector2d& Center)
+void Geom2dConic::setLocation(const Base::Vector2d& Center)
 {
     gp_Pnt2d p1(Center.x,Center.y);
     Handle_Geom2d_Conic conic = Handle_Geom2d_Conic::DownCast(handle());
@@ -665,7 +678,7 @@ Geom2dArcOfConic::~Geom2dArcOfConic()
 {
 }
 
-Base::Vector2d Geom2dArcOfConic::getCenter(void) const
+Base::Vector2d Geom2dArcOfConic::getLocation(void) const
 {
     Handle_Geom2d_TrimmedCurve curve = Handle_Geom2d_TrimmedCurve::DownCast(handle());
     Handle_Geom2d_Conic conic = Handle_Geom2d_Conic::DownCast(curve->BasisCurve());
@@ -673,7 +686,7 @@ Base::Vector2d Geom2dArcOfConic::getCenter(void) const
     return Base::Vector2d(loc.X(),loc.Y());
 }
 
-void Geom2dArcOfConic::setCenter(const Base::Vector2d& Center)
+void Geom2dArcOfConic::setLocation(const Base::Vector2d& Center)
 {
     gp_Pnt2d p1(Center.x,Center.y);
     Handle_Geom2d_TrimmedCurve curve = Handle_Geom2d_TrimmedCurve::DownCast(handle());
@@ -891,8 +904,7 @@ void Geom2dCircle::Restore(Base::XMLReader& reader)
 
 PyObject *Geom2dCircle::getPyObject(void)
 {
-    //return new CirclePy((GeomCircle*)this->clone());
-    return 0;
+    return new Circle2dPy(static_cast<Geom2dCircle*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -1017,8 +1029,7 @@ void Geom2dArcOfCircle::Restore(Base::XMLReader &reader)
 
 PyObject *Geom2dArcOfCircle::getPyObject(void)
 {
-    return 0;
-    //return new ArcOfCirclePy(static_cast<GeomArcOfCircle*>(this->clone()));
+    return new ArcOfCircle2dPy(static_cast<Geom2dArcOfCircle*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -1177,8 +1188,7 @@ void Geom2dEllipse::Restore(Base::XMLReader& reader)
 
 PyObject *Geom2dEllipse::getPyObject(void)
 {
-    return 0;
-    //return new EllipsePy((GeomEllipse*)this->clone());
+    return new Ellipse2dPy(static_cast<Geom2dEllipse*>(this->clone()));
 }
 
 void Geom2dEllipse::setHandle(const Handle_Geom2d_Ellipse &e)
@@ -1368,8 +1378,7 @@ void Geom2dArcOfEllipse::Restore(Base::XMLReader &reader)
 
 PyObject *Geom2dArcOfEllipse::getPyObject(void)
 {
-    return 0;
-    //return new ArcOfEllipsePy(static_cast<GeomArcOfEllipse*>(this->clone()));
+    return new ArcOfEllipse2dPy(static_cast<Geom2dArcOfEllipse*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -1492,8 +1501,7 @@ void Geom2dHyperbola::Restore(Base::XMLReader& reader)
 
 PyObject *Geom2dHyperbola::getPyObject(void)
 {
-    return 0;
-    //return new HyperbolaPy((GeomHyperbola*)this->clone());
+    return new Hyperbola2dPy(static_cast<Geom2dHyperbola*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -1638,8 +1646,7 @@ void Geom2dArcOfHyperbola::Restore(Base::XMLReader &reader)
 
 PyObject *Geom2dArcOfHyperbola::getPyObject(void)
 {
-    return 0;
-    //return new ArcOfHyperbolaPy(static_cast<GeomArcOfHyperbola*>(this->clone()));
+    return new ArcOfHyperbola2dPy(static_cast<Geom2dArcOfHyperbola*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -1742,8 +1749,7 @@ void Geom2dParabola::Restore(Base::XMLReader& reader)
 
 PyObject *Geom2dParabola::getPyObject(void)
 {
-    return 0;
-    //return new ParabolaPy((GeomParabola*)this->clone());
+    return new Parabola2dPy(static_cast<Geom2dParabola*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -1867,8 +1873,7 @@ void Geom2dArcOfParabola::Restore(Base::XMLReader &reader)
 
 PyObject *Geom2dArcOfParabola::getPyObject(void)
 {
-    return 0;
-    //return new ArcOfParabolaPy(static_cast<GeomArcOfParabola*>(this->clone()));
+    return new ArcOfParabola2dPy(static_cast<Geom2dArcOfParabola*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -1978,7 +1983,7 @@ void Geom2dLine::Restore(Base::XMLReader &reader)
 
 PyObject *Geom2dLine::getPyObject(void)
 {
-    return 0;
+    return new Line2dPy(static_cast<Geom2dLine*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -2115,8 +2120,7 @@ void Geom2dLineSegment::Restore(Base::XMLReader &reader)
 
 PyObject *Geom2dLineSegment::getPyObject(void)
 {
-    return 0;
-    //return new LinePy((GeomLineSegment*)this->clone());
+    return new Line2dSegmentPy(static_cast<Geom2dLineSegment*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -2174,8 +2178,7 @@ void Geom2dOffsetCurve::Restore(Base::XMLReader &/*reader*/)
 
 PyObject *Geom2dOffsetCurve::getPyObject(void)
 {
-    //return new OffsetCurvePy((GeomOffsetCurve*)this->clone());
-    return 0;
+    return new OffsetCurve2dPy(static_cast<Geom2dOffsetCurve*>(this->clone()));
 }
 
 // -------------------------------------------------
@@ -2228,5 +2231,82 @@ void Geom2dTrimmedCurve::Restore(Base::XMLReader &/*reader*/)
 
 PyObject *Geom2dTrimmedCurve::getPyObject(void)
 {
+    Handle_Geom2d_Curve basis = this->myCurve->BasisCurve();
+    if (basis.IsNull())
+        Py_Return;
+    if (basis->IsKind(STANDARD_TYPE (Geom2d_Parabola))) {
+        Geom2dArcOfParabola c;
+        c.setHandle(this->myCurve);
+        return c.getPyObject();
+    }
+    if (basis->IsKind(STANDARD_TYPE (Geom2d_Hyperbola))) {
+        Geom2dArcOfHyperbola c;
+        c.setHandle(this->myCurve);
+        return c.getPyObject();
+    }
+    if (basis->IsKind(STANDARD_TYPE (Geom2d_Ellipse))) {
+        Geom2dArcOfEllipse c;
+        c.setHandle(this->myCurve);
+        return c.getPyObject();
+    }
+    if (basis->IsKind(STANDARD_TYPE (Geom2d_Circle))) {
+        Geom2dArcOfCircle c;
+        c.setHandle(this->myCurve);
+        return c.getPyObject();
+    }
+    if (basis->IsKind(STANDARD_TYPE (Geom2d_Line))) {
+        Geom2dLineSegment c;
+        c.setHandle(this->myCurve);
+        return c.getPyObject();
+    }
+    if (basis->IsKind(STANDARD_TYPE (Geom2d_BSplineCurve))) {
+        Geom2dBSplineCurve c;
+        c.setHandle(Handle_Geom2d_BSplineCurve::DownCast(basis));
+        return c.getPyObject();
+    }
+    if (basis->IsKind(STANDARD_TYPE (Geom2d_BezierCurve))) {
+        Geom2dBezierCurve c;
+        c.setHandle(Handle_Geom2d_BezierCurve::DownCast(basis));
+        return c.getPyObject();
+    }
+
+    PyErr_SetString(PyExc_RuntimeError, "Unknown curve type");
     return 0;
+}
+
+// ------------------------------------------------------------------
+
+namespace Part {
+std::unique_ptr<Geom2dCurve> getCurve2dFromGeom2d(Handle_Geom2d_Curve curve)
+{
+    std::unique_ptr<Geom2dCurve> geo2d;
+    if (curve.IsNull())
+        return geo2d;
+    if (curve->IsKind(STANDARD_TYPE (Geom2d_Parabola))) {
+        geo2d.reset(new Geom2dParabola(Handle_Geom2d_Parabola::DownCast(curve)));
+    }
+    else if (curve->IsKind(STANDARD_TYPE (Geom2d_Hyperbola))) {
+        geo2d.reset(new Geom2dHyperbola(Handle_Geom2d_Hyperbola::DownCast(curve)));
+    }
+    else if (curve->IsKind(STANDARD_TYPE (Geom2d_Ellipse))) {
+        geo2d.reset(new Geom2dEllipse(Handle_Geom2d_Ellipse::DownCast(curve)));
+    }
+    else if (curve->IsKind(STANDARD_TYPE (Geom2d_Circle))) {
+        geo2d.reset(new Geom2dCircle(Handle_Geom2d_Circle::DownCast(curve)));
+    }
+    else if (curve->IsKind(STANDARD_TYPE (Geom2d_Line))) {
+        geo2d.reset(new Geom2dLine(Handle_Geom2d_Line::DownCast(curve)));
+    }
+    else if (curve->IsKind(STANDARD_TYPE (Geom2d_BSplineCurve))) {
+        geo2d.reset(new Geom2dBSplineCurve(Handle_Geom2d_BSplineCurve::DownCast(curve)));
+    }
+    else if (curve->IsKind(STANDARD_TYPE (Geom2d_BezierCurve))) {
+        geo2d.reset(new Geom2dBezierCurve(Handle_Geom2d_BezierCurve::DownCast(curve)));
+    }
+    else if (curve->IsKind(STANDARD_TYPE (Geom2d_TrimmedCurve))) {
+        geo2d.reset(new Geom2dTrimmedCurve(Handle_Geom2d_TrimmedCurve::DownCast(curve)));
+    }
+
+    return geo2d;
+}
 }

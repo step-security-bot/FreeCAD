@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2014 Abdullah Tahiri <abdullah.tahiri.yo@gmail.com      *
+ *   Copyright (c) 2016 Werner Mayer <wmayer[at]users.sourceforge.net>     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -23,21 +23,19 @@
 
 #include "PreCompiled.h"
 #ifndef _PreComp_
-# include <gp_Parab.hxx>
-# include <Geom_Parabola.hxx>
-# include <GC_MakeArcOfParabola.hxx>
-# include <gce_MakeParab.hxx>
-# include <Geom_TrimmedCurve.hxx>
+# include <gp_Parab2d.hxx>
+# include <Geom2d_Parabola.hxx>
+# include <GCE2d_MakeArcOfParabola.hxx>
+# include <Geom2d_TrimmedCurve.hxx>
 #endif
 
 #include <Mod/Part/App/Geometry2d.h>
 #include <Mod/Part/App/Geom2d/ArcOfParabola2dPy.h>
 #include <Mod/Part/App/Geom2d/ArcOfParabola2dPy.cpp>
-#include <Mod/Part/App/ParabolaPy.h>
+#include <Mod/Part/App/Geom2d/Parabola2dPy.h>
 #include <Mod/Part/App/OCCError.h>
 
 #include <Base/GeometryPyCXX.h>
-#include <Base/VectorPy.h>
 
 using namespace Part;
 
@@ -46,39 +44,7 @@ extern const char* gce_ErrorStatusText(gce_ErrorType et);
 // returns a string which represents the object e.g. when printed in python
 std::string ArcOfParabola2dPy::representation(void) const
 {
-#if 0
-    Handle_Geom_TrimmedCurve trim = Handle_Geom_TrimmedCurve::DownCast
-        (getGeomArcOfParabolaPtr()->handle());
-    Handle_Geom_Parabola parabola = Handle_Geom_Parabola::DownCast(trim->BasisCurve());
-
-    gp_Ax1 axis = parabola->Axis();
-    gp_Dir dir = axis.Direction();
-    gp_Pnt loc = axis.Location();
-    Standard_Real fFocal = parabola->Focal();
-    Standard_Real u1 = trim->FirstParameter();
-    Standard_Real u2 = trim->LastParameter();
-    
-    gp_Dir normal = parabola->Axis().Direction();
-    gp_Dir xdir = parabola->XAxis().Direction();
-    
-    gp_Ax2 xdirref(loc, normal); // this is a reference XY for the parabola
-    
-    Standard_Real fAngleXU = -xdir.AngleWithRef(xdirref.XDirection(),normal);
-    
-
-    std::stringstream str;
-    str << "ArcOfParabola (";
-    str << "Focal : " << fFocal << ", "; 
-    str << "AngleXU : " << fAngleXU << ", ";
-    str << "Position : (" << loc.X() << ", "<< loc.Y() << ", "<< loc.Z() << "), "; 
-    str << "Direction : (" << dir.X() << ", "<< dir.Y() << ", "<< dir.Z() << "), "; 
-    str << "Parameter : (" << u1 << ", " << u2 << ")"; 
-    str << ")";
-
-    return str.str();
-#else
-    return "";
-#endif
+    return "<ArcOfParabola2d object>";
 }
 
 PyObject *ArcOfParabola2dPy::PyMake(struct _typeobject *, PyObject *, PyObject *)  // Python wrapper
@@ -90,23 +56,20 @@ PyObject *ArcOfParabola2dPy::PyMake(struct _typeobject *, PyObject *, PyObject *
 // constructor method
 int ArcOfParabola2dPy::PyInit(PyObject* args, PyObject* /*kwds*/)
 {
-#if 1
-    return 0;
-#else
     PyObject* o;
     double u1, u2;
     PyObject *sense=Py_True;
-    if (PyArg_ParseTuple(args, "O!dd|O!", &(Part::ParabolaPy::Type), &o, &u1, &u2, &PyBool_Type, &sense)) {
+    if (PyArg_ParseTuple(args, "O!dd|O!", &(Part::Parabola2dPy::Type), &o, &u1, &u2, &PyBool_Type, &sense)) {
         try {
-            Handle_Geom_Parabola parabola = Handle_Geom_Parabola::DownCast
-                (static_cast<ParabolaPy*>(o)->getGeomParabolaPtr()->handle());
-            GC_MakeArcOfParabola arc(parabola->Parab(), u1, u2, PyObject_IsTrue(sense) ? Standard_True : Standard_False);
+            Handle_Geom2d_Parabola parabola = Handle_Geom2d_Parabola::DownCast
+                (static_cast<Parabola2dPy*>(o)->getGeom2dParabolaPtr()->handle());
+            GCE2d_MakeArcOfParabola arc(parabola->Parab2d(), u1, u2, PyObject_IsTrue(sense) ? Standard_True : Standard_False);
             if (!arc.IsDone()) {
                 PyErr_SetString(PartExceptionOCCError, gce_ErrorStatusText(arc.Status()));
                 return -1;
             }
 
-            getGeomArcOfParabolaPtr()->setHandle(arc.Value());
+            getGeom2dArcOfParabolaPtr()->setHandle(arc.Value());
             return 0;
         }
         catch (Standard_Failure) {
@@ -122,102 +85,28 @@ int ArcOfParabola2dPy::PyInit(PyObject* args, PyObject* /*kwds*/)
     
     // All checks failed
     PyErr_SetString(PyExc_TypeError,
-        "ArcOfParabola constructor expects an parabola curve and a parameter range");
+        "ArcOfParabola2d constructor expects an parabola curve and a parameter range");
     return -1;
-#endif
 }
-#if 0
+
 Py::Float ArcOfParabola2dPy::getFocal(void) const
 {
-    return Py::Float(getGeomArcOfParabolaPtr()->getFocal()); 
+    return Py::Float(getGeom2dArcOfParabolaPtr()->getFocal());
 }
 
 void  ArcOfParabola2dPy::setFocal(Py::Float arg)
 {
-    getGeomArcOfParabolaPtr()->setFocal((double)arg);
-}
-
-Py::Float ArcOfParabola2dPy::getAngleXU(void) const
-{
-    return Py::Float(getGeomArcOfParabolaPtr()->getAngleXU()); 
-}
-
-void ArcOfParabola2dPy::setAngleXU(Py::Float arg)
-{
-    getGeomArcOfParabolaPtr()->setAngleXU((double)arg);
-}
-
-Py::Object ArcOfParabola2dPy::getCenter(void) const
-{
-    return Py::Vector(getGeomArcOfParabolaPtr()->getCenter());
-}
-
-void  ArcOfParabola2dPy::setCenter(Py::Object arg)
-{
-    PyObject* p = arg.ptr();
-    if (PyObject_TypeCheck(p, &(Base::VectorPy::Type))) {
-        Base::Vector3d loc = static_cast<Base::VectorPy*>(p)->value();
-        getGeomArcOfParabolaPtr()->setCenter(loc);
-    }
-    else if (PyObject_TypeCheck(p, &PyTuple_Type)) {
-        Base::Vector3d loc = Base::getVectorFromTuple<double>(p);
-        getGeomArcOfParabolaPtr()->setCenter(loc);
-    }
-    else {
-        std::string error = std::string("type must be 'Vector', not ");
-        error += p->ob_type->tp_name;
-        throw Py::TypeError(error);
-    }
-}
-
-Py::Object ArcOfParabola2dPy::getAxis(void) const
-{
-    Handle_Geom_TrimmedCurve trim = Handle_Geom_TrimmedCurve::DownCast
-        (getGeomArcOfParabolaPtr()->handle());
-    Handle_Geom_Parabola parabola = Handle_Geom_Parabola::DownCast(trim->BasisCurve());
-    gp_Ax1 axis = parabola->Axis();
-    gp_Dir dir = axis.Direction();
-    return Py::Vector(Base::Vector3d(dir.X(), dir.Y(), dir.Z()));
-}
-
-void  ArcOfParabola2dPy::setAxis(Py::Object arg)
-{
-    PyObject* p = arg.ptr();
-    Base::Vector3d val;
-    if (PyObject_TypeCheck(p, &(Base::VectorPy::Type))) {
-        val = static_cast<Base::VectorPy*>(p)->value();
-    }
-    else if (PyTuple_Check(p)) {
-        val = Base::getVectorFromTuple<double>(p);
-    }
-    else {
-        std::string error = std::string("type must be 'Vector', not ");
-        error += p->ob_type->tp_name;
-        throw Py::TypeError(error);
-    }
-
-    Handle_Geom_TrimmedCurve trim = Handle_Geom_TrimmedCurve::DownCast
-        (getGeomArcOfParabolaPtr()->handle());
-    Handle_Geom_Parabola parabola = Handle_Geom_Parabola::DownCast(trim->BasisCurve());
-    try {
-        gp_Ax1 axis;
-        axis.SetLocation(parabola->Location());
-        axis.SetDirection(gp_Dir(val.x, val.y, val.z));
-        parabola->SetAxis(axis);
-    }
-    catch (Standard_Failure) {
-        throw Py::Exception("cannot set axis");
-    }
+    getGeom2dArcOfParabolaPtr()->setFocal((double)arg);
 }
 
 Py::Object ArcOfParabola2dPy::getParabola(void) const
 {
-    Handle_Geom_TrimmedCurve trim = Handle_Geom_TrimmedCurve::DownCast
-        (getGeomArcOfParabolaPtr()->handle());
-    Handle_Geom_Parabola parabola = Handle_Geom_Parabola::DownCast(trim->BasisCurve());
-    return Py::Object(new ParabolaPy(new GeomParabola(parabola)), true);
+    Handle_Geom2d_TrimmedCurve trim = Handle_Geom2d_TrimmedCurve::DownCast
+        (getGeom2dArcOfParabolaPtr()->handle());
+    Handle_Geom2d_Parabola parabola = Handle_Geom2d_Parabola::DownCast(trim->BasisCurve());
+    return Py::asObject(new Parabola2dPy(new Geom2dParabola(parabola)));
 }
-#endif
+
 PyObject *ArcOfParabola2dPy::getCustomAttributes(const char* ) const
 {
     return 0;

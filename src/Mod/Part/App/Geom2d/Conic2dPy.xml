@@ -12,36 +12,25 @@
       Constructor="true">
     <Documentation>
       <Author Licence="LGPL" Name="Werner Mayer" EMail="wmayer@users.sourceforge.net" />
-      <UserDocu>Describes a circle in 3D space
-To create a circle there are several ways:
-Part.Circle()
-    Creates a default circle with center (0,0,0) and radius 1
-
-Part.Circle(Circle)
-    Creates a copy of the given circle
-
-Part.Circle(Circle, Distance)
-    Creates a circle parallel to given circle at a certain distance
-
-Part.Circle(Center,Normal,Radius)
-    Creates a circle defined by center, normal direction and radius
-
-Part.Circle(Point1,Point2,Point3)
-    Creates a circle defined by three non-linear points
-   </UserDocu>
+      <UserDocu>Describes an abstract conic in 2d space</UserDocu>
     </Documentation>
-    <!--
-    <Attribute Name="Center" ReadOnly="false">
+    <Attribute Name="Location" ReadOnly="false">
       <Documentation>
-        <UserDocu>Center of the circle.</UserDocu>
+        <UserDocu>Location of the conic.</UserDocu>
       </Documentation>
-      <Parameter Name="Center" Type="Object"/>
+      <Parameter Name="Location" Type="Object"/>
     </Attribute>
-    <Attribute Name="Axis" ReadOnly="false">
-      <Documentation>
-        <UserDocu>The axis direction of the circle</UserDocu>
-      </Documentation>
-      <Parameter Name="Axis" Type="Object"/>
+    <Attribute Name="Eccentricity" ReadOnly="true">
+        <Documentation>
+            <UserDocu>
+            returns the eccentricity value of the conic e.
+            e = 0 for a circle
+            0 &lt; e &lt; 1 for an ellipse  (e = 0 if MajorRadius = MinorRadius)
+            e > 1 for a hyperbola
+            e = 1 for a parabola
+            </UserDocu>
+        </Documentation>
+        <Parameter Name="Eccentricity" Type="Float"/>
     </Attribute>
     <Attribute Name="XAxis" ReadOnly="false">
       <Documentation>
@@ -55,6 +44,5 @@ Part.Circle(Point1,Point2,Point3)
       </Documentation>
       <Parameter Name="YAxis" Type="Object"/>
     </Attribute>
-    -->
   </PythonExport>
 </GenerateModel>

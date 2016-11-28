@@ -51,6 +51,8 @@
 # include <ShapeConstruct_Curve.hxx>
 # include <GeomAPI_IntCS.hxx>
 # include <Geom2dAPI_ExtremaCurveCurve.hxx>
+# include <BRepBuilderAPI_MakeEdge2d.hxx>
+# include <BRepBuilderAPI_MakeEdge.hxx>
 #endif
 
 #include <Base/GeometryPyCXX.h>
@@ -59,10 +61,7 @@
 #include <Mod/Part/App/Geometry.h>
 #include <Mod/Part/App/Geom2d/Curve2dPy.h>
 #include <Mod/Part/App/Geom2d/Curve2dPy.cpp>
-#include <Mod/Part/App/BSplineSurfacePy.h>
-#include <Mod/Part/App/PlanePy.h>
-#include <Mod/Part/App/PointPy.h>
-#include <Mod/Part/App/BSplineCurvePy.h>
+#include <Mod/Part/App/GeometrySurfacePy.h>
 
 #include <Mod/Part/App/OCCError.h>
 #include <Mod/Part/App/TopoShape.h>
@@ -85,7 +84,7 @@ PyObject *Curve2dPy::PyMake(struct _typeobject *, PyObject *, PyObject *)  // Py
 {
     // never create such objects with the constructor
     PyErr_SetString(PyExc_RuntimeError,
-        "You cannot create an instance of the abstract class 'GeometryCurve'.");
+        "You cannot create an instance of the abstract class 'Curve2d'.");
     return 0;
 }
 
@@ -94,12 +93,13 @@ int Curve2dPy::PyInit(PyObject* /*args*/, PyObject* /*kwd*/)
 {
     return 0;
 }
-#if 0
-PyObject* Curve2dPy::toShape(PyObject *args)
+
+PyObject* Curve2dPy::reverse(PyObject *args)
 {
     try {
-        TopoDS_Shape sh = getGeometry2dPtr()->toShape(Handle_Geom_Surface());
-        return new TopoShapeEdgePy(new TopoShape(sh));
+        Handle_Geom2d_Curve curve = Handle_Geom2d_Curve::DownCast(getGeom2dCurvePtr()->handle());
+        curve->Reverse();
+        Py_Return;
     }
     catch (Standard_Failure) {
         Handle_Standard_Failure e = Standard_Failure::Caught();
@@ -111,6 +111,84 @@ PyObject* Curve2dPy::toShape(PyObject *args)
     return 0;
 }
 
+extern Py::Object shape2pyshape(const TopoDS_Shape &shape);
+
+PyObject* Curve2dPy::toShape(PyObject *args)
+{
+    if (PyArg_ParseTuple(args, "")) {
+        try {
+            Handle_Geom2d_Curve curv = Handle_Geom2d_Curve::DownCast(getGeometry2dPtr()->handle());
+
+            BRepBuilderAPI_MakeEdge2d mkBuilder(curv);
+            TopoDS_Shape edge =  mkBuilder.Shape();
+            return Py::new_reference_to(shape2pyshape(edge));
+        }
+        catch (Standard_Failure) {
+            Handle_Standard_Failure e = Standard_Failure::Caught();
+            PyErr_SetString(PartExceptionOCCError, e->GetMessageString());
+            return 0;
+        }
+    }
+
+    PyErr_Clear();
+    double u1, u2;
+    if (PyArg_ParseTuple(args, "dd", &u1, &u2)) {
+        try {
+            Handle_Geom2d_Curve curv = Handle_Geom2d_Curve::DownCast(getGeometry2dPtr()->handle());
+
+            BRepBuilderAPI_MakeEdge2d mkBuilder(curv, u1, u2);
+            TopoDS_Shape edge =  mkBuilder.Shape();
+            return Py::new_reference_to(shape2pyshape(edge));
+        }
+        catch (Standard_Failure) {
+            Handle_Standard_Failure e = Standard_Failure::Caught();
+            PyErr_SetString(PartExceptionOCCError, e->GetMessageString());
+            return 0;
+        }
+    }
+
+    PyErr_Clear();
+    PyObject* p;
+    if (PyArg_ParseTuple(args, "O!", &(Part::GeometrySurfacePy::Type), &p)) {
+        try {
+            Handle_Geom_Surface surf = Handle_Geom_Surface::DownCast(
+                        static_cast<GeometrySurfacePy*>(p)->getGeomSurfacePtr()->handle());
+            Handle_Geom2d_Curve curv = Handle_Geom2d_Curve::DownCast(getGeometry2dPtr()->handle());
+
+            BRepBuilderAPI_MakeEdge mkBuilder(curv, surf);
+            TopoDS_Shape edge =  mkBuilder.Shape();
+            return Py::new_reference_to(shape2pyshape(edge));
+        }
+        catch (Standard_Failure) {
+            Handle_Standard_Failure e = Standard_Failure::Caught();
+            PyErr_SetString(PartExceptionOCCError, e->GetMessageString());
+            return 0;
+        }
+    }
+
+    PyErr_Clear();
+    if (PyArg_ParseTuple(args, "O!dd", &(Part::GeometrySurfacePy::Type), &p, &u1, &u2)) {
+        try {
+            Handle_Geom_Surface surf = Handle_Geom_Surface::DownCast(
+                        static_cast<GeometrySurfacePy*>(p)->getGeomSurfacePtr()->handle());
+            Handle_Geom2d_Curve curv = Handle_Geom2d_Curve::DownCast(getGeometry2dPtr()->handle());
+
+            BRepBuilderAPI_MakeEdge mkBuilder(curv, surf, u1, u2);
+            TopoDS_Shape edge =  mkBuilder.Shape();
+            return Py::new_reference_to(shape2pyshape(edge));
+        }
+        catch (Standard_Failure) {
+            Handle_Standard_Failure e = Standard_Failure::Caught();
+            PyErr_SetString(PartExceptionOCCError, e->GetMessageString());
+            return 0;
+        }
+    }
+
+    PyErr_SetString(PyExc_TypeError, "empty parameter list, parameter range or surface expected");
+    return 0;
+}
+
+#if 0
 PyObject* Curve2dPy::discretize(PyObject *args, PyObject *kwds)
 {
     try {
@@ -335,18 +413,24 @@ PyObject* Curve2dPy::parameterAtDistance(PyObject *args)
     PyErr_SetString(PartExceptionOCCError, "Geometry is not a curve");
     return 0;
 }
-
+#endif
 PyObject* Curve2dPy::value(PyObject *args)
 {
     Handle_Geom2d_Geometry g = getGeometry2dPtr()->handle();
-    Handle_Geom_Curve c = Handle_Geom_Curve::DownCast(g);
+    Handle_Geom2d_Curve c = Handle_Geom2d_Curve::DownCast(g);
     try {
         if (!c.IsNull()) {
             double u;
             if (!PyArg_ParseTuple(args, "d", &u))
                 return 0;
-            gp_Pnt p = c->Value(u);
-            return new Base::VectorPy(Base::Vector3d(p.X(),p.Y(),p.Z()));
+            gp_Pnt2d p = c->Value(u);
+
+            Py::Module module("__FreeCADBase__");
+            Py::Callable method(module.getAttr("Vector2d"));
+            Py::Tuple arg(2);
+            arg.setItem(0, Py::Float(p.X()));
+            arg.setItem(1, Py::Float(p.Y()));
+            return Py::new_reference_to(method.apply(arg));
         }
     }
     catch (Standard_Failure) {
@@ -358,7 +442,7 @@ PyObject* Curve2dPy::value(PyObject *args)
     PyErr_SetString(PartExceptionOCCError, "Geometry is not a curve");
     return 0;
 }
-
+#if 0
 PyObject* Curve2dPy::tangent(PyObject *args)
 {
     Handle_Geom2d_Geometry g = getGeometry2dPtr()->handle();
@@ -567,10 +651,10 @@ PyObject* Curve2dPy::approximateBSpline(PyObject *args)
         return 0;
     }
 }
-
+#endif
 Py::String Curve2dPy::getContinuity(void) const
 {
-    GeomAbs_Shape c = Handle_Geom_Curve::DownCast
+    GeomAbs_Shape c = Handle_Geom2d_Curve::DownCast
         (getGeometry2dPtr()->handle())->Continuity();
     std::string str;
     switch (c) {
@@ -602,18 +686,30 @@ Py::String Curve2dPy::getContinuity(void) const
     return Py::String(str);
 }
 
+Py::Boolean Curve2dPy::getClosed(void) const
+{
+    return Py::Boolean(Handle_Geom2d_Curve::DownCast
+        (getGeometry2dPtr()->handle())->IsClosed() ? true : false);
+}
+
+Py::Boolean Curve2dPy::getPeriodic(void) const
+{
+    return Py::Boolean(Handle_Geom2d_Curve::DownCast
+        (getGeometry2dPtr()->handle())->IsPeriodic() ? true : false);
+}
+
 Py::Float Curve2dPy::getFirstParameter(void) const
 {
-    return Py::Float(Handle_Geom_Curve::DownCast
+    return Py::Float(Handle_Geom2d_Curve::DownCast
         (getGeometry2dPtr()->handle())->FirstParameter());
 }
 
 Py::Float Curve2dPy::getLastParameter(void) const
 {
-    return Py::Float(Handle_Geom_Curve::DownCast
+    return Py::Float(Handle_Geom2d_Curve::DownCast
         (getGeometry2dPtr()->handle())->LastParameter());
 }
-#endif
+
 PyObject *Curve2dPy::getCustomAttributes(const char* /*attr*/) const
 {
     return 0;
