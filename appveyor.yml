@@ -41,9 +41,9 @@ install:
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
   #- ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.3.1.zip
   #- 7z x v3.3.1.zip > nul
-  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/f14d1a9f41e089db3839c2f9454920b3df4f2add.zip
-  - 7z x f14d1a9f41e089db3839c2f9454920b3df4f2add.zip > nul
-  - ren clcache-f14d1a9f41e089db3839c2f9454920b3df4f2add clcache-bin
+  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/c465e28b3fc6955e3cac354df116c620b3c7f508.zip
+  - 7z x c465e28b3fc6955e3cac354df116c620b3c7f508.zip > nul
+  - ren clcache-c465e28b3fc6955e3cac354df116c620b3c7f508 clcache-bin
   - python --version
   - set PATH=C:\\Python34;%PATH%
   - set PATH=C:\\Python34\\Scripts;%PATH%
@@ -71,7 +71,7 @@ install:
   - set CLCACHE_PROFILE=1
   #- set CLCACHE_HARDLINK=1
   #- set CLCACHE_NODIRECT=1
-  - set CLCACHE_OBJECT_CACHE_TIMEOUT_MS=40000
+  #- set CLCACHE_OBJECT_CACHE_TIMEOUT_MS=40000
   - if [%ARCH%] == [Win64] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64" )
   - if [%ARCH%] == [Win32] ( cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin" )
   - ren cl.exe cl_original.exe
