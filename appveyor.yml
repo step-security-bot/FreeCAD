@@ -105,6 +105,7 @@ after_build:
   - cl.exe -s
   - cl.exe -M 1073741824
   - cl.exe -c
+  - cl.exe -M 2147483648
   - cl.exe -s
 
 #artifacts:
