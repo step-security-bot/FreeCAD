@@ -48,6 +48,7 @@ install:
   - set PATH=C:\\Python34;%PATH%
   - set PATH=C:\\Python34\\Scripts;%PATH%
   - python --version
+  - fsutil behavior set disablelastaccess 0
   - cd clcache-bin
   #- pip install xxhash
   - pip install pyinstaller
