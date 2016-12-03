@@ -102,7 +102,9 @@ after_build:
   - python C:\projects\freecad\clcache-bin\showprofilereport.py
   - cd "C:\projects\freecad\clcache-bin\dist"
   - cl.exe -s
-  #- cl.exe -c
+  - cl.exe -M 1073741824
+  - cl.exe -c
+  - cl.exe -s
 
 #artifacts:
 
