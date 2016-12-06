@@ -41,9 +41,9 @@ install:
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
   #- ps: Start-FileDownload https://github.com/frerich/clcache/archive/v3.3.1.zip
   #- 7z x v3.3.1.zip > nul
-  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/c465e28b3fc6955e3cac354df116c620b3c7f508.zip
-  - 7z x c465e28b3fc6955e3cac354df116c620b3c7f508.zip > nul
-  - ren clcache-c465e28b3fc6955e3cac354df116c620b3c7f508 clcache-bin
+  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/e9d70a9c80dad69631b5661eb9c4644d0335c3c7.zip
+  - 7z x e9d70a9c80dad69631b5661eb9c4644d0335c3c7.zip > nul
+  - ren clcache-e9d70a9c80dad69631b5661eb9c4644d0335c3c7 clcache-bin
   - python --version
   - set PATH=C:\\Python34;%PATH%
   - set PATH=C:\\Python34\\Scripts;%PATH%
