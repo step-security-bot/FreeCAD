@@ -73,6 +73,7 @@ def makePipe(baseobj=None,diameter=0,length=0,placement=None,name="Pipe"):
         obj.Diameter = p.GetFloat("PipeDiameter",50)
     if placement:
         obj.Placement = placement
+    return obj
 
 
 def makePipeConnector(pipes,radius=0,name="Connector"):
@@ -88,6 +89,7 @@ def makePipeConnector(pipes,radius=0,name="Connector"):
     obj.Radius = radius
     if FreeCAD.GuiUp:
         _ViewProviderPipe(obj.ViewObject)
+    return obj
 
 
 class _CommandPipe:
@@ -190,13 +192,13 @@ class _ArchPipe(ArchComponent.Component):
             e = w.Edges[0]
             v = e.Vertexes[-1].Point.sub(e.Vertexes[0].Point).normalize()
             v.multiply(obj.OffsetStart.Value)
-            e = Part.Line(e.Vertexes[0].Point.add(v),e.Vertexes[-1].Point).toShape()
+            e = Part.LineSegment(e.Vertexes[0].Point.add(v),e.Vertexes[-1].Point).toShape()
             w = Part.Wire([e]+w.Edges[1:])
         if obj.OffsetEnd.Value:
             e = w.Edges[-1]
             v = e.Vertexes[0].Point.sub(e.Vertexes[-1].Point).normalize()
             v.multiply(obj.OffsetEnd.Value)
-            e = Part.Line(e.Vertexes[-1].Point.add(v),e.Vertexes[0].Point).toShape()
+            e = Part.LineSegment(e.Vertexes[-1].Point.add(v),e.Vertexes[0].Point).toShape()
             w = Part.Wire(w.Edges[:-1]+[e])
         p = self.getProfile(obj)
         if not p:
@@ -237,7 +239,7 @@ class _ArchPipe(ArchComponent.Component):
         else:
             if obj.Length.Value == 0:
                 return
-            w = Part.Wire([Part.Line(FreeCAD.Vector(0,0,0),FreeCAD.Vector(0,0,obj.Length.Value)).toShape()])
+            w = Part.Wire([Part.LineSegment(FreeCAD.Vector(0,0,0),FreeCAD.Vector(0,0,obj.Length.Value)).toShape()])
         return w
 
     def getProfile(self,obj):
