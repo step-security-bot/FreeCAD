@@ -66,6 +66,10 @@ install:
   - cd build\clcache
   - dir
   - ren clcache.exe cl.exe
+  - cl.exe --help
+  - cl.exe -s
+  - cd C:\Users\appveyor\AppData\Roaming\pyinstaller\bincache00_py34_32bit\
+  - dir
   - set CLCACHE_DIR=C:\projects\clcache
   #- set CLCACHE_SERVER=1
   #- set CLCACHE_LOG=1
