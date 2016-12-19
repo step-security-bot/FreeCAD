@@ -615,39 +615,29 @@ void StdCmdDrawStyle::languageChange()
     QList<QAction*> a = pcAction->actions();
 
     a[0]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "As is", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "As is"));
     a[0]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Normal mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Normal mode"));
 
     a[1]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "Flat lines", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Flat lines"));
     a[1]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Flat lines mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Flat lines mode"));
 
     a[2]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "Shaded", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Shaded"));
     a[2]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Shaded mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Shaded mode"));
 
     a[3]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "Wireframe", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Wireframe"));
     a[3]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Wireframe mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Wireframe mode"));
 
     a[4]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "Points", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Points"));
     a[4]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Points mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Points mode"));
 }
 
 void StdCmdDrawStyle::updateIcon(const MDIView *view)
@@ -1453,8 +1443,7 @@ Action * StdViewDockUndockFullscreen::createAction(void)
     ActionGroup* pcAction = new ActionGroup(this, getMainWindow());
     pcAction->setDropDownMenu(true);
     pcAction->setText(QCoreApplication::translate(
-        this->className(), sMenuText, 0,
-        QCoreApplication::CodecForTr));
+        this->className(), sMenuText));
 
     CommandManager &rcCmdMgr = Application::Instance->commandManager();
     Command* cmdD = rcCmdMgr.getCommandByName("Std_ViewDock");
@@ -1471,17 +1460,21 @@ void StdViewDockUndockFullscreen::activated(int iMsg)
 {
     MDIView* view = getMainWindow()->activeWindow();
     if (!view) return; // no active view
-    if (iMsg == (int)(view->currentViewMode()))
-        return; // nothing to do
 
     if (iMsg==0) {
-        view->setCurrentViewMode( MDIView::Child );
+        view->setCurrentViewMode(MDIView::Child);
     }
     else if (iMsg==1) {
-        view->setCurrentViewMode( MDIView::TopLevel );
+        if (view->currentViewMode() == MDIView::TopLevel)
+            view->setCurrentViewMode(MDIView::Child);
+        else
+            view->setCurrentViewMode(MDIView::TopLevel);
     }
     else if (iMsg==2) {
-        view->setCurrentViewMode( MDIView::FullScreen );
+        if (view->currentViewMode() == MDIView::FullScreen)
+            view->setCurrentViewMode(MDIView::Child);
+        else
+            view->setCurrentViewMode(MDIView::FullScreen);
     }
 }
 

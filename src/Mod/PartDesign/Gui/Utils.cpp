@@ -355,13 +355,6 @@ bool isFeatureMovable(App::DocumentObject* const feat)
             return false;
     }
 
-    if (feat->getTypeId().isDerivedFrom(PartDesign::FeaturePrimitive::getClassTypeId())) {
-        auto prim = static_cast<PartDesign::FeaturePrimitive*>(feat);
-
-        if (!isFeatureMovable(prim->CoordinateSystem.getValue()))
-            return false;
-    }
-
     if (feat->getTypeId().isDerivedFrom(PartDesign::ProfileBased::getClassTypeId())) {
         auto prim = static_cast<PartDesign::ProfileBased*>(feat);
         auto sk = prim->getVerifiedSketch(true);
@@ -394,8 +387,8 @@ bool isFeatureMovable(App::DocumentObject* const feat)
 
     }
 
-    if (feat->getTypeId().isDerivedFrom(Part::AttachableObject::getClassTypeId())) {
-        auto attachable = static_cast<Part::AttachableObject*>(feat);
+    if (feat->hasExtension(Part::AttachExtension::getExtensionClassTypeId())) {
+        auto attachable = feat->getExtensionByType<Part::AttachExtension>();
         App::DocumentObject* support = attachable->Support.getValue();
         if (support && !support->getTypeId().isDerivedFrom(App::OriginFeature::getClassTypeId()))
             return false;
@@ -410,13 +403,6 @@ std::vector<App::DocumentObject*> collectMovableDependencies(std::vector<App::Do
 
     for (auto const &feat : features)
     {
-        // Get coordinate system object
-        if (feat->getTypeId().isDerivedFrom(PartDesign::FeaturePrimitive::getClassTypeId())) {
-            auto prim = static_cast<PartDesign::FeaturePrimitive*>(feat);
-            App::DocumentObject* cs = prim->CoordinateSystem.getValue();
-            if (cs && cs->getTypeId() == PartDesign::CoordinateSystem::getClassTypeId())
-                unique_objs.insert(cs);
-        }
 
         // Get sketches and datums from profile based features
         if (feat->getTypeId().isDerivedFrom(PartDesign::ProfileBased::getClassTypeId())) {
@@ -460,8 +446,8 @@ std::vector<App::DocumentObject*> collectMovableDependencies(std::vector<App::Do
 
 void relinkToOrigin(App::DocumentObject* feat, PartDesign::Body* targetbody)
 {
-    if (feat->getTypeId().isDerivedFrom(Part::AttachableObject::getClassTypeId())) {
-        auto attachable = static_cast<Part::AttachableObject*>(feat);
+    if (feat->hasExtension(Part::AttachExtension::getExtensionClassTypeId())) {
+        auto attachable = feat->getExtensionByType<Part::AttachExtension>();
         App::DocumentObject* support = attachable->Support.getValue();
         if (support && support->getTypeId().isDerivedFrom(App::OriginFeature::getClassTypeId())) {
             auto originfeat = static_cast<App::OriginFeature*>(support);

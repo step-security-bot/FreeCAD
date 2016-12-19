@@ -97,7 +97,10 @@ void SceneModel::setNode(QModelIndex index, SoNode* node)
         for (int i=0; i<group->getNumChildren();i++) {
             SoNode* child = group->getChild(i);
             setNode(this->index(i, 0, index), child);
-            this->setData(this->index(i, 1, index), QVariant(QString::fromLatin1(child->getName())));
+            // See ViewProviderDocumentObject::updateData
+            QByteArray name(child->getName());
+            name = QByteArray::fromPercentEncoding(name);
+            this->setData(this->index(i, 1, index), QVariant(QString::fromUtf8(name)));
         }
     }
     // insert icon
@@ -133,8 +136,13 @@ void DlgInspector::setNode(SoNode* node)
     model->setNode(node);
     
     QHeaderView* header = ui->treeView->header();
+#if QT_VERSION >= 0x050000
+    header->setSectionResizeMode(0, QHeaderView::Stretch);
+    header->setSectionsMovable(false);
+#else
     header->setResizeMode(0, QHeaderView::Stretch);
     header->setMovable(false);
+#endif
 }
 
 void DlgInspector::changeEvent(QEvent *e)

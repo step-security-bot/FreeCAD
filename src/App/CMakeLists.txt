@@ -40,7 +40,6 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${PYTHON_INCLUDE_DIRS}
     ${XercesC_INCLUDE_DIRS}
-    ${QT_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
 )
 
@@ -50,6 +49,23 @@ set(FreeCADApp_LIBS
     ${QT_QTCORE_LIBRARY}
     ${QT_QTXML_LIBRARY}
 )
+
+if (BUILD_QT5)
+    include_directories(
+        ${Qt5Xml_INCLUDE_DIRS}
+    )
+    list(APPEND FreeCADApp_LIBS
+         ${Qt5Core_LIBRARIES}
+         ${Qt5Xml_LIBRARIES}
+    )
+else()
+    include_directories(
+        ${QT_QTCORE_INCLUDE_DIR}
+    )
+    list(APPEND FreeCADApp_LIBS
+         ${QT_QTCORE_LIBRARY}
+    )
+endif()
 
 generate_from_xml(DocumentPy)
 generate_from_xml(DocumentObjectPy)

@@ -62,6 +62,7 @@
 #include "View3DInventorViewer.h"
 #include "BitmapFactory.h"
 #include "ViewProviderDocumentObject.h"
+#include "ViewProviderDocumentObjectGroup.h"
 #include "Selection.h"
 #include "WaitCursor.h"
 #include "Thumbnail.h"
@@ -897,8 +898,11 @@ void Document::SaveDocFile (Base::Writer &writer) const
         ViewProvider* obj = it->second;
         writer.Stream() << writer.ind() << "<ViewProvider name=\""
                         << doc->getNameInDocument() << "\" "
-                        << "expanded=\"" << (doc->testStatus(App::Expand) ? 1:0)
-                        << "\">" << std::endl;
+                        << "expanded=\"" << (doc->testStatus(App::Expand) ? 1:0) << "\"";
+        if(obj->hasExtensions())
+            writer.Stream() << " Extensions=\"True\"";
+        
+        writer.Stream() << ">" << std::endl;
         obj->Save(writer);
         writer.Stream() << writer.ind() << "</ViewProvider>" << std::endl;
     }
@@ -1471,6 +1475,23 @@ void Document::handleChildren3D(ViewProvider* viewProvider)
                             if (d->_editViewProvider == ChildViewProvider)
                                 resetEdit();
                             activeView->getViewer()->removeViewProvider(ChildViewProvider);
+                        }
+                    }
+                }
+            }
+        }
+    } else if (viewProvider && viewProvider->isDerivedFrom(ViewProviderDocumentObjectGroup::getClassTypeId())) {
+
+        if (viewProvider->hasExtension(ViewProviderDocumentObjectGroup::getExtensionClassTypeId())) {
+            std::vector<App::DocumentObject*> children = viewProvider->claimChildren();
+
+            for (auto& child : children) {
+                ViewProvider* ChildViewProvider = getViewProvider(child);
+                if (ChildViewProvider) {
+                    for (BaseView* view : d->baseViews) {
+                        View3DInventor *activeView = dynamic_cast<View3DInventor *>(view);
+                        if (activeView && !activeView->getViewer()->hasViewProvider(ChildViewProvider)) {
+                            activeView->getViewer()->addViewProvider(ChildViewProvider);
                         }
                     }
                 }

@@ -25,49 +25,50 @@
 #ifndef _PreComp_
 #endif
 
-#include "AttachableObject.h"
+#include "AttachExtension.h"
 
 #include <Base/Console.h>
 #include <App/Application.h>
 
 #include <App/FeaturePythonPyImp.h>
-#include "AttachableObjectPy.h"
+#include "AttachExtensionPy.h"
 
 
 using namespace Part;
 using namespace Attacher;
 
-PROPERTY_SOURCE(Part::AttachableObject, Part::Feature);
+EXTENSION_PROPERTY_SOURCE(Part::AttachExtension, App::DocumentObjectExtension);
 
-AttachableObject::AttachableObject()
+AttachExtension::AttachExtension()
    :  _attacher(0)
 {
-    ADD_PROPERTY_TYPE(AttacherType, ("Attacher::AttachEngine3D"), "Attachment",(App::PropertyType)(App::Prop_None),"Class name of attach engine object driving the attachment.");
+    EXTENSION_ADD_PROPERTY_TYPE(AttacherType, ("Attacher::AttachEngine3D"), "Attachment",(App::PropertyType)(App::Prop_None),"Class name of attach engine object driving the attachment.");
     this->AttacherType.setStatus(App::Property::Status::Hidden, true);
 
-    ADD_PROPERTY_TYPE(Support, (0,0), "Attachment",(App::PropertyType)(App::Prop_None),"Support of the 2D geometry");
+    EXTENSION_ADD_PROPERTY_TYPE(Support, (0,0), "Attachment",(App::PropertyType)(App::Prop_None),"Support of the 2D geometry");
 
-    ADD_PROPERTY_TYPE(MapMode, (mmDeactivated), "Attachment", App::Prop_None, "Mode of attachment to other object");
+    EXTENSION_ADD_PROPERTY_TYPE(MapMode, (mmDeactivated), "Attachment", App::Prop_None, "Mode of attachment to other object");
     MapMode.setEnums(AttachEngine::eMapModeStrings);
     //a rough test if mode string list in Attacher.cpp is in sync with eMapMode enum.
     assert(MapMode.getEnumVector().size() == mmDummy_NumberOfModes);
 
-    ADD_PROPERTY_TYPE(MapReversed, (false), "Attachment", App::Prop_None, "Reverse Z direction (flip sketch upside down)");
+    EXTENSION_ADD_PROPERTY_TYPE(MapReversed, (false), "Attachment", App::Prop_None, "Reverse Z direction (flip sketch upside down)");
 
-    ADD_PROPERTY_TYPE(MapPathParameter, (0.0), "Attachment", App::Prop_None, "Sets point of curve to map the sketch to. 0..1 = start..end");
+    EXTENSION_ADD_PROPERTY_TYPE(MapPathParameter, (0.0), "Attachment", App::Prop_None, "Sets point of curve to map the sketch to. 0..1 = start..end");
 
-    ADD_PROPERTY_TYPE(superPlacement, (Base::Placement()), "Attachment", App::Prop_None, "Extra placement to apply in addition to attachment (in local coordinates)");
+    EXTENSION_ADD_PROPERTY_TYPE(superPlacement, (Base::Placement()), "Attachment", App::Prop_None, "Extra placement to apply in addition to attachment (in local coordinates)");
 
     setAttacher(new AttachEngine3D);//default attacher
+    initExtension(AttachExtension::getExtensionClassTypeId());
 }
 
-AttachableObject::~AttachableObject()
+AttachExtension::~AttachExtension()
 {
     if(_attacher)
         delete _attacher;
 }
 
-void AttachableObject::setAttacher(AttachEngine* attacher)
+void AttachExtension::setAttacher(AttachEngine* attacher)
 {
     if (_attacher)
         delete _attacher;
@@ -84,7 +85,7 @@ void AttachableObject::setAttacher(AttachEngine* attacher)
     }
 }
 
-bool AttachableObject::changeAttacherType(const char* typeName)
+bool AttachExtension::changeAttacherType(const char* typeName)
 {
     //check if we need to actually change anything
     if (_attacher){
@@ -112,13 +113,13 @@ bool AttachableObject::changeAttacherType(const char* typeName)
     return false;
 }
 
-bool AttachableObject::positionBySupport()
+bool AttachExtension::positionBySupport()
 {
     if (!_attacher)
-        throw Base::Exception("AttachableObject: can't positionBySupport, because no AttachEngine is set.");
+        throw Base::Exception("AttachExtension: can't positionBySupport, because no AttachEngine is set.");
     updateAttacherVals();
     try{
-        this->Placement.setValue(_attacher->calculateAttachedPlacement(this->Placement.getValue()));
+        getPlacement().setValue(_attacher->calculateAttachedPlacement(getPlacement().getValue()));
         return true;
     } catch (ExceptionCancel) {
         //disabled, don't do anything
@@ -126,7 +127,12 @@ bool AttachableObject::positionBySupport()
     };
 }
 
-App::DocumentObjectExecReturn *AttachableObject::execute()
+short int AttachExtension::extensionMustExecute(void) {
+    return DocumentObjectExtension::extensionMustExecute();
+}
+
+
+App::DocumentObjectExecReturn *AttachExtension::extensionExecute()
 {
     if(this->isTouched_Mapping()) {
         try{
@@ -137,12 +143,12 @@ App::DocumentObjectExecReturn *AttachableObject::execute()
             return new App::DocumentObjectExecReturn(e.GetMessageString());
         }
     }
-    return Part::Feature::execute();
+    return App::DocumentObjectExtension::extensionExecute();
 }
 
-void AttachableObject::onChanged(const App::Property* prop)
+void AttachExtension::extensionOnChanged(const App::Property* prop)
 {
-    if(! this->isRestoring()){
+    if(! getExtendedObject()->isRestoring()){
         if ((prop == &Support
              || prop == &MapMode
              || prop == &MapPathParameter
@@ -153,17 +159,17 @@ void AttachableObject::onChanged(const App::Property* prop)
             try{
                 bAttached = positionBySupport();
             } catch (Base::Exception &e) {
-                this->setError();
+                getExtendedObject()->setStatus(App::Error, true);
                 Base::Console().Error("PositionBySupport: %s",e.what());
                 //set error message - how?
             } catch (Standard_Failure &e){
-                this->setError();
+                getExtendedObject()->setStatus(App::Error, true);
                 Base::Console().Error("PositionBySupport: %s",e.GetMessageString());
             }
 
             eMapMode mmode = eMapMode(this->MapMode.getValue());
             this->superPlacement.setReadOnly(!bAttached);
-            this->Placement.setReadOnly(bAttached && mmode != mmTranslate); //for mmTranslate, orientation should remain editable even when attached.
+            getPlacement().setReadOnly(bAttached && mmode != mmTranslate); //for mmTranslate, orientation should remain editable even when attached.
         }
 
     }
@@ -172,10 +178,10 @@ void AttachableObject::onChanged(const App::Property* prop)
         this->changeAttacherType(this->AttacherType.getValue());
     }
 
-    Part::Feature::onChanged(prop);
+    App::DocumentObjectExtension::extensionOnChanged(prop);
 }
 
-void AttachableObject::updateAttacherVals()
+void AttachExtension::updateAttacherVals()
 {
     if (!_attacher)
         return;
@@ -187,22 +193,30 @@ void AttachableObject::updateAttacherVals()
                      this->superPlacement.getValue());
 }
 
+App::PropertyPlacement& AttachExtension::getPlacement() {
+
+    if(!getExtendedObject()->isDerivedFrom(App::GeoFeature::getClassTypeId()))
+        throw Base::Exception("AttachExtension not added to GeooFeature!");
+    
+    return static_cast<App::GeoFeature*>(getExtendedObject())->Placement;
+}
+
+PyObject* AttachExtension::getExtensionPyObject(void) {
+    
+    if (ExtensionPythonObject.is(Py::_None())){
+        // ref counter is set to 1
+        ExtensionPythonObject = Py::Object(new AttachExtensionPy(this),true);
+    }
+    return Py::new_reference_to(ExtensionPythonObject);
+}
+
+
 namespace App {
 /// @cond DOXERR
-  PROPERTY_SOURCE_TEMPLATE(Part::AttachableObjectPython, Part::AttachableObject)
-  template<> const char* Part::AttachableObjectPython::getViewProviderName(void) const {
-    return "PartGui::ViewProviderPython";
-  }
-  template<> PyObject* Part::AttachableObjectPython::getPyObject(void) {
-        if (PythonObject.is(Py::_None())) {
-            // ref counter is set to 1
-            PythonObject = Py::Object(new FeaturePythonPyT<Part::AttachableObjectPy>(this),true);
-        }
-        return Py::new_reference_to(PythonObject);
-  }
+  EXTENSION_PROPERTY_SOURCE_TEMPLATE(Part::AttachExtensionPython, Part::AttachExtension)
 /// @endcond
 
 // explicit template instantiation
-  template class PartExport FeaturePythonT<Part::AttachableObject>;
+  template class PartExport ExtensionPythonT<Part::AttachExtension>;
 }
 

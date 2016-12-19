@@ -67,7 +67,6 @@ class PathWorkbench (Workbench):
         from PathScripts import PathSimpleCopy
         from PathScripts import PathEngrave
         from PathScripts import PathSurface
-        from PathScripts import PathRemote
         from PathScripts import PathSanity
         from PathScripts import DragknifeDressup
         from PathScripts import PathContour
@@ -135,7 +134,7 @@ class PathWorkbench (Workbench):
         if len(FreeCADGui.Selection.getSelection()) == 1:
             if FreeCADGui.Selection.getSelection()[0].isDerivedFrom("Path::Feature"):
                 self.appendContextMenu("", ["Path_Inspect"])
-                if "Profile" or "Contour" in FreeCADGui.Selection.getSelection()[0].Name:
+                if FreeCADGui.Selection.getSelection()[0].Name in ["Profile", "Contour"]:
                     self.appendContextMenu("", ["Add_Tag"])
                     self.appendContextMenu("", ["Set_StartPoint"])
                     self.appendContextMenu("", ["Set_EndPoint"])

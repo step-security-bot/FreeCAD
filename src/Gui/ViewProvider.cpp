@@ -263,13 +263,14 @@ SbMatrix ViewProvider::convert(const Base::Matrix4D &rcMatrix) const
                     dMtrx[12],dMtrx[13],dMtrx[14], dMtrx[15]);
 }
 
-void ViewProvider::addDisplayMaskMode( SoNode *node, const char* type )
+void ViewProvider::addDisplayMaskMode(SoNode *node, const char* type)
 {
-    _sDisplayMaskModes[ type ] = pcModeSwitch->getNumChildren();
-    pcModeSwitch->addChild( node );
+    node->setName(type);
+    _sDisplayMaskModes[type] = pcModeSwitch->getNumChildren();
+    pcModeSwitch->addChild(node);
 }
 
-void ViewProvider::setDisplayMaskMode( const char* type )
+void ViewProvider::setDisplayMaskMode(const char* type)
 {
     std::map<std::string, int>::const_iterator it = _sDisplayMaskModes.find( type );
     if (it != _sDisplayMaskModes.end())
@@ -538,7 +539,7 @@ bool ViewProvider::onDelete(const vector< string >& subNames) {
     bool del = true;
     auto vector = getExtensionsDerivedFromType<Gui::ViewProviderExtension>();
     for(Gui::ViewProviderExtension* ext : vector)
-        del = del || ext->extensionOnDelete(subNames);
+        del &= ext->extensionOnDelete(subNames);
 
     return del;
 }
@@ -580,9 +581,13 @@ void ViewProvider::dragObject(App::DocumentObject* obj) {
 bool ViewProvider::canDropObject(App::DocumentObject* obj) const {
 
     auto vector = getExtensionsDerivedFromType<Gui::ViewProviderExtension>();
-    Base::Console().Message("Check extensions for drop\n");
+#if FC_DEBUG
+    Base::Console().Log("Check extensions for drop\n");
+#endif
     for(Gui::ViewProviderExtension* ext : vector){
-        Base::Console().Message("Check extensions %s\n", ext->name());
+#if FC_DEBUG
+        Base::Console().Log("Check extensions %s\n", ext->name().c_str());
+#endif
         if(ext->extensionCanDropObject(obj))
             return true;
     }

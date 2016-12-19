@@ -9,7 +9,6 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${COIN3D_INCLUDE_DIRS}
     ${OPENCV2_INCLUDE_DIR}
-    ${QT_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
     ${XercesC_INCLUDE_DIRS}
@@ -35,12 +34,17 @@ SET(ImageGui_RES_SRCS
     Resources/Image.qrc
 )
 
-qt4_add_resources(ImageGui_QRC_SRCS ${ImageGui_RES_SRCS})
-
 set(ImageGui_UIC_SRCS
     ImageOrientationDialog.ui
 )
-qt4_wrap_ui(ImageGui_UIC_HDRS ${ImageGui_UIC_SRCS})
+
+if(BUILD_QT5)
+    qt5_add_resources(ImageGui_QRC_SRCS ${ImageGui_RES_SRCS})
+    qt5_wrap_ui(ImageGui_UIC_HDRS ${ImageGui_UIC_SRCS})
+else()
+    qt4_add_resources(ImageGui_QRC_SRCS ${ImageGui_RES_SRCS})
+    qt4_wrap_ui(ImageGui_UIC_HDRS ${ImageGui_UIC_SRCS})
+endif()
 
 SET(ImageGui_SRCS
 #   ${ImageGui_MOC_SRCS}

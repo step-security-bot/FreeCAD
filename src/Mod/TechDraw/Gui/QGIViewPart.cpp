@@ -296,9 +296,9 @@ void QGIViewPart::updateView(bool update)
         QList<QGraphicsItem*> items = childItems();
         for(QList<QGraphicsItem*>::iterator it = items.begin(); it != items.end(); ++it) {
             QGIEdge *edge = dynamic_cast<QGIEdge *>(*it);
-            if(edge  && edge->getHiddenEdge()) {
+            if(edge && edge->getHiddenEdge()) {
                 edge->setWidth(viewPart->HiddenWidth.getValue() * lineScaleFactor);
-            } else {
+            } else if (edge){
                 edge->setWidth(viewPart->LineWidth.getValue() * lineScaleFactor);
             }
         }
@@ -615,7 +615,7 @@ void QGIViewPart::drawMatting()
 {
     auto viewPart( dynamic_cast<TechDraw::DrawViewPart *>(getViewObject()) );
     TechDraw::DrawViewDetail* dvd = nullptr;
-    if (viewPart->isDerivedFrom(TechDraw::DrawViewDetail::getClassTypeId())) {
+    if (viewPart && viewPart->isDerivedFrom(TechDraw::DrawViewDetail::getClassTypeId())) {
         dvd = static_cast<TechDraw::DrawViewDetail*>(viewPart);
     } else {
         return;
@@ -755,7 +755,8 @@ void QGIViewPart::toggleCache(bool state)
   QList<QGraphicsItem*> items = childItems();
     for(QList<QGraphicsItem*>::iterator it = items.begin(); it != items.end(); it++) {
         //(*it)->setCacheMode((state)? DeviceCoordinateCache : NoCache);        //TODO: fiddle cache settings if req'd for performance
-        (*it)->setCacheMode((state)? NoCache : NoCache);
+        Q_UNUSED(state);
+        (*it)->setCacheMode(NoCache);
         (*it)->update();
     }
 }

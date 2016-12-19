@@ -165,10 +165,20 @@ struct EditData {
     EditRoot(0),
     PointsMaterials(0),
     CurvesMaterials(0),
+    RootCrossMaterials(0),
+    EditCurvesMaterials(0),
     PointsCoordinate(0),
     CurvesCoordinate(0),
-    CurveSet(0), RootCrossSet(0), EditCurveSet(0),
-    PointSet(0), pickStyleAxes(0)
+    RootCrossCoordinate(0),
+    EditCurvesCoordinate(0),
+    CurveSet(0),
+    RootCrossSet(0),
+    EditCurveSet(0),
+    PointSet(0),
+    textX(0),
+    textPos(0),
+    constrGroup(0),
+    pickStyleAxes(0)
     {}
 
     // pointer to the active handler for new sketch objects
@@ -2178,7 +2188,7 @@ void ViewProviderSketch::doBoxSelection(const SbVec2s &startPos, const SbVec2s &
 
         } else if ((*it)->getTypeId() == Part::GeomArcOfHyperbola::getClassTypeId()) {
             // Check if arc lies inside box selection
-            const Part::GeomArcOfHyperbola *aoh = dynamic_cast<const Part::GeomArcOfHyperbola *>(*it);
+            const Part::GeomArcOfHyperbola *aoh = static_cast<const Part::GeomArcOfHyperbola *>(*it);
 
             pnt0 = aoh->getStartPoint();
             pnt1 = aoh->getEndPoint();
@@ -3548,7 +3558,7 @@ Restart:
                                     angle2plus = (startangle + endangle)/2;
                                     midpos2 = aoe->getCenter();
                                 } else if (geo2->getTypeId() == Part::GeomArcOfHyperbola::getClassTypeId()) {
-                                    const Part::GeomArcOfHyperbola *aoh = dynamic_cast<const Part::GeomArcOfHyperbola *>(geo2);
+                                    const Part::GeomArcOfHyperbola *aoh = static_cast<const Part::GeomArcOfHyperbola *>(geo2);
                                     r2a = aoh->getMajorRadius();
                                     r2b = aoh->getMinorRadius();
                                     double startangle, endangle;

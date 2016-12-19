@@ -16,7 +16,6 @@ include_directories(
     ${COIN3D_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
     ${OCC_INCLUDE_DIR}
-    ${QT_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
     ${XercesC_INCLUDE_DIRS}
     ${SMESH_INCLUDE_DIR}
@@ -117,7 +116,12 @@ if(BUILD_FEM_VTK)
         SphereWidget.ui
     )
 endif(BUILD_FEM_VTK)
-qt4_wrap_ui(FemGui_UIC_HDRS ${FemGui_UIC_SRCS})
+
+if(BUILD_QT5)
+    qt5_wrap_ui(FemGui_UIC_HDRS ${FemGui_UIC_SRCS})
+else()
+    qt4_wrap_ui(FemGui_UIC_HDRS ${FemGui_UIC_SRCS})
+endif()
 
 SET(FemGui_DLG_SRCS
     ${FemGui_UIC_HDRS}
@@ -179,7 +183,11 @@ SET(FemGui_DLG_SRCS
 )
 SOURCE_GROUP("Constraint-Dialogs" FILES ${FemGui_DLG_SRCS})
 
-qt4_add_resources(FemResource_SRCS Resources/Fem.qrc)
+if(BUILD_QT5)
+    qt5_add_resources(FemResource_SRCS Resources/Fem.qrc)
+else()
+    qt4_add_resources(FemResource_SRCS Resources/Fem.qrc)
+endif()
 
 SOURCE_GROUP("Resources" FILES ${FemResource_SRCS})
 

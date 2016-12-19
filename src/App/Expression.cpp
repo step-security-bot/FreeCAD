@@ -268,7 +268,7 @@ void NumberExpression::negate()
 std::string NumberExpression::toString() const
 {
     std::stringstream s;
-    s << std::setprecision(std::numeric_limits<double>::digits10 + 1) << quantity.getValue();
+    s << std::setprecision(std::numeric_limits<double>::digits10 + 2) << quantity.getValue();
 
     /* Trim of any extra spaces */
     //while (s.size() > 0 && s[s.size() - 1] == ' ')
@@ -534,6 +534,10 @@ std::string OperatorExpression::toString() const
         else if (!isCommutative())
             needsParens = true;
     }
+    else if (right->priority() == priority()) {
+        if (!isRightAssociative())
+            needsParens = true;
+    }
 
     if (needsParens)
         s << "(" << right->toString() << ")";
@@ -677,9 +681,6 @@ FunctionExpression::FunctionExpression(const DocumentObject *_owner, Function _f
             throw ExpressionError("Invalid number of arguments: eaxctly two required.");
         break;
     case STDDEV:
-        if (args.size() < 2)
-            throw ExpressionError("Invalid number of arguments: at least two required.");
-        break;
     case SUM:
     case AVERAGE:
     case COUNT:
@@ -732,7 +733,7 @@ public:
     Collector() : first(true) { }
     virtual void collect(Quantity value) {
         if (first)
-            value.setUnit(value.getUnit());
+            q.setUnit(value.getUnit());
     }
     virtual Quantity getQuantity() const {
         return q;
@@ -778,7 +779,7 @@ public:
     void collect(Quantity value) {
         Collector::collect(value);
         if (first) {
-            M2 = Quantity(0, value.getUnit());
+            M2 = Quantity(0, value.getUnit() * value.getUnit());
             mean = Quantity(0, value.getUnit());
             n = 0;
         }
@@ -792,9 +793,9 @@ public:
 
     virtual Quantity getQuantity() const {
         if (n < 2)
-            return Quantity();
+            throw ExpressionError("Invalid number of entries: at least two required.");
         else
-            return (M2 / (n - 1.0)).pow(Quantity(0.5));
+            return Quantity((M2 / (n - 1.0)).pow(Quantity(0.5)).getValue(), mean.getUnit());
     }
 
 private:

@@ -82,10 +82,9 @@ DocumentObjectExecReturn *DocumentObject::execute(void)
 {
     //call all extensions
     auto vector = getExtensionsDerivedFromType<App::DocumentObjectExtension>();
-    for(auto ext : vector) {
-        if(ext->extensionMustExecute()) 
-            ext->extensionExecute();
-    }
+    for(auto ext : vector)
+        ext->extensionExecute();
+
     return StdReturn;
 }
 
@@ -306,7 +305,7 @@ bool DocumentObject::isTouched() const
 void DocumentObject::Save (Base::Writer &writer) const
 {
     writer.ObjectName = this->getNameInDocument();
-    App::PropertyContainer::Save(writer);
+    App::ExtensionContainer::Save(writer);
 }
 
 /**
