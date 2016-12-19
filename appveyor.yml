@@ -39,11 +39,11 @@ install:
       powershell -Command "Start-FileDownload https://github.com/FreeCAD/FreeCAD-ports-cache/releases/download/v0.17/FreeCADLibs_11.5.1_x86_VC12.7z" &&
       7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
-  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/v4.0.0.zip
-  - 7z x v4.0.0.zip > nul
-  #- ps: Start-FileDownload https://github.com/frerich/clcache/archive/6a68a7c65648f1e0b80eafc22b7611313c42d86e.zip
-  #- 7z x 6a68a7c65648f1e0b80eafc22b7611313c42d86e.zip > nul
-  - ren clcache-4.0.0 clcache-bin
+  #- ps: Start-FileDownload https://github.com/frerich/clcache/archive/v4.0.0.zip
+  #- 7z x v4.0.0.zip > nul
+  - ps: Start-FileDownload https://github.com/frerich/clcache/archive/676ef005a931e91064dfd7a9c386dbcf78821a55.zip
+  - 7z x 676ef005a931e91064dfd7a9c386dbcf78821a55.zip > nul
+  - ren clcache-676ef005a931e91064dfd7a9c386dbcf78821a55 clcache-bin
   - python --version
   - set PATH=C:\\Python34;%PATH%
   - set PATH=C:\\Python34\\Scripts;%PATH%
