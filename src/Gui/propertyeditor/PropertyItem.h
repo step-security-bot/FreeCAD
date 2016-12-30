@@ -114,6 +114,7 @@ public:
     void updateData();
     const std::vector<App::Property*>& getPropertyData() const;
     bool hasProperty(const App::Property*) const;
+    virtual void assignProperty(const App::Property*);
     bool removeProperty(const App::Property*);
     App::Property* getFirstProperty();
     const App::Property* getFirstProperty() const;
@@ -129,6 +130,7 @@ public:
     virtual void bind(const App::Property& prop);
     virtual void bind(const App::ObjectIdentifier& _path);
     virtual void propertyBound()  {}
+    QString expressionAsString() const;
 
     void setParent(PropertyItem* parent);
     PropertyItem *parent() const;
@@ -156,6 +158,7 @@ public:
 protected:
     PropertyItem();
 
+    virtual QVariant displayName() const;
     virtual QVariant decoration(const QVariant&) const;
     virtual QVariant toolTip(const App::Property*) const;
     virtual QVariant toString(const QVariant&) const;
@@ -166,6 +169,7 @@ protected:
 
 private:
     QString propName;
+    QString displayText;
     QVariant propData;
     std::vector<App::Property*> propertyItems;
     PropertyItem *parentItem;
@@ -582,6 +586,7 @@ class GuiExport PropertyPlacementItem: public PropertyItem
     virtual QVariant editorData(QWidget *editor) const;
 
     virtual void propertyBound();
+    virtual void assignProperty(const App::Property*);
 
     Base::Quantity getAngle() const;
     void setAngle(Base::Quantity);

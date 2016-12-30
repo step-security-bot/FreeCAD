@@ -138,7 +138,7 @@ class SelectionTaskPanel:
     """A temp taks panel to wait for a selection"""
     def __init__(self):
         self.baseform = QtGui.QLabel()
-        self.baseform.setText(QtGui.QApplication.translate("Arch", "Please select a base object", None, QtGui.QApplication.UnicodeUTF8))
+        self.baseform.setText(QtGui.QApplication.translate("Arch", "Please select a base object", None))
 
     def getStandardButtons(self):
         return int(QtGui.QDialogButtonBox.Cancel)
@@ -292,19 +292,19 @@ class ComponentTaskPanel:
                 FreeCADGui.ActiveDocument.setEdit(obj.Name,0)
 
     def retranslateUi(self, TaskPanel):
-        self.baseform.setWindowTitle(QtGui.QApplication.translate("Arch", "Components", None, QtGui.QApplication.UnicodeUTF8))
-        self.delButton.setText(QtGui.QApplication.translate("Arch", "Remove", None, QtGui.QApplication.UnicodeUTF8))
-        self.addButton.setText(QtGui.QApplication.translate("Arch", "Add", None, QtGui.QApplication.UnicodeUTF8))
-        self.title.setText(QtGui.QApplication.translate("Arch", "Components of this object", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeBase.setText(0,QtGui.QApplication.translate("Arch", "Base component", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeAdditions.setText(0,QtGui.QApplication.translate("Arch", "Additions", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeSubtractions.setText(0,QtGui.QApplication.translate("Arch", "Subtractions", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeObjects.setText(0,QtGui.QApplication.translate("Arch", "Objects", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeAxes.setText(0,QtGui.QApplication.translate("Arch", "Axes", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeComponents.setText(0,QtGui.QApplication.translate("Arch", "Components", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeFixtures.setText(0,QtGui.QApplication.translate("Arch", "Fixtures", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeArmatures.setText(0,QtGui.QApplication.translate("Arch", "Armatures", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeGroup.setText(0,QtGui.QApplication.translate("Arch", "Group", None, QtGui.QApplication.UnicodeUTF8))
+        self.baseform.setWindowTitle(QtGui.QApplication.translate("Arch", "Components", None))
+        self.delButton.setText(QtGui.QApplication.translate("Arch", "Remove", None))
+        self.addButton.setText(QtGui.QApplication.translate("Arch", "Add", None))
+        self.title.setText(QtGui.QApplication.translate("Arch", "Components of this object", None))
+        self.treeBase.setText(0,QtGui.QApplication.translate("Arch", "Base component", None))
+        self.treeAdditions.setText(0,QtGui.QApplication.translate("Arch", "Additions", None))
+        self.treeSubtractions.setText(0,QtGui.QApplication.translate("Arch", "Subtractions", None))
+        self.treeObjects.setText(0,QtGui.QApplication.translate("Arch", "Objects", None))
+        self.treeAxes.setText(0,QtGui.QApplication.translate("Arch", "Axes", None))
+        self.treeComponents.setText(0,QtGui.QApplication.translate("Arch", "Components", None))
+        self.treeFixtures.setText(0,QtGui.QApplication.translate("Arch", "Fixtures", None))
+        self.treeArmatures.setText(0,QtGui.QApplication.translate("Arch", "Armatures", None))
+        self.treeGroup.setText(0,QtGui.QApplication.translate("Arch", "Group", None))
 
 class Component:
     "The default Arch Component object"
@@ -333,6 +333,8 @@ class Component:
         obj.setEditorMode("PerimeterLength",1)
 
     def execute(self,obj):
+        if self.clone(obj):
+            return
         if obj.Base:
             obj.Shape = obj.Base.Shape
 
@@ -344,13 +346,18 @@ class Component:
             self.Type = state
 
     def onChanged(self,obj,prop):
-        pass
+        if prop == "BaseMaterial":
+            if hasattr(obj,"BaseMaterial"):
+                if obj.BaseMaterial:
+                    if Draft.getType(obj.BaseMaterial) != "Material":
+                        obj.BaseMaterial = None
+                        print "Removing bad BaseMaterial link in ",obj.Name
 
     def clone(self,obj):
         "if this object is a clone, sets the shape. Returns True if this is the case"
         if hasattr(obj,"CloneOf"):
             if obj.CloneOf:
-                if Draft.getType(obj.CloneOf) == Draft.getType(obj):
+                if (Draft.getType(obj.CloneOf) == Draft.getType(obj)) or (Draft.getType(obj) == "Component"):
                     pl = obj.Placement
                     obj.Shape = obj.CloneOf.Shape.copy()
                     obj.Placement = pl
@@ -390,9 +397,11 @@ class Component:
             if obj.Base.isDerivedFrom("Part::Extrusion"):
                 if obj.Base.Base:
                     base,placement = self.rebase(obj.Base.Base.Shape)
-                    extrusion = obj.Base.Dir
+                    extrusion = FreeCAD.Vector(obj.Base.Dir)
                     if extrusion.Length == 0:
                         extrusion = FreeCAD.Vector(0,0,1)
+                    else:
+                        extrusion = placement.inverse().Rotation.multVec(extrusion)
                     if hasattr(obj.Base,"LengthForward"):
                         if obj.Base.LengthForward.Value:
                             extrusion = extrusion.multiply(obj.Base.LengthForward.Value)

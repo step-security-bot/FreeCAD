@@ -160,6 +160,10 @@ bool PropertyItem::hasProperty(const App::Property* prop) const
         return false;
 }
 
+void PropertyItem::assignProperty(const App::Property*)
+{
+}
+
 bool PropertyItem::removeProperty(const App::Property* prop)
 {
     std::vector<App::Property*>::iterator it = std::find(propertyItems.begin(), propertyItems.end(), prop);
@@ -255,6 +259,11 @@ int PropertyItem::decimals() const
     return precision;
 }
 
+QVariant PropertyItem::displayName() const
+{
+    return QVariant(displayText);
+}
+
 QVariant PropertyItem::toolTip(const App::Property* prop) const
 {
     QString str = QApplication::translate("App::Property",
@@ -329,7 +338,7 @@ QVariant PropertyItem::editorData(QWidget * /*editor*/) const
 QString PropertyItem::propertyName() const
 {
     if (propName.isEmpty())
-        return QLatin1String("<empty>");
+        return QLatin1String(QT_TRANSLATE_NOOP("App::Property", "<empty>"));
     return propName;
 }
 
@@ -349,6 +358,9 @@ void PropertyItem::setPropertyName(const QString& name)
     }
 
     propName = display;
+
+    QString str = QApplication::translate("App::Property", propName.toLatin1());
+    displayText = str;
 }
 
 void PropertyItem::setPropertyValue(const QString& value)
@@ -380,7 +392,7 @@ QVariant PropertyItem::data(int column, int role) const
     // property name
     if (column == 0) {
         if (role == Qt::DisplayRole)
-            return propertyName();
+            return displayName();
         // no properties set
         if (propertyItems.empty())
             return QVariant();
@@ -474,6 +486,15 @@ void PropertyItem::bind(const App::Property& prop) {
     propertyBound();
 }
 
+QString PropertyItem::expressionAsString() const
+{
+    if (hasExpression()) {
+        std::unique_ptr<App::Expression> result(getExpression()->eval());
+        return QString::fromStdString(result->toString());
+    }
+
+    return QString();
+}
 
 // --------------------------------------------------------------------
 
@@ -1741,16 +1762,16 @@ PropertyPlacementItem::PropertyPlacementItem() : init_axis(false), changed_value
 {
     m_a = static_cast<PropertyUnitItem*>(PropertyUnitItem::create());
     m_a->setParent(this);
-    m_a->setPropertyName(QLatin1String("Angle"));
+    m_a->setPropertyName(QLatin1String(QT_TRANSLATE_NOOP("App::Property", "Angle")));
     this->appendChild(m_a);
     m_d = static_cast<PropertyVectorItem*>(PropertyVectorItem::create());
     m_d->setParent(this);
-    m_d->setPropertyName(QLatin1String("Axis"));
+    m_d->setPropertyName(QLatin1String(QT_TRANSLATE_NOOP("App::Property", "Axis")));
     m_d->setReadOnly(true);
     this->appendChild(m_d);
     m_p = static_cast<PropertyVectorDistanceItem*>(PropertyVectorDistanceItem::create());
     m_p->setParent(this);
-    m_p->setPropertyName(QLatin1String("Position"));
+    m_p->setPropertyName(QLatin1String(QT_TRANSLATE_NOOP("App::Property", "Position")));
     m_p->setReadOnly(true);
     this->appendChild(m_p);
 }
@@ -1835,6 +1856,21 @@ void PropertyPlacementItem::setPosition(const Base::Vector3d& pos)
     setValue(QVariant::fromValue(val));
 }
 
+void PropertyPlacementItem::assignProperty(const App::Property* prop)
+{
+    if (prop->getTypeId().isDerivedFrom(App::PropertyPlacement::getClassTypeId())) {
+        const Base::Placement& value = static_cast<const App::PropertyPlacement*>(prop)->getValue();
+        double angle;
+        Base::Vector3d dir;
+        value.getRotation().getValue(dir, angle);
+        Base::Vector3d cross = this->rot_axis.Cross(dir);
+        if (cross.Sqr() > Base::Vector3d::epsilon()) {
+            this->rot_axis = dir;
+        }
+        this->rot_angle = Base::toDegrees(angle);
+    }
+}
+
 QVariant PropertyPlacementItem::value(const App::Property* prop) const
 {
     assert(prop && prop->getTypeId().isDerivedFrom(App::PropertyPlacement::getClassTypeId()));
@@ -1844,8 +1880,30 @@ QVariant PropertyPlacementItem::value(const App::Property* prop) const
     Base::Vector3d dir;
     value.getRotation().getValue(dir, angle);
     if (!init_axis) {
+        if (m_a->hasExpression()) {
+            QString str = m_a->expressionAsString();
+            const_cast<PropertyPlacementItem*>(this)->rot_angle = str.toDouble();
+        }
+        else {
+            const_cast<PropertyPlacementItem*>(this)->rot_angle = Base::toDegrees(angle);
+        }
+
+        PropertyItem* x = m_d->child(0);
+        PropertyItem* y = m_d->child(1);
+        PropertyItem* z = m_d->child(2);
+        if (x->hasExpression()) {
+            QString str = x->expressionAsString();
+            dir.x = str.toDouble();
+        }
+        if (y->hasExpression()) {
+            QString str = y->expressionAsString();
+            dir.y = str.toDouble();
+        }
+        if (z->hasExpression()) {
+            QString str = z->expressionAsString();
+            dir.z = str.toDouble();
+        }
         const_cast<PropertyPlacementItem*>(this)->rot_axis = dir;
-        const_cast<PropertyPlacementItem*>(this)->rot_angle = Base::toDegrees(angle);
         const_cast<PropertyPlacementItem*>(this)->init_axis = true;
     }
     return QVariant::fromValue<Base::Placement>(value);
@@ -1928,13 +1986,13 @@ QWidget* PropertyPlacementItem::createEditor(QWidget* parent, const QObject* rec
 
 void PropertyPlacementItem::setEditorData(QWidget *editor, const QVariant& data) const
 {
-    Gui::LabelButton *pe = qobject_cast<Gui::LabelButton*>(editor);
+    PlacementEditor *pe = qobject_cast<PlacementEditor*>(editor);
     pe->setValue(data);
 }
 
 QVariant PropertyPlacementItem::editorData(QWidget *editor) const
 {
-    Gui::LabelButton *pe = qobject_cast<Gui::LabelButton*>(editor);
+    PlacementEditor *pe = qobject_cast<PlacementEditor*>(editor);
     return pe->value();
 }
 

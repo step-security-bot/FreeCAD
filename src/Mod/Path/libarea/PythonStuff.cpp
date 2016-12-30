@@ -25,7 +25,7 @@
 #include <Python.h>
 #endif
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__clang__)
 #pragma implementation
 #endif
 

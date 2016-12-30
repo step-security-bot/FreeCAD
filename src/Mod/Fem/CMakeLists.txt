@@ -3,6 +3,11 @@ if(BUILD_FEM_VTK)
     add_definitions(-DFC_USE_VTK)
 endif(BUILD_FEM_VTK)
 
+# suppress warnings from smesh
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
+endif()
+
 add_subdirectory(App)
 
 if(BUILD_GUI)
@@ -24,7 +29,9 @@ INSTALL(
         TestFem.py
 
         FemCommands.py
+        _CommandClearMesh.py
         _CommandMeshNetgenFromShape.py
+        _CommandPrintMeshInfo.py
         _CommandPurgeResults.py
         _CommandRunSolver.py
         _CommandControlSolver.py
@@ -47,6 +54,13 @@ INSTALL(
 
         FemMesh2Mesh.py
         _CommandFEMMesh2Mesh.py
+
+        FemMeshRegion.py
+        _FemMeshRegion.py
+        _ViewProviderFemMeshRegion.py
+        _CommandMeshRegion.py
+        _TaskPanelFemMeshRegion.py
+        TaskPanelFemMeshRegion.ui
 
         FemBeamSection.py
         _FemBeamSection.py

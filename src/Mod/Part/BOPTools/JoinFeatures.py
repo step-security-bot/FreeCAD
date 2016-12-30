@@ -33,26 +33,29 @@ import Part
 if FreeCAD.GuiUp:
     import FreeCADGui
     from PySide import QtCore, QtGui
-
-
-# -------------------------- common stuff --------------------------------------------------
-
-#-------------------------- translation-related code ----------------------------------------
-#Thanks, yorik! (see forum thread "A new Part tool is being born... JoinFeatures!"
-#http://forum.freecadweb.org/viewtopic.php?f=22&t=11112&start=30#p90239 )
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except Exception:
-    def _fromUtf8(s):
-        return s
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
+    # -------------------------- common stuff --------------------------------------------------
+    
+    #-------------------------- translation-related code ----------------------------------------
+    #Thanks, yorik! (see forum thread "A new Part tool is being born... JoinFeatures!"
+    #http://forum.freecadweb.org/viewtopic.php?f=22&t=11112&start=30#p90239 )
+    
+    try:
+        _fromUtf8 = QtCore.QString.fromUtf8
+    except Exception:
+        def _fromUtf8(s):
+            return s
+    try:
+        _encoding = QtGui.QApplication.UnicodeUTF8
+        def _translate(context, text, disambig):
+            return QtGui.QApplication.translate(context, text, disambig, _encoding)
+    except AttributeError:
+        def _translate(context, text, disambig):
+            return QtGui.QApplication.translate(context, text, disambig)
+else:
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except NameError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
-#--------------------------/translation-related code ----------------------------------------
+        return text
+    #--------------------------/translation-related code ----------------------------------------
+
 
 def getParamRefine():
     return FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Part/Boolean").GetBool("RefineModel")
@@ -121,6 +124,7 @@ class FeatureConnect:
         obj.addProperty("App::PropertyLength","Tolerance","Connect","Tolerance when intersecting (fuzzy value). In addition to tolerances of the shapes.")
 
         obj.Proxy = self
+        self.Type = "FeatureConnect"
 
     def execute(self,selfobj):
         rst = JoinAPI.connect([obj.Shape for obj in selfobj.Objects], selfobj.Tolerance)
@@ -214,6 +218,7 @@ class FeatureEmbed:
         obj.addProperty("App::PropertyLength","Tolerance","Embed","Tolerance when intersecting (fuzzy value). In addition to tolerances of the shapes.")
 
         obj.Proxy = self
+        self.Type = "FeatureEmbed"
 
     def execute(self,selfobj):
         rst = JoinAPI.embed_legacy(selfobj.Base.Shape, selfobj.Tool.Shape, selfobj.Tolerance)
@@ -308,6 +313,7 @@ class FeatureCutout:
         obj.addProperty("App::PropertyLength","Tolerance","Cutout","Tolerance when intersecting (fuzzy value). In addition to tolerances of the shapes.")
 
         obj.Proxy = self
+        self.Type = "FeatureCutout"
 
     def execute(self,selfobj):
         rst = JoinAPI.cutout_legacy(selfobj.Base.Shape, selfobj.Tool.Shape, selfobj.Tolerance)

@@ -220,7 +220,7 @@ void PropertyModel::buildUp(const PropertyModel::PropertyList& props)
         App::Property* prop = jt->second.front();
         const char* group = prop->getGroup();
         bool isEmpty = (group == 0 || group[0] == '\0');
-        std::string grp = isEmpty ? "Base" : group;
+        std::string grp = isEmpty ? QT_TRANSLATE_NOOP("App::Property", "Base") : group;
         propGroup[grp].push_back(jt->second);
     }
 
@@ -268,6 +268,7 @@ void PropertyModel::updateProperty(const App::Property& prop)
             child->updateData();
             QModelIndex data = this->index(row, column, QModelIndex());
             if (data.isValid()) {
+                child->assignProperty(&prop);
                 dataChanged(data, data);
                 updateChildren(child, column, data);
             }

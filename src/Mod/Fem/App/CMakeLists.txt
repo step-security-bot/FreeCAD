@@ -63,15 +63,16 @@ SOURCE_GROUP("Module" FILES ${Mod_SRCS})
 SET(FemScripts_SRCS
     _CommandAnalysis.py
     _CommandBeamSection.py
+    _CommandClearMesh.py
     _CommandControlSolver.py
     _CommandConstraintSelfWeight.py
     _CommandFEMMesh2Mesh.py
-    _CommandMechanicalMaterial.py
-    _CommandShowResult.py
     _CommandMaterialMechanicalNonlinear.py
     _CommandMechanicalMaterial.py
     _CommandMeshGmshFromShape.py
     _CommandMeshNetgenFromShape.py
+    _CommandMeshRegion.py
+    _CommandPrintMeshInfo.py
     _CommandPurgeResults.py
     _CommandRunSolver.py
     _CommandShellThickness.py
@@ -82,12 +83,14 @@ SET(FemScripts_SRCS
     _FemConstraintSelfWeight.py
     _FemMaterialMechanicalNonlinear.py
     _FemMeshGmsh.py
+    _FemMeshRegion.py
     _FemShellThickness.py
     _FemSolverCalculix.py
     _FemSolverZ88.py
     _MechanicalMaterial.py
     _TaskPanelFemBeamSection.py
     _TaskPanelFemMeshGmsh.py
+    _TaskPanelFemMeshRegion.py
     _TaskPanelFemShellThickness.py
     _TaskPanelFemSolverCalculix.py
     _TaskPanelMechanicalMaterial.py
@@ -96,6 +99,7 @@ SET(FemScripts_SRCS
     _ViewProviderFemConstraintSelfWeight.py
     _ViewProviderFemMaterialMechanicalNonlinear.py
     _ViewProviderFemMeshGmsh.py
+    _ViewProviderFemMeshRegion.py
     _ViewProviderFemShellThickness.py
     _ViewProviderFemSolverCalculix.py
     _ViewProviderFemSolverZ88.py
@@ -118,6 +122,7 @@ SET(FemScripts_SRCS
     FemMaterialMechanicalNonlinear.py
     FemMesh2Mesh.py
     FemMeshGmsh.py
+    FemMeshRegion.py
     FemMeshTools.py
     FemShellThickness.py
     FemSolverCalculix.py
@@ -131,6 +136,7 @@ SET(FemScripts_SRCS
     z88DispReader.py
     TaskPanelFemBeamSection.ui
     TaskPanelFemMeshGmsh.ui
+    TaskPanelFemMeshRegion.ui
     TaskPanelFemShellThickness.ui
     TaskPanelFemSolverCalculix.ui
     TaskPanelMechanicalMaterial.ui

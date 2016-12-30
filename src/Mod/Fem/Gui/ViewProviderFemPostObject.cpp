@@ -247,8 +247,11 @@ void ViewProviderFemPostObject::updateProperties() {
     colorArrays.push_back("None");
 
     vtkPointData* point = poly->GetPointData();
-    for(int i=0; i<point->GetNumberOfArrays(); ++i)
-        colorArrays.push_back(point->GetArrayName(i));
+    for(int i=0; i<point->GetNumberOfArrays(); ++i) {
+        std::string FieldName = point->GetArrayName(i);
+        if (FieldName != "Texture Coordinates")
+            colorArrays.push_back(FieldName);
+    }
 
     vtkCellData* cell = poly->GetCellData();
     for(int i=0; i<cell->GetNumberOfArrays(); ++i)
@@ -406,7 +409,7 @@ void ViewProviderFemPostObject::update3D() {
 
 void ViewProviderFemPostObject::WritePointData(vtkPoints* points, vtkDataArray* normals, vtkDataArray* tcoords) {
 
-
+    Q_UNUSED(tcoords)
     double *p;
     int i;
 
@@ -615,7 +618,7 @@ void ViewProviderFemPostObject::show(void) {
 }
 
 
-void ViewProviderFemPostObject::OnChange(Base::Subject< int >& rCaller, int rcReason) {
+void ViewProviderFemPostObject::OnChange(Base::Subject< int >& /*rCaller*/, int /*rcReason*/) {
     bool ResetColorBarRange = false;
     WriteColorData(ResetColorBarRange);
 }
