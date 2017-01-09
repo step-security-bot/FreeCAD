@@ -18,6 +18,7 @@
         <file>icons/Path-FaceProfile.svg</file>
         <file>icons/Path-Face.svg</file>
         <file>icons/Path-Heights.svg</file>
+        <file>icons/Path-Helix.svg</file>
         <file>icons/Path-Hop.svg</file>
         <file>icons/Path-Inspect.svg</file>
         <file>icons/Path-Job.svg</file>
@@ -53,6 +54,7 @@
         <file>panels/DogboneEdit.ui</file>
         <file>panels/DrillingEdit.ui</file>
         <file>panels/EngraveEdit.ui</file>
+        <file>panels/HoldingTagsEdit.ui</file>
         <file>panels/JobEdit.ui</file>
         <file>panels/MillFaceEdit.ui</file>
         <file>panels/PocketEdit.ui</file>

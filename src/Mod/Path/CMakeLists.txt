@@ -26,6 +26,7 @@ SET(PathScripts_SRCS
     PathScripts/PathDressup.py
     PathScripts/PathDressupDogbone.py
     PathScripts/PathDressupDragknife.py
+    PathScripts/PathDressupHoldingTags.py
     PathScripts/PathDrilling.py
     PathScripts/PathEngrave.py
     PathScripts/PathFacePocket.py
@@ -52,6 +53,7 @@ SET(PathScripts_SRCS
     PathScripts/PathSimpleCopy.py
     PathScripts/PathStock.py
     PathScripts/PathStop.py
+    PathScripts/PathHelix.py
     PathScripts/PathSurface.py
     PathScripts/PathToolLenOffset.py
     PathScripts/PathToolLibraryManager.py
@@ -73,6 +75,7 @@ SET(PathScripts_SRCS
     PathScripts/slic3r_pre.py
     PathTests/PathTestUtils.py
     PathTests/TestPathDepthParams.py
+    PathTests/TestPathDressupHoldingTags.py
     PathTests/TestPathGeom.py
     PathTests/TestPathPost.py
     PathTests/__init__.py

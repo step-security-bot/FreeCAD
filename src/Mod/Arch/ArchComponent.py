@@ -361,9 +361,6 @@ class Component:
                     pl = obj.Placement
                     obj.Shape = obj.CloneOf.Shape.copy()
                     obj.Placement = pl
-                    if hasattr(obj,"BaseMaterial"):
-                        if hasattr(obj.CloneOf,"BaseMaterial"):
-                            obj.BaseMaterial = obj.CloneOf.BaseMaterial
                     for prop in ["Length","Width","Height","Thickness","Area","PerimeterLength","HorizontalArea","VerticalArea"]:
                         if hasattr(obj,prop) and hasattr(obj.CloneOf,prop):
                             setattr(obj,prop,getattr(obj.CloneOf,prop))
@@ -390,9 +387,11 @@ class Component:
         "returns (shape,extrusion vector,placement) or None"
         if hasattr(obj,"CloneOf"):
             if obj.CloneOf:
-                data = obj.CloneOf.Proxy.getExtrusionData(obj.CloneOf)
-                if data:
-                    return data 
+                if hasattr(obj.CloneOf,"Proxy"):
+                    if hasattr(obj.CloneOf.Proxy,"getExtrusionData"):
+                        data = obj.CloneOf.Proxy.getExtrusionData(obj.CloneOf)
+                        if data:
+                            return data 
         if obj.Base:
             if obj.Base.isDerivedFrom("Part::Extrusion"):
                 if obj.Base.Base:
@@ -406,6 +405,37 @@ class Component:
                         if obj.Base.LengthForward.Value:
                             extrusion = extrusion.multiply(obj.Base.LengthForward.Value)
                     return (base,extrusion,placement)
+            elif obj.Base.isDerivedFrom("Part::MultiFuse"):
+                rshapes = []
+                revs = []
+                rpls = []
+                for sub in obj.Base.Shapes:
+                    if sub.isDerivedFrom("Part::Extrusion"):
+                        if sub.Base:
+                            base,placement = self.rebase(sub.Base.Shape)
+                            extrusion = FreeCAD.Vector(sub.Dir)
+                            if extrusion.Length == 0:
+                                extrusion = FreeCAD.Vector(0,0,1)
+                            else:
+                                extrusion = placement.inverse().Rotation.multVec(extrusion)
+                            if hasattr(sub,"LengthForward"):
+                                if sub.LengthForward.Value:
+                                    extrusion = extrusion.multiply(sub.LengthForward.Value)
+                            placement = obj.Placement.multiply(placement)
+                            rshapes.append(base)
+                            revs.append(extrusion)
+                            rpls.append(placement)
+                    else:
+                        exdata = ArchCommands.getExtrusionData(sub.Shape)
+                        if exdata:
+                            base,placement = self.rebase(exdata[0])
+                            extrusion = placement.inverse().Rotation.multVec(exdata[1])
+                            placement = obj.Placement.multiply(placement)
+                            rshapes.append(base)
+                            revs.append(extrusion)
+                            rpls.append(placement)
+                if rshapes and revs and rpls:
+                    return (rshapes,revs,rpls)
         return None
         
     def rebase(self,shape):
@@ -632,28 +662,33 @@ class ViewProviderComponent:
         #print obj.Name," : updating ",prop
         if prop == "BaseMaterial":
             if obj.BaseMaterial:
-                if 'Color' in obj.BaseMaterial.Material:
-                    if "(" in obj.BaseMaterial.Material['Color']:
-                        c = tuple([float(f) for f in obj.BaseMaterial.Material['Color'].strip("()").split(",")])
+                if 'DiffuseColor' in obj.BaseMaterial.Material:
+                    if "(" in obj.BaseMaterial.Material['DiffuseColor']:
+                        c = tuple([float(f) for f in obj.BaseMaterial.Material['DiffuseColor'].strip("()").split(",")])
                         if obj.ViewObject:
-                            obj.ViewObject.ShapeColor = c
+                            if obj.ViewObject.ShapeColor != c:
+                                obj.ViewObject.ShapeColor = c
         elif prop == "Shape":
             if obj.Base:
                 if obj.Base.isDerivedFrom("Part::Compound"):
                     if obj.ViewObject.DiffuseColor != obj.Base.ViewObject.DiffuseColor:
                         obj.ViewObject.DiffuseColor = obj.Base.ViewObject.DiffuseColor
                         obj.ViewObject.update()
-            self.onChanged(obj.ViewObject,"ShapeColor")
+                        self.onChanged(obj.ViewObject,"ShapeColor")
         elif prop == "CloneOf":
-            if obj.CloneOf:
+            if obj.CloneOf and not(obj.BaseMaterial):
                 if obj.ViewObject.DiffuseColor != obj.CloneOf.ViewObject.DiffuseColor:
                         obj.ViewObject.DiffuseColor = obj.CloneOf.ViewObject.DiffuseColor
                         obj.ViewObject.update()
-            self.onChanged(obj.ViewObject,"ShapeColor")
+                        self.onChanged(obj.ViewObject,"ShapeColor")
         return
 
     def getIcon(self):
         import Arch_rc
+        if hasattr(self,"Object"):
+            if hasattr(self.Object,"CloneOf"):
+                if self.Object.CloneOf:
+                    return ":/icons/Arch_Component_Clone.svg"
         return ":/icons/Arch_Component.svg"
 
     def onChanged(self,vobj,prop):
