@@ -27,7 +27,8 @@ __title__="FreeCAD Equipment"
 __author__ = "Yorik van Havre"
 __url__ = "http://www.freecadweb.org"
 
-import FreeCAD,Draft,ArchComponent,DraftVecUtils,ArchCommands,Units
+import FreeCAD,Draft,ArchComponent,DraftVecUtils,ArchCommands
+from FreeCAD import Units
 from FreeCAD import Vector
 if FreeCAD.GuiUp:
     import FreeCADGui
@@ -121,7 +122,7 @@ def createMeshView(obj,direction=FreeCAD.Vector(0,0,-1),outeronly=False,largesto
     # 3. Getting the bigger mesh from the planar segments
     if largestonly:
         c = cleanmesh.getSeparateComponents()
-        #print c
+        #print(c)
         cleanmesh = c[0]
         segs = cleanmesh.getPlanarSegments(1)
         meshes = []
@@ -141,7 +142,7 @@ def createMeshView(obj,direction=FreeCAD.Vector(0,0,-1),outeronly=False,largesto
     shape = None
     for f in cleanmesh.Facets:
         p = Part.makePolygon(f.Points+[f.Points[0]])
-        #print p,len(p.Vertexes),p.isClosed()
+        #print(p,len(p.Vertexes),p.isClosed())
         try:
             p = Part.Face(p)
             if shape:
@@ -165,7 +166,7 @@ def createMeshView(obj,direction=FreeCAD.Vector(0,0,-1),outeronly=False,largesto
             try:
                 f = Part.Face(w)
             except Part.OCCError:
-                print "Unable to produce a face from the outer wire."
+                print("Unable to produce a face from the outer wire.")
             else:
                 shape = f
 
@@ -191,7 +192,9 @@ class _CommandEquipment:
             base = s[0].Name
             FreeCAD.ActiveDocument.openTransaction(str(translate("Arch","Create Equipment")))
             FreeCADGui.addModule("Arch")
-            FreeCADGui.doCommand("Arch.makeEquipment(FreeCAD.ActiveDocument." + base + ")")
+            FreeCADGui.doCommand("obj = Arch.makeEquipment(FreeCAD.ActiveDocument." + base + ")")
+            FreeCADGui.addModule("Draft")
+            FreeCADGui.doCommand("Draft.autogroup(obj)")
             FreeCAD.ActiveDocument.commitTransaction()
             FreeCAD.ActiveDocument.recompute()
             # get diffuse color info from base object

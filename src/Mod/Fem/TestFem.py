@@ -37,21 +37,27 @@ import unittest
 mesh_name = 'Mesh'
 
 home_path = FreeCAD.getHomePath()
-temp_dir = tempfile.gettempdir()
+temp_dir = tempfile.gettempdir() + '/FEM_unittests'
 test_file_dir = home_path + 'Mod/Fem/test_files/ccx'
 
 static_base_name = 'cube_static'
-frequency_base_name = 'cube_frequency'
-thermomech_base_name = 'spine_thermomech'
 static_analysis_dir = temp_dir + '/FEM_static'
-frequency_analysis_dir = temp_dir + '/FEM_frequency'
-thermomech_analysis_dir = temp_dir + '/FEM_thermomech'
+static_save_fc_file = static_analysis_dir + '/' + static_base_name + '.fcstd'
 static_analysis_inp_file = test_file_dir + '/' + static_base_name + '.inp'
 static_expected_values = test_file_dir + "/cube_static_expected_values"
+
+frequency_base_name = 'cube_frequency'
+frequency_analysis_dir = temp_dir + '/FEM_frequency'
+frequency_save_fc_file = frequency_analysis_dir + '/' + frequency_base_name + '.fcstd'
 frequency_analysis_inp_file = test_file_dir + '/' + frequency_base_name + '.inp'
 frequency_expected_values = test_file_dir + "/cube_frequency_expected_values"
+
+thermomech_base_name = 'spine_thermomech'
+thermomech_analysis_dir = temp_dir + '/FEM_thermomech'
+thermomech_save_fc_file = thermomech_analysis_dir + '/' + thermomech_base_name + '.fcstd'
 thermomech_analysis_inp_file = test_file_dir + '/' + thermomech_base_name + '.inp'
 thermomech_expected_values = test_file_dir + "/spine_thermomech_expected_values"
+
 mesh_points_file = test_file_dir + '/mesh_points.csv'
 mesh_volumes_file = test_file_dir + '/mesh_volumes.csv'
 spine_points_file = test_file_dir + '/spine_points.csv'
@@ -76,7 +82,7 @@ class FemTest(unittest.TestCase):
         self.active_doc.recompute()
 
     def create_new_analysis(self):
-        self.analysis = FemAnalysis.makeFemAnalysis('MechanicalAnalysis')
+        self.analysis = FemAnalysis.makeFemAnalysis('Analysis')
         self.active_doc.recompute()
 
     def create_new_solver(self):
@@ -134,53 +140,11 @@ class FemTest(unittest.TestCase):
         self.pressure_constraint.Pressure = 1000.0
         self.pressure_constraint.Reversed = False
 
-    def force_unix_line_ends(self, line_list):
-        new_line_list = []
-        for l in line_list:
-            if l.endswith("\r\n"):
-                l = l[:-2] + '\n'
-            new_line_list.append(l)
-        return new_line_list
-
-    def compare_inp_files(self, file_name1, file_name2):
-        file1 = open(file_name1, 'r')
-        f1 = file1.readlines()
-        file1.close()
-        lf1 = [l for l in f1 if not l.startswith('**   written ')]
-        lf1 = self.force_unix_line_ends(lf1)
-        file2 = open(file_name2, 'r')
-        f2 = file2.readlines()
-        file2.close()
-        lf2 = [l for l in f2 if not l.startswith('**   written ')]
-        lf2 = self.force_unix_line_ends(lf2)
-        import difflib
-        diff = difflib.unified_diff(lf1, lf2, n=0)
-        result = ''
-        for l in diff:
-            result += l
-        if result:
-            result = "Comparing {} to {} failed!\n".format(file_name1, file_name2) + result
-        return result
-
-    def compare_stats(self, fea, stat_file=None):
-        if stat_file:
-            sf = open(stat_file, 'r')
-            sf_content = sf.readlines()
-            sf.close()
-            sf_content = self.force_unix_line_ends(sf_content)
-        stat_types = ["U1", "U2", "U3", "Uabs", "Sabs"]
-        stats = []
-        for s in stat_types:
-            stats.append("{}: {}\n".format(s, fea.get_stats(s)))
-        if sf_content != stats:
-            fcc_print("Expected stats from {}".format(stat_file))
-            fcc_print(sf_content)
-            fcc_print("Stats read from {}.frd file".format(fea.base_name))
-            fcc_print(stats)
-            return True
-        return False
+    def save_file(self, fc_file_name):
+        self.active_doc.saveAs(fc_file_name)
 
     def test_new_analysis(self):
+        # static
         fcc_print('--------------- Start of FEM tests ---------------')
         fcc_print('Checking FEM new analysis...')
         self.create_new_analysis()
@@ -237,7 +201,7 @@ class FemTest(unittest.TestCase):
         self.assertFalse(error, "Writing failed")
 
         fcc_print('Comparing {} to {}/{}.inp'.format(static_analysis_inp_file, static_analysis_dir, mesh_name))
-        ret = self.compare_inp_files(static_analysis_inp_file, static_analysis_dir + "/" + mesh_name + '.inp')
+        ret = compare_inp_files(static_analysis_inp_file, static_analysis_dir + "/" + mesh_name + '.inp')
         self.assertFalse(ret, "FemToolsCcx write_inp_file test failed.\n{}".format(ret))
 
         fcc_print('Setting up working directory to {} in order to read simulated calculations'.format(test_file_dir))
@@ -260,9 +224,14 @@ class FemTest(unittest.TestCase):
         self.assertTrue(fea.results_present, "Cannot read results from {}.frd frd file".format(fea.base_name))
 
         fcc_print('Reading stats from result object for static analysis...')
-        ret = self.compare_stats(fea, static_expected_values)
+        ret = compare_stats(fea, static_expected_values)
         self.assertFalse(ret, "Invalid results read from .frd file")
 
+        fcc_print('Save FreeCAD file for static analysis to {}...'.format(static_save_fc_file))
+        self.save_file(static_save_fc_file)
+        self.assertTrue(self.save_file, "FemTest saving of file {} failed ...".format(static_save_fc_file))
+
+        # frequency
         fcc_print('Setting analysis type to \'frequency\"')
         fea.set_analysis_type("frequency")
         self.assertTrue(True if fea.analysis_type == 'frequency' else False, "Setting anlysis type to \'frequency\' failed")
@@ -281,7 +250,7 @@ class FemTest(unittest.TestCase):
         self.assertFalse(error, "Writing failed")
 
         fcc_print('Comparing {} to {}/{}.inp'.format(frequency_analysis_inp_file, frequency_analysis_dir, mesh_name))
-        ret = self.compare_inp_files(frequency_analysis_inp_file, frequency_analysis_dir + "/" + mesh_name + '.inp')
+        ret = compare_inp_files(frequency_analysis_inp_file, frequency_analysis_dir + "/" + mesh_name + '.inp')
         self.assertFalse(ret, "FemToolsCcx write_inp_file test failed.\n{}".format(ret))
 
         fcc_print('Setting up working directory to {} in order to read simulated calculations'.format(test_file_dir))
@@ -304,10 +273,14 @@ class FemTest(unittest.TestCase):
         self.assertTrue(fea.results_present, "Cannot read results from {}.frd frd file".format(fea.base_name))
 
         fcc_print('Reading stats from result object for frequency analysis...')
-        ret = self.compare_stats(fea, frequency_expected_values)
+        ret = compare_stats(fea, frequency_expected_values)
         self.assertFalse(ret, "Invalid results read from .frd file")
 
-        fcc_print('--------------- End of FEM tests ---------------')
+        fcc_print('Save FreeCAD file for frequency analysis to {}...'.format(frequency_save_fc_file))
+        self.save_file(frequency_save_fc_file)
+        self.assertTrue(self.save_file, "FemTest saving of file {} failed ...".format(frequency_save_fc_file))
+
+        fcc_print('--------------- End of FEM tests static and frequency analysis ---------------')
 
     def tearDown(self):
         FreeCAD.closeDocument("FemTest")
@@ -336,6 +309,7 @@ class TherMechFemTest(unittest.TestCase):
 
     def create_new_solver(self):
         self.solver_object = FemSolverCalculix.makeFemSolverCalculix('CalculiX')
+        self.solver_object.AnalysisType = 'thermomech'
         self.solver_object.GeometricalNonlinearity = 'linear'
         self.solver_object.ThermoMechSteadyState = True
         self.solver_object.MatrixSolverType = 'default'
@@ -392,51 +366,8 @@ class TherMechFemTest(unittest.TestCase):
         self.heatflux_constraint.AmbientTemp = 255.3722
         self.heatflux_constraint.FilmCoef = 5.678
 
-    def force_unix_line_ends(self, line_list):
-        new_line_list = []
-        for l in line_list:
-            if l.endswith("\r\n"):
-                l = l[:-2] + '\n'
-            new_line_list.append(l)
-        return new_line_list
-
-    def compare_inp_files(self, file_name1, file_name2):
-        file1 = open(file_name1, 'r')
-        f1 = file1.readlines()
-        file1.close()
-        lf1 = [l for l in f1 if not l.startswith('**   written ') if not l.startswith('**   file ')]
-        lf1 = self.force_unix_line_ends(lf1)
-        file2 = open(file_name2, 'r')
-        f2 = file2.readlines()
-        file2.close()
-        lf2 = [l for l in f2 if not l.startswith('**   written ') if not l.startswith('**   file ')]
-        lf2 = self.force_unix_line_ends(lf2)
-        import difflib
-        diff = difflib.unified_diff(lf1, lf2, n=0)
-        result = ''
-        for l in diff:
-            result += l
-        if result:
-            result = "Comparing {} to {} failed!\n".format(file_name1, file_name2) + result
-        return result
-
-    def compare_stats(self, fea, stat_file=None):
-        if stat_file:
-            sf = open(stat_file, 'r')
-            sf_content = sf.readlines()
-            sf.close()
-            sf_content = self.force_unix_line_ends(sf_content)
-        stat_types = ["U1", "U2", "U3", "Uabs", "Sabs"]
-        stats = []
-        for s in stat_types:
-            stats.append("{}: {}\n".format(s, fea.get_stats(s)))
-        if sf_content != stats:
-            fcc_print("Expected stats from {}".format(stat_file))
-            fcc_print(sf_content)
-            fcc_print("Stats read from {}.frd file".format(fea.base_name))
-            fcc_print(stats)
-            return True
-        return False
+    def save_file(self, fc_file_name):
+        self.active_doc.saveAs(fc_file_name)
 
     def test_new_analysis(self):
         fcc_print('--------------- Start of FEM tests ---------------')
@@ -500,7 +431,7 @@ class TherMechFemTest(unittest.TestCase):
         self.assertFalse(error, "Writing failed")
 
         fcc_print('Comparing {} to {}/{}.inp'.format(thermomech_analysis_inp_file, thermomech_analysis_dir, mesh_name))
-        ret = self.compare_inp_files(thermomech_analysis_inp_file, thermomech_analysis_dir + "/" + mesh_name + '.inp')
+        ret = compare_inp_files(thermomech_analysis_inp_file, thermomech_analysis_dir + "/" + mesh_name + '.inp')
         self.assertFalse(ret, "FemToolsCcx write_inp_file test failed.\n{}".format(ret))
 
         fcc_print('Setting up working directory to {} in order to read simulated calculations'.format(test_file_dir))
@@ -518,26 +449,95 @@ class TherMechFemTest(unittest.TestCase):
         self.assertTrue(True if fea.inp_file_name == thermomech_analysis_inp_file else False,
                         "Setting inp file name to {} failed".format(thermomech_analysis_inp_file))
 
+        fcc_print('Checking FEM frd file read from thermomech analysis...')
+        fea.load_results()
+        self.assertTrue(fea.results_present, "Cannot read results from {}.frd frd file".format(fea.base_name))
+
+        fcc_print('Reading stats from result object for thermomech analysis...')
+        ret = compare_stats(fea, thermomech_expected_values)
+        self.assertFalse(ret, "Invalid results read from .frd file")
+
+        fcc_print('Save FreeCAD file for thermomech analysis to {}...'.format(thermomech_save_fc_file))
+        self.save_file(thermomech_save_fc_file)
+        self.assertTrue(self.save_file, "FemTest saving of file {} failed ...".format(thermomech_save_fc_file))
+
+        fcc_print('--------------- End of FEM tests thermomech analysis ---------------')
+
     def tearDown(self):
         FreeCAD.closeDocument("TherMechFemTest")
         pass
 
 
 # helpers
-def open_cube_test():
-    cube_file = test_file_dir + '/cube.fcstd'
-    FreeCAD.open(cube_file)
+def compare_inp_files(file_name1, file_name2):
+    file1 = open(file_name1, 'r')
+    f1 = file1.readlines()
+    file1.close()
+    lf1 = [l for l in f1 if not (l.startswith('**   written ') or l.startswith('**   file '))]
+    lf1 = force_unix_line_ends(lf1)
+    file2 = open(file_name2, 'r')
+    f2 = file2.readlines()
+    file2.close()
+    lf2 = [l for l in f2 if not (l.startswith('**   written ') or l.startswith('**   file '))]
+    lf2 = force_unix_line_ends(lf2)
+    import difflib
+    diff = difflib.unified_diff(lf1, lf2, n=0)
+    result = ''
+    for l in diff:
+        result += l
+    if result:
+        result = "Comparing {} to {} failed!\n".format(file_name1, file_name2) + result
+    return result
 
 
-def create_cube_test_results():
+def compare_stats(fea, stat_file=None):
+    if stat_file:
+        sf = open(stat_file, 'r')
+        sf_content = sf.readlines()
+        sf.close()
+        sf_content = force_unix_line_ends(sf_content)
+    stat_types = ["U1", "U2", "U3", "Uabs", "Sabs"]
+    stats = []
+    for s in stat_types:
+        stats.append("{}: {}\n".format(s, fea.get_stats(s)))
+    if sf_content != stats:
+        fcc_print("Expected stats from {}".format(stat_file))
+        fcc_print(sf_content)
+        fcc_print("Stats read from {}.frd file".format(fea.base_name))
+        fcc_print(stats)
+        return True
+    return False
+
+
+def force_unix_line_ends(line_list):
+    new_line_list = []
+    for l in line_list:
+        if l.endswith("\r\n"):
+            l = l[:-2] + '\n'
+        new_line_list.append(l)
+    return new_line_list
+
+
+def run_fem_unittests():
+    import unittest
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromName("TestFem"))
+    r = unittest.TextTestRunner()
+    r.run(suite)
+
+
+def create_test_results():
+    # run FEM unit tests
+    run_fem_unittests()
+
     import os
     import shutil
-    cube_file = test_file_dir + '/cube.fcstd'
-
-    FreeCAD.open(cube_file)
     import FemGui
-    FemGui.setActiveAnalysis(FreeCAD.ActiveDocument.MechanicalAnalysis)
     import FemToolsCcx
+
+    # static and frequency cube
+    FreeCAD.open(static_save_fc_file)
+    FemGui.setActiveAnalysis(FreeCAD.ActiveDocument.Analysis)
     fea = FemToolsCcx.FemToolsCcx()
 
     # static
@@ -549,7 +549,7 @@ def create_cube_test_results():
     stats_static = []  # we only have one result object so we are fine
     for s in stat_types:
         stats_static.append("{}: {}\n".format(s, fea.get_stats(s)))
-    static_expected_values_file = temp_dir + '/cube_static_expected_values'
+    static_expected_values_file = static_analysis_dir + '/cube_static_expected_values'
     f = open(static_expected_values_file, 'w')
     for s in stats_static:
         f.write(s)
@@ -559,8 +559,8 @@ def create_cube_test_results():
     frd_result_file = os.path.splitext(fea.inp_file_name)[0] + '.frd'
     dat_result_file = os.path.splitext(fea.inp_file_name)[0] + '.dat'
 
-    frd_static_test_result_file = temp_dir + '/cube_static.frd'
-    dat_static_test_result_file = temp_dir + '/cube_static.dat'
+    frd_static_test_result_file = static_analysis_dir + '/cube_static.frd'
+    dat_static_test_result_file = static_analysis_dir + '/cube_static.dat'
     shutil.copyfile(frd_result_file, frd_static_test_result_file)
     shutil.copyfile(dat_result_file, dat_static_test_result_file)
 
@@ -574,28 +574,55 @@ def create_cube_test_results():
     stats_frequency = []  # since we set eigenmodeno. we only have one result object so we are fine
     for s in stat_types:
         stats_frequency.append("{}: {}\n".format(s, fea.get_stats(s)))
-    frequency_expected_values_file = temp_dir + '/cube_frequency_expected_values'
+    frequency_expected_values_file = frequency_analysis_dir + '/cube_frequency_expected_values'
     f = open(frequency_expected_values_file, 'w')
     for s in stats_frequency:
         f.write(s)
     f.close()
 
-    frd_frequency_test_result_file = temp_dir + '/cube_frequency.frd'
-    dat_frequency_test_result_file = temp_dir + '/cube_frequency.dat'
+    frd_frequency_test_result_file = frequency_analysis_dir + '/cube_frequency.frd'
+    dat_frequency_test_result_file = frequency_analysis_dir + '/cube_frequency.dat'
     shutil.copyfile(frd_result_file, frd_frequency_test_result_file)
     shutil.copyfile(dat_result_file, dat_frequency_test_result_file)
 
-    print('Results copied to: ' + temp_dir)
+    # thermomech
+    FreeCAD.open(thermomech_save_fc_file)
+    FemGui.setActiveAnalysis(FreeCAD.ActiveDocument.Analysis)
+    fea = FemToolsCcx.FemToolsCcx()
+    fea.reset_all()
+    fea.run()
+
+    fea.load_results()
+    stat_types = ["U1", "U2", "U3", "Uabs", "Sabs"]
+    stats_thermomech = []  # we only have one result object so we are fine
+    for s in stat_types:
+        stats_thermomech.append("{}: {}\n".format(s, fea.get_stats(s)))
+    thermomech_expected_values_file = thermomech_analysis_dir + '/spine_thermomech_expected_values'
+    f = open(thermomech_expected_values_file, 'w')
+    for s in stats_thermomech:
+        f.write(s)
+    f.close()
+
+    # could be added in FemToolsCcx to the self object as an Attribut
+    frd_result_file = os.path.splitext(fea.inp_file_name)[0] + '.frd'
+    dat_result_file = os.path.splitext(fea.inp_file_name)[0] + '.dat'
+
+    frd_thermomech_test_result_file = thermomech_analysis_dir + '/spine_thermomech.frd'
+    dat_thermomech_test_result_file = thermomech_analysis_dir + '/spine_thermomech.dat'
+    shutil.copyfile(frd_result_file, frd_thermomech_test_result_file)
+    shutil.copyfile(dat_result_file, dat_thermomech_test_result_file)
+
+    print('Results copied to the appropriate FEM test dirs in: ' + temp_dir)
 
 
 '''
-update the results in FEM untit tests:
-start FreeCAD
+update the results of FEM unit tests:
 
 import TestFem
-TestFem.create_cube_test_results()
+TestFem.create_test_results()
 
-copy result files from /tmp into the src dirctory
+copy result files from your_temp_directory/FEM_unittests/   test directories into the src dirctory
+compare the results with git difftool
 run make
 start FreeCAD and run FEM unit test
 if FEM unit test is fine --> commit new FEM unit test results

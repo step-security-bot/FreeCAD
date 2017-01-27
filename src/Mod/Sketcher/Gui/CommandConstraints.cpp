@@ -738,6 +738,142 @@ int SketchSelection::setUp(void)
 
 
 /* Constrain commands =======================================================*/
+
+namespace SketcherGui {
+    class HoriVertConstraintSelection : public Gui::SelectionFilterGate
+    {
+        App::DocumentObject* object;
+    public:
+        HoriVertConstraintSelection(App::DocumentObject* obj)
+            : Gui::SelectionFilterGate((Gui::SelectionFilter*)0), object(obj)
+        {}
+
+        bool allow(App::Document *, App::DocumentObject *pObj, const char *sSubName)
+        {
+            if (pObj != this->object)
+                return false;
+            if (!sSubName || sSubName[0] == '\0')
+                return false;
+            std::string element(sSubName);
+            if (element.substr(0,4) == "Edge")
+                return true;
+            return false;
+        }
+    };
+}
+
+/* XPM */
+static const char *cursor_createhoriconstraint[]={
+"32 32 3 1",
+"+ c white",
+"# c red",
+". c None",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"................................",
+"+++++...+++++...................",
+"................................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+......#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............############.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................"};
+
+class DrawSketchHandlerHoriConstraint: public DrawSketchHandler
+{
+public:
+    DrawSketchHandlerHoriConstraint() {}
+    virtual ~DrawSketchHandlerHoriConstraint()
+    {
+        Gui::Selection().rmvSelectionGate();
+    }
+
+    virtual void activated(ViewProviderSketch *)
+    {
+        Gui::Selection().rmvSelectionGate();
+        Gui::Selection().addSelectionGate(new HoriVertConstraintSelection(sketchgui->getObject()));
+        setCursor(QPixmap(cursor_createhoriconstraint), 7, 7);
+    }
+
+    virtual void mouseMove(Base::Vector2d onSketchPos) {Q_UNUSED(onSketchPos);}
+
+    virtual bool pressButton(Base::Vector2d onSketchPos)
+    {
+        Q_UNUSED(onSketchPos);
+        return false;
+    }
+
+    virtual bool releaseButton(Base::Vector2d onSketchPos)
+    {
+        Q_UNUSED(onSketchPos);
+        Sketcher::SketchObject* Obj = static_cast<Sketcher::SketchObject*>(sketchgui->getObject());
+
+        const std::vector< Sketcher::Constraint * > &vals = Obj->Constraints.getValues();
+
+        int CrvId = sketchgui->getPreselectCurve();
+        if (CrvId != -1) {
+            const Part::Geometry *geo = Obj->getGeometry(CrvId);
+            if (geo->getTypeId() != Part::GeomLineSegment::getClassTypeId()) {
+                QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Impossible constraint"),
+                                     QObject::tr("The selected edge is not a line segment"));
+                return false;
+            }
+
+            // check if the edge has already a Horizontal or Vertical constraint
+            for (std::vector< Sketcher::Constraint * >::const_iterator it= vals.begin();
+                 it != vals.end(); ++it) {
+                if ((*it)->Type == Sketcher::Horizontal && (*it)->First == CrvId){
+                    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Double constraint"),
+                        QObject::tr("The selected edge has already a horizontal constraint!"));
+                    return false;
+                }
+                if ((*it)->Type == Sketcher::Vertical && (*it)->First == CrvId) {
+                    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Impossible constraint"),
+                                         QObject::tr("The selected edge has already a vertical constraint!"));
+                    return false;
+                }
+            }
+
+            // undo command open
+            Gui::Command::openCommand("add horizontal constraint");
+            // issue the actual commands to create the constraint
+            Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addConstraint(Sketcher.Constraint('Horizontal',%d)) ",
+                      sketchgui->getObject()->getNameInDocument(),CrvId);
+            // finish the transaction and update
+            Gui::Command::commitCommand();
+
+            ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
+            bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
+
+            if(autoRecompute)
+                Gui::Command::updateActive();
+        }
+        return false;
+    }
+};
+
 DEF_STD_CMD_A(CmdSketcherConstrainHorizontal);
 
 CmdSketcherConstrainHorizontal::CmdSketcherConstrainHorizontal()
@@ -757,13 +893,16 @@ CmdSketcherConstrainHorizontal::CmdSketcherConstrainHorizontal()
 void CmdSketcherConstrainHorizontal::activated(int iMsg)
 {
     Q_UNUSED(iMsg);
+
+    ActivateHandler(getActiveGuiDocument(), new DrawSketchHandlerHoriConstraint());
+
     // get the selection
     std::vector<Gui::SelectionObject> selection = getSelection().getSelectionEx();
 
     // only one sketch with its subelements are allowed to be selected
     if (selection.size() != 1) {
-        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-            QObject::tr("Select an edge from the sketch."));
+//        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+//            QObject::tr("Select an edge from the sketch."));
         return;
     }
 
@@ -832,9 +971,121 @@ void CmdSketcherConstrainHorizontal::activated(int iMsg)
 
 bool CmdSketcherConstrainHorizontal::isActive(void)
 {
-    return isCreateConstraintActive( getActiveGuiDocument() );
+    return isCreateGeoActive( getActiveGuiDocument() );
 }
 
+// ======================================================================================
+
+static const char *cursor_createvertconstraint[]={
+"32 32 3 1",
+"+ c white",
+"# c red",
+". c None",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"................................",
+"+++++...+++++...................",
+"................................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+......#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+".............#..........#.......",
+"..............#........#........",
+"...............#......#.........",
+"................#....#..........",
+".................#..#...........",
+"..................##............",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................",
+"................................"};
+
+class DrawSketchHandlerVertConstraint: public DrawSketchHandler
+{
+public:
+    DrawSketchHandlerVertConstraint() {}
+    virtual ~DrawSketchHandlerVertConstraint()
+    {
+        Gui::Selection().rmvSelectionGate();
+    }
+
+    virtual void activated(ViewProviderSketch *)
+    {
+        Gui::Selection().rmvSelectionGate();
+        Gui::Selection().addSelectionGate(new HoriVertConstraintSelection(sketchgui->getObject()));
+        setCursor(QPixmap(cursor_createvertconstraint), 7, 7);
+    }
+
+    virtual void mouseMove(Base::Vector2d onSketchPos) {Q_UNUSED(onSketchPos);}
+
+    virtual bool pressButton(Base::Vector2d onSketchPos)
+    {
+        Q_UNUSED(onSketchPos);
+        return false;
+    }
+
+    virtual bool releaseButton(Base::Vector2d onSketchPos)
+    {
+        Q_UNUSED(onSketchPos);
+        Sketcher::SketchObject* Obj = static_cast<Sketcher::SketchObject*>(sketchgui->getObject());
+
+        const std::vector< Sketcher::Constraint * > &vals = Obj->Constraints.getValues();
+
+        int CrvId = sketchgui->getPreselectCurve();
+        if (CrvId != -1) {
+            const Part::Geometry *geo = Obj->getGeometry(CrvId);
+            if (geo->getTypeId() != Part::GeomLineSegment::getClassTypeId()) {
+                QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Impossible constraint"),
+                                     QObject::tr("The selected edge is not a line segment"));
+                return false;
+            }
+
+            // check if the edge has already a Horizontal or Vertical constraint
+            for (std::vector< Sketcher::Constraint * >::const_iterator it= vals.begin();
+                 it != vals.end(); ++it) {
+                if ((*it)->Type == Sketcher::Horizontal && (*it)->First == CrvId){
+                    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Double constraint"),
+                        QObject::tr("The selected edge has already a horizontal constraint!"));
+                    return false;
+                }
+                if ((*it)->Type == Sketcher::Vertical && (*it)->First == CrvId) {
+                    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Impossible constraint"),
+                                         QObject::tr("The selected edge has already a vertical constraint!"));
+                    return false;
+                }
+            }
+
+            // undo command open
+            Gui::Command::openCommand("add horizontal constraint");
+            // issue the actual commands to create the constraint
+            Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.addConstraint(Sketcher.Constraint('Vertical',%d)) ",
+                      sketchgui->getObject()->getNameInDocument(),CrvId);
+            // finish the transaction and update
+            Gui::Command::commitCommand();
+
+            ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
+            bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
+
+            if(autoRecompute)
+                Gui::Command::updateActive();
+        }
+        return false;
+    }
+};
 
 DEF_STD_CMD_A(CmdSketcherConstrainVertical);
 
@@ -855,13 +1106,16 @@ CmdSketcherConstrainVertical::CmdSketcherConstrainVertical()
 void CmdSketcherConstrainVertical::activated(int iMsg)
 {
     Q_UNUSED(iMsg);
+
+    ActivateHandler(getActiveGuiDocument(), new DrawSketchHandlerVertConstraint());
+
     // get the selection
     std::vector<Gui::SelectionObject> selection = getSelection().getSelectionEx();
 
     // only one sketch with its subelements are allowed to be selected
     if (selection.size() != 1) {
-        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-            QObject::tr("Select an edge from the sketch."));
+//        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+//            QObject::tr("Select an edge from the sketch."));
         return;
     }
 
@@ -930,9 +1184,8 @@ void CmdSketcherConstrainVertical::activated(int iMsg)
 
 bool CmdSketcherConstrainVertical::isActive(void)
 {
-    return isCreateConstraintActive( getActiveGuiDocument() );
+    return isCreateGeoActive( getActiveGuiDocument() );
 }
-
 
 // ======================================================================================
 
@@ -1205,7 +1458,6 @@ void CmdSketcherConstrainLock::updateAction(int mode)
 
 bool CmdSketcherConstrainLock::isActive(void)
 {
-    //    return isCreateConstraintActive( getActiveGuiDocument() );
     return isCreateGeoActive( getActiveGuiDocument() );
 }
 
@@ -1687,6 +1939,16 @@ void CmdSketcherConstrainPointOnObject::activated(int iMsg)
                 }
                 if (points[iPnt].GeoId == curves[iCrv].GeoId)
                     continue; //constraining a point of an element onto the element is a bad idea...
+
+                const Part::Geometry *geom = Obj->getGeometry(curves[iCrv].GeoId);
+
+                if( geom && geom->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() ){
+                    // unsupported until normal to BSpline at any point implemented.
+                    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+                                         QObject::tr("Point on BSpline edge currently unsupported."));
+                    continue;
+                }
+
                 cnt++;
                 Gui::Command::doCommand(
                     Doc,"App.ActiveDocument.%s.addConstraint(Sketcher.Constraint('PointOnObject',%d,%d,%d)) ",
@@ -2273,6 +2535,21 @@ void CmdSketcherConstrainPerpendicular::activated(int iMsg)
                     QObject::tr("Cannot add a perpendicularity constraint at an unconnected point!"));
                 return;
             }
+            
+            // This code supports simple bspline endpoint perp to any other geometric curve
+            const Part::Geometry *geom1 = Obj->getGeometry(GeoId1);
+            const Part::Geometry *geom2 = Obj->getGeometry(GeoId2);
+
+            if( geom1 && geom2 &&
+                ( geom1->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() ||
+                geom2->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() )){
+
+                if(geom1->getTypeId() != Part::GeomBSplineCurve::getClassTypeId()) {
+                    std::swap(GeoId1,GeoId2);
+                    std::swap(PosId1,PosId2);
+                }
+                // GeoId1 is the bspline now
+            } // end of code supports simple bspline endpoint tangency
 
             openCommand("add perpendicular constraint");
             Gui::Command::doCommand(
@@ -2301,6 +2578,15 @@ void CmdSketcherConstrainPerpendicular::activated(int iMsg)
                     QObject::tr("Cannot add a perpendicularity constraint at an unconnected point!"));
                 return;
             }
+            
+            const Part::Geometry *geom2 = Obj->getGeometry(GeoId2);
+            
+            if( geom2 && geom2->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() ){
+                // unsupported until normal to BSpline at any point implemented.
+                QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+                                     QObject::tr("Perpendicular to BSpline edge currently unsupported."));
+                return;
+            }
 
             openCommand("add perpendicularity constraint");
             Gui::Command::doCommand(
@@ -2321,10 +2607,21 @@ void CmdSketcherConstrainPerpendicular::activated(int iMsg)
 
             const Part::Geometry *geo1 = Obj->getGeometry(GeoId1);
             const Part::Geometry *geo2 = Obj->getGeometry(GeoId2);
+            
             if (geo1->getTypeId() != Part::GeomLineSegment::getClassTypeId() &&
                 geo2->getTypeId() != Part::GeomLineSegment::getClassTypeId()) {
                 QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
                     QObject::tr("One of the selected edges should be a line."));
+                return;
+            }
+            
+            if( geo1 && geo2 &&
+                ( geo1->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() ||
+                  geo2->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() )){
+                
+                // unsupported until tangent to BSpline at any point implemented.
+                QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+                                     QObject::tr("Perpendicular to BSpline edge currently unsupported."));
                 return;
             }
 
@@ -2623,6 +2920,21 @@ void CmdSketcherConstrainTangent::activated(int iMsg)
                 return;
             }
 
+            // This code supports simple bspline endpoint tangency to any other geometric curve
+            const Part::Geometry *geom1 = Obj->getGeometry(GeoId1);
+            const Part::Geometry *geom2 = Obj->getGeometry(GeoId2);
+
+            if( geom1 && geom2 &&
+                ( geom1->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() ||
+                geom2->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() )){
+
+                if(geom1->getTypeId() != Part::GeomBSplineCurve::getClassTypeId()) {
+                    std::swap(GeoId1,GeoId2);
+                    std::swap(PosId1,PosId2);
+                }
+                // GeoId1 is the bspline now
+            } // end of code supports simple bspline endpoint tangency
+
             openCommand("add tangent constraint");
             Gui::Command::doCommand(
                 Doc,"App.ActiveDocument.%s.addConstraint(Sketcher.Constraint('Tangent',%d,%d,%d,%d)) ",
@@ -2650,6 +2962,15 @@ void CmdSketcherConstrainTangent::activated(int iMsg)
                     QObject::tr("Cannot add a tangency constraint at an unconnected point!"));
                 return;
             }
+            
+            const Part::Geometry *geom2 = Obj->getGeometry(GeoId2);
+            
+            if( geom2 && geom2->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() ){
+                // unsupported until tangent to BSpline at any point implemented.
+                QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+                                     QObject::tr("Tangency to BSpline edge currently unsupported."));
+                return;
+            }
 
             openCommand("add tangent constraint");
             Gui::Command::doCommand(
@@ -2670,6 +2991,17 @@ void CmdSketcherConstrainTangent::activated(int iMsg)
 
             const Part::Geometry *geom1 = Obj->getGeometry(GeoId1);
             const Part::Geometry *geom2 = Obj->getGeometry(GeoId2);
+
+            if( geom1 && geom2 &&
+                ( geom1->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() ||
+                geom2->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() )){
+                
+                // unsupported until tangent to BSpline at any point implemented.
+                QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+                                     QObject::tr("Tangency to BSpline edge currently unsupported."));
+                return;
+            }
+            
 
             if( geom1 && geom2 &&
                 ( geom1->getTypeId() == Part::GeomEllipse::getClassTypeId() ||
@@ -2746,8 +3078,8 @@ void CmdSketcherConstrainTangent::activated(int iMsg)
                 geom1 = Obj->getGeometry(GeoId1);
                 geom2 = Obj->getGeometry(GeoId2);
 
-                if( geom2->getTypeId() == Part::GeomArcOfParabola::getClassTypeId() ||
-		    geom2->getTypeId() == Part::GeomArcOfHyperbola::getClassTypeId() ||
+                if (geom2->getTypeId() == Part::GeomArcOfParabola::getClassTypeId() ||
+                    geom2->getTypeId() == Part::GeomArcOfHyperbola::getClassTypeId() ||
                     geom2->getTypeId() == Part::GeomArcOfEllipse::getClassTypeId() ||
                     geom2->getTypeId() == Part::GeomCircle::getClassTypeId() ||
                     geom2->getTypeId() == Part::GeomArcOfCircle::getClassTypeId() ||
@@ -3477,8 +3809,16 @@ void CmdSketcherConstrainEqual::activated(int iMsg)
             else
                 hasAlreadyExternal = true;
         }
-
+        
         const Part::Geometry *geo = Obj->getGeometry(GeoId);
+        
+        if(geo->getTypeId() == Part::GeomBSplineCurve::getClassTypeId()) {
+            // unsupported as they are generally hereogeneus shapes
+            QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+                                 QObject::tr("Equality for BSpline edge currently unsupported."));
+            return;
+        }
+        
         if (geo->getTypeId() != Part::GeomLineSegment::getClassTypeId())
             lineSel = true;
         else if (geo->getTypeId() != Part::GeomArcOfCircle::getClassTypeId())
@@ -3775,6 +4115,15 @@ void CmdSketcherConstrainSnellsLaw::activated(int iMsg)
             strError = QObject::tr("Incompatible geometry is selected!", dmbg);
             throw(Base::Exception(""));
         };
+        
+        const Part::Geometry *geo = Obj->getGeometry(GeoId3);
+        
+        if( geo && geo->getTypeId() == Part::GeomBSplineCurve::getClassTypeId() ){
+            // unsupported until normal to BSpline at any point implemented.
+            QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
+                                 QObject::tr("SnellsLaw on BSpline edge currently unsupported."));
+            return;
+        }
 
         double n2divn1=0;
         
