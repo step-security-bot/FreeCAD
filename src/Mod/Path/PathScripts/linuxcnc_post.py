@@ -20,7 +20,7 @@
 # *   USA                                                                   *
 # *                                                                         *
 # ***************************************************************************/
-
+from __future__ import print_function
 
 TOOLTIP='''
 This is a postprocessor file for the Path workbench. It is used to
@@ -40,7 +40,7 @@ Arguments for linuxcnc:
     --line-numbers,--no-line-numbers ... prefix with line numbers (--no-lin-numbers)
     --show-editor, --no-show-editor  ... pop up editor before writing output(--show-editor)
 '''
-
+import FreeCAD
 import datetime
 from PathScripts import PostUtils
 
@@ -50,7 +50,10 @@ now = datetime.datetime.now()
 OUTPUT_COMMENTS = True
 OUTPUT_HEADER = True
 OUTPUT_LINE_NUMBERS = False
-SHOW_EDITOR = True
+if FreeCAD.GuiUp:
+    SHOW_EDITOR = True
+else:
+    SHOW_EDITOR = False
 MODAL = False  # if true commands are suppressed if the same as previous line.
 COMMAND_SPACE = " "
 LINENR = 100  # line number starting value
@@ -115,10 +118,10 @@ def export(objectslist, filename, argstring):
     global UNITS
     for obj in objectslist:
         if not hasattr(obj, "Path"):
-            print "the object " + obj.Name + " is not a path. Please select only path and Compounds."
+            print("the object " + obj.Name + " is not a path. Please select only path and Compounds.")
             return
 
-    print "postprocessing..."
+    print("postprocessing...")
     gcode = ""
 
     # Find the machine.
@@ -134,7 +137,7 @@ def export(objectslist, filename, argstring):
             else:
                UNITS = "G20"
     if myMachine is None:
-        print "No machine found in this selection"
+        print("No machine found in this selection")
 
     # write header
     if OUTPUT_HEADER:
@@ -183,7 +186,7 @@ def export(objectslist, filename, argstring):
     else:
         final = gcode
 
-    print "done postprocessing."
+    print("done postprocessing.")
 
     if not filename == '-':
         gfile = pythonopen(filename, "wb")
@@ -276,4 +279,4 @@ def parse(pathobj):
         return out
 
 
-print __name__ + " gcode postprocessor loaded."
+print(__name__ + " gcode postprocessor loaded.")

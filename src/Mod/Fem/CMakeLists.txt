@@ -3,6 +3,11 @@ if(BUILD_FEM_VTK)
     add_definitions(-DFC_USE_VTK)
 endif(BUILD_FEM_VTK)
 
+# suppress warnings from smesh
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-overloaded-virtual")
+endif()
+
 add_subdirectory(App)
 
 if(BUILD_GUI)
@@ -24,7 +29,9 @@ INSTALL(
         TestFem.py
 
         FemCommands.py
+        _CommandClearMesh.py
         _CommandMeshNetgenFromShape.py
+        _CommandPrintMeshInfo.py
         _CommandPurgeResults.py
         _CommandRunSolver.py
         _CommandControlSolver.py
@@ -48,6 +55,20 @@ INSTALL(
         FemMesh2Mesh.py
         _CommandFEMMesh2Mesh.py
 
+        FemMeshGroup.py
+        _FemMeshGroup.py
+        _ViewProviderFemMeshGroup.py
+        _CommandMeshGroup.py
+        _TaskPanelFemMeshGroup.py
+        TaskPanelFemMeshGroup.ui
+
+        FemMeshRegion.py
+        _FemMeshRegion.py
+        _ViewProviderFemMeshRegion.py
+        _CommandMeshRegion.py
+        _TaskPanelFemMeshRegion.py
+        TaskPanelFemMeshRegion.ui
+
         FemBeamSection.py
         _FemBeamSection.py
         _ViewProviderFemBeamSection.py
@@ -67,12 +88,13 @@ INSTALL(
         _ViewProviderFemConstraintSelfWeight.py
         _CommandConstraintSelfWeight.py
 
-        MechanicalMaterial.py
-        _MechanicalMaterial.py
-        _ViewProviderMechanicalMaterial.py
-        _CommandMechanicalMaterial.py
-        _TaskPanelMechanicalMaterial.py
-        TaskPanelMechanicalMaterial.ui
+        FemMaterial.py
+        _FemMaterial.py
+        _ViewProviderFemMaterial.py
+        _CommandMaterialSolid.py
+        _CommandMaterialFluid.py
+        _TaskPanelFemMaterial.py
+        TaskPanelFemMaterial.ui
 
         FemMaterialMechanicalNonlinear.py
         _FemMaterialMechanicalNonlinear.py
@@ -94,13 +116,16 @@ INSTALL(
 
         # solver Z88
         importZ88Mesh.py
-        z88DispReader.py
+        importZ88Results.py
         FemInputWriterZ88.py
         FemToolsZ88.py
         FemSolverZ88.py
         _FemSolverZ88.py
         _ViewProviderFemSolverZ88.py
         _CommandSolverZ88.py
+
+        # additional imports and exports
+        importVTKResults.py
 
     DESTINATION
         Mod/Fem

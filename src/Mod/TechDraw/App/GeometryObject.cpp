@@ -67,6 +67,7 @@
 #include "DrawUtil.h"
 #include "GeometryObject.h"
 #include "DrawViewPart.h"
+#include "DrawViewDetail.h"
 
 using namespace TechDrawGeometry;
 using namespace TechDraw;
@@ -77,9 +78,9 @@ struct EdgePoints {
     TopoDS_Edge edge;
 };
 
-GeometryObject::GeometryObject(const string& parent) :
-    Scale(1.f),
+GeometryObject::GeometryObject(const string& parent, TechDraw::DrawView* parentObj) :
     m_parentName(parent),
+    m_parent(parentObj),
     m_isoCount(0)
 {
 }
@@ -88,12 +89,6 @@ GeometryObject::~GeometryObject()
 {
     clear();
 }
-
-void GeometryObject::setScale(double value)
-{
-    Scale = value;
-}
-
 
 const std::vector<BaseGeom *> GeometryObject::getVisibleFaceEdges(const bool smooth, const bool seam) const
 {
@@ -152,13 +147,11 @@ void GeometryObject::clear()
 
 //!set up a hidden line remover and project a shape with it
 void GeometryObject::projectShape(const TopoDS_Shape& input,
-                             const gp_Pnt& inputCenter,
-                             const Base::Vector3d& direction)
+                                  const gp_Ax2 viewAxis)
 {
     // Clear previous Geometry
     clear();
-    Base::Vector3d origin(inputCenter.X(),inputCenter.Y(),inputCenter.Z());
-    gp_Ax2 viewAxis = getViewAxis(origin,direction);
+
     auto start = chrono::high_resolution_clock::now();
 
     Handle_HLRBRep_Algo brep_hlr = NULL;
@@ -168,7 +161,8 @@ void GeometryObject::projectShape(const TopoDS_Shape& input,
         HLRAlgo_Projector projector( viewAxis );
         brep_hlr->Projector(projector);
         brep_hlr->Update();
-        brep_hlr->Hide();
+        brep_hlr->Hide();                           //XXXX: what happens if we don't call Hide()?? and only look at VCompound?
+                                                    // WF: you get back all the edges in the shape, but very fast!!
     }
     catch (...) {
         Standard_Failure::Raise("GeometryObject::projectShape - error occurred while projecting shape");
@@ -292,6 +286,7 @@ void GeometryObject::addGeomFromCompound(TopoDS_Shape edgeCompound, edgeClass ca
         edgeGeom.push_back(base);
 
         //add vertices of new edge if not already in list
+        bool skipDetail = false;
         if (visible) {
             BaseGeom* lastAdded = edgeGeom.back();
             bool v1Add = true, v2Add = true;
@@ -301,9 +296,23 @@ void GeometryObject::addGeomFromCompound(TopoDS_Shape edgeCompound, edgeClass ca
             TechDrawGeometry::Circle* circle = dynamic_cast<TechDrawGeometry::Circle*>(lastAdded);
             TechDrawGeometry::Vertex* c1 = nullptr;
             if (circle) {
-                c1 = new TechDrawGeometry::Vertex(circle->center);
-                c1->isCenter = true;
-                c1->visible = true;
+                // if this is the center of a detail view, skip it
+                TechDraw::DrawViewDetail* detail = isParentDetail();
+                if (detail != nullptr) {
+                    double scale = m_parent->Scale.getValue();
+                    if ( ((circle->center - Base::Vector2d(0.0,0.0)).Length() < Precision::Confusion()) &&
+                        (DrawUtil::fpCompare(circle->radius, scale * detail->getFudgeRadius())) ) {
+                        skipDetail = true;
+                    } else {
+                        c1 = new TechDrawGeometry::Vertex(circle->center);
+                        c1->isCenter = true;
+                        c1->visible = true;
+                    }
+                } else {
+                    c1 = new TechDrawGeometry::Vertex(circle->center);
+                    c1->isCenter = true;
+                    c1->visible = true;
+                }
             }
 
             std::vector<Vertex *>::iterator itVertex = vertexGeom.begin();
@@ -314,7 +323,7 @@ void GeometryObject::addGeomFromCompound(TopoDS_Shape edgeCompound, edgeClass ca
                 if ((*itVertex)->isEqual(v2,Precision::Confusion())) {
                     v2Add = false;
                 }
-                if (circle) {
+                if (circle && !skipDetail) {
                     if ((*itVertex)->isEqual(c1,Precision::Confusion())) {
                         c1Add = false;
                     }
@@ -334,7 +343,7 @@ void GeometryObject::addGeomFromCompound(TopoDS_Shape edgeCompound, edgeClass ca
                 delete v2;
             }
 
-            if (circle) {
+            if (circle && !skipDetail) {
                 if (c1Add) {
                     vertexGeom.push_back(c1);
                     c1->visible = true;
@@ -356,6 +365,18 @@ void GeometryObject::clearFaceGeom()
 void GeometryObject::addFaceGeom(Face* f)
 {
     faceGeom.push_back(f);
+}
+
+TechDraw::DrawViewDetail* GeometryObject::isParentDetail()
+{
+    TechDraw::DrawViewDetail* result = nullptr;
+    if (m_parent != nullptr) {
+        TechDraw::DrawViewDetail* detail = dynamic_cast<TechDraw::DrawViewDetail*>(m_parent);
+        if (detail != nullptr) {
+            result = detail;
+        }
+    }
+    return result;
 }
 
 
@@ -431,7 +452,8 @@ bool GeometryObject::findVertex(Base::Vector2d v)
 }
 
 /// utility non-class member functions
-//! gets a coordinate system
+//! gets a coordinate system that matches view system used in 3D with +Z up (or +Y up if neccessary)
+//! used for individual views, but not secondary views in projection groups
 gp_Ax2 TechDrawGeometry::getViewAxis(const Base::Vector3d origin,
                                      const Base::Vector3d& direction,
                                      const bool flip)
@@ -444,9 +466,9 @@ gp_Ax2 TechDrawGeometry::getViewAxis(const Base::Vector3d origin,
     }
     Base::Vector3d cross = flipDirection;
     //special cases
-    if (flipDirection == stdZ) {
+    if ((flipDirection - stdZ).Length() < Precision::Confusion()) {
         cross = Base::Vector3d(1.0,0.0,0.0);
-    } else if (flipDirection == (stdZ * -1.0)) {
+    } else if ((flipDirection - (stdZ * -1.0)).Length() < Precision::Confusion()) {
         cross = Base::Vector3d(1.0,0.0,0.0);
     } else {
         cross.Normalize();
@@ -455,11 +477,28 @@ gp_Ax2 TechDrawGeometry::getViewAxis(const Base::Vector3d origin,
     gp_Ax2 viewAxis;
     viewAxis = gp_Ax2(inputCenter,
                       gp_Dir(flipDirection.x, flipDirection.y, flipDirection.z),
+//                      gp_Dir(1.0, 1.0, 0.0));
                       gp_Dir(cross.x, cross.y, cross.z));
     return viewAxis;
 }
 
-
+//! gets a coordinate system specified by Z and X directions
+gp_Ax2 TechDrawGeometry::getViewAxis(const Base::Vector3d origin,
+                                     const Base::Vector3d& direction,
+                                     const Base::Vector3d& xAxis,
+                                     const bool flip)
+{
+    gp_Pnt inputCenter(origin.x,origin.y,origin.z);
+    Base::Vector3d flipDirection(direction.x,-direction.y,direction.z);
+    if (!flip) {
+        flipDirection = Base::Vector3d(direction.x,direction.y,direction.z);
+    }
+    gp_Ax2 viewAxis;
+    viewAxis = gp_Ax2(inputCenter,
+                      gp_Dir(flipDirection.x, flipDirection.y, flipDirection.z),
+                      gp_Dir(xAxis.x, xAxis.y, xAxis.z));
+    return viewAxis;
+}
 
 //! Returns the centroid of shape, as viewed according to direction
 gp_Pnt TechDrawGeometry::findCentroid(const TopoDS_Shape &shape,

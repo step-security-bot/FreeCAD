@@ -37,10 +37,10 @@ class ArchWorkbench(Workbench):
                      "Arch_Floor","Arch_Building","Arch_Site",
                      "Arch_Window","Arch_Roof","Arch_Axis",
                      "Arch_SectionPlane","Arch_Space","Arch_Stairs",
-                     "Arch_Panel","Arch_Equipment",
+                     "Arch_PanelTools","Arch_Equipment",
                      "Arch_Frame","Arch_Material","Arch_Schedule","Arch_PipeTools",
                      "Arch_CutPlane","Arch_Add","Arch_Remove","Arch_Survey"]
-        self.utilities = ["Arch_Component","Arch_SplitMesh","Arch_MeshToShape",
+        self.utilities = ["Arch_Component","Arch_CloneComponent","Arch_SplitMesh","Arch_MeshToShape",
                      "Arch_SelectNonSolidMeshes","Arch_RemoveShape",
                      "Arch_CloseHoles","Arch_MergeWalls","Arch_Check",
                      "Arch_IfcExplorer","Arch_ToggleIfcBrepFlag","Arch_3Views",
@@ -56,8 +56,8 @@ class ArchWorkbench(Workbench):
                         "Draft_Shape2DView","Draft_Draft2Sketch","Draft_Array",
                         "Draft_Clone"]
         self.draftextratools = ["Draft_WireToBSpline","Draft_AddPoint","Draft_DelPoint","Draft_ShapeString",
-                                "Draft_PathArray","Draft_Mirror"]
-        self.draftcontexttools = ["Draft_ApplyStyle","Draft_ToggleDisplayMode","Draft_AddToGroup",
+                                "Draft_PathArray","Draft_Mirror","Draft_Stretch"]
+        self.draftcontexttools = ["Draft_ApplyStyle","Draft_ToggleDisplayMode","Draft_AddToGroup","Draft_AutoGroup",
                             "Draft_SelectGroup","Draft_SelectPlane",
                             "Draft_ShowSnapBar","Draft_ToggleGrid","Draft_UndoLine",
                             "Draft_FinishLine","Draft_CloseLine"]
@@ -74,11 +74,11 @@ class ArchWorkbench(Workbench):
         self.appendToolbar(QT_TRANSLATE_NOOP("Workbench","Arch tools"),self.archtools)
         self.appendToolbar(QT_TRANSLATE_NOOP("Workbench","Draft tools"),self.drafttools)
         self.appendToolbar(QT_TRANSLATE_NOOP("Workbench","Draft mod tools"),self.draftmodtools)
-        self.appendMenu([translate("arch","&Arch"),translate("arch","Utilities")],self.utilities)
-        self.appendMenu(translate("arch","&Arch"),self.archtools)
-        self.appendMenu(translate("arch","&Draft"),self.drafttools+self.draftmodtools+self.draftextratools)
-        self.appendMenu([translate("arch","&Draft"),translate("arch","Utilities")],self.draftutils+self.draftcontexttools)
-        self.appendMenu([translate("arch","&Draft"),translate("arch","Snapping")],self.snapList)
+        self.appendMenu([QT_TRANSLATE_NOOP("arch","&Arch"),QT_TRANSLATE_NOOP("arch","Utilities")],self.utilities)
+        self.appendMenu(QT_TRANSLATE_NOOP("arch","&Arch"),self.archtools)
+        self.appendMenu(QT_TRANSLATE_NOOP("arch","&Draft"),self.drafttools+self.draftmodtools+self.draftextratools)
+        self.appendMenu([QT_TRANSLATE_NOOP("arch","&Draft"),QT_TRANSLATE_NOOP("arch","Utilities")],self.draftutils+self.draftcontexttools)
+        self.appendMenu([QT_TRANSLATE_NOOP("arch","&Draft"),QT_TRANSLATE_NOOP("arch","Snapping")],self.snapList)
         FreeCADGui.addIconPath(":/icons")
         FreeCADGui.addLanguagePath(":/translations")
         FreeCADGui.addPreferencePage(":/ui/preferences-arch.ui","Arch")

@@ -17,11 +17,9 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${OCC_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
-    ${QT_INCLUDE_DIR}
     ${XercesC_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
     ${FREETYPE_INCLUDE_DIRS}
-    ${QT_INCLUDE_DIR}
 )
 
 link_directories(${OCC_LIBRARY_DIR})
@@ -73,7 +71,7 @@ generate_from_xml(RectangularTrimmedSurfacePy)
 generate_from_xml(SurfaceOfExtrusionPy)
 generate_from_xml(SurfaceOfRevolutionPy)
 generate_from_xml(PartFeaturePy)
-generate_from_xml(AttachableObjectPy)
+generate_from_xml(AttachExtensionPy)
 generate_from_xml(Part2DObjectPy)
 generate_from_xml(AttachEnginePy)
 generate_from_xml(TopoShapePy)
@@ -169,8 +167,8 @@ SET(Features_SRCS
     BodyBase.cpp
     DatumFeature.cpp
     DatumFeature.h
-    AttachableObject.h
-    AttachableObject.cpp
+    AttachExtension.h
+    AttachExtension.cpp
 )
 SOURCE_GROUP("Features" FILES ${Features_SRCS})
 
@@ -251,8 +249,8 @@ SET(Python_SRCS
     SurfaceOfRevolutionPyImp.cpp
     PartFeaturePy.xml
     PartFeaturePyImp.cpp
-    AttachableObjectPy.xml
-    AttachableObjectPyImp.cpp
+    AttachExtensionPy.xml
+    AttachExtensionPyImp.cpp
     Part2DObjectPy.xml
     Part2DObjectPyImp.cpp
     AttachEnginePy.xml

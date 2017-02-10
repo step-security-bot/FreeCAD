@@ -63,7 +63,7 @@ def addToComponent(compobject,addobject,mod=None):
     if compobject == addobject: return
     # first check zis already there
     found = False
-    attribs = ["Additions","Objects","Components","Subtractions","Base"]
+    attribs = ["Additions","Objects","Components","Subtractions","Base","Group"]
     for a in attribs:
         if hasattr(compobject,a):
             if a == "Base":
@@ -89,6 +89,8 @@ def addToComponent(compobject,addobject,mod=None):
                     setattr(compobject,mod,l)
                     if mod != "Objects":
                         addobject.ViewObject.hide()
+                        if Draft.getType(compobject) == "PanelSheet":
+                            addobject.Placement.move(compobject.Placement.Base.negative())
         else:
             for a in attribs[:3]:
                 if hasattr(compobject,a):
@@ -106,7 +108,7 @@ def removeFromComponent(compobject,subobject):
     it is added as a subtraction.'''
     if compobject == subobject: return
     found = False
-    attribs = ["Additions","Subtractions","Objects","Components","Base","Axes","Fixtures"]
+    attribs = ["Additions","Subtractions","Objects","Components","Base","Axes","Fixtures","Group"]
     for a in attribs:
         if hasattr(compobject,a):
             if a == "Base":
@@ -120,6 +122,8 @@ def removeFromComponent(compobject,subobject):
                     l.remove(subobject)
                     setattr(compobject,a,l)
                     subobject.ViewObject.show()
+                    if Draft.getType(compobject) == "PanelSheet":
+                        subobject.Placement.move(compobject.Placement.Base)
                     found = True
     if not found:
         if hasattr(compobject,"Subtractions"):
@@ -134,7 +138,7 @@ class SelectionTaskPanel:
     """A temp taks panel to wait for a selection"""
     def __init__(self):
         self.baseform = QtGui.QLabel()
-        self.baseform.setText(QtGui.QApplication.translate("Arch", "Please select a base object", None, QtGui.QApplication.UnicodeUTF8))
+        self.baseform.setText(QtGui.QApplication.translate("Arch", "Please select a base object", None))
 
     def getStandardButtons(self):
         return int(QtGui.QDialogButtonBox.Cancel)
@@ -154,7 +158,7 @@ class ComponentTaskPanel:
         # the categories are shown only if they are not empty.
 
         self.obj = None
-        self.attribs = ["Base","Additions","Subtractions","Objects","Components","Axes","Fixtures","Armatures"]
+        self.attribs = ["Base","Additions","Subtractions","Objects","Components","Axes","Fixtures","Armatures","Group"]
         self.baseform = QtGui.QWidget()
         self.baseform.setObjectName("TaskPanel")
         self.grid = QtGui.QGridLayout(self.baseform)
@@ -288,18 +292,19 @@ class ComponentTaskPanel:
                 FreeCADGui.ActiveDocument.setEdit(obj.Name,0)
 
     def retranslateUi(self, TaskPanel):
-        self.baseform.setWindowTitle(QtGui.QApplication.translate("Arch", "Components", None, QtGui.QApplication.UnicodeUTF8))
-        self.delButton.setText(QtGui.QApplication.translate("Arch", "Remove", None, QtGui.QApplication.UnicodeUTF8))
-        self.addButton.setText(QtGui.QApplication.translate("Arch", "Add", None, QtGui.QApplication.UnicodeUTF8))
-        self.title.setText(QtGui.QApplication.translate("Arch", "Components of this object", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeBase.setText(0,QtGui.QApplication.translate("Arch", "Base component", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeAdditions.setText(0,QtGui.QApplication.translate("Arch", "Additions", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeSubtractions.setText(0,QtGui.QApplication.translate("Arch", "Subtractions", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeObjects.setText(0,QtGui.QApplication.translate("Arch", "Objects", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeAxes.setText(0,QtGui.QApplication.translate("Arch", "Axes", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeComponents.setText(0,QtGui.QApplication.translate("Arch", "Components", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeFixtures.setText(0,QtGui.QApplication.translate("Arch", "Fixtures", None, QtGui.QApplication.UnicodeUTF8))
-        self.treeArmatures.setText(0,QtGui.QApplication.translate("Arch", "Armatures", None, QtGui.QApplication.UnicodeUTF8))
+        self.baseform.setWindowTitle(QtGui.QApplication.translate("Arch", "Components", None))
+        self.delButton.setText(QtGui.QApplication.translate("Arch", "Remove", None))
+        self.addButton.setText(QtGui.QApplication.translate("Arch", "Add", None))
+        self.title.setText(QtGui.QApplication.translate("Arch", "Components of this object", None))
+        self.treeBase.setText(0,QtGui.QApplication.translate("Arch", "Base component", None))
+        self.treeAdditions.setText(0,QtGui.QApplication.translate("Arch", "Additions", None))
+        self.treeSubtractions.setText(0,QtGui.QApplication.translate("Arch", "Subtractions", None))
+        self.treeObjects.setText(0,QtGui.QApplication.translate("Arch", "Objects", None))
+        self.treeAxes.setText(0,QtGui.QApplication.translate("Arch", "Axes", None))
+        self.treeComponents.setText(0,QtGui.QApplication.translate("Arch", "Components", None))
+        self.treeFixtures.setText(0,QtGui.QApplication.translate("Arch", "Fixtures", None))
+        self.treeArmatures.setText(0,QtGui.QApplication.translate("Arch", "Armatures", None))
+        self.treeGroup.setText(0,QtGui.QApplication.translate("Arch", "Group", None))
 
 class Component:
     "The default Arch Component object"
@@ -328,6 +333,8 @@ class Component:
         obj.setEditorMode("PerimeterLength",1)
 
     def execute(self,obj):
+        if self.clone(obj):
+            return
         if obj.Base:
             obj.Shape = obj.Base.Shape
 
@@ -339,19 +346,21 @@ class Component:
             self.Type = state
 
     def onChanged(self,obj,prop):
-        pass
+        if prop == "BaseMaterial":
+            if hasattr(obj,"BaseMaterial"):
+                if obj.BaseMaterial:
+                    if Draft.getType(obj.BaseMaterial) != "Material":
+                        obj.BaseMaterial = None
+                        print "Removing bad BaseMaterial link in ",obj.Name
 
     def clone(self,obj):
         "if this object is a clone, sets the shape. Returns True if this is the case"
         if hasattr(obj,"CloneOf"):
             if obj.CloneOf:
-                if Draft.getType(obj.CloneOf) == Draft.getType(obj):
+                if (Draft.getType(obj.CloneOf) == Draft.getType(obj)) or (Draft.getType(obj) == "Component"):
                     pl = obj.Placement
                     obj.Shape = obj.CloneOf.Shape.copy()
                     obj.Placement = pl
-                    if hasattr(obj,"BaseMaterial"):
-                        if hasattr(obj.CloneOf,"BaseMaterial"):
-                            obj.BaseMaterial = obj.CloneOf.BaseMaterial
                     for prop in ["Length","Width","Height","Thickness","Area","PerimeterLength","HorizontalArea","VerticalArea"]:
                         if hasattr(obj,prop) and hasattr(obj.CloneOf,prop):
                             setattr(obj,prop,getattr(obj.CloneOf,prop))
@@ -378,20 +387,55 @@ class Component:
         "returns (shape,extrusion vector,placement) or None"
         if hasattr(obj,"CloneOf"):
             if obj.CloneOf:
-                data = obj.CloneOf.Proxy.getExtrusionData(obj.CloneOf)
-                if data:
-                    return data 
+                if hasattr(obj.CloneOf,"Proxy"):
+                    if hasattr(obj.CloneOf.Proxy,"getExtrusionData"):
+                        data = obj.CloneOf.Proxy.getExtrusionData(obj.CloneOf)
+                        if data:
+                            return data 
         if obj.Base:
             if obj.Base.isDerivedFrom("Part::Extrusion"):
                 if obj.Base.Base:
                     base,placement = self.rebase(obj.Base.Base.Shape)
-                    extrusion = obj.Base.Dir
+                    extrusion = FreeCAD.Vector(obj.Base.Dir)
                     if extrusion.Length == 0:
                         extrusion = FreeCAD.Vector(0,0,1)
+                    else:
+                        extrusion = placement.inverse().Rotation.multVec(extrusion)
                     if hasattr(obj.Base,"LengthForward"):
                         if obj.Base.LengthForward.Value:
                             extrusion = extrusion.multiply(obj.Base.LengthForward.Value)
                     return (base,extrusion,placement)
+            elif obj.Base.isDerivedFrom("Part::MultiFuse"):
+                rshapes = []
+                revs = []
+                rpls = []
+                for sub in obj.Base.Shapes:
+                    if sub.isDerivedFrom("Part::Extrusion"):
+                        if sub.Base:
+                            base,placement = self.rebase(sub.Base.Shape)
+                            extrusion = FreeCAD.Vector(sub.Dir)
+                            if extrusion.Length == 0:
+                                extrusion = FreeCAD.Vector(0,0,1)
+                            else:
+                                extrusion = placement.inverse().Rotation.multVec(extrusion)
+                            if hasattr(sub,"LengthForward"):
+                                if sub.LengthForward.Value:
+                                    extrusion = extrusion.multiply(sub.LengthForward.Value)
+                            placement = obj.Placement.multiply(placement)
+                            rshapes.append(base)
+                            revs.append(extrusion)
+                            rpls.append(placement)
+                    else:
+                        exdata = ArchCommands.getExtrusionData(sub.Shape)
+                        if exdata:
+                            base,placement = self.rebase(exdata[0])
+                            extrusion = placement.inverse().Rotation.multVec(exdata[1])
+                            placement = obj.Placement.multiply(placement)
+                            rshapes.append(base)
+                            revs.append(extrusion)
+                            rpls.append(placement)
+                if rshapes and revs and rpls:
+                    return (rshapes,revs,rpls)
         return None
         
     def rebase(self,shape):
@@ -422,11 +466,16 @@ class Component:
                             if (Draft.getType(o) == "Roof"):
                                 continue
                         o.ViewObject.hide()
+        elif prop in ["Mesh"]:
+            if hasattr(obj,prop):
+                o = getattr(obj,prop)
+                if o:
+                    o.ViewObject.hide()            
 
     def processSubShapes(self,obj,base,placement=None):
         "Adds additions and subtractions to a base shape"
         import Draft,Part
-        #print "Processing subshapes of ",obj.Label, " : ",obj.Additions
+        #print("Processing subshapes of ",obj.Label, " : ",obj.Additions)
 
         if placement:
             if placement.isNull():
@@ -476,7 +525,7 @@ class Component:
                                             try:
                                                 base = base.fuse(s)
                                             except Part.OCCError:
-                                                print "Arch: unable to fuse object ",obj.Name, " with ", o.Name
+                                                print("Arch: unable to fuse object ", obj.Name, " with ", o.Name)
                                     else:
                                         base = s
 
@@ -514,7 +563,7 @@ class Component:
                                     try:
                                         base = base.cut(s)
                                     except Part.OCCError:
-                                        print "Arch: unable to cut object ",o.Name, " from ", obj.Name
+                                        print("Arch: unable to cut object ",o.Name, " from ", obj.Name)
         return base
 
     def applyShape(self,obj,shape,placement,allowinvalid=False,allownosolid=False):
@@ -589,7 +638,7 @@ class Component:
                     except Part.OCCError:
                         # error in computing the areas. Better set them to zero than show a wrong value
                         if obj.HorizontalArea.Value != 0:
-                            print "Debug: Error computing areas for ",obj.Label,": unable to project face: ",str([v.Point for v in f.Vertexes])," (face normal:",f.normalAt(0,0),")"
+                            print("Debug: Error computing areas for ",obj.Label,": unable to project face: ",str([v.Point for v in f.Vertexes])," (face normal:",f.normalAt(0,0),")")
                             obj.HorizontalArea = 0
                         if hasattr(obj,"PerimeterLength"):
                             if obj.PerimeterLength.Value != 0:
@@ -615,35 +664,40 @@ class ViewProviderComponent:
         self.Object = vobj.Object
 
     def updateData(self,obj,prop):
-        #print obj.Name," : updating ",prop
+        #print(obj.Name," : updating ",prop)
         if prop == "BaseMaterial":
             if obj.BaseMaterial:
-                if 'Color' in obj.BaseMaterial.Material:
-                    if "(" in obj.BaseMaterial.Material['Color']:
-                        c = tuple([float(f) for f in obj.BaseMaterial.Material['Color'].strip("()").split(",")])
+                if 'DiffuseColor' in obj.BaseMaterial.Material:
+                    if "(" in obj.BaseMaterial.Material['DiffuseColor']:
+                        c = tuple([float(f) for f in obj.BaseMaterial.Material['DiffuseColor'].strip("()").split(",")])
                         if obj.ViewObject:
-                            obj.ViewObject.ShapeColor = c
+                            if obj.ViewObject.ShapeColor != c:
+                                obj.ViewObject.ShapeColor = c
         elif prop == "Shape":
             if obj.Base:
                 if obj.Base.isDerivedFrom("Part::Compound"):
                     if obj.ViewObject.DiffuseColor != obj.Base.ViewObject.DiffuseColor:
                         obj.ViewObject.DiffuseColor = obj.Base.ViewObject.DiffuseColor
                         obj.ViewObject.update()
-            self.onChanged(obj.ViewObject,"ShapeColor")
+                        self.onChanged(obj.ViewObject,"ShapeColor")
         elif prop == "CloneOf":
-            if obj.CloneOf:
+            if obj.CloneOf and not(obj.BaseMaterial):
                 if obj.ViewObject.DiffuseColor != obj.CloneOf.ViewObject.DiffuseColor:
                         obj.ViewObject.DiffuseColor = obj.CloneOf.ViewObject.DiffuseColor
                         obj.ViewObject.update()
-            self.onChanged(obj.ViewObject,"ShapeColor")
+                        self.onChanged(obj.ViewObject,"ShapeColor")
         return
 
     def getIcon(self):
         import Arch_rc
+        if hasattr(self,"Object"):
+            if hasattr(self.Object,"CloneOf"):
+                if self.Object.CloneOf:
+                    return ":/icons/Arch_Component_Clone.svg"
         return ":/icons/Arch_Component.svg"
 
     def onChanged(self,vobj,prop):
-        #print vobj.Object.Name, " : changing ",prop
+        #print(vobj.Object.Name, " : changing ",prop)
         if prop == "Visibility":
             #for obj in vobj.Object.Additions+vobj.Object.Subtractions:
             #    if (Draft.getType(obj) == "Window") or (Draft.isClone(obj,"Window",True)):
@@ -706,16 +760,15 @@ class ViewProviderComponent:
                         if not swalW:
                             continue
                     c.append(s)
-            if hasattr(self.Object,"Armatures"):
-                c.extend(self.Object.Armatures)
-            if hasattr(self.Object,"Group"):
-                c.extend(self.Object.Group)
-            if hasattr(self.Object,"Tool"):
-                if self.Object.Tool:
-                    c.append(self.Object.Tool)
-            if hasattr(self.Object,"Subvolume"):
-                if self.Object.Subvolume:
-                    c.append(self.Object.Subvolume)
+            for link in ["Armatures","Group"]:
+                if hasattr(self.Object,link):
+                    objlink = getattr(self.Object,link)
+                    c.extend(objlink)
+            for link in ["Tool","Subvolume","Mesh","Hires"]:
+                if hasattr(self.Object,link):
+                    objlink = getattr(self.Object,link)
+                    if objlink:
+                        c.append(objlink)
             return c
         return []
 

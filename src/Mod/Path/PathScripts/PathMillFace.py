@@ -22,6 +22,7 @@
 # *                                                                         *
 # ***************************************************************************
 
+from __future__ import print_function
 import FreeCAD
 import Path
 from PySide import QtCore, QtGui
@@ -114,12 +115,12 @@ class ObjectFace:
             bb = ss.Shape.BoundBox  # parent boundbox
             subobj = ss.Shape.getElement(sub)
             fbb = subobj.BoundBox  # feature boundbox
-            obj.StartDepth = bb.ZMax
+            obj.StartDepth = bb.ZMax + 1
             obj.ClearanceHeight = bb.ZMax + 5.0
             obj.SafeHeight = bb.ZMax + 3.0
 
             if fbb.ZMax == fbb.ZMin and fbb.ZMax == bb.ZMax:  # top face
-                obj.FinalDepth = bb.ZMin
+                obj.FinalDepth = fbb.ZMin
             elif fbb.ZMax > fbb.ZMin and fbb.ZMax == bb.ZMax:  # vertical face, full cut
                 obj.FinalDepth = fbb.ZMin
             elif fbb.ZMax > fbb.ZMin and fbb.ZMin > bb.ZMin:  # internal vertical wall
@@ -211,6 +212,7 @@ class ObjectFace:
 
     # To reload this from FreeCAD, use: import PathScripts.PathFace; reload(PathScripts.PathFace)
     def execute(self, obj):
+        print("in execute")
 
         if not obj.Active:
             path = Path.Path("(inactive operation)")
@@ -224,7 +226,7 @@ class ObjectFace:
             self.vertFeed = 100
             self.horizFeed = 100
             self.vertRapid = 100
-            self.horiRrapid = 100
+            self.horizRrapid = 100
             self.radius = 0.25
             obj.ToolNumber = 0
             obj.ToolDescription = "UNDEFINED"
@@ -259,7 +261,7 @@ class ObjectFace:
                     if isinstance (shape, Part.Face):
                         faces.append(shape)
                     else:
-                        print ('falling out')
+                        print('falling out')
                         return
             planeshape = Part.makeCompound(faces)
 
@@ -419,19 +421,20 @@ class TaskPanel:
     def getFields(self):
         if self.obj:
             if hasattr(self.obj, "StartDepth"):
-                self.obj.StartDepth = self.form.startDepth.text()
+                self.obj.StartDepth = FreeCAD.Units.Quantity(self.form.startDepth.text()).Value
             if hasattr(self.obj, "FinalDepth"):
-                self.obj.FinalDepth = self.form.finalDepth.text()
+                self.obj.FinalDepth = FreeCAD.Units.Quantity(self.form.finalDepth.text()).Value
             if hasattr(self.obj, "FinishDepth"):
-                self.obj.FinishDepth = self.form.finishDepth.text()
+                self.obj.FinishDepth = FreeCAD.Units.Quantity(self.form.finishDepth.text()).Value
             if hasattr(self.obj, "SafeHeight"):
-                self.obj.SafeHeight = self.form.safeHeight.text()
+                self.obj.SafeHeight = FreeCAD.Units.Quantity(self.form.safeHeight.text()).Value
             if hasattr(self.obj, "ClearanceHeight"):
-                self.obj.ClearanceHeight = self.form.clearanceHeight.text()
+                self.obj.ClearanceHeight = FreeCAD.Units.Quantity(self.form.clearanceHeight.text()).Value
             if hasattr(self.obj, "StepDown"):
-                self.obj.StepDown = self.form.stepDown.value()
+                self.obj.StepDown = FreeCAD.Units.Quantity(self.form.stepDown.text()).Value
             if hasattr(self.obj, "PassExtension"):
-                self.obj.PassExtension = self.form.extraOffset.value()
+                self.obj.PassExtension = FreeCAD.Units.Quantity(self.form.extraOffset.text()).Value
+
             # if hasattr(self.obj, "UseStartPoint"):
             #     self.obj.UseStartPoint = self.form.useStartPoint.isChecked()
             if hasattr(self.obj, "CutMode"):
@@ -441,7 +444,9 @@ class TaskPanel:
             if hasattr(self.obj, "ZigUnidirectional"):
                 self.obj.ZigUnidirectional = self.form.zigZagUnidirectional.isChecked()
             if hasattr(self.obj, "ZigZagAngle"):
-                self.obj.ZigZagAngle = self.form.zigZagAngle.value()
+                self.obj.ZigZagAngle = FreeCAD.Units.Quantity(self.form.zigZagAngle.text()).Value
+#            if hasattr(self.obj, "ZigZagAngle"):
+#                self.obj.ZigZagAngle = self.form.zigZagAngle.value()
             if hasattr(self.obj, "StepOver"):
                 self.obj.StepOver = self.form.stepOverPercent.value()
             if hasattr(self.obj, "BoundaryShape"):
@@ -450,16 +455,18 @@ class TaskPanel:
         self.obj.Proxy.execute(self.obj)
 
     def setFields(self):
-        self.form.startDepth.setText(str(self.obj.StartDepth.Value))
-        self.form.finalDepth.setText(str(self.obj.FinalDepth.Value))
-        self.form.finishDepth.setText(str(self.obj.FinishDepth.Value))
-        self.form.stepDown.setValue(self.obj.StepDown)
-        self.form.safeHeight.setText(str(self.obj.SafeHeight.Value))
-        self.form.clearanceHeight.setText(str(self.obj.ClearanceHeight.Value))
+        self.form.startDepth.setText(FreeCAD.Units.Quantity(self.obj.StartDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.finalDepth.setText(FreeCAD.Units.Quantity(self.obj.FinalDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.finishDepth.setText(FreeCAD.Units.Quantity(self.obj.FinishDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.stepDown.setText(FreeCAD.Units.Quantity(self.obj.StepDown, FreeCAD.Units.Length).UserString)
+        self.form.safeHeight.setText(FreeCAD.Units.Quantity(self.obj.SafeHeight.Value, FreeCAD.Units.Length).UserString)
+        self.form.clearanceHeight.setText(FreeCAD.Units.Quantity(self.obj.ClearanceHeight.Value,  FreeCAD.Units.Length).UserString)
+
         self.form.stepOverPercent.setValue(self.obj.StepOver)
         self.form.useZigZag.setChecked(self.obj.UseZigZag)
         self.form.zigZagUnidirectional.setChecked(self.obj.ZigUnidirectional)
-        self.form.zigZagAngle.setValue(self.obj.ZigZagAngle)
+        self.form.zigZagAngle.setValue(FreeCAD.Units.Quantity(self.obj.ZigZagAngle, FreeCAD.Units.Angle))
+#        self.form.zigZagAngle.setValue(self.obj.ZigZagAngle)
         #self.form.useStartPoint.setChecked(self.obj.UseStartPoint)
         self.form.extraOffset.setValue(self.obj.PassExtension.Value)
 
@@ -511,6 +518,8 @@ class TaskPanel:
         for i in self.obj.Base:
             for sub in i[1]:
                 self.form.baseList.addItem(i[0].Name + "." + sub)
+        #self.obj.Proxy.execute(self.obj)
+        FreeCAD.ActiveDocument.recompute()
 
     def deleteBase(self):
         dlist = self.form.baseList.selectedItems()
@@ -533,11 +542,10 @@ class TaskPanel:
                     newlist.append(i)
             self.form.baseList.takeItem(self.form.baseList.row(d))
         self.obj.Base = newlist
-        self.obj.Proxy.execute(self.obj)
+        #self.obj.Proxy.execute(self.obj)
         FreeCAD.ActiveDocument.recompute()
 
     def itemActivated(self):
-        print self.form.baseList.selectedItems()[0].text()
         FreeCADGui.Selection.clearSelection()
         slist = self.form.baseList.selectedItems()
         for i in slist:
@@ -561,7 +569,7 @@ class TaskPanel:
             newlist.append(item)
         self.obj.Base = newlist
 
-        self.obj.Proxy.execute(self.obj)
+        #self.obj.Proxy.execute(self.obj)
         FreeCAD.ActiveDocument.recompute()
 
     def getStandardButtons(self):

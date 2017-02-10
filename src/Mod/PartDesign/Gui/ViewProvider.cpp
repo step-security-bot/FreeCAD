@@ -144,9 +144,9 @@ void ViewProvider::unsetEdit(int ModNum)
 
     if (ModNum == ViewProvider::Default) {
         // when pressing ESC make sure to close the dialog
-		PartDesign::Body* activeBody = Gui::Application::Instance->activeView()->getActiveObject<PartDesign::Body*>(PDBODYKEY);
+        PartDesign::Body* activeBody = Gui::Application::Instance->activeView()->getActiveObject<PartDesign::Body*>(PDBODYKEY);
         Gui::Control().closeDialog();
-		if ((activeBody != NULL) && (oldTip != NULL)) {
+        if ((activeBody != NULL) && (oldTip != NULL)) {
             Gui::Selection().clearSelection();
             Gui::Selection().addSelection(oldTip->getDocument()->getName(), oldTip->getNameInDocument());
             Gui::Command::doCommand(Gui::Command::Gui,"FreeCADGui.runCommand('PartDesign_MoveTip')");
@@ -179,7 +179,7 @@ void ViewProvider::onChanged(const App::Property* prop) {
         if(body) {
             
             //hide all features in the body other than this object
-            for(App::DocumentObject* obj : body->Model.getValues()) {
+            for(App::DocumentObject* obj : body->Group.getValues()) {
              
                 if(obj->isDerivedFrom(PartDesign::Feature::getClassTypeId()) && obj != getObject()) {
                    Gui::ViewProvider* vp = Gui::Application::Instance->activeDocument()->getViewProvider(obj);

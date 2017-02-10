@@ -29,7 +29,11 @@
 # include <Inventor/nodes/SoOrthographicCamera.h>
 # include <Inventor/nodes/SoPerspectiveCamera.h>
 # include <QFile>
+# include <QFileInfo>
+# include <QFont>
+# include <QFontMetrics>
 # include <QMessageBox>
+# include <QPainter>
 # include <QTextStream>
 # include <boost/bind.hpp>
 #endif
@@ -615,39 +619,29 @@ void StdCmdDrawStyle::languageChange()
     QList<QAction*> a = pcAction->actions();
 
     a[0]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "As is", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "As is"));
     a[0]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Normal mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Normal mode"));
 
     a[1]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "Flat lines", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Flat lines"));
     a[1]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Flat lines mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Flat lines mode"));
 
     a[2]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "Shaded", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Shaded"));
     a[2]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Shaded mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Shaded mode"));
 
     a[3]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "Wireframe", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Wireframe"));
     a[3]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Wireframe mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Wireframe mode"));
 
     a[4]->setText(QCoreApplication::translate(
-        "Std_DrawStyle", "Points", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Points"));
     a[4]->setToolTip(QCoreApplication::translate(
-        "Std_DrawStyle", "Points mode", 0,
-        QCoreApplication::CodecForTr));
+        "Std_DrawStyle", "Points mode"));
 }
 
 void StdCmdDrawStyle::updateIcon(const MDIView *view)
@@ -914,6 +908,47 @@ void StdCmdHideSelection::activated(int iMsg)
 bool StdCmdHideSelection::isActive(void)
 {
     return (Gui::Selection().size() != 0);
+}
+
+//===========================================================================
+// Std_SelectVisibleObjects
+//===========================================================================
+DEF_STD_CMD_A(StdCmdSelectVisibleObjects)
+
+StdCmdSelectVisibleObjects::StdCmdSelectVisibleObjects()
+  : Command("Std_SelectVisibleObjects")
+{
+    sGroup        = QT_TR_NOOP("Standard-View");
+    sMenuText     = QT_TR_NOOP("Select visible objects");
+    sToolTipText  = QT_TR_NOOP("Select visible objects in the active document");
+    sStatusTip    = QT_TR_NOOP("Select visible objects in the active document");
+    sWhatsThis    = "Std_SelectVisibleObjects";
+    eType         = Alter3DView;
+}
+
+void StdCmdSelectVisibleObjects::activated(int iMsg)
+{
+    Q_UNUSED(iMsg);
+    // go through active document
+    Gui::Document* doc = Application::Instance->activeDocument();
+    App::Document* app = doc->getDocument();
+    const std::vector<App::DocumentObject*> obj = app->getObjectsOfType
+        (App::DocumentObject::getClassTypeId());
+
+    std::vector<App::DocumentObject*> visible;
+    visible.reserve(obj.size());
+    for (std::vector<App::DocumentObject*>::const_iterator it=obj.begin();it!=obj.end();++it) {
+        if (doc->isShow((*it)->getNameInDocument()))
+            visible.push_back(*it);
+    }
+
+    SelectionSingleton& rSel = Selection();
+    rSel.setSelection(app->getName(), visible);
+}
+
+bool StdCmdSelectVisibleObjects::isActive(void)
+{
+    return App::GetApplication().getActiveDocument();
 }
 
 //===========================================================================
@@ -1453,8 +1488,7 @@ Action * StdViewDockUndockFullscreen::createAction(void)
     ActionGroup* pcAction = new ActionGroup(this, getMainWindow());
     pcAction->setDropDownMenu(true);
     pcAction->setText(QCoreApplication::translate(
-        this->className(), sMenuText, 0,
-        QCoreApplication::CodecForTr));
+        this->className(), sMenuText));
 
     CommandManager &rcCmdMgr = Application::Instance->commandManager();
     Command* cmdD = rcCmdMgr.getCommandByName("Std_ViewDock");
@@ -1471,17 +1505,21 @@ void StdViewDockUndockFullscreen::activated(int iMsg)
 {
     MDIView* view = getMainWindow()->activeWindow();
     if (!view) return; // no active view
-    if (iMsg == (int)(view->currentViewMode()))
-        return; // nothing to do
 
     if (iMsg==0) {
-        view->setCurrentViewMode( MDIView::Child );
+        view->setCurrentViewMode(MDIView::Child);
     }
     else if (iMsg==1) {
-        view->setCurrentViewMode( MDIView::TopLevel );
+        if (view->currentViewMode() == MDIView::TopLevel)
+            view->setCurrentViewMode(MDIView::Child);
+        else
+            view->setCurrentViewMode(MDIView::TopLevel);
     }
     else if (iMsg==2) {
-        view->setCurrentViewMode( MDIView::FullScreen );
+        if (view->currentViewMode() == MDIView::FullScreen)
+            view->setCurrentViewMode(MDIView::Child);
+        else
+            view->setCurrentViewMode(MDIView::FullScreen);
     }
 }
 
@@ -1645,6 +1683,42 @@ void StdViewScreenShot::activated(int iMsg)
             else {
                 doCommand(Gui,"Gui.activeDocument().activeView().saveImage('%s',%d,%d,'%s')",
                             fn.toUtf8().constData(),w,h,background);
+            }
+
+            // When adding a watermark check if the image could be created
+            if (opt->addWatermark()) {
+                QFileInfo fi(fn);
+                QPixmap pixmap;
+                if (fi.exists() && pixmap.load(fn)) {
+                    QString name = qApp->applicationName();
+                    std::map<std::string, std::string>& config = App::Application::Config();
+                    QString url  = QString::fromLatin1(config["MaintainerUrl"].c_str());
+                    url = QUrl(url).host();
+
+                    QPixmap appicon = Gui::BitmapFactory().pixmap(config["AppIcon"].c_str());
+
+                    QPainter painter;
+                    painter.begin(&pixmap);
+
+                    painter.drawPixmap(8, h-15-appicon.height(), appicon);
+
+                    QFont font = painter.font();
+                    font.setPointSize(20);
+
+                    int n = QFontMetrics(font).width(name);
+                    int h = pixmap.height();
+
+                    painter.setFont(font);
+                    painter.drawText(8+appicon.width(), h-24, name);
+
+                    font.setPointSize(12);
+                    int u = QFontMetrics(font).width(url);
+                    painter.setFont(font);
+                    painter.drawText(8+appicon.width()+n-u, h-9, url);
+
+                    painter.end();
+                    pixmap.save(fn);
+                }
             }
         }
     }
@@ -2485,13 +2559,12 @@ StdCmdSceneInspector::StdCmdSceneInspector()
 void StdCmdSceneInspector::activated(int iMsg)
 {
     Q_UNUSED(iMsg); 
-    View3DInventor* child = qobject_cast<View3DInventor*>(getMainWindow()->activeWindow());
-    if (child) {
-        View3DInventorViewer* viewer = child->getViewer();
+    Gui::Document* doc = Application::Instance->activeDocument();
+    if (doc) {
         static QPointer<Gui::Dialog::DlgInspector> dlg = 0;
         if (!dlg)
             dlg = new Gui::Dialog::DlgInspector(getMainWindow());
-        dlg->setNode(viewer->getSceneGraph());
+        dlg->setDocument(doc);
         dlg->setAttribute(Qt::WA_DeleteOnClose);
         dlg->show();
     }
@@ -2656,6 +2729,7 @@ void CreateViewStdCommands(void)
     rcCmdMgr.addCommand(new StdCmdToggleSelectability());
     rcCmdMgr.addCommand(new StdCmdShowSelection());
     rcCmdMgr.addCommand(new StdCmdHideSelection());
+    rcCmdMgr.addCommand(new StdCmdSelectVisibleObjects());
     rcCmdMgr.addCommand(new StdCmdToggleObjects());
     rcCmdMgr.addCommand(new StdCmdShowObjects());
     rcCmdMgr.addCommand(new StdCmdHideObjects());

@@ -2,7 +2,6 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${Boost_INCLUDE_DIRS}
     ${COIN3D_INCLUDE_DIRS}
-    ${QT_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
     ${XercesC_INCLUDE_DIRS}
@@ -12,7 +11,17 @@ set(WebGui_LIBS
     FreeCADGui
 )
 
-qt4_add_resources(Web_QRC_SRCS Resources/Web.qrc)
+if(BUILD_QT5)
+    include_directories(
+        ${Qt5WebKitWidgets_INCLUDE_DIRS}
+    )
+    list(APPEND WebGui_LIBS
+        ${Qt5WebKitWidgets_LIBRARIES}
+    )
+    qt5_add_resources(Web_QRC_SRCS Resources/Web.qrc)
+else()
+    qt4_add_resources(Web_QRC_SRCS Resources/Web.qrc)
+endif()
 
 SET(WebGui_SRCS
     ${Web_QRC_SRCS}

@@ -22,6 +22,7 @@
 # *                                                                         *
 # ***************************************************************************
 ''' Post Process command that will make use of the Output File and Post Processor entries in PathJob '''
+from __future__ import print_function
 import FreeCAD
 import FreeCADGui
 from PySide import QtCore, QtGui
@@ -79,7 +80,6 @@ class DlgSelectPostProcessor:
 class CommandPathPost:
 
     def resolveFileName(self, job):
-        #print("resolveFileName(%s)" % job.Label)
         path = PathPreferences.defaultOutputFile()
         if job.OutputFile:
             path = job.OutputFile
@@ -134,7 +134,6 @@ class CommandPathPost:
             else:
                 filename = None
 
-        #print("resolveFileName(%s, %s) -> '%s'" % (path, policy, filename))
         return filename
 
     def resolvePostProcessor(self, job):
@@ -162,39 +161,6 @@ class CommandPathPost:
                         return True
         return False
 
-    def Activated(self):
-        FreeCAD.ActiveDocument.openTransaction(
-            translate("Path_Post", "Post Process the Selected path(s)"))
-        FreeCADGui.addModule("PathScripts.PathPost")
-        # select the Path Job that you want to post output from
-        selected = FreeCADGui.Selection.getCompleteSelection()
-        print "in activated %s" %(selected)
-
-        # try to find the job, if it's not directly selected ...
-        jobs = set()
-        for obj in selected:
-            if hasattr(obj, 'OutputFile') or hasattr(obj, 'PostProcessor'):
-                jobs.add(obj)
-            elif hasattr(obj, 'Path') or hasattr(obj, 'ToolNumber'):
-                job = PathUtils.findParentJob(obj)
-                if job:
-                    jobs.add(job)
-
-        fail = True
-        rc = ''
-        if len(jobs) != 1:
-            FreeCAD.Console.PrintError("Please select a single job or other path object\n")
-        else:
-            job = jobs.pop()
-            print("Job for selected objects = %s" % job.Name)
-            (fail, rc) = exportObjectsWith(selected, job)
-
-        if fail:
-            FreeCAD.ActiveDocument.abortTransaction()
-        else:
-            FreeCAD.ActiveDocument.commitTransaction()
-        FreeCAD.ActiveDocument.recompute()
-
     def exportObjectsWith(self, objs, job, needFilename = True):
         # check if the user has a project and has set the default post and
         # output filename
@@ -216,6 +182,41 @@ class CommandPathPost:
             return (False, gcode)
         else:
             return (True, '')
+
+    def Activated(self):
+        FreeCAD.ActiveDocument.openTransaction(
+            translate("Path_Post", "Post Process the Selected path(s)"))
+        FreeCADGui.addModule("PathScripts.PathPost")
+        # select the Path Job that you want to post output from
+        selected = FreeCADGui.Selection.getCompleteSelection()
+        print("in activated %s" %(selected))
+
+        # try to find the job, if it's not directly selected ...
+        jobs = set()
+        for obj in selected:
+            if hasattr(obj, 'OutputFile') or hasattr(obj, 'PostProcessor'):
+                jobs.add(obj)
+            elif hasattr(obj, 'Path') or hasattr(obj, 'ToolNumber'):
+                job = PathUtils.findParentJob(obj)
+                if job:
+                    jobs.add(job)
+
+        fail = True
+        rc = ''
+        if len(jobs) != 1:
+            FreeCAD.Console.PrintError("Please select a single job or other path object\n")
+        else:
+            job = jobs.pop()
+            print("Job for selected objects = %s" % job.Name)
+            (fail, rc) = self.exportObjectsWith(selected, job)
+
+        if fail:
+            FreeCAD.ActiveDocument.abortTransaction()
+        else:
+            FreeCAD.ActiveDocument.commitTransaction()
+        FreeCAD.ActiveDocument.recompute()
+
+
 
 if FreeCAD.GuiUp:
     # register the FreeCAD command

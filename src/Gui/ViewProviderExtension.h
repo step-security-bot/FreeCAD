@@ -80,7 +80,7 @@ public:
     virtual void extensionUpdateData(const App::Property*);
     
 private:
-    Gui::ViewProviderDocumentObject* m_viewBase = nullptr;
+  //Gui::ViewProviderDocumentObject* m_viewBase = nullptr;
 };
 
 /**
@@ -97,7 +97,7 @@ public:
     
     ViewProviderExtensionPythonT() {
         ExtensionT::m_isPythonExtension = true;
-        ExtensionT::initExtension(ViewProviderExtensionPythonT::getExtensionClassTypeId());
+        ExtensionT::initExtensionType(ViewProviderExtensionPythonT::getExtensionClassTypeId());
         
         EXTENSION_ADD_PROPERTY(ExtensionProxy,(Py::Object()));
     }

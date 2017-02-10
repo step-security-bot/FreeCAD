@@ -50,6 +50,14 @@ Workbench::~Workbench()
 {
 }
 
+void Workbench::setupContextMenu(const char* recipient, Gui::MenuItem* item) const
+{
+     StdWorkbench::setupContextMenu( recipient, item );
+     *item << "Separator" 
+           << "Fem_ClearMesh"
+           << "Fem_PrintMeshInfo";
+}
+
 Gui::ToolBarItem* Workbench::setupToolBars() const
 {
     Gui::ToolBarItem* root = StdWorkbench::setupToolBars();
@@ -59,14 +67,18 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
          << "Fem_Analysis"
          << "Fem_SolverCalculix"
          // << "Fem_SolverZ88"
+         << "Separator"
          << "Fem_MeshNetgenFromShape"
          << "Fem_MeshGmshFromShape"
-         << "Fem_MechanicalMaterial"
+         << "Fem_MeshRegion"
+         << "Fem_MeshGroup"
+         //<< "Fem_CreateNodesSet"
+         << "Separator"
+         << "Fem_MaterialSolid"
+         << "Fem_MaterialFluid"
          << "Fem_MaterialMechanicalNonlinear"
          << "Fem_BeamSection"
          << "Fem_ShellThickness"
-         << "Separator"
-         //<< "Fem_CreateNodesSet"
          << "Separator"
          << "Fem_ConstraintFixed"
          << "Fem_ConstraintDisplacement"
@@ -103,6 +115,8 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
             << "Fem_PostCreateScalarClipFilter"
             << "Fem_PostCreateCutFilter"
             << "Fem_PostCreateWarpVectorFilter"
+            << "Fem_PostCreateDataAlongLineFilter"
+            << "Fem_PostCreateLinearizedStressesFilter"
             << "Separator"
             << "Fem_PostCreateFunctions";
 #endif
@@ -127,14 +141,18 @@ Gui::MenuItem* Workbench::setupMenuBar() const
          << "Fem_Analysis"
          << "Fem_SolverCalculix"
          << "Fem_SolverZ88"
+         << "Separator"
          << "Fem_MeshNetgenFromShape"
          << "Fem_MeshGmshFromShape"
-         << "Fem_MechanicalMaterial"
+         << "Fem_MeshRegion"
+         << "Fem_MeshGroup"
+         << "Fem_CreateNodesSet"
+         << "Separator"
+         << "Fem_MaterialSolid"
+         << "Fem_MaterialFluid"
          << "Fem_MaterialMechanicalNonlinear"
          << "Fem_BeamSection"
          << "Fem_ShellThickness"
-         << "Separator"
-         << "Fem_CreateNodesSet"
          << "Separator"
          << "Fem_ConstraintFixed"
          << "Fem_ConstraintDisplacement"

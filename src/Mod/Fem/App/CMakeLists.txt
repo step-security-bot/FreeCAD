@@ -13,9 +13,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_BINARY_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}/src/3rdParty/ANN/include
     ${Boost_INCLUDE_DIRS}
-    ${QT_INCLUDE_DIR}
     ${OCC_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
@@ -28,17 +26,16 @@ include_directories(
 link_directories(${OCC_LIBRARY_DIR})
 
 set(Fem_LIBS
-        Part
-        FreeCADApp
-        StdMeshers
-        SMESH
-        SMDS
-        SMESHDS
-    )
+    Part
+    FreeCADApp
+    StdMeshers
+    SMESH
+    SMDS
+    SMESHDS
+)
 
 if(BUILD_FEM_NETGEN)
-    set(Fem_LIBS
-        ${Fem_LIBS}
+    list(APPEND Fem_LIBS
         NETGENPlugin
     )
 endif(BUILD_FEM_NETGEN)
@@ -66,15 +63,18 @@ SOURCE_GROUP("Module" FILES ${Mod_SRCS})
 SET(FemScripts_SRCS
     _CommandAnalysis.py
     _CommandBeamSection.py
+    _CommandClearMesh.py
     _CommandControlSolver.py
     _CommandConstraintSelfWeight.py
     _CommandFEMMesh2Mesh.py
-    _CommandMechanicalMaterial.py
-    _CommandShowResult.py
     _CommandMaterialMechanicalNonlinear.py
-    _CommandMechanicalMaterial.py
+    _CommandMaterialSolid.py
+    _CommandMaterialFluid.py
     _CommandMeshGmshFromShape.py
     _CommandMeshNetgenFromShape.py
+    _CommandMeshGroup.py
+    _CommandMeshRegion.py
+    _CommandPrintMeshInfo.py
     _CommandPurgeResults.py
     _CommandRunSolver.py
     _CommandShellThickness.py
@@ -85,29 +85,37 @@ SET(FemScripts_SRCS
     _FemConstraintSelfWeight.py
     _FemMaterialMechanicalNonlinear.py
     _FemMeshGmsh.py
+    _FemMeshGroup.py
+    _FemMeshRegion.py
     _FemShellThickness.py
     _FemSolverCalculix.py
     _FemSolverZ88.py
-    _MechanicalMaterial.py
+    _FemMaterial.py
     _TaskPanelFemBeamSection.py
     _TaskPanelFemMeshGmsh.py
+    _TaskPanelFemMeshGroup.py
+    _TaskPanelFemMeshRegion.py
     _TaskPanelFemShellThickness.py
     _TaskPanelFemSolverCalculix.py
-    _TaskPanelMechanicalMaterial.py
+    _TaskPanelFemMaterial.py
     _TaskPanelShowResult.py
     _ViewProviderFemBeamSection.py
     _ViewProviderFemConstraintSelfWeight.py
     _ViewProviderFemMaterialMechanicalNonlinear.py
     _ViewProviderFemMeshGmsh.py
+    _ViewProviderFemMeshGroup.py
+    _ViewProviderFemMeshRegion.py
     _ViewProviderFemShellThickness.py
     _ViewProviderFemSolverCalculix.py
     _ViewProviderFemSolverZ88.py
-    _ViewProviderMechanicalMaterial.py
+    _ViewProviderFemMaterial.py
     ccxDatReader.py
     ccxFrdReader.py
     convert2TetGen.py
     importInpMesh.py
+    importVTKResults.py
     importZ88Mesh.py
+    importZ88Results.py
     Init.py
     InitGui.py
     FemAnalysis.py
@@ -121,6 +129,8 @@ SET(FemScripts_SRCS
     FemMaterialMechanicalNonlinear.py
     FemMesh2Mesh.py
     FemMeshGmsh.py
+    FemMeshGroup.py
+    FemMeshRegion.py
     FemMeshTools.py
     FemShellThickness.py
     FemSolverCalculix.py
@@ -128,15 +138,16 @@ SET(FemScripts_SRCS
     FemTools.py
     FemToolsCcx.py
     FemToolsZ88.py
-    MechanicalMaterial.py
+    FemMaterial.py
     FemSelectionObserver.py
     TestFem.py
-    z88DispReader.py
     TaskPanelFemBeamSection.ui
     TaskPanelFemMeshGmsh.ui
+    TaskPanelFemMeshGroup.ui
+    TaskPanelFemMeshRegion.ui
     TaskPanelFemShellThickness.ui
     TaskPanelFemSolverCalculix.ui
-    TaskPanelMechanicalMaterial.ui
+    TaskPanelFemMaterial.ui
     TaskPanelShowResult.ui
 )
 #SOURCE_GROUP("Scripts" FILES ${FemScripts_SRCS})

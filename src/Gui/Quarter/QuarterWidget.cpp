@@ -54,6 +54,10 @@
 
 #include <assert.h>
 
+#include <Quarter/QuarterWidget.h>
+#include <Quarter/eventhandlers/EventFilter.h>
+#include <Quarter/eventhandlers/DragDropHandler.h>
+
 #include <QtCore/QEvent>
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
@@ -78,10 +82,6 @@
 #include <Inventor/SoEventManager.h>
 #include <Inventor/scxml/ScXML.h>
 #include <Inventor/scxml/SoScXMLStateMachine.h>
-
-#include <Quarter/QuarterWidget.h>
-#include <Quarter/eventhandlers/EventFilter.h>
-#include <Quarter/eventhandlers/DragDropHandler.h>
 
 #include <ctime>
 
@@ -824,7 +824,12 @@ QuarterWidget::redraw(void)
   // we're triggering the next paintGL(). Set a flag to remember this
   // to avoid that we process the delay queue in paintGL()
   PRIVATE(this)->processdelayqueue = false;
+#if QT_VERSION >= 0x050500 && QT_VERSION < 0x050600
+  // With Qt 5.5.x there is a major performance problem
+  this->viewport()->update();
+#else
   this->viewport()->repaint();
+#endif
 }
 
 /*!

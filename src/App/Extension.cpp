@@ -71,7 +71,7 @@ Extension::~Extension()
     }
 }
 
-void Extension::initExtension(Base::Type type) {
+void Extension::initExtensionType(Base::Type type) {
 
     m_extensionType = type;
     if(m_extensionType.isBad())
@@ -105,18 +105,18 @@ PyObject* Extension::getExtensionPyObject(void) {
     return Py::new_reference_to(ExtensionPythonObject);
 }
 
-const char* Extension::name() {
+std::string Extension::name() const {
     
     if(m_extensionType.isBad())
-        throw Base::Exception("Extension::setExtendedObject: Extension type not set");
+        throw Base::Exception("Extension::name: Extension type not set");
     
     std::string temp(m_extensionType.getName());
     std::string::size_type pos = temp.find_last_of(":");
 
     if(pos != std::string::npos)
-        return temp.substr(pos+1).c_str();
+        return temp.substr(pos+1);
     else
-        return std::string().c_str();
+        return std::string();
 }
 
 

@@ -26,6 +26,7 @@
 
 #include "PropertyContainer.h"
 #include "PropertyPythonObject.h"
+#include "ExtensionContainer.h"
 #include "Base/Interpreter.h"
 #include <CXX/Objects.hxx>
 
@@ -51,6 +52,13 @@ Base::Type _class_::classTypeId = Base::Type::badType();  \
 void * _class_::create(void){\
    return new _class_ ();\
 }
+
+/// define to implement a  subclass of Base::BaseClass
+#define EXTENSION_TYPESYSTEM_SOURCE_ABSTRACT_P(_class_) \
+Base::Type _class_::getExtensionClassTypeId(void) { return _class_::classTypeId; } \
+Base::Type _class_::getExtensionTypeId(void) const { return _class_::classTypeId; } \
+Base::Type _class_::classTypeId = Base::Type::badType();  \
+void * _class_::create(void){return 0;}
 
 /// define to implement a subclass of Base::BaseClass
 #define EXTENSION_TYPESYSTEM_SOURCE(_class_, _parentclass_) \
@@ -207,15 +215,15 @@ public:
     Extension();
     virtual ~Extension();
 
-    void initExtension(App::ExtensionContainer* obj);
+    virtual void initExtension(App::ExtensionContainer* obj);
     
-    App::ExtensionContainer*       getExtendedContainer() {return m_base;};
-    const App::ExtensionContainer* getExtendedContainer() const {return m_base;};
+    App::ExtensionContainer*       getExtendedContainer() {return m_base;}
+    const App::ExtensionContainer* getExtendedContainer() const {return m_base;}
  
     //get extension name without namespace
-    const char* name();
+    std::string name() const;
  
-    bool isPythonExtension() {return m_isPythonExtension;};
+    bool isPythonExtension() {return m_isPythonExtension;}
   
     virtual PyObject* getExtensionPyObject(void);
   
@@ -245,17 +253,26 @@ public:
     virtual const char* extensionGetPropertyDocumentation(const char *name) const;
     //@}
     
+    /** @name Persistance */
+    //@{
+    virtual void extensionSave(Base::Writer&) const {}
+    virtual void extensionRestore(Base::XMLReader&) {}
+    //@}
+    
     /** @name TypeHandling */
     //@{
-    bool isDerivedFrom(const Base::Type type) const {return getExtensionTypeId().isDerivedFrom(type);}
+    bool extensionIsDerivedFrom(const Base::Type type) const {return getExtensionTypeId().isDerivedFrom(type);}
 protected:
     static void initExtensionSubclass(Base::Type &toInit,const char* ClassName, const char *ParentName, 
-                             Base::Type::instantiationMethod method=0);
+                                      Base::Type::instantiationMethod method=0);
     //@}
 
+    virtual void extensionOnChanged(const Property* p) {(void)(p);}
+    
+    friend class App::ExtensionContainer;
 
 protected:     
-    void initExtension(Base::Type type);
+    void initExtensionType(Base::Type type);
     bool m_isPythonExtension = false;
     Py::Object ExtensionPythonObject;
   
@@ -292,7 +309,7 @@ public:
     
     ExtensionPythonT() {
         ExtensionT::m_isPythonExtension = true;
-        ExtensionT::initExtension(ExtensionPythonT::getExtensionClassTypeId());
+        ExtensionT::initExtensionType(ExtensionPythonT::getExtensionClassTypeId());
         
         EXTENSION_ADD_PROPERTY(ExtensionProxy,(Py::Object()));
     }
@@ -365,6 +382,6 @@ typedef ExtensionPythonT<App::Extension> ExtensionPython;
         return res.ptr();\
     };
     
-}; //App
+} //App
 
 #endif // APP_EXTENSION_H

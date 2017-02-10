@@ -34,7 +34,7 @@
         <x>0</x>
         <y>0</y>
         <width>381</width>
-        <height>353</height>
+        <height>381</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -112,7 +112,7 @@
         <x>0</x>
         <y>0</y>
         <width>381</width>
-        <height>353</height>
+        <height>381</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -151,23 +151,23 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QDoubleSpinBox" name="stepDown">
-         <property name="decimals">
-          <number>3</number>
-         </property>
-         <property name="minimum">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Step Down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="Gui::InputField" name="stepDown">
+         <property name="maximum">
+          <double>10000.000000000000000</double>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="unit" stdset="0">
+          <string notr="true">mm</string>
          </property>
         </widget>
        </item>
@@ -179,7 +179,7 @@
         <x>0</x>
         <y>0</y>
         <width>381</width>
-        <height>353</height>
+        <height>381</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -223,71 +223,13 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="Holding">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>381</width>
-        <height>353</height>
-       </rect>
-      </property>
-      <attribute name="label">
-       <string>Holding</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="0">
-        <widget class="QPushButton" name="addTag">
-         <property name="text">
-          <string>Add New</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="deleteTag">
-         <property name="text">
-          <string>Delete</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QTreeWidget" name="tagTree">
-         <column>
-          <property name="text">
-           <string>Tag</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Location</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Height</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Length</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Angle</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="page_3">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
         <width>381</width>
-        <height>353</height>
+        <height>381</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -352,38 +294,32 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="extraOffset"/>
-          </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Segment Length</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="segLen"/>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="rollRadius"/>
-          </item>
-          <item row="2" column="0">
            <widget class="QLabel" name="label_11">
             <property name="text">
              <string>Roll Radius</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Plunge Angle</string>
+          <item row="0" column="2">
+           <widget class="Gui::InputField" name="extraOffset">
+            <property name="minimum">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="unit" stdset="0">
+             <string notr="true">mm</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="plungeAngle"/>
+          <item row="1" column="2">
+           <widget class="Gui::InputField" name="rollRadius">
+            <property name="minimum">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="unit" stdset="0">
+             <string notr="true">mm</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

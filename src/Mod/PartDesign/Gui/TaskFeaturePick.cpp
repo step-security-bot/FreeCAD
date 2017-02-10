@@ -65,7 +65,7 @@ const QString TaskFeaturePick::getFeatureStatusString(const featureStatus st)
         case isUsed: return tr("Sketch already used by other feature");
         case otherBody: return tr("Belongs to another body");
         case otherPart: return tr("Belongs to another part");
-        case notInBody: return tr("Doesn't belongs to any body");
+        case notInBody: return tr("Doesn't belong to any body");
         case basePlane: return tr("Base plane");
         case afterTip: return tr("Feature is located after the tip feature");
     }
@@ -235,17 +235,17 @@ std::vector<App::DocumentObject*> TaskFeaturePick::buildFeatures()
                     auto copy = makeCopy(obj, "", ui->radioIndependent->isChecked());
 
                     if (*st == otherBody) {
-                        activeBody->addFeature(copy);
+                        activeBody->addObject(copy);
                     }
                     else if (*st == otherPart) {
                         auto oBody = PartDesignGui::getBodyFor(obj, false);
                         if (!oBody)
                             activePart->addObject(copy);
                         else
-                            activeBody->addFeature(copy);
+                            activeBody->addObject(copy);
                     }
                     else if (*st == notInBody) {
-                        activeBody->addFeature(copy);
+                        activeBody->addObject(copy);
                         // doesn't supposed to get here anything but sketch but to be on the safe side better to check
                         if (copy->getTypeId().isDerivedFrom(Sketcher::SketchObject::getClassTypeId())) {
                             Sketcher::SketchObject *sketch = static_cast<Sketcher::SketchObject*>(copy);

@@ -22,6 +22,7 @@
 # *                                                                         *
 # ***************************************************************************
 
+from __future__ import print_function
 import FreeCAD
 import Path
 import Part
@@ -195,7 +196,7 @@ class ObjectDrilling:
                 if isinstance(subobj.Edges[0].Curve, Part.Circle):
                     drillable = True
                 if str(subobj.Surface) == "<Cylinder object>":
-                    drillable = True
+                    drillable = subobj.isClosed()
                 if len(subobj.Edges) == 3:
                     cedge = []
                     ledge = []
@@ -211,7 +212,7 @@ class ObjectDrilling:
                         drillable = False
             if sub[0:4] == 'Edge':
                 o = obj.getElement(sub)
-                if isinstance(o.Curve, Part.Circle) and len(o.Vertexes) == 1:
+                if isinstance(o.Curve, Part.Circle):
                     drillable = True
 
         return drillable
@@ -266,9 +267,48 @@ class ObjectDrilling:
                         FreeCAD.Console.PrintWarning("Drillable location already in the list" + "\n")
                     else:
                         baselist.append(item)
-            print baselist
-            obj.Base = baselist
-            self.execute(obj)
+            else:
+                if item in baselist:
+                    FreeCAD.Console.PrintWarning("Drillable location already in the list" + "\n")
+                else:
+                    baselist.append(item)
+
+
+        if sub[0:4] == 'Edge':
+            drillableEdges = []
+            o = ss.Shape.getElement(sub)
+
+            for i in range(len(ss.Shape.Edges)):
+                candidateedge = ss.Shape.getElement("Edge" + str(i+1))
+                if self.checkdrillable(ss.Shape, "Edge" + str(i+1)):
+                    if candidateedge.Curve.Radius == o.Curve.Radius and candidateedge.Curve.Center.z == o.Curve.Center.z:
+                        drillableEdges.append("Edge" + str(i+1))
+            if len(drillableEdges) > 1:
+                reply = QtGui.QMessageBox.question(None,"","Multiple drillable edges found.  Drill them all?",
+                        QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+                if reply == QtGui.QMessageBox.Yes:
+                    for i in drillableEdges:
+                        if i in baselist:
+                            FreeCAD.Console.PrintWarning("Drillable location already in the list" + "\n")
+                            continue
+                        else:
+                            newitem = (ss, i)
+                            baselist.append(newitem)
+                else:
+                    if item in baselist:
+                        FreeCAD.Console.PrintWarning("Drillable location already in the list" + "\n")
+                    else:
+                        baselist.append(item)
+            else:
+                if item in baselist:
+                    FreeCAD.Console.PrintWarning("Drillable location already in the list" + "\n")
+                else:
+                    baselist.append(item)
+
+        print(baselist)
+        obj.Base = baselist
+        self.execute(obj)
+
 
 class _ViewProviderDrill:
     def __init__(self, obj):
@@ -361,27 +401,27 @@ class TaskPanel:
     def getFields(self):
         if self.obj:
             if hasattr(self.obj, "StartDepth"):
-                self.obj.StartDepth = self.form.startDepth.text()
+                self.obj.StartDepth = FreeCAD.Units.Quantity(self.form.startDepth.text()).Value
             if hasattr(self.obj, "FinalDepth"):
-                self.obj.FinalDepth = self.form.finalDepth.text()
+                self.obj.FinalDepth = FreeCAD.Units.Quantity(self.form.finalDepth.text()).Value
             if hasattr(self.obj, "PeckDepth"):
-                self.obj.PeckDepth = self.form.peckDepth.text()
+                self.obj.PeckDepth = FreeCAD.Units.Quantity(self.form.peckDepth.text()).Value
             if hasattr(self.obj, "SafeHeight"):
-                self.obj.SafeHeight = self.form.safeHeight.text()
+                self.obj.SafeHeight = FreeCAD.Units.Quantity(self.form.safeHeight.text()).Value
             if hasattr(self.obj, "ClearanceHeight"):
-                self.obj.ClearanceHeight = self.form.clearanceHeight.text()
+                self.obj.ClearanceHeight = FreeCAD.Units.Quantity(self.form.clearanceHeight.text()).Value
             if hasattr(self.obj, "RetractHeight"):
-                self.obj.RetractHeight = self.form.retractHeight.text()
+                self.obj.RetractHeight = FreeCAD.Units.Quantity(self.form.retractHeight.text()).Value
 
         self.obj.Proxy.execute(self.obj)
 
     def setFields(self):
-        self.form.startDepth.setText(str(self.obj.StartDepth.Value))
-        self.form.finalDepth.setText(str(self.obj.FinalDepth.Value))
-        self.form.peckDepth.setText(str(self.obj.PeckDepth.Value))
-        self.form.safeHeight.setText(str(self.obj.SafeHeight.Value))
-        self.form.clearanceHeight.setText(str(self.obj.ClearanceHeight.Value))
-        self.form.retractHeight.setText(str(self.obj.RetractHeight.Value))
+        self.form.startDepth.setText(FreeCAD.Units.Quantity(self.obj.StartDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.finalDepth.setText(FreeCAD.Units.Quantity(self.obj.FinalDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.peckDepth.setText(FreeCAD.Units.Quantity(self.obj.PeckDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.safeHeight.setText(FreeCAD.Units.Quantity(self.obj.SafeHeight.Value, FreeCAD.Units.Length).UserString)
+        self.form.clearanceHeight.setText(FreeCAD.Units.Quantity(self.obj.ClearanceHeight.Value, FreeCAD.Units.Length).UserString)
+        self.form.retractHeight.setText(FreeCAD.Units.Quantity(self.obj.RetractHeight.Value, FreeCAD.Units.Length).UserString)
 
         self.form.baseList.clear()
         for i in self.obj.Base:

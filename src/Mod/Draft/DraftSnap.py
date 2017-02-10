@@ -32,7 +32,9 @@ __url__ = "http://www.freecadweb.org"
 #  This module provides tools to handle point snapping and
 #  everything that goes with it (toolbar buttons, cursor icons, etc)
 
+
 import FreeCAD, FreeCADGui, math, Draft, DraftGui, DraftTrackers, DraftVecUtils
+from collections import OrderedDict
 from FreeCAD import Vector
 from pivy import coin
 from PySide import QtCore,QtGui
@@ -93,43 +95,44 @@ class Snapper:
         
         # the snapmarker has "dot","circle" and "square" available styles
         if self.snapStyle:
-            self.mk = {'passive':'empty',
-                       'extension':'empty',
-                       'parallel':'empty',
-                       'grid':'quad',
-                       'endpoint':'quad',
-                       'midpoint':'quad',
-                       'perpendicular':'quad',
-                       'angle':'quad',
-                       'center':'quad',
-                       'ortho':'quad',
-                       'intersection':'quad',
-                       'special':'quad'}
+            self.mk = OrderedDict([('passive',      'empty'),
+                                   ('extension',    'empty'),
+                                   ('parallel',     'empty'),
+                                   ('grid',         'quad'),
+                                   ('endpoint',     'quad'),
+                                   ('midpoint',     'quad'),
+                                   ('perpendicular','quad'),
+                                   ('angle',        'quad'),
+                                   ('center',       'quad'),
+                                   ('ortho',        'quad'),
+                                   ('intersection', 'quad'),
+                                   ('special',      'quad')])
         else:
-            self.mk = {'passive':'circle',
-                       'extension':'circle',
-                       'parallel':'circle',
-                       'grid':'circle',
-                       'endpoint':'dot',
-                       'midpoint':'square',
-                       'perpendicular':'dot',
-                       'angle':'square',
-                       'center':'dot',
-                       'ortho':'dot',
-                       'intersection':'dot',
-                       'special':'dot'}
-        self.cursors = {'passive':':/icons/Snap_Near.svg',
-                        'extension':':/icons/Snap_Extension.svg',
-                        'parallel':':/icons/Snap_Parallel.svg',
-                        'grid':':/icons/Snap_Grid.svg',
-                        'endpoint':':/icons/Snap_Endpoint.svg',
-                        'midpoint':':/icons/Snap_Midpoint.svg',
-                        'perpendicular':':/icons/Snap_Perpendicular.svg',
-                        'angle':':/icons/Snap_Angle.svg',
-                        'center':':/icons/Snap_Center.svg',
-                        'ortho':':/icons/Snap_Ortho.svg',
-                        'intersection':':/icons/Snap_Intersection.svg',
-                        'special':':/icons/Snap_Special.svg'}
+            self.mk = OrderedDict([('passive',      'circle'),
+                                   ('extension',    'circle'),
+                                   ('parallel',     'circle'),
+                                   ('grid',         'circle'),
+                                   ('endpoint',     'dot'),
+                                   ('midpoint',     'square'),
+                                   ('perpendicular','dot'),
+                                   ('angle',        'square'),
+                                   ('center',       'dot'),
+                                   ('ortho',        'dot'),
+                                   ('intersection', 'dot'),
+                                   ('special',      'dot')])
+
+        self.cursors = OrderedDict([('passive',         ':/icons/Snap_Near.svg'),
+                                    ('extension',       ':/icons/Snap_Extension.svg'),
+                                    ('parallel',        ':/icons/Snap_Parallel.svg'),
+                                    ('grid',            ':/icons/Snap_Grid.svg'),
+                                    ('endpoint',        ':/icons/Snap_Endpoint.svg'),
+                                    ('midpoint',        ':/icons/Snap_Midpoint.svg'),
+                                    ('perpendicular',   ':/icons/Snap_Perpendicular.svg'),
+                                    ('angle',           ':/icons/Snap_Angle.svg'),
+                                    ('center',          ':/icons/Snap_Center.svg'),
+                                    ('ortho',           ':/icons/Snap_Ortho.svg'),
+                                    ('intersection',    ':/icons/Snap_Intersection.svg'),
+                                    ('special',         ':/icons/Snap_Special.svg')])
         
     def snap(self,screenpos,lastpoint=None,active=True,constrain=False,noTracker=False):
         """snap(screenpos,lastpoint=None,active=True,constrain=False,noTracker=False): returns a snapped
@@ -1106,22 +1109,21 @@ class Snapper:
         bsize = p.GetInt("ToolbarIconSize",24)+2
         isize = p.GetInt("ToolbarIconSize",24)/3*2
         self.toolbar = QtGui.QToolBar(None)
+        self.toolbar.setIconSize(QtCore.QSize(isize, isize))
         self.toolbar.setObjectName("Draft Snap")
         self.toolbar.setWindowTitle(QtCore.QCoreApplication.translate("Workbench", "Draft Snap"))
         self.toolbarButtons = []
         # grid button
-        gridbutton = QtGui.QPushButton(None)
+        gridbutton = QtGui.QToolButton(None)
         gridbutton.setIcon(QtGui.QIcon(":/icons/Draft_Grid.svg"))
-        gridbutton.setIconSize(QtCore.QSize(isize, isize))
         gridbutton.setMaximumSize(QtCore.QSize(bsize,bsize))
         gridbutton.setToolTip(QtCore.QCoreApplication.translate("Draft_ToggleGrid","Toggles the Draft grid on/off"))
         gridbutton.setObjectName("GridButton")
         QtCore.QObject.connect(gridbutton,QtCore.SIGNAL("clicked()"),self.toggleGrid)
         self.toolbar.addWidget(gridbutton)
         # master button
-        self.masterbutton = QtGui.QPushButton(None)
+        self.masterbutton = QtGui.QToolButton(None)
         self.masterbutton.setIcon(QtGui.QIcon(":/icons/Snap_Lock.svg"))
-        self.masterbutton.setIconSize(QtCore.QSize(isize, isize))
         self.masterbutton.setMaximumSize(QtCore.QSize(bsize,bsize))
         self.masterbutton.setToolTip(QtCore.QCoreApplication.translate("Draft_Snap_Lock","Toggle On/Off"))
         self.masterbutton.setObjectName("SnapButtonMain")
@@ -1131,9 +1133,8 @@ class Snapper:
         self.toolbar.addWidget(self.masterbutton)
         for c,i in self.cursors.items():
             if i:
-                b = QtGui.QPushButton(None)
+                b = QtGui.QToolButton(None)
                 b.setIcon(QtGui.QIcon(i))
-                b.setIconSize(QtCore.QSize(isize, isize))
                 b.setMaximumSize(QtCore.QSize(bsize,bsize))
                 if c == "passive":
                     b.setToolTip(QtCore.QCoreApplication.translate("Draft_Snap_Near","Nearest"))
@@ -1147,9 +1148,8 @@ class Snapper:
                 QtCore.QObject.connect(b,QtCore.SIGNAL("toggled(bool)"),self.saveSnapModes)
         # adding non-snap button
         for n in ["Dimensions","WorkingPlane"]:
-            b = QtGui.QPushButton(None)
+            b = QtGui.QToolButton(None)
             b.setIcon(QtGui.QIcon(":/icons/Snap_"+n+".svg"))
-            b.setIconSize(QtCore.QSize(isize, isize))
             b.setMaximumSize(QtCore.QSize(bsize,bsize))
             b.setToolTip(QtCore.QCoreApplication.translate("Draft_Snap_"+n,n))
             b.setObjectName("SnapButton"+n)

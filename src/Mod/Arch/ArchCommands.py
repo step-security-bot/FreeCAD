@@ -212,6 +212,19 @@ def makeComponent(baseobj=None,name="Component",delete=False):
         elif isinstance(baseobj,Part.Shape):
             obj.Shape = baseobj
     return obj
+    
+def cloneComponent(obj):
+    '''cloneComponent(obj): Creates a clone of an object as an undefined component'''
+    c = makeComponent()
+    c.CloneOf = obj
+    c.Placement = obj.Placement
+    c.Label = obj.Label
+    if hasattr(obj,"BaseMaterial"):
+        if obj.BaseMaterial:
+            c.BaseMaterial = obj.BaseMaterial
+    if hasattr(obj,"IfcAttributes"):
+        if obj.IfcAttributes:
+            c.IfcAttributes = obj.IfcAttributes
 
 def setAsSubcomponent(obj):
     '''Sets the given object properly to become a subcomponent (addition, subtraction)
@@ -280,7 +293,7 @@ def splitMesh(obj,mark=True):
 
 def makeFace(wires,method=2,cleanup=False):
     '''makeFace(wires): makes a face from a list of wires, finding which ones are holes'''
-    #print "makeFace: start:", wires
+    #print("makeFace: start:", wires)
     import Part
 
     if not isinstance(wires,list):
@@ -295,21 +308,21 @@ def makeFace(wires,method=2,cleanup=False):
 
     wires = wires[:]
 
-    #print "makeFace: inner wires found"
+    #print("makeFace: inner wires found")
     ext = None
     max_length = 0
     # cleaning up rubbish in wires
     if cleanup:
         for i in range(len(wires)):
             wires[i] = DraftGeomUtils.removeInterVertices(wires[i])
-        #print "makeFace: garbage removed"
+        #print("makeFace: garbage removed")
     for w in wires:
         # we assume that the exterior boundary is that one with
         # the biggest bounding box
         if w.BoundBox.DiagonalLength > max_length:
             max_length = w.BoundBox.DiagonalLength
             ext = w
-    #print "makeFace: exterior wire",ext
+    #print("makeFace: exterior wire", ext)
     wires.remove(ext)
 
     if method == 1:
@@ -317,22 +330,22 @@ def makeFace(wires,method=2,cleanup=False):
         # all interior wires mark a hole and must reverse
         # their orientation, otherwise Part.Face fails
         for w in wires:
-            #print "makeFace: reversing",w
+            #print("makeFace: reversing", w)
             w.reverse()
             # make sure that the exterior wires comes as first in the list
         wires.insert(0, ext)
-        #print "makeFace: done sorting", wires
+        #print("makeFace: done sorting", wires)
         if wires:
             return Part.Face(wires)
     else:
         # method 2: use the cut method
         mf = Part.Face(ext)
-        #print "makeFace: external face:",mf
+        #print("makeFace: external face:", mf)
         for w in wires:
             f = Part.Face(w)
-            #print "makeFace: internal face:",f
+            #print("makeFace: internal face:", f)
             mf = mf.cut(f)
-        #print "makeFace: final face:",mf.Faces
+        #print("makeFace: final face:", mf.Faces)
         return mf.Faces[0]
 
 def closeHole(shape):
@@ -343,7 +356,7 @@ def closeHole(shape):
     for face in shape.Faces:
         for edge in face.Edges:
             hc = edge.hashCode()
-            if lut.has_key(hc):
+            if hc in lut:
                 lut[hc] = lut[hc] + 1
             else:
                 lut[hc] = 1
@@ -462,7 +475,7 @@ def getShapeFromMesh(mesh,fast=True,tolerance=0.001,flat=False,cut=True):
     #    print "getShapeFromMesh: non-solid mesh, using slow method"
     faces = []
     segments = mesh.getPlanarSegments(tolerance)
-    #print len(segments)
+    #print(len(segments))
     for i in segments:
         if len(i) > 0:
             wires = MeshPart.wireFromSegment(mesh, i)
@@ -568,7 +581,7 @@ def removeShape(objs,mark=True):
             if dims:
                 name = obj.Name
                 tp = Draft.getType(obj)
-                print tp
+                print(tp)
                 if tp == "Structure":
                     FreeCAD.ActiveDocument.removeObject(name)
                     import ArchStructure
@@ -694,7 +707,7 @@ def pruneIncluded(objectslist,strict=False):
     for obj in objectslist:
         toplevel = True
         if obj.isDerivedFrom("Part::Feature"):
-            if not (Draft.getType(obj) in ["Window","Clone","Pipe"]):
+            if not (Draft.getType(obj) in ["Window","Clone","Pipe","Rebar"]):
                 for parent in obj.InList:
                     if parent.isDerivedFrom("Part::Feature") and not (Draft.getType(parent) in ["Facebinder"]):
                         if not parent.isDerivedFrom("Part::Part2DObject"):
@@ -887,7 +900,7 @@ def makeCompoundFromSelected(objects=None):
         Part.show(c)
 
 
-def cleanArchSplitter(objets=None):
+def cleanArchSplitter(objects=None):
     """cleanArchSplitter([objects]): removes the splitters from the base shapes
     of the given Arch objects or selected Arch objects if objects is None"""
     import FreeCAD,FreeCADGui
@@ -899,7 +912,7 @@ def cleanArchSplitter(objets=None):
         if obj.isDerivedFrom("Part::Feature"):
             if hasattr(obj,"Base"):
                 if obj.Base:
-                    print "Attempting to clean splitters from ",obj.Label
+                    print("Attempting to clean splitters from ", obj.Label)
                     if obj.Base.isDerivedFrom("Part::Feature"):
                         if not obj.Base.Shape.isNull():
                             obj.Base.Shape = obj.Base.Shape.removeSplitter()
@@ -920,31 +933,31 @@ def rebuildArchShape(objects=None):
             if hasattr(obj,"Base"):
                 if obj.Base:
                     try:
-                        print "Attempting to rebuild ",obj.Label
+                        print("Attempting to rebuild ", obj.Label)
                         if obj.Base.isDerivedFrom("Part::Feature"):
                             if not obj.Base.Shape.isNull():
                                 faces = []
                                 for f in obj.Base.Shape.Faces:
                                     f2 = Part.Face(f.Wires)
-                                    #print "rebuilt face: isValid is ",f2.isValid()
+                                    #print("rebuilt face: isValid is ", f2.isValid())
                                     faces.append(f2)
                                 if faces:
                                     shell = Part.Shell(faces)
                                     if shell:
-                                        #print "rebuilt shell: isValid is ",shell.isValid()
+                                        #print("rebuilt shell: isValid is ", shell.isValid())
                                         solid = Part.Solid(shell)
                                         if solid:
                                             if not solid.isValid():
                                                 solid.sewShape()
                                                 solid = Part.Solid(solid)
-                                            #print "rebuilt solid: isValid is ",solid.isValid()
+                                            #print("rebuilt solid: isValid is ",solid.isValid())
                                             if solid.isValid():
                                                 obj.Base.Shape = solid
                                                 success = True
                     except:
                         pass
         if not success:
-            print "Failed to rebuild a valid solid for object ",obj.Name
+            print ("Failed to rebuild a valid solid for object ",obj.Name)
     FreeCAD.ActiveDocument.recompute()
 
 
@@ -955,7 +968,7 @@ def getExtrusionData(shape):
         return None
     if not shape.Solids:
         return None
-    if len(shape.Faces) < 5:
+    if len(shape.Faces) < 3:
         return None
     # build faces list with normals
     faces = []
@@ -1277,11 +1290,39 @@ class _CommandComponent:
         if sel:
             FreeCAD.ActiveDocument.openTransaction(translate("Arch","Create Component"))
             FreeCADGui.addModule("Arch")
+            FreeCADGui.addModule("Draft")
             FreeCADGui.Control.closeDialog()
             for o in sel:
-                FreeCADGui.doCommand("Arch.makeComponent(FreeCAD.ActiveDocument."+o.Name+")")
+                FreeCADGui.doCommand("obj = Arch.makeComponent(FreeCAD.ActiveDocument."+o.Name+")")
+                FreeCADGui.doCommand("Draft.autogroup(obj)")
             FreeCAD.ActiveDocument.commitTransaction()
             FreeCAD.ActiveDocument.recompute()
+
+
+class _CommandCloneComponent:
+    "the Arch Clone Component command definition"
+    def GetResources(self):
+        return {'Pixmap'  : 'Arch_Component_Clone',
+                'MenuText': QtCore.QT_TRANSLATE_NOOP("Arch_CloneComponent","Clone component"),
+                'Accel': "C, C",
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("Arch_CloneComponent","Clones an object as an undefined architectural component")}
+
+    def IsActive(self):
+        return not FreeCAD.ActiveDocument is None
+
+    def Activated(self):
+        sel = FreeCADGui.Selection.getSelection()
+        if sel:
+            FreeCAD.ActiveDocument.openTransaction(translate("Arch","Create Component"))
+            FreeCADGui.addModule("Arch")
+            FreeCADGui.addModule("Draft")
+            FreeCADGui.Control.closeDialog()
+            for o in sel:
+                FreeCADGui.doCommand("obj = Arch.cloneComponent(FreeCAD.ActiveDocument."+o.Name+")")
+                FreeCADGui.doCommand("Draft.autogroup(obj)")
+            FreeCAD.ActiveDocument.commitTransaction()
+            FreeCAD.ActiveDocument.recompute()
+
 
 def makeIfcSpreadsheet(archobj=None):
     ifc_container = None
@@ -1371,5 +1412,6 @@ if FreeCAD.GuiUp:
     FreeCADGui.addCommand('Arch_Survey',_CommandSurvey())
     FreeCADGui.addCommand('Arch_ToggleIfcBrepFlag',_ToggleIfcBrepFlag())
     FreeCADGui.addCommand('Arch_Component',_CommandComponent())
+    FreeCADGui.addCommand('Arch_CloneComponent',_CommandCloneComponent())
     FreeCADGui.addCommand('Arch_IfcSpreadsheet',_CommandIfcSpreadsheet())
     FreeCADGui.addCommand('Arch_ToggleSubs',_ToggleSubs())

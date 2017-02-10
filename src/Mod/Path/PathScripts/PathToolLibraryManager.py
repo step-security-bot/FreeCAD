@@ -22,6 +22,7 @@
 # *                                                                         *
 # ***************************************************************************
 
+from __future__ import print_function
 import FreeCAD
 import xml.sax
 import FreeCADGui
@@ -139,7 +140,7 @@ class ToolLibraryManager():
     '''
 
     def __init__(self):
-        self.ToolLibrary = []
+        # self.ToolLibrary = []
         self.prefs = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Path")
         return
 
@@ -190,6 +191,23 @@ class ToolLibraryManager():
         headers = ["","Tool Num.","Name","Tool Type","Material","Diameter","Length Offset","Flat Radius","Corner Radius","Cutting Edge Angle","Cutting Edge Height"]
         model = QtGui.QStandardItemModel()
         model.setHorizontalHeaderLabels(headers)
+
+        def unitconv(ivalue):
+            parms = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Units")
+            digits = parms.GetContents()[1][2] #get user's number of digits of precision
+            if parms.GetContents()[0][2]==0:
+                suffix = 'mm'
+                conversion = 1.0
+            elif parms.GetContents()[0][2]==3:
+                suffix = 'in'
+                conversion = 25.4
+            else:
+                suffix = ''
+            val = FreeCAD.Units.parseQuantity(str(round(ivalue/conversion,digits))+suffix)
+            displayed_val = val.UserString #just the displayed value-not the internal one
+
+            return displayed_val
+
         if tt:
             if len(tt.Tools) == 0:
                 tooldata.append([])
@@ -201,12 +219,12 @@ class ToolLibraryManager():
                 itemName =  QtGui.QStandardItem(t.Name)
                 itemToolType =  QtGui.QStandardItem(t.ToolType)
                 itemMaterial =  QtGui.QStandardItem(t.Material)
-                itemDiameter =  QtGui.QStandardItem(str(t.Diameter))
-                itemLengthOffset =  QtGui.QStandardItem(str(t.LengthOffset))
-                itemFlatRadius =  QtGui.QStandardItem(str(t.FlatRadius))
-                itmCornerRadius =  QtGui.QStandardItem(str(t.CornerRadius))
+                itemDiameter =  QtGui.QStandardItem(unitconv(t.Diameter))
+                itemLengthOffset =  QtGui.QStandardItem(unitconv(t.LengthOffset))
+                itemFlatRadius =  QtGui.QStandardItem(unitconv(t.FlatRadius))
+                itmCornerRadius =  QtGui.QStandardItem(unitconv(t.CornerRadius))
                 itemCuttingEdgeAngle =  QtGui.QStandardItem(str(t.CuttingEdgeAngle))
-                itemCuttingEdgeHeight =  QtGui.QStandardItem(str(t.CuttingEdgeHeight))
+                itemCuttingEdgeHeight =  QtGui.QStandardItem(unitconv(t.CuttingEdgeHeight))
 
                 row = [itemcheck, itemNumber, itemName, itemToolType, itemMaterial, itemDiameter, itemLengthOffset, itemFlatRadius, itmCornerRadius, itemCuttingEdgeAngle, itemCuttingEdgeHeight]
                 model.appendRow(row)
@@ -222,33 +240,41 @@ class ToolLibraryManager():
             Handler = HeeksTooltableHandler()
         else:
             Handler = FreeCADTooltableHandler()
-        parser.setContentHandler(Handler)
-        parser.parse(str(filename[0]))
-        if not Handler.tooltable:
-            return None
 
-        ht = Handler.tooltable
-        tt = self._findList(listname)
-        for t in ht.Tools:
-            newt = ht.getTool(t).copy()
-            tt.addTools(newt)
-        if listname == "<Main>":
-            self.saveMainLibrary(tt)
-        return True
+        try:
+            parser.setContentHandler(Handler)
+            parser.parse(unicode(filename[0]))
+            if not Handler.tooltable:
+                return None
+
+            ht = Handler.tooltable
+            tt = self._findList(listname)
+            for t in ht.Tools:
+                newt = ht.getTool(t).copy()
+                tt.addTools(newt)
+            if listname == "<Main>":
+                self.saveMainLibrary(tt)
+            return True
+        except Exception as e:
+            print("could not parse file", e)
 
     def write(self, filename, listname):
         "exports the tooltable to a file"
         tt = self._findList(listname)
         if tt:
-            fil = open(str(filename[0]), "wb")
-            fil.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            fil.write(tt.Content)
-            fil.close()
-            print "Written ", filename[0]
+            try:
+                file = open(unicode(filename[0]), "wb")
+                file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+                file.write(tt.Content)
+                file.close()
+                print("Written ", unicode(filename[0]))
+
+            except Exception as e:
+                print("Could not write file:", e)
 
     def addnew(self, listname, tool, position = None):
         "adds a new tool at the end of the table"
-        print listname, tool, position
+        print(listname, tool, position)
         tt = self._findList(listname)
         if position is None:
             tt.addTools(tool)
@@ -311,20 +337,20 @@ class ToolLibraryManager():
             self.saveMainLibrary(tt)
         return True
 
-    def createToolController(self, job, tool):
-        pass
+    # def createToolController(self, job, tool):
+    #     pass
 
-    def exportListHeeks(self, tooltable):
-        '''exports one or more Lists as a HeeksCNC tooltable'''
-        pass
+    # def exportListHeeks(self, tooltable):
+    #     '''exports one or more Lists as a HeeksCNC tooltable'''
+    #     pass
 
-    def exportListLinuxCNC(self, tooltable):
-        '''exports one or more Lists as a LinuxCNC tooltable'''
-        pass
+    # def exportListLinuxCNC(self, tooltable):
+    #     '''exports one or more Lists as a LinuxCNC tooltable'''
+    #     pass
 
-    def exportListXML(self, tooltable):
-        '''exports one or more Lists as an XML file'''
-        pass
+    # def exportListXML(self, tooltable):
+    #     '''exports one or more Lists as an XML file'''
+    #     pass
 
 class EditorPanel():
     def __init__(self):
@@ -356,7 +382,6 @@ class EditorPanel():
         pass
 
     def getType(self, tooltype):
-        print("tooltype: ", tooltype)
         "gets a combobox index number for a given type or viceversa"
         toolslist = ["Drill", "CenterDrill", "CounterSink", "CounterBore",
                      "Reamer", "Tap", "EndMill", "SlotCutter", "BallEndMill",
@@ -389,20 +414,21 @@ class EditorPanel():
 
     def addTool(self):
         t = Path.Tool()
-        print (t)
+        print("adding a new tool")
         editform = FreeCADGui.PySideUic.loadUi(":/panels/ToolEdit.ui")
+
         r = editform.exec_()
         if r:
             if editform.NameField.text():
-                t.Name = str(editform.NameField.text())
+                t.Name = str(editform.NameField.text()) #FIXME: not unicode safe!
             t.ToolType = self.getType(editform.TypeField.currentIndex())
             t.Material = self.getMaterial(editform.MaterialField.currentIndex())
-            t.Diameter = editform.DiameterField.value()
-            t.LengthOffset = editform.LengthOffsetField.value()
-            t.FlatRadius = editform.FlatRadiusField.value()
-            t.CornerRadius = editform.CornerRadiusField.value()
-            t.CuttingEdgeAngle = editform.CuttingEdgeAngleField.value()
-            t.CuttingEdgeHeight = editform.CuttingEdgeHeightField.value()
+            t.Diameter = FreeCAD.Units.parseQuantity(editform.DiameterField.text())
+            t.LengthOffset = FreeCAD.Units.parseQuantity(editform.LengthOffsetField.text())
+            t.FlatRadius = FreeCAD.Units.parseQuantity(editform.FlatRadiusField.text())
+            t.CornerRadius = FreeCAD.Units.parseQuantity(editform.CornerRadiusField.text())
+            t.CuttingEdgeAngle = FreeCAD.Units.Quantity(editform.CuttingEdgeAngleField.text())
+            t.CuttingEdgeHeight = FreeCAD.Units.parseQuantity(editform.CuttingEdgeHeightField.text())
 
             listname = self.form.listView.selectedIndexes()[0].data()
             if self.TLM.addnew(listname, t) is True:
@@ -463,34 +489,33 @@ class EditorPanel():
         editform.NameField.setText(tool.Name)
         editform.TypeField.setCurrentIndex(self.getType(tool.ToolType))
         editform.MaterialField.setCurrentIndex(self.getMaterial(tool.Material))
-        editform.DiameterField.setValue(tool.Diameter)
-        editform.LengthOffsetField.setValue(tool.LengthOffset)
-        editform.FlatRadiusField.setValue(tool.FlatRadius)
-        editform.CornerRadiusField.setValue(tool.CornerRadius)
-        editform.CuttingEdgeAngleField.setValue(tool.CuttingEdgeAngle)
-        editform.CuttingEdgeHeightField.setValue(tool.CuttingEdgeHeight)
+        editform.DiameterField.setText(FreeCAD.Units.Quantity(tool.Diameter, FreeCAD.Units.Length).UserString)
+        editform.LengthOffsetField.setText(FreeCAD.Units.Quantity(tool.LengthOffset, FreeCAD.Units.Length).UserString)
+        editform.FlatRadiusField.setText(FreeCAD.Units.Quantity(tool.FlatRadius, FreeCAD.Units.Length).UserString)
+        editform.CornerRadiusField.setText(FreeCAD.Units.Quantity(tool.CornerRadius, FreeCAD.Units.Length).UserString)
+        editform.CuttingEdgeAngleField.setText(FreeCAD.Units.Quantity(tool.CuttingEdgeAngle, FreeCAD.Units.Angle).UserString)
+        editform.CuttingEdgeHeightField.setText(FreeCAD.Units.Quantity(tool.CuttingEdgeHeight, FreeCAD.Units.Length).UserString)
 
         r = editform.exec_()
         if r:
             if editform.NameField.text():
-                tool.Name = str(editform.NameField.text())
+                tool.Name = str(editform.NameField.text()) #FIXME: not unicode safe!
             tool.ToolType = self.getType(editform.TypeField.currentIndex())
             tool.Material = self.getMaterial(editform.MaterialField.currentIndex())
-            tool.Diameter = editform.DiameterField.value()
-            tool.LengthOffset = editform.LengthOffsetField.value()
-            tool.FlatRadius = editform.FlatRadiusField.value()
-            tool.CornerRadius = editform.CornerRadiusField.value()
-            tool.CuttingEdgeAngle = editform.CuttingEdgeAngleField.value()
-            tool.CuttingEdgeHeight = editform.CuttingEdgeHeightField.value()
+            tool.Diameter = FreeCAD.Units.parseQuantity(editform.DiameterField.text())
+            tool.LengthOffset = FreeCAD.Units.parseQuantity(editform.LengthOffsetField.text())
+            tool.FlatRadius = FreeCAD.Units.parseQuantity(editform.FlatRadiusField.text())
+            tool.CornerRadius = FreeCAD.Units.parseQuantity(editform.CornerRadiusField.text())
+            tool.CuttingEdgeAngle = FreeCAD.Units.Quantity(editform.CuttingEdgeAngleField.text())
+            tool.CuttingEdgeHeight = FreeCAD.Units.parseQuantity(editform.CuttingEdgeHeightField.text())
 
             if self.TLM.updateTool(listname, toolnum, tool) is True:
                 self.loadTable(self.form.listView.selectedIndexes()[0])
 
     def importFile(self):
         "imports a tooltable from a file"
-        filename = QtGui.QFileDialog.getOpenFileName(self.form, _translate(
-                "TooltableEditor", "Open tooltable", None), None, _translate("TooltableEditor", "Tooltable XML (*.xml);;HeeksCAD tooltable (*.tooltable)", None))
-        if filename:
+        filename = QtGui.QFileDialog.getOpenFileName(self.form, _translate( "TooltableEditor", "Open tooltable", None), None, _translate("TooltableEditor", "Tooltable XML (*.xml);;HeeksCAD tooltable (*.tooltable)", None))
+        if filename[0]:
             listname = self.form.listView.selectedIndexes()[0].data()
             if self.TLM.read(filename, listname):
                 self.loadTable(self.form.listView.selectedIndexes()[0])
@@ -500,7 +525,7 @@ class EditorPanel():
         "imports a tooltable from a file"
         filename = QtGui.QFileDialog.getSaveFileName(self.form, _translate("TooltableEditor", "Save tooltable", None), None, _translate("TooltableEditor", "Tooltable XML (*.xml)", None))
 
-        if filename:
+        if filename[0]:
             listname = self.form.listView.selectedIndexes()[0].data()
             self.TLM.write(filename, listname)
 

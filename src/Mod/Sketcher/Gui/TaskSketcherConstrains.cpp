@@ -102,6 +102,12 @@ public:
 
         const Sketcher::Constraint * constraint = sketch->Constraints[ConstraintNbr];
 
+        // it can happen that the geometry of the sketch is tmp. invalid and thus
+        // the index operator returns null.
+        if (!constraint) {
+            return QVariant();
+        }
+
         if (role == Qt::EditRole) {
             if (value.isValid())
                 return value;
@@ -393,7 +399,7 @@ void ConstraintView::contextMenuEvent (QContextMenuEvent* event)
     CONTEXT_ITEM("Sketcher_SelectElementsAssociatedWithConstraints","Select Elements","Sketcher_SelectElementsAssociatedWithConstraints",doSelectConstraints,true)
 
     QAction* rename = menu.addAction(tr("Rename"), this, SLOT(renameCurrentItem())
-#ifndef Q_WS_MAC // on Mac F2 doesn't seem to trigger an edit signal
+#ifndef Q_OS_MAC // on Mac F2 doesn't seem to trigger an edit signal
         ,QKeySequence(Qt::Key_F2)
 #endif
         );

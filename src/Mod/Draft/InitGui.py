@@ -76,10 +76,10 @@ class DraftWorkbench (Workbench):
                         "Draft_Trimex", "Draft_Upgrade", "Draft_Downgrade", "Draft_Scale",
                         "Draft_Edit","Draft_WireToBSpline","Draft_AddPoint",
                         "Draft_DelPoint","Draft_Shape2DView","Draft_Draft2Sketch","Draft_Array",
-                        "Draft_PathArray","Draft_Clone","Draft_Drawing","Draft_Mirror"]
+                        "Draft_PathArray","Draft_Clone","Draft_Drawing","Draft_Mirror","Draft_Stretch"]
         self.treecmdList = ["Draft_ApplyStyle","Draft_ToggleDisplayMode","Draft_AddToGroup",
                             "Draft_SelectGroup","Draft_SelectPlane",
-                            "Draft_ShowSnapBar","Draft_ToggleGrid"]
+                            "Draft_ShowSnapBar","Draft_ToggleGrid","Draft_AutoGroup"]
         self.lineList = ["Draft_UndoLine","Draft_FinishLine","Draft_CloseLine"]
         self.utils = ["Draft_VisGroup","Draft_Heal","Draft_FlipDimension",
                       "Draft_ToggleConstructionMode","Draft_ToggleContinueMode","Draft_Edit",
@@ -91,10 +91,10 @@ class DraftWorkbench (Workbench):
                          'Draft_Snap_Dimensions','Draft_Snap_WorkingPlane']
         self.appendToolbar(QT_TRANSLATE_NOOP("Workbench","Draft creation tools"),self.cmdList)
         self.appendToolbar(QT_TRANSLATE_NOOP("Workbench","Draft modification tools"),self.modList)
-        self.appendMenu(translate("draft","&Draft"),self.cmdList+self.modList)
-        self.appendMenu([translate("draft","&Draft"),translate("draft","Utilities")],self.utils+self.treecmdList)
-        self.appendMenu([translate("draft","&Draft"),translate("draft","Wire tools")],self.lineList)
-        self.appendMenu([translate("draft","&Draft"),translate("draft","Snapping")],self.snapList)
+        self.appendMenu(QT_TRANSLATE_NOOP("draft","&Draft"),self.cmdList+self.modList)
+        self.appendMenu([QT_TRANSLATE_NOOP("draft","&Draft"),QT_TRANSLATE_NOOP("draft","Utilities")],self.utils+self.treecmdList)
+        self.appendMenu([QT_TRANSLATE_NOOP("draft","&Draft"),QT_TRANSLATE_NOOP("draft","Wire tools")],self.lineList)
+        self.appendMenu([QT_TRANSLATE_NOOP("draft","&Draft"),QT_TRANSLATE_NOOP("draft","Snapping")],self.snapList)
         if hasattr(FreeCADGui,"draftToolBar"):
             if not hasattr(FreeCADGui.draftToolBar,"loadedPreferences"):
                 FreeCADGui.addPreferencePage(":/ui/preferences-draft.ui","Draft")

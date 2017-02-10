@@ -15,7 +15,6 @@ include_directories(
     ${EIGEN3_INCLUDE_DIR}
     ${PYTHON_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIR}
-    ${QT_INCLUDE_DIR}
     ${XercesC_INCLUDE_DIRS}
 )
 link_directories(${OCC_LIBRARY_DIR})
@@ -23,7 +22,7 @@ link_directories(${OCC_LIBRARY_DIR})
 set(Path_LIBS
 #   Robot
     Part
-    ${QT_QTCORE_LIBRARY}
+    area-native
     FreeCADApp
 )
 
@@ -32,6 +31,8 @@ generate_from_xml(PathPy)
 generate_from_xml(ToolPy)
 generate_from_xml(TooltablePy)
 generate_from_xml(FeaturePathCompoundPy)
+generate_from_xml(AreaPy)
+generate_from_xml(FeatureAreaPy)
 
 SET(Python_SRCS
     CommandPy.xml
@@ -43,6 +44,10 @@ SET(Python_SRCS
     TooltablePyImp.cpp
     FeaturePathCompoundPy.xml
     FeaturePathCompoundPyImp.cpp
+    AreaPy.xml
+    AreaPyImp.cpp
+    FeatureAreaPy.xml
+    FeatureAreaPyImp.cpp
 )
 
 SET(Mod_SRCS
@@ -69,6 +74,12 @@ SET(Path_SRCS
     FeaturePathCompound.h
     FeaturePathShape.cpp
     FeaturePathShape.h
+    Area.cpp
+    Area.h
+    AreaParams.h
+    ParamsHelper.h
+    FeatureArea.cpp
+    FeatureArea.h
     ${Mod_SRCS}
     ${Python_SRCS}
 )

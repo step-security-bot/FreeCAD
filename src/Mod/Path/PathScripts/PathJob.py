@@ -28,8 +28,6 @@ from PySide import QtCore, QtGui
 from PathScripts.PathPostProcessor import PostProcessor
 from PathScripts.PathPreferences import PathPreferences
 import Draft
-import os
-import glob
 
 
 FreeCADGui = None
@@ -58,8 +56,13 @@ class ObjectPathJob:
 
         obj.addProperty("App::PropertyString", "Description", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property","An optional description for this job"))
         obj.addProperty("App::PropertyEnumeration", "PostProcessor", "Output", QtCore.QT_TRANSLATE_NOOP("App::Property","Select the Post Processor"))
-        obj.PostProcessor = PathPreferences.allEnabledPostProcessors([''])
-        obj.PostProcessor = PathPreferences.defaultPostProcessor()
+        obj.PostProcessor = postProcessors = PathPreferences.allEnabledPostProcessors()
+        defaultPostProcessor = PathPreferences.defaultPostProcessor()
+        # Check to see if default post processor hasn't been 'lost' (This can happen when Macro dir has changed)
+        if defaultPostProcessor in postProcessors:
+            obj.PostProcessor = defaultPostProcessor
+        else:
+            obj.PostProcessor = postProcessors[0]
         obj.addProperty("App::PropertyString", "PostProcessorArgs", "Output", QtCore.QT_TRANSLATE_NOOP("App::Property", "Arguments for the Post Processor (specific to the script)"))
         obj.PostProcessorArgs = PathPreferences.defaultPostProcessorArgs()
         obj.addProperty("App::PropertyString",    "MachineName", "Output", QtCore.QT_TRANSLATE_NOOP("App::Property","Name of the Machine that will use the CNC program"))
@@ -331,11 +334,8 @@ class TaskPanel:
         else:
             for o in FreeCADGui.Selection.getCompleteSelection():
                 baseindex = self.form.cboBaseObject.findText(o.Name, QtCore.Qt.MatchFixedString)
-        print baseindex
         if baseindex >= 0:
-            self.form.cboBaseObject.blockSignals(True)
             self.form.cboBaseObject.setCurrentIndex(baseindex)
-            self.form.cboBaseObject.blockSignals(False)
 
 
     def open(self):

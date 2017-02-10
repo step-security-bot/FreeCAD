@@ -97,7 +97,7 @@ def getCutShapes(objs,section,showHidden):
                 if o.Shape.isValid():
                     shapes.extend(o.Shape.Solids)
                 else:
-                    print section.Label,": Skipping invalid object:",o.Label
+                    print(section.Label,": Skipping invalid object:",o.Label)
             else:
                 shapes.append(o.Shape)
     cutface,cutvolume,invcutvolume = ArchCommands.getCutVolume(section.Shape.copy(),shapes)
@@ -137,7 +137,7 @@ def getSVG(section,allOn=False,renderMode="Wireframe",showHidden=False,showFill=
     If showFill is True, the cut areas get filled with a pattern"""
 
     if not section.Objects:
-        return
+        return ""
     import Part,DraftGeomUtils
     p = FreeCAD.Placement(section.Placement)
     direction = p.Rotation.multVec(FreeCAD.Vector(0,0,1))
@@ -188,7 +188,7 @@ def getSVG(section,allOn=False,renderMode="Wireframe",showHidden=False,showFill=
         if showHidden:
             svg += render.getHiddenSVG(linewidth="LWPlaceholder")
         svg += '</g>\n'
-        # print render.info()
+        # print(render.info())
 
     else:
         # render using the Drawing module
@@ -589,7 +589,11 @@ class _ArchDrawingView:
     def execute(self, obj):
         if hasattr(obj,"Source"):
             if obj.Source:
-                svgbody = getSVG(obj.Source,obj.AlwaysOn,obj.RenderingMode,obj.ShowCut,obj.ShowFill,obj.Scale,obj.LineWidth,obj.FontSize)
+                if hasattr(obj,"AlwaysOn"):
+                    a = obj.AlwaysOn
+                else:
+                    a = False
+                svgbody = getSVG(obj.Source,a,obj.RenderingMode,obj.ShowCut,obj.ShowFill,obj.Scale,obj.LineWidth,obj.FontSize)
                 if svgbody:
                     result = '<g id="' + obj.Name + '"'
                     result += ' transform="'
@@ -618,7 +622,7 @@ class _ArchDrawingView:
     def getDXF(self,obj):
         "returns a DXF representation of the view"
         if obj.RenderingMode == "Solid":
-            print "Unable to get DXF from Solid mode: ",obj.Label
+            print("Unable to get DXF from Solid mode: ",obj.Label)
             return ""
         result = []
         import Drawing
@@ -722,10 +726,10 @@ class SectionPlaneTaskPanel:
         return True
 
     def retranslateUi(self, TaskPanel):
-        TaskPanel.setWindowTitle(QtGui.QApplication.translate("Arch", "Objects", None, QtGui.QApplication.UnicodeUTF8))
-        self.delButton.setText(QtGui.QApplication.translate("Arch", "Remove", None, QtGui.QApplication.UnicodeUTF8))
-        self.addButton.setText(QtGui.QApplication.translate("Arch", "Add", None, QtGui.QApplication.UnicodeUTF8))
-        self.title.setText(QtGui.QApplication.translate("Arch", "Objects seen by this section plane", None, QtGui.QApplication.UnicodeUTF8))
+        TaskPanel.setWindowTitle(QtGui.QApplication.translate("Arch", "Objects", None))
+        self.delButton.setText(QtGui.QApplication.translate("Arch", "Remove", None))
+        self.addButton.setText(QtGui.QApplication.translate("Arch", "Add", None))
+        self.title.setText(QtGui.QApplication.translate("Arch", "Objects seen by this section plane", None))
 
 if FreeCAD.GuiUp:
     FreeCADGui.addCommand('Arch_SectionPlane',_CommandSectionPlane())

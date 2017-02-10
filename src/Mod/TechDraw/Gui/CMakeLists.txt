@@ -11,8 +11,6 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     ${COIN3D_INCLUDE_DIRS}
     ${PYTHON_INCLUDE_DIRS}
-    ${QT_INCLUDE_DIR}
-    ${QT_USE_QTXML}
     ${OCC_INCLUDE_DIR}
     ${ZLIB_INCLUDE_DIR}
     ${XercesC_INCLUDE_DIRS}
@@ -38,12 +36,17 @@ set(TechDrawGui_MOC_HDRS
     TaskLinkDim.h
     DlgTemplateField.h
     TaskSectionView.h
+    TaskGeomHatch.h
 )
 
 fc_wrap_cpp(TechDrawGui_MOC_SRCS ${TechDrawGui_MOC_HDRS})
 SOURCE_GROUP("Moc" FILES ${TechDrawGui_MOC_SRCS})
 
-qt4_add_resources(TechDrawGui_SRCS Resources/TechDraw.qrc)
+if(BUILD_QT5)
+    qt5_add_resources(TechDrawGui_SRCS Resources/TechDraw.qrc)
+else()
+    qt4_add_resources(TechDrawGui_SRCS Resources/TechDraw.qrc)
+endif()
 
 set(TechDrawGui_UIC_SRCS
     DlgPrefsTechDraw.ui
@@ -52,9 +55,14 @@ set(TechDrawGui_UIC_SRCS
     TaskLinkDim.ui
     DlgTemplateField.ui
     TaskSectionView.ui
+    TaskGeomHatch.ui
 )
 
-qt4_wrap_ui(TechDrawGui_UIC_HDRS ${TechDrawGui_UIC_SRCS})
+if(BUILD_QT5)
+    qt5_wrap_ui(TechDrawGui_UIC_HDRS ${TechDrawGui_UIC_SRCS})
+else()
+    qt4_wrap_ui(TechDrawGui_UIC_HDRS ${TechDrawGui_UIC_SRCS})
+endif()
 
 SET(TechDrawGui_SRCS
     ${TechDrawGui_SRCS}
@@ -86,8 +94,13 @@ SET(TechDrawGui_SRCS
     TaskSectionView.ui
     TaskSectionView.cpp
     TaskSectionView.h
+    TaskGeomHatch.ui
+    TaskGeomHatch.cpp
+    TaskGeomHatch.h
     DrawGuiUtil.cpp
     DrawGuiUtil.h
+    Rez.cpp
+    Rez.h
 )
 SET(TechDrawGuiView_SRCS
     MDIViewPage.cpp
@@ -191,6 +204,8 @@ SET(TechDrawGuiViewProvider_SRCS
     ViewProviderViewClip.h
     ViewProviderHatch.cpp
     ViewProviderHatch.h
+    ViewProviderGeomHatch.cpp
+    ViewProviderGeomHatch.h
     ViewProviderImage.cpp
     ViewProviderImage.h
 )
@@ -203,6 +218,7 @@ SET(TechDrawGuiTaskDlgs_SRCS
     TaskProjGroup.ui
     TaskLinkDim.ui
     TaskSectionView.ui
+    TaskGeomHatch.ui
 )
 SOURCE_GROUP("TaskDialogs" FILES ${TechDrawGuiTaskDlgs_SRCS})
 

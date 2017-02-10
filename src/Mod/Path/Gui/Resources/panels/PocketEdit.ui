@@ -10,6 +10,12 @@
     <height>525</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="minimumSize">
    <size>
     <width>0</width>
@@ -34,7 +40,7 @@
         <x>0</x>
         <y>0</y>
         <width>334</width>
-        <height>329</height>
+        <height>343</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -111,8 +117,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>334</width>
-        <height>329</height>
+        <width>114</width>
+        <height>108</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -165,23 +171,20 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QDoubleSpinBox" name="stepDown">
-         <property name="decimals">
-          <number>3</number>
-         </property>
-         <property name="minimum">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="1">
         <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Step Down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="Gui::InputField" name="stepDown">
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="unit" stdset="0">
+          <string notr="true">mm</string>
          </property>
         </widget>
        </item>
@@ -192,8 +195,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>334</width>
-        <height>329</height>
+        <width>144</width>
+        <height>56</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -242,8 +245,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>334</width>
-        <height>329</height>
+        <width>94</width>
+        <height>24</height>
        </rect>
       </property>
       <attribute name="label">
@@ -256,8 +259,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>334</width>
-        <height>329</height>
+        <width>178</width>
+        <height>120</height>
        </rect>
       </property>
       <attribute name="label">
@@ -296,6 +299,9 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QFormLayout" name="formLayout_4">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::ExpandingFieldsGrow</enum>
+          </property>
           <item row="0" column="0" colspan="2">
            <widget class="QCheckBox" name="useZigZag">
             <property name="text">
@@ -310,13 +316,17 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QSpinBox" name="zigZagAngle"/>
-          </item>
           <item row="2" column="1">
            <widget class="QLabel" name="label_10">
             <property name="text">
              <string>ZigZag Angle</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="Gui::InputField" name="zigZagAngle">
+            <property name="unit" stdset="0">
+             <string notr="true"/>
             </property>
            </widget>
           </item>
@@ -331,7 +341,7 @@
         <x>0</x>
         <y>0</y>
         <width>334</width>
-        <height>329</height>
+        <height>343</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -406,20 +416,35 @@
          </layout>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
+       <item row="8" column="0" colspan="2">
         <widget class="QWidget" name="widget_4" native="true">
-         <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Material Allowance</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="extraOffset"/>
-          </item>
-         </layout>
+         <layout class="QGridLayout" name="gridLayout_6"/>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Material Allowance</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="Gui::InputField" name="extraOffset">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="unit" stdset="0">
+          <string notr="true">mm</string>
+         </property>
         </widget>
        </item>
       </layout>

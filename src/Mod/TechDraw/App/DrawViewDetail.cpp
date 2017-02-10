@@ -103,6 +103,7 @@ DrawViewDetail::DrawViewDetail()
     ADD_PROPERTY_TYPE(Reference ,("1"),dgroup,App::Prop_None,"An identifier for this detail");
 
     getParameters();
+    m_fudge = 1.1;
 }
 
 DrawViewDetail::~DrawViewDetail()
@@ -165,11 +166,10 @@ App::DocumentObjectExecReturn *DrawViewDetail::execute(void)
 
     Base::Vector3d anchor = AnchorPoint.getValue();    //this is a 2D point
     anchor = Base::Vector3d(anchor.x,anchor.y, 0.0);
-    double radiusFudge = 1.1;
-    double radius = Radius.getValue() * radiusFudge;
+    double radius = getFudgeRadius();
     Base::Vector3d dirDetail = dvp->Direction.getValue();
     double scale = Scale.getValue();
-    gp_Ax2 viewAxis = TechDrawGeometry::getViewAxis(Base::Vector3d(0.0,0.0,0.0), dirDetail, false);
+    gp_Ax2 viewAxis = getViewAxis(Base::Vector3d(0.0,0.0,0.0), dirDetail, false);
 
     Base::BoundBox3d bbxSource = partTopo.getBoundBox();
 
@@ -186,7 +186,8 @@ App::DocumentObjectExecReturn *DrawViewDetail::execute(void)
 
     //turn anchor(x,y,0) in projection plane(P) into displacement in 3D
     Base::Vector3d offsetCenter3D = DrawUtil::toR3(viewAxis, anchor);     //displacement in R3
-    if (DrawUtil::checkZParallel(dirDetail)) {
+    Base::Vector3d stdZ(0.0,0.0,1.0);
+    if (DrawUtil::checkParallel(dirDetail,stdZ)) {
         extentNear = extentNear + offsetCenter3D;
     } else {
         extentNear = extentNear - offsetCenter3D;
@@ -203,11 +204,11 @@ App::DocumentObjectExecReturn *DrawViewDetail::execute(void)
 
     BRepAlgoAPI_Common mkCommon(myShape,tool);
     if (!mkCommon.IsDone()) {
-        Base::Console().Message("TRACE - DVD::execute - mkCommon not done\n");
+        Base::Console().Log("DVD::execute - mkCommon not done\n");
         return new App::DocumentObjectExecReturn("DVD::execute - mkCommon not done");
     }
     if (mkCommon.Shape().IsNull()) {
-        Base::Console().Message("TRACE - DVD::execute - mkCommon.Shape is Null\n");
+        Base::Console().Log("DVD::execute - mkCommon.Shape is Null\n");
         return new App::DocumentObjectExecReturn("DVD::execute - mkCommon.Shape is Null");
     }
 
@@ -215,7 +216,7 @@ App::DocumentObjectExecReturn *DrawViewDetail::execute(void)
     TopExp_Explorer xp;
     xp.Init(mkCommon.Shape(),TopAbs_SOLID);
     if (!(xp.More() == Standard_True)) {
-        Base::Console().Message("TRACE - DVD::execute - mkCommon.Shape is not a solid!\n");
+        Base::Console().Log("DVD::execute - mkCommon.Shape is not a solid!\n");
     }
     TopoDS_Shape detail = mkCommon.Shape();
     Bnd_Box testBox;
@@ -239,7 +240,8 @@ App::DocumentObjectExecReturn *DrawViewDetail::execute(void)
         TopoDS_Shape mirroredShape = TechDrawGeometry::mirrorShape(detail,
                                                     inputCenter,
                                                     scale);
-        geometryObject = buildGeometryObject(mirroredShape,inputCenter);
+        gp_Ax2 viewAxis = getViewAxis(Base::Vector3d(inputCenter.X(),inputCenter.Y(),inputCenter.Z()),Direction.getValue());
+        geometryObject = buildGeometryObject(mirroredShape,viewAxis);
 
 #if MOD_TECHDRAW_HANDLE_FACES
     if (handleFaces()) {
@@ -263,6 +265,11 @@ App::DocumentObjectExecReturn *DrawViewDetail::execute(void)
 
 
     return App::DocumentObject::StdReturn;
+}
+
+double DrawViewDetail::getFudgeRadius()
+{
+    return Radius.getValue() * m_fudge;
 }
 
 void DrawViewDetail::getParameters()

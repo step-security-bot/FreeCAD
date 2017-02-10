@@ -53,6 +53,8 @@
 #include "MenuManager.h"
 #include "Application.h"
 #include "MainWindow.h"
+#include "View3DInventor.h"
+#include "View3DInventorViewer.h"
 
 using namespace Gui;
 
@@ -113,7 +115,11 @@ TreeWidget::TreeWidget(QWidget* parent)
     labels << tr("Labels & Attributes");
     this->setHeaderLabels(labels);
     // make sure to show a horizontal scrollbar if needed
+#if QT_VERSION >= 0x050000
+    this->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+#else
     this->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+#endif
     this->header()->setStretchLastSection(false);
 
     // Add the first main label
@@ -633,6 +639,14 @@ void TreeWidget::dropEvent(QDropEvent *event)
             if (parent && parent->type() == TreeWidget::ObjectType) {
                 Gui::ViewProvider* vpp = static_cast<DocumentObjectItem *>(parent)->object();
                 vpp->dragObject(obj);
+            }
+
+            std::list<MDIView*> baseViews = gui->getMDIViews();
+            for (MDIView* view : baseViews) {
+                View3DInventor *activeView = dynamic_cast<View3DInventor *>(view);
+                if (activeView && !activeView->getViewer()->hasViewProvider(vpc)) {
+                    activeView->getViewer()->addViewProvider(vpc);
+                }
             }
         }
         gui->commitCommand();
@@ -1510,7 +1524,10 @@ void DocumentObjectItem::displayStatusInfo()
     QString info = QString::fromLatin1(Obj->getStatusString());
     if ( Obj->mustExecute() == 1 )
         info += QString::fromLatin1(" (but must be executed)");
-    getMainWindow()->showMessage( info );
+    QString status = TreeWidget::tr("%1, Internal name: %2")
+            .arg(info)
+            .arg(QString::fromLatin1(Obj->getNameInDocument()));
+    getMainWindow()->showMessage(status);
 
     if (Obj->isError()) {
         QTreeWidget* tree = this->treeWidget();

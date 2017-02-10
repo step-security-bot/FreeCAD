@@ -37,9 +37,14 @@
 #include <Base/BoundBox.h>
 
 #include "DrawView.h"
-#include "DrawProjectSplit.h"
 
 class gp_Pnt;
+class gp_Pln;
+class gp_Ax2;
+//class TopoDS_Edge;
+//class TopoDS_Vertex;
+//class TopoDS_Wire;
+//class TopoDS_Shape;
 
 namespace TechDrawGeometry
 {
@@ -51,6 +56,10 @@ class Face;
 
 namespace TechDraw {
 class DrawHatch;
+class DrawGeomHatch;
+class DrawViewDimension;
+class DrawProjectSplit;
+class DrawViewSection;
 }
 
 namespace TechDraw
@@ -91,6 +100,8 @@ public:
 
 
     std::vector<TechDraw::DrawHatch*> getHatches(void) const;
+    std::vector<TechDraw::DrawGeomHatch*> getGeomHatches(void) const;
+    std::vector<TechDraw::DrawViewDimension*> getDimensions() const;
 
     //TODO: are there use-cases for Python access to TechDrawGeometry???
 
@@ -114,6 +125,9 @@ public:
     const Base::Vector3d& getWDir(void) const {return wDir;}                       //paperspace Z
     const Base::Vector3d& getCentroid(void) const {return shapeCentroid;}
     Base::Vector3d projectPoint(const Base::Vector3d& pt) const;
+    virtual gp_Ax2 getViewAxis(const Base::Vector3d& pt,
+                               const Base::Vector3d& direction,
+                               const bool flip=true) const;
 
     virtual short mustExecute() const;
 
@@ -132,17 +146,24 @@ public:
     }
     //return PyObject as DrawViewPartPy
     virtual PyObject *getPyObject(void);
+    bool isDeleting(void) { return nowDeleting; }
+    
+    gp_Pln getProjPlane(void) const;
+    virtual std::vector<TopoDS_Wire> getWireForFace(int idx) const;
+
 
 protected:
     TechDrawGeometry::GeometryObject *geometryObject;
     Base::BoundBox3d bbox;
 
     void onChanged(const App::Property* prop);
-    TechDrawGeometry::GeometryObject*  buildGeometryObject(TopoDS_Shape shape, gp_Pnt& center);
+    virtual void unsetupObject();
+
+    virtual TechDrawGeometry::GeometryObject*  buildGeometryObject(TopoDS_Shape shape, gp_Ax2 viewAxis);
     void extractFaces();
 
     //Projection parameter space
-    void saveParamSpace(const Base::Vector3d& direction);
+    virtual void saveParamSpace(const Base::Vector3d& direction, const Base::Vector3d& xAxis=Base::Vector3d(0.0,0.0,0.0));
     Base::Vector3d uDir;                       //paperspace X
     Base::Vector3d vDir;                       //paperspace Y
     Base::Vector3d wDir;                       //paperspace Z
@@ -153,6 +174,7 @@ protected:
     bool m_handleFaces;
 
 private:
+    bool nowDeleting;
 
 };
 

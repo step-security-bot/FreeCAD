@@ -270,38 +270,38 @@ std::string DrawUtil::formatVector(const Base::Vector3d& v)
 {
     std::string result;
     std::stringstream builder;
+    builder << std::fixed << std::setprecision(3) ;
     builder << " (" << v.x  << "," << v.y << "," << v.z << ") ";
+//    builder << " (" << setw(6) << v.x  << "," << setw(6) << v.y << "," << setw(6) << v.z << ") ";
     result = builder.str();
     return result;
 }
 
-//! compare 2 vectors for sorting purposes ( -1 -> v1<v2, 0 -> v1 == v2, 1 -> v1 > v2)
-int DrawUtil::vectorCompare(const Base::Vector3d& v1, const Base::Vector3d& v2)
+std::string DrawUtil::formatVector(const Base::Vector2d& v)
 {
-    int result = 0;
-    if (v1 == v2) {
-        return result;
-    }
-
-    if (v1.x < v2.x) {
-        result = -1;
-    } else if (DrawUtil::fpCompare(v1.x, v2.x)) {
-        if (v1.y < v2.y) {
-            result = -1;
-        } else if (DrawUtil::fpCompare(v1.y, v2.y)) {
-            if (v1.z < v2.z) {
-                result = -1;
-            } else {
-                result = 1;
-            }
-        } else {
-            result = 1;  //v2y > v1y
-        }
-    } else {
-        result = 1; //v1x > v2x
-    }
+    std::string result;
+    std::stringstream builder;
+    builder << std::fixed << std::setprecision(3) ;
+    builder << " (" << v.x  << "," << v.y << ") ";
+    result = builder.str();
     return result;
 }
+
+//! compare 2 vectors for sorting - true if v1 < v2
+bool DrawUtil::vectorLess(const Base::Vector3d& v1, const Base::Vector3d& v2)  
+{
+    bool result = false;
+    if ((v1 - v2).Length() > Precision::Confusion()) {      //ie v1 != v2
+        if (!DrawUtil::fpCompare(v1.x,v2.x)) {
+            result = v1.x < v2.x;
+        } else if (!DrawUtil::fpCompare(v1.y,v2.y)) {
+            result = v1.y < v2.y;
+        } else {
+            result = v1.z < v2.z;
+        }
+    }
+    return result;
+}  
 
 //!convert fromPoint in coordinate system fromSystem to reference coordinate system
 Base::Vector3d DrawUtil::toR3(const gp_Ax2 fromSystem, const Base::Vector3d fromPoint)
@@ -317,15 +317,80 @@ Base::Vector3d DrawUtil::toR3(const gp_Ax2 fromSystem, const Base::Vector3d from
     return toPoint;
 }
 
-//! check if direction is parallel to stdZ
-bool DrawUtil::checkZParallel(const Base::Vector3d direction)
+//! check if two vectors are parallel
+bool DrawUtil::checkParallel(const Base::Vector3d v1, Base::Vector3d v2)
 {
     bool result = false;
-    Base::Vector3d stdZ(0.0,0.0,1.0);
-    double dot = fabs(direction.Dot(stdZ));
-    double mag = direction.Length() * 1;   //stdZ.Length() == 1
+    double dot = fabs(v1.Dot(v2));
+    double mag = v1.Length() * v2.Length();
     if (DrawUtil::fpCompare(dot,mag)) {
         result = true;
+    }
+    return result;
+}
+
+//! rotate vector by angle radians around axis through org
+Base::Vector3d DrawUtil::vecRotate(Base::Vector3d vec,
+                                   double angle,
+                                   Base::Vector3d axis,
+                                   Base::Vector3d org)
+{
+    Base::Vector3d result;
+    Base::Matrix4D xForm;
+    xForm.rotLine(org,axis,angle);
+    result = xForm * (vec);
+    return result;
+}
+
+Base::Vector3d  DrawUtil::closestBasis(Base::Vector3d v)
+{
+    Base::Vector3d result(0.0,-1,0);
+    Base::Vector3d  stdX(1.0,0.0,0.0);
+    Base::Vector3d  stdY(0.0,1.0,0.0);
+    Base::Vector3d  stdZ(0.0,0.0,1.0);
+    Base::Vector3d  stdXr(-1.0,0.0,0.0);
+    Base::Vector3d  stdYr(0.0,-1.0,0.0);
+    Base::Vector3d  stdZr(0.0,0.0,-1.0);
+    double angleX,angleY,angleZ,angleXr,angleYr,angleZr, angleMin;
+    
+    //first check if already a basis
+    if (checkParallel(v,stdZ)) {
+        return v;
+    } else if (checkParallel(v,stdY)) {
+        return v;
+    } else if (checkParallel(v,stdX)) {
+        return v;
+    }
+    
+    //not a basis. find smallest angle with a basis.
+    angleX = stdX.GetAngle(v);
+    angleY = stdY.GetAngle(v);
+    angleZ = stdZ.GetAngle(v);
+    angleXr = stdXr.GetAngle(v);
+    angleYr = stdYr.GetAngle(v);
+    angleZr = stdZr.GetAngle(v);
+
+    angleMin = angleX;
+    result = stdX;
+    if (angleY < angleMin) {
+        angleMin = angleY;
+        result = stdY;
+    }
+    if (angleZ < angleMin) {
+        angleMin = angleZ;
+        result = stdZ;
+    }
+    if (angleXr < angleMin) {
+        angleMin = angleXr;
+        result = stdXr;
+    }
+    if (angleYr < angleMin) {
+        angleMin = angleYr;
+        result = stdYr;
+    }
+    if (angleZr < angleMin) {
+        angleMin = angleZr;
+        result = stdZr;
     }
     return result;
 }

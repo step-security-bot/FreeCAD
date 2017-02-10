@@ -46,11 +46,13 @@ void DlgPrefsTechDraw2Imp::saveSettings()
     cbShowUnits->onSave();
     dsbFontSize->onSave();
     colDimColor->onSave();
+    leDiameter->onSave();
     pcbMatting->onSave();
     pcbCenterStyle->onSave();
     colCenterLine->onSave();
     pcbSectionStyle->onSave();
     colSectionLine->onSave();
+    pcbArrow->onSave();
 }
 
 void DlgPrefsTechDraw2Imp::loadSettings()
@@ -58,11 +60,13 @@ void DlgPrefsTechDraw2Imp::loadSettings()
     cbShowUnits->onRestore();
     dsbFontSize->onRestore();
     colDimColor->onRestore();
+    leDiameter->onRestore();
     pcbMatting->onRestore();
     pcbCenterStyle->onRestore();
     colCenterLine->onRestore();
     pcbSectionStyle->onRestore();
     colSectionLine->onRestore();
+    pcbArrow->onRestore();
 }
 
 /**

@@ -147,6 +147,34 @@ using namespace Base;
 using namespace App;
 using namespace std;
 
+/** Observer that watches relabeled objects and make sure that the labels inside
+ * a document are unique.
+ * @note In the FreeCAD design it is explicitly allowed to have duplicate labels
+ * (i.e. the user visible text e.g. in the tree view) while the internal names
+ * are always guaranteed to be unique.
+ */
+class ObjectLabelObserver
+{
+public:
+    /// The one and only instance.
+    static ObjectLabelObserver* instance();
+    /// Destructs the sole instance.
+    static void destruct ();
+
+    /** Checks the new label of the object and relabel it if needed
+     * to make it unique document-wide
+     */
+    void slotRelabelObject(const App::DocumentObject&, const App::Property&);
+
+private:
+    static ObjectLabelObserver* _singleton;
+
+    ObjectLabelObserver();
+    ~ObjectLabelObserver();
+    const App::DocumentObject* current;
+    ParameterGrp::handle _hPGrp;
+};
+
 
 //==========================================================================
 // Application
@@ -159,7 +187,6 @@ Base::ConsoleObserverFile *Application::_pConsoleObserverFile =0;
 
 AppExport std::map<std::string,std::string> Application::mConfig;
 BaseExport extern PyObject* Base::BaseExceptionFreeCADError;
-
 
 //**************************************************************************
 // Construction and destruction
@@ -985,8 +1012,60 @@ static void freecadNewHandler ()
 }
 #endif
 
+#if defined(FC_OS_LINUX)
+#include <execinfo.h>
+#include <dlfcn.h>
+#include <cxxabi.h>
+
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <sstream>
+
+// This function produces a stack backtrace with demangled function & method names.
+void printBacktrace(size_t skip=0)
+{
+    void *callstack[128];
+    size_t nMaxFrames = sizeof(callstack) / sizeof(callstack[0]);
+    size_t nFrames = backtrace(callstack, nMaxFrames);
+    char **symbols = backtrace_symbols(callstack, nFrames);
+
+    for (size_t i = skip; i < nFrames; i++) {
+        char *demangled = NULL;
+        int status = -1;
+        Dl_info info;
+        if (dladdr(callstack[i], &info) && info.dli_sname && info.dli_fname) {
+            if (info.dli_sname[0] == '_') {
+                demangled = abi::__cxa_demangle(info.dli_sname, NULL, 0, &status);
+            }
+        }
+
+        std::stringstream str;
+        if (status == 0) {
+            void* offset = (void*)((char*)callstack[i] - (char*)info.dli_saddr);
+            str << "#" << (i-skip) << "  " << callstack[i] << " in " << demangled << " from " << info.dli_fname << "+" << offset << std::endl;
+            free(demangled);
+        }
+        else {
+            str << "#" << (i-skip) << "  " << symbols[i] << std::endl;
+        }
+
+        // cannot directly print to cerr when using --write-log
+        std::cerr << str.str();
+    }
+
+    free(symbols);
+}
+#endif
+
 void segmentation_fault_handler(int sig)
 {
+#if defined(FC_OS_LINUX)
+    std::cerr << "Program received signal SIGSEGV, Segmentation fault.\n";
+    printBacktrace(2);
+    exit(1);
+#endif
+
     switch (sig) {
         case SIGSEGV:
             std::cerr << "Illegal storage access..." << std::endl;
@@ -1051,12 +1130,14 @@ void Application::init(int argc, char ** argv)
 #endif
         // if an unexpected crash occurs we can install a handler function to
         // write some additional information
-#ifdef _MSC_VER // Microsoft compiler
+#if defined (_MSC_VER) // Microsoft compiler
         std::signal(SIGSEGV,segmentation_fault_handler);
         std::signal(SIGABRT,segmentation_fault_handler);
         std::set_terminate(my_terminate_handler);
         std::set_unexpected(unexpection_error_handler);
 //        _set_se_translator(my_trans_func);
+#elif defined(FC_OS_LINUX)
+        std::signal(SIGSEGV,segmentation_fault_handler);
 #endif
 
         initTypes();
@@ -1346,6 +1427,8 @@ void Application::initApplication(void)
     Console().Log("Run App init script\n");
     Interpreter().runString(Base::ScriptFactory().ProduceScript("CMakeVariables"));
     Interpreter().runString(Base::ScriptFactory().ProduceScript("FreeCADInit"));
+
+    ObjectLabelObserver::instance();
 }
 
 std::list<std::string> Application::getCmdLineFiles()
@@ -1677,7 +1760,7 @@ void Application::ParseOptions(int ac, char ** av)
     config.add_options()
     //("write-log,l", value<string>(), "write a log file")
     ("write-log,l", descr.c_str())
-    ("log-file", value<string>(), "Unlike to --write-log this allows to log to an arbitrary file")
+    ("log-file", value<string>(), "Unlike --write-log this allows logging to an arbitrary file")
     ("user-cfg,u", value<string>(),"User config file to load/save user settings")
     ("system-cfg,s", value<string>(),"Systen config file to load/save system settings")
     ("run-test,t",   value<string>()   ,"Test case - or 0 for all")
@@ -1713,9 +1796,9 @@ void Application::ParseOptions(int ac, char ** av)
     ("btn",        boost::program_options::value< string >(), "set the X-Window button color")
     ("name",       boost::program_options::value< string >(), "set the X-Window name")
     ("title",      boost::program_options::value< string >(), "set the X-Window title")
-    ("visual",     boost::program_options::value< string >(), "set the X-Window to color scema")
-    ("ncols",      boost::program_options::value< int    >(), "set the X-Window to color scema")
-    ("cmap",                                                  "set the X-Window to color scema")
+    ("visual",     boost::program_options::value< string >(), "set the X-Window to color scheme")
+    ("ncols",      boost::program_options::value< int    >(), "set the X-Window to color scheme")
+    ("cmap",                                                  "set the X-Window to color scheme")
 #if defined(FC_OS_MACOSX)
     ("psn",        boost::program_options::value< string >(), "process serial number")
 #endif
@@ -1745,6 +1828,9 @@ void Application::ParseOptions(int ac, char ** av)
             merge = true;
         }
         else if (strcmp(av[i],"-session") == 0) {
+            merge = true;
+        }
+        else if (strcmp(av[i],"-graphicssystem") == 0) {
             merge = true;
         }
     }
@@ -2261,3 +2347,80 @@ std::string Application::FindHomePath(const char* sCall)
 #else
 # error "std::string Application::FindHomePath(const char*) not implemented"
 #endif
+
+ObjectLabelObserver* ObjectLabelObserver::_singleton = 0;
+
+ObjectLabelObserver* ObjectLabelObserver::instance()
+{
+    if (!_singleton)
+        _singleton = new ObjectLabelObserver;
+    return _singleton;
+}
+
+void ObjectLabelObserver::destruct ()
+{
+    delete _singleton;
+    _singleton = 0;
+}
+
+void ObjectLabelObserver::slotRelabelObject(const App::DocumentObject& obj, const App::Property& prop)
+{
+    // observe only the Label property
+    if (&prop == &obj.Label) {
+        // have we processed this (or another?) object right now?
+        if (current) {
+            return;
+        }
+
+        std::string label = obj.Label.getValue();
+        App::Document* doc = obj.getDocument();
+        if (doc && !_hPGrp->GetBool("DuplicateLabels")) {
+            std::vector<std::string> objectLabels;
+            std::vector<App::DocumentObject*>::const_iterator it;
+            std::vector<App::DocumentObject*> objs = doc->getObjects();
+            bool match = false;
+
+            for (it = objs.begin();it != objs.end();++it) {
+                if (*it == &obj)
+                    continue; // don't compare object with itself
+                std::string objLabel = (*it)->Label.getValue();
+                if (!match && objLabel == label)
+                    match = true;
+                objectLabels.push_back(objLabel);
+            }
+
+            // make sure that there is a name conflict otherwise we don't have to do anything
+            if (match && !label.empty()) {
+                // remove number from end to avoid lengthy names
+                size_t lastpos = label.length()-1;
+                while (label[lastpos] >= 48 && label[lastpos] <= 57) {
+                    // if 'lastpos' becomes 0 then all characters are digits. In this case we use
+                    // the complete label again
+                    if (lastpos == 0) {
+                        lastpos = label.length()-1;
+                        break;
+                    }
+                    lastpos--;
+                }
+
+                label = label.substr(0, lastpos+1);
+                label = Base::Tools::getUniqueName(label, objectLabels, 3);
+                this->current = &obj;
+                const_cast<App::DocumentObject&>(obj).Label.setValue(label);
+                this->current = 0;
+            }
+        }
+    }
+}
+
+ObjectLabelObserver::ObjectLabelObserver() : current(0)
+{
+    App::GetApplication().signalChangedObject.connect(boost::bind
+        (&ObjectLabelObserver::slotRelabelObject, this, _1, _2));
+    _hPGrp = App::GetApplication().GetUserParameter().GetGroup("BaseApp");
+    _hPGrp = _hPGrp->GetGroup("Preferences")->GetGroup("Document");
+}
+
+ObjectLabelObserver::~ObjectLabelObserver()
+{
+}

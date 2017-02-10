@@ -25,6 +25,7 @@
 
 #ifndef _PreComp_
 # include <QPixmap>
+# include <QTimer>
 # include <Inventor/SoPickedPoint.h>
 # include <Inventor/nodes/SoSeparator.h>
 # include <Inventor/nodes/SoSwitch.h>
@@ -44,6 +45,7 @@
 
 #include "ViewProvider.h"
 #include "Application.h"
+#include "ActionFunction.h"
 #include "Document.h"
 #include "ViewProviderPy.h"
 #include "BitmapFactory.h"
@@ -51,6 +53,8 @@
 #include "View3DInventorViewer.h"
 #include "SoFCDB.h"
 #include "ViewProviderExtension.h"
+
+#include <boost/bind.hpp>
 
 using namespace std;
 using namespace Gui;
@@ -171,10 +175,16 @@ void ViewProvider::eventCallback(void * ud, SoEventCallback * node)
             const SbBool press = ke->getState() == SoButtonEvent::DOWN ? true : false;
             switch (ke->getKey()) {
             case SoKeyboardEvent::ESCAPE:
-                if (self->keyPressed (press, ke->getKey()))
+                if (self->keyPressed (press, ke->getKey())) {
                     node->setHandled();
-                else
-                    Gui::Application::Instance->activeDocument()->resetEdit();
+                }
+                else {
+                    Gui::TimerFunction* func = new Gui::TimerFunction();
+                    func->setAutoDelete(true);
+                    Gui::Document* doc = Gui::Application::Instance->activeDocument();
+                    func->setFunction(boost::bind(&Document::resetEdit, doc));
+                    QTimer::singleShot(0, func, SLOT(timeout()));
+                }
                 break;
             default:
                 // call the virtual method
@@ -263,13 +273,13 @@ SbMatrix ViewProvider::convert(const Base::Matrix4D &rcMatrix) const
                     dMtrx[12],dMtrx[13],dMtrx[14], dMtrx[15]);
 }
 
-void ViewProvider::addDisplayMaskMode( SoNode *node, const char* type )
+void ViewProvider::addDisplayMaskMode(SoNode *node, const char* type)
 {
-    _sDisplayMaskModes[ type ] = pcModeSwitch->getNumChildren();
-    pcModeSwitch->addChild( node );
+    _sDisplayMaskModes[type] = pcModeSwitch->getNumChildren();
+    pcModeSwitch->addChild(node);
 }
 
-void ViewProvider::setDisplayMaskMode( const char* type )
+void ViewProvider::setDisplayMaskMode(const char* type)
 {
     std::map<std::string, int>::const_iterator it = _sDisplayMaskModes.find( type );
     if (it != _sDisplayMaskModes.end())
@@ -396,9 +406,8 @@ void ViewProvider::setModeSwitch()
 {
     if (viewOverrideMode == -1)
         pcModeSwitch->whichChild = _iActualMode;
-    else
-        if (viewOverrideMode < pcModeSwitch->getNumChildren())
-            pcModeSwitch->whichChild = viewOverrideMode;
+    else if (viewOverrideMode < pcModeSwitch->getNumChildren())
+        pcModeSwitch->whichChild = viewOverrideMode;
 }
 
 void ViewProvider::setDefaultMode(int val)
@@ -532,13 +541,13 @@ bool ViewProvider::mouseButtonPressed(int button, bool pressed,
     (void)cursorPos;
     (void)viewer;
     return false;
-    }
+}
 
 bool ViewProvider::onDelete(const vector< string >& subNames) {
     bool del = true;
     auto vector = getExtensionsDerivedFromType<Gui::ViewProviderExtension>();
     for(Gui::ViewProviderExtension* ext : vector)
-        del = del || ext->extensionOnDelete(subNames);
+        del &= ext->extensionOnDelete(subNames);
 
     return del;
 }
@@ -546,9 +555,10 @@ bool ViewProvider::onDelete(const vector< string >& subNames) {
 bool ViewProvider::canDragObject(App::DocumentObject* obj) const {
 
     auto vector = getExtensionsDerivedFromType<Gui::ViewProviderExtension>();
-    for(Gui::ViewProviderExtension* ext : vector)
+    for(Gui::ViewProviderExtension* ext : vector) {
         if(ext->extensionCanDragObject(obj))
             return true;
+    }
 
     return false;
 }
@@ -556,9 +566,10 @@ bool ViewProvider::canDragObject(App::DocumentObject* obj) const {
 bool ViewProvider::canDragObjects() const {
 
     auto vector = getExtensionsDerivedFromType<Gui::ViewProviderExtension>();
-    for(Gui::ViewProviderExtension* ext : vector)
+    for(Gui::ViewProviderExtension* ext : vector) {
         if(ext->extensionCanDragObjects())
             return true;
+    }
 
     return false;
 }
@@ -573,16 +584,20 @@ void ViewProvider::dragObject(App::DocumentObject* obj) {
         }
     }
 
-    throw Base::Exception("ViewProvider::dragObject: no extension for draging given object available."); 
+    throw Base::Exception("ViewProvider::dragObject: no extension for dragging given object available.");
 }
 
 
 bool ViewProvider::canDropObject(App::DocumentObject* obj) const {
 
     auto vector = getExtensionsDerivedFromType<Gui::ViewProviderExtension>();
-    Base::Console().Message("Check extensions for drop\n");
+#if FC_DEBUG
+    Base::Console().Log("Check extensions for drop\n");
+#endif
     for(Gui::ViewProviderExtension* ext : vector){
-        Base::Console().Message("Check extensions %s\n", ext->name());
+#if FC_DEBUG
+        Base::Console().Log("Check extensions %s\n", ext->name().c_str());
+#endif
         if(ext->extensionCanDropObject(obj))
             return true;
     }
@@ -610,7 +625,7 @@ void ViewProvider::dropObject(App::DocumentObject* obj) {
         }
     }
 
-    throw Base::Exception("ViewProvider::dropObject: no extension for droping given object available."); 
+    throw Base::Exception("ViewProvider::dropObject: no extension for dropping given object available.");
 }
 
 void ViewProvider::Restore(Base::XMLReader& reader) {

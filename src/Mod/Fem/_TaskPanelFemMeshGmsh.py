@@ -51,22 +51,25 @@ class _TaskPanelFemMeshGmsh:
         QtCore.QObject.connect(self.form.if_max, QtCore.SIGNAL("valueChanged(Base::Quantity)"), self.max_changed)
         QtCore.QObject.connect(self.form.if_min, QtCore.SIGNAL("valueChanged(Base::Quantity)"), self.min_changed)
         QtCore.QObject.connect(self.form.cb_dimension, QtCore.SIGNAL("activated(int)"), self.choose_dimension)
-        QtCore.QObject.connect(self.form.cb_order, QtCore.SIGNAL("activated(int)"), self.choose_order)
         QtCore.QObject.connect(self.Timer, QtCore.SIGNAL("timeout()"), self.update_timer_text)
 
         self.form.cb_dimension.addItems(_FemMeshGmsh._FemMeshGmsh.known_element_dimensions)
-        self.form.cb_order.addItems(_FemMeshGmsh._FemMeshGmsh.known_element_orders)
 
         self.get_mesh_params()
         self.get_active_analysis()
         self.update()
 
     def getStandardButtons(self):
-        return int(QtGui.QDialogButtonBox.Apply | QtGui.QDialogButtonBox.Close)
-        # show a apply and a close button
-        # def reject() is called on close button
+        return int(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Apply | QtGui.QDialogButtonBox.Cancel)
+        # show a OK, a apply and a Cancel button
+        # def reject() is called on Cancel button
         # def clicked(self, button) is needed, to access the apply button
-        # def accept() in no longer needed, since there is no OK button
+
+    def accept(self):
+        self.set_mesh_params()
+        FreeCADGui.ActiveDocument.resetEdit()
+        FreeCAD.ActiveDocument.recompute()
+        return True
 
     def reject(self):
         FreeCADGui.ActiveDocument.resetEdit()
@@ -75,18 +78,17 @@ class _TaskPanelFemMeshGmsh:
 
     def clicked(self, button):
         if button == QtGui.QDialogButtonBox.Apply:
+            self.set_mesh_params()
             self.run_gmsh()
 
     def get_mesh_params(self):
         self.clmax = self.mesh_obj.CharacteristicLengthMax
         self.clmin = self.mesh_obj.CharacteristicLengthMin
-        self.order = self.mesh_obj.ElementOrder
         self.dimension = self.mesh_obj.ElementDimension
 
     def set_mesh_params(self):
         self.mesh_obj.CharacteristicLengthMax = self.clmax
         self.mesh_obj.CharacteristicLengthMin = self.clmin
-        self.mesh_obj.ElementOrder = self.order
         self.mesh_obj.ElementDimension = self.dimension
 
     def update(self):
@@ -95,8 +97,6 @@ class _TaskPanelFemMeshGmsh:
         self.form.if_min.setText(self.clmin.UserString)
         index_dimension = self.form.cb_dimension.findText(self.dimension)
         self.form.cb_dimension.setCurrentIndex(index_dimension)
-        index_order = self.form.cb_order.findText(self.order)
-        self.form.cb_order.setCurrentIndex(index_order)
 
     def console_log(self, message="", color="#000000"):
         self.console_message_gmsh = self.console_message_gmsh + '<font color="#0000FF">{0:4.1f}:</font> <font color="{1}">{2}</font><br>'.\
@@ -123,21 +123,22 @@ class _TaskPanelFemMeshGmsh:
         self.form.cb_dimension.setCurrentIndex(index)
         self.dimension = str(self.form.cb_dimension.itemText(index))  # form returns unicode
 
-    def choose_order(self, index):
-        if index < 0:
-            return
-        self.form.cb_order.setCurrentIndex(index)
-        self.order = str(self.form.cb_order.itemText(index))  # form returns unicode
-
     def run_gmsh(self):
         QApplication.setOverrideCursor(Qt.WaitCursor)
+        partsh = self.obj.Part
+        if partsh.Shape.ShapeType == "Compound":
+            error_message = "The mesh to shape is a Compound, GMSH could return unexpected meshes for Compounds. It is strongly recommended to extract the shape to mesh from the Compound and use this one."
+            FreeCAD.Console.PrintError(error_message + "\n")
+            if hasattr(partsh, "Proxy") and (partsh.Proxy.Type == "FeatureBooleanFragments" or partsh.Proxy.Type == "FeatureSlice" or partsh.Proxy.Type == "FeatureXOR"):  # other part obj might not have a Proxy
+                error_message = "The mesh to shape is a boolean split tools Compound, GMSH could return unexpected meshes for a boolean split tools Compound. It is strongly recommended to extract the shape to mesh from the Compound and use this one."
+                FreeCAD.Console.PrintError(error_message + "\n")
+                QtGui.QMessageBox.critical(None, "Shape to mesh is a Compound", error_message)
         self.Start = time.time()
         self.form.l_time.setText('Time: {0:4.1f}: '.format(time.time() - self.Start))
         self.console_message_gmsh = ''
         self.gmsh_runs = True
         self.console_log("We gone start ...")
         self.get_active_analysis()
-        self.set_mesh_params()
         import FemGmshTools
         gmsh_mesh = FemGmshTools.FemGmshTools(self.obj, self.analysis)
         self.console_log("Start GMSH ...")
@@ -165,7 +166,7 @@ class _TaskPanelFemMeshGmsh:
         if self.analysis:
             for m in FemGui.getActiveAnalysis().Member:
                 if m.Name == self.mesh_obj.Name:
-                    print(self.analysis.Name)
+                    print('Active analysis found: ' + self.analysis.Name)
                     return
             else:
                 # print('Mesh is not member of active analysis, means no group meshing')
