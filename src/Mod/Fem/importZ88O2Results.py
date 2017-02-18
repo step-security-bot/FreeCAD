@@ -21,11 +21,12 @@
 # ***************************************************************************
 
 __title__ = "FreeCAD Z88 Disp Reader"
-__author__ = "Bernd Hahnebach "
+__author__ = "Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
-## @package importZ88Results
+## @package importZ88O2Results
 #  \ingroup FEM
+#  \brief FreeCAD Z88 Disp Reader for FEM workbench
 
 import FreeCAD
 import os
@@ -34,6 +35,8 @@ from math import pow, sqrt
 
 Debug = False
 
+
+########## generic FreeCAD import and export methods ##########
 if open.__module__ == '__builtin__':
     pyopen = open  # because we'll redefine open below
 
@@ -54,6 +57,7 @@ def insert(filename, docname):
     import_z88_disp(filename)
 
 
+########## module specific methods ##########
 def import_z88_disp(filename, analysis=None, result_name_prefix=None):
     '''insert a FreeCAD FEM Result object in the ActiveDocument
     '''
@@ -71,7 +75,9 @@ def import_z88_disp(filename, analysis=None, result_name_prefix=None):
 
         for result_set in m['Results']:
             results_name = result_name_prefix + 'results'
-            results = FreeCAD.ActiveDocument.addObject('Fem::FemResultObject', results_name)
+            import FemMechanicalResult
+            results = FemMechanicalResult.makeFemMechanicalResult(results_name)
+            #results = FreeCAD.ActiveDocument.addObject('Fem::FemResultObject', results_name)
             for m in analysis_object.Member:
                 if m.isDerivedFrom("Fem::FemMeshObject"):
                     results.Mesh = m
@@ -93,21 +99,25 @@ def import_z88_disp(filename, analysis=None, result_name_prefix=None):
             sum_list = map(sum, zip(*displacement))
             x_avg, y_avg, z_avg = [i / no_of_values for i in sum_list]
 
-            s_max = max(results.StressValues)
-            s_min = min(results.StressValues)
-            s_avg = sum(results.StressValues) / no_of_values
-            p1_min = min(results.PrincipalMax)
-            p1_avg = sum(results.PrincipalMax) / no_of_values
-            p1_max = max(results.PrincipalMax)
-            p2_min = min(results.PrincipalMed)
-            p2_avg = sum(results.PrincipalMed) / no_of_values
-            p2_max = max(results.PrincipalMed)
-            p3_min = min(results.PrincipalMin)
-            p3_avg = sum(results.PrincipalMin) / no_of_values
-            p3_max = max(results.PrincipalMin)
-            ms_min = min(results.MaxShear)
-            ms_avg = sum(results.MaxShear) / no_of_values
-            ms_max = max(results.MaxShear)
+            # set stats of not imported values to 0
+            s_max = s_min = s_avg = 0
+            p1_min = p1_avg = p1_max = p2_min = p2_avg = p2_max = p3_min = p3_avg = p3_max = 0
+            ms_min = ms_avg = ms_max = 0
+            # s_max = max(results.StressValues)
+            # s_min = min(results.StressValues)
+            # s_avg = sum(results.StressValues) / no_of_values
+            # p1_min = min(results.PrincipalMax)
+            # p1_avg = sum(results.PrincipalMax) / no_of_values
+            # p1_max = max(results.PrincipalMax)
+            # p2_min = min(results.PrincipalMed)
+            # p2_avg = sum(results.PrincipalMed) / no_of_values
+            # p2_max = max(results.PrincipalMed)
+            # p3_min = min(results.PrincipalMin)
+            # p3_avg = sum(results.PrincipalMin) / no_of_values
+            # p3_max = max(results.PrincipalMin)
+            # ms_min = min(results.MaxShear)
+            # ms_avg = sum(results.MaxShear) / no_of_values
+            # ms_max = max(results.MaxShear)
 
             disp_abs = []
             for d in displacement:
@@ -143,9 +153,9 @@ def read_z88_disp(z88_disp_input):
     pure usage:
     import FemToolsZ88
     fea = FemToolsZ88.FemToolsZ88()
-    import importZ88Results
+    import importZ88O2Results
     disp_file = '/pathtofile/z88o2.txt'
-    importZ88Results.import_z88_disp(disp_file , fea.analysis)
+    importZ88O2Results.import_z88_disp(disp_file , fea.analysis)
 
     The FreeCAD file needs to have an Analysis and an appropiate FEM Mesh
     '''

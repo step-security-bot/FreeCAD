@@ -21,15 +21,16 @@
 # ***************************************************************************
 
 __title__ = "Command Show Result"
-__author__ = "Juergen Riegel"
+__author__ = "Juergen Riegel, Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
 ## @package CommandShowResult
 #  \ingroup FEM
+#  \brief FreeCAD Command show results for FEM workbench
 
 from FemCommands import FemCommands
 import FreeCADGui
-from PySide import QtCore, QtGui
+from PySide import QtCore
 
 
 class _CommandShowResult(FemCommands):
@@ -40,33 +41,17 @@ class _CommandShowResult(FemCommands):
                           'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_ShowResult", "Show result"),
                           'Accel': "S, R",
                           'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_ShowResult", "Shows and visualizes selected result data")}
-        self.is_active = 'with_results'
+        self.is_active = 'with_selresult'
 
     def Activated(self):
-        self.result_object = get_results_object(FreeCADGui.Selection.getSelection())
+        sel = FreeCADGui.Selection.getSelection()
+        if (len(sel) == 1):
+            if sel[0].isDerivedFrom("Fem::FemResultObject"):
+                self.result_object = sel[0]
 
-        if not self.result_object:
-            QtGui.QMessageBox.critical(None, "Missing prerequisite", "No result found in active Analysis")
-            return
-
-        self.hide_parts_constraints_show_meshes()
-
-        import _TaskPanelShowResult
-        taskd = _TaskPanelShowResult._TaskPanelShowResult()
-        FreeCADGui.Control.showDialog(taskd)
-
-
-# Code duplidation - to be removed after migration to FemTools
-def get_results_object(sel):
-    import FemGui
-    if (len(sel) == 1):
-        if sel[0].isDerivedFrom("Fem::FemResultObject"):
-            return sel[0]
-
-    for i in FemGui.getActiveAnalysis().Member:
-        if(i.isDerivedFrom("Fem::FemResultObject")):
-            return i
-    return None
+        import _ViewProviderFemMechanicalResult
+        if _ViewProviderFemMechanicalResult.is_result_obj_valid(self.result_object):
+            self.result_object.ViewObject.startEditing()
 
 
 FreeCADGui.addCommand('Fem_ShowResult', _CommandShowResult())

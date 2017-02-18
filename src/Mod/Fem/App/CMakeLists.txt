@@ -84,6 +84,7 @@ SET(FemScripts_SRCS
     _FemBeamSection.py
     _FemConstraintSelfWeight.py
     _FemMaterialMechanicalNonlinear.py
+    _FemMechanicalResult.py
     _FemMeshGmsh.py
     _FemMeshGroup.py
     _FemMeshRegion.py
@@ -102,6 +103,7 @@ SET(FemScripts_SRCS
     _ViewProviderFemBeamSection.py
     _ViewProviderFemConstraintSelfWeight.py
     _ViewProviderFemMaterialMechanicalNonlinear.py
+    _ViewProviderFemMechanicalResult.py
     _ViewProviderFemMeshGmsh.py
     _ViewProviderFemMeshGroup.py
     _ViewProviderFemMeshRegion.py
@@ -109,13 +111,13 @@ SET(FemScripts_SRCS
     _ViewProviderFemSolverCalculix.py
     _ViewProviderFemSolverZ88.py
     _ViewProviderFemMaterial.py
-    ccxDatReader.py
-    ccxFrdReader.py
     convert2TetGen.py
+    importCcxDatResults.py
+    importCcxFrdResults.py
     importInpMesh.py
     importVTKResults.py
     importZ88Mesh.py
-    importZ88Results.py
+    importZ88O2Results.py
     Init.py
     InitGui.py
     FemAnalysis.py
@@ -127,6 +129,7 @@ SET(FemScripts_SRCS
     FemInputWriterCcx.py
     FemInputWriterZ88.py
     FemMaterialMechanicalNonlinear.py
+    FemMechanicalResult.py
     FemMesh2Mesh.py
     FemMeshGmsh.py
     FemMeshGroup.py
