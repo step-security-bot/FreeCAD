@@ -51,6 +51,7 @@ install:
   #- fsutil behavior set disablelastaccess 0
   - cd clcache-bin
   #- pip install xxhash
+  - pip install codespell
   - pip install pyinstaller
   - pyinstaller --onefile clcache.py
   #- cd server
@@ -103,6 +104,7 @@ after_build:
   - cd C:\projects\freecad\build\bin\
   - FreeCADCmd.exe --run-test 0
   - cd C:\projects\freecad\build
+  - codespell.py -q 3 --skip="*.po,*.ts"
   - python C:\projects\freecad\clcache-bin\showprofilereport.py
   - cd "C:\projects\freecad\clcache-bin\dist\"
   - cl.exe -s
