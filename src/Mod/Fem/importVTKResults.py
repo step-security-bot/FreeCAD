@@ -37,7 +37,11 @@ import Fem
 
 ########## generic FreeCAD import and export methods ##########
 if open.__module__ == '__builtin__':
-    pyopen = open  # because we'll redefine open below
+    # because we'll redefine open below (Python2)
+    pyopen = open
+elif open.__module__ == 'io':
+    # because we'll redefine open below (Python3)
+    pyopen = open
 
 
 def open(filename):
@@ -70,20 +74,19 @@ def export(objectslist, filename):
 
 ########## module specific methods ##########
 def importVTK(filename, analysis=None, result_name_prefix=None):
+    import ObjectsFem
     if result_name_prefix is None:
         result_name_prefix = ''
     if analysis is None:
         analysis_name = os.path.splitext(os.path.basename(filename))[0]
-        import FemAnalysis
-        analysis_object = FemAnalysis.makeFemAnalysis('Analysis')
+        analysis_object = ObjectsFem.makeAnalysis('Analysis')
         analysis_object.Label = analysis_name
     else:
         analysis_object = analysis
 
     # if properties can be added in FemVTKTools importCfdResult(), this file can be used for CFD workbench
     results_name = result_name_prefix + 'results'
-    from FemMechanicalResult import makeFemMechanicalResult
-    result_obj = makeFemMechanicalResult(results_name)
+    result_obj = ObjectsFem.makeResultMechanical(results_name)
     # result_obj = FreeCAD.ActiveDocument.addObject('Fem::FemResultObject', results_name)
     Fem.readResult(filename, result_obj.Name)  # readResult always creates a new femmesh named ResultMesh
 

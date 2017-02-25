@@ -19,6 +19,7 @@
 # *   USA                                                                   *
 # *                                                                         *
 # ***************************************************************************
+from __future__ import print_function
 
 __title__ = "FreeCAD Z88 Mesh reader and writer"
 __author__ = "Bernd Hahnebach"
@@ -38,7 +39,11 @@ Debug = False
 
 ########## generic FreeCAD import and export methods ##########
 if open.__module__ == '__builtin__':
-    pyopen = open  # because we'll redefine open below
+    # because we'll redefine open below (Python2)
+    pyopen = open
+elif open.__module__ == 'io':
+    # because we'll redefine open below (Python3)
+    pyopen = open
 
 
 def open(filename):
@@ -390,7 +395,7 @@ def get_z88_element_type(femmesh, femelement_table=None):
     # in some cases lowest key in femelement_table is not [1]
     for elem in sorted(femelement_table):
         elem_length = len(femelement_table[elem])
-        print elem_length
+        print(elem_length)
         break  # break after the first elem
     if FemMeshTools.is_solid_femmesh(femmesh):
         if femmesh.TetraCount == femmesh.VolumeCount:

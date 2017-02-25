@@ -38,7 +38,11 @@ import numpy as np
 
 ########## generic FreeCAD import and export methods ##########
 if open.__module__ == '__builtin__':
-    pyopen = open  # because we'll redefine open below
+    # because we'll redefine open below (Python2)
+    pyopen = open
+elif open.__module__ == 'io':
+    # because we'll redefine open below (Python3)
+    pyopen = open
 
 
 def open(filename):
@@ -59,6 +63,7 @@ def insert(filename, docname):
 
 ########## module specific methods ##########
 def importFrd(filename, analysis=None, result_name_prefix=None):
+    import ObjectsFem
     if result_name_prefix is None:
         result_name_prefix = ''
     m = readResult(filename)
@@ -66,8 +71,7 @@ def importFrd(filename, analysis=None, result_name_prefix=None):
     if(len(m['Nodes']) > 0):
         if analysis is None:
             analysis_name = os.path.splitext(os.path.basename(filename))[0]
-            import FemAnalysis
-            analysis_object = FemAnalysis.makeFemAnalysis('Analysis')
+            analysis_object = ObjectsFem.makeAnalysis('Analysis')
             analysis_object.Label = analysis_name
         else:
             analysis_object = analysis  # see if statement few lines later, if not analysis -> no FemMesh object is created !
@@ -104,8 +108,7 @@ def importFrd(filename, analysis=None, result_name_prefix=None):
                 results_name = result_name_prefix + 'time_' + str(step_time) + '_results'
             else:
                 results_name = result_name_prefix + 'results'
-            import FemMechanicalResult
-            results = FemMechanicalResult.makeFemMechanicalResult(results_name)
+            results = ObjectsFem.makeResultMechanical(results_name)
             for m in analysis_object.Member:
                 if m.isDerivedFrom("Fem::FemMeshObject"):
                     results.Mesh = m
@@ -130,10 +133,10 @@ def importFrd(filename, analysis=None, result_name_prefix=None):
                 scale = 1.0
 
             if len(disp) > 0:
-                results.DisplacementVectors = map((lambda x: x * scale), disp.values())
-                results.StressVectors = map((lambda x: x * scale), stressv.values())
-                results.StrainVectors = map((lambda x: x * scale), strainv.values())
-                results.NodeNumbers = disp.keys()
+                results.DisplacementVectors = list(map((lambda x: x * scale), disp.values()))
+                results.StressVectors = list(map((lambda x: x * scale), stressv.values()))
+                results.StrainVectors = list(map((lambda x: x * scale), strainv.values()))
+                results.NodeNumbers = list(disp.keys())
                 if(mesh_object):
                     results.Mesh = mesh_object
 
@@ -148,9 +151,9 @@ def importFrd(filename, analysis=None, result_name_prefix=None):
                         for i in range(nodes):
                             Temp_value = Temp_extra_nodes[i]
                             Temp.append(Temp_value)
-                        results.Temperature = map((lambda x: x), Temp)
+                        results.Temperature = list(map((lambda x: x), Temp))
                     else:
-                        results.Temperature = map((lambda x: x), Temperature.values())
+                        results.Temperature = list(map((lambda x: x), Temperature.values()))
                     results.Time = step_time
             except:
                 pass
@@ -170,11 +173,11 @@ def importFrd(filename, analysis=None, result_name_prefix=None):
                     prinstress3.append(prin3)
                     shearstress.append(shear)
                 if eigenmode_number > 0:
-                    results.StressValues = map((lambda x: x * scale), mstress)
-                    results.PrincipalMax = map((lambda x: x * scale), prinstress1)
-                    results.PrincipalMed = map((lambda x: x * scale), prinstress2)
-                    results.PrincipalMin = map((lambda x: x * scale), prinstress3)
-                    results.MaxShear = map((lambda x: x * scale), shearstress)
+                    results.StressValues = list(map((lambda x: x * scale), mstress))
+                    results.PrincipalMax = list(map((lambda x: x * scale), prinstress1))
+                    results.PrincipalMed = list(map((lambda x: x * scale), prinstress2))
+                    results.PrincipalMin = list(map((lambda x: x * scale), prinstress3))
+                    results.MaxShear = list(map((lambda x: x * scale), shearstress))
                     results.Eigenmode = eigenmode_number
                 else:
                     results.StressValues = mstress
@@ -183,10 +186,29 @@ def importFrd(filename, analysis=None, result_name_prefix=None):
                     results.PrincipalMin = prinstress3
                     results.MaxShear = shearstress
 
-            if (results.NodeNumbers != 0 and results.NodeNumbers != stress.keys()):
+            if (results.NodeNumbers != 0 and results.NodeNumbers != list(stress.keys())):
                 print("Inconsistent FEM results: element number for Stress doesn't equal element number for Displacement {} != {}"
                       .format(results.NodeNumbers, len(results.StressValues)))
-                results.NodeNumbers = stress.keys()
+                results.NodeNumbers = list(stress.keys())
+
+            # Read Equivalent Plastic strain if they exist
+            try:
+                Peeq = result_set['peeq']
+                if len(Peeq) > 0:
+                    if len(Peeq.values()) != len(disp.values()):
+
+                        Pe = []
+                        Pe_extra_nodes = Peeq.values()
+                        nodes = len(disp.values())
+                        for i in range(nodes):
+                            Pe_value = Pe_extra_nodes[i]
+                            Pe.append(Pe_value)
+                        results.Peeq = Pe
+                    else:
+                        results.Peeq = Peeq.values()
+                    results.Time = step_time
+            except:
+                pass
 
             x_min, y_min, z_min = map(min, zip(*displacement))
             sum_list = map(sum, zip(*displacement))
@@ -255,12 +277,14 @@ def readResult(frd_input):
     mode_stress = {}
     mode_stressv = {}
     mode_strain = {}
+    mode_peeq = {}
     mode_temp = {}
 
     mode_disp_found = False
     nodes_found = False
     mode_stress_found = False
     mode_strain_found = False
+    mode_peeq_found = False
     mode_temp_found = False
     mode_time_found = False
     elements_found = False
@@ -495,6 +519,14 @@ def readResult(frd_input):
 #            strain_5 = float(line[61:73])
 #            strain_6 = float(line[73:85])
             mode_strain[elem] = FreeCAD.Vector(strain_1, strain_2, strain_3)
+
+        if line[5:7] == "PE":
+            mode_peeq_found = True
+        # we found an equivalent plastic strain line in the frd file
+        if mode_peeq_found and (line[1:3] == "-1"):
+            elem = int(line[4:13])
+            peeq = float(line[13:25])
+            mode_peeq[elem] = (peeq)
         # Check if we found a time step
         if line[4:10] == "1PSTEP":
             mode_time_found = True
@@ -520,6 +552,9 @@ def readResult(frd_input):
             if mode_strain_found:
                 mode_strain_found = False
 
+            if mode_peeq_found:
+                mode_peeq_found = False
+
             if mode_temp_found:
                 mode_temp_found = False
 
@@ -533,6 +568,7 @@ def readResult(frd_input):
                 mode_results['stress'] = mode_stress
                 mode_results['stressv'] = mode_stressv
                 mode_results['strainv'] = mode_strain
+                mode_results['peeq'] = mode_peeq
                 mode_results['temp'] = mode_temp
                 mode_results['time'] = timestep
                 results.append(mode_results)
@@ -548,6 +584,7 @@ def readResult(frd_input):
                 mode_results['stress'] = mode_stress
                 mode_results['stressv'] = mode_stressv
                 mode_results['strainv'] = mode_strain
+                mode_results['peeq'] = mode_peeq
                 mode_results['time'] = 0  # Dont return time if static
                 results.append(mode_results)
                 mode_disp = {}

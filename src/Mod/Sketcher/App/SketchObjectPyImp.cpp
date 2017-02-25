@@ -964,6 +964,7 @@ PyObject* SketchObjectPy::changeConstraintsLocking(PyObject *args)
     return Py::new_reference_to(Py::Int(naff));
 }
 
+//Deprecated
 PyObject* SketchObjectPy::ExposeInternalGeometry(PyObject *args)
 {
     int GeoId;
@@ -971,7 +972,7 @@ PyObject* SketchObjectPy::ExposeInternalGeometry(PyObject *args)
     if (!PyArg_ParseTuple(args, "i", &GeoId))
         return 0;
 
-    if (this->getSketchObjectPtr()->ExposeInternalGeometry(GeoId)==-1) {
+    if (this->getSketchObjectPtr()->exposeInternalGeometry(GeoId)==-1) {
         std::stringstream str;
         str << "Object does not support internal geometry: " << GeoId;
         PyErr_SetString(PyExc_ValueError, str.str().c_str());
@@ -981,6 +982,7 @@ PyObject* SketchObjectPy::ExposeInternalGeometry(PyObject *args)
     Py_Return;
 }
 
+//Deprecated
 PyObject* SketchObjectPy::DeleteUnusedInternalGeometry(PyObject *args)
 {
     int GeoId;
@@ -988,9 +990,78 @@ PyObject* SketchObjectPy::DeleteUnusedInternalGeometry(PyObject *args)
     if (!PyArg_ParseTuple(args, "i", &GeoId))
         return 0;
 
-    if (this->getSketchObjectPtr()->DeleteUnusedInternalGeometry(GeoId)==-1) {
+    if (this->getSketchObjectPtr()->deleteUnusedInternalGeometry(GeoId)==-1) {
         std::stringstream str;
         str << "Object does not support internal geometry: " << GeoId;
+        PyErr_SetString(PyExc_ValueError, str.str().c_str());
+        return 0;
+    }
+    
+    Py_Return;
+}
+
+PyObject* SketchObjectPy::exposeInternalGeometry(PyObject *args)
+{
+    int GeoId;
+
+    if (!PyArg_ParseTuple(args, "i", &GeoId))
+        return 0;
+
+    if (this->getSketchObjectPtr()->exposeInternalGeometry(GeoId)==-1) {
+        std::stringstream str;
+        str << "Object does not support internal geometry: " << GeoId;
+        PyErr_SetString(PyExc_ValueError, str.str().c_str());
+        return 0;
+    }
+
+    Py_Return;
+}
+
+PyObject* SketchObjectPy::deleteUnusedInternalGeometry(PyObject *args)
+{
+    int GeoId;
+
+    if (!PyArg_ParseTuple(args, "i", &GeoId))
+        return 0;
+
+    if (this->getSketchObjectPtr()->deleteUnusedInternalGeometry(GeoId)==-1) {
+        std::stringstream str;
+        str << "Object does not support internal geometry: " << GeoId;
+        PyErr_SetString(PyExc_ValueError, str.str().c_str());
+        return 0;
+    }
+
+    Py_Return;
+}
+
+PyObject* SketchObjectPy::convertToNURBS(PyObject *args)
+{
+    int GeoId;
+
+    if (!PyArg_ParseTuple(args, "i", &GeoId))
+        return 0;
+
+    if (this->getSketchObjectPtr()->convertToNURBS(GeoId)==false) {
+        std::stringstream str;
+        str << "Object does not support NURBS conversion: " << GeoId;
+        PyErr_SetString(PyExc_ValueError, str.str().c_str());
+        return 0;
+    }
+
+    Py_Return;
+}
+
+PyObject* SketchObjectPy::increaseBSplineDegree(PyObject *args)
+{
+    int GeoId;
+    int incr = 1;
+    
+    if (!PyArg_ParseTuple(args, "i|i", &GeoId, &incr))
+        return 0;
+    
+    if (this->getSketchObjectPtr()->increaseBSplineDegree(GeoId, incr)==false) {
+        std::stringstream str;
+        str << "Degree increase failed for: " << GeoId;
         PyErr_SetString(PyExc_ValueError, str.str().c_str());
         return 0;
     }

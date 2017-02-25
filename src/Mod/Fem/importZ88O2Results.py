@@ -38,7 +38,11 @@ Debug = False
 
 ########## generic FreeCAD import and export methods ##########
 if open.__module__ == '__builtin__':
-    pyopen = open  # because we'll redefine open below
+    # because we'll redefine open below (Python2)
+    pyopen = open
+elif open.__module__ == 'io':
+    # because we'll redefine open below (Python3)
+    pyopen = open
 
 
 def open(filename):
@@ -61,22 +65,21 @@ def insert(filename, docname):
 def import_z88_disp(filename, analysis=None, result_name_prefix=None):
     '''insert a FreeCAD FEM Result object in the ActiveDocument
     '''
+    import ObjectsFem
     if result_name_prefix is None:
         result_name_prefix = ''
     m = read_z88_disp(filename)
     if(len(m['Nodes']) > 0):
         if analysis is None:
             analysis_name = os.path.splitext(os.path.basename(filename))[0]
-            import FemAnalysis
-            analysis_object = FemAnalysis.makeFemAnalysis('Analysis')
+            analysis_object = ObjectsFem.makeAnalysis('Analysis')
             analysis_object.Label = analysis_name
         else:
             analysis_object = analysis  # see if statement few lines later, if not analysis -> no FemMesh object is created !
 
         for result_set in m['Results']:
             results_name = result_name_prefix + 'results'
-            import FemMechanicalResult
-            results = FemMechanicalResult.makeFemMechanicalResult(results_name)
+            results = ObjectsFem.makeResultMechanical(results_name)
             #results = FreeCAD.ActiveDocument.addObject('Fem::FemResultObject', results_name)
             for m in analysis_object.Member:
                 if m.isDerivedFrom("Fem::FemMeshObject"):

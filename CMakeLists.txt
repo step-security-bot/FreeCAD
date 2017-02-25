@@ -196,6 +196,7 @@ if(APPLE)
             ${CMAKE_INSTALL_PREFIX}/${PACKAGE_NAME}.app/Contents)
         set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX}/lib)
     endif(FREECAD_CREATE_MAC_APP)
+    set(CMAKE_MACOSX_RPATH TRUE)
 endif(APPLE)
 
 OPTION(BUILD_FEM "Build the FreeCAD FEM module" ON)
@@ -601,7 +602,7 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         )
 
         # check which modules are available
-        if(UNIX AND NOT APPLE)
+        if(UNIX)
             find_package(VTK COMPONENTS vtkCommonCore REQUIRED NO_MODULE)
             list(APPEND VTK_COMPONENTS vtkIOMPIParallel vtkParallelMPI vtkhdf5)
             foreach(_module ${VTK_COMPONENTS})
