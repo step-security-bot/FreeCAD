@@ -20,7 +20,9 @@ INSTALL(
         convert2TetGen.py
         importCcxDatResults.py
         importCcxFrdResults.py
+        importFenicsMesh.py
         importInpMesh.py
+        importToolsFem.py
         importVTKResults.py
         importZ88Mesh.py
         importZ88O2Results.py
@@ -47,6 +49,7 @@ INSTALL(
         PyObjects/__init__.py
         PyObjects/_FemBeamSection.py
         PyObjects/_FemConstraintSelfWeight.py
+        PyObjects/_FemFluidSection.py
         PyObjects/_FemMaterialMechanicalNonlinear.py
         PyObjects/_FemMeshGmsh.py
         PyObjects/_FemMeshGroup.py
@@ -70,6 +73,7 @@ INSTALL(
         PyGui/_CommandControlSolver.py
         PyGui/_CommandConstraintSelfWeight.py
         PyGui/_CommandFEMMesh2Mesh.py
+        PyGui/_CommandFluidSection.py
         PyGui/_CommandMaterialMechanicalNonlinear.py
         PyGui/_CommandMaterialSolid.py
         PyGui/_CommandMaterialFluid.py
@@ -85,6 +89,7 @@ INSTALL(
         PyGui/_CommandSolverCalculix.py
         PyGui/_CommandSolverZ88.py
         PyGui/_TaskPanelFemBeamSection.py
+        PyGui/_TaskPanelFemFluidSection.py
         PyGui/_TaskPanelFemMeshGmsh.py
         PyGui/_TaskPanelFemMeshGroup.py
         PyGui/_TaskPanelFemMeshRegion.py
@@ -94,6 +99,7 @@ INSTALL(
         PyGui/_TaskPanelShowResult.py
         PyGui/_ViewProviderFemBeamSection.py
         PyGui/_ViewProviderFemConstraintSelfWeight.py
+        PyGui/_ViewProviderFemFluidSection.py
         PyGui/_ViewProviderFemMaterialMechanicalNonlinear.py
         PyGui/_ViewProviderFemMeshGmsh.py
         PyGui/_ViewProviderFemMeshGroup.py
@@ -104,12 +110,13 @@ INSTALL(
         PyGui/_ViewProviderFemSolverZ88.py
         PyGui/_ViewProviderFemMaterial.py
         PyGui/TaskPanelFemBeamSection.ui
+        PyGui/TaskPanelFemFluidSection.ui
+        PyGui/TaskPanelFemMaterial.ui
         PyGui/TaskPanelFemMeshGmsh.ui
         PyGui/TaskPanelFemMeshGroup.ui
         PyGui/TaskPanelFemMeshRegion.ui
         PyGui/TaskPanelFemShellThickness.ui
         PyGui/TaskPanelFemSolverCalculix.ui
-        PyGui/TaskPanelFemMaterial.ui
         PyGui/TaskPanelShowResult.ui
     DESTINATION
         Mod/Fem/PyGui

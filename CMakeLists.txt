@@ -14,7 +14,9 @@ cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
 
 if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
-    cmake_policy(SET CMP0020 NEW)
+    if(POLICY CMP0020)
+        cmake_policy(SET CMP0020 NEW)
+    endif(POLICY CMP0020)
     # added in cmake 3.0
     if(POLICY CMP0050)
         cmake_policy(SET CMP0050 OLD)
@@ -587,7 +589,7 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     # Salome SMESH sources are under src/3rdParty now
     IF(BUILD_SMESH)
-        #if we use smesh we definitly also need vtk, no matter of external or internal smesh
+        #if we use smesh we definitely also need vtk, no matter of external or internal smesh
         set (VTK_COMPONENTS
             vtkCommonCore
             vtkCommonDataModel
@@ -878,15 +880,21 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
                                                             "from PySide2.QtWidgets import *\n")
         file(WRITE ${CMAKE_BINARY_DIR}/bin/PySide/QtSvg.py  "from PySide2.QtSvg import *\n")
 
-        INSTALL(
-            FILES
-                ${CMAKE_BINARY_DIR}/bin/PySide/__init__.py
-                ${CMAKE_BINARY_DIR}/bin/PySide/QtCore.py
-                ${CMAKE_BINARY_DIR}/bin/PySide/QtGui.py
-                ${CMAKE_BINARY_DIR}/bin/PySide/QtSvg.py
-            DESTINATION
-                bin/PySide
-        )
+	if(APPLE)
+	    INSTALL(
+	        DIRECTORY	
+                    ${CMAKE_BINARY_DIR}/bin/PySide
+		DESTINATION
+                    MacOS
+            )
+	else()
+            INSTALL(
+	        DIRECTORY	
+                    ${CMAKE_BINARY_DIR}/bin/PySide
+                DESTINATION
+                    bin
+            )
+	endif()
     else()
         # set(PYTHON_SUFFIX -python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
         SET(PYTHON_SUFFIX -python2.7) # for shiboken

@@ -34,24 +34,21 @@ from PySide import QtCore
 
 
 class _CommandShowResult(FemCommands):
-    "the Fem show reslult command definition"
+    "the FEM_show reslult command definition"
     def __init__(self):
         super(_CommandShowResult, self).__init__()
         self.resources = {'Pixmap': 'fem-result',
-                          'MenuText': QtCore.QT_TRANSLATE_NOOP("Fem_ShowResult", "Show result"),
+                          'MenuText': QtCore.QT_TRANSLATE_NOOP("FEM_ShowResult", "Show result"),
                           'Accel': "S, R",
-                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("Fem_ShowResult", "Shows and visualizes selected result data")}
+                          'ToolTip': QtCore.QT_TRANSLATE_NOOP("FEM_ShowResult", "Shows and visualizes selected result data")}
         self.is_active = 'with_selresult'
 
     def Activated(self):
         sel = FreeCADGui.Selection.getSelection()
         if (len(sel) == 1):
             if sel[0].isDerivedFrom("Fem::FemResultObject"):
-                self.result_object = sel[0]
-
-        import _ViewProviderFemResultMechanical
-        if _ViewProviderFemResultMechanical.is_result_obj_valid(self.result_object):
-            self.result_object.ViewObject.startEditing()
+                result_object = sel[0]
+                result_object.ViewObject.startEditing()
 
 
-FreeCADGui.addCommand('Fem_ShowResult', _CommandShowResult())
+FreeCADGui.addCommand('FEM_ShowResult', _CommandShowResult())
