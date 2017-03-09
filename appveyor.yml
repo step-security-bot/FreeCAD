@@ -51,6 +51,8 @@ install:
   #- fsutil behavior set disablelastaccess 0
   - cd clcache-bin
   #- pip install xxhash
+  - curl -sSL https://srcclr.com/install | bash
+  - srcclr scan C:\projects\freecad
   - pip install codespell
   - pip install pyinstaller
   - pyinstaller --onefile clcache.py
@@ -93,21 +95,21 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - cmake -D FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
+  #- cmake -D FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
     -D BUILD_FEM_NETGEN=OFF
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\build\bin /E /Q
-  - msbuild /m FreeCAD_Trunk.sln
+  #- msbuild /m FreeCAD_Trunk.sln
 
 after_build:
   - cd C:\projects\freecad\build\bin\
-  - FreeCADCmd.exe --run-test 0
+  #- FreeCADCmd.exe --run-test 0
   - cd C:\projects\freecad\build
-  - codespell.py -q 3 --skip="*.po,*.ts"
-  - python C:\projects\freecad\clcache-bin\showprofilereport.py
-  - cd "C:\projects\freecad\clcache-bin\dist\"
-  - cl.exe -s
+  #- codespell.py -q 3 --skip="*.po,*.ts"
+  #- python C:\projects\freecad\clcache-bin\showprofilereport.py
+  #- cd "C:\projects\freecad\clcache-bin\dist\"
+  ##- cl.exe -s
   #- cl.exe -M 1073741824
   #- cl.exe -c
   #- cl.exe -M 2147483648
