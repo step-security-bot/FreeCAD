@@ -315,7 +315,7 @@ protected:
 };
 
 /**
- * Change a Unit based floating point number withing constraints.
+ * Change a Unit based floating point number within constraints.
  * \author Stefan Troeger
  */
 class GuiExport PropertyUnitConstraintItem: public PropertyUnitItem
@@ -347,6 +347,16 @@ protected:
 
 protected:
     PropertyFloatConstraintItem();
+};
+
+/**
+ * Change a floating point number with many decimal points (hard coded as 16)
+ */
+class GuiExport PropertyPrecisionItem: public PropertyFloatConstraintItem
+{
+    PROPERTYITEM_HEADER
+protected:
+    PropertyPrecisionItem();
 };
 
 /**
@@ -945,8 +955,13 @@ public:
     PropertyItemEditorFactory();
     virtual ~PropertyItemEditorFactory();
 
-    virtual QWidget * createEditor ( QVariant::Type type, QWidget * parent ) const;
-    virtual QByteArray valuePropertyName ( QVariant::Type type ) const;
+#if (QT_VERSION >= 0x050300)
+    virtual QWidget *createEditor(int userType, QWidget *parent) const;
+    virtual QByteArray valuePropertyName(int userType) const;
+#else
+    virtual QWidget * createEditor(QVariant::Type type, QWidget * parent) const;
+    virtual QByteArray valuePropertyName (QVariant::Type type) const;
+#endif
 };
 
 } // namespace PropertyEditor

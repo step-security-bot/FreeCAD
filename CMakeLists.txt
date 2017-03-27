@@ -177,6 +177,14 @@ set_property(CACHE FREECAD_USE_OCC_VARIANT PROPERTY STRINGS
              "Community Edition"
 )
 
+if (BUILD_QT5)
+  OPTION(FREECAD_USE_QTOPENGL_WIDGET "Replace QGLWidget with QOpenGLWidget." ON)
+  if (FREECAD_USE_QTOPENGL_WIDGET)
+    set(HAVE_QT5_OPENGL 1)
+  endif()
+endif()
+configure_file(${CMAKE_SOURCE_DIR}/src/QtOpenGL.h.cmake ${CMAKE_BINARY_DIR}/src/QtOpenGL.h)
+
 if(APPLE)
     OPTION(FREECAD_CREATE_MAC_APP "Create app bundle on install" OFF)
 
@@ -401,9 +409,9 @@ if(NOT FREECAD_LIBPACK_USE OR FREECAD_LIBPACK_CHECKFILE_CLBUNDLER)
 
 # -------------------------------- Python --------------------------------
 
-#http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=677598
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=677598
 # Acceptable versions of Python
-set(Python_ADDITIONAL_VERSIONS "2.5" "2.6" "2.7" "2.8" "2.9")
+set(Python_ADDITIONAL_VERSIONS "2.7")
 
 # For building on OS X
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -531,6 +539,13 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         MESSAGE(FATAL_ERROR "=================================\n"
                             "Python not found, install Python!\n"
                             "=================================\n")
+    ELSE(NOT PYTHONLIBS_FOUND)
+        # prevent python3 lower than 3.3 (not enough utf8<->unicode tools)
+        IF(PYTHON_VERSION_MAJOR EQUAL 3)
+            IF(PYTHON_VERSION_MINOR LESS 5)
+                MESSAGE(FATAL_ERROR "To build FreeCAD with Python3, you need at least version 3.5\n")
+            ENDIF(PYTHON_VERSION_MINOR LESS 5)
+        ENDIF(PYTHON_VERSION_MAJOR EQUAL 3)
     ENDIF(NOT PYTHONLIBS_FOUND)
 
 # -------------------------------- pcl ----------------------------------
@@ -896,10 +911,15 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
             )
 	endif()
     else()
+        if (PYTHON_VERSION_MAJOR LESS 3)
+            SET(PYTHON_SUFFIX -python2.7)
+            SET(PYTHON_BASENAME -python2.7)
+        else(PYTHON_VERSION_MAJOR LESS 3)
         # set(PYTHON_SUFFIX -python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
-        SET(PYTHON_SUFFIX -python2.7) # for shiboken
-        SET(PYTHON_BASENAME -python2.7) # for PySide
-
+        # below are two variables that can be left empty for standard python, but must be set by the user for different python versions such as 3.5
+            SET(PYTHON_SUFFIX "" CACHE STRING "Shiboken cmake file suffix. If left empty, system default python version will be used: <ShibokenConfigPYTHON_SUFFIX.cmake>")
+            SET(PYTHON_BASENAME "" CACHE STRING "Same as PYTHON_SUFFIX but for PySide. if left empty, PYTHON_SUFFIX will be used: <PySideConfigPYTHON_BASENAME.cmake>")
+        endif(PYTHON_VERSION_MAJOR LESS 3)
         if(DEFINED MACPORTS_PREFIX)
             find_package(Shiboken REQUIRED HINTS "${PYTHON_LIBRARY_DIR}/cmake")
             find_package(PySide REQUIRED HINTS "${PYTHON_LIBRARY_DIR}/cmake")

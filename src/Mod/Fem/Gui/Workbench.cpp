@@ -54,8 +54,8 @@ void Workbench::setupContextMenu(const char* recipient, Gui::MenuItem* item) con
 {
      StdWorkbench::setupContextMenu( recipient, item );
      *item << "Separator"
-           << "FEM_ClearMesh"
-           << "FEM_PrintMeshInfo";
+           << "FEM_MeshClear"
+           << "FEM_MeshPrintInfo";
 }
 
 Gui::ToolBarItem* Workbench::setupToolBars() const
@@ -63,7 +63,7 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
     Gui::ToolBarItem* root = StdWorkbench::setupToolBars();
     Gui::ToolBarItem* fem = new Gui::ToolBarItem(root);
     fem->setCommand("FEM");
-    *fem << "FEM_FemMesh2Mesh"
+    *fem << "FEM_FEMMesh2Mesh"
          << "FEM_Analysis"
          << "FEM_SolverCalculix"
          // << "FEM_SolverZ88"
@@ -77,9 +77,9 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
          << "FEM_MaterialSolid"
          << "FEM_MaterialFluid"
          << "FEM_MaterialMechanicalNonlinear"
-         << "FEM_BeamSection"
-         << "FEM_ShellThickness"
-         << "FEM_FluidSection"
+         << "FEM_ElementGeometry1D"
+         << "FEM_ElementGeometry2D"
+         << "FEM_ElementFluid1D"
          << "Separator"
          << "FEM_ConstraintFixed"
          << "FEM_ConstraintDisplacement"
@@ -100,11 +100,11 @@ Gui::ToolBarItem* Workbench::setupToolBars() const
          << "FEM_ConstraintHeatflux"
          << "FEM_ConstraintInitialTemperature"
          << "Separator"
-         << "FEM_ControlSolver"
-         << "FEM_RunSolver"
+         << "FEM_SolverControl"
+         << "FEM_SolverRun"
          << "Separator"
-         << "FEM_PurgeResults"
-         << "FEM_ShowResult";
+         << "FEM_ResultsPurge"
+         << "FEM_ResultShow";
 
 #ifdef FC_USE_VTK
      Gui::ToolBarItem* post = new Gui::ToolBarItem(root);
@@ -132,7 +132,7 @@ Gui::MenuItem* Workbench::setupMenuBar() const
 
     Gui::MenuItem* util = new Gui::MenuItem;
     util->setCommand("&Utilities");
-    *util << "FEM_FemMesh2Mesh";
+    *util << "FEM_FEMMesh2Mesh";
 
     Gui::MenuItem* fem = new Gui::MenuItem;
     root->insertItem(item, fem);
@@ -152,9 +152,9 @@ Gui::MenuItem* Workbench::setupMenuBar() const
          << "FEM_MaterialSolid"
          << "FEM_MaterialFluid"
          << "FEM_MaterialMechanicalNonlinear"
-         << "FEM_BeamSection"
-         << "FEM_ShellThickness"
-         << "FEM_FluidSection"
+         << "FEM_ElementGeometry1D"
+         << "FEM_ElementGeometry2D"
+         << "FEM_ElementFluid1D"
          << "Separator"
          << "FEM_ConstraintFixed"
          << "FEM_ConstraintDisplacement"
@@ -176,11 +176,11 @@ Gui::MenuItem* Workbench::setupMenuBar() const
          << "FEM_ConstraintHeatflux"
          << "FEM_ConstraintInitialTemperature"
          << "Separator"
-         << "FEM_ControlSolver"
-         << "FEM_RunSolver"
+         << "FEM_SolverControl"
+         << "FEM_SolverRun"
          << "Separator"
-         << "FEM_PurgeResults"
-         << "FEM_ShowResult";
+         << "FEM_ResultsPurge"
+         << "FEM_ResultShow";
 
     return root;
 }

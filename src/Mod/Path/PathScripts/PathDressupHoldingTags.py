@@ -44,8 +44,8 @@ def translate(text, context = "PathDressup_HoldingTags", disambig=None):
     return QtCore.QCoreApplication.translate(context, text, disambig)
 
 
-LOG_MODULE = 'PathDressupHoldingTags'
-#PathLog.setLevel(PathLog.Level.DEBUG, LOG_MODULE)
+LOG_MODULE = PathLog.thisModule()
+PathLog.setLevel(PathLog.Level.INFO, LOG_MODULE)
 
 if FreeCAD.GuiUp:
     from pivy import coin
@@ -912,15 +912,31 @@ class ObjectDressup:
             return None
 
         self.toolRadius = 5
-        toolLoad = PathUtils.getLastToolLoad(obj)
+        # toolLoad = PathUtils.getLastToolLoad(obj)
+        # if toolLoad is None or toolLoad.ToolNumber == 0:
+        #     self.toolRadius = 5
+        # else:
+        #     tool = PathUtils.getTool(obj, toolLoad.ToolNumber)
+        #     if not tool or tool.Diameter == 0:
+        #         self.toolRadius = 5
+        #     else:
+        #         self.toolRadius = tool.Diameter / 2
+        toolLoad = obj.Base.ToolController
         if toolLoad is None or toolLoad.ToolNumber == 0:
-            self.toolRadius = 5
+            PathLog.error(translate("No Tool Controller is selected. We need a tool to build a Path\n"))
+            #return
         else:
-            tool = PathUtils.getTool(obj, toolLoad.ToolNumber)
+            # self.vertFeed = toolLoad.VertFeed.Value
+            # self.horizFeed = toolLoad.HorizFeed.Value
+            # self.vertRapid = toolLoad.VertRapid.Value
+            # self.horizRapid = toolLoad.HorizRapid.Value
+            tool = toolLoad.Proxy.getTool(toolLoad)
             if not tool or tool.Diameter == 0:
-                self.toolRadius = 5
+                PathLog.error(translate("No Tool found or diameter is zero. We need a tool to build a Path.\n"))
+                return
             else:
-                self.toolRadius = tool.Diameter / 2
+                self.toolRadius = tool.Diameter/2
+
         self.pathData = pathData
         if generate:
             obj.Height = self.pathData.defaultTagHeight()

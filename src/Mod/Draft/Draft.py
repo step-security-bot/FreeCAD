@@ -244,8 +244,10 @@ def ungroup(obj):
     "removes the current object from any group it belongs to"
     for g in getGroupNames():
         grp = FreeCAD.ActiveDocument.getObject(g)
-        if grp.hasObject(obj):
-            grp.removeObject(obj)
+        if obj in grp.Group:
+            g = grp.Group
+            g.remove(obj)
+            grp.Group = g
             
 def autogroup(obj):
     "adds a given object to the autogroup, if applicable"
@@ -1874,7 +1876,7 @@ def getSVG(obj,scale=1,linewidth=0.35,fontsize=12,fillstyle="shape color",direct
         return ''
 
     def getPath(edges=[],wires=[],pathname=None):
-        import DraftGeomUtils
+        import Part,DraftGeomUtils
         svg = "<path "
         if pathname is None:
             svg += 'id="%s" ' % obj.Name
@@ -1916,45 +1918,60 @@ def getSVG(obj,scale=1,linewidth=0.35,fontsize=12,fillstyle="shape color",direct
                     if plane: drawing_plane_normal = plane.axis
                     c = e.Curve
                     if round(c.Axis.getAngle(drawing_plane_normal),2) == 0:
-                        if len(e.Vertexes) == 1 and iscircle: #complete curve
-                            svg = getCircle(e)
-                            return svg
-                        elif len(e.Vertexes) == 1 and isellipse:
-                            #svg = getEllipse(e)
-                            #return svg
-                            endpoints = (getProj(c.value((c.LastParameter-\
-                                    c.FirstParameter)/2.0)), \
-                                    getProj(vs[-1].Point))
-                        else:
-                            endpoints = (getProj(vs[-1].Point),)
-                        # arc
-                        if iscircle:
-                            rx = ry = c.Radius
-                            rot = 0
-                        else: #ellipse
-                            rx = c.MajorRadius
-                            ry = c.MinorRadius
-                            rot = math.degrees(c.AngleXU * (c.Axis * \
-                                FreeCAD.Vector(0,0,1)))
-                            if rot > 90:
-                                rot -=180
-                            if rot < -90:
-                                rot += 180
-                            #be careful with the sweep flag
-                        flag_large_arc = (((e.ParameterRange[1] - \
-                                e.ParameterRange[0]) / math.pi) % 2) > 1
-                        #flag_sweep = (c.Axis * drawing_plane_normal >= 0) \
-                        #         == (e.LastParameter > e.FirstParameter)
-                        #        == (e.Orientation == "Forward")
-                        # other method: check the direction of the angle between tangents
-                        t1 = e.tangentAt(e.FirstParameter)
-                        t2 = e.tangentAt(e.FirstParameter + (e.LastParameter-e.FirstParameter)/10)
-                        flag_sweep = (DraftVecUtils.angle(t1,t2,drawing_plane_normal) < 0)
-                        for v in endpoints:
-                            edata += 'A %s %s %s %s %s %s %s ' % \
-                                    (str(rx),str(ry),str(rot),\
-                                    str(int(flag_large_arc)),\
-                                    str(int(flag_sweep)),str(v.x),str(v.y))
+                        occversion = Part.OCC_VERSION.split(".")
+                        done = False
+                        if (occversion[0] >= 7) and (occversion[1] >= 1):
+                            # if using occ >= 7.1, use HLR algorithm
+                            import Drawing
+                            snip = Drawing.projectToSVG(e,drawing_plane_normal)
+                            if snip:
+                                try:
+                                    a = "A " + snip.split("path d=\"")[1].split("\"")[0].split("A")[1]
+                                except:
+                                    pass
+                                else:
+                                    edata += a
+                                    done = True
+                        if not done:
+                            if len(e.Vertexes) == 1 and iscircle: #complete curve
+                                svg = getCircle(e)
+                                return svg
+                            elif len(e.Vertexes) == 1 and isellipse:
+                                #svg = getEllipse(e)
+                                #return svg
+                                endpoints = (getProj(c.value((c.LastParameter-\
+                                        c.FirstParameter)/2.0)), \
+                                        getProj(vs[-1].Point))
+                            else:
+                                endpoints = (getProj(vs[-1].Point),)
+                            # arc
+                            if iscircle:
+                                rx = ry = c.Radius
+                                rot = 0
+                            else: #ellipse
+                                rx = c.MajorRadius
+                                ry = c.MinorRadius
+                                rot = math.degrees(c.AngleXU * (c.Axis * \
+                                    FreeCAD.Vector(0,0,1)))
+                                if rot > 90:
+                                    rot -=180
+                                if rot < -90:
+                                    rot += 180
+                                #be careful with the sweep flag
+                            flag_large_arc = (((e.ParameterRange[1] - \
+                                    e.ParameterRange[0]) / math.pi) % 2) > 1
+                            #flag_sweep = (c.Axis * drawing_plane_normal >= 0) \
+                            #         == (e.LastParameter > e.FirstParameter)
+                            #        == (e.Orientation == "Forward")
+                            # other method: check the direction of the angle between tangents
+                            t1 = e.tangentAt(e.FirstParameter)
+                            t2 = e.tangentAt(e.FirstParameter + (e.LastParameter-e.FirstParameter)/10)
+                            flag_sweep = (DraftVecUtils.angle(t1,t2,drawing_plane_normal) < 0)
+                            for v in endpoints:
+                                edata += 'A %s %s %s %s %s %s %s ' % \
+                                        (str(rx),str(ry),str(rot),\
+                                        str(int(flag_large_arc)),\
+                                        str(int(flag_sweep)),str(v.x),str(v.y))
                     else:
                         edata += getDiscretized(e)
                 elif DraftGeomUtils.geomType(e) == "Line":
@@ -5316,17 +5333,16 @@ class _Shape2DView(_DraftObject):
                             if sh.Volume < 0:
                                 sh.reverse()
                             c = sh.section(cutp)
+                            faces = []
                             if (obj.ProjectionMode == "Cutfaces") and (sh.ShapeType == "Solid"):
-                                try:
-                                    c = Part.Wire(Part.__sortEdges__(c.Edges))
-                                except Part.OCCError:
-                                    pass
-                                else:
-                                    try:
-                                        c = Part.Face(c)
-                                    except Part.OCCError:
-                                        pass
-                            cuts.append(c)
+                                wires = DraftGeomUtils.findWires(c.Edges)
+                                for w in wires:
+                                    if w.isClosed():
+                                        faces.append(Part.Face(w))
+                            if faces:
+                                cuts.extend(faces)
+                            else:
+                                cuts.append(c)
                         comp = Part.makeCompound(cuts)
                         opl = FreeCAD.Placement(obj.Base.Placement)
                         comp.Placement = opl.inverse()

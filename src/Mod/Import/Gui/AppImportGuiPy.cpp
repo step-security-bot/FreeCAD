@@ -407,16 +407,6 @@ private:
 
             ImportOCAFExt ocaf(hDoc, pcDoc, file.fileNamePure());
             ocaf.loadShapes();
-
-            // Shape are loaded we must now sort the one we want to display and the one we do want to hide
-            Gui::Document *guiDoc = Gui::Application::Instance->activeDocument();
-            std::vector<const char *>keep_leaf= ocaf.return_leaf();
-            for (std::vector<const char *>::iterator it = keep_leaf.begin() ; it != keep_leaf.end(); ++it)
-                guiDoc->setShow((*it));
-            std::vector<const char *>hide_node= ocaf.return_node();
-            for (std::vector<const char *>::iterator it = hide_node.begin() ; it != hide_node.end(); ++it)
-                guiDoc->setHide((*it));
-
             pcDoc->recompute();
         }
         catch (Standard_Failure) {
@@ -441,12 +431,14 @@ private:
         std::string name8bit = Part::encodeFilename(Utf8Name);
 
         try {
+            Py::Sequence list(object);
             Handle(XCAFApp_Application) hApp = XCAFApp_Application::GetApplication();
             Handle(TDocStd_Document) hDoc;
             hApp->NewDocument(TCollection_ExtendedString("MDTV-CAF"), hDoc);
-            Import::ExportOCAF ocaf(hDoc);
 
-            Py::Sequence list(object);
+            bool keepExplicitPlacement = list.size() > 1;
+            Import::ExportOCAF ocaf(hDoc, keepExplicitPlacement);
+
             for (Py::Sequence::iterator it = list.begin(); it != list.end(); ++it) {
                 PyObject* item = (*it).ptr();
                 if (PyObject_TypeCheck(item, &(App::DocumentObjectPy::Type))) {
