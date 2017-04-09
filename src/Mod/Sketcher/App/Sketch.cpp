@@ -27,6 +27,7 @@
 # include <Precision.hxx>
 # include <ShapeFix_Wire.hxx>
 # include <TopoDS_Compound.hxx>
+# include <Standard_Version.hxx>
 #endif
 
 #include <Base/Writer.h>
@@ -199,7 +200,12 @@ int Sketch::addGeometry(const Part::Geometry *geo, bool fixed)
     if (geo->getTypeId() == GeomPoint::getClassTypeId()) { // add a point
         const GeomPoint *point = static_cast<const GeomPoint*>(geo);
         // create the definition struct for that geom
-        return addPoint(*point, fixed);
+        if( point->Construction == false ) {
+            return addPoint(*point, fixed);
+        }
+        else {
+            return addPoint(*point, true);
+        }
     } else if (geo->getTypeId() == GeomLineSegment::getClassTypeId()) { // add a line
         const GeomLineSegment *lineSeg = static_cast<const GeomLineSegment*>(geo);
         // create the definition struct for that geom
@@ -252,8 +258,6 @@ int Sketch::addPoint(const Part::GeomPoint &point, bool fixed)
 
     // create our own copy
     GeomPoint *p = static_cast<GeomPoint*>(point.clone());
-    // points in a sketch are always construction elements
-    p->Construction = true;
     // create the definition struct for that geom
     GeoDef def;
     def.geo  = p;
@@ -771,6 +775,14 @@ int Sketch::addBSpline(const Part::GeomBSplineCurve &bspline, bool fixed)
     bs.degree       = degree;
     bs.periodic     = periodic;
     def.index       = BSplines.size();
+    
+    // non-solver related, just to enable initialization of knotspoints which is not a parameter of the solver
+    bs.knotpointGeoids.resize(knots.size());
+    
+    for(std::vector<int>::iterator it = bs.knotpointGeoids.begin(); it != bs.knotpointGeoids.end(); ++it) {
+        (*it) = Constraint::GeoUndef; 
+    }
+    
     BSplines.push_back(bs);
 
     // store complete set
@@ -1244,6 +1256,8 @@ int Sketch::addConstraint(const Constraint *constraint)
                 break;
             case BSplineControlPoint:
                 rtn = addInternalAlignmentBSplineControlPoint(constraint->First,constraint->Second, constraint->InternalAlignmentIndex);
+            case BSplineKnotPoint:
+                rtn = addInternalAlignmentKnotPoint(constraint->First,constraint->Second, constraint->InternalAlignmentIndex);
             default:
                 break;
         }
@@ -2461,9 +2475,40 @@ int Sketch::addInternalAlignmentBSplineControlPoint(int geoId1, int geoId2, int 
         GCS::Circle &c = Circles[Geoms[geoId2].index];
 
         GCS::BSpline &b = BSplines[Geoms[geoId1].index];
+        
+        assert(poleindex < static_cast<int>(b.poles.size()) && poleindex >= 0);
 
         int tag = ++ConstraintsCounter;
         GCSsys.addConstraintInternalAlignmentBSplineControlPoint(b, c, poleindex, tag);
+        return ConstraintsCounter;
+    }
+    return -1;
+}
+
+int Sketch::addInternalAlignmentKnotPoint(int geoId1, int geoId2, int knotindex)
+{
+    std::swap(geoId1, geoId2);
+
+    geoId1 = checkGeoId(geoId1);
+    geoId2 = checkGeoId(geoId2);
+
+    if (Geoms[geoId1].type != BSpline)
+        return -1;
+    if (Geoms[geoId2].type != Point)
+        return -1;
+
+    int pointId1 = getPointId(geoId2, start);
+
+    if (pointId1 >= 0 && pointId1 < int(Points.size())) {
+       // GCS::Point &p = Points[pointId1];
+
+        GCS::BSpline &b = BSplines[Geoms[geoId1].index];
+
+        // no constraint is actually added, as knots are fixed geometry in this implementation
+        // indexing is added here.
+        
+        b.knotpointGeoids[knotindex] = geoId2;
+        
         return ConstraintsCounter;
     }
     return -1;
@@ -2514,10 +2559,13 @@ bool Sketch::updateGeometry()
         try {
             if (it->type == Point) {
                 GeomPoint *point = static_cast<GeomPoint*>(it->geo);
-                point->setPoint(Vector3d(*Points[it->startPointId].x,
+                
+                if(!point->Construction) {
+                    point->setPoint(Vector3d(*Points[it->startPointId].x,
                                          *Points[it->startPointId].y,
                                          0.0)
                                );
+                }
             } else if (it->type == Line) {
                 GeomLineSegment *lineSeg = static_cast<GeomLineSegment*>(it->geo);
                 lineSeg->setPoints(Vector3d(*Lines[it->index].p1.x,
@@ -2656,6 +2704,21 @@ bool Sketch::updateGeometry()
                 }
 
                 bsp->setKnots(knots,mult);
+                
+                #if OCC_VERSION_HEX >= 0x060900
+                int index = 0;
+                for(std::vector<int>::const_iterator it5 = mybsp.knotpointGeoids.begin(); it5 != mybsp.knotpointGeoids.end(); ++it5, index++) {
+                    if( *it5 != Constraint::GeoUndef) {
+                        if (Geoms[*it5].type == Point) {
+                            GeomPoint *point = static_cast<GeomPoint*>(Geoms[*it5].geo);
+
+                            if(point->Construction) {
+                                point->setPoint(bsp->pointAtParameter(knots[index]));
+                            }
+                        }
+                    }
+                }
+                #endif
 
             }
         } catch (Base::Exception e) {

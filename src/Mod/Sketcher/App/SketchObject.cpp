@@ -390,6 +390,17 @@ int SketchObject::toggleDriving(int ConstrId)
 
     if (!(vals[ConstrId]->First>=0 || vals[ConstrId]->Second>=0 || vals[ConstrId]->Third>=0) && vals[ConstrId]->isDriving==false)
         return -3; // a constraint that does not have at least one element as not-external-geometry can never be driving.
+    
+    const Part::Geometry * geo1 = getGeometry(vals[ConstrId]->First);
+    const Part::Geometry * geo2 = getGeometry(vals[ConstrId]->Second);
+    const Part::Geometry * geo3 = getGeometry(vals[ConstrId]->Third);
+    
+    bool extorconstructionpoint1 = (vals[ConstrId]->First == Constraint::GeoUndef) || (vals[ConstrId]->First < 0) || (geo1 && geo1->getTypeId() == Part::GeomPoint::getClassTypeId() && geo1->Construction == true);
+    bool extorconstructionpoint2 = (vals[ConstrId]->Second == Constraint::GeoUndef) || (vals[ConstrId]->Second < 0) || (geo2 && geo2->getTypeId() == Part::GeomPoint::getClassTypeId() && geo2->Construction == true);
+    bool extorconstructionpoint3 = (vals[ConstrId]->Third == Constraint::GeoUndef) || (vals[ConstrId]->Third < 0) || (geo3 && geo3->getTypeId() == Part::GeomPoint::getClassTypeId() && geo3->Construction == true);
+    
+    if (extorconstructionpoint1 && extorconstructionpoint2 && extorconstructionpoint3 && vals[ConstrId]->isDriving==false)
+        return -4;
 
     // copy the list
     std::vector<Constraint *> newVals(vals);
@@ -713,6 +724,9 @@ int SketchObject::toggleConstruction(int GeoId)
     const std::vector< Part::Geometry * > &vals = getInternalGeometry();
     if (GeoId < 0 || GeoId >= int(vals.size()))
         return -1;
+    
+    if(vals[GeoId]->getTypeId() == Part::GeomPoint::getClassTypeId())
+        return -1;
 
     std::vector< Part::Geometry * > newVals(vals);
 
@@ -730,6 +744,9 @@ int SketchObject::setConstruction(int GeoId, bool on)
 {
     const std::vector< Part::Geometry * > &vals = getInternalGeometry();
     if (GeoId < 0 || GeoId >= int(vals.size()))
+        return -1;
+    
+    if(vals[GeoId]->getTypeId() == Part::GeomPoint::getClassTypeId())
         return -1;
 
     std::vector< Part::Geometry * > newVals(vals);
@@ -3366,12 +3383,20 @@ int SketchObject::exposeInternalGeometry(int GeoId)
         std::vector<bool> controlpoints(bsp->countPoles());
         std::vector<int> controlpointgeoids(bsp->countPoles());
         
+        std::vector<bool> knotpoints(bsp->countKnots());
+        std::vector<int> knotgeoids(bsp->countKnots());
+        
         bool isfirstweightconstrained = false;
         
         std::vector<bool>::iterator itb;
         std::vector<int>::iterator it;
         
         for(it=controlpointgeoids.begin(), itb=controlpoints.begin(); it!=controlpointgeoids.end() && itb!=controlpoints.end(); ++it, ++itb) {
+            (*it)=-1;
+            (*itb)=false;
+        }
+        
+        for(it=knotgeoids.begin(), itb=knotpoints.begin(); it!=knotgeoids.end() && itb!=knotpoints.end(); ++it, ++itb) {
             (*it)=-1;
             (*itb)=false;
         }
@@ -3387,6 +3412,10 @@ int SketchObject::exposeInternalGeometry(int GeoId)
                     case Sketcher::BSplineControlPoint:
                         controlpoints[(*it)->InternalAlignmentIndex] = true;
                         controlpointgeoids[(*it)->InternalAlignmentIndex] = (*it)->First;
+                        break;
+                    case Sketcher::BSplineKnotPoint:
+                        knotpoints[(*it)->InternalAlignmentIndex] = true;
+                        knotgeoids[(*it)->InternalAlignmentIndex] = (*it)->First;
                         break;
                     default:
                         return -1;
@@ -3411,6 +3440,7 @@ int SketchObject::exposeInternalGeometry(int GeoId)
         std::vector<Constraint *> icon;
         
         std::vector<Base::Vector3d> poles = bsp->getPoles();
+        std::vector<double> knots = bsp->getKnots();
         
         double distance_p0_p1 = (poles[1]-poles[0]).Length(); // for visual purposes only
         
@@ -3437,15 +3467,19 @@ int SketchObject::exposeInternalGeometry(int GeoId)
                 icon.push_back(newConstr);
 
                 if(it != controlpointgeoids.begin()) {
-                    // if pole-weight newly created make it equal to first weight by default
-                    /*Sketcher::Constraint *newConstr2 = new Sketcher::Constraint();
-                    newConstr2->Type = Sketcher::Equal;
-                    newConstr2->First = currentgeoid+incrgeo+1;
-                    newConstr2->FirstPos = Sketcher::none;
-                    newConstr2->Second = controlpointgeoids[0];
-                    newConstr2->SecondPos = Sketcher::none;
+                    // if pole-weight newly created AND first weight is radius-constrained,
+                    // make it equal to first weight by default
+                    
+                    if(isfirstweightconstrained) {
+                        Sketcher::Constraint *newConstr2 = new Sketcher::Constraint();
+                        newConstr2->Type = Sketcher::Equal;
+                        newConstr2->First = currentgeoid+incrgeo+1;
+                        newConstr2->FirstPos = Sketcher::none;
+                        newConstr2->Second = controlpointgeoids[0];
+                        newConstr2->SecondPos = Sketcher::none;
 
-                    icon.push_back(newConstr2);*/
+                        icon.push_back(newConstr2);
+                    }
                 }
                 else {
                     controlpointgeoids[0] = currentgeoid+incrgeo+1;
@@ -3454,6 +3488,38 @@ int SketchObject::exposeInternalGeometry(int GeoId)
                 incrgeo++;
             }
         }
+        
+        #if OCC_VERSION_HEX >= 0x060900
+        index=0;
+        
+        for(it=knotgeoids.begin(), itb=knotpoints.begin(); it!=knotgeoids.end() && itb!=knotpoints.end(); ++it, ++itb, index++) {
+            
+            if(!(*itb)) // if knot point not existing
+            {
+                Part::GeomPoint *kp = new Part::GeomPoint();
+
+                kp->setPoint(bsp->pointAtParameter(knots[index]));
+                
+                // a construction point, for now on, is a point that is not handled by the solver and does not contribute to the dofs
+                // This is done so as to avoid having to add another data member to GeomPoint that is specific for the sketcher.
+                kp->Construction=true; 
+
+                igeo.push_back(kp);
+
+                Sketcher::Constraint *newConstr = new Sketcher::Constraint();
+                newConstr->Type = Sketcher::InternalAlignment;
+                newConstr->AlignmentType = Sketcher::BSplineKnotPoint;
+                newConstr->First = currentgeoid+incrgeo+1;
+                newConstr->FirstPos = Sketcher::mid;
+                newConstr->Second = GeoId;
+                newConstr->InternalAlignmentIndex = index;
+
+                icon.push_back(newConstr);
+
+                incrgeo++;
+            }
+        }
+        #endif
 
         Q_UNUSED(isfirstweightconstrained);
         // constraint the first weight to allow for seamless weight modification and proper visualization
@@ -3682,12 +3748,20 @@ int SketchObject::deleteUnusedInternalGeometry(int GeoId, bool delgeoid)
 
         // First we search existing IA 
         std::vector<int> controlpointgeoids(bsp->countPoles());
-        std::vector<int> associatedcontraints(bsp->countPoles());
+        std::vector<int> cpassociatedcontraints(bsp->countPoles());
+        
+        std::vector<int> knotgeoids(bsp->countKnots());
+        std::vector<int> kassociatedcontraints(bsp->countKnots());
 
         std::vector<int>::iterator it;
         std::vector<int>::iterator ita;
 
-        for (it=controlpointgeoids.begin(), ita=associatedcontraints.begin(); it!=controlpointgeoids.end() && ita!=associatedcontraints.end(); ++it, ++ita) {
+        for (it=controlpointgeoids.begin(), ita=cpassociatedcontraints.begin(); it!=controlpointgeoids.end() && ita!=cpassociatedcontraints.end(); ++it, ++ita) {
+            (*it) = -1;
+            (*ita) = 0;
+        }
+        
+        for (it=knotgeoids.begin(), ita=kassociatedcontraints.begin(); it!=knotgeoids.end() && ita!=kassociatedcontraints.end(); ++it, ++ita) {
             (*it) = -1;
             (*ita) = 0;
         }
@@ -3701,6 +3775,9 @@ int SketchObject::deleteUnusedInternalGeometry(int GeoId, bool delgeoid)
                 case Sketcher::BSplineControlPoint:
                     controlpointgeoids[(*jt)->InternalAlignmentIndex] = (*jt)->First;
                     break;
+                case Sketcher::BSplineKnotPoint:
+                    knotgeoids[(*jt)->InternalAlignmentIndex] = (*jt)->First;
+                    break;
                 default:
                     return -1;
                 }
@@ -3709,7 +3786,7 @@ int SketchObject::deleteUnusedInternalGeometry(int GeoId, bool delgeoid)
 
         std::vector<int> delgeometries;
 
-        for (it=controlpointgeoids.begin(), ita=associatedcontraints.begin(); it!=controlpointgeoids.end() && ita!=associatedcontraints.end(); ++it, ++ita) {
+        for (it=controlpointgeoids.begin(), ita=cpassociatedcontraints.begin(); it!=controlpointgeoids.end() && ita!=cpassociatedcontraints.end(); ++it, ++ita) {
             if ((*it) != -1) {
                 // look for a circle at geoid index
                 for (std::vector< Sketcher::Constraint * >::const_iterator itc= vals.begin(); itc != vals.end(); ++itc) {
@@ -3746,6 +3823,22 @@ int SketchObject::deleteUnusedInternalGeometry(int GeoId, bool delgeoid)
             }
         }
 
+        for (it=knotgeoids.begin(), ita=kassociatedcontraints.begin(); it!=knotgeoids.end() && ita!=kassociatedcontraints.end(); ++it, ++ita) {
+            if ((*it) != -1) {
+                // look for a point at geoid index
+                for (std::vector< Sketcher::Constraint * >::const_iterator itc= vals.begin(); itc != vals.end(); ++itc) {
+                    if ((*itc)->Second == (*it) || (*itc)->First == (*it) || (*itc)->Third == (*it)) {
+                        (*ita)++;
+                    }
+                }
+                
+                if ( (*ita) < 2 ) { // IA
+                    delgeometries.push_back((*it));
+                }
+            }
+        }
+        
+        
         if(delgeoid)
             delgeometries.push_back(GeoId);
 
@@ -3872,6 +3965,180 @@ bool SketchObject::increaseBSplineDegree(int GeoId, int degreeincrement /*= 1*/)
     Geometry.setValues(newVals);
     Constraints.acceptGeometry(getCompleteGeometry());
     rebuildVertexIndex();
+
+    return true;
+}
+
+bool SketchObject::modifyBSplineKnotMultiplicity(int GeoId, int knotIndex, int multiplicityincr)
+{
+    #if OCC_VERSION_HEX < 0x060900
+    Base::Console().Error("This version of OCE/OCC does not support knot operation. You need 6.9.0 or higher\n");
+    return false;
+    #endif
+    
+    if (GeoId < 0 || GeoId > getHighestCurveIndex())
+        throw Base::ValueError("BSpline GeoId is out of bounds.");
+    
+    if (multiplicityincr == 0) // no change in multiplicity
+        throw Base::ValueError("You are requesting no change in knot multiplicity.");
+    
+    const Part::Geometry *geo = getGeometry(GeoId);
+    
+    if(geo->getTypeId() != Part::GeomBSplineCurve::getClassTypeId())
+        throw Base::TypeError("The GeoId provided is not a B-spline curve");
+    
+    const Part::GeomBSplineCurve *bsp = static_cast<const Part::GeomBSplineCurve *>(geo);
+    
+    int degree = bsp->getDegree();
+    
+    if( knotIndex > bsp->countKnots() || knotIndex < 1 ) // knotindex in OCC 1 -> countKnots
+        throw Base::ValueError("The knot index is out of bounds. Note that in accordance with OCC notation, the first knot has index 1 and not zero.");
+
+    Part::GeomBSplineCurve *bspline;
+
+    int curmult = bsp->getMultiplicity(knotIndex);
+    
+    if ( (curmult + multiplicityincr) > degree ) // zero is removing the knot, degree is just positional continuity
+        throw Base::ValueError("The multiplicity cannot be increased beyond the degree of the b-spline.");
+    
+    if ( (curmult + multiplicityincr) < 0) // zero is removing the knot, degree is just positional continuity
+        throw Base::ValueError("The multiplicity cannot be decreased beyond zero.");
+    
+    try {
+
+        bspline = static_cast<Part::GeomBSplineCurve *>(bsp->clone());
+
+        if(multiplicityincr > 0) { // increase multiplicity
+            bspline->increaseMultiplicity(knotIndex, curmult + multiplicityincr);
+        }
+        else { // decrease multiplicity
+            bool result = bspline->removeKnot(knotIndex, curmult + multiplicityincr,1E6);
+
+            if(!result)
+                throw Base::RuntimeError("OCC is unable to decrease the multiplicity within the maximum tolerance.");
+        }
+    }
+    catch (const Base::Exception& e) {
+        Base::Console().Error("%s\n", e.what());
+        return false;
+    }
+
+    // we succeeded with the multiplicity modification, so aligment geometry may be invalid/inconsistent for the new bspline
+
+    std::vector<int> delGeoId;
+    
+    std::vector<Base::Vector3d> poles = bsp->getPoles();
+    std::vector<Base::Vector3d> newpoles = bspline->getPoles();
+    std::vector<int> prevpole(bsp->countPoles());
+
+    for(int i = 0; i < int(poles.size()); i++)
+        prevpole[i] = -1;
+
+    int taken = 0;
+    for(int j = 0; j < int(poles.size()); j++){
+        for(int i = taken; i < int(newpoles.size()); i++){
+            if( newpoles[i] == poles[j] ) {
+                prevpole[j] = i;
+                taken++;
+                break;
+            }
+        }
+    }
+    
+    // on fully removing a knot the knot geometry changes
+    std::vector<double> knots = bsp->getKnots();
+    std::vector<double> newknots = bspline->getKnots();
+    std::vector<int> prevknot(bsp->countKnots());
+    
+    for(int i = 0; i < int(knots.size()); i++)
+        prevknot[i] = -1;
+    
+    taken = 0;
+    for(int j = 0; j < int(knots.size()); j++){
+        for(int i = taken; i < int(newknots.size()); i++){
+            if( newknots[i] == knots[j] ) {
+                prevknot[j] = i;
+                taken++;
+                break;
+            }
+        }
+    }
+
+    const std::vector< Sketcher::Constraint * > &cvals = Constraints.getValues();
+
+    std::vector< Constraint * > newcVals(0);
+
+    // modify pole constraints
+    for (std::vector< Sketcher::Constraint * >::const_iterator it= cvals.begin(); it != cvals.end(); ++it) {
+        if((*it)->Type == Sketcher::InternalAlignment && (*it)->Second == GeoId)
+        {
+            if((*it)->AlignmentType == Sketcher::BSplineControlPoint) {
+                if (prevpole[(*it)->InternalAlignmentIndex]!=-1) {
+                    assert(prevpole[(*it)->InternalAlignmentIndex] < bspline->countPoles());
+                    Constraint * newConstr = (*it)->clone();
+                    newConstr->InternalAlignmentIndex = prevpole[(*it)->InternalAlignmentIndex];
+                    newcVals.push_back(newConstr);
+                }
+                else { // it is an internal aligment geometry that is no longer valid => delete it and the pole circle
+                    delGeoId.push_back((*it)->First);
+                }
+            }
+            else if((*it)->AlignmentType == Sketcher::BSplineKnotPoint) {
+                if (prevknot[(*it)->InternalAlignmentIndex]!=-1) {
+                    assert(prevknot[(*it)->InternalAlignmentIndex] < bspline->countKnots());
+                    Constraint * newConstr = (*it)->clone();
+                    newConstr->InternalAlignmentIndex = prevknot[(*it)->InternalAlignmentIndex];
+                    newcVals.push_back(newConstr);
+                }
+                else { // it is an internal aligment geometry that is no longer valid => delete it and the knot point
+                    delGeoId.push_back((*it)->First);
+                }
+            }
+            else { // it is a bspline geometry, but not a controlpoint or knot
+                newcVals.push_back(*it);
+            }
+        }
+        else {
+            newcVals.push_back(*it);
+        }
+    }
+
+    const std::vector< Part::Geometry * > &vals = getInternalGeometry();
+    
+    std::vector< Part::Geometry * > newVals(vals);
+    
+    newVals[GeoId] = bspline;
+    
+    Geometry.setValues(newVals);
+    Constraints.acceptGeometry(getCompleteGeometry());
+    rebuildVertexIndex();
+    
+    this->Constraints.setValues(newcVals);
+    
+    std::sort (delGeoId.begin(), delGeoId.end());
+    
+    if (delGeoId.size()>0) {
+        for (std::vector<int>::reverse_iterator it=delGeoId.rbegin(); it!=delGeoId.rend(); ++it) {
+            delGeometry(*it,false);
+        }
+    }
+
+    // * DOCUMENTING OCC ISSUE OCC < 6.9.0
+    // https://forum.freecadweb.org/viewtopic.php?f=10&t=9364&start=330#p162528
+    //
+    // A segmentation fault is generated:
+    //Program received signal SIGSEGV, Segmentation fault.
+    //#0 /lib/x86_64-linux-gnu/libc.so.6(+0x36cb0) [0x7f4b933bbcb0]
+    //#1  0x7f4b0300ea14 in BSplCLib::BuildCache(double, double, bool, int, TColStd_Array1OfReal const&, TColgp_Array1OfPnt const&, TColStd_Array1OfReal const&, TColgp_Array1OfPnt&, TColStd_Array1OfReal&) from /usr/lib/x86_64-linux-gnu/libTKMath.so.10+0x484
+    //#2  0x7f4b033f9582 in Geom_BSplineCurve::ValidateCache(double) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x202
+    //#3  0x7f4b033f2a7e in Geom_BSplineCurve::D0(double, gp_Pnt&) const from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0xde
+    //#4  0x7f4b033de1b5 in Geom_Curve::Value(double) const from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x25
+    //#5  0x7f4b03423d73 in GeomLProp_CurveTool::Value(Handle_Geom_Curve const&, double, gp_Pnt&) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x13
+    //#6  0x7f4b03427175 in GeomLProp_CLProps::SetParameter(double) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x75
+    //#7  0x7f4b0342727d in GeomLProp_CLProps::GeomLProp_CLProps(Handle_Geom_Curve const&, double, int, double) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0xcd
+    //#8  0x7f4b11924b53 in Part::GeomCurve::pointAtParameter(double) const from /home/abdullah/github/freecad-build/Mod/Part/Part.so+0xa7
+
+
 
     return true;
 }

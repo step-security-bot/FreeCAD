@@ -35,6 +35,8 @@
 # include <Standard_Failure.hxx>
 #endif
 
+#include <boost/uuid/uuid_io.hpp>
+
 #include <Base/GeometryPyCXX.h>
 #include <Base/Matrix.h>
 #include <Base/MatrixPy.h>
@@ -217,7 +219,14 @@ Py::Boolean GeometryPy::getConstruction(void) const
 
 void  GeometryPy::setConstruction(Py::Boolean arg)
 {
-    getGeometryPtr()->Construction = arg;
+    if(getGeometryPtr()->getClassTypeId() != Part::GeomPoint::getClassTypeId())
+        getGeometryPtr()->Construction = arg;
+}
+
+Py::String GeometryPy::getTag(void) const
+{
+    std::string tmp = boost::uuids::to_string(getGeometryPtr()->getTag());
+    return Py::String(tmp);
 }
 
 PyObject *GeometryPy::getCustomAttributes(const char* /*attr*/) const
