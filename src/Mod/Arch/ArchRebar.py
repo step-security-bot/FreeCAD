@@ -35,7 +35,7 @@ else:
     def QT_TRANSLATE_NOOP(ctxt,txt):
         return txt
     # \endcond
-    
+
 ## @package ArchRebar
 #  \ingroup ARCH
 #  \brief The Rebar object and tools
@@ -85,6 +85,7 @@ def makeRebar(baseobj=None,sketch=None,diameter=None,amount=1,offset=None,name="
     else:
         obj.Diameter = p.GetFloat("RebarDiameter",6)
     obj.Amount = amount
+    obj.Document.recompute()
     if offset:
         obj.OffsetStart = offset
         obj.OffsetEnd = offset
@@ -185,7 +186,7 @@ class _Rebar(ArchComponent.Component):
                     v = DraftGeomUtils.vec(e).normalize()
                     return e.Vertexes[0].Point,v
         return None,None
-        
+
     def getRebarData(self,obj):
         if len(obj.InList) != 1:
             return
@@ -237,10 +238,10 @@ class _Rebar(ArchComponent.Component):
         return [wires,obj.Diameter.Value/2]
 
     def execute(self,obj):
-        
+
         if self.clone(obj):
             return
-        
+
         if len(obj.InList) != 1:
             return
         if Draft.getType(obj.InList[0]) != "Structure":

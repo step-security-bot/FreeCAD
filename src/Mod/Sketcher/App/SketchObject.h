@@ -109,6 +109,8 @@ public:
     int delConstraintsToExternal();
     /// transfers all contraints of a point to a new point
     int transferConstraints(int fromGeoId, PointPos fromPosId, int toGeoId, PointPos toPosId);
+    /// Carbon copy another sketch geometry and constraints
+    int carbonCopy(App::DocumentObject * pObj, bool construction = true);
     /// add an external geometry reference
     int addExternal(App::DocumentObject *Obj, const char* SubName);
     /** delete external
@@ -300,6 +302,8 @@ public:
 
     /// Flag to allow external geometry from other bodies than the one this sketch belongs to
     bool allowOtherBody;
+    /// Flag to allow carbon copy from misaligned geometry
+    bool allowUnaligned;
 
     enum eReasonList{
         rlAllowed,
@@ -307,10 +311,16 @@ public:
         rlCircularReference,
         rlOtherPart,
         rlOtherBody,
+        rlNotASketch,           // for carbon copy
+        rlNonParallel,          // for carbon copy
+        rlAxesMisaligned,       // for carbon copy
+        rlOriginsMisaligned     // for carbon copy
     };
     /// Return true if this object is allowed as external geometry for the
     /// sketch. rsn argument receives the reason for disallowing.
     bool isExternalAllowed(App::Document *pDoc, App::DocumentObject *pObj, eReasonList* rsn = 0) const;
+    
+    bool isCarbonCopyAllowed(App::Document *pDoc, App::DocumentObject *pObj, bool & xinv, bool & yinv, eReasonList* rsn = 0) const;
 
 protected:
     /// get called by the container when a property has changed

@@ -99,6 +99,7 @@ SketchObject::SketchObject()
     ADD_PROPERTY_TYPE(ExternalGeometry,(0,0),"Sketch",(App::PropertyType)(App::Prop_None),"Sketch external geometry");
 
     allowOtherBody = true;
+    allowUnaligned = true;
 
     for (std::vector<Part::Geometry *>::iterator it=ExternalGeo.begin(); it != ExternalGeo.end(); ++it)
         if (*it) delete *it;
@@ -519,7 +520,7 @@ Base::Vector3d SketchObject::getPoint(int GeoId, PointPos PosId) const
         else if (PosId == mid)
             return aoh->getCenter();
     } else if (geo->getTypeId() == Part::GeomArcOfParabola::getClassTypeId()) {
-        const Part::GeomArcOfParabola *aop = dynamic_cast<const Part::GeomArcOfParabola*>(geo);
+        const Part::GeomArcOfParabola *aop = static_cast<const Part::GeomArcOfParabola*>(geo);
         if (PosId == start)
             return aop->getStartPoint();
         else if (PosId == end)
@@ -594,9 +595,9 @@ bool SketchObject::isSupportedGeometry(const Part::Geometry *geo) const
         return true;
     }
     if (geo->getTypeId() == Part::GeomTrimmedCurve::getClassTypeId()) {
-        Handle_Geom_TrimmedCurve trim = Handle_Geom_TrimmedCurve::DownCast(geo->handle());
-        Handle_Geom_Circle circle = Handle_Geom_Circle::DownCast(trim->BasisCurve());
-        Handle_Geom_Ellipse ellipse = Handle_Geom_Ellipse::DownCast(trim->BasisCurve());
+        Handle(Geom_TrimmedCurve) trim = Handle(Geom_TrimmedCurve)::DownCast(geo->handle());
+        Handle(Geom_Circle) circle = Handle(Geom_Circle)::DownCast(trim->BasisCurve());
+        Handle(Geom_Ellipse) ellipse = Handle(Geom_Ellipse)::DownCast(trim->BasisCurve());
         if (!circle.IsNull() || !ellipse.IsNull()) {
             return true;
         }
@@ -623,16 +624,24 @@ int SketchObject::addGeometry(const std::vector<Part::Geometry *> &geoList, bool
     const std::vector< Part::Geometry * > &vals = getInternalGeometry();
 
     std::vector< Part::Geometry * > newVals(vals);
+    std::vector< Part::Geometry * > copies;
+    copies.reserve(geoList.size());
     for (std::vector<Part::Geometry *>::const_iterator it = geoList.begin(); it != geoList.end(); ++it) {
-        if(construction && (*it)->getTypeId() != Part::GeomPoint::getClassTypeId())
-            const_cast<Part::Geometry *>(*it)->Construction = construction;
-        
-        newVals.push_back(*it);
+        Part::Geometry* copy = (*it)->copy();
+        if(construction && copy->getTypeId() != Part::GeomPoint::getClassTypeId()) {
+            copy->Construction = construction;
+        }
+
+        copies.push_back(copy);
     }
+
+    newVals.insert(newVals.end(), copies.begin(), copies.end());
     Geometry.setValues(newVals);
+    for (std::vector<Part::Geometry *>::iterator it = copies.begin(); it != copies.end(); ++it)
+        delete *it;
     Constraints.acceptGeometry(getCompleteGeometry());
     rebuildVertexIndex();
-    
+
     return Geometry.getSize()-1;
 }
 
@@ -641,7 +650,7 @@ int SketchObject::addGeometry(const Part::Geometry *geo, bool construction/*=fal
     const std::vector< Part::Geometry * > &vals = getInternalGeometry();
 
     std::vector< Part::Geometry * > newVals(vals);
-    Part::Geometry *geoNew = geo->clone();
+    Part::Geometry *geoNew = geo->copy();
     
     if(geoNew->getTypeId() != Part::GeomPoint::getClassTypeId())
         geoNew->Construction = construction;
@@ -1041,7 +1050,7 @@ int SketchObject::fillet(int GeoId1, int GeoId2,
             }
             dist1.ProjectToLine(arc->getStartPoint(/*emulateCCW=*/true)-intersection, dir1);
             dist2.ProjectToLine(arc->getStartPoint(/*emulateCCW=*/true)-intersection, dir2);
-            Part::Geometry *newgeo = dynamic_cast<Part::Geometry* >(arc);
+            Part::Geometry *newgeo = arc;
             filletId = addGeometry(newgeo);
             if (filletId < 0) {
                 delete arc;
@@ -1928,7 +1937,7 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
                 }
                 else { // trim arc end
                     delConstraintOnPoint(GeoId, end, false);
-                    Part::GeomArcOfHyperbola *aoe1 = dynamic_cast<Part::GeomArcOfHyperbola*>(geomlist[GeoId]);
+                    Part::GeomArcOfHyperbola *aoe1 = static_cast<Part::GeomArcOfHyperbola*>(geomlist[GeoId]);
                     aoe1->setRange(startAngle, startAngle + theta1, /*emulateCCW=*/true);
                     Sketcher::Constraint *newConstr = new Sketcher::Constraint();
                     newConstr->Type = constrType;
@@ -2006,6 +2015,114 @@ bool SketchObject::isExternalAllowed(App::Document *pDoc, App::DocumentObject *p
     return true;
 }
 
+bool SketchObject::isCarbonCopyAllowed(App::Document *pDoc, App::DocumentObject *pObj, bool & xinv, bool & yinv, eReasonList* rsn) const
+{
+    if (rsn)
+        *rsn = rlAllowed;
+    
+    // Only applicable to sketches
+    if (pObj->getTypeId() != Sketcher::SketchObject::getClassTypeId()) {
+        if (rsn)
+            *rsn = rlNotASketch;
+        return false;
+    }
+    
+    // Sketches outside of the Document are NOT allowed
+    if (this->getDocument() != pDoc){
+        if (rsn)
+            *rsn = rlOtherDoc;
+        return false;
+    }
+    
+    //circular reference prevention
+    try {
+        if (!(this->testIfLinkDAGCompatible(pObj))){
+            if (rsn)
+                *rsn = rlCircularReference;
+            return false;
+        }
+    } catch (Base::Exception &e) {
+        Base::Console().Warning("Probably, there is a circular reference in the document. Error: %s\n", e.what());
+        return true; //prohibiting this reference won't remove the problem anyway...
+    }
+    
+    
+    // Note: Checking for the body of the support doesn't work when the support are the three base planes
+    //App::DocumentObject *support = this->Support.getValue();
+    Part::BodyBase* body_this = Part::BodyBase::findBodyOf(this);
+    Part::BodyBase* body_obj = Part::BodyBase::findBodyOf(pObj);
+    App::Part* part_this = App::Part::getPartOfObject(this, true);
+    App::Part* part_obj = App::Part::getPartOfObject(pObj, true);
+    if (part_this == part_obj){ //either in the same part, or in the root of document
+        if (body_this != NULL) {
+            if ((body_this != body_obj) && !this->allowOtherBody) {
+                if (rsn)
+                    *rsn = rlOtherBody;
+                return false;
+            }
+        }
+    } else {
+        // cross-part link. Disallow, should be done via shapebinders only
+        if (rsn)
+            *rsn = rlOtherPart;
+        return false;
+    }
+    
+    SketchObject * psObj = static_cast<SketchObject *>(pObj);
+    
+    const Rotation & srot = psObj->Placement.getValue().getRotation();
+    const Rotation & lrot = this->Placement.getValue().getRotation();
+    
+    Base::Vector3d snormal(0,0,1);
+    Base::Vector3d sx(1,0,0);
+    Base::Vector3d sy(0,1,0);
+    srot.multVec(snormal, snormal);
+    srot.multVec(sx, sx);
+    srot.multVec(sy, sy);
+    
+    Base::Vector3d lnormal(0,0,1);
+    Base::Vector3d lx(1,0,0);
+    Base::Vector3d ly(0,1,0);
+    lrot.multVec(lnormal, lnormal);
+    lrot.multVec(lx, lx);
+    lrot.multVec(ly, ly);
+    
+    double dot = snormal*lnormal;
+    double dotx = sx * lx;
+    double doty = sy * ly;
+    
+    // the planes of the sketches must be parallel
+    if(!allowUnaligned && dot != 1.0 && dot != -1.0) {
+        if (rsn)
+            *rsn = rlNonParallel;
+        return false;
+    }
+    
+    // the axis must be aligned
+    if(!allowUnaligned && ((dotx != 1.0 && dotx != -1.0) || (doty != 1.0 && doty != -1.0))) {
+        if (rsn)
+            *rsn = rlAxesMisaligned;
+        return false;
+    }
+
+    
+    // the origins of the sketches must be aligned or be the same
+    Base::Vector3d ddir = (psObj->Placement.getValue().getPosition() - this->Placement.getValue().getPosition()).Normalize();
+    
+    double alignment = ddir * lnormal;
+    
+    if(!allowUnaligned && (alignment != 1.0 && alignment != -1.0) && (psObj->Placement.getValue().getPosition() != this->Placement.getValue().getPosition()) ){
+        if (rsn)
+            *rsn = rlOriginsMisaligned;
+        return false;
+    }
+    
+    xinv = allowUnaligned?false:(dotx != 1.0);
+    yinv = allowUnaligned?false:(doty != 1.0);
+
+    return true;
+}
+
 int SketchObject::addSymmetric(const std::vector<int> &geoIdList, int refGeoId, Sketcher::PointPos refPosId/*=Sketcher::none*/)
 {
     const std::vector< Part::Geometry * > &geovals = getInternalGeometry();
@@ -2034,7 +2151,7 @@ int SketchObject::addSymmetric(const std::vector<int> &geoIdList, int refGeoId, 
 
         for (std::vector<int>::const_iterator it = geoIdList.begin(); it != geoIdList.end(); ++it) {
             const Part::Geometry *geo = getGeometry(*it);
-            Part::Geometry *geosym = geo->clone();
+            Part::Geometry *geosym = geo->copy();
 
             // Handle Geometry
             if(geosym->getTypeId() == Part::GeomLineSegment::getClassTypeId()){
@@ -2296,7 +2413,7 @@ int SketchObject::addSymmetric(const std::vector<int> &geoIdList, int refGeoId, 
 
         for (std::vector<int>::const_iterator it = geoIdList.begin(); it != geoIdList.end(); ++it) {
             const Part::Geometry *geo = getGeometry(*it);
-            Part::Geometry *geosym = geo->clone();
+            Part::Geometry *geosym = geo->copy();
 
             // Handle Geometry
             if(geosym->getTypeId() == Part::GeomLineSegment::getClassTypeId()){
@@ -2498,6 +2615,7 @@ int SketchObject::addSymmetric(const std::vector<int> &geoIdList, int refGeoId, 
                         (*it)->Type ==  Sketcher::Distance ||
                         (*it)->Type ==  Sketcher::Equal ||
                         (*it)->Type ==  Sketcher::Radius ||
+                        (*it)->Type ==  Sketcher::Angle ||
                         (*it)->Type ==  Sketcher::PointOnObject ){
                             Constraint *constNew = (*it)->copy();
 
@@ -2518,6 +2636,10 @@ int SketchObject::addSymmetric(const std::vector<int> &geoIdList, int refGeoId, 
 
                             if (constNew->Type == Tangent || constNew->Type == Perpendicular)
                                 AutoLockTangencyAndPerpty(constNew,true);
+                            
+                            if( ((*it)->Type ==  Sketcher::Angle) && (refPosId == Sketcher::none)) {
+                                constNew->setValue(-(*it)->getValue());
+                            }
 
                             newconstrVals.push_back(constNew);
                         }
@@ -2621,7 +2743,7 @@ int SketchObject::addCopy(const std::vector<int> &geoIdList, const Base::Vector3
 
             for (std::vector<int>::const_iterator it = geoIdList.begin(); it != geoIdList.end(); ++it) {
                 const Part::Geometry *geo = getGeometry(*it);
-                Part::Geometry *geocopy = geo->clone();
+                Part::Geometry *geocopy = geo->copy();
 
                 // Handle Geometry
                 if(geocopy->getTypeId() == Part::GeomLineSegment::getClassTypeId()){
@@ -3941,7 +4063,7 @@ bool SketchObject::increaseBSplineDegree(int GeoId, int degreeincrement /*= 1*/)
 
     const Part::GeomBSplineCurve *bsp = static_cast<const Part::GeomBSplineCurve *>(geo);
 
-    const Handle_Geom_BSplineCurve curve = Handle_Geom_BSplineCurve::DownCast(bsp->handle());
+    const Handle(Geom_BSplineCurve) curve = Handle(Geom_BSplineCurve)::DownCast(bsp->handle());
 
     Part::GeomBSplineCurve *bspline = new Part::GeomBSplineCurve(curve);
 
@@ -4133,14 +4255,130 @@ bool SketchObject::modifyBSplineKnotMultiplicity(int GeoId, int knotIndex, int m
     //#2  0x7f4b033f9582 in Geom_BSplineCurve::ValidateCache(double) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x202
     //#3  0x7f4b033f2a7e in Geom_BSplineCurve::D0(double, gp_Pnt&) const from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0xde
     //#4  0x7f4b033de1b5 in Geom_Curve::Value(double) const from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x25
-    //#5  0x7f4b03423d73 in GeomLProp_CurveTool::Value(Handle_Geom_Curve const&, double, gp_Pnt&) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x13
+    //#5  0x7f4b03423d73 in GeomLProp_CurveTool::Value(Handle(Geom_Curve) const&, double, gp_Pnt&) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x13
     //#6  0x7f4b03427175 in GeomLProp_CLProps::SetParameter(double) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0x75
-    //#7  0x7f4b0342727d in GeomLProp_CLProps::GeomLProp_CLProps(Handle_Geom_Curve const&, double, int, double) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0xcd
+    //#7  0x7f4b0342727d in GeomLProp_CLProps::GeomLProp_CLProps(Handle(Geom_Curve) const&, double, int, double) from /usr/lib/x86_64-linux-gnu/libTKG3d.so.10+0xcd
     //#8  0x7f4b11924b53 in Part::GeomCurve::pointAtParameter(double) const from /home/abdullah/github/freecad-build/Mod/Part/Part.so+0xa7
 
 
 
     return true;
+}
+
+int SketchObject::carbonCopy(App::DocumentObject * pObj, bool construction)
+{
+    // so far only externals to the support of the sketch and datum features
+    bool xinv = false, yinv = false;
+    
+    if (!isCarbonCopyAllowed(pObj->getDocument(), pObj, xinv, yinv))
+        return -1;
+    
+    SketchObject * psObj = static_cast<SketchObject *>(pObj);
+    
+    const std::vector< Part::Geometry * > &vals = getInternalGeometry();
+    
+    const std::vector< Sketcher::Constraint * > &cvals = Constraints.getValues();
+    
+    std::vector< Part::Geometry * > newVals(vals);
+    
+    std::vector< Constraint * > newcVals(cvals);
+    
+    int nextgeoid = vals.size();
+    
+    int nextcid = cvals.size();
+    
+    const std::vector< Part::Geometry * > &svals = psObj->getInternalGeometry();
+    
+    const std::vector< Sketcher::Constraint * > &scvals = psObj->Constraints.getValues();
+    
+    for (std::vector<Part::Geometry *>::const_iterator it=svals.begin(); it != svals.end(); ++it){
+        Part::Geometry *geoNew = (*it)->copy();
+        if(construction) {
+            geoNew->Construction = true;
+        }
+        newVals.push_back(geoNew);
+    }
+    
+    for (std::vector< Sketcher::Constraint * >::const_iterator it= scvals.begin(); it != scvals.end(); ++it) {
+        Sketcher::Constraint *newConstr = (*it)->copy();
+        if( (*it)->First>=0 )
+            newConstr->First += nextgeoid;
+        if( (*it)->Second>=0 )
+            newConstr->Second += nextgeoid;
+        if( (*it)->Third>=0 )
+            newConstr->Third += nextgeoid;
+
+        newcVals.push_back(newConstr);
+    }
+    
+    Geometry.setValues(newVals);
+    Constraints.acceptGeometry(getCompleteGeometry());
+    rebuildVertexIndex();
+    
+    this->Constraints.setValues(newcVals);
+    
+    int sourceid = 0;
+    for (std::vector< Sketcher::Constraint * >::const_iterator it= scvals.begin(); it != scvals.end(); ++it,nextcid++,sourceid++) {
+
+        if ((*it)->Type == Sketcher::Distance ||
+            (*it)->Type == Sketcher::Radius || 
+            (*it)->Type == Sketcher::Angle ||
+            (*it)->Type == Sketcher::SnellsLaw) {
+            // then we link its value to the parent 
+            // (there is a plausible alternative for a slightly different use case to copy the expression of the parent if one is existing)
+            if ((*it)->isDriving) {
+                App::ObjectIdentifier spath = psObj->Constraints.createPath(sourceid);
+                /*
+                 *           App::PropertyExpressionEngine::ExpressionInfo expr_info = psObj->getExpression(path);
+                 *           
+                 *           if (expr_info.expression)*/
+                //App::Expression * expr = parse(this, const std::string& buffer);
+                
+                boost::shared_ptr<App::Expression> expr(App::Expression::parse(this, spath.getDocumentObjectName().getString() +std::string(1,'.') + spath.toString()));
+                setExpression(Constraints.createPath(nextcid), expr);
+                
+                
+            }
+            
+        }
+        else if ((*it)->Type == Sketcher::DistanceX) {
+            // then we link its value to the parent 
+            // (there is a plausible alternative for a slightly different use case to copy the expression of the parent if one is existing)
+            if ((*it)->isDriving) {
+                App::ObjectIdentifier spath = psObj->Constraints.createPath(sourceid);
+                
+                if(xinv) {
+                    boost::shared_ptr<App::Expression> expr(App::Expression::parse(this, std::string(1,'-') + spath.getDocumentObjectName().getString() +std::string(1,'.') + spath.toString()));
+                    setExpression(Constraints.createPath(nextcid), expr);
+                }
+                else {
+                    boost::shared_ptr<App::Expression> expr(App::Expression::parse(this, spath.getDocumentObjectName().getString() +std::string(1,'.') + spath.toString()));                    
+
+                    setExpression(Constraints.createPath(nextcid), expr);
+                }
+            }
+            
+        }
+        else if ((*it)->Type == Sketcher::DistanceY ) {
+            // then we link its value to the parent 
+            // (there is a plausible alternative for a slightly different use case to copy the expression of the parent if one is existing)
+            if ((*it)->isDriving) {
+                App::ObjectIdentifier spath = psObj->Constraints.createPath(sourceid);
+
+                if(yinv) {
+                    boost::shared_ptr<App::Expression> expr(App::Expression::parse(this, std::string(1,'-') + spath.getDocumentObjectName().getString() +std::string(1,'.') + spath.toString()));
+                    setExpression(Constraints.createPath(nextcid), expr);
+                }
+                else {
+                    boost::shared_ptr<App::Expression> expr(App::Expression::parse(this, spath.getDocumentObjectName().getString() +std::string(1,'.') + spath.toString()));                    
+                    setExpression(Constraints.createPath(nextcid), expr);
+                }
+            }
+            
+        }        
+    }
+    
+    return svals.size();
 }
 
 int SketchObject::addExternal(App::DocumentObject *Obj, const char* SubName)
@@ -4520,7 +4758,7 @@ void SketchObject::rebuildExternalGeometry(void)
                 refSubShape = refShape.getSubShape(SubElement.c_str());
             }
             catch (Standard_Failure) {
-                Handle_Standard_Failure e = Standard_Failure::Caught();
+                Handle(Standard_Failure) e = Standard_Failure::Caught();
                 throw Base::Exception(e->GetMessageString());
             }
         } else  if (Obj->getTypeId().isDerivedFrom(App::Plane::getClassTypeId())) {
@@ -4605,8 +4843,8 @@ void SketchObject::rebuildExternalGeometry(void)
                         }
                         else {
                             Part::GeomArcOfCircle* gArc = new Part::GeomArcOfCircle();
-                            Handle_Geom_Curve hCircle = new Geom_Circle(circle);
-                            Handle_Geom_TrimmedCurve tCurve = new Geom_TrimmedCurve(hCircle, curve.FirstParameter(),
+                            Handle(Geom_Curve) hCircle = new Geom_Circle(circle);
+                            Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(hCircle, curve.FirstParameter(),
                                                                                     curve.LastParameter());
                             gArc->setHandle(tCurve);
                             gArc->Construction = true;
@@ -4666,8 +4904,8 @@ void SketchObject::rebuildExternalGeometry(void)
                                     }
                                     else {
                                         Part::GeomArcOfCircle* arc = new Part::GeomArcOfCircle();
-                                        Handle_Geom_Curve curve = new Geom_Circle(c);
-                                        Handle_Geom_TrimmedCurve tCurve = new Geom_TrimmedCurve(curve, projCurve.FirstParameter(),
+                                        Handle(Geom_Curve) curve = new Geom_Circle(c);
+                                        Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(curve, projCurve.FirstParameter(),
                                                                                                 projCurve.LastParameter());
                                         arc->setHandle(tCurve);
                                         arc->Construction = true;
@@ -4686,7 +4924,7 @@ void SketchObject::rebuildExternalGeometry(void)
                                         gp_Pnt p2 = projCurve.Value(splits(2));
                                         gp_Pnt p3 = projCurve.Value(0.5 * (splits(1) + splits(2)));
                                         GC_MakeCircle circleMaker(p1, p2, p3);
-                                        Handle_Geom_Circle circ = circleMaker.Value();
+                                        Handle(Geom_Circle) circ = circleMaker.Value();
                                         Part::GeomCircle* circle = new Part::GeomCircle();
                                         circle->setRadius(circ->Radius());
                                         gp_Pnt center = circ->Axis().Location();
@@ -4720,8 +4958,8 @@ void SketchObject::rebuildExternalGeometry(void)
                                     }
                                     else {
                                         Part::GeomArcOfHyperbola* aoh = new Part::GeomArcOfHyperbola();
-                                        Handle_Geom_Curve curve = new Geom_Hyperbola(e);
-                                        Handle_Geom_TrimmedCurve tCurve = new Geom_TrimmedCurve(curve, projCurve.FirstParameter(),
+                                        Handle(Geom_Curve) curve = new Geom_Hyperbola(e);
+                                        Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(curve, projCurve.FirstParameter(),
                                                                                                 projCurve.LastParameter());
                                         aoh->setHandle(tCurve);
                                         aoh->Construction = true;
@@ -4747,8 +4985,8 @@ void SketchObject::rebuildExternalGeometry(void)
                                     }
                                     else {
                                         Part::GeomArcOfParabola* aop = new Part::GeomArcOfParabola();
-                                        Handle_Geom_Curve curve = new Geom_Parabola(e);
-                                        Handle_Geom_TrimmedCurve tCurve = new Geom_TrimmedCurve(curve, projCurve.FirstParameter(),
+                                        Handle(Geom_Curve) curve = new Geom_Parabola(e);
+                                        Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(curve, projCurve.FirstParameter(),
                                                                                                 projCurve.LastParameter());
                                         aop->setHandle(tCurve);
                                         aop->Construction = true;
@@ -4767,15 +5005,15 @@ void SketchObject::rebuildExternalGeometry(void)
 
                                     if (P1.SquareDistance(P2) < Precision::Confusion()) {
                                         Part::GeomEllipse* ellipse = new Part::GeomEllipse();
-                                        Handle_Geom_Ellipse curve = new Geom_Ellipse(e);
+                                        Handle(Geom_Ellipse) curve = new Geom_Ellipse(e);
                                         ellipse->setHandle(curve);
                                         ellipse->Construction = true;
                                         ExternalGeo.push_back(ellipse);
                                     }
                                     else {
                                         Part::GeomArcOfEllipse* aoe = new Part::GeomArcOfEllipse();
-                                        Handle_Geom_Curve curve = new Geom_Ellipse(e);
-                                        Handle_Geom_TrimmedCurve tCurve = new Geom_TrimmedCurve(curve, projCurve.FirstParameter(),
+                                        Handle(Geom_Curve) curve = new Geom_Ellipse(e);
+                                        Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(curve, projCurve.FirstParameter(),
                                                                                                 projCurve.LastParameter());
                                         aoe->setHandle(tCurve);
                                         aoe->Construction = true;
@@ -4789,7 +5027,7 @@ void SketchObject::rebuildExternalGeometry(void)
                         }
                     }
                     catch (Standard_Failure) {
-                        Handle_Standard_Failure e = Standard_Failure::Caught();
+                        Handle(Standard_Failure) e = Standard_Failure::Caught();
                         throw Base::Exception(e->GetMessageString());
                     }
                 }

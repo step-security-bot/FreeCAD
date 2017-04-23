@@ -98,7 +98,7 @@ void ShowRestoreInformationLayer(SketcherGui::ViewProviderSketch* vp, char * vis
     vp->showRestoreInformationLayer();
 }
 
-// Show/Hide BSpline degree
+// Show/Hide B-spline degree
 DEF_STD_CMD_A(CmdSketcherBSplineDegree);
 
 CmdSketcherBSplineDegree::CmdSketcherBSplineDegree()
@@ -132,7 +132,7 @@ bool CmdSketcherBSplineDegree::isActive(void)
     return isSketcherBSplineActive( getActiveGuiDocument(), false );
 }
 
-// Show/Hide BSpline polygon
+// Show/Hide B-spline polygon
 DEF_STD_CMD_A(CmdSketcherBSplinePolygon);
 
 CmdSketcherBSplinePolygon::CmdSketcherBSplinePolygon()
@@ -166,7 +166,7 @@ bool CmdSketcherBSplinePolygon::isActive(void)
     return isSketcherBSplineActive( getActiveGuiDocument(), false );
 }
 
-// Show/Hide BSpline comb
+// Show/Hide B-spline comb
 DEF_STD_CMD_A(CmdSketcherBSplineComb);
 
 CmdSketcherBSplineComb::CmdSketcherBSplineComb()
@@ -469,6 +469,12 @@ void CmdSketcherIncreaseDegree::activated(int iMsg)
             Gui::Command::doCommand(
                 Doc,"App.ActiveDocument.%s.increaseBSplineDegree(%d) ",
                                     selection[0].getFeatName(),GeoId);
+            
+            // add new control points
+            Gui::Command::doCommand(Gui::Command::Doc,
+                                    "App.ActiveDocument.%s.exposeInternalGeometry(%d)",
+                                    selection[0].getFeatName(),
+                                    GeoId);
         }
     }
 
@@ -567,12 +573,12 @@ void CmdSketcherIncreaseKnotMultiplicity::activated(int iMsg)
                     applied = true;
 
                     // Warning: GeoId list might have changed as the consequence of deleting pole circles and
-                    // particularly bspline GeoID might have changed.
+                    // particularly B-spline GeoID might have changed.
 
                 }
                 catch (const Base::Exception& e) {
                     QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Error"),
-                                         QObject::tr(e.what()));
+                                         QObject::tr(getStrippedPythonExceptionString(e).c_str()));
                     getSelection().clearSelection();
                 }
 
@@ -586,12 +592,12 @@ void CmdSketcherIncreaseKnotMultiplicity::activated(int iMsg)
     
     if(notaknot){
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-                             QObject::tr("None of the selected elements is a knot of a bspline"));
+                             QObject::tr("None of the selected elements is a knot of a B-spline"));
     }
     
     if(applied)
     {
-        // find new geoid for bspline as GeoId might have changed
+        // find new geoid for B-spline as GeoId might have changed
         const std::vector< Part::Geometry * > &gvals = Obj->getInternalGeometry();
         
         int ngeoid = 0;
@@ -721,12 +727,12 @@ void CmdSketcherDecreaseKnotMultiplicity::activated(int iMsg)
                     applied = true;
                     
                     // Warning: GeoId list might have changed as the consequence of deleting pole circles and
-                    // particularly bspline GeoID might have changed.
+                    // particularly B-spline GeoID might have changed.
                     
                 }
                 catch (const Base::Exception& e) {
                     QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Error"),
-                                         QObject::tr(e.what()));
+                                         QObject::tr(getStrippedPythonExceptionString(e).c_str()));
                     getSelection().clearSelection();
                 }
                 
@@ -739,12 +745,12 @@ void CmdSketcherDecreaseKnotMultiplicity::activated(int iMsg)
     
     if(notaknot){
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-                             QObject::tr("None of the selected elements is a knot of a bspline"));
+                             QObject::tr("None of the selected elements is a knot of a B-spline"));
     }    
     
     if(applied)
     {
-        // find new geoid for bspline as GeoId might have changed
+        // find new geoid for B-spline as GeoId might have changed
         const std::vector< Part::Geometry * > &gvals = Obj->getInternalGeometry();
         
         int ngeoid = 0;

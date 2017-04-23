@@ -74,11 +74,9 @@ class AddonsInstaller(QtGui.QDialog):
         self.verticalLayout.addWidget(self.tabWidget)
         self.listWorkbenches = QtGui.QListWidget()
         self.listWorkbenches.setIconSize(QtCore.QSize(16,16))
-        self.listWorkbenches.setSortingEnabled(True)
         self.tabWidget.addTab(self.listWorkbenches,"")
         self.listMacros = QtGui.QListWidget()
         self.listMacros.setIconSize(QtCore.QSize(16,16))
-        self.listMacros.setSortingEnabled(True)
         self.tabWidget.addTab(self.listMacros,"")
         self.labelDescription = QtGui.QLabel()
         self.labelDescription.setMinimumSize(QtCore.QSize(0, 75))
@@ -308,15 +306,18 @@ class UpdateWorker(QtCore.QThread):
             #url = re.findall("title=\"(.*?) @",l)[0]
             url = "https://github.com/" + re.findall("href=\"\/(.*?)\/tree",l)[0]
             addondir = moddir + os.sep + name
+            #print ("found:",name," at ",url)
             if not os.path.exists(addondir):
                 state = 0
             else:
                 state = 1
             repos.append([name,url,state])
-            self.addon_repo.emit([name,url,state])
         if not repos:
             self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Unable to download addon list.", None, QtGui.QApplication.UnicodeUTF8))
         else:
+            repos = sorted(repos, key=lambda s: s[0].lower())
+            for repo in repos:
+                self.addon_repo.emit(repo)
             self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Workbenches list was updated.", None, QtGui.QApplication.UnicodeUTF8))
         self.progressbar_show.emit(False)
         self.stop = True
@@ -365,7 +366,7 @@ class MacroWorker(QtCore.QThread):
         u.close()
         macros = re.findall("title=\"(Macro.*?)\"",p)
         macros = [mac for mac in macros if (not("translated" in mac))]
-        macros.sort()
+        macros.sort(key=str.lower)
         for mac in macros:
             macname = mac[6:]
             macname = macname.replace("&amp;","&")

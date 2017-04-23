@@ -272,7 +272,8 @@ PROPERTY_SOURCE(SketcherGui::ViewProviderSketch, PartGui::ViewProvider2DObject)
 ViewProviderSketch::ViewProviderSketch()
   : edit(0),
     Mode(STATUS_NONE),
-    visibleInformationChanged(true)
+    visibleInformationChanged(true),
+    combrepscalehyst(0)
 {
     ADD_PROPERTY_TYPE(Autoconstraints,(true),"Auto Constraints",(App::PropertyType)(App::Prop_None),"Create auto constraints");
     ADD_PROPERTY_TYPE(TempoVis,(Py::None()),"Visibility automation",(App::PropertyType)(App::Prop_None),"Object that handles hiding and showing other objects when entering/leaving sketch.");
@@ -295,14 +296,18 @@ ViewProviderSketch::ViewProviderSketch()
     PointSize.setValue(4);
 
     zCross=0.001f;
-    zLines=0.005f;
-    zConstr=0.007f; // constraint not construction
-    zHighLine=0.006f;
-    zPoints=0.008f;
-    zHighlight=0.009f;
-    zText=0.011f;
     zEdit=0.001f;
     zInfo=0.004f;
+    zLowLines=0.005f;
+    //zLines=0.005f;    // ZLines removed in favour of 3 height groups intended for NormalLines, ConstructionLines, ExternalLines
+    zMidLines=0.006f;
+    zHighLines=0.007f;  // Lines that are somehow selected to be in the high position (higher than other line categories)
+    zHighLine=0.008f;   // highlighted line (of any group)
+    zConstr=0.009f; // constraint not construction
+    zPoints=0.010f;
+    zHighlight=0.011f;
+    zText=0.011f;
+    
 
     xInit=0;
     yInit=0;
@@ -1000,7 +1005,12 @@ void ViewProviderSketch::editDoubleClicked(void)
                 Constr->Type == Sketcher::DistanceY ||
                 Constr->Type == Sketcher::Radius ||
                 Constr->Type == Sketcher::Angle ||
-                Constr->Type == Sketcher::SnellsLaw) && Constr->isDriving ) {
+                Constr->Type == Sketcher::SnellsLaw)) {
+
+                if(!Constr->isDriving) {
+                    Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.setDriving(%i,%s)",
+                                            getObject()->getNameInDocument(),*it,"True");
+                }
 
                 // Coin's SoIdleSensor causes problems on some platform while Qt seems to work properly (#0001517)
                 EditDatumDialog *editDatumDialog = new EditDatumDialog(this, *it);
@@ -2292,7 +2302,7 @@ void ViewProviderSketch::doBoxSelection(const SbVec2s &startPos, const SbVec2s &
 
         } else if ((*it)->getTypeId() == Part::GeomArcOfParabola::getClassTypeId()) {
             // Check if arc lies inside box selection
-            const Part::GeomArcOfParabola *aop = dynamic_cast<const Part::GeomArcOfParabola *>(*it);
+            const Part::GeomArcOfParabola *aop = static_cast<const Part::GeomArcOfParabola *>(*it);
 
             pnt0 = aop->getStartPoint();
             pnt1 = aop->getEndPoint();
@@ -2452,6 +2462,17 @@ void ViewProviderSketch::updateColor(void)
   //int intGeoCount = getSketchObject()->getHighestCurveIndex() + 1;
   //int extGeoCount = getSketchObject()->getExternalGeometryCount();
     
+    ParameterGrp::handle hGrpp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
+    
+    // 1->Normal Geometry, 2->Construction, 3->External
+    int topid = hGrpp->GetInt("TopRenderGeometryId",1);
+    int midid = hGrpp->GetInt("MidRenderGeometryId",2);
+    //int lowid = hGrpp->GetInt("LowRenderGeometryId",3);
+    
+    float zNormLine = (topid==1?zHighLines:midid==1?zMidLines:zLowLines);
+    float zConstrLine = (topid==2?zHighLines:midid==2?zMidLines:zLowLines);
+    float zExtLine = (topid==3?zHighLines:midid==3?zMidLines:zLowLines);
+    
     float x,y,z;
     
     int j=0; // vertexindex
@@ -2490,28 +2511,28 @@ void ViewProviderSketch::updateColor(void)
             color[i] = CurveExternalColor;
             for (int k=j; j<k+indexes; j++) {
                 verts[j].getValue(x,y,z);
-                verts[j] = SbVec3f(x,y,zConstr);
+                verts[j] = SbVec3f(x,y,zExtLine);
             }
         }
         else if (getSketchObject()->getGeometry(GeoId)->Construction) {
             color[i] = CurveDraftColor;
             for (int k=j; j<k+indexes; j++) {
                 verts[j].getValue(x,y,z);
-                verts[j] = SbVec3f(x,y,zLines);
+                verts[j] = SbVec3f(x,y,zConstrLine);
             }
         }
         else if (edit->FullyConstrained) {
             color[i] = FullyConstrainedColor;
             for (int k=j; j<k+indexes; j++) {
                 verts[j].getValue(x,y,z);
-                verts[j] = SbVec3f(x,y,zLines);
+                verts[j] = SbVec3f(x,y,zLowLines);
             }
         }
         else {
             color[i] = CurveColor;
             for (int k=j; j<k+indexes; j++) {
                 verts[j].getValue(x,y,z);
-                verts[j] = SbVec3f(x,y,zLines);
+                verts[j] = SbVec3f(x,y,zNormLine);
             }
         }
     }
@@ -3219,8 +3240,8 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
     
     std::vector<int> bsplineGeoIds;
     
-    double combrepscale = 0;
-    
+    double combrepscale = 0; // the repscale that would correspond to this comb based only on this calculation.
+
     // end information layer
 
     int GeoId = 0;
@@ -3249,7 +3270,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         }
         else if ((*it)->getTypeId() == Part::GeomCircle::getClassTypeId()) { // add a circle
             const Part::GeomCircle *circle = static_cast<const Part::GeomCircle *>(*it);
-            Handle_Geom_Circle curve = Handle_Geom_Circle::DownCast(circle->handle());
+            Handle(Geom_Circle) curve = Handle(Geom_Circle)::DownCast(circle->handle());
 
             int countSegments = stdcountsegments;
             Base::Vector3d center = circle->getCenter();
@@ -3268,7 +3289,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         }
         else if ((*it)->getTypeId() == Part::GeomEllipse::getClassTypeId()) { // add an ellipse
             const Part::GeomEllipse *ellipse = static_cast<const Part::GeomEllipse *>(*it);
-            Handle_Geom_Ellipse curve = Handle_Geom_Ellipse::DownCast(ellipse->handle());
+            Handle(Geom_Ellipse) curve = Handle(Geom_Ellipse)::DownCast(ellipse->handle());
 
             int countSegments = stdcountsegments;
             Base::Vector3d center = ellipse->getCenter();
@@ -3287,7 +3308,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         }
         else if ((*it)->getTypeId() == Part::GeomArcOfCircle::getClassTypeId()) { // add an arc
             const Part::GeomArcOfCircle *arc = static_cast<const Part::GeomArcOfCircle *>(*it);
-            Handle_Geom_TrimmedCurve curve = Handle_Geom_TrimmedCurve::DownCast(arc->handle());
+            Handle(Geom_TrimmedCurve) curve = Handle(Geom_TrimmedCurve)::DownCast(arc->handle());
 
             double startangle, endangle;
             arc->getRange(startangle, endangle, /*emulateCCW=*/false);
@@ -3320,7 +3341,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         }
         else if ((*it)->getTypeId() == Part::GeomArcOfEllipse::getClassTypeId()) { // add an arc
             const Part::GeomArcOfEllipse *arc = static_cast<const Part::GeomArcOfEllipse *>(*it);
-            Handle_Geom_TrimmedCurve curve = Handle_Geom_TrimmedCurve::DownCast(arc->handle());
+            Handle(Geom_TrimmedCurve) curve = Handle(Geom_TrimmedCurve)::DownCast(arc->handle());
 
             double startangle, endangle;
             arc->getRange(startangle, endangle, /*emulateCCW=*/false);
@@ -3353,7 +3374,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         }
         else if ((*it)->getTypeId() == Part::GeomArcOfHyperbola::getClassTypeId()) { 
             const Part::GeomArcOfHyperbola *aoh = dynamic_cast<const Part::GeomArcOfHyperbola *>(*it);
-            Handle_Geom_TrimmedCurve curve = Handle_Geom_TrimmedCurve::DownCast(aoh->handle());
+            Handle(Geom_TrimmedCurve) curve = Handle(Geom_TrimmedCurve)::DownCast(aoh->handle());
 
             double startangle, endangle;
             aoh->getRange(startangle, endangle, /*emulateCCW=*/true);
@@ -3386,7 +3407,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         } 
         else if ((*it)->getTypeId() == Part::GeomArcOfParabola::getClassTypeId()) { 
             const Part::GeomArcOfParabola *aop = dynamic_cast<const Part::GeomArcOfParabola *>(*it);
-            Handle_Geom_TrimmedCurve curve = Handle_Geom_TrimmedCurve::DownCast(aop->handle());
+            Handle(Geom_TrimmedCurve) curve = Handle(Geom_TrimmedCurve)::DownCast(aop->handle());
 
             double startangle, endangle;
             aop->getRange(startangle, endangle, /*emulateCCW=*/true);
@@ -3420,7 +3441,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         else if ((*it)->getTypeId() == Part::GeomBSplineCurve::getClassTypeId()) { // add a bspline
             bsplineGeoIds.push_back(GeoId);
             const Part::GeomBSplineCurve *spline = static_cast<const Part::GeomBSplineCurve *>(*it);
-            Handle_Geom_BSplineCurve curve = Handle_Geom_BSplineCurve::DownCast(spline->handle());
+            Handle(Geom_BSplineCurve) curve = Handle(Geom_BSplineCurve)::DownCast(spline->handle());
 
             Base::Vector3d startp  = spline->getStartPoint();
             Base::Vector3d endp    = spline->getEndPoint();
@@ -3484,13 +3505,12 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
                 if(curvaturelist[i] > maxcurv)
                     maxcurv = curvaturelist[i];
 
-                double temp = ( pointatcurvelist[i] - midp ).Length();
+                double tempf = ( pointatcurvelist[i] - midp ).Length();
 
-                if( temp > maxdisttocenterofmass )
-                    maxdisttocenterofmass = temp;
+                if( tempf > maxdisttocenterofmass )
+                    maxdisttocenterofmass = tempf;
 
             }
-
 
             double temprepscale = ( 0.5 * maxdisttocenterofmass ) / maxcurv; // just a factor to make a comb reasonably visible
             
@@ -3502,6 +3522,10 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         else {
         }
     }
+    
+    if ( (combrepscale > (2 * combrepscalehyst)) || (combrepscale < (combrepscalehyst/2)))
+        combrepscalehyst = combrepscale ;
+        
     
     // geometry information layer for bsplines, as they need a second round now that max curvature is known
     for (std::vector<int>::const_iterator it = bsplineGeoIds.begin(); it != bsplineGeoIds.end(); ++it) {
@@ -3693,7 +3717,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
         std::vector<Base::Vector3d> pointatcomblist(ndiv);
 
         for(int i = 0; i < ndiv; i++) {
-            pointatcomblist[i] = pointatcurvelist[i] - combrepscale * curvaturelist[i] * normallist[i];
+            pointatcomblist[i] = pointatcurvelist[i] - combrepscalehyst * curvaturelist[i] * normallist[i];
         }
         
         if(rebuildinformationlayer) {
@@ -3870,7 +3894,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationlayer
 
     int i=0; // setting up the line set
     for (std::vector<Base::Vector3d>::const_iterator it = Coords.begin(); it != Coords.end(); ++it,i++)
-      verts[i].setValue(it->x,it->y,zLines);
+        verts[i].setValue(it->x,it->y,zLowLines);
     
     i=0; // setting up the indexes of the line set
     for (std::vector<unsigned int>::const_iterator it = Index.begin(); it != Index.end(); ++it,i++)
@@ -4108,7 +4132,7 @@ Restart:
                                     angle1plus = (startangle + endangle)/2;
                                     midpos1 = aoe->getCenter();
                                 } else if (geo1->getTypeId() == Part::GeomArcOfHyperbola::getClassTypeId()) {
-                                    const Part::GeomArcOfHyperbola *aoh = dynamic_cast<const Part::GeomArcOfHyperbola *>(geo1);
+                                    const Part::GeomArcOfHyperbola *aoh = static_cast<const Part::GeomArcOfHyperbola *>(geo1);
                                     r1a = aoh->getMajorRadius();
                                     r1b = aoh->getMinorRadius();
                                     double startangle, endangle;
@@ -4118,7 +4142,7 @@ Restart:
                                     angle1plus = (startangle + endangle)/2;
                                     midpos1 = aoh->getCenter();
                                 } else if (geo1->getTypeId() == Part::GeomArcOfParabola::getClassTypeId()) {
-                                    const Part::GeomArcOfParabola *aop = dynamic_cast<const Part::GeomArcOfParabola *>(geo1);
+                                    const Part::GeomArcOfParabola *aop = static_cast<const Part::GeomArcOfParabola *>(geo1);
                                     r1a = aop->getFocal();
                                     double startangle, endangle;
                                     aop->getRange(startangle, endangle, /*emulateCCW=*/true);
@@ -4170,7 +4194,7 @@ Restart:
                                     angle2plus = (startangle + endangle)/2;
                                     midpos2 = aoh->getCenter();
                                 } else if (geo2->getTypeId() == Part::GeomArcOfParabola::getClassTypeId()) {
-                                    const Part::GeomArcOfParabola *aop = dynamic_cast<const Part::GeomArcOfParabola *>(geo2);
+                                    const Part::GeomArcOfParabola *aop = static_cast<const Part::GeomArcOfParabola *>(geo2);
                                     r2a = aop->getFocal();
                                     double startangle, endangle;
                                     aop->getRange(startangle, endangle, /*emulateCCW=*/true);
