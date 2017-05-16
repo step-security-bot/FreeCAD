@@ -60,6 +60,8 @@
         "but 'Check' only gives warning.",(None)(Check)(Force)))\
     ((bool,reorient,Reorient,true,\
         "Re-orient closed wires in wire only shapes so that inner wires become holes."))\
+    ((bool,outline,Outline,false,\
+        "Remove all inner wires (holes) before output the final shape"))\
     ((bool,explode,Explode,false,\
         "If true, Area will explode the first shape into disconnected open edges, \n"\
         "with all curves discretized, so that later operations like 'Difference' \n"\
@@ -98,13 +100,18 @@
  * */
 #define AREA_PARAMS_POCKET \
     ((enum,mode,PocketMode,0,"Selects the pocket toolpath pattern",\
-        (None)(ZigZag)(Offset)(Spiral)(ZigZagOffset)))\
+        (None)(ZigZag)(Offset)(Spiral)(ZigZagOffset)(Line)(Grid)(Triangle)))\
 	((double,tool_radius,ToolRadius,1.0,"Tool radius for pocketing",App::PropertyLength))\
 	((double,extra_offset,PocketExtraOffset,0.0,"Extra offset for pocketing",App::PropertyDistance))\
 	((double,stepover,PocketStepover,0.0,\
         "Cutter diameter to step over on each pass. If =0, use ToolRadius.",App::PropertyLength))\
 	((bool,from_center,FromCenter,true,"Start pocketing from center"))\
-	((double,zig_angle,ZigAngle,45,"Zig angle in degree",App::PropertyAngle))
+	((double,angle,Angle,45,"Pattern angle in degree",App::PropertyAngle))\
+	((double,angle_shift,AngleShift,0.0,"Pattern angle shift for each section", App::PropertyAngle))\
+	((double,shift,Shift,0.0,"Pattern shift distance for each section.\n"\
+        "The pocket patter will be shifted in othgnal direction by this amount for each section.\n"\
+        "This gives a 3D pattern mainly for 3D printing. The shift only applies to 'Offset', 'Grid'\n"\
+        "and 'Triangle'", App::PropertyDistance))
 
 #define AREA_PARAMS_POCKET_CONF \
     ((bool,thicken,Thicken,false,"Thicken the resulting wires with ToolRadius"))
@@ -131,8 +138,9 @@
         "'Workplane' means relative to workplane, minus SectionOffset.\n"\
         "Note that OCC has trouble getting the minimum bounding box of some solids, particularly\n"\
         "those with non-planar surface. It is recommended to use Workplane to specifiy the intended\n"\
-        "starting z height.",\
-        (Absolute)(BoundBox)(Workplane)))
+        "starting z height.\n",(Absolute)(BoundBox)(Workplane)))\
+    ((bool,project,Project,false, "The section is produced by normal pojecting the outline\n"\
+        "of all added shapes to the section plane, instead of slicing."))
 
 /** Section parameters */
 #define AREA_PARAMS_SECTION \
@@ -184,6 +192,11 @@
         "arc encountered.",\
         (None)(Auto)(XY)(ZX)(YZ)(Variable)))
 
+#define AREA_PARAMS_ORIENTATION \
+    ((enum, orientation, Orientation, 0, "Enforce loop orientation\n"\
+        "'Normal' means CCW for outer wires when looking against the positive axis direction, \n"\
+        "and CW for inner wires. 'Reversed' means the other way round", (Normal)(Reversed)))
+
 /** Area wire sorting parameters */
 #define AREA_PARAMS_SORT \
     ((enum, sort_mode, SortMode, 1, "Wire sorting mode to optimize travel distance.\n"\
@@ -195,9 +208,11 @@
     AREA_PARAMS_MIN_DIST \
     ((double, abscissa, SortAbscissa, 3.0, "Controls vertex sampling on wire for nearest point searching\n"\
         "The sampling is dong using OCC GCPnts_UniformAbscissa",App::PropertyLength))\
-    ((short, nearest_k, NearestK, 3, "Nearest k sampling vertices are considered during sorting"))
+    ((short, nearest_k, NearestK, 3, "Nearest k sampling vertices are considered during sorting"))\
+    AREA_PARAMS_ORIENTATION \
+    ((enum, direction, Direction, 0, "Enforce open path direction",\
+        (None)(XPositive)(XNegative)(YPositive)(YNegative)(ZPositive)(ZNegative)))
        
-
 /** Area path generation parameters */
 #define AREA_PARAMS_PATH \
     AREA_PARAMS_ARC_PLANE \
@@ -209,12 +224,16 @@
     ((double, retraction, Retraction, 0.0,"Tool retraction absolute coordinate along retraction axis",\
         App::PropertyLength))\
     ((enum, retract_axis, RetractAxis, 2,"Tool retraction axis",(X)(Y)(Z)))\
-    ((double, clearance, Clearance, 0.0,\
+    ((double, resume_height, ResumeHeight, 0.0,\
         "When return from last retraction, this gives the pause height relative to the Z\n"\
-        "value of the next move",App::PropertyLength))\
+        "value of the next move.", App::PropertyLength))\
     ((double,segmentation,Segmentation,0.0,\
         "Break long curves into segments of this length. One use case is for PCB autolevel,\n"\
         "so that more correction points can be inserted",App::PropertyLength)) \
+    ((double,feedrate,FeedRate,0.0, "Normal move feed rate", App::PropertyFloat)) \
+    ((double,feedrate_v,FeedRateVertical,0.0, "Vertical only (step down) move feed rate", App::PropertyFloat)) \
+    ((bool,verbose,Verbose,true, "If true, each motion GCode will contain full coordinate and feedrate")) \
+    ((bool,abs_center,AbsoluteArcCenter,false, "Use absolute arc center mode (G90.1)")) \
     AREA_PARAMS_DEFLECTION
 
 /** Group of all Area configuration parameters except CArea's*/

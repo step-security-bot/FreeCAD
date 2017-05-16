@@ -492,14 +492,14 @@ PyObject * @self.export.Name@::staticCallback_@i.Name@ (PyObject *self, PyObject
 -
         return ret;
     }
-    catch(const Base::Exception& e) // catch the FreeCAD exceptions
+    catch(Base::Exception& e) // catch the FreeCAD exceptions
     {
-        std::string str;
-        str += "FreeCAD exception thrown (";
-        str += e.what();
-        str += ")";
+        PyObject *edict = e.getPyObject();
+        
         e.ReportException();
-        PyErr_SetString(Base::BaseExceptionFreeCADError,str.c_str());
+        PyErr_SetObject(Base::BaseExceptionFreeCADError, edict);
+        Py_DECREF(edict);
+        
         return NULL;
     }
     catch(const boost::filesystem::filesystem_error& e) // catch boost filesystem exception
@@ -621,9 +621,11 @@ int @self.export.Name@::staticCallback_set@i.Name@ (PyObject *self, PyObject *va
 + if (self.export.Reference):
     pcObject->ref();
 -
-    
 + if (self.export.Initialization):
     initialization();
+-
++ if (self.export.DisableNotify):
+    this->setShouldNotify(false);
 -
 }
 
@@ -680,14 +682,13 @@ PyObject *@self.export.Name@::_getattr(char *attr)				// __getattr__ function: n
         if(r) return r;
     }
 #ifndef DONT_CATCH_CXX_EXCEPTIONS 
-    catch(const Base::Exception& e) // catch the FreeCAD exceptions
+    catch(Base::Exception& e) // catch the FreeCAD exceptions
     {
-        std::string str;
-        str += "FreeCAD exception thrown (";
-        str += e.what();
-        str += ")";
+        PyObject *edict = e.getPyObject();
+        
         e.ReportException();
-        PyErr_SetString(Base::BaseExceptionFreeCADError,str.c_str());
+        PyErr_SetObject(Base::BaseExceptionFreeCADError, edict);
+        Py_DECREF(edict);
         return NULL;
     }
     catch(const std::exception& e) // catch other c++ exceptions
@@ -711,14 +712,14 @@ PyObject *@self.export.Name@::_getattr(char *attr)				// __getattr__ function: n
         return NULL;
     }
 #else  // DONT_CATCH_CXX_EXCEPTIONS  
-    catch(const Base::Exception& e) // catch the FreeCAD exceptions
+    catch(Base::Exception& e) // catch the FreeCAD exceptions
     {
-        std::string str;
-        str += "FreeCAD exception thrown (";
-        str += e.what();
-        str += ")";
+        PyObject *edict = e.getPyObject();
+        
         e.ReportException();
-        PyErr_SetString(Base::BaseExceptionFreeCADError,str.c_str());
+        PyErr_SetObject(Base::BaseExceptionFreeCADError, edict);
+        Py_DECREF(edict);
+        
         return NULL;
     }
     catch(const Py::Exception&)
@@ -754,14 +755,14 @@ int @self.export.Name@::_setattr(char *attr, PyObject *value) // __setattr__ fun
             return -1;
     }
 #ifndef DONT_CATCH_CXX_EXCEPTIONS 
-    catch(const Base::Exception& e) // catch the FreeCAD exceptions
+    catch(Base::Exception& e) // catch the FreeCAD exceptions
     {
-        std::string str;
-        str += "FreeCAD exception thrown (";
-        str += e.what();
-        str += ")";
+        PyObject *edict = e.getPyObject();
+        
         e.ReportException();
-        PyErr_SetString(Base::BaseExceptionFreeCADError,str.c_str());
+        PyErr_SetObject(Base::BaseExceptionFreeCADError, edict);
+        Py_DECREF(edict);
+        
         return -1;
     }
     catch(const std::exception& e) // catch other c++ exceptions
@@ -785,14 +786,13 @@ int @self.export.Name@::_setattr(char *attr, PyObject *value) // __setattr__ fun
         return -1;
     }
 #else  // DONT_CATCH_CXX_EXCEPTIONS  
-    catch(const Base::Exception& e) // catch the FreeCAD exceptions
+    catch(Base::Exception& e) // catch the FreeCAD exceptions
     {
-        std::string str;
-        str += "FreeCAD exception thrown (";
-        str += e.what();
-        str += ")";
+        PyObject *edict = e.getPyObject();
+        
         e.ReportException();
-        PyErr_SetString(Base::BaseExceptionFreeCADError,str.c_str());
+        PyErr_SetObject(Base::BaseExceptionFreeCADError, edict);
+        Py_DECREF(edict);
         return -1;
     }
     catch(const Py::Exception&)

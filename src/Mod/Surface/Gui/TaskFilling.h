@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2015 Balázs Bámer                                       *
+ *   Copyright (c) 2017 Werner Mayer <wmayer[at]users.sourceforge.net>     *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -31,20 +31,26 @@
 #include <Mod/Part/Gui/ViewProviderSpline.h>
 #include <Mod/Surface/App/FeatureFilling.h>
 
+class QListWidgetItem;
+
 namespace SurfaceGui
 {
 
+class FillingVertexPanel;
 class Ui_TaskFilling;
 
 class ViewProviderFilling : public PartGui::ViewProviderSpline
 {
     PROPERTY_HEADER(SurfaceGui::ViewProviderFilling);
+    typedef std::vector<App::PropertyLinkSubList::SubSet> References;
+
 public:
+    enum ShapeType {Vertex, Edge, Face};
     virtual void setupContextMenu(QMenu*, QObject*, const char*);
     virtual bool setEdit(int ModNum);
     virtual void unsetEdit(int ModNum);
     QIcon getIcon(void) const;
-    void highlightReferences(bool on);
+    void highlightReferences(ShapeType type, const References& refs, bool on);
 };
 
 class FillingPanel : public QWidget,
@@ -81,12 +87,18 @@ protected:
     virtual void slotUndoDocument(const Gui::Document& Doc);
     /** Notifies on redo */
     virtual void slotRedoDocument(const Gui::Document& Doc);
+    /** Notifies when the object is about to be removed. */
+    virtual void slotDeletedObject(const Gui::ViewProviderDocumentObject& Obj);
+    void modifyBoundary(bool);
 
 private Q_SLOTS:
     void on_buttonInitFace_clicked();
     void on_buttonEdgeAdd_clicked();
     void on_buttonEdgeRemove_clicked();
     void on_lineInitFaceName_textChanged(const QString&);
+    void on_listBoundary_itemDoubleClicked(QListWidgetItem*);
+    void on_buttonAccept_clicked();
+    void on_buttonIgnore_clicked();
     void onDeleteEdge(void);
     void clearSelection();
 };
@@ -109,8 +121,8 @@ public:
     { return QDialogButtonBox::Ok | QDialogButtonBox::Cancel; }
 
 private:
-    FillingPanel* widget;
-    Gui::TaskView::TaskBox* taskbox;
+    FillingPanel* widget1;
+    FillingVertexPanel* widget2;
 };
 
 } //namespace SurfaceGui

@@ -38,11 +38,28 @@ installed.
 '''
 
 from PySide import QtCore, QtGui
-import FreeCAD,urllib2,re,os,shutil
+import sys, os, re, shutil
+import FreeCAD
+if sys.version_info.major < 3:
+    import urllib2
+else:
+    import urllib.request as urllib2
 
 NOGIT = False # for debugging purposes, set this to True to always use http downloads
 
 MACROS_BLACKLIST = ["BOLTS","WorkFeatures","how to install","PartsLibrary","FCGear"]
+
+
+
+# Qt tanslation handling
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def translate(context, text, disambig=None):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def translate(context, text, disambig=None):
+        return QtGui.QApplication.translate(context, text, disambig)
+
 
 def symlink(source, link_name):
     if os.path.exists(link_name):
@@ -121,14 +138,13 @@ class AddonsInstaller(QtGui.QDialog):
         self.update()
 
     def retranslateUi(self):
-        self.setWindowTitle(QtGui.QApplication.translate("AddonsInstaller",
-                                                         "Addon manager", None, QtGui.QApplication.UnicodeUTF8))
-        self.labelDescription.setText(QtGui.QApplication.translate("AddonsInstaller", "Downloading addon list...", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonCancel.setText(QtGui.QApplication.translate("AddonsInstaller", "Close", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonInstall.setText(QtGui.QApplication.translate("AddonsInstaller", "Install / update", None, QtGui.QApplication.UnicodeUTF8))
-        self.buttonRemove.setText(QtGui.QApplication.translate("AddonsInstaller", "Remove", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.listWorkbenches), QtGui.QApplication.translate("AddonsInstaller", "Workbenches", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.listMacros), QtGui.QApplication.translate("AddonsInstaller", "Macros", None, QtGui.QApplication.UnicodeUTF8))
+        self.setWindowTitle(translate("AddonsInstaller","Addon manager"))
+        self.labelDescription.setText(translate("AddonsInstaller", "Downloading addon list..."))
+        self.buttonCancel.setText(translate("AddonsInstaller", "Close"))
+        self.buttonInstall.setText(translate("AddonsInstaller", "Install / update"))
+        self.buttonRemove.setText(translate("AddonsInstaller", "Remove"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.listWorkbenches), translate("AddonsInstaller", "Workbenches"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.listMacros), translate("AddonsInstaller", "Macros"))
 
     def update(self):
         self.listWorkbenches.clear()
@@ -209,7 +225,7 @@ class AddonsInstaller(QtGui.QDialog):
                 os.makedirs(macropath)
             macro = self.macros[self.listMacros.currentRow()]
             if len(macro) < 5:
-                self.labelDescription.setText(QtGui.QApplication.translate("AddonsInstaller", "Unable to install", None, QtGui.QApplication.UnicodeUTF8))
+                self.labelDescription.setText(translate("AddonsInstaller", "Unable to install"))
                 return
             macroname = "Macro_"+macro[0]+".FCMacro"
             macroname = macroname.replace(" ","_")
@@ -217,7 +233,7 @@ class AddonsInstaller(QtGui.QDialog):
             macrofile = open(macrofilename,"wb")
             macrofile.write(macro[3])
             macrofile.close()
-            self.labelDescription.setText(QtGui.QApplication.translate("AddonsInstaller", "Macro successfully installed. The macro is now available from the Macros dialog.", None, QtGui.QApplication.UnicodeUTF8))
+            self.labelDescription.setText(translate("AddonsInstaller", "Macro successfully installed. The macro is now available from the Macros dialog."))
         self.update_status()
 
     def show_progress_bar(self, state):
@@ -242,9 +258,9 @@ class AddonsInstaller(QtGui.QDialog):
             clonedir = basedir + os.sep + "Mod" + os.sep + self.repos[idx][0]
             if os.path.exists(clonedir):
                 shutil.rmtree(clonedir)
-                self.labelDescription.setText(QtGui.QApplication.translate("AddonsInstaller", "Addon successfully removed. Please restart FreeCAD", None, QtGui.QApplication.UnicodeUTF8))
+                self.labelDescription.setText(translate("AddonsInstaller", "Addon successfully removed. Please restart FreeCAD"))
             else:
-                self.labelDescription.setText(QtGui.QApplication.translate("AddonsInstaller", "Unable to remove this addon", None, QtGui.QApplication.UnicodeUTF8))
+                self.labelDescription.setText(translate("AddonsInstaller", "Unable to remove this addon"))
         elif self.tabWidget.currentIndex() == 1:
             macropath = FreeCAD.ParamGet('User parameter:BaseApp/Preferences/Macro').GetString("MacroPath",os.path.join(FreeCAD.ConfigGet("UserAppData"),"Macro"))
             macro = self.macros[self.listMacros.currentRow()]
@@ -255,7 +271,7 @@ class AddonsInstaller(QtGui.QDialog):
             macrofilename = os.path.join(macropath,macroname)
             if os.path.exists(macrofilename):
                 os.remove(macrofilename)
-                self.labelDescription.setText(QtGui.QApplication.translate("AddonsInstaller", "Macro successfully removed.", None, QtGui.QApplication.UnicodeUTF8))
+                self.labelDescription.setText(translate("AddonsInstaller", "Macro successfully removed."))
         self.update_status()
 
     def update_status(self):
@@ -293,6 +309,8 @@ class UpdateWorker(QtCore.QThread):
         self.progressbar_show.emit(True)
         u = urllib2.urlopen("https://github.com/FreeCAD/FreeCAD-addons")
         p = u.read()
+        if sys.version_info.major >= 3 and isinstance(p, bytes):
+            p = p.decode("utf-8")
         u.close()
         p = p.replace("\n"," ")
         p = re.findall("octicon-file-submodule(.*?)message",p)
@@ -313,12 +331,12 @@ class UpdateWorker(QtCore.QThread):
                 state = 1
             repos.append([name,url,state])
         if not repos:
-            self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Unable to download addon list.", None, QtGui.QApplication.UnicodeUTF8))
+            self.info_label.emit(translate("AddonsInstaller", "Unable to download addon list."))
         else:
             repos = sorted(repos, key=lambda s: s[0].lower())
             for repo in repos:
                 self.addon_repo.emit(repo)
-            self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Workbenches list was updated.", None, QtGui.QApplication.UnicodeUTF8))
+            self.info_label.emit(translate("AddonsInstaller", "Workbenches list was updated."))
         self.progressbar_show.emit(False)
         self.stop = True
 
@@ -335,6 +353,8 @@ class InfoWorker(QtCore.QThread):
             url = repo[1]
             u = urllib2.urlopen(url)
             p = u.read()
+            if sys.version_info.major >= 3 and isinstance(p, bytes):
+                p = p.decode("utf-8")
             u.close()
             desc = re.findall("<meta name=\"description\" content=\"(.*?)\">",p)
             if desc:
@@ -363,6 +383,8 @@ class MacroWorker(QtCore.QThread):
         macropath = FreeCAD.ParamGet('User parameter:BaseApp/Preferences/Macro').GetString("MacroPath",os.path.join(FreeCAD.ConfigGet("UserAppData"),"Macro"))
         u = urllib2.urlopen("http://www.freecadweb.org/wiki/Macros_recipes")
         p = u.read()
+        if sys.version_info.major >= 3 and isinstance(p, bytes):
+            p = p.decode("utf-8")
         u.close()
         macros = re.findall("title=\"(Macro.*?)\"",p)
         macros = [mac for mac in macros if (not("translated" in mac))]
@@ -377,7 +399,7 @@ class MacroWorker(QtCore.QThread):
                 else:
                     installed = 0
                 self.add_macro.emit([macname,installed])
-        self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "List of macros successfully retrieved.", None, QtGui.QApplication.UnicodeUTF8))
+        self.info_label.emit(translate("AddonsInstaller", "List of macros successfully retrieved."))
         self.progressbar_show.emit(False)
         self.stop = True
 
@@ -395,14 +417,16 @@ class ShowWorker(QtCore.QThread):
 
     def run(self):
         self.progressbar_show.emit(True)
-        self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Retrieving description...", None, QtGui.QApplication.UnicodeUTF8))
+        self.info_label.emit(translate("AddonsInstaller", "Retrieving description..."))
         if len(self.repos[self.idx]) == 4:
             desc = self.repos[self.idx][3]
         else:
             url = self.repos[self.idx][1]
-            self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Retrieving info from ", None, QtGui.QApplication.UnicodeUTF8) + str(url))
+            self.info_label.emit(translate("AddonsInstaller", "Retrieving info from ") + str(url))
             u = urllib2.urlopen(url)
             p = u.read()
+            if sys.version_info.major >= 3 and isinstance(p, bytes):
+                p = p.decode("utf-8")
             u.close()
             desc = re.findall("<meta name=\"description\" content=\"(.*?)\">",p)
             if desc:
@@ -412,7 +436,7 @@ class ShowWorker(QtCore.QThread):
             self.repos[self.idx].append(desc)
             self.addon_repos.emit(self.repos)
         if self.repos[self.idx][2] == 1 :
-            message = "<strong>" + QtGui.QApplication.translate("AddonsInstaller", "<strong>This addon is already installed.", None, QtGui.QApplication.UnicodeUTF8) + "</strong><br>" + desc + ' - <a href="' + self.repos[self.idx][1] + '"><span style="word-wrap: break-word;width:15em;text-decoration: underline; color:#0000ff;">' + self.repos[self.idx][1] + '</span></a>'
+            message = "<strong>" + translate("AddonsInstaller", "This addon is already installed.") + "</strong><br>" + desc + ' - <a href="' + self.repos[self.idx][1] + '"><span style="word-wrap: break-word;width:15em;text-decoration: underline; color:#0000ff;">' + self.repos[self.idx][1] + '</span></a>'
         else:
             message = desc + ' - <a href="' + self.repos[self.idx][1] + '"><span style="word-wrap: break-word;width:15em;text-decoration: underline; color:#0000ff;">' + self.repos[self.idx][1] + '</span></a>'
         self.info_label.emit( message )
@@ -433,7 +457,7 @@ class ShowMacroWorker(QtCore.QThread):
 
     def run(self):
         self.progressbar_show.emit(True)
-        self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Retrieving description...", None, QtGui.QApplication.UnicodeUTF8))
+        self.info_label.emit(translate("AddonsInstaller", "Retrieving description..."))
         if len(self.macros[self.idx]) > 2:
             desc = self.macros[self.idx][2]
             url = self.macros[self.idx][4]
@@ -445,13 +469,15 @@ class ShowMacroWorker(QtCore.QThread):
             self.info_label.emit("Retrieving info from " + str(url))
             u = urllib2.urlopen(url)
             p = u.read()
+            if sys.version_info.major >= 3 and isinstance(p, bytes):
+                p = p.decode("utf-8")
             u.close()
             code = re.findall("<pre>(.*?)<\/pre>",p.replace("\n","--endl--"))
             if code:
                 code = code[0]
                 code = code.replace("--endl--","\n")
             else:
-                self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Unable to fetch the code of this macro.", None, QtGui.QApplication.UnicodeUTF8))
+                self.info_label.emit(translate("AddonsInstaller", "Unable to fetch the code of this macro."))
                 self.progressbar_show.emit(False)
                 self.stop = True
                 return
@@ -459,7 +485,7 @@ class ShowMacroWorker(QtCore.QThread):
             if desc:
                 desc = desc[0]
             else:
-                self.info_label.emit(QtGui.QApplication.translate("AddonsInstaller", "Unable to retrieve a description for this macro.", None, QtGui.QApplication.UnicodeUTF8))
+                self.info_label.emit(translate("AddonsInstaller", "Unable to retrieve a description for this macro."))
                 desc = "No description available"
             # clean HTML escape codes
             try:
@@ -472,10 +498,10 @@ class ShowMacroWorker(QtCore.QThread):
                 code = code.encode("utf8")
                 code = code.replace("\xc2\xa0", " ")
             except:
-                FreeCAD.Console.PrintWarning("Unable to clean macro code: "+mac+"\n")
+                FreeCAD.Console.PrintWarning(translate("AddonsInstaller", "Unable to clean macro code: ")+mac+"\n")
             self.update_macro.emit(self.idx,self.macros[self.idx]+[desc,code,url])
         if self.macros[self.idx][1] == 1 :
-            message = "<strong>" + QtGui.QApplication.translate("AddonsInstaller", "<strong>This addon is already installed.", None, QtGui.QApplication.UnicodeUTF8) + "</strong><br>" + desc + ' - <a href="' + url + '"><span style="word-wrap: break-word;width:15em;text-decoration: underline; color:#0000ff;">' + url + '</span></a>'
+            message = "<strong>" + translate("AddonsInstaller", "<strong>This addon is already installed.") + "</strong><br>" + desc + ' - <a href="' + url + '"><span style="word-wrap: break-word;width:15em;text-decoration: underline; color:#0000ff;">' + url + '</span></a>'
         else:
             message = desc + ' - <a href="' + url + '"><span style="word-wrap: break-word;width:15em;text-decoration: underline; color:#0000ff;">' + url + '</span></a>'
         self.info_label.emit( message )
@@ -500,12 +526,12 @@ class InstallWorker(QtCore.QThread):
             import git
         except:
             self.info_label.emit("python-git not found.")
-            FreeCAD.Console.PrintWarning("python-git not found. Using standard download instead.\n")
+            FreeCAD.Console.PrintWarning(translate("AddonsInstaller","python-git not found. Using standard download instead.\n"))
             try:
-                import zipfile,StringIO
+                import zipfile,io
             except:
                 self.info_label.emit("no zip support.")
-                FreeCAD.Console.PrintError("your version of python doesn't appear to support ZIP files. Unable to proceed.\n")
+                FreeCAD.Console.PrintError(translate("AddonsInstaller","Your version of python doesn't appear to support ZIP files. Unable to proceed.\n"))
                 return
         if self.idx < 0:
             return
@@ -533,14 +559,14 @@ class InstallWorker(QtCore.QThread):
             else:
                 self.info_label.emit("Downloading module...")
                 self.download(self.repos[self.idx][1],clonedir)
-            answer = QtGui.QApplication.translate("AddonsInstaller", "Workbench successfully installed. Please restart FreeCAD to apply the changes.", None, QtGui.QApplication.UnicodeUTF8)
+            answer = translate("AddonsInstaller", "Workbench successfully installed. Please restart FreeCAD to apply the changes.")
             # symlink any macro contained in the module to the macros folder
             macrodir = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Macro").GetString("MacroPath")
             for f in os.listdir(clonedir):
                 if f.lower().endswith(".fcmacro"):
                     symlink(clonedir+os.sep+f,macrodir+os.sep+f)
                     FreeCAD.ParamGet('User parameter:Plugins/'+self.repos[self.idx][0]).SetString("destination",clonedir)
-                    answer += QtGui.QApplication.translate("AddonsInstaller", "A macro has been installed and is available the Macros menu", None, QtGui.QApplication.UnicodeUTF8) + ": <b>"
+                    answer += translate("AddonsInstaller", "A macro has been installed and is available the Macros menu") + ": <b>"
                     answer += f + "</b>"
         self.info_label.emit(answer)
         self.progressbar_show.emit(False)
@@ -548,7 +574,8 @@ class InstallWorker(QtCore.QThread):
 
     def download(self,giturl,clonedir):
         "downloads and unzip from github"
-        import StringIO,zipfile
+        import zipfile
+        import io
         bakdir = None
         if os.path.exists(clonedir):
             bakdir = clonedir+".bak"
@@ -561,8 +588,8 @@ class InstallWorker(QtCore.QThread):
             print("Downloading "+zipurl)
             u = urllib2.urlopen(zipurl)
         except:
-            return QtGui.QApplication.translate("AddonsInstaller", "Error: Unable to download", None, QtGui.QApplication.UnicodeUTF8) + " " + zipurl
-        zfile = StringIO.StringIO()
+            return translate("AddonsInstaller", "Error: Unable to download") + " " + zipurl
+        zfile = io.StringIO()
         zfile.write(u.read())
         zfile = zipfile.ZipFile(zfile)
         master = zfile.namelist()[0] # github will put everything in a subfolder
@@ -574,14 +601,14 @@ class InstallWorker(QtCore.QThread):
         os.rmdir(clonedir+os.sep+master)
         if bakdir:
             shutil.rmtree(bakdir)
-        return QtGui.QApplication.translate("AddonsInstaller", "Successfully installed", None, QtGui.QApplication.UnicodeUTF8) + " " + zipurl
+        return translate("AddonsInstaller", "Successfully installed") + " " + zipurl
 
 
 def launchAddonMgr():
     # first use dialog
     readWarning = FreeCAD.ParamGet('User parameter:Plugins/addonsRepository').GetBool('readWarning',False)
     if not readWarning:
-        if QtGui.QMessageBox.warning(None,"FreeCAD",QtGui.QApplication.translate("AddonsInstaller", "The addons that can be installed here are not officially part of FreeCAD, and are not reviewed by the FreeCAD team. Make sure you know what you are installing!", None, QtGui.QApplication.UnicodeUTF8), QtGui.QMessageBox.Cancel | QtGui.QMessageBox.Ok) != QtGui.QMessageBox.StandardButton.Cancel:
+        if QtGui.QMessageBox.warning(None,"FreeCAD",translate("AddonsInstaller", "The addons that can be installed here are not officially part of FreeCAD, and are not reviewed by the FreeCAD team. Make sure you know what you are installing!"), QtGui.QMessageBox.Cancel | QtGui.QMessageBox.Ok) != QtGui.QMessageBox.StandardButton.Cancel:
             FreeCAD.ParamGet('User parameter:Plugins/addonsRepository').SetBool('readWarning',True)
             readWarning = True
 
