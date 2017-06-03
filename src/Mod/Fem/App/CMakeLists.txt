@@ -41,6 +41,7 @@ if(BUILD_FEM_NETGEN)
 endif(BUILD_FEM_NETGEN)
 
 generate_from_xml(FemMeshPy)
+generate_from_xml(FemPostPipelinePy)
 
 SET(Python_SRCS
     FemMeshPy.xml
@@ -48,6 +49,13 @@ SET(Python_SRCS
     HypothesisPy.cpp
     HypothesisPy.h
 )
+if(BUILD_FEM_VTK)
+SET(Python_SRCS
+    ${Python_SRCS}
+    FemPostPipelinePy.xml
+    FemPostPipelinePyImp.cpp
+)
+endif(BUILD_FEM_VTK)
 SOURCE_GROUP("Python" FILES ${Python_SRCS})
 
 SET(Mod_SRCS
@@ -64,6 +72,10 @@ SET(FemScripts_SRCS
     convert2TetGen.py
     importCcxDatResults.py
     importCcxFrdResults.py
+    readFenicsXML.py
+    writeFenicsXML.py
+    readFenicsXDMF.py
+    writeFenicsXDMF.py
     importFenicsMesh.py
     importInpMesh.py
     importToolsFem.py
