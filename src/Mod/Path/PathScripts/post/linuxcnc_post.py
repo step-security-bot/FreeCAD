@@ -225,7 +225,7 @@ def parse(pathobj):
     # params = ['X','Y','Z','A','B','I','J','K','F','S'] #This list control
     # the order of parameters
     # linuxcnc doesn't want K properties on XY plane  Arcs need work.
-    params = ['X', 'Y', 'Z', 'A', 'B', 'I', 'J', 'F', 'S', 'T', 'Q', 'R', 'L']
+    params = ['X', 'Y', 'Z', 'A', 'B', 'I', 'J', 'F', 'S', 'T', 'Q', 'R', 'L', 'H']
 
     if hasattr(pathobj, "Group"):  # We have a compound or project.
         # if OUTPUT_COMMENTS:
@@ -261,7 +261,7 @@ def parse(pathobj):
                             outstring.append(
                                 param + format(float(speed.getValueAs(UNIT_FORMAT)), precision_string) )
                     elif param == 'T':
-                        outstring.append(param + str(c.Parameters['T']))
+                        outstring.append(param + str(int(c.Parameters['T'])))
                     else:
                         outstring.append(
                             param + format(c.Parameters[param], precision_string))

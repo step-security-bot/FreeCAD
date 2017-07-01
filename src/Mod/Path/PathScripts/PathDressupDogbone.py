@@ -40,7 +40,7 @@ LOG_MODULE = 'PathDressupDogbone'
 #PathLog.setLevel(PathLog.Level.INFO, LOG_MODULE)
 
 # Qt tanslation handling
-def translate(text, context = "PathDressup_Dogbone", disambig=None):
+def translate(context, text, disambig=None):
     return QtCore.QCoreApplication.translate(context, text, disambig)
 
 movecommands = ['G0', 'G00', 'G1', 'G01', 'G2', 'G02', 'G3', 'G03']
@@ -975,6 +975,7 @@ class ViewProviderDressup:
         '''this makes sure that the base operation is added back to the project and visible'''
         FreeCADGui.ActiveDocument.getObject(arg1.Object.Base.Name).Visibility = True
         PathUtils.addToJob(arg1.Object.Base)
+        arg1.Object.Base = None
         return True
 
 class CommandDressupDogbone:

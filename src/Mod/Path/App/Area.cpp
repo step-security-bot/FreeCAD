@@ -77,6 +77,9 @@
 #include <HLRBRep_Algo.hxx>
 #include <HLRBRep_HLRToShape.hxx>
 #include <HLRAlgo_Projector.hxx>
+#include <ShapeFix_ShapeTolerance.hxx>
+#include <ShapeExtend_WireData.hxx>
+#include <ShapeFix_Wire.hxx>
 
 #include <Base/Exception.h>
 #include <Base/Tools.h>
@@ -103,6 +106,12 @@ BOOST_GEOMETRY_REGISTER_POINT_3D_GET_SET(
 #define AREA_TRACE FC_TRACE
 #define AREA_XYZ FC_XYZ
 #define AREA_XY AREA_XY
+
+#ifdef FC_DEBUG
+#   define AREA_DBG FC_WARN
+#else
+#   define AREA_DBG(...) do{}while(0)
+#endif
 
 FC_LOG_LEVEL_INIT("Path.Area",true,true)
 
@@ -164,6 +173,7 @@ Area::Area(const Area &other, bool deep_copy)
 ,myHaveFace(other.myHaveFace)
 ,myHaveSolid(other.myHaveSolid)
 ,myShapeDone(false)
+,myProjecting(false)
 {
     if(!deep_copy || !other.isBuilt())
         return;
@@ -737,6 +747,11 @@ struct WireJoiner {
     // edges (added by calling add() ) as possible. One edge may be included
     // in more than one closed wires if it connects to more than one edges.
     int findClosedWires() {
+        // It seems OCC projector sometimes mess up the tolerance of edges
+        // which are supposed to be connected. So use a lesser preceision
+        // below, and call makeCleanWire to fix the tolerance
+        const double tol = 1e-10;
+
         std::map<int,TopoDS_Edge> edgesToVisit;
         int count = 0;
         for(const auto &info : edges) {
@@ -745,7 +760,7 @@ struct WireJoiner {
 #else
             gp_Pnt p1,p2;
             getEndPoints(info.edge,p1,p2);
-            if(p1.SquareDistance(p2)<Precision::SquareConfusion())
+            if(p1.SquareDistance(p2)<tol)
 #endif
             {
                 builder.Add(comp,BRepBuilderAPI_MakeWire(info.edge).Wire());
@@ -766,14 +781,17 @@ struct WireJoiner {
             bool skip_me = true;
             stack.clear();
 
+            // pstart and pend is the start and end vertex of the current wire
             while(true) {
+                // push a new stack entry
                 stack.emplace_back();
                 auto &r = stack.back();
 
+                // this loop is to find all edges connected to pend, and save them into stack.back()
                 for(auto vit=vmap.qbegin(bgi::nearest(pend,INT_MAX));
                     vit!=vmap.qend();++vit)
                 {
-                    if(vit->pt().SquareDistance(pend) > Precision::SquareConfusion())
+                    if(vit->pt().SquareDistance(pend) > tol)
                         break;
 
                     auto &info = *vit->it;
@@ -793,9 +811,12 @@ struct WireJoiner {
                 while(stack.size()) {
                     auto &r = stack.back();
                     if(r.idx<(int)r.ret.size()) {
+                        // now pick one edge from stack.back(), connect it to
+                        // pend, then extend pend
                         pend = r.ret[r.idx].ptOther();
                         break;
                     }
+                    // if no edge left in stack.back(), then pop it, and try again
                     for(auto &v : r.ret)
                         --v.it->iteration;
                     stack.pop_back();
@@ -803,14 +824,18 @@ struct WireJoiner {
                         ++stack.back().idx;
                 }
                 if(stack.empty()) {
+                    // If stack is empty, it means this wire is open. Try a new
+                    // starting edge
                     ++skips;
                     break;
                 }
-                if(pstart.SquareDistance(pend) > Precision::SquareConfusion()) 
+                if(pstart.SquareDistance(pend) > tol) {
+                    // check if the wire is closed
                     continue;
+                }
 
-                BRepBuilderAPI_MakeWire mkWire;
-                mkWire.Add(e);
+                Handle(ShapeExtend_WireData) wireData = new ShapeExtend_WireData();
+                wireData->Add(e);
                 for(auto &r : stack) {
                     const auto &v = r.ret[r.idx];
                     auto &info = *v.it;
@@ -821,11 +846,14 @@ struct WireJoiner {
                             edgesToVisit.erase(it);
                     }
                     if(v.start)
-                        mkWire.Add(info.edge);
+                        wireData->Add(info.edge);
                     else
-                        mkWire.Add(TopoDS::Edge(info.edge.Reversed()));
+                        wireData->Add(TopoDS::Edge(info.edge.Reversed()));
                 }
-                TopoDS_Wire wire = mkWire.Wire();
+                // TechDraw even uses 0.1 as tolerance. Really? Why?
+                TopoDS_Wire wire = makeCleanWire(wireData,0.01);
+                if(!BRep_Tool::IsClosed(wire)) 
+                    throw Base::RuntimeError("Area: failed to close projection wire");
                 builder.Add(comp,wire);
                 ++count;
                 break;
@@ -834,6 +862,33 @@ struct WireJoiner {
         AREA_TRACE("found " << count << " closed wires, skipped " << skips);
         return skips;
     }
+
+    //! make a clean wire with sorted, oriented, connected, etc edges
+    // Copied from TechDraw::EdgeWalker
+    static TopoDS_Wire makeCleanWire(Handle(ShapeExtend_WireData) wireData, double tol) {
+        TopoDS_Wire result;
+        BRepBuilderAPI_MakeWire mkWire;
+        ShapeFix_ShapeTolerance sTol;
+
+        Handle(ShapeFix_Wire) fixer = new ShapeFix_Wire;
+        fixer->Load(wireData);
+        fixer->Perform();
+        fixer->FixReorder();
+        fixer->SetMaxTolerance(tol);
+        fixer->ClosedWireMode() = Standard_True;
+        fixer->FixConnected(Precision::Confusion());
+        fixer->FixClosed(Precision::Confusion());
+
+        for (int i = 1; i <= wireData->NbEdges(); i ++) {
+            TopoDS_Edge edge = fixer->WireData()->Edge(i);
+            sTol.SetTolerance(edge, tol, TopAbs_VERTEX);
+            mkWire.Add(edge);
+        }
+
+        result = mkWire.Wire();
+        return result;
+    }
+
 };
 
 void Area::explode(const TopoDS_Shape &shape) {
@@ -864,22 +919,45 @@ void Area::explode(const TopoDS_Shape &shape) {
     }
 }
 
-// enable this to show intermediate shapes during projection in FC, for
-// debugging.
-#if 0
-static inline void showShape(const TopoDS_Shape &shape, const char *name) {
-    App::Document *pcDoc = App::GetApplication().getActiveDocument(); 	 
-    if (!pcDoc)
-        pcDoc = App::GetApplication().newDocument();
-    Part::Feature *pcFeature = (Part::Feature *)pcDoc->addObject("Part::Feature", name);
-    // copy the data
-    //TopoShape* shape = new MeshObject(*pShape->getTopoShapeObjectPtr());
-    pcFeature->Shape.setValue(shape);
-    //pcDoc->recompute();
+void Area::showShape(const TopoDS_Shape &shape, const char *name, const char *fmt, ...) {
+    if(FC_LOG_INSTANCE.level()>FC_LOGLEVEL_TRACE) {
+        App::Document *pcDoc = App::GetApplication().getActiveDocument(); 	 
+        if (!pcDoc)
+            pcDoc = App::GetApplication().newDocument();
+        char buf[256];
+        if(!name && fmt) {
+            va_list args;
+            va_start(args, fmt);
+            vsnprintf(buf,sizeof(buf), fmt, args);
+            va_end (args);
+            name = buf;
+        }
+        Part::Feature *pcFeature = (Part::Feature *)pcDoc->addObject("Part::Feature", name);
+        pcFeature->Shape.setValue(shape);
+    }
 }
-#else
-#define showShape(s,name) do{(void)s;}while(0)
-#endif
+
+template<class T>
+static void showShapes(const T &shapes, const char *name, const char *fmt=0, ...) {
+    if(FC_LOG_INSTANCE.level()>FC_LOGLEVEL_TRACE) {
+        BRep_Builder builder;
+        TopoDS_Compound comp;
+        builder.MakeCompound(comp);
+        for(auto &s : shapes) {
+            if(s.IsNull()) continue;
+            builder.Add(comp,s);
+        }
+        char buf[256];
+        if(!name && fmt) {
+            va_list args;
+            va_start(args, fmt);
+            vsnprintf(buf,sizeof(buf), fmt, args);
+            va_end (args);
+            name = buf;
+        }
+        Area::showShape(comp,name);
+    }
+}
 
 template<class Func>
 static int foreachSubshape(const TopoDS_Shape &shape, Func func, int type=TopAbs_FACE) {
@@ -922,19 +1000,35 @@ struct FindPlane {
     FindPlane(TopoDS_Shape &s, gp_Trsf &t, double &z)
         :myPlaneShape(s),myTrsf(t),myZ(z)
     {}
-    void operator()(const TopoDS_Shape &shape, int) {
+    void operator()(const TopoDS_Shape &shape, int type) {
         gp_Trsf trsf;
 
-        BRepLib_FindSurface finder(shape.Located(TopLoc_Location()),-1,Standard_True);
-        if (!finder.Found()) 
-            return;
+        gp_Pln pln;
+        if(type == TopAbs_FACE) {
+            BRepAdaptor_Surface adapt(TopoDS::Face(shape));
+            if(adapt.GetType() != GeomAbs_Plane)
+                return;
+            pln = adapt.Plane();
+        }else{
+            BRepLib_FindSurface finder(shape.Located(TopLoc_Location()),-1,Standard_True);
+            if (!finder.Found()) 
+                return;
 
-        // TODO: It seemed that FindSurface disregard shape's
-        // transformation SOMETIME, so we have to transformed the found
-        // plane manually. Need to figure out WHY!
-        gp_Pln pln = GeomAdaptor_Surface(finder.Surface()).Plane();
-        pln.Transform(shape.Location().Transformation());
+            // TODO: It seemed that FindSurface disregard shape's
+            // transformation SOMETIME, so we have to transformed the found
+            // plane manually. Need to figure out WHY!
+            //
+            // ADD NOTE: Okay, one thing I find out that for face shape, this
+            // FindSurface may produce plane at the wrong position, so use
+            // adaptor to get the underlaying surface plane directly (see
+            // above).  It remains to be seen that if FindSurface has the same
+            // problem on wires
+            gp_Pln pln = GeomAdaptor_Surface(finder.Surface()).Plane();
+            pln.Transform(shape.Location().Transformation());
+        }
+
         gp_Ax3 pos = pln.Position();
+        AREA_TRACE("plane pos " << AREA_XYZ(pos.Location()) << ", " << AREA_XYZ(pos.Direction()));
 
         // We only use right hand coordinate, hence gp_Ax2 instead of gp_Ax3
         if(!pos.Direct()) {
@@ -1201,7 +1295,8 @@ std::vector<shared_ptr<Area> > Area::makeSections(
     bool can_retry = fabs(tolerance)>Precision::Confusion();
     TopLoc_Location locInverse(loc.Inverted());
 
-    for(double z : heights) {
+    for(size_t i=0;i<heights.size();++i) {
+        double z = heights[i];
         bool retried = !can_retry;
         while(true) {
             gp_Pln pln(gp_Pnt(0,0,z),gp_Dir(0,0,1));
@@ -1232,9 +1327,11 @@ std::vector<shared_ptr<Area> > Area::makeSections(
                 builder.MakeCompound(comp);
 
                 for(TopExp_Explorer xp(s.shape.Moved(loc), TopAbs_SOLID); xp.More(); xp.Next()) {
+                    showShape(xp.Current(),0,"section_%u_shape",i);
                     std::list<TopoDS_Wire> wires;
                     Part::CrossSection section(a,b,c,xp.Current());
                     wires = section.slice(-d);
+                    showShapes(wires,0,"section_%u_wire",i);
                     if(wires.empty()) {
                         AREA_LOG("Section returns no wires");
                         continue;
@@ -1253,6 +1350,7 @@ std::vector<shared_ptr<Area> > Area::makeSections(
                         if (shape.IsNull())
                             AREA_WARN("FaceMakerBullseye return null shape on section");
                         else {
+                            showShape(shape,0,"section_%u_face",i);
                             for(auto it=wires.begin(),itNext=it;it!=wires.end();it=itNext) {
                                 ++itNext;
                                 if(BRep_Tool::IsClosed(*it)) 
@@ -1272,9 +1370,11 @@ std::vector<shared_ptr<Area> > Area::makeSections(
                 }
 
                 // Make sure the compound has at least one edge
-                if(TopExp_Explorer(comp,TopAbs_EDGE).More())
-                    area->add(comp.Moved(locInverse),s.op);
-                else if(area->myShapes.empty()){
+                if(TopExp_Explorer(comp,TopAbs_EDGE).More()) {
+                    const TopoDS_Shape &shape = comp.Moved(locInverse);
+                    showShape(shape,0,"section_%u_result",i);
+                    area->add(shape,s.op);
+                }else if(area->myShapes.empty()){
                     auto itNext = it;
                     if(++itNext != myShapes.end() &&
                         (itNext->op==OperationIntersection ||
@@ -1287,6 +1387,7 @@ std::vector<shared_ptr<Area> > Area::makeSections(
             if(area->myShapes.size()){
                 sections.push_back(area);
                 FC_TIME_LOG(t1,"makeSection " << z);
+                showShape(area->getShape(),0,"section_%u_final",i);
                 break;
             }
             if(retried) {
@@ -1512,8 +1613,8 @@ TopoDS_Shape Area::getShape(int index) {
 
     CAreaConfig conf(myParams);
 
-    // if no offset or thicken, try pocket
-    if(fabs(myParams.Offset) < Precision::Confusion() && !myParams.Thicken) {
+    // if no offset, try pocket
+    if(fabs(myParams.Offset) < Precision::Confusion()) {
         if(myParams.PocketMode == PocketModeNone) {
             myShape = toShape(*myArea,myParams.Fill);
             myShapeDone = true;
@@ -2800,6 +2901,7 @@ void Area::toPath(Toolpath &path, const std::list<TopoDS_Shape> &shapes,
     threshold = fabs(threshold);
     if(threshold < Precision::Confusion())
         threshold = Precision::Confusion();
+    threshold *= threshold;
     resume_height = fabs(resume_height);
 
     AxisGetter getter = &gp_Pnt::Z;

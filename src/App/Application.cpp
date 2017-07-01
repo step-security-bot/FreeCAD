@@ -71,6 +71,7 @@
 #include <Base/MatrixPy.h>
 #include <Base/VectorPy.h>
 #include <Base/AxisPy.h>
+#include <Base/CoordinateSystemPy.h>
 #include <Base/BoundBoxPy.h>
 #include <Base/PlacementPy.h>
 #include <Base/RotationPy.h>
@@ -221,7 +222,12 @@ Application::Application(std::map<std::string,std::string> &mConfig)
     // setting up Python binding
     Base::PyGILStateLocker lock;
 #if PY_MAJOR_VERSION >= 3
-    static struct PyModuleDef FreeCADModuleDef = {PyModuleDef_HEAD_INIT,"FreeCAD", FreeCAD_doc, -1, Application::Methods};
+    static struct PyModuleDef FreeCADModuleDef = {
+        PyModuleDef_HEAD_INIT,
+        "FreeCAD", FreeCAD_doc, -1,
+        Application::Methods,
+        NULL, NULL, NULL, NULL
+    };
     PyObject* pAppModule = PyModule_Create(&FreeCADModuleDef);
     _PyImport_FixupBuiltin(pAppModule, "FreeCAD");
 #else
@@ -230,7 +236,12 @@ Application::Application(std::map<std::string,std::string> &mConfig)
     Py::Module(pAppModule).setAttr(std::string("ActiveDocument"),Py::None());
 
 #if PY_MAJOR_VERSION >= 3
-    static struct PyModuleDef ConsoleModuleDef = {PyModuleDef_HEAD_INIT, "__FreeCADConsole__", Console_doc, -1, ConsoleSingleton::Methods};
+    static struct PyModuleDef ConsoleModuleDef = {
+        PyModuleDef_HEAD_INIT,
+        "__FreeCADConsole__", Console_doc, -1,
+        ConsoleSingleton::Methods,
+        NULL, NULL, NULL, NULL
+    };
     PyObject* pConsoleModule = PyModule_Create(&ConsoleModuleDef);
 #else
     PyObject* pConsoleModule = Py_InitModule3("__FreeCADConsole__", ConsoleSingleton::Methods, Console_doc);
@@ -253,7 +264,11 @@ Application::Application(std::map<std::string,std::string> &mConfig)
     // remove these types from the FreeCAD module.
 
 #if PY_MAJOR_VERSION >= 3
-    static struct PyModuleDef BaseModuleDef = {PyModuleDef_HEAD_INIT, "__FreeCADBase__", Base_doc, -1, NULL};
+    static struct PyModuleDef BaseModuleDef = {
+        PyModuleDef_HEAD_INIT,
+        "__FreeCADBase__", Base_doc, -1,
+        NULL, NULL, NULL, NULL, NULL
+    };
     PyObject* pBaseModule = PyModule_Create(&BaseModuleDef);
 #else
     PyObject* pBaseModule = Py_InitModule3("__FreeCADBase__", NULL, Base_doc);
@@ -263,12 +278,13 @@ Application::Application(std::map<std::string,std::string> &mConfig)
     PyModule_AddObject(pBaseModule, "FreeCADError", Base::BaseExceptionFreeCADError);
 
     // Python types
-    Base::Interpreter().addType(&Base::VectorPy     ::Type,pBaseModule,"Vector");
-    Base::Interpreter().addType(&Base::MatrixPy     ::Type,pBaseModule,"Matrix");
-    Base::Interpreter().addType(&Base::BoundBoxPy   ::Type,pBaseModule,"BoundBox");
-    Base::Interpreter().addType(&Base::PlacementPy  ::Type,pBaseModule,"Placement");
-    Base::Interpreter().addType(&Base::RotationPy   ::Type,pBaseModule,"Rotation");
-    Base::Interpreter().addType(&Base::AxisPy       ::Type,pBaseModule,"Axis");
+    Base::Interpreter().addType(&Base::VectorPy          ::Type,pBaseModule,"Vector");
+    Base::Interpreter().addType(&Base::MatrixPy          ::Type,pBaseModule,"Matrix");
+    Base::Interpreter().addType(&Base::BoundBoxPy        ::Type,pBaseModule,"BoundBox");
+    Base::Interpreter().addType(&Base::PlacementPy       ::Type,pBaseModule,"Placement");
+    Base::Interpreter().addType(&Base::RotationPy        ::Type,pBaseModule,"Rotation");
+    Base::Interpreter().addType(&Base::AxisPy            ::Type,pBaseModule,"Axis");
+    Base::Interpreter().addType(&Base::CoordinateSystemPy::Type,pBaseModule,"CoordinateSystem");
 
     Base::Interpreter().addType(&App::MaterialPy::Type, pAppModule, "Material");
 
@@ -280,7 +296,12 @@ Application::Application(std::map<std::string,std::string> &mConfig)
 
     //insert Units module
 #if PY_MAJOR_VERSION >= 3
-    static struct PyModuleDef UnitsModuleDef = {PyModuleDef_HEAD_INIT, "Units", "The Unit API", -1, Base::UnitsApi::Methods};
+    static struct PyModuleDef UnitsModuleDef = {
+        PyModuleDef_HEAD_INIT,
+        "Units", "The Unit API", -1,
+        Base::UnitsApi::Methods,
+        NULL, NULL, NULL, NULL
+    };
     PyObject* pUnitsModule = PyModule_Create(&UnitsModuleDef);
 #else
     PyObject* pUnitsModule = Py_InitModule3("Units", Base::UnitsApi::Methods,"The Unit API");

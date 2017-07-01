@@ -42,9 +42,54 @@ Report to Draft.py for info
 import FreeCAD, FreeCADGui, os, Draft, sys, DraftVecUtils, math
 
 try:
-    from PySide import QtCore,QtGui,QtSvg
+    from PySide import QtCore, QtGui, QtSvg
 except ImportError:
     FreeCAD.Console.PrintMessage("Error: Python-pyside package must be installed on your system to use the Draft module.")
+    
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def translate(context, text, utf8_decode=False):
+        """convenience function for Qt translator
+            context: str
+                context is typically a class name (e.g., "MyDialog")
+            text: str
+                text which gets translated
+            utf8_decode: bool [False]
+                if set to true utf8 encoded unicode will be returned. This option does not have influence
+                on python3 as for python3 we are returning utf-8 encoded unicode by default!
+        """
+        if sys.version_info.major >= 3 or utf8_decode:
+            return QtGui.QApplication.translate(context, text, None, _encoding)
+        else:
+            return QtGui.QApplication.translate(context, text, None, _encoding).encode("utf8")
+
+except AttributeError:
+    def translate(context, text, utf8_decode=False):
+        """convenience function for Qt translator
+            context: str
+                context is typically a class name (e.g., "MyDialog")
+            text: str
+                text which gets translated
+            utf8_decode: bool [False]
+                if set to true utf8 encoded unicode will be returned. This option does not have influence
+                on python3 as for python3 we are returning utf-8 encoded unicode by default!
+        """
+        if sys.version >= 3 or utf8_decode:
+            return QtGui.QApplication.translate(context, text, None)
+        else:
+            return QtGui.QApplication.translate(context, text, None).encode("utf8")
+
+def utf8_decode(text):
+    """py2: str     -> unicode
+            unicode -> unicode
+       py3: str     -> str
+            bytes   -> str
+    """
+    try:
+        return text.decode("utf-8")
+    except AttributeError:
+        return text
 
 class todo:
     ''' static todo class, delays execution of functions.  Use todo.delay
@@ -102,17 +147,6 @@ class todo:
         # print("debug: delaying commit",cl)
         QtCore.QTimer.singleShot(0, todo.doTasks)
         todo.commitlist = cl
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def translate(context, text):
-        "convenience function for Qt translator"
-        return QtGui.QApplication.translate(context, text, None, _encoding)
-except AttributeError:
-    def translate(context, text):
-        "convenience function for Qt translator"
-        return QtGui.QApplication.translate(context, text, None)
-
 
 #---------------------------------------------------------------------------
 # UNITS handling
@@ -217,13 +251,17 @@ class DraftTaskPanel:
         if hasattr(FreeCADGui,"draftToolBar"):
             return FreeCADGui.draftToolBar.validatePoint()
         else:
-            FreeCADGui.ActiveDocument.resetEdit()
+            if FreeCADGui.ActiveDocument:
+                FreeCADGui.ActiveDocument.resetEdit()
             return True
     def reject(self):
         FreeCADGui.draftToolBar.isTaskOn = False
         FreeCADGui.draftToolBar.escape()
-        FreeCADGui.ActiveDocument.resetEdit()
+        if FreeCADGui.ActiveDocument:
+            FreeCADGui.ActiveDocument.resetEdit()
         return True
+    def isAllowedAlterDocument(self):
+        return False
 
 class DraftToolBar:
     "main draft Toolbar"
@@ -478,11 +516,11 @@ class DraftToolBar:
         self.wipeButton = self._pushbutton("wipeButton", self.layout, icon='Draft_Wipe')
         self.orientWPButton = self._pushbutton("orientWPButton", self.layout, icon='Draft_SelectPlane')
         self.selectButton = self._pushbutton("selectButton", self.layout, icon='view-select')
-        self.xyButton = self._pushbutton("xyButton", self.layout)
-        self.xzButton = self._pushbutton("xzButton", self.layout)
-        self.yzButton = self._pushbutton("yzButton", self.layout)
-        self.currentViewButton = self._pushbutton("view", self.layout)
-        self.resetPlaneButton = self._pushbutton("none", self.layout)
+        self.xyButton = self._pushbutton("xyButton", self.layout,icon="view-top")
+        self.xzButton = self._pushbutton("xzButton", self.layout,icon="view-front")
+        self.yzButton = self._pushbutton("yzButton", self.layout,icon="view-right")
+        self.currentViewButton = self._pushbutton("view", self.layout,icon="view-isometric")
+        self.resetPlaneButton = self._pushbutton("none", self.layout,icon="view-axonometric")
         self.isCopy = self._checkbox("isCopy",self.layout,checked=False)
         gl = QtGui.QHBoxLayout()
         self.layout.addLayout(gl)
@@ -613,7 +651,7 @@ class DraftToolBar:
         self.autoGroupButton = self._pushbutton("autoGroup",self.bottomtray,icon="Draft_AutoGroup_off",hide=False,width=120)
         self.autoGroupButton.setText("None")
         
-        self.wplabel.setToolTip(translate("draft", "Current working plane:")+self.wplabel.text())
+        self.wplabel.setToolTip(translate("draft", "Current working plane:",utf8_decode=True)+self.wplabel.text())
         self.constrButton.setToolTip(translate("draft", "Toggle construction mode"))
         self.colorButton.setToolTip(translate("draft", "Curreont line color"))
         self.facecolorButton.setToolTip(translate("draft", "Current face color"))
@@ -772,6 +810,8 @@ class DraftToolBar:
                     FreeCADGui.draftToolBar.escape()
                     FreeCADGui.ActiveDocument.resetEdit()
                     return True
+                def isAllowedAlterDocument(self):
+                    return False
             if FreeCADGui.Control.activeDialog():
                 FreeCADGui.Control.closeDialog()
             todo.delay(FreeCADGui.Control.showDialog,dummy(extra))
@@ -883,7 +923,7 @@ class DraftToolBar:
         
     def labelUi(self,title=translate("draft","Label"),callback=None):
         w = QtGui.QWidget()
-        w.setWindowTitle(translate("draft","Label type").decode("utf8"))
+        w.setWindowTitle(translate("draft","Label type", utf8_decode=True))
         l = QtGui.QVBoxLayout(w)
         combo = QtGui.QComboBox()
         for s in ["Custom","Name","Label","Position","Length","Area","Volume","Tag","Material"]:
@@ -1373,7 +1413,7 @@ class DraftToolBar:
                                                               dialogFilter)
                     # print(fname)
                     #fname = str(fname.toUtf8())                                 # QString to PyString
-                    fname = fname[0].decode("utf8")
+                    fname = utf8_decode(fname[0])
 #                    print("debug: D_G DraftToolBar.pickFile type(fname): "  str(type(fname)))
                                                               
                 except Exception as e:
@@ -1392,7 +1432,7 @@ class DraftToolBar:
         if self.sourceCmd: 
             if (self.labelFFile.isVisible()):
                 if self.FFileValue.text():
-                    self.sourceCmd.validFFile(self.FFileValue.text().decode("utf8"))       #QString to PyString
+                    self.sourceCmd.validFFile(utf8_decode(self.FFileValue.text()))       #QString to PyString
                 else:
                     FreeCAD.Console.PrintMessage(translate("draft", "Please enter a font file."))                    
 
@@ -1404,7 +1444,8 @@ class DraftToolBar:
         if self.cancel:
             self.cancel()
             self.cancel = None
-        FreeCADGui.ActiveDocument.resetEdit()
+        if FreeCADGui.ActiveDocument:
+            FreeCADGui.ActiveDocument.resetEdit()
 
     def escape(self):
         "escapes the current command"

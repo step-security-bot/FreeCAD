@@ -35,7 +35,7 @@ else:
     def QT_TRANSLATE_NOOP(ctxt,txt):
         return txt
     # \endcond
-    
+
 ## @package ArchPanel
 #  \ingroup ARCH
 #  \brief The Panel object and tools
@@ -197,11 +197,11 @@ class CommandPanel:
         "sets up a taskbox widget"
         w = QtGui.QWidget()
         ui = FreeCADGui.UiLoader()
-        w.setWindowTitle(translate("Arch","Panel options").decode("utf8"))
+        w.setWindowTitle(translate("Arch","Panel options", utf8_decode=True))
         grid = QtGui.QGridLayout(w)
 
         # presets box
-        labelp = QtGui.QLabel(translate("Arch","Preset").decode("utf8"))
+        labelp = QtGui.QLabel(translate("Arch","Preset", utf8_decode=True))
         valuep = QtGui.QComboBox()
         fpresets = [" "]
         for p in Presets[1:]:
@@ -211,32 +211,32 @@ class CommandPanel:
         grid.addWidget(valuep,0,1,1,1)
 
         # length
-        label1 = QtGui.QLabel(translate("Arch","Length").decode("utf8"))
+        label1 = QtGui.QLabel(translate("Arch","Length", utf8_decode=True))
         self.vLength = ui.createWidget("Gui::InputField")
         self.vLength.setText(FreeCAD.Units.Quantity(self.Length,FreeCAD.Units.Length).UserString)
         grid.addWidget(label1,1,0,1,1)
         grid.addWidget(self.vLength,1,1,1,1)
 
         # width
-        label2 = QtGui.QLabel(translate("Arch","Width").decode("utf8"))
+        label2 = QtGui.QLabel(translate("Arch","Width", utf8_decode=True))
         self.vWidth = ui.createWidget("Gui::InputField")
         self.vWidth.setText(FreeCAD.Units.Quantity(self.Width,FreeCAD.Units.Length).UserString)
         grid.addWidget(label2,2,0,1,1)
         grid.addWidget(self.vWidth,2,1,1,1)
 
         # height
-        label3 = QtGui.QLabel(translate("Arch","Thickness").decode("utf8"))
+        label3 = QtGui.QLabel(translate("Arch","Thickness", utf8_decode=True))
         self.vHeight = ui.createWidget("Gui::InputField")
         self.vHeight.setText(FreeCAD.Units.Quantity(self.Thickness,FreeCAD.Units.Length).UserString)
         grid.addWidget(label3,3,0,1,1)
         grid.addWidget(self.vHeight,3,1,1,1)
 
         # horizontal button
-        value5 = QtGui.QPushButton(translate("Arch","Rotate").decode("utf8"))
+        value5 = QtGui.QPushButton(translate("Arch","Rotate", utf8_decode=True))
         grid.addWidget(value5,4,0,1,2)
 
         # continue button
-        label4 = QtGui.QLabel(translate("Arch","Con&tinue").decode("utf8"))
+        label4 = QtGui.QLabel(translate("Arch","Con&tinue", utf8_decode=True))
         value4 = QtGui.QCheckBox()
         value4.setObjectName("ContinueCmd")
         value4.setLayoutDirection(QtCore.Qt.RightToLeft)
@@ -370,7 +370,7 @@ class _Panel(ArchComponent.Component):
 
     def execute(self,obj):
         "creates the panel shape"
-        
+
         if self.clone(obj):
             return
 
@@ -520,11 +520,11 @@ class _Panel(ArchComponent.Component):
                 base = Part.makePolygon([v1,v2,v3,v4,v1])
                 baseprofile = Part.Face(base)
                 base = baseprofile.extrude(normal)
-            
+
         if hasattr(obj,"Area"):
             if baseprofile:
                 obj.Area = baseprofile.Area
-            
+
         if hasattr(obj,"WaveLength"):
             if baseprofile and obj.WaveLength.Value and obj.WaveHeight.Value:
                 # corrugated element
@@ -734,9 +734,11 @@ class PanelCut(Draft._DraftObject):
         obj.addProperty("App::PropertyVector","TagPosition","Arch",QT_TRANSLATE_NOOP("App::Property","The position of the tag text. Keep (0,0,0) for automatic center position"))
         obj.addProperty("App::PropertyAngle","TagRotation","Arch",QT_TRANSLATE_NOOP("App::Property","The rotation of the tag text"))
         obj.addProperty("App::PropertyFile","FontFile","Arch",QT_TRANSLATE_NOOP("App::Property","The font of the tag text"))
+        obj.addProperty("App::PropertyBool","MakeFace","Arch",QT_TRANSLATE_NOOP("App::Property","If True, the object is rendered as a face, if possible."))
         obj.Proxy = self
         self.Type = "PanelCut"
         obj.TagText = "%tag%"
+        obj.MakeFace = False
         obj.TagSize = 10
         obj.FontFile = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Draft").GetString("FontFile","")
 
@@ -770,9 +772,9 @@ class PanelCut(Draft._DraftObject):
                                 s = sol.section(plane)
                                 wires.extend(DraftGeomUtils.findWires(s.Edges))
                             if wires:
-                                base = Part.makeCompound(wires)
+                                base = self.buildCut(obj,wires)
                         else:
-                            base = Part.makeCompound(baseobj.Shape.Wires)
+                            base = self.buildCut(obj,baseobj.Shape.Wires)
                             for w in base.Wires:
                                 n = DraftGeomUtils.getNormal(w)
                                 if n:
@@ -820,6 +822,32 @@ class PanelCut(Draft._DraftObject):
                         base = Part.Compound([base])
                     obj.Shape = base
                     obj.Placement = pl
+
+    def buildCut(self,obj,wires):
+
+        """buildCut(obj,wires): builds the object shape"""
+        import Part
+        if hasattr(obj,"MakeFace"):
+            if obj.MakeFace:
+                face = None
+                if len(wires) > 1:
+                    d = 0
+                    ow = None
+                    for w in wires:
+                        if w.BoundBox.DiagonalLength > d:
+                            d = w.BoundBox.DiagonalLength
+                            ow = w
+                    if ow:
+                        face = Part.Face(ow)
+                        for w in wires:
+                            if w.hashCode() != ow.hashCode():
+                                wface = Part.Face(w)
+                                face = face.cut(wface)
+                else:
+                    face = Part.Face(wires[0])
+                if face:
+                    return face
+        return Part.makeCompound(wires)
 
     def getWires(self, obj):
 
@@ -938,11 +966,15 @@ class PanelSheet(Draft._DraftObject):
         obj.addProperty("App::PropertyLength","Width","Arch",QT_TRANSLATE_NOOP("App::Property","The width of the sheet"))
         obj.addProperty("App::PropertyLength","Height","Arch",QT_TRANSLATE_NOOP("App::Property","The height of the sheet"))
         obj.addProperty("App::PropertyPercent","FillRatio","Arch",QT_TRANSLATE_NOOP("App::Property","The fill ratio of this sheet"))
+        obj.addProperty("App::PropertyBool","MakeFace","Arch",QT_TRANSLATE_NOOP("App::Property","If True, the object is rendered as a face, if possible."))
+        obj.addProperty("App::PropertyAngle","GrainDirection","Arch",QT_TRANSLATE_NOOP("App::Property","Specifies an angle for the wood grain (Clockwise, 0 is North)"))
         obj.Proxy = self
         self.Type = "PanelSheet"
         obj.TagSize = 10
-        obj.Width = 1000
-        obj.Height = 1000
+        p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Arch")
+        obj.Width = p.GetFloat("PanelLength",1000)
+        obj.Height = p.GetFloat("PanelWidth",1000)
+        obj.MakeFace = False
         obj.FontFile = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Draft").GetString("FontFile","")
         obj.setEditorMode("FillRatio",2)
 
@@ -959,6 +991,9 @@ class PanelSheet(Draft._DraftObject):
             v3 = Vector(l2,w2,0)
             v4 = Vector(-l2,w2,0)
             base = Part.makePolygon([v1,v2,v3,v4,v1])
+            if hasattr(obj,"MakeFace"):
+                if obj.MakeFace:
+                    base = Part.Face(base)
             self.sheetborder = base
             wires = []
             area = obj.Width.Value * obj.Height.Value
@@ -1064,7 +1099,8 @@ class ViewProviderPanelSheet(Draft._ViewProviderDraft):
         Draft._ViewProviderDraft.__init__(self,vobj)
         vobj.addProperty("App::PropertyLength","Margin","Arch",QT_TRANSLATE_NOOP("App::Property","A margin inside the boundary"))
         vobj.addProperty("App::PropertyBool","ShowMargin","Arch",QT_TRANSLATE_NOOP("App::Property","Turns the display of the margin on/off"))
-
+        vobj.addProperty("App::PropertyBool","ShowGrain","Arch",QT_TRANSLATE_NOOP("App::Property","Turns the display of the wood grain texture on/off"))
+        vobj.PatternSize = 0.0035
 
     def getIcon(self):
         return ":/icons/Draft_Drawing.svg"
@@ -1123,11 +1159,26 @@ class ViewProviderPanelSheet(Draft._ViewProviderDraft):
             if hasattr(vobj,"LineColor"):
                 c = vobj.LineColor
                 self.color.rgb.setValue(c[0],c[1],c[2])
+        elif prop == "ShowGrain":
+            if hasattr(vobj,"ShowGrain"):
+                if vobj.ShowGrain:
+                    vobj.Pattern = "woodgrain"
+                else:
+                    vobj.Pattern = "None"
         Draft._ViewProviderDraft.onChanged(self,vobj,prop)
+    
 
     def updateData(self,obj,prop):
         if prop in ["Width","Height"]:
             self.onChanged(obj.ViewObject,"Margin")
+        elif prop == "GrainDirection":
+            if hasattr(self,"texcoords"):
+                if self.texcoords:
+                    s = FreeCAD.Vector(self.texcoords.directionS.getValue().getValue()).Length
+                    vS  = DraftVecUtils.rotate(FreeCAD.Vector(s,0,0),-math.radians(obj.GrainDirection.Value))
+                    vT  = DraftVecUtils.rotate(FreeCAD.Vector(0,s,0),-math.radians(obj.GrainDirection.Value))
+                    self.texcoords.directionS.setValue(vS.x,vS.y,vS.z)
+                    self.texcoords.directionT.setValue(vT.x,vT.y,vT.z)
         Draft._ViewProviderDraft.updateData(self,obj,prop)
 
 

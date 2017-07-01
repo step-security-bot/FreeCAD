@@ -1109,6 +1109,50 @@ int SketchObject::fillet(int GeoId1, int GeoId2,
     return -1;
 }
 
+int SketchObject::extend(int GeoId, double increment, int endpoint) {
+    if (GeoId < 0 || GeoId > getHighestCurveIndex())
+        return -1;
+
+    const std::vector<Part::Geometry *> &geomList = getInternalGeometry();
+    Part::Geometry *geom = geomList[GeoId];
+    int retcode = -1;
+    if (geom->getTypeId() == Part::GeomLineSegment::getClassTypeId()) {
+        Part::GeomLineSegment *seg = static_cast<Part::GeomLineSegment *>(geom);
+        Base::Vector3d startVec = seg->getStartPoint();
+        Base::Vector3d endVec = seg->getEndPoint();
+        if (endpoint == start) {
+            Base::Vector3d newPoint = startVec - endVec;
+            double scaleFactor = newPoint.Length() + increment;
+            newPoint.Normalize();
+            newPoint.Scale(scaleFactor, scaleFactor, scaleFactor);
+            newPoint = newPoint + endVec;
+            retcode = movePoint(GeoId, Sketcher::start, newPoint, false, true);
+        } else if (endpoint == end) {
+            Base::Vector3d newPoint = endVec - startVec;
+            double scaleFactor = newPoint.Length() + increment;
+            newPoint.Normalize();
+            newPoint.Scale(scaleFactor, scaleFactor, scaleFactor);
+            newPoint = newPoint + startVec;
+            retcode = movePoint(GeoId, Sketcher::end, newPoint, false, true);
+        }
+    } else if (geom->getTypeId() == Part::GeomArcOfCircle::getClassTypeId()) {
+        Part::GeomArcOfCircle *arc = static_cast<Part::GeomArcOfCircle *>(geom);
+        double startArc, endArc;
+        arc->getRange(startArc, endArc, true);
+        if (endpoint == start) {
+            arc->setRange(startArc - increment, endArc, true);
+            retcode = 0;
+        } else if (endpoint == end) {
+            arc->setRange(startArc, endArc + increment, true);
+            retcode = 0;
+        }
+    }
+    if (retcode == 0 && noRecomputes) {
+        solve();
+    }
+    return retcode;
+}
+
 int SketchObject::trim(int GeoId, const Base::Vector3d& point)
 {
     if (GeoId < 0 || GeoId > getHighestCurveIndex())
@@ -1990,8 +2034,8 @@ bool SketchObject::isExternalAllowed(App::Document *pDoc, App::DocumentObject *p
     //App::DocumentObject *support = this->Support.getValue();
     Part::BodyBase* body_this = Part::BodyBase::findBodyOf(this);
     Part::BodyBase* body_obj = Part::BodyBase::findBodyOf(pObj);
-    App::Part* part_this = App::Part::getPartOfObject(this, true);
-    App::Part* part_obj = App::Part::getPartOfObject(pObj, true);
+    App::Part* part_this = App::Part::getPartOfObject(this);
+    App::Part* part_obj = App::Part::getPartOfObject(pObj);
     if (part_this == part_obj){ //either in the same part, or in the root of document
         if (body_this == NULL) {
             return true;
@@ -2053,8 +2097,8 @@ bool SketchObject::isCarbonCopyAllowed(App::Document *pDoc, App::DocumentObject 
     //App::DocumentObject *support = this->Support.getValue();
     Part::BodyBase* body_this = Part::BodyBase::findBodyOf(this);
     Part::BodyBase* body_obj = Part::BodyBase::findBodyOf(pObj);
-    App::Part* part_this = App::Part::getPartOfObject(this, true);
-    App::Part* part_obj = App::Part::getPartOfObject(pObj, true);
+    App::Part* part_this = App::Part::getPartOfObject(this);
+    App::Part* part_obj = App::Part::getPartOfObject(pObj);
     if (part_this == part_obj){ //either in the same part, or in the root of document
         if (body_this != NULL) {
             if ((body_this != body_obj) && !this->allowOtherBody) {

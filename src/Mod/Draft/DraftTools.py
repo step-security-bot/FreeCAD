@@ -40,7 +40,7 @@ __url__ = "http://www.freecadweb.org"
 
 import sys, os, FreeCAD, FreeCADGui, WorkingPlane, math, re, Draft, Draft_rc, DraftVecUtils
 from FreeCAD import Vector
-from DraftGui import todo,QtCore,QtGui
+from DraftGui import todo, QtCore, QtGui, translate, utf8_decode
 from DraftSnap import *
 from DraftTrackers import *
 from pivy import coin
@@ -72,23 +72,6 @@ MODALT = MODS[Draft.getParam("modalt",2)]
 #---------------------------------------------------------------------------
 # General functions
 #---------------------------------------------------------------------------
-
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def translate(context, text):
-        "convenience function for Qt translator"
-        if sys.version_info.major >= 3:
-            return QtGui.QApplication.translate(context, text, None, _encoding)
-        else:
-            return QtGui.QApplication.translate(context, text, None, _encoding).encode("utf8")
-except AttributeError:
-    def translate(context, text):
-        "convenience function for Qt translator"
-        if sys.version >= 3:
-            return QtGui.QApplication.translate(context, text, None)
-        else:
-            return QtGui.QApplication.translate(context, text, None).encode("utf8")
 
 def msg(text=None,mode=None):
     "prints the given message on the FreeCAD status bar"
@@ -279,7 +262,11 @@ class DraftTool:
         if hasattr(FreeCADGui,"Snapper"):
             FreeCADGui.Snapper.off()
         if self.call:
-            self.view.removeEventCallback("SoEvent",self.call)
+            try:
+                self.view.removeEventCallback("SoEvent",self.call)
+            except RuntimeError:
+                # the view has been deleted already
+                pass
             self.call = None
         if self.commitList:
             todo.delayCommit(self.commitList)
@@ -452,7 +439,7 @@ class SelectPlane(DraftTool):
         elif type(arg).__name__ == 'Vector':
             plv = 'd('+str(arg.x)+','+str(arg.y)+','+str(arg.z)+')'
             self.ui.wplabel.setText(plv+suffix)
-        self.ui.wplabel.setToolTip(translate("draft", "Current working plane:")+self.ui.wplabel.text())
+        self.ui.wplabel.setToolTip(translate("draft", "Current working plane:",utf8_decode=True)+self.ui.wplabel.text())
         FreeCADGui.doCommandGui("FreeCADGui.Snapper.setGrid()")
 
 #---------------------------------------------------------------------------
@@ -509,8 +496,13 @@ class Line(Creator):
         "terminates the operation and closes the poly if asked"
         if self.obj:
             # remove temporary object, if any
-            old = self.obj.Name
-            todo.delay(self.doc.removeObject,old)
+            try:
+                old = self.obj.Name
+            except ReferenceError:
+                # object already deleted, for some reason
+                pass
+            else:
+                todo.delay(self.doc.removeObject,old)
         self.obj = None
         if self.oldWP:
             FreeCAD.DraftWorkingPlane = self.oldWP
@@ -594,10 +586,10 @@ class Line(Creator):
 
     def drawSegment(self,point):
         "draws a new segment"
+        if self.planetrack and self.node:
+            self.planetrack.set(self.node[-1])
         if (len(self.node) == 1):
             msg(translate("draft", "Pick next point:\n"))
-            if self.planetrack:
-                self.planetrack.set(self.node[0])
         elif (len(self.node) == 2):
             last = self.node[len(self.node)-2]
             newseg = Part.LineSegment(last,point).toShape()
@@ -2253,7 +2245,7 @@ class Move(Modifier):
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Draft_Move", "Moves the selected objects between 2 points. CTRL to snap, SHIFT to constrain, ALT to copy")}
 
     def Activated(self):
-        self.name = translate("draft","Move").decode("utf8")
+        self.name = translate("draft","Move", utf8_decode=True)
         Modifier.Activated(self,self.name)
         self.ghost = None
         if self.ui:
@@ -3536,7 +3528,7 @@ class Scale(Modifier):
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Draft_Scale", "Scales the selected objects from a base point. CTRL to snap, SHIFT to constrain, ALT to copy")}
 
     def Activated(self):
-        self.name = translate("draft","Scale").decode("utf8")
+        self.name = translate("draft","Scale", utf8_decode=True)
         Modifier.Activated(self,self.name)
         self.ghost = None
         if self.ui:
@@ -4682,7 +4674,8 @@ class Array(Modifier):
             obj = FreeCADGui.Selection.getSelection()[0]
             FreeCADGui.addModule("Draft")
             self.commit(translate("draft","Array"),
-                        ['Draft.makeArray(FreeCAD.ActiveDocument.'+obj.Name+',FreeCAD.Vector(1,0,0),FreeCAD.Vector(0,1,0),2,2)',
+                        ['obj = Draft.makeArray(FreeCAD.ActiveDocument.'+obj.Name+',FreeCAD.Vector(1,0,0),FreeCAD.Vector(0,1,0),2,2)',
+                         'Draft.autogroup(obj)',
                          'FreeCAD.ActiveDocument.recompute()'])
         self.finish()
 
@@ -4969,7 +4962,7 @@ class Mirror(Modifier):
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Draft_Mirror", "Mirrors the selected objects along a line defined by two points")}
 
     def Activated(self):
-        self.name = translate("draft","Mirror").decode("utf8")
+        self.name = translate("draft","Mirror", utf8_decode=True)
         Modifier.Activated(self,self.name)
         self.ghost = None
         if self.ui:
@@ -5214,7 +5207,7 @@ class Draft_Label(Creator):
                 'ToolTip': QtCore.QT_TRANSLATE_NOOP("Draft_Label", "Creates a label, optionally attached to a selected object or element")}
 
     def Activated(self):
-        self.name = translate("draft","Label").decode("utf8")
+        self.name = translate("draft","Label", utf8_decode=True)
         Creator.Activated(self,self.name,noplanesetup=True)
         self.ghost = None
         self.labeltype = Draft.getParam("labeltype","Custom")

@@ -34,9 +34,11 @@ import sys
 if sys.version_info.major >= 3:
     xrange = range
 
-LOG_MODULE = 'PathSurface'
-PathLog.setLevel(PathLog.Level.INFO, LOG_MODULE)
-#PathLog.trackModule('PathSurface')
+if False:
+    PathLog.setLevel(PathLog.Level.DEBUG, PathLog.thisModule())
+    PathLog.trackModule(PathLog.thisModule())
+else:
+    PathLog.setLevel(PathLog.Level.INFO, PathLog.thisModule())
 
 if FreeCAD.GuiUp:
     import FreeCADGui
@@ -48,15 +50,10 @@ __url__ = "http://www.freecadweb.org"
 
 """Path surface object and FreeCAD command"""
 
-# Qt tanslation handling
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
 
-    def translate(context, text, disambig=None):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def translate(context, text, disambig=None):
-        return QtGui.QApplication.translate(context, text, disambig)
+# Qt tanslation handling
+def translate(context, text, disambig=None):
+    return QtCore.QCoreApplication.translate(context, text, disambig)
 
 
 class ObjectSurface:
@@ -91,6 +88,9 @@ class ObjectSurface:
         self.vertRapid = 0.0
         self.horizRapid = 0.0
         self.radius = 0.0
+
+        if FreeCAD.GuiUp:
+            ViewProviderSurface(obj.ViewObject)
 
         obj.Proxy = self
 
@@ -171,7 +171,8 @@ class ObjectSurface:
         surface = s
 
         t_before = time.time()
-        zheights = depthparams.get_depths()
+        zheights = [i for i in depthparams]
+
         wl = ocl.Waterline()
         # wl = ocl.AdaptiveWaterline() # this is slower, ca 60 seconds on i7
         # CPU
@@ -266,7 +267,7 @@ class ObjectSurface:
     def execute(self, obj):
         import MeshPart
         FreeCAD.Console.PrintWarning(
-            translate("PathSurface", "Hold on.  This might take a minute.\n"))
+            translate("Path_Surface", "Hold on.  This might take a minute.\n"))
         output = ""
         if obj.Comment != "":
             output += '(' + str(obj.Comment)+')\n'
@@ -304,8 +305,8 @@ class ObjectSurface:
             try:
                 import ocl
             except:
-                FreeCAD.Console.PrintError(translate(
-                    "PathSurface", "This operation requires OpenCamLib to be installed.\n"))
+                FreeCAD.Console.PrintError(
+                        translate("Path_Surface", "This operation requires OpenCamLib to be installed.\n"))
                 return
 
         if mesh.TypeId.startswith('Mesh'):
@@ -318,7 +319,7 @@ class ObjectSurface:
                 from PathScripts.PathPreferences import PathPreferences
                 deflection = PathPreferences.defaultGeometryTolerance()
 
-            mesh = MeshPart.meshFromShape(mesh.Shape, Deflection = deflection)
+            mesh = MeshPart.meshFromShape(mesh.Shape, Deflection=deflection)
 
         bb = mesh.BoundBox
 
@@ -359,6 +360,9 @@ class ViewProviderSurface:
     def __setstate__(self, state):  # mandatory
         return None
 
+    def deleteObjectsOnReject(self):
+        return hasattr(self, 'deleteOnReject') and self.deleteOnReject
+
     def getIcon(self):  # optional
         return ":/icons/Path-Surfacing.svg"
 
@@ -372,10 +376,12 @@ class ViewProviderSurface:
 
     def setEdit(self, vobj, mode=0):
         FreeCADGui.Control.closeDialog()
-        taskd = TaskPanel()
+        taskd = TaskPanel(vobj.Object, self.deleteObjectsOnReject())
+
         taskd.obj = vobj.Object
         FreeCADGui.Control.showDialog(taskd)
         taskd.setupUi()
+        self.deleteOnReject = False
         return True
 
     def unsetEdit(self, vobj, mode):  # optional
@@ -404,52 +410,65 @@ class CommandPathSurfacing:
         zbottom = 0
 
         FreeCAD.ActiveDocument.openTransaction(
-            translate("Path_Surfacing", "Create Surface"))
+            translate("Path_Surface", "Create Surface"))
         FreeCADGui.addModule("PathScripts.PathSurface")
         FreeCADGui.doCommand(
             'obj = FreeCAD.ActiveDocument.addObject("Path::FeaturePython","Surface")')
         FreeCADGui.doCommand('PathScripts.PathSurface.ObjectSurface(obj)')
         FreeCADGui.doCommand('obj.Active = True')
-        FreeCADGui.doCommand(
-            'PathScripts.PathSurface.ViewProviderSurface(obj.ViewObject)')
         FreeCADGui.doCommand('from PathScripts import PathUtils')
         FreeCADGui.doCommand('obj.ClearanceHeight = ' + str(ztop + 2))
         FreeCADGui.doCommand('obj.StartDepth = ' + str(ztop))
         FreeCADGui.doCommand('obj.SafeHeight = ' + str(ztop + 2))
         FreeCADGui.doCommand('obj.StepDown = ' + str((ztop - zbottom) / 8))
         FreeCADGui.doCommand('obj.SampleInterval = 0.4')
+        FreeCADGui.doCommand('obj.ViewObject.Proxy.deleteOnReject = True')
 
         FreeCADGui.doCommand('obj.FinalDepth=' + str(zbottom))
         FreeCADGui.doCommand('PathScripts.PathUtils.addToJob(obj)')
+        FreeCADGui.doCommand('obj.ViewObject.startEditing()')
 
         FreeCAD.ActiveDocument.commitTransaction()
-        FreeCAD.ActiveDocument.recompute()
-        FreeCADGui.doCommand('obj.ViewObject.startEditing()')
 
 
 class TaskPanel:
 
-    def __init__(self):
+    def __init__(self, obj, deleteOnReject):
         # self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Path/SurfaceEdit.ui")
+        FreeCAD.ActiveDocument.openTransaction(translate("Path_Surface", "Surfacing Operation"))
         self.form = FreeCADGui.PySideUic.loadUi(":/panels/SurfaceEdit.ui")
         FreeCAD.Console.PrintWarning("Surface calculations can be slow.  Don't Panic.\n")
+        self.deleteOnReject = deleteOnReject
+        self.obj = obj
+        self.isDirty = True
 
     def accept(self):
-        self.getFields()
-
-        FreeCADGui.ActiveDocument.resetEdit()
         FreeCADGui.Control.closeDialog()
-        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        FreeCAD.ActiveDocument.commitTransaction()
         FreeCADGui.Selection.removeObserver(self.s)
+        if self.isDirty:
+            FreeCAD.ActiveDocument.recompute()
 
     def reject(self):
         FreeCADGui.Control.closeDialog()
-        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        FreeCAD.ActiveDocument.abortTransaction()
         FreeCADGui.Selection.removeObserver(self.s)
+        if self.deleteOnReject:
+            FreeCAD.ActiveDocument.openTransaction(translate("Path_Surface", "Uncreate Surface"))
+            FreeCAD.ActiveDocument.removeObject(self.obj.Name)
+            FreeCAD.ActiveDocument.commitTransaction()
+        FreeCAD.ActiveDocument.recompute()
+
+    def clicked(self,button):
+        if button == QtGui.QDialogButtonBox.Apply:
+            self.getFields()
+            FreeCAD.ActiveDocument.recompute()
+            self.isDirty = False
 
     def getFields(self):
         if self.obj:
-
             if hasattr(self.obj, "StartDepth"):
                 self.obj.StartDepth = FreeCAD.Units.Quantity(self.form.startDepth.text()).Value
             if hasattr(self.obj, "FinalDepth"):
@@ -470,7 +489,7 @@ class TaskPanel:
                 tc = PathUtils.findToolController(self.obj, self.form.uiToolController.currentText())
                 self.obj.ToolController = tc
 
-        self.obj.Proxy.execute(self.obj)
+        self.isDirty = True
 
     def setFields(self):
         self.form.startDepth.setText(FreeCAD.Units.Quantity(self.obj.StartDepth.Value, FreeCAD.Units.Length).UserString)
@@ -515,13 +534,13 @@ class TaskPanel:
         # check that the selection contains exactly what we want
         selection = FreeCADGui.Selection.getSelectionEx()
         if len(selection) != 1:
-            FreeCAD.Console.PrintError(translate(
-                "PathSurface", "Please select a single solid object from the project tree\n"))
+            FreeCAD.Console.PrintError(
+                    translate("Path_Surface", "Please select a single solid object from the project tree\n"))
             return
 
         if not len(selection[0].SubObjects) == 0:
-            FreeCAD.Console.PrintError(translate(
-                "PathSurface", "Please select a single solid object from the project tree\n"))
+            FreeCAD.Console.PrintError(
+                    translate("Path_Surface", "Please select a single solid object from the project tree\n"))
             return
 
         sel = selection[0].Object
@@ -538,7 +557,7 @@ class TaskPanel:
 
         else:
             FreeCAD.Console.PrintError(
-                translate("PathSurface", "Cannot work with this object\n"))
+                    translate("Path_Surface", "Cannot work with this object\n"))
             return
 
         self.obj.Proxy.addsurfacebase(self.obj, sel)
@@ -579,7 +598,7 @@ class TaskPanel:
         FreeCAD.ActiveDocument.recompute()
 
     def getStandardButtons(self):
-        return int(QtGui.QDialogButtonBox.Ok)
+        return int(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Apply | QtGui.QDialogButtonBox.Cancel)
 
     def setupUi(self):
         # Base Geometry
@@ -587,7 +606,6 @@ class TaskPanel:
         self.form.deleteBase.clicked.connect(self.deleteBase)
         self.form.reorderBase.clicked.connect(self.reorderBase)
         self.form.baseList.itemSelectionChanged.connect(self.itemActivated)
-        self.form.uiToolController.currentIndexChanged.connect(self.getFields)
 
         # Depths
         self.form.startDepth.editingFinished.connect(self.getFields)
@@ -601,6 +619,7 @@ class TaskPanel:
 
         # Operation
         self.form.algorithmSelect.currentIndexChanged.connect(self.getFields)
+        self.form.uiToolController.currentIndexChanged.connect(self.getFields)
 
         sel = FreeCADGui.Selection.getSelectionEx()
         self.setFields()

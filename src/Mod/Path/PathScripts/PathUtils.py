@@ -30,15 +30,17 @@ from DraftGeomUtils import geomType
 import PathScripts
 from PathScripts import PathJob
 import numpy
-import PathLog
+from PathScripts import PathLog
 from FreeCAD import Vector
 import Path
 from PySide import QtCore
 from PySide import QtGui
 
-LOG_MODULE = 'PathUtils'
-PathLog.setLevel(PathLog.Level.INFO, LOG_MODULE)
-# PathLog.trackModule('PathUtils')
+if False:
+    PathLog.setLevel(PathLog.Level.DEBUG, PathLog.thisModule())
+    PathLog.trackModule(PathLog.thisModule())
+else:
+    PathLog.setLevel(PathLog.Level.INFO, PathLog.thisModule())
 FreeCAD.setLogLevel('Path.Area', 0)
 
 
@@ -50,9 +52,10 @@ def waiting_effects(function):
         res = None
         try:
             res = function(*args, **kwargs)
-        except Exception as e:
-            raise e
-            print("Error {}".format(e.args[0]))
+        # don't catch exceptions - want to know where they are coming from ....
+        #except Exception as e:
+        #    raise e
+        #    print("Error {}".format(e.args[0]))
         finally:
             QtGui.QApplication.restoreOverrideCursor()
         return res
@@ -111,6 +114,15 @@ def curvetowire(obj, steps):
 
 
 def isDrillable(obj, candidate, tooldiameter=None):
+    """
+    Checks candidates to see if they can be drilled.
+    Candidates can be either faces - circular or cylindrical or circular edges.
+    The tooldiameter can be optionally passed.  if passed, the check will return
+    False for any holes smaller than the tooldiameter.
+    obj=Shape
+    candidate = Face or Edge
+    tooldiameter=float
+    """
     PathLog.track('obj: {} candidate: {} tooldiameter {}'.format(obj, candidate, tooldiameter))
     drillable = False
     if candidate.ShapeType == 'Face':
@@ -122,15 +134,23 @@ def isDrillable(obj, candidate, tooldiameter=None):
                     PathLog.debug("candidate is a circle")
                     v0 = edge.Vertexes[0].Point
                     v1 = edge.Vertexes[1].Point
-                    if (v1.sub(v0).x == 0) and (v1.sub(v0).y == 0):
+                    #check if the cylinder seam is vertically aligned.  Eliminate tilted holes
+                    if (numpy.isclose(v1.sub(v0).x, 0, rtol=1e-05, atol=1e-06)) and \
+                            (numpy.isclose(v1.sub(v0).y, 0, rtol=1e-05, atol=1e-06)):
+                        drillable = True
                         # vector of top center
                         lsp = Vector(face.BoundBox.Center.x, face.BoundBox.Center.y, face.BoundBox.ZMax)
                         # vector of bottom center
                         lep = Vector(face.BoundBox.Center.x, face.BoundBox.Center.y, face.BoundBox.ZMin)
-                        if obj.isInside(lsp, 0, False) or obj.isInside(lep, 0, False):
+                        # check if the cylindrical 'lids' are inside the base
+                        # object.  This eliminates extruded circles but allows
+                        # actual holes.
+                        if obj.isInside(lsp, 1e-6, False) or obj.isInside(lep, 1e-6, False):
+                            PathLog.track("inside check failed. lsp: {}  lep: {}".format(lsp,lep))
                             drillable = False
                         # eliminate elliptical holes
                         elif not hasattr(face.Surface, "Radius"):
+                            PathLog.debug("candidate face has no radius attribute")
                             drillable = False
                         else:
                             if tooldiameter is not None:
@@ -148,6 +168,11 @@ def isDrillable(obj, candidate, tooldiameter=None):
                     PathLog.debug("Has Radius, Circle")
                     if tooldiameter is not None:
                         drillable = edge.Curve.Radius >= tooldiameter/2
+                        if not drillable:
+                            FreeCAD.Console.PrintMessage(
+                                    "Found a drillable hole with diameter: {}: "
+                                    "too small for the current tool with "
+                                    "diameter: {}".format(edge.Curve.Radius*2, tooldiameter))
                     else:
                         drillable = True
     PathLog.debug("candidate is drillable: {}".format(drillable))
@@ -237,26 +262,61 @@ def makeWorkplane(shape):
     return c
 
 
-def getEnvelope(partshape, stockheight=None):
+def getEnvelope(partshape, subshape=None, depthparams=None):
     '''
-    getEnvelop(partshape, stockheight=None)
+    getEnvelope(partshape, stockheight=None)
     returns a shape corresponding to the partshape silhouette extruded to height.
     if stockheight is given, the returned shape is extruded to that height otherwise the returned shape
     is the height of the original shape boundbox
     partshape = solid object
-    stockheight = float
+    stockheight = float - Absolute Z height of the top of material before cutting.
     '''
-    PathLog.track(partshape, stockheight)
-    area = Path.Area(Fill=1, Coplanar=0).add(partshape)
-    # loc = FreeCAD.Vector(partshape.BoundBox.Center.x,
-    #                      partshape.BoundBox.Center.y,
-    #                      partshape.BoundBox.ZMin)
-    area.setPlane(makeWorkplane(partshape))
-    sec = area.makeSections(heights=[1.0], project=True)[0].getShape()
-    if stockheight is not None:
-        return sec.extrude(FreeCAD.Vector(0, 0, stockheight))
+    PathLog.track(partshape, subshape, depthparams)
+
+    # if partshape.Volume == 0.0:  #Not a 3D object
+    #     return None
+
+
+    zShift = 0
+    if subshape is not None:
+        if isinstance(subshape, Part.Face):
+            PathLog.debug('processing a face')
+            sec = Part.makeCompound([subshape])
+        else:
+            area = Path.Area(Fill=2, Coplanar=0).add(subshape)
+            area.setPlane(makeWorkplane(partshape))
+            PathLog.debug("About to section with params: {}".format(area.getParams()))
+            sec = area.makeSections(heights=[0.0], project=True)[0].getShape()
+
+       # zShift = partshape.BoundBox.ZMin - subshape.BoundBox.ZMin
+        PathLog.debug('partshapeZmin: {}, subshapeZMin: {}, zShift: {}'.format(partshape.BoundBox.ZMin, subshape.BoundBox.ZMin, zShift))
+
     else:
-        return sec.extrude(FreeCAD.Vector(0, 0, partshape.BoundBox.ZLength))
+        area = Path.Area(Fill=2, Coplanar=0).add(partshape)
+        area.setPlane(makeWorkplane(partshape))
+        sec = area.makeSections(heights=[0.0], project=True)[0].getShape()
+
+    # If depthparams are passed, use it to calculate bottom and height of
+    # envelope
+    if depthparams is not None:
+#        eLength = float(stockheight)-partshape.BoundBox.ZMin
+        eLength = depthparams.safe_height - depthparams.final_depth
+        #envelopeshape = sec.extrude(FreeCAD.Vector(0, 0, eLength))
+        zShift = depthparams.final_depth - sec.BoundBox.ZMin
+        PathLog.debug('boundbox zMIN: {} elength: {} zShift {}'.format(partshape.BoundBox.ZMin, eLength, zShift))
+    else:
+        eLength = partshape.BoundBox.ZLength - sec.BoundBox.ZMin
+
+    # Shift the section based on selection and depthparams.
+    newPlace = FreeCAD.Placement(FreeCAD.Vector(0, 0, zShift), sec.Placement.Rotation)
+    sec.Placement = newPlace
+
+    # Extrude the section to top of Boundbox or desired height
+    envelopeshape = sec.extrude(FreeCAD.Vector(0, 0, eLength))
+    if PathLog.getLevel(PathLog.thisModule()) == PathLog.Level.DEBUG:
+        removalshape = FreeCAD.ActiveDocument.addObject("Part::Feature", "Envelope")
+        removalshape.Shape = envelopeshape
+    return envelopeshape
 
 
 def reverseEdge(e):
@@ -278,13 +338,13 @@ def changeTool(obj, job):
     tlnum = 0
     for p in job.Group:
         if not hasattr(p, "Group"):
-            if isinstance(p.Proxy, PathScripts.PathLoadTool.LoadTool) and p.ToolNumber > 0:
+            if isinstance(p.Proxy, PathScripts.PathToolController.ToolController) and p.ToolNumber > 0:
                 tlnum = p.ToolNumber
             if p == obj:
                 return tlnum
         elif hasattr(p, "Group"):
             for g in p.Group:
-                if isinstance(g.Proxy, PathScripts.PathLoadTool.LoadTool):
+                if isinstance(g.Proxy, PathScripts.PathToolController.ToolController):
                     tlnum = g.ToolNumber
                 if g == obj:
                     return tlnum
@@ -301,7 +361,7 @@ def getToolControllers(obj):
     if parent is not None and hasattr(parent, 'Group'):
         sibs = parent.Group
         for g in sibs:
-            if isinstance(g.Proxy, PathScripts.PathLoadTool.LoadTool):
+            if isinstance(g.Proxy, PathScripts.PathToolController.ToolController):
                 controllers.append(g)
     return controllers
 
@@ -316,7 +376,7 @@ def findToolController(obj, name=None):
     # First check if a user has selected a tool controller in the tree. Return the first one and remove all from selection
     for sel in FreeCADGui.Selection.getSelectionEx():
         if hasattr(sel.Object, 'Proxy'):
-            if isinstance(sel.Object.Proxy, PathScripts.PathLoadTool.LoadTool):
+            if isinstance(sel.Object.Proxy, PathScripts.PathToolController.ToolController):
                 if c is None:
                     c = sel.Object
                 FreeCADGui.Selection.removeSelection(sel.Object)
@@ -408,9 +468,10 @@ def addToJob(obj, jobname=None):
                 print(form.cboProject.currentText())
                 job = [i for i in jobs if i.Name == form.cboProject.currentText()][0]
 
-    g = job.Group
-    g.append(obj)
-    job.Group = g
+    if obj:
+        g = job.Group
+        g.append(obj)
+        job.Group = g
     return job
 
 
@@ -588,6 +649,7 @@ def rampPlunge(edge, rampangle, destZ, startZ):
 
     return rampCmds
 
+
 def sort_jobs(locations, keys, attractors=[]):
     """ sort holes by the nearest neighbor method
         keys: two-element list of keys for X and Y coordinates. for example ['x','y']
@@ -602,7 +664,7 @@ def sort_jobs(locations, keys, attractors=[]):
         """ square Euclidean distance """
         d = 0
         for k in keys:
-            d += (a[k] - b[k]) ** 2 
+            d += (a[k] - b[k]) ** 2
 
         return d
 
@@ -624,7 +686,6 @@ def sort_jobs(locations, keys, attractors=[]):
 
         return result
 
-
     out = []
     zero = defaultdict(lambda: 0)
 
@@ -638,60 +699,161 @@ def sort_jobs(locations, keys, attractors=[]):
 
     return out
 
+def guessDepths(objshape, subs=None):
+    """
+    takes an object shape and optional list of subobjects and returns a depth_params
+    object with suggested height/depth values.
+
+    objshape = Part::Shape.
+    subs = list of subobjects from objshape
+    """
+
+    bb = objshape.BoundBox  # parent boundbox
+    clearance = bb.ZMax + 5.0
+    safe = bb.ZMax
+    start = bb.ZMax
+    final = bb.ZMin
+
+    if subs is not None:
+        subobj = Part.makeCompound(subs)
+        fbb = subobj.BoundBox  # feature boundbox
+        start = fbb.ZMax
+
+        if fbb.ZMax == fbb.ZMin and fbb.ZMax == bb.ZMax:  # top face
+            final = fbb.ZMin
+        elif fbb.ZMax > fbb.ZMin and fbb.ZMax == bb.ZMax:  # vertical face, full cut
+            final = fbb.ZMin
+        elif fbb.ZMax > fbb.ZMin and fbb.ZMin > bb.ZMin:  # internal vertical wall
+            final = fbb.ZMin
+        elif fbb.ZMax == fbb.ZMin and fbb.ZMax > bb.ZMin:  # face/shelf
+            final = fbb.ZMin
+
+    return depth_params(clearance, safe, start, 1.0, 0.0, final, user_depths=None, equalstep=False)
+
 
 class depth_params:
     '''calculates the intermediate depth values for various operations given the starting, ending, and stepdown parameters
-    (self, clearance_height, rapid_safety_space, start_depth, step_down, z_finish_depth, final_depth, [user_depths=None])
+    (self, clearance_height, safe_height, start_depth, step_down, z_finish_depth, final_depth, [user_depths=None], equalstep=False)
 
         Note: if user_depths are supplied, only user_depths will be used.
 
         clearance_height:   Height to clear all obstacles
-        rapid_safety_space: Height to rapid between locations
-        start_depth:        Top of Stock
+        safe_height:        Height to clear raw stock material
+        start_depth:        Top of Model
         step_down:          Distance to step down between passes (always positive)
         z_finish_step:      Maximum amount of material to remove on the final pass
         final_depth:        Lowest point of the cutting operation
         user_depths:        List of specified depths
+        equalstep:          Boolean.  If True, steps down except Z_finish_depth will be balanced.
     '''
 
-    def __init__(self, clearance_height, rapid_safety_space, start_depth, step_down, z_finish_step, final_depth, user_depths=None):
-        '''self, clearance_height, rapid_safety_space, start_depth, step_down, z_finish_depth, final_depth, [user_depths=None]'''
+    def __init__(self, clearance_height, safe_height, start_depth, step_down, z_finish_step, final_depth, user_depths=None, equalstep=False):
+        '''self, clearance_height, safe_height, start_depth, step_down, z_finish_depth, final_depth, [user_depths=None], equalstep=False'''
         if z_finish_step > step_down:
             raise ValueError('z_finish_step must be less than step_down')
 
-        self.clearance_height = clearance_height
-        self.rapid_safety_space = math.fabs(rapid_safety_space)
-        self.start_depth = start_depth
-        self.step_down = math.fabs(step_down)
-        self.z_finish_step = math.fabs(z_finish_step)
-        self.final_depth = final_depth
-        self.user_depths = user_depths
+        self.__clearance_height = clearance_height
+        self.__safe_height = math.fabs(safe_height)
+        self.__start_depth = start_depth
+        self.__step_down = math.fabs(step_down)
+        self.__z_finish_step = math.fabs(z_finish_step)
+        self.__final_depth = final_depth
+        self.__user_depths = user_depths
+        self.data = self.__get_depths(equalstep=equalstep)
+        self.index = 0
 
-    def get_depths(self, equalstep=False):
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if self.index == len(self.data):
+            raise StopIteration
+        self.index = self.index + 1
+        return self.data[self.index - 1]
+
+    @property
+    def clearance_height(self):
+        """
+        Height of all vises, clamps, and other obstructions.  Rapid moves at clearance height
+        are always assumed to be safe from collision.
+        """
+        return self.__clearance_height
+
+    @property
+    def safe_height(self):
+        """
+        Height of top of raw stock material.  Rapid moves above safe height are 
+        assumed to be safe within an operation.  May not be safe between
+        operations or tool changes.
+        All moves below safe height except retraction should be at feed rate.
+        """
+        return self.__safe_height
+
+    @property
+    def start_depth(self):
+        """
+        Start Depth is the top of the model.
+        """
+        return self.__start_depth
+
+    @property
+    def step_down(self):
+        """
+        Maximum step down value between passes.  Step-Down may be less than
+        this value, especially if equalstep is True.
+        """
+        return self.__step_down
+
+    @property
+    def z_finish_depth(self):
+        """
+        The amount of material to remove on the finish pass.  If given, the
+        final pass will remove exactly this amount.
+        """
+        return self.__z_finish_depth
+
+    @property
+    def final_depth(self):
+        """
+        The height of the cutter during the last pass or finish pass if
+        z_finish_pass is given.
+        """
+        return self.__final_depth
+
+    @property
+    def user_depths(self):
+        """
+        Returns a list of the user_specified depths.  If user_depths were given
+        in __init__, these depths override all calculation and only these are
+        used.
+        """
+        return self.__user_depths
+
+    def __get_depths(self, equalstep=False):
         '''returns a list of depths to be used in order from first to last.
         equalstep=True: all steps down before the finish pass will be equalized.'''
 
         if self.user_depths is not None:
-            return self.user_depths
+            return self.__user_depths
 
-        total_depth = self.start_depth - self.final_depth
+        total_depth = self.__start_depth - self.__final_depth
 
         if total_depth < 0:
             return []
 
-        depths = [self.final_depth]
+        depths = [self.__final_depth]
 
         # apply finish step if necessary
-        if self.z_finish_step > 0:
-            if self.z_finish_step < total_depth:
-                depths.append(self.z_finish_step + self.final_depth)
+        if self.__z_finish_step > 0:
+            if self.__z_finish_step < total_depth:
+                depths.append(self.__z_finish_step + self.__final_depth)
             else:
                 return depths
 
         if equalstep:
-            depths += self.__equal_steps(self.start_depth, depths[-1], self.step_down)[1:]
+            depths += self.__equal_steps(self.__start_depth, depths[-1], self.__step_down)[1:]
         else:
-            depths += self.__fixed_steps(self.start_depth, depths[-1], self.step_down)[1:]
+            depths += self.__fixed_steps(self.__start_depth, depths[-1], self.__step_down)[1:]
 
         depths.reverse()
         return depths
@@ -721,3 +883,5 @@ class depth_params:
             return depths.tolist()
         else:
             return [stop] + depths.tolist()
+
+

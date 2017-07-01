@@ -29,11 +29,9 @@ __url__ = "http://www.freecadweb.org"
 
 import FreeCAD
 import FreeCADGui
-from PySide import QtGui
-from PySide.QtGui import QFileDialog
-# from PySide.QtGui import QMessageBox
-from PySide import QtCore
 import Units
+from PySide import QtCore, QtGui
+from PySide.QtGui import QFileDialog, QMessageBox
 
 
 class _TaskPanelFemMaterial:
@@ -45,12 +43,12 @@ class _TaskPanelFemMaterial:
         self.selection_mode_solid = False
         self.selection_mode_std_print_message = "Select Faces and Edges by single click on them to add them to the list."
         self.selection_mode_solid_print_message = "Select Solids by single click on a Face or Edge which belongs to the Solid, to add the Solid to the list."
+        self.obj_notvisible = []
         self.material = self.obj.Material
         self.references = []
         if self.obj.References:
             self.tuplereferences = self.obj.References
             self.get_references()
-        self.references_shape_type = None
 
         self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Fem/PyGui/TaskPanelFemMaterial.ui")
         QtCore.QObject.connect(self.form.pushButton_MatWeb, QtCore.SIGNAL("clicked()"), self.goto_MatWeb)
@@ -83,6 +81,7 @@ class _TaskPanelFemMaterial:
             self.form.label_vol_expansion_coefficient.setVisible(0)
             self.form.input_fd_vol_expansion_coefficient.setVisible(0)
 
+        self.form.list_References.itemSelectionChanged.connect(self.select_clicked_reference_shape)
         self.form.list_References.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.form.list_References.connect(self.form.list_References, QtCore.SIGNAL("customContextMenuRequested(QPoint)"), self.references_list_right_clicked)
 
@@ -109,6 +108,7 @@ class _TaskPanelFemMaterial:
         self.rebuild_list_References()
 
     def accept(self):
+        self.setback_listobj_visibility()
         # print(self.material)
         self.remove_active_sel_server()
         if self.has_equal_references_shape_types():
@@ -119,6 +119,7 @@ class _TaskPanelFemMaterial:
             doc.Document.recompute()
 
     def reject(self):
+        self.setback_listobj_visibility()
         self.remove_active_sel_server()
         doc = FreeCADGui.getDocument(self.obj.Document)
         doc.resetEdit()
@@ -144,15 +145,16 @@ class _TaskPanelFemMaterial:
 
     def has_equal_references_shape_types(self):
         import FemMeshTools
-        if not self.references:
-            self.references_shape_type = None
+        ref_shty = ''
         for ref in self.references:
             r = FemMeshTools.get_element(ref[0], ref[1])  # the method getElement(element) does not return Solid elements
             # print('  ReferenceShape : ', r.ShapeType, ', ', ref[0].Name, ', ', ref[0].Label, ' --> ', ref[1])
-            if self.references_shape_type is None:
-                self.references_shape_type = r.ShapeType
-            if r.ShapeType != self.references_shape_type:
-                FreeCAD.Console.PrintError('Different ShapeTypes in Reference List not allowed\n')
+            if not ref_shty:
+                ref_shty = r.ShapeType
+            if r.ShapeType != ref_shty:
+                message = 'Multiple shape types are not allowed in the reference list.\n'
+                FreeCAD.Console.PrintError(message)
+                QMessageBox.critical(None, "Multiple ShapeTypes not allowed", message)
                 return False
         return True
 
@@ -537,14 +539,18 @@ class _TaskPanelFemMaterial:
         '''Called if Button add_reference is triggered'''
         # in constraints EditTaskPanel the selection is active as soon as the taskpanel is open
         # here the addReference button EditTaskPanel has to be triggered to start selection mode
+        self.setback_listobj_visibility()
         FreeCADGui.Selection.clearSelection()
         # start SelectionObserver and parse the function to add the References to the widget
         if self.selection_mode_solid:  # print message on button click
             print_message = self.selection_mode_solid_print_message
         else:
             print_message = self.selection_mode_std_print_message
-        import FemSelectionObserver
-        self.sel_server = FemSelectionObserver.FemSelectionObserver(self.selectionParser, print_message)
+        if not self.sel_server:
+            # if we do not check, we would start a new SelectionObserver on every click on addReference button
+            # but close only one SelectionObserver on leaving the task panel
+            import FemSelectionObserver
+            self.sel_server = FemSelectionObserver.FemSelectionObserver(self.selectionParser, print_message)
 
     def selectionParser(self, selection):
         print('selection: ', selection[0].Shape.ShapeType, ' --> ', selection[0].Name, ' --> ', selection[1])
@@ -597,3 +603,29 @@ class _TaskPanelFemMaterial:
             items.append(item_name)
         for listItemName in sorted(items):
             self.form.list_References.addItem(listItemName)
+
+    def select_clicked_reference_shape(self):
+        self.setback_listobj_visibility()
+        if self.sel_server:
+            FreeCADGui.Selection.removeObserver(self.sel_server)
+            self.sel_server = None
+        if not self.sel_server:
+            if not self.references:
+                return
+            currentItemName = str(self.form.list_References.currentItem().text())
+            for ref in self.references:
+                refname_to_compare_listentry = ref[0].Name + ':' + ref[1]
+                if refname_to_compare_listentry == currentItemName:
+                    # print( 'found: shape: ' + ref[0].Name + ' element: ' + ref[1])
+                    if not ref[0].ViewObject.Visibility:
+                        self.obj_notvisible.append(ref[0])
+                        ref[0].ViewObject.Visibility = True
+                    FreeCADGui.Selection.clearSelection()
+                    FreeCADGui.Selection.addSelection(ref[0], ref[1])
+
+    def setback_listobj_visibility(self):
+        '''set back Visibility of the list objects
+        '''
+        for obj in self.obj_notvisible:
+            obj.ViewObject.Visibility = False
+        self.obj_notvisible = []

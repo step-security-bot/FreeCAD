@@ -27,6 +27,8 @@ import Path
 from PySide import QtCore, QtGui
 from PathScripts import PathUtils
 import PathScripts.PathLog as PathLog
+from PathScripts.PathUtils import waiting_effects, depth_params
+import Part
 
 FreeCADGui = None
 if FreeCAD.GuiUp:
@@ -34,19 +36,16 @@ if FreeCAD.GuiUp:
 
 """Path Pocket object and FreeCAD command"""
 
-LOG_MODULE = 'PathPocket'
-PathLog.setLevel(PathLog.Level.INFO, LOG_MODULE)
-# PathLog.trackModule('PathPocket')
+if False:
+    PathLog.setLevel(PathLog.Level.DEBUG, PathLog.thisModule())
+    PathLog.trackModule(PathLog.thisModule())
+else:
+    PathLog.setLevel(PathLog.Level.INFO, PathLog.thisModule())
+
 
 # Qt tanslation handling
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-
-    def translate(context, text, disambig=None):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def translate(context, text, disambig=None):
-        return QtGui.QApplication.translate(context, text, disambig)
+def translate(context, text, disambig=None):
+    return QtCore.QCoreApplication.translate(context, text, disambig)
 
 
 class ObjectPocket:
@@ -56,9 +55,6 @@ class ObjectPocket:
         obj.addProperty("App::PropertyBool", "Active", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "Make False, to prevent operation from generating code"))
         obj.addProperty("App::PropertyString", "Comment", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "An optional comment for this profile"))
         obj.addProperty("App::PropertyString", "UserLabel", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "User Assigned Label"))
-
-        obj.addProperty("App::PropertyEnumeration", "Algorithm", "Algorithm", QtCore.QT_TRANSLATE_NOOP("App::Property", "The library to use to generate the path"))
-        obj.Algorithm = ['OCC Native', 'libarea']
 
         # Tool Properties
         obj.addProperty("App::PropertyLink", "ToolController", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "The tool controller that will be used to calculate the path"))
@@ -78,36 +74,24 @@ class ObjectPocket:
         obj.addProperty("App::PropertyEnumeration", "StartAt", "Pocket", QtCore.QT_TRANSLATE_NOOP("App::Property", "Start pocketing at center or boundary"))
         obj.StartAt = ['Center', 'Edge']
         obj.addProperty("App::PropertyPercent", "StepOver", "Pocket", QtCore.QT_TRANSLATE_NOOP("App::Property", "Percent of cutter diameter to step over on each pass"))
-        obj.addProperty("App::PropertyBool", "KeepToolDown", "Pocket", QtCore.QT_TRANSLATE_NOOP("App::Property", "Attempts to avoid unnecessary retractions."))
-        obj.addProperty("App::PropertyBool", "ZigUnidirectional", "Pocket", QtCore.QT_TRANSLATE_NOOP("App::Property", "Lifts tool at the end of each pass to respect cut mode."))
-        obj.addProperty("App::PropertyBool", "UseZigZag", "Pocket", QtCore.QT_TRANSLATE_NOOP("App::Property", "Use Zig Zag pattern to clear area."))
         obj.addProperty("App::PropertyFloat", "ZigZagAngle", "Pocket", QtCore.QT_TRANSLATE_NOOP("App::Property", "Angle of the zigzag pattern"))
-
-        # Entry Properties
-        obj.addProperty("App::PropertyBool", "UseEntry", "Entry", QtCore.QT_TRANSLATE_NOOP("App::Property", "Allow Cutter enter material with a straight plunge."))
-        obj.addProperty("App::PropertyFloatConstraint", "RampSize", "Entry", QtCore.QT_TRANSLATE_NOOP("App::Property", "The minimum fraction of tool diameter to use for ramp length"))
-        obj.RampSize = (0.0, 0.01, 100.0, 0.5)
-        obj.addProperty("App::PropertyFloatConstraint", "HelixSize", "Entry", QtCore.QT_TRANSLATE_NOOP("App::Property", "The fraction of tool diameter to use for calculating helix size."))
-        obj.HelixSize = (0.0, 0.01, 100.0, 0.5)
-        obj.addProperty("App::PropertyFloatConstraint", "RampAngle", "Entry", QtCore.QT_TRANSLATE_NOOP("App::Property", "The Angle of the ramp entry."))
-        obj.RampAngle = (0.0, 0.01, 100.0, 0.5)
+        obj.addProperty("App::PropertyEnumeration", "OffsetPattern", "Face", QtCore.QT_TRANSLATE_NOOP("App::Property", "clearing pattern to use"))
+        obj.OffsetPattern = ['ZigZag', 'Offset', 'Spiral', 'ZigZagOffset', 'Line', 'Grid', 'Triangle']
 
         # Start Point Properties
         obj.addProperty("App::PropertyVector", "StartPoint", "Start Point", QtCore.QT_TRANSLATE_NOOP("App::Property", "The start point of this path"))
         obj.addProperty("App::PropertyBool", "UseStartPoint", "Start Point", QtCore.QT_TRANSLATE_NOOP("App::Property", "make True, if specifying a Start Point"))
 
+        # Debug Parameters
+        obj.addProperty("App::PropertyString", "AreaParams", "Debug", QtCore.QT_TRANSLATE_NOOP("App::Property", "parameters used by PathArea"))
+        obj.setEditorMode('AreaParams', 2)  # hide
+        if FreeCAD.GuiUp:
+            ViewProviderPocket(obj.ViewObject)
+
         obj.Proxy = self
 
     def onChanged(self, obj, prop):
-        if prop == "UseEntry":
-            if obj.UseEntry:
-                obj.setEditorMode('HelixSize', 0)  # make this visible
-                obj.setEditorMode('RampAngle', 0)  # make this visible
-                obj.setEditorMode('RampSize', 0)   # make this visible
-            else:
-                obj.setEditorMode('HelixSize', 2)  # make this hidden
-                obj.setEditorMode('RampAngle', 2)  # make this hidden
-                obj.setEditorMode('RampSize', 2)   # make this hidden
+        pass
 
     def __getstate__(self):
         return None
@@ -115,7 +99,29 @@ class ObjectPocket:
     def __setstate__(self, state):
         return None
 
+    def setDepths(proxy, obj):
+        PathLog.track()
+        parentJob = PathUtils.findParentJob(obj)
+        if parentJob is None:
+            return
+        baseobject = parentJob.Base
+        if baseobject is None:
+            return
+
+        try:
+            bb = baseobject.Shape.BoundBox  # parent boundbox
+            obj.StartDepth = bb.ZMax
+            obj.ClearanceHeight = bb.ZMax + 5.0
+            obj.SafeHeight = bb.ZMax + 3.0
+            obj.FinalDepth = bb.ZMin
+
+        except:
+            obj.StartDepth = 5.0
+            obj.ClearanceHeight = 10.0
+            obj.SafeHeight = 8.0
+
     def addpocketbase(self, obj, ss, sub=""):
+        PathLog.track()
         baselist = obj.Base
         if baselist is None:
             baselist = []
@@ -150,7 +156,6 @@ class ObjectPocket:
         else:
             baselist.append(item)
         obj.Base = baselist
-        print("this base is: " + str(baselist))
         self.execute(obj)
 
     def getStock(self, obj):
@@ -165,191 +170,89 @@ class ObjectPocket:
             return self.getStock(o)
         return None
 
-    def buildpathlibarea(self, obj, a):
-        """Build the pocket path using libarea algorithm"""
-        import PathScripts.PathAreaUtils as PathAreaUtils
-        from PathScripts.PathUtils import depth_params
-        PathLog.debug("Generating toolpath with libarea offsets.\n")
+    @waiting_effects
+    def _buildPathArea(self, obj, envelopeshape, getsim=False):
+        PathLog.track()
+        pocket = Path.Area()
+        pocket.setPlane(Part.makeCircle(10))
+        pocket.add(envelopeshape)
 
-        depthparams = depth_params(
-                obj.ClearanceHeight.Value,
-                obj.SafeHeight.Value,
-                obj.StartDepth.Value,
-                obj.StepDown,
-                obj.FinishDepth.Value,
-                obj.FinalDepth.Value)
-
-        extraoffset = obj.MaterialAllowance.Value
         stepover = (self.radius * 2) * (float(obj.StepOver)/100)
-        use_zig_zag = obj.UseZigZag
-        zig_angle = obj.ZigZagAngle
-        from_center = (obj.StartAt == "Center")
-        keep_tool_down = obj.KeepToolDown
-        zig_unidirectional = obj.ZigUnidirectional
-        start_point = None
-        cut_mode = obj.CutMode
 
-        PathAreaUtils.flush_nc()
-        PathAreaUtils.output('mem')
-        PathAreaUtils.feedrate_hv(self.horizFeed, self.vertFeed)
-        if obj.UseStartPoint:
-            start_point = (obj.StartPoint.x, obj.StartPoint.y)
+        pocketparams = {'Fill': 0,
+                        'Coplanar': 0,
+                        'PocketMode': 1,
+                        'SectionCount': -1,
+                        'Angle': obj.ZigZagAngle,
+                        'FromCenter': (obj.StartAt == "Center"),
+                        'PocketStepover': stepover,
+                        'PocketExtraOffset': obj.MaterialAllowance.Value}
 
-        # print "a," + str(self.radius) + "," + str(extraoffset) + "," + str(stepover) + ",depthparams, " + str(from_center) + "," + str(keep_tool_down) + "," + str(use_zig_zag) + "," + str(zig_angle) + "," + str(zig_unidirectional) + "," + str(start_point) + "," + str(cut_mode)
+        offsetval = self.radius
+        pocketparams['ToolRadius'] = offsetval
 
-        PathAreaUtils.pocket(
-                a,
-                self.radius,
-                extraoffset,
-                stepover,
-                depthparams,
-                from_center,
-                keep_tool_down,
-                use_zig_zag,
-                zig_angle,
-                zig_unidirectional,
-                start_point,
-                cut_mode)
-        return PathAreaUtils.retrieve_gcode()
+        Pattern = ['ZigZag', 'Offset', 'Spiral', 'ZigZagOffset', 'Line', 'Grid', 'Triangle']
+        pocketparams['PocketMode'] = Pattern.index(obj.OffsetPattern) + 1
 
-    def buildpathocc(self, obj, shape):
-        """Build pocket Path using Native OCC algorithm."""
-        import Part
-        import DraftGeomUtils
-        from PathScripts.PathUtils import fmt, helicalPlunge, rampPlunge, depth_params
+        pocket.setParams(**pocketparams)
+        obj.AreaParams = str(pocket.getParams())
+        PathLog.debug("Pocketing with params: {}".format(pocket.getParams()))
 
-        PathLog.debug("Generating toolpath with OCC native offsets.\n")
-        extraoffset = obj.MaterialAllowance.Value
+        heights = [i for i in self.depthparams]
+        PathLog.debug('pocket section heights: {}'.format(heights))
+        sections = pocket.makeSections(mode=0, project=False, heights=heights)
 
-        # Build up the offset loops
-        output = ""
-        if obj.Comment != "":
-            output += '(' + str(obj.Comment)+')\n'
-        output += 'G0 Z' + fmt(obj.ClearanceHeight.Value) + "F " + PathUtils.fmt(self.vertRapid) + "\n"
+        shapelist = [sec.getShape() for sec in sections]
 
-        offsets = []
-        nextradius = self.radius + extraoffset
-        result = DraftGeomUtils.pocket2d(shape, nextradius)
-        while result:
-            offsets.extend(result)
-            nextradius += (self.radius * 2) * (float(obj.StepOver)/100)
-            result = DraftGeomUtils.pocket2d(shape, nextradius)
+        params = {'shapes': shapelist,
+                  'feedrate': self.horizFeed,
+                  'feedrate_v': self.vertFeed,
+                  'verbose': True,
+                  'resume_height': obj.StepDown.Value,
+                  'retraction': obj.ClearanceHeight.Value}
 
-        # revert the list so we start with the outer wires
-        if obj.StartAt != 'Edge':
-            offsets.reverse()
+        pp = Path.fromShapes(**params)
+        PathLog.debug("Generating Path with params: {}".format(params))
+        PathLog.debug(pp)
 
-        plungePos = None
-        rampEdge = None
-        if obj.UseEntry:
-            # Try to find an entry location
-            toold = self.radius*2
-            helixBounds = DraftGeomUtils.pocket2d(shape, self.radius * (1 + obj.HelixSize))
+        simobj = None
+        if getsim:
+            pocketparams['Thicken'] = True
+            pocketparams['ToolRadius']= self.radius - self.radius *.005
+            pocketparams['Stepdown'] = -1
+            pocket.setParams(**pocketparams)
+            #pocket.makeSections(mode=0, project=False, heights=heights)
+            simobj = pocket.getShape().extrude(FreeCAD.Vector(0,0,obj.StepDown.Value))
+            #removalshape = FreeCAD.ActiveDocument.addObject("Part::Feature", "simshape")
 
-            if helixBounds:
-                rampD = obj.RampSize
+        return pp, simobj
 
-                if obj.StartAt == 'Edge':
-                    plungePos = helixBounds[0].Edges[0].Vertexes[0].Point
-                else:
-                    plungePos = offsets[0].Edges[0].Vertexes[0].Point
+    def execute(self, obj, getsim=False):
+        PathLog.track()
+        commandlist = []
+        simlist = []
+        commandlist.append(Path.Command("(" + obj.Label + ")"))
+        if not obj.Active:
+            path = Path.Path("(inactive operation)")
+            obj.Path = path
+            obj.ViewObject.Visibility = False
+            return
 
-                    # If it turns out this is invalid for some reason, nuke plungePos
-                    [perp, idx] = DraftGeomUtils.findPerpendicular(plungePos, shape.Edges)
-                    if not perp or perp.Length < self.radius * (1 + obj.HelixSize):
-                        plungePos = None
-                        FreeCAD.Console.PrintError(translate("PathPocket", "Helical Entry location not found.\n"))
-                    # FIXME: Really need to do a point-in-polygon operation to make sure this is within helixBounds
-                    # Or some math to prove that it has to be (doubt that's true)
-                    # Maybe reverse helixBounds and pick off that?
+        parentJob = PathUtils.findParentJob(obj)
+        if parentJob is None:
+            return
+        baseobject = parentJob.Base
+        if baseobject is None:
+            return
 
-            if plungePos is None:  # If we didn't find a place to helix, how about a ramp?
-                FreeCAD.Console.PrintMessage(translate("PathPocket", "Attempting ramp entry.\n"))
-                if (offsets[0].Edges[0].Length >= toold * rampD) and not (isinstance(offsets[0].Edges[0].Curve, Part.Circle)):
-                    rampEdge = offsets[0].Edges[0]
-                # The last edge also connects with the starting location- try that
-                elif (offsets[0].Edges[-1].Length >= toold * rampD) and not (isinstance(offsets[0].Edges[-1].Curve, Part.Circle)):
-                    rampEdge = offsets[0].Edges[-1]
-                else:
-                    FreeCAD.Console.PrintError(translate("PathPocket", "Ramp Entry location not found.\n"))
-                    # print "Neither edge works: " + str(offsets[0].Edges[0]) + ", " + str(offsets[0].Edges[-1])
-                    # FIXME: There's got to be a smarter way to find a place to ramp
-
-        # For helix-ing/ramping, know where we were last time
-        # FIXME: Can probably get this from the "machine"?
-        lastZ = obj.ClearanceHeight.Value
-
-        startPoint = None
-
-        depthparams = depth_params(
-                obj.ClearanceHeight.Value,
-                obj.SafeHeight.Value,
-                obj.StartDepth.Value,
-                obj.StepDown,
-                obj.FinishDepth.Value,
-                obj.FinalDepth.Value)
-
-        for vpos in depthparams.get_depths():
-
-            first = True
-            # loop over successive wires
-            for currentWire in offsets:
-                last = None
-                for edge in currentWire.Edges:
-                    if not last:
-                        # we set the base GO to our fast move to our starting pos
-                        if first:
-                            # If we can helix, do so
-                            if plungePos:
-                                output += helicalPlunge(plungePos, obj.RampAngle, vpos, lastZ, self.radius*2, obj.HelixSize, self.horizFeed)
-                                lastZ = vpos
-                            # Otherwise, see if we can ramp
-                            # FIXME: This could be a LOT smarter (eg, searching for a longer leg of the edge to ramp along)
-                            elif rampEdge:
-                                output += rampPlunge(rampEdge, obj.RampAngle, vpos, lastZ)
-                                lastZ = vpos
-                            # Otherwise, straight plunge... Don't want to, but sometimes you might not have a choice.
-                            # FIXME: At least not with the lazy ramp programming above...
-                            else:
-                                print("WARNING: Straight-plunging... probably not good, but we didn't find a place to helix or ramp")
-                                startPoint = edge.Vertexes[0].Point
-                                output += "G0 Z" + fmt(obj.ClearanceHeight.Value) + "F " + PathUtils.fmt(self.vertRapid) + "\n"
-                                output += "G0 X" + fmt(startPoint.x) + " Y" + fmt(startPoint.y) +\
-                                          " Z" + fmt(obj.ClearanceHeight.Value) + "F " + PathUtils.fmt(self.horizRapid) + "\n"
-                            first = False
-                        # then move slow down to our starting point for our profile
-                        last = edge.Vertexes[0].Point
-                        output += "G1 X" + fmt(last.x) + " Y" + fmt(last.y) + " Z" + fmt(vpos) + " F" + fmt(self.vertFeed) + "\n"
-                    if DraftGeomUtils.geomType(edge) == "Circle":
-                        point = edge.Vertexes[-1].Point
-                        if point == last:  # edges can come flipped
-                            point = edge.Vertexes[0].Point
-                        center = edge.Curve.Center
-                        relcenter = center.sub(last)
-                        v1 = last.sub(center)
-                        v2 = point.sub(center)
-                        if v1.cross(v2).z < 0:
-                            output += "G2"
-                        else:
-                            output += "G3"
-                        output += " X" + fmt(point.x) + " Y" + fmt(point.y) + " Z" + fmt(vpos)
-                        output += " I" + fmt(relcenter.x) + " J" + fmt(relcenter.y) + " K" + fmt(relcenter.z) + " F" + fmt(self.horizFeed)
-                        output += "\n"
-                        last = point
-                    else:
-                        point = edge.Vertexes[-1].Point
-                        if point == last:  # edges can come flipped
-                            point = edge.Vertexes[0].Point
-                        output += "G1 X" + fmt(point.x) + " Y" + fmt(point.y) + " Z" + fmt(vpos) + " F" + fmt(self.horizFeed) + "\n"
-                        last = point
-
-        # move back up
-        output += "G0 Z" + fmt(obj.ClearanceHeight.Value) + "F " + PathUtils.fmt(self.vertRapid) + "\n"
-        return output
-
-    # To reload this from FreeCAD, use: import PathScripts.PathPocket; reload(PathScripts.PathPocket)
-    def execute(self, obj):
-        output = ""
+        self.depthparams = depth_params(
+                clearance_height=obj.ClearanceHeight.Value,
+                safe_height=obj.SafeHeight.Value,
+                start_depth=obj.StartDepth.Value,
+                step_down=obj.StepDown.Value,
+                z_finish_step=0.0,
+                final_depth=obj.FinalDepth.Value,
+                user_depths=None)
 
         toolLoad = obj.ToolController
         if toolLoad is None or toolLoad.ToolNumber == 0:
@@ -367,52 +270,69 @@ class ObjectPocket:
                 self.radius = tool.Diameter/2
 
         if obj.Base:
+            PathLog.debug("base items exist.  Processing...")
             for b in obj.Base:
+                PathLog.debug("Base item: {}".format(b))
                 for sub in b[1]:
-                    import Part
-                    import PathScripts.PathKurveUtils
                     if "Face" in sub:
-                        shape = getattr(b[0].Shape, sub)
-                        wire = shape.OuterWire
-                        edges = wire.Edges
+                        shape = Part.makeCompound([getattr(b[0].Shape, sub)])
+                        #shape = getattr(b[0].Shape, sub)
                     else:
                         edges = [getattr(b[0].Shape, sub) for sub in b[1]]
-                        wire = Part.Wire(edges)
-                        shape = None
+                        shape = Part.makeFace(edges, 'Part::FaceMakerSimple')
 
-                    # output = ""
-                    if obj.Algorithm == "OCC Native":
-                        if shape is None:
-                            shape = wire
-                        output += self.buildpathocc(obj, shape)
-                    else:
-                        try:
-                            import area
-                        except:
-                            FreeCAD.Console.PrintError(translate("PathKurve", "libarea needs to be installed for this command to work.\n"))
-                            return
+                    env = PathUtils.getEnvelope(baseobject.Shape, subshape=shape, depthparams=self.depthparams)
+                    removal = env.cut(baseobject.Shape)
 
-                        a = area.Area()
-                        if shape is None:
-                            c = PathScripts.PathKurveUtils.makeAreaCurve(wire.Edges, 'CW')
-                            a.append(c)
-                        else:
-                            for w in shape.Wires:
-                                c = PathScripts.PathKurveUtils.makeAreaCurve(w.Edges, 'CW')
-                                a.append(c)
+                    if PathLog.getLevel(PathLog.thisModule()) == PathLog.Level.DEBUG:
+                        removalshape=FreeCAD.ActiveDocument.addObject("Part::Feature","removalshape")
+                        removalshape.Shape = removal
 
-                        a.Reorder()
-                        output += self.buildpathlibarea(obj, a)
+                    try:
+                        (pp, sim) = self._buildPathArea(obj, removal, getsim=getsim)
+                        if sim is not None:
+                            simlist.append(sim)
+                        commandlist.extend(pp.Commands)
+                    except Exception as e:
+                        FreeCAD.Console.PrintError(e)
+                        FreeCAD.Console.PrintError("Something unexpected happened. Unable to generate a pocket path. Check project and tool config.")
+        else:  # process the job base object as a whole
+            PathLog.debug("processing the whole job base object")
 
-            if obj.Active:
-                path = Path.Path(output)
-                obj.Path = path
-                obj.ViewObject.Visibility = True
-            else:
-                path = Path.Path("(inactive operation)")
-                obj.Path = path
-                obj.ViewObject.Visibility = False
+            env = PathUtils.getEnvelope(baseobject.Shape, subshape=None, depthparams=self.depthparams)
+            removal = env.cut(baseobject.Shape)
+            if PathLog.getLevel(PathLog.thisModule()) == PathLog.Level.DEBUG:
+                removalshape=FreeCAD.ActiveDocument.addObject("Part::Feature","removalshape")
+                removalshape.Shape = removal
+            try:
+                (pp, sim) = self._buildPathArea(obj, removal, getsim=getsim)
+                commandlist.extend(pp.Commands)
+                if sim is not None:
+                    simlist.append(sim)
 
+                #commandlist.extend(self._buildPathArea(obj, env.cut(baseobject.Shape)).Commands)
+            except Exception as e:
+                FreeCAD.Console.PrintError(e)
+                FreeCAD.Console.PrintError("Something unexpected happened. Unable to generate a pocket path. Check project and tool config.")
+
+        # Let's finish by rapid to clearance...just for safety
+        commandlist.append(Path.Command("G0", {"Z": obj.ClearanceHeight.Value}))
+
+        path = Path.Path(commandlist)
+        obj.Path = path
+        obj.ViewObject.Visibility = True
+
+        PathLog.debug(simlist)
+        simshape = None
+        if len(simlist) > 1:
+            simshape=simlist[0].fuse(simlist[1:])
+        elif len(simlist) == 1:
+            simshape = simlist[0]
+
+        if simshape is not None and PathLog.getLevel(PathLog.thisModule()) == PathLog.Level.DEBUG:
+            sim=FreeCAD.ActiveDocument.addObject("Part::Feature","simshape")
+            sim.Shape = simshape
+        return simshape
 
 class _CommandSetPocketStartPoint:
     def GetResources(self):
@@ -441,13 +361,18 @@ class ViewProviderPocket:
         self.Object = vobj.Object
         return
 
+    def deleteObjectsOnReject(self):
+        return hasattr(self, 'deleteOnReject') and self.deleteOnReject
+
     def setEdit(self, vobj, mode=0):
         FreeCADGui.Control.closeDialog()
-        taskd = TaskPanel()
+        taskd = TaskPanel(vobj.Object, self.deleteObjectsOnReject())
         taskd.obj = vobj.Object
         FreeCADGui.Control.showDialog(taskd)
         taskd.setupUi()
+        self.deleteOnReject = False
         return True
+
 
     def getIcon(self):
         return ":/icons/Path-Pocket.svg"
@@ -475,6 +400,7 @@ class CommandPathPocket:
         return False
 
     def Activated(self):
+        PathLog.track()
 
         zbottom = 0.0
         ztop = 10.0
@@ -485,45 +411,56 @@ class CommandPathPocket:
         FreeCADGui.doCommand('obj = FreeCAD.ActiveDocument.addObject("Path::FeaturePython", "Pocket")')
         FreeCADGui.doCommand('PathScripts.PathPocket.ObjectPocket(obj)')
         FreeCADGui.doCommand('obj.Active = True')
-        FreeCADGui.doCommand('PathScripts.PathPocket.ViewProviderPocket(obj.ViewObject)')
+        #FreeCADGui.doCommand('PathScripts.PathPocket.ViewProviderPocket(obj.ViewObject)')
+        FreeCADGui.doCommand('obj.ViewObject.Proxy.deleteOnReject = True')
         FreeCADGui.doCommand('from PathScripts import PathUtils')
-        FreeCADGui.doCommand('obj.Algorithm = "libarea"')
         FreeCADGui.doCommand('obj.StepOver = 100')
         FreeCADGui.doCommand('obj.ClearanceHeight = 10')  # + str(bb.ZMax + 2.0))
         FreeCADGui.doCommand('obj.StepDown = 1.0')
         FreeCADGui.doCommand('obj.StartDepth = ' + str(ztop))
         FreeCADGui.doCommand('obj.FinalDepth =' + str(zbottom))
         FreeCADGui.doCommand('obj.ZigZagAngle = 45')
-        FreeCADGui.doCommand('obj.UseEntry = False')
-        FreeCADGui.doCommand('obj.RampAngle = 3.0')
-        FreeCADGui.doCommand('obj.RampSize = 0.75')
-        FreeCADGui.doCommand('obj.HelixSize = 0.75')
         FreeCADGui.doCommand('PathScripts.PathUtils.addToJob(obj)')
+        FreeCADGui.doCommand('PathScripts.PathPocket.ObjectPocket.setDepths(obj.Proxy, obj)')
         FreeCADGui.doCommand('obj.ToolController = PathScripts.PathUtils.findToolController(obj)')
         FreeCAD.ActiveDocument.commitTransaction()
 
-        FreeCAD.ActiveDocument.recompute()
+        # FreeCAD.ActiveDocument.recompute()
         FreeCADGui.doCommand('obj.ViewObject.startEditing()')
 
 
 class TaskPanel:
-    def __init__(self):
+    def __init__(self, obj, deleteOnReject):
+        FreeCAD.ActiveDocument.openTransaction(translate("Path_Pocket", "Pocket Operation"))
         # self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Path/PocketEdit.ui")
         self.form = FreeCADGui.PySideUic.loadUi(":/panels/PocketEdit.ui")
-        self.updating = False
+        self.deleteOnReject = deleteOnReject
+        self.isDirty = True
 
     def accept(self):
-        self.getFields()
-
-        FreeCADGui.ActiveDocument.resetEdit()
         FreeCADGui.Control.closeDialog()
-        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        FreeCAD.ActiveDocument.commitTransaction()
         FreeCADGui.Selection.removeObserver(self.s)
+        if self.isDirty:
+            FreeCAD.ActiveDocument.recompute()
 
     def reject(self):
         FreeCADGui.Control.closeDialog()
-        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        FreeCAD.ActiveDocument.abortTransaction()
         FreeCADGui.Selection.removeObserver(self.s)
+        if self.deleteOnReject:
+            FreeCAD.ActiveDocument.openTransaction(translate("Path_Pocket", "Uncreate Pocket Operation"))
+            FreeCAD.ActiveDocument.removeObject(self.obj.Name)
+            FreeCAD.ActiveDocument.commitTransaction()
+        FreeCAD.ActiveDocument.recompute()
+
+    def clicked(self,button):
+        if button == QtGui.QDialogButtonBox.Apply:
+            self.getFields()
+            self.obj.Proxy.execute(self.obj)
+            self.isDirty = False
 
     def getFields(self):
         if self.obj:
@@ -531,24 +468,22 @@ class TaskPanel:
                 self.obj.StartDepth = FreeCAD.Units.Quantity(self.form.startDepth.text()).Value
             if hasattr(self.obj, "FinalDepth"):
                 self.obj.FinalDepth = FreeCAD.Units.Quantity(self.form.finalDepth.text()).Value
+            if hasattr(self.obj, "FinishDepth"):
+                self.obj.FinishDepth = FreeCAD.Units.Quantity(self.form.finishDepth.text()).Value
+            if hasattr(self.obj, "StepDown"):
+                self.obj.StepDown = FreeCAD.Units.Quantity(self.form.stepDown.text()).Value
             if hasattr(self.obj, "SafeHeight"):
                 self.obj.SafeHeight = FreeCAD.Units.Quantity(self.form.safeHeight.text()).Value
             if hasattr(self.obj, "ClearanceHeight"):
                 self.obj.ClearanceHeight = FreeCAD.Units.Quantity(self.form.clearanceHeight.text()).Value
-            if hasattr(self.obj, "StepDown"):
-                self.obj.StepDown = FreeCAD.Units.Quantity(self.form.stepDown.text()).Value
             if hasattr(self.obj, "MaterialAllowance"):
                 self.obj.MaterialAllowance = FreeCAD.Units.Quantity(self.form.extraOffset.text()).Value
             if hasattr(self.obj, "UseStartPoint"):
                 self.obj.UseStartPoint = self.form.useStartPoint.isChecked()
-            if hasattr(self.obj, "Algorithm"):
-                self.obj.Algorithm = str(self.form.algorithmSelect.currentText())
             if hasattr(self.obj, "CutMode"):
                 self.obj.CutMode = str(self.form.cutMode.currentText())
-            if hasattr(self.obj, "UseZigZag"):
-                self.obj.UseZigZag = self.form.useZigZag.isChecked()
-            if hasattr(self.obj, "ZigUnidirectional"):
-                self.obj.ZigUnidirectional = self.form.zigZagUnidirectional.isChecked()
+            if hasattr(self.obj, "OffsetPattern"):
+                self.obj.OffsetPattern = str(self.form.offsetpattern.currentText())
             if hasattr(self.obj, "ZigZagAngle"):
                 self.obj.ZigZagAngle = FreeCAD.Units.Quantity(self.form.zigZagAngle.text()).Value
             if hasattr(self.obj, "StepOver"):
@@ -557,27 +492,26 @@ class TaskPanel:
                 PathLog.debug("name: {}".format(self.form.uiToolController.currentText()))
                 tc = PathUtils.findToolController(self.obj, self.form.uiToolController.currentText())
                 self.obj.ToolController = tc
-
-        self.obj.Proxy.execute(self.obj)
+        self.isDirty = True
 
     def setFields(self):
         self.form.startDepth.setText(FreeCAD.Units.Quantity(self.obj.StartDepth.Value, FreeCAD.Units.Length).UserString)
         self.form.finalDepth.setText(FreeCAD.Units.Quantity(self.obj.FinalDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.finishDepth.setText(FreeCAD.Units.Quantity(self.obj.FinishDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.stepDown.setText(FreeCAD.Units.Quantity(self.obj.StepDown.Value, FreeCAD.Units.Length).UserString)
         self.form.safeHeight.setText(FreeCAD.Units.Quantity(self.obj.SafeHeight.Value, FreeCAD.Units.Length).UserString)
         self.form.clearanceHeight.setText(FreeCAD.Units.Quantity(self.obj.ClearanceHeight.Value,  FreeCAD.Units.Length).UserString)
-        self.form.stepDown.setText(FreeCAD.Units.Quantity(self.obj.StepDown.Value, FreeCAD.Units.Length).UserString)
-        self.form.extraOffset.setText(FreeCAD.Units.Quantity(self.obj.MaterialAllowance, FreeCAD.Units.Length).UserString)
+        self.form.extraOffset.setText(FreeCAD.Units.Quantity(self.obj.MaterialAllowance.Value, FreeCAD.Units.Length).UserString)
         self.form.useStartPoint.setChecked(self.obj.UseStartPoint)
-        self.form.useZigZag.setChecked(self.obj.UseZigZag)
-        self.form.zigZagUnidirectional.setChecked(self.obj.ZigUnidirectional)
         self.form.zigZagAngle.setText(FreeCAD.Units.Quantity(self.obj.ZigZagAngle, FreeCAD.Units.Angle).UserString)
         self.form.stepOverPercent.setValue(self.obj.StepOver)
 
-        index = self.form.algorithmSelect.findText(self.obj.Algorithm, QtCore.Qt.MatchFixedString)
+        index = self.form.offsetpattern.findText(
+                self.obj.OffsetPattern, QtCore.Qt.MatchFixedString)
         if index >= 0:
-            self.form.algorithmSelect.blockSignals(True)
-            self.form.algorithmSelect.setCurrentIndex(index)
-            self.form.algorithmSelect.blockSignals(False)
+            self.form.offsetpattern.blockSignals(True)
+            self.form.offsetpattern.setCurrentIndex(index)
+            self.form.offsetpattern.blockSignals(False)
 
         index = self.form.cutMode.findText(
                 self.obj.CutMode, QtCore.Qt.MatchFixedString)
@@ -586,8 +520,6 @@ class TaskPanel:
             self.form.cutMode.setCurrentIndex(index)
             self.form.cutMode.blockSignals(False)
 
-        # for i in self.obj.Base:
-        #     self.form.baseList.addItem(i[0].Name + "." + i[1][0])
         self.form.baseList.blockSignals(True)
         for i in self.obj.Base:
             for sub in i[1]:
@@ -639,9 +571,6 @@ class TaskPanel:
             for sub in i[1]:
                 self.form.baseList.addItem(i[0].Name + "." + sub)
 
-        # for i in self.obj.Base:
-        #     self.form.baseList.addItem(i[0].Name + "." + i[1][0])
-
     def deleteBase(self):
         dlist = self.form.baseList.selectedItems()
         newlist = []
@@ -682,11 +611,7 @@ class TaskPanel:
         FreeCAD.ActiveDocument.recompute()
 
     def getStandardButtons(self):
-        return int(QtGui.QDialogButtonBox.Ok)
-
-    def edit(self, item, column):
-        if not self.updating:
-            self.resetObject()
+        return int(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Apply | QtGui.QDialogButtonBox.Cancel)
 
     def setupUi(self):
 
@@ -701,6 +626,7 @@ class TaskPanel:
         # Depths
         self.form.startDepth.editingFinished.connect(self.getFields)
         self.form.finalDepth.editingFinished.connect(self.getFields)
+        self.form.finishDepth.editingFinished.connect(self.getFields)
         self.form.stepDown.editingFinished.connect(self.getFields)
 
         # Heights
@@ -708,16 +634,15 @@ class TaskPanel:
         self.form.clearanceHeight.editingFinished.connect(self.getFields)
 
         # operation
-        self.form.algorithmSelect.currentIndexChanged.connect(self.getFields)
         self.form.cutMode.currentIndexChanged.connect(self.getFields)
         self.form.useStartPoint.clicked.connect(self.getFields)
-        self.form.extraOffset.editingFinished.connect(self.getFields)
 
         # Pattern
+        self.form.offsetpattern.currentIndexChanged.connect(self.getFields)
         self.form.stepOverPercent.editingFinished.connect(self.getFields)
-        self.form.useZigZag.clicked.connect(self.getFields)
-        self.form.zigZagUnidirectional.clicked.connect(self.getFields)
         self.form.zigZagAngle.editingFinished.connect(self.getFields)
+        self.form.extraOffset.editingFinished.connect(self.getFields)
+        self.form.uiToolController.currentIndexChanged.connect(self.getFields)
 
         self.setFields()
 

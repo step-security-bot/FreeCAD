@@ -22,37 +22,32 @@
 # *                                                                         *
 # ***************************************************************************
 
+from __future__ import print_function
 import FreeCAD
 import Path
 import PathScripts.PathLog as PathLog
+from PySide import QtCore, QtGui
 from PathScripts import PathUtils
-from PathScripts.PathUtils import depth_params
-from PySide import QtCore
 import ArchPanel
 import Part
 from PathScripts.PathUtils import waiting_effects
 from PathScripts.PathUtils import makeWorkplane
+from PathScripts.PathUtils import depth_params
 
-LOG_MODULE = 'PathContour'
-PathLog.setLevel(PathLog.Level.INFO, LOG_MODULE)
-#PathLog.trackModule('PathContour')
 FreeCAD.setLogLevel('Path.Area', 0)
+
+if False:
+    PathLog.setLevel(PathLog.Level.DEBUG, PathLog.thisModule())
+    PathLog.trackModule(PathLog.thisModule())
+else:
+    PathLog.setLevel(PathLog.Level.INFO, PathLog.thisModule())
 
 if FreeCAD.GuiUp:
     import FreeCADGui
-    from PySide import QtGui
-    # Qt tanslation handling
-    try:
-        _encoding = QtGui.QApplication.UnicodeUTF8
 
-        def translate(context, text, disambig=None):
-            return QtGui.QApplication.translate(context, text, disambig, _encoding)
-    except AttributeError:
-        def translate(context, text, disambig=None):
-            return QtGui.QApplication.translate(context, text, disambig)
-else:
-    def translate(ctxt, txt):
-        return txt
+# Qt tanslation handling
+def translate(context, text, disambig=None):
+    return QtCore.QCoreApplication.translate(context, text, disambig)
 
 __title__ = "Path Contour Operation"
 __author__ = "sliptonic (Brad Collette)"
@@ -64,9 +59,10 @@ __url__ = "http://www.freecadweb.org"
 class ObjectContour:
 
     def __init__(self, obj):
+        PathLog.track()
         obj.addProperty("App::PropertyBool", "Active", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "Make False, to prevent operation from generating code"))
         obj.addProperty("App::PropertyString", "Comment", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "An optional comment for this Contour"))
-        obj.addProperty("App::PropertyString", "UserLabel", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "User Assigned Label"))
+        #obj.addProperty("App::PropertyString", "UserLabel", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "User Assigned Label"))
 
         # Tool Properties
         obj.addProperty("App::PropertyLink", "ToolController", "Path", QtCore.QT_TRANSLATE_NOOP("App::Property", "The tool controller that will be used to calculate the path"))
@@ -85,27 +81,32 @@ class ObjectContour:
         obj.addProperty("App::PropertyEnumeration", "Direction", "Contour", QtCore.QT_TRANSLATE_NOOP("App::Property", "The direction that the toolpath should go around the part ClockWise CW or CounterClockWise CCW"))
         obj.Direction = ['CW', 'CCW']  # this is the direction that the Contour runs
         obj.addProperty("App::PropertyBool", "UseComp", "Contour", QtCore.QT_TRANSLATE_NOOP("App::Property", "make True, if using Cutter Radius Compensation"))
-        obj.addProperty("App::PropertyEnumeration", "Side", "Contour", QtCore.QT_TRANSLATE_NOOP("App::Property", "Side of edge that tool should cut"))
-        obj.Side = ['Left', 'Right', 'On']  # side of profile that cutter is on in relation to direction of profile
-        obj.setEditorMode('Side', 2)  # hide
 
         obj.addProperty("App::PropertyDistance", "OffsetExtra", "Contour", QtCore.QT_TRANSLATE_NOOP("App::Property", "Extra value to stay away from final Contour- good for roughing toolpath"))
+
+        # Debug Parameters
+        # obj.addProperty("App::PropertyString", "AreaParams", "Debug", QtCore.QT_TRANSLATE_NOOP("App::Property", "parameters used by PathArea"))
+        # obj.setEditorMode('AreaParams', 2)  # hide
+
+        if FreeCAD.GuiUp:
+            _ViewProviderContour(obj.ViewObject)
 
         obj.Proxy = self
         self.endVector = None
 
+    def onChanged(self, obj, prop):
+        PathLog.track('prop: {}  state: {}'.format(prop, obj.State))
+        #pass
+
     def __getstate__(self):
+        PathLog.track()
         return None
 
     def __setstate__(self, state):
+        PathLog.track(state)
         return None
 
-    def onChanged(self, obj, prop):
-        pass
-        # if prop in ['ClearanceHeight', 'StartPoint']:
-        #     obj.StartPoint.z = obj.ClearanceHeight.Value
-
-    def setDepths(proxy, obj):
+    def setDepths(self, obj):
         PathLog.track()
         parentJob = PathUtils.findParentJob(obj)
         if parentJob is None:
@@ -127,34 +128,27 @@ class ObjectContour:
             obj.SafeHeight = 8.0
 
     @waiting_effects
-    def _buildPathArea(self, obj, baseobject, start=None):
+    def _buildPathArea(self, obj, baseobject, start=None, getsim=False):
         PathLog.track()
         profile = Path.Area()
         profile.setPlane(makeWorkplane(baseobject))
         profile.add(baseobject)
 
         profileparams = {'Fill': 0,
-                         'Coplanar': 0}
+                         'Coplanar': 2}
 
         if obj.UseComp is False:
             profileparams['Offset'] = 0.0
         else:
             profileparams['Offset'] = self.radius+obj.OffsetExtra.Value
 
-        depthparams = depth_params(
-                clearance_height=obj.ClearanceHeight.Value,
-                rapid_safety_space=obj.SafeHeight.Value,
-                start_depth=obj.StartDepth.Value,
-                step_down=obj.StepDown.Value,
-                z_finish_step=0.0,
-                final_depth=obj.FinalDepth.Value,
-                user_depths=None)
-
-        PathLog.debug('depths: {}'.format(depthparams.get_depths()))
+        heights = [i for i in self.depthparams]
+        PathLog.debug('depths: {}'.format(heights))
         profile.setParams(**profileparams)
-        PathLog.debug("Contour with params: {}".format(profile.getParams()))
+        #obj.AreaParams = str(profile.getParams())
 
-        sections = profile.makeSections(mode=0, project=True, heights=depthparams.get_depths())
+        PathLog.debug("Contour with params: {}".format(profile.getParams()))
+        sections = profile.makeSections(mode=0, project=True, heights=heights)
         shapelist = [sec.getShape() for sec in sections]
 
         params = {'shapes': shapelist,
@@ -180,14 +174,37 @@ class ObjectContour:
         PathLog.debug('pp: {}, end vector: {}'.format(pp, end_vector))
         self.endVector = end_vector
 
-        return pp
+        simobj = None
+        if getsim:
+            profileparams['Thicken'] = True #{'Fill':0, 'Coplanar':0, 'Project':True, 'SectionMode':2, 'Thicken':True}
+            profileparams['ToolRadius']= self.radius - self.radius *.005
+            profile.setParams(**profileparams)
+            sec = profile.makeSections(mode=0, project=False, heights=heights)[-1].getShape()
+            simobj = sec.extrude(FreeCAD.Vector(0,0,baseobject.BoundBox.ZMax))
 
-    def execute(self, obj):
+        return pp, simobj
+
+    def execute(self, obj, getsim=False):
         PathLog.track()
         self.endVector = None
 
+        if not obj.Active:
+            path = Path.Path("(inactive operation)")
+            obj.Path = path
+            obj.ViewObject.Visibility = False
+            return
+
         commandlist = []
         toolLoad = obj.ToolController
+
+        self.depthparams = depth_params(
+                clearance_height=obj.ClearanceHeight.Value,
+                safe_height=obj.SafeHeight.Value,
+                start_depth=obj.StartDepth.Value,
+                step_down=obj.StepDown.Value,
+                z_finish_step=0.0,
+                final_depth=obj.FinalDepth.Value,
+                user_depths=None)
 
         if toolLoad is None or toolLoad.ToolNumber == 0:
             FreeCAD.Console.PrintError("No Tool Controller is selected. We need a tool to build a Path.")
@@ -221,8 +238,10 @@ class ObjectContour:
         # Let's always start by rapid to clearance...just for safety
         commandlist.append(Path.Command("G0", {"Z": obj.ClearanceHeight.Value}))
 
+        isPanel = False
         if hasattr(baseobject, "Proxy"):
             if isinstance(baseobject.Proxy, ArchPanel.PanelSheet):  # process the sheet
+                isPanel = True
                 baseobject.Proxy.execute(baseobject)
                 shapes = baseobject.Proxy.getOutlines(baseobject, transform=True)
                 for shape in shapes:
@@ -230,54 +249,65 @@ class ObjectContour:
                     thickness = baseobject.Group[0].Source.Thickness
                     contourshape = f.extrude(FreeCAD.Vector(0, 0, thickness))
                     try:
-                        commandlist.extend(self._buildPathArea(obj, contourshape, start=obj.StartPoint).Commands)
+                        (pp, sim) = self._buildPathArea(obj, contourshape, start=obj.StartPoint, getsim=getsim)
+                        commandlist.extend(pp.Commands)
                     except Exception as e:
-                        print(e)
+                        FreeCAD.Console.PrintError(e)
                         FreeCAD.Console.PrintError("Something unexpected happened. Unable to generate a contour path. Check project and tool config.")
-        else:
-            bb = baseobject.Shape.BoundBox
-            env = PathUtils.getEnvelope(baseobject.Shape, bb.ZLength + (obj.StartDepth.Value-bb.ZMax))
+
+        if hasattr(baseobject, "Shape") and not isPanel:
+            #bb = baseobject.Shape.BoundBox
+            env = PathUtils.getEnvelope(partshape=baseobject.Shape, subshape=None, depthparams=self.depthparams)
             try:
-                commandlist.extend(self._buildPathArea(obj, env, start=obj.StartPoint).Commands)
+                (pp, sim) = self._buildPathArea(obj, env, start=obj.StartPoint,getsim=getsim)
+                commandlist.extend(pp.Commands)
             except Exception as e:
-                print(e)
+                FreeCAD.Console.PrintError(e)
                 FreeCAD.Console.PrintError("Something unexpected happened. Unable to generate a contour path. Check project and tool config.")
 
-        if obj.Active:
-            path = Path.Path(commandlist)
-            obj.Path = path
-            if obj.ViewObject:
-                obj.ViewObject.Visibility = True
-        else:
-            path = Path.Path("(inactive operation)")
-            obj.Path = path
-            obj.ViewObject.Visibility = False
+        # Let's finish by rapid to clearance...just for safety
+        commandlist.append(Path.Command("G0", {"Z": obj.ClearanceHeight.Value}))
+
+        path = Path.Path(commandlist)
+        obj.Path = path
+        #obj.ViewObject.Visibility = True
+        return sim
 
 
 class _ViewProviderContour:
 
     def __init__(self, vobj):
+        PathLog.track()
         vobj.Proxy = self
 
     def attach(self, vobj):
+        PathLog.track()
         self.Object = vobj.Object
         return
 
+    def deleteObjectsOnReject(self):
+        PathLog.track()
+        return hasattr(self, 'deleteOnReject') and self.deleteOnReject
+
     def setEdit(self, vobj, mode=0):
+        PathLog.track()
         FreeCADGui.Control.closeDialog()
-        taskd = TaskPanel()
+        taskd = TaskPanel(vobj.Object, self.deleteObjectsOnReject())
         taskd.obj = vobj.Object
         FreeCADGui.Control.showDialog(taskd)
         taskd.setupUi()
+        self.deleteOnReject = False
         return True
 
     def getIcon(self):
         return ":/icons/Path-Contour.svg"
 
     def __getstate__(self):
+        PathLog.track()
         return None
 
     def __setstate__(self, state):
+        PathLog.track()
         return None
 
 
@@ -322,7 +352,7 @@ class CommandPathContour:
         FreeCADGui.addModule("PathScripts.PathContour")
         FreeCADGui.doCommand('obj = FreeCAD.ActiveDocument.addObject("Path::FeaturePython", "Contour")')
         FreeCADGui.doCommand('PathScripts.PathContour.ObjectContour(obj)')
-        FreeCADGui.doCommand('PathScripts.PathContour._ViewProviderContour(obj.ViewObject)')
+        FreeCADGui.doCommand('obj.ViewObject.Proxy.deleteOnReject = True')
 
         FreeCADGui.doCommand('obj.Active = True')
 
@@ -335,34 +365,48 @@ class CommandPathContour:
         FreeCADGui.doCommand('obj.OffsetExtra = 0.0')
         FreeCADGui.doCommand('obj.Direction = "CW"')
         FreeCADGui.doCommand('obj.UseComp = True')
-        FreeCADGui.doCommand('PathScripts.PathUtils.addToJob(obj)')
 
+        FreeCADGui.doCommand('PathScripts.PathUtils.addToJob(obj)')
         FreeCADGui.doCommand('PathScripts.PathContour.ObjectContour.setDepths(obj.Proxy, obj)')
         FreeCADGui.doCommand('obj.ToolController = PathScripts.PathUtils.findToolController(obj)')
 
         FreeCAD.ActiveDocument.commitTransaction()
-        FreeCAD.ActiveDocument.recompute()
+        #FreeCAD.ActiveDocument.recompute()
         FreeCADGui.doCommand('obj.ViewObject.startEditing()')
 
 
 class TaskPanel:
-    def __init__(self):
+    def __init__(self, obj, deleteOnReject):
+        FreeCAD.ActiveDocument.openTransaction(translate("Path_Contour", "Contour Operation"))
         self.form = FreeCADGui.PySideUic.loadUi(":/panels/ContourEdit.ui")
         # self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Path/ContourEdit.ui")
-        self.updating = False
+        self.deleteOnReject = deleteOnReject
+        self.isDirty = True
 
     def accept(self):
-        self.getFields()
-
-        FreeCADGui.ActiveDocument.resetEdit()
         FreeCADGui.Control.closeDialog()
+        FreeCADGui.ActiveDocument.resetEdit()
+        FreeCAD.ActiveDocument.commitTransaction()
         FreeCADGui.Selection.removeObserver(self.s)
-        FreeCAD.ActiveDocument.recompute()
+        if self.isDirty:
+            FreeCAD.ActiveDocument.recompute()
 
     def reject(self):
         FreeCADGui.Control.closeDialog()
+        FreeCADGui.ActiveDocument.resetEdit()
+        FreeCAD.ActiveDocument.abortTransaction()
         FreeCADGui.Selection.removeObserver(self.s)
+        if self.deleteOnReject:
+            FreeCAD.ActiveDocument.openTransaction(translate("Path_Contour", "Uncreate Contour Operation"))
+            FreeCAD.ActiveDocument.removeObject(self.obj.Name)
+            FreeCAD.ActiveDocument.commitTransaction()
         FreeCAD.ActiveDocument.recompute()
+
+    def clicked(self,button):
+        if button == QtGui.QDialogButtonBox.Apply:
+            self.getFields()
+            FreeCAD.ActiveDocument.recompute()
+            self.isDirty = False
 
     def getFields(self):
         PathLog.track()
@@ -388,15 +432,15 @@ class TaskPanel:
             if hasattr(self.obj, "ToolController"):
                 tc = PathUtils.findToolController(self.obj, self.form.uiToolController.currentText())
                 self.obj.ToolController = tc
-        self.obj.Proxy.execute(self.obj)
+        self.isDirty = True
 
     def setFields(self):
         PathLog.track()
         self.form.startDepth.setText(FreeCAD.Units.Quantity(self.obj.StartDepth.Value, FreeCAD.Units.Length).UserString)
         self.form.finalDepth.setText(FreeCAD.Units.Quantity(self.obj.FinalDepth.Value, FreeCAD.Units.Length).UserString)
+        self.form.stepDown.setText(FreeCAD.Units.Quantity(self.obj.StepDown.Value, FreeCAD.Units.Length).UserString)
         self.form.safeHeight.setText(FreeCAD.Units.Quantity(self.obj.SafeHeight.Value, FreeCAD.Units.Length).UserString)
         self.form.clearanceHeight.setText(FreeCAD.Units.Quantity(self.obj.ClearanceHeight.Value,  FreeCAD.Units.Length).UserString)
-        self.form.stepDown.setText(FreeCAD.Units.Quantity(self.obj.StepDown.Value, FreeCAD.Units.Length).UserString)
         self.form.extraOffset.setText(FreeCAD.Units.Quantity(self.obj.OffsetExtra.Value, FreeCAD.Units.Length).UserString)
         self.form.useCompensation.setChecked(self.obj.UseComp)
         # self.form.useStartPoint.setChecked(self.obj.UseStartPoint)
@@ -433,7 +477,7 @@ class TaskPanel:
         FreeCADGui.Selection.addObserver(self.s)
 
     def getStandardButtons(self):
-        return int(QtGui.QDialogButtonBox.Ok)
+        return int(QtGui.QDialogButtonBox.Ok | QtGui.QDialogButtonBox.Apply | QtGui.QDialogButtonBox.Cancel)
 
     def setupUi(self):
         PathLog.track()

@@ -156,6 +156,72 @@ SketcherGui::ViewProviderSketch* getSketchViewprovider(Gui::Document *doc)
     return 0;
 }
 
+void removeRedundantHorizontalVertical(Sketcher::SketchObject* psketch,
+                                       std::vector<AutoConstraint> &sug1,
+                                       std::vector<AutoConstraint> &sug2)
+{
+    if(!sug1.empty() && !sug2.empty()) {
+        
+        bool rmvhorvert = false;
+        
+        // we look for:
+        // 1. Coincident to external on both endpoints
+        // 2. Coincident in one endpoint to origin and pointonobject/tangent to an axis on the other
+        auto detectredundant = [psketch](std::vector<AutoConstraint> &sug, bool &ext, bool &orig, bool &axis) {
+            
+            ext = false;
+            orig = false;
+            axis = false;
+            
+            for(std::vector<AutoConstraint>::const_iterator it = sug.begin(); it!=sug.end(); ++it) {
+                if( (*it).Type == Sketcher::Coincident && ext == false) {
+                    const std::map<int, Sketcher::PointPos> coincidents = psketch->getAllCoincidentPoints((*it).GeoId, (*it).PosId);
+
+                    if(!coincidents.empty()) {
+                        ext = coincidents.begin()->first < 0; // the keys are ordered, so if the first is negative, it is coincident with external
+                        
+                        std::map<int, Sketcher::PointPos>::const_iterator geoId1iterator;
+                        
+                        geoId1iterator = coincidents.find(-1);
+                        
+                        if( geoId1iterator != coincidents.end()) {
+                            if( (*geoId1iterator).second == Sketcher::start )
+                                orig = true;
+                        }
+                    }
+                    else { // it may be that there is no constraint at all, but there is external geometry
+                        ext = (*it).GeoId < 0;
+                        orig = ((*it).GeoId == -1 && (*it).PosId == Sketcher::start);
+                    }
+                }
+                else if( (*it).Type == Sketcher::PointOnObject && axis == false) {
+                    axis = (((*it).GeoId == -1 && (*it).PosId == Sketcher::none) || ((*it).GeoId == -2 && (*it).PosId == Sketcher::none));
+                }
+                
+            }
+        };
+        
+        bool firstext = false, secondext = false, firstorig = false, secondorig = false, firstaxis = false, secondaxis = false;
+        
+        detectredundant(sug1, firstext, firstorig, firstaxis);
+        detectredundant(sug2, secondext, secondorig, secondaxis);
+        
+        
+        rmvhorvert = ((firstext && secondext)   ||  // coincident with external on both endpoints
+                      (firstorig && secondaxis) ||  // coincident origin and point on object on other
+                      (secondorig && firstaxis));
+        
+        if(rmvhorvert) {
+            for(std::vector<AutoConstraint>::reverse_iterator it = sug2.rbegin(); it!=sug2.rend(); ++it) {
+                if( (*it).Type == Sketcher::Horizontal || (*it).Type == Sketcher::Vertical) {
+                    sug2.erase(std::next(it).base());
+                    it = sug2.rbegin(); // erase invalidates the iterator
+                }
+            }
+        }
+    }
+}
+
 
 /* Sketch commands =======================================================*/
 
@@ -276,19 +342,24 @@ public:
                 Gui::Command::abortCommand();
             }
 
+            ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
+            bool avoidredundant = hGrp->GetBool("AvoidRedundantAutoconstraints",true);
+            
+            if(avoidredundant) 
+                removeRedundantHorizontalVertical(static_cast<Sketcher::SketchObject *>(sketchgui->getObject()),sugConstr1,sugConstr2);
+
             // add auto constraints for the line segment start
-            if (sugConstr1.size() > 0) {
+            if (!sugConstr1.empty()) {
                 createAutoConstraints(sugConstr1, getHighestCurveIndex(), Sketcher::start);
                 sugConstr1.clear();
             }
 
             // add auto constraints for the line segment end
-            if (sugConstr2.size() > 0) {
+            if (!sugConstr2.empty()) {
                 createAutoConstraints(sugConstr2, getHighestCurveIndex(), Sketcher::end);
                 sugConstr2.clear();
             }
 
-            ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
             bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
 
             if(autoRecompute)
@@ -895,6 +966,8 @@ public:
 
             EditCurve[0] = onSketchPos; // this may be overwritten if previousCurve is found
 
+            virtualsugConstr1 = sugConstr1; // store original autoconstraints.
+            
             // here we check if there is a preselected point and
             // we set up a transition from the neighbouring segment.
             // (peviousCurve, previousPosId, dirVec, TransitionMode)
@@ -1064,8 +1137,21 @@ public:
                 else
                     static_cast<Sketcher::SketchObject *>(sketchgui->getObject())->solve();                
             }
+            
+            ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
+            bool avoidredundant = hGrp->GetBool("AvoidRedundantAutoconstraints",true);
 
             if (Mode == STATUS_Close) {
+
+                if(avoidredundant) {
+                    if (SegmentMode == SEGMENT_MODE_Line) { // avoid redundant constraints.
+                        if (sugConstr1.size() > 0)
+                            removeRedundantHorizontalVertical(static_cast<Sketcher::SketchObject *>(sketchgui->getObject()),sugConstr1,sugConstr2);
+                        else
+                            removeRedundantHorizontalVertical(static_cast<Sketcher::SketchObject *>(sketchgui->getObject()),virtualsugConstr1,sugConstr2);
+                    }
+                }
+
                 if (sugConstr2.size() > 0) {
                     // exclude any coincidence constraints
                     std::vector<AutoConstraint> sugConstr;
@@ -1111,12 +1197,24 @@ public:
             }
             else {
                 Gui::Command::commitCommand();
-                            
+
                 // Add auto constraints
                 if (sugConstr1.size() > 0) { // this is relevant only to the very first point
                     createAutoConstraints(sugConstr1, getHighestCurveIndex(), Sketcher::start);
                     sugConstr1.clear();
                 }
+                
+
+                if(avoidredundant) {
+                    if (SegmentMode == SEGMENT_MODE_Line) { // avoid redundant constraints.
+                        if (sugConstr1.size() > 0)
+                            removeRedundantHorizontalVertical(static_cast<Sketcher::SketchObject *>(sketchgui->getObject()),sugConstr1,sugConstr2);
+                        else
+                            removeRedundantHorizontalVertical(static_cast<Sketcher::SketchObject *>(sketchgui->getObject()),virtualsugConstr1,sugConstr2);
+                    }
+                }
+
+                virtualsugConstr1 = sugConstr2; // these are the initial constraints for the next iteration.
 
                 if (sugConstr2.size() > 0) {
                     createAutoConstraints(sugConstr2, getHighestCurveIndex(), Sketcher::end);
@@ -1125,7 +1223,7 @@ public:
 
                 ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
                 bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
-                
+
                 if(autoRecompute)
                     Gui::Command::updateActive();
                 else
@@ -1206,7 +1304,8 @@ protected:
     int previousCurve;
     Sketcher::PointPos firstPosId;
     Sketcher::PointPos previousPosId;
-    std::vector<AutoConstraint> sugConstr1, sugConstr2;
+    // the latter stores those constraints that a first point would have been given in abscence of the transition mechanism
+    std::vector<AutoConstraint> sugConstr1, sugConstr2, virtualsugConstr1; 
 
     Base::Vector2d CenterPoint;
     Base::Vector3d dirVec;
@@ -5985,6 +6084,357 @@ bool CmdSketcherTrimming::isActive(void)
 // ======================================================================================
 
 namespace SketcherGui {
+    class ExtendSelection : public Gui::SelectionFilterGate
+    {
+        App::DocumentObject* object;
+    public:
+        ExtendSelection(App::DocumentObject* obj)
+            : Gui::SelectionFilterGate((Gui::SelectionFilter*)0)
+            , object(obj)
+            , disabled(false)
+        {}
+
+        bool allow(App::Document * /*pDoc*/, App::DocumentObject *pObj, const char *sSubName)
+        {
+            if (pObj != this->object)
+                return false;
+            if (!sSubName || sSubName[0] == '\0')
+                return false;
+            if (disabled)
+                return true;
+            std::string element(sSubName);
+            if (element.substr(0, 4) == "Edge") {
+                int GeoId = std::atoi(element.substr(4, 4000).c_str()) - 1;
+                Sketcher::SketchObject *Sketch = static_cast<Sketcher::SketchObject*>(object);
+                const Part::Geometry *geom = Sketch->getGeometry(GeoId);
+                if (geom->getTypeId() == Part::GeomLineSegment::getClassTypeId() ||
+                    geom->getTypeId() == Part::GeomArcOfCircle::getClassTypeId())
+                    return true;
+            }
+            return false; 
+        }
+
+        void setDisabled(bool isDisabled) {
+            disabled = isDisabled;
+        }
+    protected:
+        bool disabled;
+    };
+}
+
+/* XPM */
+static const char *cursor_extension[]={
+"32 32 3 1",
+"+ c white",
+"* c red",
+". c None",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"................................",
+"+++++...+++++...................",
+"................................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+.........................",
+"......+..........****...........",
+"..................***...........",
+".................*.**...........",
+"................*...*...........",
+"................................",
+"..............*.................",
+".............*..................",
+"................................",
+"...........*....................",
+"..........*.....................",
+"................................",
+"........*.......................",
+".......*........................",
+"......*.........................",
+"...***..........................",
+"...***..........................",
+"....**..........................",
+"................................",
+"................................",
+"................................"};
+
+class DrawSketchHandlerExtend: public DrawSketchHandler
+{
+public:
+    DrawSketchHandlerExtend()
+        : Mode(STATUS_SEEK_First)
+        , EditCurve(2)
+        , BaseGeoId(-1)
+        , ExtendFromStart(false)
+    {
+    }
+    virtual ~DrawSketchHandlerExtend()
+    {
+        Gui::Selection().rmvSelectionGate();
+    }
+    enum SelectMode {
+        STATUS_SEEK_First,
+        STATUS_SEEK_Second,
+    };
+
+    virtual void activated(ViewProviderSketch *sketchgui)
+    {
+        Q_UNUSED(sketchgui)
+        Gui::Selection().clearSelection();
+        Gui::Selection().rmvSelectionGate();
+        filterGate = new ExtendSelection(sketchgui->getObject());
+        Gui::Selection().addSelectionGate(filterGate);
+        setCursor(QPixmap(cursor_extension),7,7);
+    }
+
+    virtual void mouseMove(Base::Vector2d onSketchPos)
+    {
+        Q_UNUSED(onSketchPos);
+        if (Mode == STATUS_SEEK_Second) {
+            const Part::Geometry *geom = sketchgui->getSketchObject()->getGeometry(BaseGeoId);
+            if (geom->getTypeId() == Part::GeomLineSegment::getClassTypeId()) {
+                const Part::GeomLineSegment *lineSeg = static_cast<const Part::GeomLineSegment *>(geom);
+                // project point to the existing curve
+                Base::Vector3d start3d = lineSeg->getStartPoint();
+                Base::Vector3d end3d = lineSeg->getEndPoint();
+
+                Base::Vector2d startPoint = Base::Vector2d(start3d.x, start3d.y);
+                Base::Vector2d endPoint = Base::Vector2d(end3d.x, end3d.y);
+                Base::Vector2d recenteredLine = endPoint - startPoint;
+                Base::Vector2d recenteredPoint = onSketchPos - startPoint;
+                Base::Vector2d projection;
+                projection.ProjectToLine(recenteredPoint, recenteredLine);
+                if (recenteredPoint.Length() < recenteredPoint.Distance(recenteredLine)) {
+                    EditCurve[0] = startPoint + projection;
+                    EditCurve[1] = endPoint;
+                } else {
+                    EditCurve[0] = startPoint;
+                    EditCurve[1] = startPoint + projection;
+                }
+                /**
+                 * If in-curve, the intuitive behavior is for the line to shrink an amount from
+                 * the original click-point.
+                 *
+                 * If out-of-curve, the intuitive behavior is for the closest line endpoint to
+                 * expand.
+                 */
+                bool inCurve = (projection.Length() < recenteredLine.Length()
+                    && projection.GetAngle(recenteredLine) < 0.1); // Two possible values here, M_PI and 0, but 0.1 is to avoid floating point problems.
+                if (inCurve) {
+                    Increment = SavedExtendFromStart ? -1 * projection.Length() : projection.Length() - recenteredLine.Length();
+                    ExtendFromStart = SavedExtendFromStart;
+                } else {
+                    ExtendFromStart = onSketchPos.Distance(startPoint) < onSketchPos.Distance(endPoint);
+                    Increment = ExtendFromStart ? projection.Length() : projection.Length() - recenteredLine.Length();
+                }
+                sketchgui->drawEdit(EditCurve);
+
+            } else if (geom->getTypeId() == Part::GeomArcOfCircle::getClassTypeId()) {
+                const Part::GeomArcOfCircle *arc = static_cast<const Part::GeomArcOfCircle *>(geom);
+                Base::Vector3d center = arc->getCenter();
+                double radius = arc->getRadius();
+
+                double start, end;
+                arc->getRange(start, end, true);
+                double arcAngle = end - start;
+
+                Base::Vector2d angle = Base::Vector2d(onSketchPos.x - center.x, onSketchPos.y - center.y);
+                Base::Vector2d startAngle = Base::Vector2d(cos(start), sin(start));
+                Base::Vector2d endAngle = Base::Vector2d(cos(end), sin(end));
+
+                Base::Vector2d arcHalf = Base::Vector2d(cos(start + arcAngle/ 2.0), sin(start+ arcAngle / 2.0));
+                double angleToEndAngle = angle.GetAngle(endAngle);
+                double angleToStartAngle = angle.GetAngle(startAngle);
+
+
+                double modStartAngle = start;
+                double modArcAngle = end - start;
+                bool outOfArc = arcHalf.GetAngle(angle) * 2.0 > arcAngle;
+                if (ExtendFromStart) {
+                    bool isCCWFromStart = crossProduct(angle, startAngle) < 0;
+                    if (outOfArc) {
+                        if (isCCWFromStart) {
+                            modStartAngle -= 2*M_PI - angleToStartAngle;
+                            modArcAngle += 2*M_PI - angleToStartAngle;
+                        } else {
+                            modStartAngle -= angleToStartAngle;
+                            modArcAngle += angleToStartAngle;
+                        }
+                    } else {
+                        if (isCCWFromStart) {
+                            modStartAngle += angleToStartAngle;
+                            modArcAngle -= angleToStartAngle;
+                        } else {
+                            modStartAngle += 2*M_PI - angleToStartAngle;
+                            modArcAngle -= 2*M_PI - angleToStartAngle;
+                        }
+                    }
+                } else {
+                    bool isCWFromEnd = crossProduct(angle, endAngle) >= 0;
+                    if (outOfArc) {
+                        if (isCWFromEnd) {
+                            modArcAngle += 2*M_PI - angleToEndAngle;
+                        } else {
+                            modArcAngle += angleToEndAngle;
+                        }
+                    } else {
+                        if (isCWFromEnd) {
+                            modArcAngle -= angleToEndAngle;
+                        } else {
+                            modArcAngle -= 2*M_PI - angleToEndAngle;
+                        }
+                    }
+                }
+                Increment = modArcAngle - (end - start);
+                for (int i = 0; i < 31; i++) {
+                    double angle = modStartAngle + i * modArcAngle/30.0;
+                    EditCurve[i] = Base::Vector2d(center.x + radius * cos(angle), center.y + radius * sin(angle));
+                }
+                sketchgui->drawEdit(EditCurve);
+            }
+            int curveId = sketchgui->getPreselectCurve();
+            if (BaseGeoId != curveId && seekAutoConstraint(SugConstr, onSketchPos, Base::Vector2d(0.f,0.f))) {
+                renderSuggestConstraintsCursor(SugConstr);
+                return;
+            }
+        }
+    }
+
+    virtual bool pressButton(Base::Vector2d onSketchPos)
+    {
+        Q_UNUSED(onSketchPos);
+        return true;
+    }
+
+    virtual bool releaseButton(Base::Vector2d onSketchPos)
+    {
+        Q_UNUSED(onSketchPos);
+        if (Mode == STATUS_SEEK_First) {
+            BaseGeoId = sketchgui->getPreselectCurve();
+            if (BaseGeoId > -1) {
+                const Part::Geometry *geom = sketchgui->getSketchObject()->getGeometry(BaseGeoId);
+                if (geom->getTypeId() == Part::GeomLineSegment::getClassTypeId()) {
+                    const Part::GeomLineSegment *seg = static_cast<const Part::GeomLineSegment *>(geom);
+                    Base::Vector3d start3d = seg->getStartPoint();
+                    Base::Vector3d end3d = seg->getEndPoint();
+                    Base::Vector2d start = Base::Vector2d(start3d.x, start3d.y);
+                    Base::Vector2d end = Base::Vector2d(end3d.x, end3d.y);
+                    SavedExtendFromStart = (onSketchPos.Distance(start) < onSketchPos.Distance(end));
+                    ExtendFromStart = SavedExtendFromStart;
+                    Mode = STATUS_SEEK_Second;
+                } else if (geom->getTypeId() == Part::GeomArcOfCircle::getClassTypeId()) {
+                    const Part::GeomArcOfCircle *arc = static_cast<const Part::GeomArcOfCircle *>(geom);
+                    double start, end;
+                    arc->getRange(start, end, true);
+
+                    Base::Vector3d center = arc->getCenter();
+                    Base::Vector2d angle = Base::Vector2d(onSketchPos.x - center.x, onSketchPos.y - center.y);
+                    double angleToStart = angle.GetAngle(Base::Vector2d(cos(start), sin(start)));
+                    double angleToEnd = angle.GetAngle(Base::Vector2d(cos(end), sin(end)));
+                    ExtendFromStart = (angleToStart < angleToEnd); // move start point if closer to angle than end point
+                    EditCurve.resize(31);
+                    Mode = STATUS_SEEK_Second;
+                }
+                filterGate->setDisabled(true);
+            }
+        } else if (Mode == STATUS_SEEK_Second) {
+            try {
+                Gui::Command::openCommand("Extend edge");
+                Gui::Command::doCommand(Gui::Command::Doc, 
+                        "App.ActiveDocument.%s.extend(%d, %f, %d)\n", // GeoId, increment, PointPos
+                    sketchgui->getObject()->getNameInDocument(), BaseGeoId, Increment,
+                    ExtendFromStart ? Sketcher::start : Sketcher::end);
+                    Gui::Command::commitCommand();
+
+                ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
+                bool autoRecompute = hGrp->GetBool("AutoRecompute",false);
+                if(autoRecompute)
+                    Gui::Command::updateActive();
+
+                // constrain chosen point
+                if (SugConstr.size() > 0) {
+                    createAutoConstraints(SugConstr, BaseGeoId, (ExtendFromStart) ? Sketcher::start : Sketcher::end);
+                    SugConstr.clear();
+                }
+                bool continuousMode = hGrp->GetBool("ContinuousCreationMode",true);
+
+                if(continuousMode){
+                    // This code enables the continuous creation mode.
+                    Mode=STATUS_SEEK_First;
+                    filterGate->setDisabled(false);
+                    EditCurve.clear();
+                    sketchgui->drawEdit(EditCurve);
+                    EditCurve.resize(2);
+                    applyCursor();
+                    /* this is ok not to call to purgeHandler
+                    * in continuous creation mode because the 
+                    * handler is destroyed by the quit() method on pressing the
+                    * right button of the mouse */
+                } else{
+                    sketchgui->purgeHandler(); // no code after this line, Handler get deleted in ViewProvider
+                }
+            }
+            catch (const Base::Exception& e) {
+                Base::Console().Error("Failed to extend edge: %s\n", e.what());
+                Gui::Command::abortCommand();
+            }
+
+        } else { // exit extension tool if user clicked on empty space
+            BaseGeoId = -1;
+            sketchgui->purgeHandler(); // no code after this line, Handler get deleted in ViewProvider
+        }
+        return true;
+    }
+
+protected:
+    SelectMode Mode;
+    std::vector<Base::Vector2d> EditCurve;
+    int BaseGeoId;
+    ExtendSelection* filterGate = nullptr;
+    bool ExtendFromStart; // if true, extend from start, else extend from end (circle only)
+    bool SavedExtendFromStart;
+    double Increment;
+    std::vector<AutoConstraint> SugConstr;
+
+private:
+    int crossProduct(Base::Vector2d &vec1, Base::Vector2d &vec2) {
+        return vec1.x * vec2.y - vec1.y * vec2.x;
+    }
+};
+
+DEF_STD_CMD_A(CmdSketcherExtend);
+
+//TODO: fix the translations for this
+CmdSketcherExtend::CmdSketcherExtend()
+  : Command("Sketcher_Extend")
+{
+    sAppModule      = "Sketcher";
+    sGroup          = QT_TR_NOOP("Sketcher");
+    sMenuText       = QT_TR_NOOP("Extend edge");
+    sToolTipText    = QT_TR_NOOP("Extend an edge with respect to the picked position");
+    sWhatsThis      = "Sketcher_Extend";
+    sStatusTip      = sToolTipText;
+    sPixmap         = "Sketcher_Extend";
+    sAccel          = "T,E";
+    eType           = ForEdit;
+}
+
+void CmdSketcherExtend::activated(int iMsg)
+{
+    Q_UNUSED(iMsg);
+    ActivateHandler(getActiveGuiDocument(), new DrawSketchHandlerExtend());
+}
+
+bool CmdSketcherExtend::isActive(void)
+{
+    return isCreateGeoActive(getActiveGuiDocument());
+}
+
+
+namespace SketcherGui {
     class ExternalSelection : public Gui::SelectionFilterGate
     {
         App::DocumentObject* object;
@@ -6043,7 +6493,7 @@ namespace SketcherGui {
             return  false;
         }
     };
-};
+}
 
 
 /* XPM */
@@ -7273,6 +7723,7 @@ void CreateSketcherCommandsCreateGeo(void)
     //rcCmdMgr.addCommand(new CmdSketcherCreateText());
     //rcCmdMgr.addCommand(new CmdSketcherCreateDraftLine());
     rcCmdMgr.addCommand(new CmdSketcherTrimming());
+    rcCmdMgr.addCommand(new CmdSketcherExtend());
     rcCmdMgr.addCommand(new CmdSketcherExternal());
     rcCmdMgr.addCommand(new CmdSketcherCarbonCopy());
 }
