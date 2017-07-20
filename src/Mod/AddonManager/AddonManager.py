@@ -33,7 +33,7 @@ __url__ = "http://www.freecadweb.org"
 FreeCAD Addon Manager Module
 
 It will fetch its contents from https://github.com/FreeCAD/FreeCAD-addons
-You need a working internet connection, and the python-git package
+You need a working internet connection, and the GitPython package
 installed.
 '''
 
@@ -442,11 +442,27 @@ class CheckWBWorker(QtCore.QThread):
         moddir = basedir + os.sep + "Mod" 
         self.info_label.emit(translate("AddonsInstaller", "Checking for new versions..."))
         upds = 0
+        gitpython_warning = False
         for repo in self.repos:
             if repo[2] == 1: #installed
                 self.info_label.emit(translate("AddonsInstaller","Checking repo")+" "+repo[0]+"...")
                 clonedir = moddir + os.sep + repo[0]
                 if os.path.exists(clonedir):
+                    if not os.path.exists(clonedir + os.sep + '.git'):
+                        # Repair addon installed with raw download
+                        bare_repo = git.Repo.clone_from(repo[1], clonedir + os.sep + '.git', bare=True)
+                        try:
+                            with bare_repo.config_writer() as cw:
+                                cw.set('core', 'bare', False)
+                        except AttributeError:
+                            if not gitpython_warning:
+                                FreeCAD.Console.PrintWarning(translate("AddonsInstaller", "Outdated GitPython detected, consider upgrading with pip.\n"))
+                                gitpython_warning = True
+                            cw = bare_repo.config_writer()
+                            cw.set('core', 'bare', False)
+                            del cw
+                        repo = git.Repo(clonedir)
+                        repo.head.reset('--hard')
                     gitrepo = git.Git(clonedir)
                     gitrepo.fetch()
                     if "git pull" in gitrepo.status():
@@ -627,8 +643,8 @@ class InstallWorker(QtCore.QThread):
         try:
             import git
         except:
-            self.info_label.emit("python-git not found.")
-            FreeCAD.Console.PrintWarning(translate("AddonsInstaller","python-git not found. Using standard download instead.\n"))
+            self.info_label.emit("GitPython not found.")
+            FreeCAD.Console.PrintWarning(translate("AddonsInstaller","GitPython not found. Using standard download instead.\n"))
             try:
                 import zipfile
             except:
@@ -654,6 +670,19 @@ class InstallWorker(QtCore.QThread):
         if os.path.exists(clonedir):
             self.info_label.emit("Updating module...")
             if git:
+                if not os.path.exists(clonedir + os.sep + '.git'):
+                    # Repair addon installed with raw download
+                    bare_repo = git.Repo.clone_from(self.repos[self.idx][1], clonedir + os.sep + '.git', bare=True)
+                    try:
+                        with bare_repo.config_writer() as cw:
+                            cw.set('core', 'bare', False)
+                    except AttributeError:
+                        FreeCAD.Console.PrintWarning(translate("AddonsInstaller", "Outdated GitPython detected, consider upgrading with pip.\n"))
+                        cw = bare_repo.config_writer()
+                        cw.set('core', 'bare', False)
+                        del cw
+                    repo = git.Repo(clonedir)
+                    repo.head.reset('--hard')
                 repo = git.Git(clonedir)
                 answer = repo.pull()
             else:

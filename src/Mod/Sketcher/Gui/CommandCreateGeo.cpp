@@ -1304,7 +1304,7 @@ protected:
     int previousCurve;
     Sketcher::PointPos firstPosId;
     Sketcher::PointPos previousPosId;
-    // the latter stores those constraints that a first point would have been given in abscence of the transition mechanism
+    // the latter stores those constraints that a first point would have been given in absence of the transition mechanism
     std::vector<AutoConstraint> sugConstr1, sugConstr2, virtualsugConstr1; 
 
     Base::Vector2d CenterPoint;
@@ -5032,13 +5032,13 @@ void CmdSketcherCompCreateBSpline::languageChange()
     QList<QAction*> a = pcAction->actions();
     
     QAction* bspline = a[0];
-    bspline->setText(QApplication::translate("Sketcher_CreateBSpline","B-spline by control points or poles"));
-    bspline->setToolTip(QApplication::translate("Sketcher_CreateBSpline","Create a B-spline by control points or poles"));
-    bspline->setStatusTip(QApplication::translate("Sketcher_CreateBSpline","Create a B-spline by control points or poles"));
+    bspline->setText(QApplication::translate("Sketcher_CreateBSpline","B-spline by control points"));
+    bspline->setToolTip(QApplication::translate("Sketcher_CreateBSpline","Create a B-spline by control points"));
+    bspline->setStatusTip(QApplication::translate("Sketcher_CreateBSpline","Create a B-spline by control points"));
     QAction* periodicbspline = a[1];
-    periodicbspline->setText(QApplication::translate("Sketcher_Create_Periodic_BSpline","Periodic B-spline by control points or poles"));
-    periodicbspline->setToolTip(QApplication::translate("Sketcher_Create_Periodic_BSpline","Create a periodic B-spline by control points or poles"));
-    periodicbspline->setStatusTip(QApplication::translate("Sketcher_Create_Periodic_BSpline","Create a periodic B-spline by control points or poles"));
+    periodicbspline->setText(QApplication::translate("Sketcher_Create_Periodic_BSpline","Periodic B-spline by control points"));
+    periodicbspline->setToolTip(QApplication::translate("Sketcher_Create_Periodic_BSpline","Create a periodic B-spline by control points"));
+    periodicbspline->setStatusTip(QApplication::translate("Sketcher_Create_Periodic_BSpline","Create a periodic B-spline by control points"));
 }
 
 bool CmdSketcherCompCreateBSpline::isActive(void)

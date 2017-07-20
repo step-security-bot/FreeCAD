@@ -36,6 +36,7 @@ SET(PathScripts_SRCS
     PathScripts/PathFixture.py
     PathScripts/PathFromShape.py
     PathScripts/PathGeom.py
+    PathScripts/PathHelix.py
     PathScripts/PathHop.py
     PathScripts/PathInspect.py
     PathScripts/PathJob.py
@@ -55,8 +56,6 @@ SET(PathScripts_SRCS
     PathScripts/PathSimpleCopy.py
     PathScripts/PathStock.py
     PathScripts/PathStop.py
-    PathScripts/PathHelix.py
-    PathScripts/kdtree.py
     PathScripts/PathSurface.py
     PathScripts/PathToolController.py
     PathScripts/PathToolLenOffset.py
@@ -65,12 +64,18 @@ SET(PathScripts_SRCS
     PathScripts/PathUtils.py
     PathScripts/PostUtils.py
     PathScripts/__init__.py
+    PathScripts/kdtree.py
+)
+
+SET(PathScripts_post_SRCS
+    PathScripts/post/__init__.py
     PathScripts/post/centroid_post.py
     PathScripts/post/comparams_post.py
     PathScripts/post/dumper_post.py
     PathScripts/post/dynapath_post.py
     PathScripts/post/example_post.py
     PathScripts/post/example_pre.py
+    PathScripts/post/grbl_post.py
     PathScripts/post/linuxcnc_post.py
     PathScripts/post/opensbp_post.py
     PathScripts/post/opensbp_pre.py
@@ -83,7 +88,9 @@ SET(PathScripts_SRCS
 
 SET(PathTests_SRCS
     PathTests/__init__.py
+    PathTests/boxtest.fcstd
     PathTests/PathTestUtils.py
+    PathTests/test_centroid_00.ngc
     PathTests/test_linuxcnc_00.ngc
     PathTests/TestPathCore.py
     PathTests/TestPathDepthParams.py
@@ -96,7 +103,7 @@ SET(PathTests_SRCS
 
 SET(all_files
     ${PathScripts_SRCS}
-    ${PathScripts_NC_SRCS}
+    ${PathScripts_post_SRCS}
 )
 
 ADD_CUSTOM_TARGET(PathScripts ALL
@@ -127,4 +134,11 @@ INSTALL(
         ${PathTests_SRCS}
     DESTINATION
         Mod/Path/PathTests
+)
+
+INSTALL(
+    FILES
+        ${PathScripts_post_SRCS}
+    DESTINATION
+        Mod/Path/PathScripts/post
 )

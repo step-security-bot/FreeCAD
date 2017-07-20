@@ -20,6 +20,7 @@
 #*   USA                                                                   *
 #*                                                                         *
 #***************************************************************************
+# Modified Amritpal Singh <amrit3701@gmail.com> on 07-07-2017
 
 import FreeCAD,Draft,ArchComponent,DraftVecUtils,ArchCommands
 from FreeCAD import Vector
@@ -69,17 +70,7 @@ def makeRebar(baseobj=None,sketch=None,diameter=None,amount=1,offset=None,name="
         obj.Base = sketch
         if FreeCAD.GuiUp:
             sketch.ViewObject.hide()
-        p = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Arch")
-        if p.GetBool("archRemoveExternal",False):
-            a = baseobj.Armatures
-            a.append(obj)
-            baseobj.Armatures = a
-        else:
-            import Arch
-            host = getattr(Arch,"make"+Draft.getType(baseobj))(baseobj)
-            a = host.Armatures
-            a.append(obj)
-            host.Armatures = a
+        obj.Host = baseobj
     if diameter:
         obj.Diameter = diameter
     else:
@@ -171,6 +162,8 @@ class _Rebar(ArchComponent.Component):
         obj.addProperty("App::PropertyVector","Direction","Arch",QT_TRANSLATE_NOOP("App::Property","The direction to use to spread the bars. Keep (0,0,0) for automatic direction."))
         obj.addProperty("App::PropertyFloat","Rounding","Arch",QT_TRANSLATE_NOOP("App::Property","The fillet to apply to the angle of the base profile. This value is multiplied by the bar diameter."))
         obj.addProperty("App::PropertyPlacementList","PlacementList","Arch",QT_TRANSLATE_NOOP("App::Property","List of placement of all the bars"))
+        obj.addProperty("App::PropertyLink","Host","Arch",QT_TRANSLATE_NOOP("App::Property","The structure object that hosts this rebar"))
+        obj.addProperty("App::PropertyString", "CustomSpacing", "Arch", QT_TRANSLATE_NOOP("App::Property","The custom spacing of rebar"))
         self.Type = "Rebar"
         obj.setEditorMode("Spacing",1)
 
@@ -246,16 +239,16 @@ class _Rebar(ArchComponent.Component):
                     wires.append(wire)
         return [wires,obj.Diameter.Value/2]
 
+    def onChanged(self,obj,prop):
+        if prop == "Host":
+            if hasattr(obj,"Host"):
+                if obj.Host:
+                    # mark host to recompute so it can detect this object
+                    obj.Host.touch()
+
     def execute(self,obj):
 
         if self.clone(obj):
-            return
-
-        if len(obj.InList) != 1:
-            return
-        if Draft.getType(obj.InList[0]) != "Structure":
-            return
-        if not obj.InList[0].Shape:
             return
         if not obj.Base:
             return
@@ -267,7 +260,18 @@ class _Rebar(ArchComponent.Component):
             return
         if not obj.Amount:
             return
-        father = obj.InList[0]
+        father = obj.Host
+        fathershape = None
+        if not father:
+            # support for old-style rebars
+            if obj.InList:
+                if hasattr(obj.InList[0],"Armatures"):
+                    if obj in obj.InList[0].Armatures:
+                        father = obj.InList[0]
+        if father:
+            if father.isDerivedFrom("Part::Feature"):
+                fathershape = father.Shape
+
         wire = obj.Base.Shape.Wires[0]
         if hasattr(obj,"Rounding"):
             #print(obj.Rounding)
@@ -279,20 +283,30 @@ class _Rebar(ArchComponent.Component):
         if not bpoint:
             return
         axis = obj.Base.Placement.Rotation.multVec(FreeCAD.Vector(0,0,-1))
-        size = (ArchCommands.projectToVector(father.Shape.copy(),axis)).Length
+        if fathershape:
+            size = (ArchCommands.projectToVector(fathershape.copy(),axis)).Length
+        else:
+            size = 1
         if hasattr(obj,"Direction"):
             if not DraftVecUtils.isNull(obj.Direction):
                 axis = FreeCAD.Vector(obj.Direction)
                 axis.normalize()
-                size = (ArchCommands.projectToVector(father.Shape.copy(),axis)).Length
+                if fathershape:
+                    size = (ArchCommands.projectToVector(fathershape.copy(),axis)).Length
+                else:
+                    size = 1
         if hasattr(obj,"Distance"):
             if obj.Distance.Value:
                 size = obj.Distance.Value
         #print(axis)
         #print(size)
+        spacinglist = None
+        if hasattr(obj, "CustomSpacing"):
+            if obj.CustomSpacing:
+                spacinglist = strprocessOfCustomSpacing(obj.CustomSpacing)
+                influenceArea = sum(spacinglist) - spacinglist[0] / 2 - spacinglist[-1] / 2
         if (obj.OffsetStart.Value + obj.OffsetEnd.Value) > size:
             return
-
         # all tests ok!
         pl = obj.Placement
         import Part
@@ -306,8 +320,12 @@ class _Rebar(ArchComponent.Component):
         # building final shape
         shapes = []
         placementlist = []
+        if father:
+            rot = father.Placement.Rotation
+        else:
+            rot = FreeCAD.Rotation()
         if obj.Amount == 1:
-            barplacement = CalculatePlacement(obj.Amount, 1, size, axis, father.Placement.Rotation, obj.OffsetStart.Value, obj.OffsetEnd.Value)
+            barplacement = CalculatePlacement(obj.Amount, 1, size, axis, rot, obj.OffsetStart.Value, obj.OffsetEnd.Value)
             placementlist.append(barplacement)
             if hasattr(obj,"Spacing"):
                 obj.Spacing = 0
@@ -319,10 +337,29 @@ class _Rebar(ArchComponent.Component):
             interval = size - (obj.OffsetStart.Value + obj.OffsetEnd.Value)
             interval = interval / (obj.Amount - 1)
             for i in range(obj.Amount):
-                barplacement = CalculatePlacement(obj.Amount, i+1, size, axis, father.Placement.Rotation, obj.OffsetStart.Value, obj.OffsetEnd.Value)
+                barplacement = CalculatePlacement(obj.Amount, i+1, size, axis, rot, obj.OffsetStart.Value, obj.OffsetEnd.Value)
                 placementlist.append(barplacement)
             if hasattr(obj,"Spacing"):
                 obj.Spacing = interval
+        # Calculate placement of bars from custom spacing.
+        if spacinglist:
+            placementlist[:] = []
+            reqInfluenceArea = size - (obj.OffsetStart.Value + obj.OffsetEnd.Value)
+            # Avoid unnecessary checks to pass like. For eg.: when we have values
+            # like influenceArea is 100.00001 and reqInflueneArea is 100
+            if round(influenceArea) > round(reqInfluenceArea):
+                return FreeCAD.Console.PrintError("Influence area of rebars is greater than "+ str(reqInfluenceArea) + ".\n")
+            elif round(influenceArea) < round(reqInfluenceArea):
+                FreeCAD.Console.PrintWarning("Last span is greater that end offset.\n")
+            for i in range(len(spacinglist)):
+                if i == 0:
+                    barplacement = CustomSpacingPlacement(spacinglist, 1, axis, father.Placement.Rotation, obj.OffsetStart.Value, obj.OffsetEnd.Value)
+                    placementlist.append(barplacement)
+                else:
+                    barplacement = CustomSpacingPlacement(spacinglist, i+1, axis, father.Placement.Rotation, obj.OffsetStart.Value, obj.OffsetEnd.Value)
+                    placementlist.append(barplacement)
+            obj.Amount = len(spacinglist)
+            obj.Spacing = 0
         obj.PlacementList = placementlist
         for i in range(len(obj.PlacementList)):
             if i == 0:
@@ -372,6 +409,44 @@ def CalculatePlacement(baramount, barnumber, size, axis, rotation, offsetstart, 
     barplacement = DraftVecUtils.scaleTo(axis, bardistance)
     placement = FreeCAD.Placement(barplacement, rotation)
     return placement
+
+def CustomSpacingPlacement(spacinglist, barnumber, axis, rotation, offsetstart, offsetend):
+    """ CustomSpacingPlacement(spacinglist, barnumber, axis, rotation, offsetstart, offsetend):
+    Calculate placement of the bar from custom spacing list."""
+    if barnumber == 1:
+        bardistance = offsetstart
+    else:
+        bardistance = sum(spacinglist[0:barnumber])
+        bardistance = bardistance - spacinglist[0] / 2
+        bardistance = bardistance - spacinglist[barnumber - 1] / 2
+        bardistance = bardistance + offsetstart
+    barplacement = DraftVecUtils.scaleTo(axis, bardistance)
+    placement = FreeCAD.Placement(barplacement, rotation)
+    return placement
+
+def strprocessOfCustomSpacing(span_string):
+    """ strprocessOfCustomSpacing(span_string): This function take input
+    in specific syntax and return output in the form of list. For eg.
+    Input: "3@100+2@200+3@100"
+    Output: [100, 100, 100, 200, 200, 100, 100, 100]"""
+    import string
+    span_st = string.strip(span_string)
+    span_sp = string.split(span_st, '+')
+    index = 0
+    spacinglist = []
+    while index < len(span_sp):
+        # Find "@" recursively in span_sp array.
+        # If not found, append the index value to "spacinglist" array.
+        if string.find(span_sp[index],'@') == -1:
+            spacinglist.append(float(span_sp[index]))
+        else:
+            in_sp = string.split(span_sp[index], '@')
+            count = 0
+            while count < int(in_sp[0]):
+                spacinglist.append(float(in_sp[1]))
+                count += 1
+        index += 1
+    return spacinglist
 
 if FreeCAD.GuiUp:
     FreeCADGui.addCommand('Arch_Rebar',_CommandRebar())

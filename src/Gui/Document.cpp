@@ -781,6 +781,7 @@ void Document::RestoreDocFile(Base::Reader &reader)
 
     xmlReader.readElement("Document");
     long scheme = xmlReader.getAttributeAsInteger("SchemaVersion");
+    xmlReader.DocumentSchema = scheme;
 
     // At this stage all the document objects and their associated view providers exist.
     // Now we must restore the properties of the view providers only.
@@ -1203,6 +1204,8 @@ bool Document::isLastView(void)
  */
 bool Document::canClose ()
 {
+    if (d->_isClosing)
+        return true;
     if (!getDocument()->isClosable()) {
         QMessageBox::warning(getActiveView(),
             QObject::tr("Document not closable"),

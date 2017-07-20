@@ -436,6 +436,14 @@ def GetJobs(jobname=None):
                     jobs.append(o)
     return jobs
 
+def addObjectToJob(obj, job):
+    '''
+    addObjectToJob(obj, job) ... adds object to given job.
+    '''
+    g = job.Group
+    g.append(obj)
+    job.Group = g
+    return job
 
 def addToJob(obj, jobname=None):
     '''adds a path object to a job
@@ -469,9 +477,7 @@ def addToJob(obj, jobname=None):
                 job = [i for i in jobs if i.Name == form.cboProject.currentText()][0]
 
     if obj:
-        g = job.Group
-        g.append(obj)
-        job.Group = g
+        addObjectToJob(obj, job)
     return job
 
 
@@ -730,6 +736,15 @@ def guessDepths(objshape, subs=None):
 
     return depth_params(clearance, safe, start, 1.0, 0.0, final, user_depths=None, equalstep=False)
 
+def drillTipLength(tool):
+    """returns the length of the drillbit tip.
+"""
+    if tool.CuttingEdgeAngle == 0.0 or tool.Diameter == 0.0:
+        return 0.0
+    else:
+        theta = math.radians(tool.CuttingEdgeAngle)
+        return (tool.Diameter/2) / math.tan(theta)
+
 
 class depth_params:
     '''calculates the intermediate depth values for various operations given the starting, ending, and stepdown parameters
@@ -763,13 +778,17 @@ class depth_params:
         self.index = 0
 
     def __iter__(self):
+        self.index = 0
         return self
 
-    def next(self):
+    def __next__(self):
         if self.index == len(self.data):
             raise StopIteration
         self.index = self.index + 1
         return self.data[self.index - 1]
+
+    def next(self):
+        return self.__next__()
 
     @property
     def clearance_height(self):
