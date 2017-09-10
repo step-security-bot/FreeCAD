@@ -164,7 +164,7 @@ class ObjectDressup:
         maxY = maxZ
 
         # the assumption is that all helixes are in the xy-plane - in other words there is no
-        # intermittent point of a command that has a lower/higer Z-position than the start and
+        # intermittent point of a command that has a lower/higher Z-position than the start and
         # and end positions of a command.
         lastPt = FreeCAD.Vector(0, 0, 0)
         for cmd in obj.Base.Path.Commands:
@@ -242,7 +242,7 @@ def Create(baseObject, name = 'DressupTag'):
     obj = FreeCAD.ActiveDocument.addObject("Path::FeaturePython", "TagDressup")
     dbo = ObjectDressup(obj, baseObject)
     job = PathUtils.findParentJob(baseObject)
-    PathUtils.addObjectToJob(obj, job)
+    job.adddOperation(obj)
     dbo.assignDefaultValues()
     return obj
 

@@ -33,6 +33,20 @@ from math import pow, sqrt
 import numpy as np
 
 
+def get_FemMeshObjectMeshGroups(fem_mesh_obj):
+    """
+        Get mesh groups from mesh. This also throws no exception if there
+        is no Groups property at all (e.g. Netgen meshes).
+    """
+    fem_mesh = fem_mesh_obj.FemMesh
+    try:
+        gmshgroups = fem_mesh.Groups
+    except:
+        gmshgroups = ()
+
+    return gmshgroups
+
+
 def get_FemMeshObjectOrder(fem_mesh_obj):
     """
         Gets element order. Element order counting based on number of nodes on
@@ -56,7 +70,6 @@ def get_FemMeshObjectOrder(fem_mesh_obj):
             presumable_order = [el - 1 for el in edges_length_set]
     else:
         print("Found no edges in mesh: Element order determination does not work without them.")
-    print(presumable_order)
 
     return presumable_order
 
@@ -382,7 +395,7 @@ def fill_femresult_mechanical(results, result_set, span):
                      temp_min, temp_avg, temp_max,
                      mflow_min, mflow_avg, mflow_max,
                      npress_min, npress_avg, npress_max]
-    # do not forget to adapt the def get_stats in FemTools and _TaskPanelFemResultShow module as well as the TestFem module
+    # do not forget to adapt the def get_stats in FemResultTools module as well as the TestFem module
     # stat_types = ["U1", "U2", "U3", "Uabs", "Sabs", "MaxPrin", "MidPrin", "MinPrin", "MaxShear", "Peeq", "Temp", "MFlow", "NPress"]
     # TODO a dictionary would be far robust than a list, but needs adapten in VTK too because of VTK result import
 

@@ -42,8 +42,10 @@ if False:
     PathLog.trackModule(PathLog.thisModule())
 else:
     PathLog.setLevel(PathLog.Level.INFO, PathLog.thisModule())
-FreeCAD.setLogLevel('Path.Area', 0)
+#FreeCAD.setLogLevel('Path.Area', 0)
 
+def translate(context, text, disambig=None):
+    return QtCore.QCoreApplication.translate(context, text, disambig)
 
 def waiting_effects(function):
     def new_function(*args, **kwargs):
@@ -114,7 +116,7 @@ def curvetowire(obj, steps):
     return edgelist
 
 
-def isDrillable(obj, candidate, tooldiameter=None):
+def isDrillable(obj, candidate, tooldiameter=None, includePartials=False):
     """
     Checks candidates to see if they can be drilled.
     Candidates can be either faces - circular or cylindrical or circular edges.
@@ -160,7 +162,7 @@ def isDrillable(obj, candidate, tooldiameter=None):
                                 drillable = True
     else:
         for edge in candidate.Edges:
-            if isinstance(edge.Curve, Part.Circle) and edge.isClosed():
+            if isinstance(edge.Curve, Part.Circle) and (includePartials or edge.isClosed()):
                 PathLog.debug("candidate is a circle or ellipse")
                 if not hasattr(edge.Curve, "Radius"):
                     PathLog.debug("No radius.  Ellipse.")
@@ -353,18 +355,14 @@ def changeTool(obj, job):
 
 def getToolControllers(obj):
     '''returns all the tool controllers'''
-    controllers = []
     try:
-        parent = findParentJob(obj)
+        job = findParentJob(obj)
     except:
-        parent = None
+        job = None
 
-    if parent is not None and hasattr(parent, 'Group'):
-        sibs = parent.Group
-        for g in sibs:
-            if isinstance(g.Proxy, PathScripts.PathToolController.ToolController):
-                controllers.append(g)
-    return controllers
+    if job:
+        return job.ToolController
+    return []
 
 
 def findToolController(obj, name=None):
@@ -374,13 +372,14 @@ def findToolController(obj, name=None):
 
     PathLog.track('name: {}'.format(name))
     c = None
-    # First check if a user has selected a tool controller in the tree. Return the first one and remove all from selection
-    for sel in FreeCADGui.Selection.getSelectionEx():
-        if hasattr(sel.Object, 'Proxy'):
-            if isinstance(sel.Object.Proxy, PathScripts.PathToolController.ToolController):
-                if c is None:
-                    c = sel.Object
-                FreeCADGui.Selection.removeSelection(sel.Object)
+    if FreeCAD.GuiUp:
+        # First check if a user has selected a tool controller in the tree. Return the first one and remove all from selection
+        for sel in FreeCADGui.Selection.getSelectionEx():
+            if hasattr(sel.Object, 'Proxy'):
+                if isinstance(sel.Object.Proxy, PathScripts.PathToolController.ToolController):
+                    if c is None:
+                        c = sel.Object
+                    FreeCADGui.Selection.removeSelection(sel.Object)
     if c is not None:
         return c
 
@@ -414,7 +413,7 @@ def findParentJob(obj):
     '''retrieves a parent job object for an operation or other Path object'''
     PathLog.track()
     for i in obj.InList:
-        if isinstance(i.Proxy, PathScripts.PathJob.ObjectPathJob):
+        if isinstance(i.Proxy, PathScripts.PathJob.ObjectJob):
             return i
         if i.TypeId == "Path::FeaturePython" or i.TypeId == "Path::FeatureCompoundPython":
             grandParent = findParentJob(i)
@@ -428,32 +427,13 @@ def GetJobs(jobname=None):
     PathLog.track()
     jobs = []
     for o in FreeCAD.ActiveDocument.Objects:
-        if "Proxy" in o.PropertiesList:
-            if isinstance(o.Proxy, PathJob.ObjectPathJob):
-                if jobname is not None:
-                    if o.Name == jobname:
-                        jobs.append(o)
-                else:
+        if hasattr(o, 'Proxy') and isinstance(o.Proxy, PathJob.ObjectJob):
+            if jobname is not None:
+                if o.Name == jobname:
                     jobs.append(o)
+            else:
+                jobs.append(o)
     return jobs
-
-def addObjectToJob(obj, job):
-    '''
-    addObjectToJob(obj, job) ... adds object to given job.
-    '''
-    g = job.Group
-    g.append(obj)
-    job.Group = g
-    return job
-
-def addObjectToJob(obj, job):
-    '''
-    addObjectToJob(obj, job) ... adds object to given job.
-    '''
-    g = job.Group
-    g.append(obj)
-    job.Group = g
-    return job
 
 def addToJob(obj, jobname=None):
     '''adds a path object to a job
@@ -465,7 +445,7 @@ def addToJob(obj, jobname=None):
         if len(jobs) == 1:
             job = jobs[0]
         else:
-            FreeCAD.Console.PrintError("Didn't find the job")
+            PathLog.error(translate("Path", "Didn't find job %s") % jobname)
             return None
     else:
         jobs = GetJobs()
@@ -477,17 +457,17 @@ def addToJob(obj, jobname=None):
         else:
             # form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Path/DlgJobChooser.ui")
             form = FreeCADGui.PySideUic.loadUi(":/panels/DlgJobChooser.ui")
-            mylist = [i.Name for i in jobs]
+            mylist = [i.Label for i in jobs]
             form.cboProject.addItems(mylist)
             r = form.exec_()
             if r is False:
                 return None
             else:
                 print(form.cboProject.currentText())
-                job = [i for i in jobs if i.Name == form.cboProject.currentText()][0]
+                job = [i for i in jobs if i.Label == form.cboProject.currentText()][0]
 
     if obj:
-        addObjectToJob(obj, job)
+        job.Proxy.addOperation(obj)
     return job
 
 def rapid(x=None, y=None, z=None):
@@ -750,8 +730,15 @@ def drillTipLength(tool):
     if tool.CuttingEdgeAngle == 0.0 or tool.Diameter == 0.0:
         return 0.0
     else:
+        if tool.CuttingEdgeAngle < 0 or tool.CuttingEdgeAngle >= 90:
+            PathLog.error(translate("Path", "Invalid Cutting Edge Angle %.2f, must be <90° and >=0°") % tool.CuttingEdgeAngle)
+            return 0.0
         theta = math.radians(tool.CuttingEdgeAngle)
-        return (tool.Diameter/2) / math.tan(theta) 
+        length = (tool.Diameter/2) / math.tan(theta) 
+        if length < 0:
+            PathLog.error(translate("Path", "Cutting Edge Angle (%.2f) results in negative tool tip length") % tool.CuttingEdgeAngle)
+            return 0.0
+        return length
 
 class depth_params:
     '''calculates the intermediate depth values for various operations given the starting, ending, and stepdown parameters

@@ -155,6 +155,9 @@ DrawViewPart::~DrawViewPart()
 
 App::DocumentObjectExecReturn *DrawViewPart::execute(void)
 {
+    if (!keepUpdated()) {
+        return App::DocumentObject::StdReturn;
+    }
     App::DocumentObject *link = Source.getValue();
     if (!link) {
         return new App::DocumentObjectExecReturn("DVP - No Source object linked");
@@ -169,8 +172,6 @@ App::DocumentObjectExecReturn *DrawViewPart::execute(void)
         return new App::DocumentObjectExecReturn("DVP - Linked shape object is empty");
     }
 
-    (void) DrawView::execute();           //make sure Scale is up to date
-
     gp_Pnt inputCenter;
     inputCenter = TechDrawGeometry::findCentroid(shape,
                                                  Direction.getValue());
@@ -179,10 +180,12 @@ App::DocumentObjectExecReturn *DrawViewPart::execute(void)
     TopoDS_Shape mirroredShape;
     mirroredShape = TechDrawGeometry::mirrorShape(shape,
                                                   inputCenter,
-                                                  Scale.getValue());
+                                                  getScale());
 
      gp_Ax2 viewAxis = getViewAxis(shapeCentroid,Direction.getValue());
+//     Base::Console().Message("Removing Hidden Lines from %s/%s\n",getNameInDocument(),Label.getValue());
      geometryObject =  buildGeometryObject(mirroredShape,viewAxis);
+//     Base::Console().Message("Finished Removing Hidden Lines\n");
      
      //Base::Console().Message("TRACE - DVP::execute - u: %s v: %s w: %s\n",
      //         DrawUtil::formatVector(getUDir()).c_str(), DrawUtil::formatVector(getVDir()).c_str(), DrawUtil::formatVector(getWDir()).c_str());
@@ -192,17 +195,16 @@ App::DocumentObjectExecReturn *DrawViewPart::execute(void)
         try {
             extractFaces();
         }
-        catch (Standard_Failure) {
-            Handle(Standard_Failure) e4 = Standard_Failure::Caught();
-            Base::Console().Log("LOG - DVP::execute - extractFaces failed for %s - %s **\n",getNameInDocument(),e4->GetMessageString());
-            return new App::DocumentObjectExecReturn(e4->GetMessageString());
+        catch (Standard_Failure& e4) {
+            Base::Console().Log("LOG - DVP::execute - extractFaces failed for %s - %s **\n",getNameInDocument(),e4.GetMessageString());
+            return new App::DocumentObjectExecReturn(e4.GetMessageString());
         }
     }
 #endif //#if MOD_TECHDRAW_HANDLE_FACES
 
 //   Base::Console().Message("TRACE _ DVP::exec - %s/%s u: %s v: %s w: %s\n",getNameInDocument(),Label.getValue(),
 //                           DrawUtil::formatVector(getUDir()).c_str(), DrawUtil::formatVector(getVDir()).c_str(),DrawUtil::formatVector(getWDir()).c_str());
-
+    requestPaint();
     return App::DocumentObject::StdReturn;
 }
 
@@ -224,7 +226,6 @@ short DrawViewPart::mustExecute() const
 
 void DrawViewPart::onChanged(const App::Property* prop)
 {
-
     DrawView::onChanged(prop);
 
 //TODO: when scale changes, any Dimensions for this View sb recalculated.  DVD should pick this up subject to topological naming issues.

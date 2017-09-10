@@ -92,7 +92,7 @@ class _CommandRebar:
 
     def GetResources(self):
         return {'Pixmap'  : 'Arch_Rebar',
-                'MenuText': QT_TRANSLATE_NOOP("Arch_Rebar","Rebar"),
+                'MenuText': QT_TRANSLATE_NOOP("Arch_Rebar","Custom Rebar"),
                 'Accel': "R, B",
                 'ToolTip': QT_TRANSLATE_NOOP("Arch_Rebar","Creates a Reinforcement bar from the selected face of a structural object")}
 
@@ -154,7 +154,7 @@ class _Rebar(ArchComponent.Component):
     def __init__(self,obj):
         ArchComponent.Component.__init__(self,obj)
         obj.addProperty("App::PropertyLength","Diameter","Arch",QT_TRANSLATE_NOOP("App::Property","The diameter of the bar"))
-        obj.addProperty("App::PropertyLength","OffsetStart","Arch",QT_TRANSLATE_NOOP("App::Property","The distance between the border of the beam and the fist bar (concrete cover)."))
+        obj.addProperty("App::PropertyLength","OffsetStart","Arch",QT_TRANSLATE_NOOP("App::Property","The distance between the border of the beam and the first bar (concrete cover)."))
         obj.addProperty("App::PropertyLength","OffsetEnd","Arch",QT_TRANSLATE_NOOP("App::Property","The distance between the border of the beam and the last bar (concrete cover)."))
         obj.addProperty("App::PropertyInteger","Amount","Arch",QT_TRANSLATE_NOOP("App::Property","The amount of bars"))
         obj.addProperty("App::PropertyLength","Spacing","Arch",QT_TRANSLATE_NOOP("App::Property","The spacing between the bars"))
@@ -172,13 +172,15 @@ class _Rebar(ArchComponent.Component):
         import DraftGeomUtils
         if wire:
             e = wire.Edges[0]
-            v = DraftGeomUtils.vec(e).normalize()
+            #v = DraftGeomUtils.vec(e).normalize()
+            v = e.tangentAt(e.FirstParameter)
             return e.Vertexes[0].Point,v
         if obj.Base:
             if obj.Base.Shape:
                 if obj.Base.Shape.Wires:
                     e = obj.Base.Shape.Wires[0].Edges[0]
-                    v = DraftGeomUtils.vec(e).normalize()
+                    #v = DraftGeomUtils.vec(e).normalize()
+                    v = e.tangentAt(e.FirstParameter)
                     return e.Vertexes[0].Point,v
         return None,None
 

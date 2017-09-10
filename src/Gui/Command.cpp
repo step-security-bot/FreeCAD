@@ -610,17 +610,13 @@ void Command::applyCommandData(const char* context, Action* action)
         context, getMenuText()));
     action->setToolTip(QCoreApplication::translate(
         context, getToolTipText()));
+    action->setWhatsThis(QCoreApplication::translate(
+        context, getWhatsThis()));
     if (sStatusTip)
         action->setStatusTip(QCoreApplication::translate(
             context, getStatusTip()));
     else
         action->setStatusTip(QCoreApplication::translate(
-            context, getToolTipText()));
-    if (sWhatsThis)
-        action->setWhatsThis(QCoreApplication::translate(
-            context, getWhatsThis()));
-    else
-        action->setWhatsThis(QCoreApplication::translate(
             context, getToolTipText()));
     QString accel = action->shortcut().toString(QKeySequence::NativeText);
     if (!accel.isEmpty()) {
@@ -747,18 +743,18 @@ void MacroCommand::activated(int iMsg)
     Q_UNUSED(iMsg); 
 
     QDir d;
-    if(!systemMacro) {
-	std::string cMacroPath;
-	
-	cMacroPath = App::GetApplication().GetParameterGroupByPath
+    if (!systemMacro) {
+        std::string cMacroPath;
+
+        cMacroPath = App::GetApplication().GetParameterGroupByPath
                              ("User parameter:BaseApp/Preferences/Macro")->GetASCII("MacroPath",
                                      App::Application::getUserMacroDir().c_str());
-			     
-	d = QDir(QString::fromUtf8(cMacroPath.c_str()));
+
+        d = QDir(QString::fromUtf8(cMacroPath.c_str()));
     }
     else {
-	QString dirstr = QString::fromUtf8(App::GetApplication().getHomePath()) + QString::fromUtf8("Macro");
-	d = QDir(dirstr);
+        QString dirstr = QString::fromUtf8(App::GetApplication().getHomePath()) + QString::fromUtf8("Macro");
+        d = QDir(dirstr);
     }
     
     QFileInfo fi(d, QString::fromUtf8(sScriptName));

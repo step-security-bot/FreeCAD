@@ -38,8 +38,7 @@ def translate(text, context="PathDressup_RampEntry", disambig=None):
     return QtCore.QCoreApplication.translate(context, text, disambig)
 
 
-LOG_MODULE = PathLog.thisModule()
-PathLog.setLevel(PathLog.Level.DEBUG, LOG_MODULE)
+PathLog.setLevel(PathLog.Level.INFO, PathLog.thisModule())
 
 
 class ObjectDressup:
@@ -564,7 +563,7 @@ class ViewProviderDressup:
         '''this makes sure that the base operation is added back to the project and visible'''
         FreeCADGui.ActiveDocument.getObject(arg1.Object.Base.Name).Visibility = True
         job = PathUtils.findParentJob(self.obj)
-        PathUtils.addObjectToJob(arg1.Object.Base, job)
+        job.Proxy.addOperation(arg1.Object.Base)
         arg1.Object.Base = None
         return True
 
