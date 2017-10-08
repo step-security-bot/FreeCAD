@@ -47,7 +47,7 @@ public:
     App::PropertyString       Symbol;
     App::PropertyStringList   EditableTexts;
 
-    /** @name methods overide Feature */
+    /** @name methods override Feature */
     //@{
     /// recalculate the Feature
     virtual App::DocumentObjectExecReturn *execute(void) override;
@@ -61,9 +61,9 @@ public:
     virtual bool checkFit(TechDraw::DrawPage* p) const override;
 
     //return PyObject as DrawViewSymbolPy
-    virtual PyObject *getPyObject(void);
+    virtual PyObject *getPyObject(void) override;
 
-    virtual short mustExecute() const;
+    virtual short mustExecute() const override;
 
 
 protected:

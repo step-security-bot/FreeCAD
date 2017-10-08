@@ -27,7 +27,10 @@
 # include <TopoDS_Face.hxx>
 # include <TopoDS.hxx>
 # include <BRepAdaptor_Surface.hxx>
+# include <BRep_Tool.hxx>
 # include <TopExp_Explorer.hxx>
+# include <TopLoc_Location.hxx>
+# include <GeomLib_IsPlanarSurface.hxx>
 # include <QMessageBox>
 # include <Inventor/nodes/SoCamera.h>
 #endif
@@ -113,6 +116,10 @@ void UnifiedDatumCommand(Gui::Command &cmd, Base::Type type, std::string name)
             cmd.openCommand(tmp.c_str());
             cmd.doCommand(Gui::Command::Doc,"App.activeDocument().%s.newObject('%s','%s')", pcActiveBody->getNameInDocument(), 
                           fullTypeName.c_str(),FeatName.c_str());
+
+            // remove the body from links in case it's selected as
+            // otherwise a cyclic dependency will be created
+            support.removeValue(pcActiveBody);
 
             //test if current selection fits a mode.
             if (support.getSize() > 0) {
@@ -257,9 +264,7 @@ void CmdPartDesignShapeBinder::activated(int iMsg)
     }
 
     if (bEditSelected) {
-        // TODO probably we not should handle edit here (2015-10-26, Fat-Zer)
-        std::string tmp = std::string("Edit ShapeBinder");
-        openCommand(tmp.c_str());
+        openCommand("Edit ShapeBinder");
         doCommand(Gui::Command::Gui,"Gui.activeDocument().setEdit('%s')",
                 support.getValue()->getNameInDocument());
     } else {
@@ -268,13 +273,15 @@ void CmdPartDesignShapeBinder::activated(int iMsg)
             return;
 
         std::string FeatName = getUniqueObjectName("ShapeBinder");
-        std::string tmp = std::string("Create ShapeBinder");
 
-        openCommand(tmp.c_str());
-
+        openCommand("Create ShapeBinder");
         doCommand(Gui::Command::Doc,"App.activeDocument().%s.newObject('%s','%s')",
                     pcActiveBody->getNameInDocument(), "PartDesign::ShapeBinder",FeatName.c_str());
-        
+
+        // remove the body from links in case it's selected as
+        // otherwise a cyclic dependency will be created
+        support.removeValue(pcActiveBody);
+
         //test if current selection fits a mode.
         if (support.getSize() > 0) {
             doCommand(Gui::Command::Doc,"App.activeDocument().%s.Support = %s",
@@ -289,6 +296,49 @@ void CmdPartDesignShapeBinder::activated(int iMsg)
 bool CmdPartDesignShapeBinder::isActive(void)
 {
     return hasActiveDocument ();
+}
+
+//===========================================================================
+// PartDesign_Clone
+//===========================================================================
+
+DEF_STD_CMD_A(CmdPartDesignClone)
+
+CmdPartDesignClone::CmdPartDesignClone()
+  :Command("PartDesign_Clone")
+{
+    sAppModule      = "PartDesign";
+    sGroup          = QT_TR_NOOP("PartDesign");
+    sMenuText       = QT_TR_NOOP("Create a clone");
+    sToolTipText    = QT_TR_NOOP("Create a new clone");
+    sWhatsThis      = "PartDesign_Clone";
+    sStatusTip      = sToolTipText;
+    sPixmap         = "PartDesign_Clone";
+}
+
+void CmdPartDesignClone::activated(int iMsg)
+{
+    Q_UNUSED(iMsg);
+    std::string FeatName = getUniqueObjectName("Clone");
+    std::vector<App::DocumentObject*> objs = getSelection().getObjectsOfType
+            (Part::Feature::getClassTypeId());
+    if (objs.size() == 1) {
+        openCommand("Create Clone");
+        doCommand(Command::Doc,"App.ActiveDocument.addObject('PartDesign::FeatureBase','%s')",
+                  FeatName.c_str());
+        doCommand(Command::Doc,"App.ActiveDocument.ActiveObject.BaseFeature = App.ActiveDocument.%s",
+                  objs.front()->getNameInDocument());
+        doCommand(Command::Doc,"App.ActiveDocument.ActiveObject.Placement = App.ActiveDocument.%s.Placement",
+                  objs.front()->getNameInDocument());
+        doCommand(Command::Doc,"App.ActiveDocument.ActiveObject.setEditorMode('Placement',0)");
+        commitCommand();
+        updateActive();
+    }
+}
+
+bool CmdPartDesignClone::isActive(void)
+{
+    return getSelection().countObjectsOfType(Part::Feature::getClassTypeId()) == 1;
 }
 
 //===========================================================================
@@ -394,10 +444,14 @@ void CmdPartDesignNewSketch::activated(int iMsg)
             }
 
             BRepAdaptor_Surface adapt(face);
-            if (adapt.GetType() != GeomAbs_Plane){
-                QMessageBox::warning(Gui::getMainWindow(), QObject::tr("No planar support"),
-                    QObject::tr("You need a planar face as support for a sketch!"));
-                return;
+            if (adapt.GetType() != GeomAbs_Plane) {
+                TopLoc_Location loc;
+                Handle(Geom_Surface) surf = BRep_Tool::Surface(face, loc);
+                if (surf.IsNull() || !GeomLib_IsPlanarSurface(surf).IsPlanar()) {
+                    QMessageBox::warning(Gui::getMainWindow(), QObject::tr("No planar support"),
+                        QObject::tr("You need a planar face as support for a sketch!"));
+                    return;
+                }
             }
 
             supportString = FaceFilter.Result[0][0].getAsPropertyLinkSubString();
@@ -649,6 +703,7 @@ void finishFeature(const Gui::Command* cmd, const std::string& FeatName,
         cmd->copyVisual(FeatName.c_str(), "LineColor", pcActiveBody->getNameInDocument());
         cmd->copyVisual(FeatName.c_str(), "PointColor", pcActiveBody->getNameInDocument());
         cmd->copyVisual(FeatName.c_str(), "Transparency", pcActiveBody->getNameInDocument());
+        cmd->copyVisual(FeatName.c_str(), "DisplayMode", pcActiveBody->getNameInDocument());
     }
 }
 
@@ -1661,15 +1716,28 @@ void prepareTransformed(Gui::Command* cmd, const std::string& which,
         }
         str << "]";
 
-        Gui::Command::openCommand((std::string("Make ") + which + " feature").c_str());
+        std::string bodyName = PartDesignGui::getBody(false)->getNameInDocument();
+
+        std::string msg("Make ");
+        msg += which;
+        Gui::Command::openCommand(msg.c_str());
         Gui::Command::doCommand(Gui::Command::Doc,"App.activeDocument().%s.newObject(\"PartDesign::%s\",\"%s\")",
-                                PartDesignGui::getBody(false)->getNameInDocument(), which.c_str(), FeatName.c_str());
+                                bodyName.c_str(), which.c_str(), FeatName.c_str());
         // FIXME: There seems to be kind of a race condition here, leading to sporadic errors like
         // Exception (Thu Sep  6 11:52:01 2012): 'App.Document' object has no attribute 'Mirrored'
         Gui::Command::updateActive(); // Helps to ensure that the object already exists when the next command comes up
         Gui::Command::doCommand(Gui::Command::Doc, str.str().c_str());
         // TODO Wjat that function supposed to do? (2015-08-05, Fat-Zer)
         func(FeatName, features);
+
+        // Set the tip of the body
+        Gui::Command::doCommand(Gui::Command::Doc,"App.activeDocument().%s.Tip = App.activeDocument().%s",
+                                bodyName.c_str(), FeatName.c_str());
+
+        // Adjust visibility to show only the tip feature
+        Gui::Command::doCommand(Gui::Command::Gui, "Gui.activeDocument().show(\"%s\")",
+                                FeatName.c_str());
+        Gui::Command::updateActive();
     };
 
     // Get a valid original from the user
@@ -2144,6 +2212,7 @@ void CreatePartDesignCommands(void)
     Gui::CommandManager &rcCmdMgr = Gui::Application::Instance->commandManager();
 
     rcCmdMgr.addCommand(new CmdPartDesignShapeBinder());
+    rcCmdMgr.addCommand(new CmdPartDesignClone());
     rcCmdMgr.addCommand(new CmdPartDesignPlane());
     rcCmdMgr.addCommand(new CmdPartDesignLine());
     rcCmdMgr.addCommand(new CmdPartDesignPoint());

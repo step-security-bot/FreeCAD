@@ -26,7 +26,7 @@ This is besides the Application class the most important class in FreeCAD
 It contains all the data of the opened, saved or newly created FreeCAD Document.
 The Document manage the Undo and Redo mechanism and the linking of documents.
 
-Note: the documents are not free objects. They are completly handled by the
+Note: the documents are not free objects. They are completely handled by the
 App::Application. Only the Application can Open or destroy a document.
 
 \section Exception Exception handling
@@ -1242,6 +1242,7 @@ Document::~Document()
 
     d->objectArray.clear();
     for (it = d->objectMap.begin(); it != d->objectMap.end(); ++it) {
+        it->second->setStatus(ObjectStatus::Destroy, true);
         delete(it->second);
     }
 
@@ -2588,7 +2589,7 @@ void Document::_addObject(DocumentObject* pcObject, const char* pObjectName)
 }
 
 /// Remove an object out of the document
-void Document::remObject(const char* sName)
+void Document::removeObject(const char* sName)
 {
     std::map<std::string,DocumentObject*>::iterator pos = d->objectMap.find(sName);
 
@@ -2602,7 +2603,7 @@ void Document::remObject(const char* sName)
         d->activeObject = 0;
 
     // Mark the object as about to be deleted
-    pos->second->setStatus(ObjectStatus::Delete, true);
+    pos->second->setStatus(ObjectStatus::Remove, true);
     if (!d->undoing && !d->rollback) {
         pos->second->unsetupObject();
     }
@@ -2641,6 +2642,7 @@ void Document::remObject(const char* sName)
     }
 
     // do no transactions if we do a rollback!
+    std::unique_ptr<DocumentObject> tobedestroyed;
     if (!d->rollback) {
         // Undo stuff
         if (d->activeUndoTransaction) {
@@ -2648,8 +2650,10 @@ void Document::remObject(const char* sName)
             d->activeUndoTransaction->addObjectNew(pos->second);
         }
         else {
-            // if not saved in undo -> delete object
-            delete pos->second;
+            // if not saved in undo -> delete object later
+            std::unique_ptr<DocumentObject> delobj(pos->second);
+            tobedestroyed.swap(delobj);
+            tobedestroyed->setStatus(ObjectStatus::Destroy, true);
         }
     }
 
@@ -2659,18 +2663,15 @@ void Document::remObject(const char* sName)
             break;
         }
     }
-    // remove from adjancy list
-    //remove_vertex(_DepConMap[pos->second],_DepList);
-    //_DepConMap.erase(pos->second);
 
-    pos->second->setStatus(ObjectStatus::Delete, false); // Unset the bit to be on the safe side
+    pos->second->setStatus(ObjectStatus::Remove, false); // Unset the bit to be on the safe side
     d->objectMap.erase(pos);
 }
 
 /// Remove an object out of the document (internal)
-void Document::_remObject(DocumentObject* pcObject)
+void Document::_removeObject(DocumentObject* pcObject)
 {
-    // TODO Refactoring: share code with Document::remObject() (2015-09-01, Fat-Zer)
+    // TODO Refactoring: share code with Document::removeObject() (2015-09-01, Fat-Zer)
     _checkTransaction(pcObject);
 
     std::map<std::string,DocumentObject*>::iterator pos = d->objectMap.find(pcObject->getNameInDocument());
@@ -2679,8 +2680,8 @@ void Document::_remObject(DocumentObject* pcObject)
     if (d->activeObject == pcObject)
         d->activeObject = 0;
 
-    // Mark the object as about to be deleted
-    pcObject->setStatus(ObjectStatus::Delete, true);
+    // Mark the object as about to be removed
+    pcObject->setStatus(ObjectStatus::Remove, true);
     if (!d->undoing && !d->rollback) {
         pcObject->unsetupObject();
     }
@@ -2706,7 +2707,7 @@ void Document::_remObject(DocumentObject* pcObject)
     }
 
     // remove from map
-    pcObject->setStatus(ObjectStatus::Delete, false); // Unset the bit to be on the safe side
+    pcObject->setStatus(ObjectStatus::Remove, false); // Unset the bit to be on the safe side
     d->objectMap.erase(pos);
 
     for (std::vector<DocumentObject*>::iterator it = d->objectArray.begin(); it != d->objectArray.end(); ++it) {
@@ -2718,6 +2719,7 @@ void Document::_remObject(DocumentObject* pcObject)
 
     // for a rollback delete the object
     if (d->rollback) {
+        pcObject->setStatus(ObjectStatus::Destroy, true);
         delete pcObject;
     }
 }
@@ -2831,7 +2833,7 @@ DocumentObject* Document::moveObject(DocumentObject* obj, bool recursive)
     // all object of the other document that refer to this object must be nullified
     that->breakDependency(obj, false);
     std::string objname = getUniqueObjectName(obj->getNameInDocument());
-    that->_remObject(obj);
+    that->_removeObject(obj);
     this->_addObject(obj, objname.c_str());
     obj->setDocument(this);
 

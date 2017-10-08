@@ -37,7 +37,7 @@ class GroupExtensionPy;
 
 class AppExport GroupExtension : public DocumentObjectExtension
 {
-    EXTENSION_PROPERTY_HEADER(App::GroupExtension);
+    EXTENSION_PROPERTY_HEADER_WITH_OVERRIDE(App::GroupExtension);
 
 public:
     /// Constructor
@@ -106,7 +106,7 @@ public:
     static DocumentObject* getGroupOfObject(const DocumentObject* obj);
     //@}
     
-    virtual PyObject* getExtensionPyObject(void);
+    virtual PyObject* getExtensionPyObject(void) override;
 
     virtual void extensionOnChanged(const Property* p) override;
     
