@@ -33,6 +33,7 @@ other than PathLog, then it probably doesn't belong here.
 '''
 
 import PathScripts.PathLog as PathLog
+import sys
 
 PathLog.setLevel(PathLog.Level.INFO, PathLog.thisModule())
 
@@ -87,3 +88,32 @@ def getPublicObject(obj):
             return getPublicObject(body)
     return obj
 
+def clearExpressionEngine(obj):
+    '''clearExpressionEngine(obj) ... removes all expressions from obj.
+
+There is currently a bug that invalidates the DAG if an object
+is deleted that still has one or more expressions attached to it.
+Use this function to remove all expressions before deletion.'''
+    if hasattr(obj, 'ExpressionEngine'):
+        for attr,expr in obj.ExpressionEngine:
+            obj.setExpression(attr, None)
+
+def toUnicode(string):
+    '''toUnicode(string) ... returns a unicode version of string regardless of the python version.'''
+    if sys.version_info.major < 3:
+        return unicode(string)
+    return string
+
+def isString(string):
+    '''isString(string) ... return True if string is a string, regardless of string type and python version.'''
+    if type(string) == str:
+        return True
+    if sys.version_info.major < 3 and type(string) == unicode:
+        return True
+    return False
+
+def keyValueIter(dictionary):
+    '''keyValueIter(dict) ... return iterable object over dictionary's (key,value) tuples.'''
+    if sys.version_info.major < 3:
+        return dictionary.iteritems()
+    return dictionary.items()

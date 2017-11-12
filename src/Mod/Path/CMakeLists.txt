@@ -1,5 +1,6 @@
 add_subdirectory(App)
 add_subdirectory(libarea)
+add_subdirectory(PathSimulator)
 
 if(BUILD_GUI)
     add_subdirectory(Gui)
@@ -39,6 +40,7 @@ SET(PathScripts_SRCS
     PathScripts/PathFixture.py
     PathScripts/PathGeom.py
     PathScripts/PathGetPoint.py
+    PathScripts/PathGui.py
     PathScripts/PathHelix.py
     PathScripts/PathHelixGui.py
     PathScripts/PathHop.py
@@ -74,6 +76,7 @@ SET(PathScripts_SRCS
     PathScripts/PathProfileFacesGui.py
     PathScripts/PathSanity.py
     PathScripts/PathSelection.py
+    PathScripts/PathSetupSheet.py
     PathScripts/PathSimpleCopy.py
     PathScripts/PathStock.py
     PathScripts/PathStop.py
@@ -84,6 +87,7 @@ SET(PathScripts_SRCS
     PathScripts/PathToolLibraryManager.py
     PathScripts/PathUtil.py
     PathScripts/PathUtils.py
+    PathScripts/PathSimulatorGui.py
     PathScripts/PostUtils.py
     PathScripts/__init__.py
 )
@@ -120,6 +124,7 @@ SET(PathTests_SRCS
     PathTests/TestPathGeom.py
     PathTests/TestPathLog.py
     PathTests/TestPathPost.py
+    PathTests/TestPathSetupSheet.py
     PathTests/TestPathStock.py
     PathTests/TestPathTool.py
     PathTests/TestPathToolController.py

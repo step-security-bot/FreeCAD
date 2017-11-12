@@ -27,6 +27,7 @@ import DraftVecUtils
 import FreeCAD
 import FreeCADGui
 import PathScripts.PathJob as PathJob
+import PathScripts.PathGui as PathGui
 import PathScripts.PathLog as PathLog
 import PathScripts.PathStock as PathStock
 import PathScripts.PathToolController as PathToolController
@@ -155,6 +156,9 @@ class ViewProvider:
             children.append(self.obj.Base)
         if self.obj.Stock:
             children.append(self.obj.Stock)
+        if hasattr(self.obj, 'SetupSheet'):
+            # when loading a job that didn't have a setup sheet they might not've been created yet
+            children.append(self.obj.SetupSheet)
         return children
 
     def onDelete(self, vobj, arg2=None):
@@ -549,6 +553,7 @@ class TaskPanel:
 
             self.updateTooltips()
             self.stockEdit.getFields(self.obj)
+
             self.obj.Proxy.execute(self.obj)
 
     def selectComboBoxText(self, widget, text):
@@ -646,7 +651,6 @@ class TaskPanel:
 
         self.updateToolController()
         self.stockEdit.setFields(self.obj)
-
 
     def setPostProcessorOutputFile(self):
         filename = QtGui.QFileDialog.getSaveFileName(self.form, translate("Path_Job", "Select Output File"), None, translate("Path_Job", "All Files (*.*)"))
@@ -752,6 +756,18 @@ class TaskPanel:
             except:
                 pass
             item.setText("%s%g" % ('+' if tc.SpindleDir == 'Forward' else '-', tc.SpindleSpeed))
+        elif 'HorizFeed' == prop or 'VertFeed' == prop:
+            vUnit = FreeCAD.Units.Quantity(1, FreeCAD.Units.Velocity).getUserPreferred()[2]
+            try:
+                val = FreeCAD.Units.Quantity(item.text())
+                if FreeCAD.Units.Velocity == val.Unit:
+                    setattr(tc, prop, val)
+                elif FreeCAD.Units.Unit() == val.Unit:
+                    val = FreeCAD.Units.Quantity(item.text()+vUnit);
+                    setattr(tc, prop, val)
+            except:
+                pass
+            item.setText("%g" % getattr(tc, prop).getValueAs(vUnit))
         else:
             try:
                 val = FreeCAD.Units.Quantity(item.text())
@@ -1009,6 +1025,7 @@ def Create(base, template=None):
         obj = PathJob.Create('Job', base, template)
         ViewProvider(obj.ViewObject)
         FreeCAD.ActiveDocument.commitTransaction()
+        obj.Document.recompute()
         obj.ViewObject.Proxy.editObject(obj.Stock)
         return obj
     except:

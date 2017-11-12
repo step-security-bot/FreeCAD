@@ -47,11 +47,11 @@ __url__ = "http://www.freecadweb.org"
 
 '''The Draft module offers a range of tools to create and manipulate basic 2D objects'''
 
-import FreeCAD, math, sys, os, DraftVecUtils, Draft_rc
+import FreeCAD, math, sys, os, DraftVecUtils, Draft_rc, WorkingPlane
 from FreeCAD import Vector
 
 if FreeCAD.GuiUp:
-    import FreeCADGui, WorkingPlane
+    import FreeCADGui
     from PySide import QtCore
     from PySide.QtCore import QT_TRANSLATE_NOOP
     gui = True
@@ -1727,7 +1727,8 @@ def draftify(objectslist,makeblock=False,delete=True):
     newobjlist = []
     for obj in objectslist:
         if obj.isDerivedFrom('Part::Feature'):
-            for w in obj.Shape.Wires:
+            for cluster in Part.getSortedClusters(obj.Shape.Edges):
+                w = Part.Wire(cluster)
                 if DraftGeomUtils.hasCurves(w):
                     if (len(w.Edges) == 1) and (DraftGeomUtils.geomType(w.Edges[0]) == "Circle"):
                         nobj = makeCircle(w.Edges[0])
@@ -2675,6 +2676,12 @@ def makeSketch(objectslist,autoconstraints=False,addTo=None,
         except AttributeError:
             pass
 
+    def convertBezier(edge):
+        if DraftGeomUtils.geomType(edge) == "BezierCurve":
+            return(edge.Curve.toBSpline(edge.FirstParameter,edge.LastParameter).toShape())
+        else:
+            return(edge)
+
     rotation = None
     for obj in objectslist:
         ok = False
@@ -2755,11 +2762,13 @@ def makeSketch(objectslist,autoconstraints=False,addTo=None,
                 ok = True
         elif tp == "BSpline":
             nobj.addGeometry(obj.Shape.Edges[0].Curve)
+            nobj.exposeInternalGeometry(nobj.GeometryCount-1)
             ok = True
         elif tp == "BezCurve":
             bez = obj.Shape.Edges[0].Curve
             bsp = bez.toBSpline(bez.FirstParameter,bez.LastParameter)
             nobj.addGeometry(bsp)
+            nobj.exposeInternalGeometry(nobj.GeometryCount-1)
             ok = True
         elif tp == 'Shape' or obj.isDerivedFrom("Part::Feature"):
             shape = obj if tp == 'Shape' else obj.Shape
@@ -2776,10 +2785,13 @@ def makeSketch(objectslist,autoconstraints=False,addTo=None,
                     FreeCAD.Console.PrintWarning(translate("draft","Unable to guess the normal direction of this object"))
                     rotation = FreeCAD.Rotation()
                     norm = obj.Placement.Rotation.Axis
-            for e in shape.Edges:
-                if DraftGeomUtils.geomType(e) in ["BSplineCurve","BezierCurve"]:
-                    FreeCAD.Console.PrintError(translate("draft","BSplines and Bezier curves are not supported by this tool"))
-                    return None
+            if not shape.Wires:
+                for e in shape.Edges:
+                    # unconnected edges
+                    newedge = convertBezier(e)
+                    nobj.addGeometry(DraftGeomUtils.orientEdge(newedge,norm,make_arc=True))
+                    addRadiusConstraint(newedge)
+
             # if not addTo:
                 # nobj.Placement.Rotation = DraftGeomUtils.calculatePlacement(shape).Rotation
 
@@ -2788,9 +2800,10 @@ def makeSketch(objectslist,autoconstraints=False,addTo=None,
                     last_count = nobj.GeometryCount
                     edges = wire.OrderedEdges
                     for edge in edges:
+                        newedge = convertBezier(edge)
                         nobj.addGeometry(DraftGeomUtils.orientEdge(
-                                            edge,norm,make_arc=True))
-                        addRadiusConstraint(edge)
+                                            newedge,norm,make_arc=True))
+                        addRadiusConstraint(newedge)
                     for i,g in enumerate(nobj.Geometry[last_count:]):
                         if edges[i].Closed:
                             continue
@@ -2830,8 +2843,9 @@ def makeSketch(objectslist,autoconstraints=False,addTo=None,
             else:
                 for wire in shape.Wires:
                     for edge in wire.OrderedEdges:
+                        newedge = convertBezier(edge)
                         nobj.addGeometry(DraftGeomUtils.orientEdge(
-                                                edge,norm,make_arc=True))
+                                                newedge,norm,make_arc=True))
             ok = True
         formatObject(nobj,obj)
         if ok and delete and obj.isDerivedFrom("Part::Feature"):
@@ -3881,7 +3895,13 @@ class _Dimension(_DraftObject):
                         elif DraftGeomUtils.geomType(edge) == "Circle":
                             c = edge.Curve.Center
                             r = edge.Curve.Radius
-                            ray = DraftVecUtils.scaleTo(obj.Dimline.sub(c),r)
+                            a = edge.Curve.Axis
+                            ray = obj.Dimline.sub(c).projectToPlane(Vector(0,0,0),a)
+                            if (ray.Length == 0):
+                                ray = a.cross(Vector(1,0,0))
+                                if (ray.Length == 0):
+                                    ray = a.cross(Vector(0,1,0))
+                            ray = DraftVecUtils.scaleTo(ray,r)
                             if hasattr(obj,"Diameter"):
                                 if obj.Diameter:
                                     obj.Start = c.add(ray.negative())

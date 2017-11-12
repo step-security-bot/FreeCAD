@@ -811,6 +811,7 @@ SET(View3D_CPP_SRCS
     NavigationStyle.cpp
     InventorNavigationStyle.cpp
     CADNavigationStyle.cpp
+    RevitNavigationStyle.cpp
     BlenderNavigationStyle.cpp
     MayaGestureNavigationStyle.cpp
     OpenCascadeNavigationStyle.cpp
@@ -1194,6 +1195,10 @@ if(MSVC)
 endif(MSVC)
 
 add_library(FreeCADGui SHARED ${FreeCADGui_SRCS})
+
+if (FREECAD_USE_QT_FILEDIALOG)
+    set_source_files_properties(FileDialog.cpp PROPERTIES COMPILE_FLAGS -DUSE_QT_FILEDIALOG)
+endif()
 
 target_link_libraries(FreeCADGui ${FreeCADGui_LIBS})
 

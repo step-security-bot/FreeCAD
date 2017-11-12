@@ -29,6 +29,7 @@ import FreeCADGui
 import Path
 import PathScripts
 import PathScripts.PathLog as PathLog
+import PathScripts.PathUtil as PathUtil
 import PathScripts.PathUtils as PathUtils
 import json
 import os
@@ -164,7 +165,7 @@ class ToolLibraryManager():
     def tooltableFromAttrs(self, stringattrs):
         if stringattrs.get('Version') and 1 == int(stringattrs['Version']):
             attrs = {}
-            for key, val in stringattrs['Tools'].iteritems():
+            for key, val in PathUtil.keyValueIter(stringattrs['Tools']):
                 attrs[int(key)] = val
             return Path.Tooltable(attrs)
         else:
@@ -234,7 +235,7 @@ class ToolLibraryManager():
         if tt:
             if len(tt.Tools) == 0:
                 tooldata.append([])
-            for number, t in tt.Tools.iteritems():
+            for number, t in PathUtil.keyValueIter(tt.Tools):
 
                 itemcheck = QtGui.QStandardItem()
                 itemcheck.setCheckable(True)
@@ -270,13 +271,13 @@ class ToolLibraryManager():
                 parser = xml.sax.make_parser()
                 parser.setFeature(xml.sax.handler.feature_namespaces, 0)
                 parser.setContentHandler(xmlHandler)
-                parser.parse(unicode(filename[0]))
+                parser.parse(PathUtil.toUnicode(filename[0]))
                 if not xmlHandler.tooltable:
                     return None
 
                 ht = xmlHandler.tooltable
             else:
-                with open(unicode(filename[0]), "rb") as fp:
+                with open(PathUtil.toUnicode(filename[0]), "rb") as fp:
                     ht = self.tooltableFromAttrs(json.load(fp))
 
             tt = self._findList(listname)
@@ -299,7 +300,7 @@ class ToolLibraryManager():
                     fext = os.path.splitext(name)[1].lower()
                     if fext != ext:
                         name = "{}{}".format(name, ext)
-                    return (open(unicode(name), 'wb'), name)
+                    return (open(PathUtil.toUnicode(name), 'wb'), name)
 
                 if filename[1] == self.TooltableTypeXML:
                     fp,fname = openFileWithExtension(filename[0], '.xml')
@@ -315,7 +316,7 @@ class ToolLibraryManager():
                     json.dump(self.templateAttrs(tt), fp, sort_keys=True, indent=2)
 
                 fp.close()
-                print("Written ", unicode(fname))
+                print("Written ", PathUtil.toUnicode(fname))
 
             except Exception as e:
                 print("Could not write file:", e)

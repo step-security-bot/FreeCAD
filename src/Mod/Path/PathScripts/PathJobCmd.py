@@ -27,6 +27,7 @@ import FreeCADGui
 import PathScripts.PathJob as PathJob
 import PathScripts.PathLog as PathLog
 import PathScripts.PathStock as PathStock
+import PathScripts.PathUtil as PathUtil
 import glob
 import json
 import os
@@ -143,12 +144,13 @@ class DlgJobTemplateExport:
             self.dialog.postProcessingGroup.setChecked(False)
 
         if job.Stock and not PathJob.isResourceClone(job, 'Stock', 'Stock'):
-            if hasattr(job.Stock, 'ExtXNeg'):
+            stockType = PathStock.StockType.FromStock(job.Stock)
+            if stockType == PathStock.StockType.FromBase:
                 seHint = translate('PathJob', "Base -/+ %.2f/%.2f %.2f/%.2f %.2f/%.2f") % (job.Stock.ExtXneg, job.Stock.ExtXpos, job.Stock.ExtYneg, job.Stock.ExtYpos, job.Stock.ExtZneg, job.Stock.ExtZpos)
                 self.dialog.stockPlacement.setChecked(False)
-            elif hasattr(job.Stock, 'Length') and hasattr(job.Stock, 'Width'):
+            elif stockType == PathStock.StockType.CreateBox:
                 seHint = translate('PathJob', "Box: %.2f x %.2f x %.2f") % (job.Stock.Length, job.Stock.Width, job.Stock.Height)
-            elif hasattr(job.Stock, 'Radius'):
+            elif stockType == PathStock.StockType.CreateCylinder:
                 seHint = translate('PathJob', "Cylinder: %.2f x %.2f") % (job.Stock.Radius, job.Stock.Height)
             else:
                 seHint = '-'
@@ -156,6 +158,15 @@ class DlgJobTemplateExport:
             self.dialog.stockExtentHint.setText(seHint)
             spHint = "%s" % job.Stock.Placement
             self.dialog.stockPlacementHint.setText(spHint)
+
+        rapidChanged = not job.SetupSheet.Proxy.hasDefaultToolRapids()
+        depthsChanged = not job.SetupSheet.Proxy.hasDefaultOperationDepths()
+        heightsChanged = not job.SetupSheet.Proxy.hasDefaultOperationHeights()
+        settingsChanged = rapidChanged or depthsChanged or heightsChanged
+        self.dialog.settingsGroup.setChecked(settingsChanged)
+        self.dialog.settingToolRapid.setChecked(rapidChanged)
+        self.dialog.settingOperationDepths.setChecked(depthsChanged)
+        self.dialog.settingOperationHeights.setChecked(heightsChanged)
 
         for tc in sorted(job.ToolController, key=lambda o: o.Label):
             item = QtGui.QListWidgetItem(tc.Label)
@@ -183,12 +194,19 @@ class DlgJobTemplateExport:
 
     def includeStock(self):
         return self.dialog.stockGroup.isChecked()
-
     def includeStockExtent(self):
         return self.dialog.stockExtent.isChecked()
-
     def includeStockPlacement(self):
         return self.dialog.stockPlacement.isChecked()
+
+    def includeSettings(self):
+        return self.dialog.settingsGroup.isChecked()
+    def includeSettingToolRapid(self):
+        return self.dialog.settingToolRapid.isChecked()
+    def includeSettingOperationHeights(self):
+        return self.dialog.settingOperationHeights.isChecked()
+    def includeSettingOperationDepths(self):
+        return self.dialog.settingOperationDepths.isChecked()
 
     def exec_(self):
         return self.dialog.exec_()
@@ -223,14 +241,20 @@ class CommandJobTemplateExport:
     @classmethod
     def Execute(cls, job, path, dialog=None):
         attrs = job.Proxy.templateAttrs(job)
+
+        # post processor settings
         if dialog and not dialog.includePostProcessing():
             attrs.pop(PathJob.JobTemplate.PostProcessor, None)
-            attrs.pob(PathJob.JobTemplate.PostProcessorArgs, None)
-            attrs.pob(PathJob.JobTemplate.PostProcessorOutputFile, None)
+            attrs.pop(PathJob.JobTemplate.PostProcessorArgs, None)
+            attrs.pop(PathJob.JobTemplate.PostProcessorOutputFile, None)
+
+        # tool controller settings
         toolControllers = dialog.includeToolControllers() if dialog else job.ToolController
         if toolControllers:
             tcAttrs = [tc.Proxy.templateAttrs(tc) for tc in toolControllers]
             attrs[PathJob.JobTemplate.ToolController] = tcAttrs
+
+        # stock settings
         stockAttrs = None
         if dialog:
             if dialog.includeStock():
@@ -239,8 +263,20 @@ class CommandJobTemplateExport:
             stockAttrs = PathStock.TemplateAttributes(job.Stock)
         if stockAttrs:
             attrs[PathJob.JobTemplate.Stock] = stockAttrs
-        with open(unicode(path), 'wb') as fp:
-            json.dump(attrs, fp, sort_keys=True, indent=2)
+
+        # setup sheet
+        setupSheetAttrs = None
+        if dialog:
+            setupSheetAttrs = job.Proxy.setupSheet.templateAttributes(dialog.includeSettingToolRapid(), dialog.includeSettingOperationHeights(), dialog.includeSettingOperationDepths())
+        else:
+            setupSheetAttrs = job.Proxy.setupSheet.templateAttributes(True, True, True)
+        if setupSheetAttrs:
+            attrs[PathJob.JobTemplate.SetupSheet] = setupSheetAttrs
+
+        encoded = job.Proxy.setupSheet.encodeTemplateAttributes(attrs)
+        # write template
+        with open(PathUtil.toUnicode(path), 'wb') as fp:
+            json.dump(encoded, fp, sort_keys=True, indent=2)
 
 if FreeCAD.GuiUp:
     # register the FreeCAD command

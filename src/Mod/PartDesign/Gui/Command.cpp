@@ -1209,9 +1209,17 @@ void CmdPartDesignGroove::activated(int iMsg)
         }
 
         Gui::Command::doCommand(Doc,"App.activeDocument().%s.Angle = 360.0",FeatName.c_str());
-        PartDesign::Groove* pcGroove = static_cast<PartDesign::Groove*>(cmd->getDocument()->getObject(FeatName.c_str()));
-        if (pcGroove && pcGroove->suggestReversed())
-            Gui::Command::doCommand(Doc,"App.activeDocument().%s.Reversed = 1",FeatName.c_str());
+
+        try {
+            // This raises as exception if line is perpendicular to sketch/support face.
+            // Here we should continue to give the user a chance to change the default values.
+            PartDesign::Groove* pcGroove = static_cast<PartDesign::Groove*>(cmd->getDocument()->getObject(FeatName.c_str()));
+            if (pcGroove && pcGroove->suggestReversed())
+                Gui::Command::doCommand(Doc,"App.activeDocument().%s.Reversed = 1",FeatName.c_str());
+        }
+        catch (const Base::Exception& e) {
+            e.ReportException();
+        }
 
         finishProfileBased(cmd, sketch, FeatName);
         cmd->adjustCameraPosition();
@@ -1824,10 +1832,10 @@ void CmdPartDesignMirrored::activated(int iMsg)
     if (!PartDesignGui::assureModernWorkflow(doc))
         return;
 
-	PartDesign::Body *pcActiveBody = PartDesignGui::getBody(true);
+    PartDesign::Body *pcActiveBody = PartDesignGui::getBody(true);
 
-	if (!pcActiveBody)
-		return;
+    if (!pcActiveBody)
+        return;
 
     Gui::Command* cmd = this;
     auto worker = [this, cmd](std::string FeatName, std::vector<App::DocumentObject*> features) {

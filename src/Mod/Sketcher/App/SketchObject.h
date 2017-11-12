@@ -97,6 +97,8 @@ public:
      \retval int - 0 if successful
      */
     int delGeometry(int GeoId, bool deleteinternalgeo = true);
+    /// deletes all the elements/constraints of the sketch except for external geometry
+    int deleteAllGeometry();
     /// add all constraints in the list
     int addConstraints(const std::vector<Constraint *> &ConstraintList);
     /// add constraint
@@ -312,6 +314,7 @@ public:
     void setAllowOtherBody(bool on) {
         allowOtherBody = on;
     }
+
     /// Flag to allow carbon copy from misaligned geometry
     bool isAllowedUnaligned() const {
         return allowUnaligned;
@@ -358,6 +361,7 @@ protected:
 private:
     /// Flag to allow external geometry from other bodies than the one this sketch belongs to
     bool allowOtherBody;
+
     /// Flag to allow carbon copy from misaligned geometry
     bool allowUnaligned;
 

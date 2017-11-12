@@ -47,6 +47,7 @@
 #include <App/Document.h>
 #include <App/DocumentObject.h>
 #include <App/Expression.h>
+#include <App/PropertyGeo.h>
 #include <sstream>
 #include <boost/math/special_functions/round.hpp>
 
@@ -289,7 +290,6 @@ void Gui::QuantitySpinBox::setExpression(boost::shared_ptr<Expression> expr)
 
 QString QuantitySpinBox::boundToName() const
 {
-    Q_D(const QuantitySpinBox);
     if (isBound()) {
         std::string path = getPath().toString();
         return QString::fromStdString(path);
@@ -305,7 +305,6 @@ QString QuantitySpinBox::boundToName() const
  */
 void QuantitySpinBox::setBoundToByName(const QString &name)
 {
-    Q_D(QuantitySpinBox);
     try {
         // get document
         App::Document *doc = App::GetApplication().getActiveDocument();
@@ -350,9 +349,13 @@ void QuantitySpinBox::setBoundToByName(const QString &name)
 
 QString Gui::QuantitySpinBox::expressionText() const
 {
-    Q_D(const QuantitySpinBox);
-    if (isBound()) {
-        return QString::fromStdString(getExpressionString());
+    try {
+        if (hasExpression()) {
+            return QString::fromStdString(getExpressionString());
+        }
+    }
+    catch (const Base::Exception& e) {
+        qDebug() << e.what();
     }
     return QString();
 }
@@ -398,6 +401,7 @@ void Gui::QuantitySpinBox::onChange()
 bool QuantitySpinBox::apply(const std::string & propName)
 {
     if (!ExpressionBinding::apply(propName)) {
+        double dValue = value().getValue();
         if (isBound()) {
             const App::ObjectIdentifier & path = getPath();
             const Property * prop = path.getProperty();
@@ -405,8 +409,16 @@ bool QuantitySpinBox::apply(const std::string & propName)
             /* Skip update if property is bound and we know it is read-only */
             if (prop && prop->isReadOnly())
                 return true;
+
+            if (prop && prop->getTypeId().isDerivedFrom(App::PropertyPlacement::getClassTypeId())) {
+                std::string p = path.getSubPathStr();
+                if (p == ".Rotation.Angle") {
+                    dValue = Base::toRadians(dValue);
+                }
+            }
         }
-        Gui::Command::doCommand(Gui::Command::Doc, "%s = %f", propName.c_str(), value().getValue());
+
+        Gui::Command::doCommand(Gui::Command::Doc, "%s = %f", propName.c_str(), dValue);
         return true;
     }
     else

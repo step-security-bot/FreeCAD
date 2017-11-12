@@ -24,14 +24,14 @@
 #ifndef FEM_ViewProviderAnalysis_H
 #define FEM_ViewProviderAnalysis_H
 
-#include <Gui/ViewProviderDocumentObject.h>
+#include <Gui/ViewProviderDocumentObjectGroup.h>
 #include <Gui/ViewProviderPythonFeature.h>
 #include <QCoreApplication>
 
 namespace FemGui
 {
 
-class FemGuiExport ViewProviderFemAnalysis : public Gui::ViewProviderDocumentObject
+class FemGuiExport ViewProviderFemAnalysis : public Gui::ViewProviderDocumentObjectGroup
 {
     Q_DECLARE_TR_FUNCTIONS(FemGui::ViewProviderFemAnalysis)
     PROPERTY_HEADER(FemGui::ViewProviderAnalysis);
@@ -46,6 +46,8 @@ public:
     virtual bool doubleClicked(void);
 
     virtual std::vector<App::DocumentObject*> claimChildren(void)const;
+    /// Asks the view provider if the given object can be deleted.
+    virtual bool canDelete(App::DocumentObject* obj) const;
 
     //virtual std::vector<App::DocumentObject*> claimChildren3D(void)const;
     void setupContextMenu(QMenu*, QObject*, const char*);
