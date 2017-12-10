@@ -214,8 +214,6 @@ public:
     ViewerEventFilter() {}
     ~ViewerEventFilter() {}
 
-
-
     bool eventFilter(QObject* obj, QEvent* event) {
 
 #ifdef GESTURE_MESS
@@ -333,6 +331,7 @@ public:
 
 
 // *************************************************************************
+
 View3DInventorViewer::View3DInventorViewer(QWidget* parent, const QtGLWidget* sharewidget)
     : Quarter::SoQTQuarterAdaptor(parent, sharewidget), editViewProvider(0), navigation(0),
       renderType(Native), framebuffer(0), axisCross(0), axisGroup(0), editing(false), redirected(false),
@@ -665,7 +664,6 @@ void View3DInventorViewer::removeViewProvider(ViewProvider* pcProvider)
 
     _ViewProviderSet.erase(pcProvider);
 }
-
 
 SbBool View3DInventorViewer::setEditingViewProvider(Gui::ViewProvider* p, int ModNum)
 {
@@ -1673,11 +1671,9 @@ void View3DInventorViewer::setSeekMode(SbBool on)
 void View3DInventorViewer::printDimension()
 {
     SoCamera* cam = getSoRenderManager()->getCamera();
-
-    if (!cam) return;  // no camera there
+    if (!cam) return; // no camera there
 
     SoType t = getSoRenderManager()->getCamera()->getTypeId();
-
     if (t.isDerivedFrom(SoOrthographicCamera::getClassTypeId())) {
         const SbViewportRegion& vp = getSoRenderManager()->getViewportRegion();
         const SbVec2s& size = vp.getWindowSize();
@@ -1746,7 +1742,6 @@ bool View3DInventorViewer::processSoEvent(const SoEvent* ev)
         case SoKeyboardEvent::ESCAPE:
         case SoKeyboardEvent::Q: // ignore 'Q' keys (to prevent app from being closed)
             return inherited::processSoEvent(ev);
-
         default:
             break;
         }
@@ -1766,10 +1761,8 @@ SbVec3f View3DInventorViewer::getViewDirection() const
 
     if (!cam) return SbVec3f(0,0,-1);  // this is the default
 
-    SbRotation camrot = cam->orientation.getValue();
-    SbVec3f lookat(0, 0, -1); // init to default view direction vector
-    camrot.multVec(lookat, lookat);
-    return lookat;
+    SbVec3f projDir = cam->getViewVolume().getProjectionDirection();
+    return projDir;
 }
 
 void View3DInventorViewer::setViewDirection(SbVec3f dir)
@@ -2021,7 +2014,6 @@ void View3DInventorViewer::setCameraType(SoType t)
 void View3DInventorViewer::moveCameraTo(const SbRotation& rot, const SbVec3f& pos, int steps, int ms)
 {
     SoCamera* cam = this->getSoRenderManager()->getCamera();
-
     if (cam == 0) return;
 
     SbVec3f campos = cam->position.getValue();
@@ -2049,7 +2041,6 @@ void View3DInventorViewer::moveCameraTo(const SbRotation& rot, const SbVec3f& po
 void View3DInventorViewer::animatedViewAll(int steps, int ms)
 {
     SoCamera* cam = this->getSoRenderManager()->getCamera();
-
     if (!cam)
         return;
 
@@ -2633,51 +2624,7 @@ void View3DInventorViewer::drawArrow(void)
 }
 
 // ************************************************************************
-#if 0
-#define HAND_WITH 24
-#define HAND_HEIGHT 24
-#define HAND_HOT_X 9
-#define HAND_HOT_Y 0
 
-static unsigned char hand_bitmap[] = {
-    0x00,0x03,0x00,0x80,0x04,0x00,0x80,0x04,0x00,0x80,0x04,0x00,0x80,0x04,0x00,
-    0x80,0x1c,0x00,0x80,0xe4,0x00,0x80,0x24,0x01,0x80,0x24,0x07,0x8e,0x24,0x09,
-    0x92,0x24,0x09,0xa4,0x00,0x09,0xc4,0x00,0x08,0x08,0x00,0x08,0x08,0x00,0x08,
-    0x10,0x00,0x08,0x10,0x00,0x04,0x20,0x00,0x04,0x20,0x00,0x04,0x40,0x00,0x02,
-    0x80,0x00,0x02,0x00,0x01,0x01,0x00,0xff,0x01,0x00,0x00,0x00,0x00,0xab,0xab,
-    0xab,0xab,0xab,0xab,0xab,0xab,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,
-    0x00,0x1b,0x00,0xee,0x04,0xee
-};
-
-static unsigned char hand_mask_bitmap[] = {
-    0x00,0x03,0x00,0x80,0x07,0x00,0x80,0x07,0x00,0x80,0x07,0x00,0x80,0x07,0x00,
-    0x80,0x1f,0x00,0x80,0xff,0x00,0x80,0xff,0x01,0x80,0xff,0x07,0x8e,0xff,0x0f,
-    0x9e,0xff,0x0f,0xbc,0xff,0x0f,0xfc,0xff,0x0f,0xf8,0xff,0x0f,0xf8,0xff,0x0f,
-    0xf0,0xff,0x0f,0xf0,0xff,0x07,0xe0,0xff,0x07,0xe0,0xff,0x07,0xc0,0xff,0x03,
-    0x80,0xff,0x03,0x00,0xff,0x01,0x00,0xff,0x01,0x00,0x00,0x00,0x00,0xab,0xab,
-    0xab,0xab,0xab,0xab,0xab,0xab,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x05,
-    0x00,0x1b,0x00,0xd5,0x07,0x1c
-};
-
-#define CROSS_WIDTH 16
-#define CROSS_HEIGHT 16
-#define CROSS_HOT_X 7
-#define CROSS_HOT_Y 7
-
-static unsigned char cross_bitmap[] = {
-    0xc0, 0x03, 0x40, 0x02, 0x40, 0x02, 0x40, 0x02,
-    0x40, 0x02, 0x40, 0x02, 0x7f, 0xfe, 0x01, 0x80,
-    0x01, 0x80, 0x7f, 0xfe, 0x40, 0x02, 0x40, 0x02,
-    0x40, 0x02, 0x40, 0x02, 0x40, 0x02, 0xc0, 0x03
-};
-
-static unsigned char cross_mask_bitmap[] = {
-    0xc0, 0x03, 0xc0, 0x03, 0xc0, 0x03, 0xc0, 0x03,
-    0xc0, 0x03, 0xc0, 0x03, 0xff, 0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff, 0xff, 0xc0, 0x03, 0xc0, 0x03,
-    0xc0, 0x03, 0xc0, 0x03, 0xc0, 0x03, 0xc0, 0x03
-};
-#endif
 // Set cursor graphics according to mode.
 void View3DInventorViewer::setCursorRepresentation(int modearg)
 {
@@ -2707,7 +2654,6 @@ void View3DInventorViewer::setCursorRepresentation(int modearg)
             this->getWidget()->setCursor(this->editCursor);
         else
             this->getWidget()->setCursor(QCursor(Qt::ArrowCursor));
-
         break;
 
     case NavigationStyle::DRAGGING:
@@ -2898,6 +2844,7 @@ PyObject *View3DInventorViewer::getPyObject(void)
     Py_INCREF(_viewerPy);
     return _viewerPy;
 }
+
 /**
  * Drops the event \a e and loads the files into the given document.
  */

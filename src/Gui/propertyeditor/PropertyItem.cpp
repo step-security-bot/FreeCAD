@@ -439,7 +439,7 @@ QVariant PropertyItem::data(int column, int role) const
 }
 
 bool PropertyItem::setData (const QVariant& value)
-{   
+{
     cleared = false;
     
     // This is the basic mechanism to set the value to
@@ -447,12 +447,10 @@ bool PropertyItem::setData (const QVariant& value)
     // it delegates it to its parent which sets then the
     // property or delegates again to its parent...
     if (propertyItems.empty()) {
-               
         PropertyItem* parent = this->parent();
         if (!parent || !parent->parent())
             return false;
         parent->setProperty(qPrintable(objectName()),value);
-        
         return true;
     }
     else {
@@ -460,7 +458,6 @@ bool PropertyItem::setData (const QVariant& value)
         return true;
     }
 }
-
 
 Qt::ItemFlags PropertyItem::flags(int column) const
 {
@@ -525,6 +522,7 @@ void PropertyStringItem::setValue(const QVariant& value)
     if (!value.canConvert(QVariant::String))
         return;
     QString val = value.toString();
+    val = QString::fromUtf8(Base::Interpreter().strToPython(val.toUtf8()).c_str());
     QString data = QString::fromLatin1("\"%1\"").arg(val);
     setPropertyValue(data);
 }
@@ -2001,7 +1999,7 @@ void PropertyPlacementItem::setValue(const QVariant& value)
 }
 
 QWidget* PropertyPlacementItem::createEditor(QWidget* parent, const QObject* receiver, const char* method) const
-{  
+{
     PlacementEditor *pe = new PlacementEditor(this->propertyName(), parent);
     QObject::connect(pe, SIGNAL(valueChanged(const QVariant &)), receiver, method);
     pe->setDisabled(isReadOnly());
@@ -3380,7 +3378,7 @@ void LinkSelection::select()
 // ---------------------------------------------------------------
 
 LinkLabel::LinkLabel (QWidget * parent) : QWidget(parent)
-{   
+{
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
     layout->setSpacing(1);
