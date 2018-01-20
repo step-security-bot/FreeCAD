@@ -21,7 +21,7 @@
 # ***************************************************************************
 
 
-__title__ = "_Base"
+__title__ = "_Base ViewProvider"
 __author__ = "Markus Hovorka"
 __url__ = "http://www.freecadweb.org"
 
@@ -31,16 +31,8 @@ if FreeCAD.GuiUp:
     from pivy import coin
 
 
-class Proxy(object):
-
-    BaseType = "Fem::ConstraintPython"
-
-    def __init__(self, obj):
-        obj.Proxy = self
-
-
 class ViewProxy(object):
-    """Proxy for FemSolverElmers View Provider."""
+    """Proxy View Provider for Pythons base constraint."""
 
     def __init__(self, vobj):
         vobj.Proxy = self

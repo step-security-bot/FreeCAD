@@ -357,6 +357,9 @@ def getGroupContents(objectslist,walls=False,addgroups=False,spaces=False):
     for obj in objectslist:
         if obj:
             if obj.isDerivedFrom("App::DocumentObjectGroup") or ((getType(obj) in ["Space","Site"]) and hasattr(obj,"Group")):
+                if getType(obj) == "Site":
+                    if obj.Shape:
+                        newlist.append(obj)
                 if obj.isDerivedFrom("Drawing::FeaturePage"):
                     # skip if the group is a page
                     newlist.append(obj)
@@ -1553,7 +1556,7 @@ def offset(obj,delta,copy=False,bind=False,sym=False,occ=False):
         print("the offset tool is currently unable to offset a non-Draft object directly - Creating a copy")
 
     def getRect(p,obj):
-        "returns length,heigh,placement"
+        "returns length,height,placement"
         pl = obj.Placement.copy()
         pl.Base = p[0]
         diag = p[2].sub(p[0])
@@ -2900,7 +2903,7 @@ def makePoint(X=0, Y=0, Z=0,color=None,name = "Point", point_size= 5):
     obj.Z = Z
     if gui:
         _ViewProviderPoint(obj.ViewObject)
-        if not color:
+        if hasattr(FreeCADGui,"draftToolBar") and (not color):
             color = FreeCADGui.draftToolBar.getDefaultColor('ui')
         obj.ViewObject.PointColor = (float(color[0]), float(color[1]), float(color[2]))
         obj.ViewObject.PointSize = point_size
@@ -5358,10 +5361,12 @@ class _Shape2DView(_DraftObject):
         obj.addProperty("App::PropertyBool","Tessellation","Draft",QT_TRANSLATE_NOOP("App::Property","Tessellate Ellipses and B-splines into line segments"))
         obj.addProperty("App::PropertyBool","InPlace","Draft",QT_TRANSLATE_NOOP("App::Property","For Cutlines and Cutfaces modes, this leaves the faces at the cut location"))
         obj.addProperty("App::PropertyFloat","SegmentLength","Draft",QT_TRANSLATE_NOOP("App::Property","Length of line segments if tessellating Ellipses or B-splines into line segments"))
+        obj.addProperty("App::PropertyBool","VisibleOnly","Draft",QT_TRANSLATE_NOOP("App::Property","If this is True, this object will be recomputed only if it is visible"))
         obj.Projection = Vector(0,0,1)
         obj.ProjectionMode = ["Solid","Individual Faces","Cutlines","Cutfaces"]
         obj.HiddenLines = False
         obj.Tessellation = False
+        obj.VisibleOnly = False
         obj.InPlace = True
         obj.SegmentLength = .05
         _DraftObject.__init__(self,obj,"Shape2DView")
@@ -5386,6 +5391,11 @@ class _Shape2DView(_DraftObject):
             #return DraftGeomUtils.cleanProjection(Part.makeCompound(edges))
 
     def execute(self,obj):
+        if hasattr(obj,"VisibleOnly"):
+            if obj.VisibleOnly:
+                if obj.ViewObject:
+                    if obj.ViewObject.Visibility == False:
+                        return False
         import DraftGeomUtils
         obj.positionBySupport()
         pl = obj.Placement

@@ -257,6 +257,11 @@ double QGIView::getYInClip(double y)
 
 void QGIView::updateView(bool update)
 {
+    if (getViewObject()->LockPosition.getValue()) {
+        setFlag(QGraphicsItem::ItemIsMovable, false);
+    } else {
+        setFlag(QGraphicsItem::ItemIsMovable, true);
+    }
     if (update ||
         getViewObject()->X.isTouched() ||
         getViewObject()->Y.isTouched()) {
@@ -512,7 +517,7 @@ QString QGIView::getPrefFont()
 {
     Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter().
                                          GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("Mod/TechDraw/Labels");
-    std::string fontName = hGrp->GetASCII("LabelFont", "Sans");
+    std::string fontName = hGrp->GetASCII("LabelFont", "osifont");
     return QString::fromStdString(fontName);
 }
 

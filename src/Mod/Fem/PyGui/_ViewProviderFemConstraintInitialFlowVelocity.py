@@ -27,14 +27,14 @@ __url__ = "http://www.freecadweb.org"
 
 
 import FreeCAD as App
-import FemUtils
-import FemConstraint
+import femtools.femutils as FemUtils
+from . import ViewProviderFemConstraint
 from FreeCAD import Units
 
 import FreeCADGui as Gui
 
 
-class ViewProxy(FemConstraint.ViewProxy):
+class ViewProxy(ViewProviderFemConstraint.ViewProxy):
 
     def getIcon(self):
         return ":/icons/fem-constraint-initial-flow-velocity.svg"
@@ -58,7 +58,7 @@ class _TaskPanel(object):
     def __init__(self, obj):
         self._obj = obj
         self._paramWidget = Gui.PySideUic.loadUi(
-            App.getHomePath() + "Mod/Fem/PyGui/TaskPanelFemInitialFlowVelocity.ui")
+            App.getHomePath() + "Mod/Fem/Resources/ui/InitialFlowVelocity.ui")
         self._initParamWidget()
         self.form = [self._paramWidget]
         analysis = FemUtils.findAnalysisOfMember(obj)

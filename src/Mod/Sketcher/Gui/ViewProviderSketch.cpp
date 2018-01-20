@@ -141,6 +141,7 @@ SbColor ViewProviderSketch::FullyConstrainedColor       (0.0f,1.0f,0.0f);     //
 SbColor ViewProviderSketch::ConstrDimColor              (1.0f,0.149f,0.0f);   // #FF2600 -> (255, 38,  0)
 SbColor ViewProviderSketch::ConstrIcoColor              (1.0f,0.149f,0.0f);   // #FF2600 -> (255, 38,  0)
 SbColor ViewProviderSketch::NonDrivingConstrDimColor    (0.0f,0.149f,1.0f);   // #0026FF -> (  0, 38,255)
+SbColor ViewProviderSketch::ExprBasedConstrDimColor     (1.0f,0.5f,0.149f);   // #FF7F26 -> (255, 127,  38)
 SbColor ViewProviderSketch::InformationColor            (0.0f,1.0f,0.0f);     // #00FF00 -> (  0,255,  0)
 SbColor ViewProviderSketch::PreselectColor              (0.88f,0.88f,0.0f);   // #E1E100 -> (225,225,  0)
 SbColor ViewProviderSketch::SelectColor                 (0.11f,0.68f,0.11f);  // #1CAD1C -> ( 28,173, 28)
@@ -334,7 +335,6 @@ ViewProviderSketch::ViewProviderSketch()
     
     //rubberband selection
     rubberband = new Gui::Rubberband();
-
 }
 
 ViewProviderSketch::~ViewProviderSketch()
@@ -767,7 +767,7 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                             try {
                                 Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.movePoint(%i,%i,App.Vector(%f,%f,0),%i)"
                                                        ,getObject()->getNameInDocument()
-                                                       ,GeoId, PosId, x-xInit, y-yInit, relative ? 1 : 0
+                                                       ,GeoId, PosId, x-xInit, y-yInit, 0
                                                        );
                                 Gui::Command::commitCommand();
 
@@ -1136,9 +1136,9 @@ bool ViewProviderSketch::mouseMove(const SbVec2s &cursorPos, Gui::View3DInventor
                 int GeoId;
                 Sketcher::PointPos PosId;
                 getSketchObject()->getGeoVertexIndex(edit->DragPoint, GeoId, PosId);
-                Base::Vector3d vec(x-xInit,y-yInit,0);
+                Base::Vector3d vec(x,y,0);
                 if (GeoId != Sketcher::Constraint::GeoUndef && PosId != Sketcher::none) {
-                    if (getSketchObject()->getSolvedSketch().movePoint(GeoId, PosId, vec, relative) == 0) {
+                    if (getSketchObject()->getSolvedSketch().movePoint(GeoId, PosId, vec, false) == 0) {
                         setPositionText(Base::Vector2d(x,y));
                         draw(true,false);
                         signalSolved(QString::fromLatin1("Solved in %1 sec").arg(getSketchObject()->getSolvedSketch().SolveTime));
@@ -2690,7 +2690,10 @@ void ViewProviderSketch::updateColor(void)
         else {
             if (hasDatumLabel) {
                 SoDatumLabel *l = static_cast<SoDatumLabel *>(s->getChild(CONSTRAINT_SEPARATOR_INDEX_MATERIAL_OR_DATUMLABEL));
-                l->textColor = constraint->isDriving?ConstrDimColor:NonDrivingConstrDimColor;
+
+                l->textColor = (getSketchObject()->constraintHasExpression(i) ? ExprBasedConstrDimColor: 
+                                        (constraint->isDriving ? ConstrDimColor : NonDrivingConstrDimColor));
+
             } else if (hasMaterial) {
                 m->diffuseColor = constraint->isDriving?ConstrDimColor:NonDrivingConstrDimColor;
             }
@@ -4709,18 +4712,23 @@ Restart:
                                         p0 = SbVec3f(x,y,0);
                                     }
                                 }
-                            } else {//angle-via-point
+
+                                range = Constr->getValue(); // WYSIWYG
+                                startangle = atan2(dir1.y,dir1.x);
+                            }
+                            else {//angle-via-point
                                 Base::Vector3d p = getSketchObject()->getSolvedSketch().getPoint(Constr->Third, Constr->ThirdPos);
                                 p0 = SbVec3f(p.x, p.y, 0);
                                 dir1 = getSketchObject()->getSolvedSketch().calculateNormalAtPoint(Constr->First, p.x, p.y);
                                 dir1.RotateZ(-M_PI/2);//convert to vector of tangency by rotating
                                 dir2 = getSketchObject()->getSolvedSketch().calculateNormalAtPoint(Constr->Second, p.x, p.y);
                                 dir2.RotateZ(-M_PI/2);
+
+                                startangle = atan2(dir1.y,dir1.x);
+                                range = atan2(dir1.x*dir2.y-dir1.y*dir2.x,
+                                          dir1.x*dir2.x+dir1.y*dir2.y);
                             }
 
-                            startangle = atan2(dir1.y,dir1.x);
-                            range = atan2(dir1.x*dir2.y-dir1.y*dir2.x,
-                                          dir1.x*dir2.x+dir1.y*dir2.y);
                             endangle = startangle + range;
 
                         } else if (Constr->First != Constraint::GeoUndef) {
@@ -5137,6 +5145,7 @@ bool ViewProviderSketch::setEdit(int ModNum)
 
     // clear the selection (convenience)
     Gui::Selection().clearSelection();
+    Gui::Selection().rmvPreselect();
 
     // create the container for the additional edit data
     assert(!edit);
@@ -5218,7 +5227,12 @@ bool ViewProviderSketch::setEdit(int ModNum)
     // set non-driving constraint color
     color = (unsigned long)(NonDrivingConstrDimColor.getPackedValue());
     color = hGrp->GetUnsigned("NonDrivingConstrDimColor", color);
-    NonDrivingConstrDimColor.setPackedValue((uint32_t)color, transparency);    
+    NonDrivingConstrDimColor.setPackedValue((uint32_t)color, transparency);
+    // set expression based constraint color
+    color = (unsigned long)(ExprBasedConstrDimColor.getPackedValue());
+    color = hGrp->GetUnsigned("ExprBasedConstrDimColor", color);
+    ExprBasedConstrDimColor.setPackedValue((uint32_t)color, transparency);
+
     // set the external geometry color
     color = (unsigned long)(CurveExternalColor.getPackedValue());
     color = hGrp->GetUnsigned("ExternalColor", color);
@@ -5256,6 +5270,11 @@ bool ViewProviderSketch::setEdit(int ModNum)
         ->signalUndoDocument.connect(boost::bind(&ViewProviderSketch::slotUndoDocument, this, _1));
     connectRedoDocument = Gui::Application::Instance->activeDocument()
         ->signalRedoDocument.connect(boost::bind(&ViewProviderSketch::slotRedoDocument, this, _1));
+
+    // Enable solver initial solution update while dragging.
+    ParameterGrp::handle hGrp2 = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Sketcher");
+
+    getSketchObject()->getSolvedSketch().RecalculateInitialSolutionWhileMovingPoint = hGrp2->GetBool("RecalculateInitialSolutionWhileDragging",true);
 
     return true;
 }
@@ -5837,7 +5856,11 @@ bool ViewProviderSketch::onDelete(const std::vector<std::string> &subList)
             }
         }
 
+        // We stored the vertices, but is there really a coincident constraint? Check
+        const std::vector< Sketcher::Constraint * > &vals = getSketchObject()->Constraints.getValues();
+        
         std::set<int>::const_reverse_iterator rit;
+
         for (rit = delConstraints.rbegin(); rit != delConstraints.rend(); ++rit) {
             try {
                 Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.delConstraint(%i)"
@@ -5849,12 +5872,30 @@ bool ViewProviderSketch::onDelete(const std::vector<std::string> &subList)
         }
 
         for (rit = delCoincidents.rbegin(); rit != delCoincidents.rend(); ++rit) {
-            try {
-                Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.delConstraintOnPoint(%i)"
-                                       ,getObject()->getNameInDocument(), *rit);
+            int GeoId;
+            PointPos PosId;
+
+            if (*rit == GeoEnum::RtPnt) { // RootPoint
+                GeoId = Sketcher::GeoEnum::RtPnt;
+                PosId = start;
+            } else {
+                getSketchObject()->getGeoVertexIndex(*rit, GeoId, PosId);
             }
-            catch (const Base::Exception& e) {
-                Base::Console().Error("%s\n", e.what());
+
+            if (GeoId != Constraint::GeoUndef) {
+                for (std::vector< Sketcher::Constraint * >::const_iterator it= vals.begin(); it != vals.end(); ++it) {
+                    if (((*it)->Type == Sketcher::Coincident) && (((*it)->First == GeoId && (*it)->FirstPos == PosId) ||
+                        ((*it)->Second == GeoId && (*it)->SecondPos == PosId)) ) {
+                        try {
+                            Gui::Command::doCommand(Gui::Command::Doc,"App.ActiveDocument.%s.delConstraintOnPoint(%i,%i)"
+                                                    ,getObject()->getNameInDocument(), GeoId, (int)PosId);
+                        }
+                        catch (const Base::Exception& e) {
+                            Base::Console().Error("%s\n", e.what());
+                        }
+                        break;
+                    }
+                }
             }
         }
 

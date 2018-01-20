@@ -324,7 +324,7 @@ def get_femvolumeelements_by_femfacenodes(femelement_table, node_list):
             if nodecount == 6 or nodecount == 8:
                 e.append(elementID)
         else:
-            FreeCAD.Console.PrintError('Error in get_femvolumeelements_by_femfacenodes(): not known volume element: ' + el_nd_ct + '\n')
+            FreeCAD.Console.PrintError('Error in get_femvolumeelements_by_femfacenodes(): unknown volume element: ' + el_nd_ct + '\n')
     # print(sorted(e))
     return e
 
@@ -400,13 +400,13 @@ def get_femelement_sets_from_group_data(femmesh, fem_objects):
 
 
 def get_elset_short_name(obj, i):
-    if hasattr(obj, "Proxy") and obj.Proxy.Type == 'FemMaterial':
+    if hasattr(obj, "Proxy") and obj.Proxy.Type == 'Fem::Material':
         return 'Mat' + str(i)
-    elif hasattr(obj, "Proxy") and obj.Proxy.Type == 'FemElementGeometry1D':
+    elif hasattr(obj, "Proxy") and obj.Proxy.Type == 'Fem::FemElementGeometry1D':
         return 'Beam' + str(i)
-    elif hasattr(obj, "Proxy") and obj.Proxy.Type == 'FemElementFluid1D':
+    elif hasattr(obj, "Proxy") and obj.Proxy.Type == 'Fem::FemElementFluid1D':
         return 'Fluid' + str(i)
-    elif hasattr(obj, "Proxy") and obj.Proxy.Type == 'FemElementGeometry2D':
+    elif hasattr(obj, "Proxy") and obj.Proxy.Type == 'Fem::FemElementGeometry2D':
         return 'Shell' + str(i)
     else:
         print('Error: ', obj.Name, ' --> ', obj.Proxy.Type)

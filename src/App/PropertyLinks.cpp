@@ -379,7 +379,7 @@ void PropertyLinkList::Restore(Base::XMLReader &reader)
         std::string name = reader.getAttribute("value");
         // In order to do copy/paste it must be allowed to have defined some
         // referenced objects in XML which do not exist anymore in the new
-        // document. Thus, we should silently ingore this.
+        // document. Thus, we should silently ignore this.
         // Property not in an object!
         DocumentObject* father = static_cast<DocumentObject*>(getContainer());
         App::Document* document = father->getDocument();
@@ -995,6 +995,11 @@ void PropertyLinkSubList::setPyObject(PyObject *value)
                             pcObj = static_cast<DocumentObjectPy*>(tup[0].ptr());
                             values.insert(values.end(), list.size(), pcObj->getDocumentObjectPtr());
                         }
+                    }
+                    else {
+                        std::string error = std::string("type of first item must be 'DocumentObject', not ");
+                        error += Py_TYPE(tup[0].ptr())->tp_name;
+                        throw Base::TypeError(error);
                     }
                 }
                 else if (PyObject_TypeCheck(*item, &(DocumentObjectPy::Type))) {

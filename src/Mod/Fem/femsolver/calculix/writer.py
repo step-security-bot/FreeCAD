@@ -33,7 +33,7 @@ import os
 import sys
 import time
 import femmesh.meshtools as FemMeshTools
-import FemInputWriter
+from .. import writerbase as FemInputWriter
 import six
 
 
@@ -69,14 +69,15 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
         print('FemInputWriterCcx --> self.file_name  -->  ' + self.file_name)
 
     def write_calculix_input_file(self):
+        timestart = time.clock()
         if self.solver_obj.SplitInputWriter is True:
             self.write_calculix_splitted_input_file()
         else:
             self.write_calculix_one_input_file()
+        print("Writing time input file: " + str(time.clock() - timestart) + ' \n')
         return self.file_name
 
     def write_calculix_one_input_file(self):
-        timestart = time.clock()
         self.femmesh.writeABAQUS(self.file_name, 1, False)
 
         # reopen file with "append" and add the analysis definition
@@ -163,11 +164,8 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
         # footer
         self.write_footer(inpfile)
         inpfile.close()
-        print("Writing time input file: " + str(time.clock() - timestart) + ' \n')
 
     def write_calculix_splitted_input_file(self):
-        timestart = time.clock()
-
         # reopen file with "append" and add the analysis definition
         # first open file with "write" to ensure that each new iteration of writing of inputfile starts in new file
         # first open file with "write" to ensure that the .writeABAQUS also writes in inputfile
@@ -333,7 +331,6 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
         # footer
         self.write_footer(inpfileMain)
         inpfileMain.close()
-        print("Writing time input file: " + str(time.clock() - timestart) + ' \n')
 
     def write_element_sets_material_and_femelement_type(self, f):
         f.write('\n***********************************************************\n')
@@ -463,8 +460,8 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
         f.write('** written by {} function\n'.format(sys._getframe().f_code.co_name))
         # info about self.constraint_conflict_nodes:
         # is used to check if MPC and constraint fixed and constraint displacement share same nodes,
-        # because MPC's and constriants fixed an constraints displacement can't share same nodes.
-        # thus call write_node_sets_constraints_planerotation has to be after constraint fixed and constraint displacement
+        # because MPC's and constriants fixed and constraints displacement can't share same nodes.
+        # Thus call write_node_sets_constraints_planerotation has to be after constraint fixed and constraint displacement
         for femobj in self.planerotation_objects:  # femobj --> dict, FreeCAD document object is femobj['Object']
             l_nodes = femobj['Nodes']
             fric_obj = femobj['Object']
@@ -1001,7 +998,7 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
                             for line in lines:
                                 b = line.split(',')
                                 if int(b[0]) == n and b[3] == 'PIPE INLET\n':
-                                    f.write(b[1] + ',1,1,' + str(fluidsection_obj.InletFlowRate * 0.001) + '\n')  # degree of freedom 1 is for defining flow rate, factor applied to convet unit from kg/s to t/s
+                                    f.write(b[1] + ',1,1,' + str(fluidsection_obj.InletFlowRate * 0.001) + '\n')  # degree of freedom 1 is for defining flow rate, factor applied to convert unit from kg/s to t/s
                 elif fluidsection_obj.LiquidSectionType == 'PIPE OUTLET':
                     f.write('**Fluid Section Outlet \n')
                     if fluidsection_obj.OutletPressureActive is True:
@@ -1017,7 +1014,7 @@ class FemInputWriterCcx(FemInputWriter.FemInputWriter):
                             for line in lines:
                                 b = line.split(',')
                                 if int(b[0]) == n and b[3] == 'PIPE OUTLET\n':
-                                    f.write(b[1] + ',1,1,' + str(fluidsection_obj.OutletFlowRate * 0.001) + '\n')  # degree of freedom 1 is for defining flow rate, factor applied to convet unit from kg/s to t/s
+                                    f.write(b[1] + ',1,1,' + str(fluidsection_obj.OutletFlowRate * 0.001) + '\n')  # degree of freedom 1 is for defining flow rate, factor applied to convert unit from kg/s to t/s
 
     def write_outputs_types(self, f):
         f.write('\n***********************************************************\n')

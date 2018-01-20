@@ -27,15 +27,15 @@ __url__ = "http://www.freecadweb.org"
 
 
 import FreeCAD as App
-import FemUtils
-import FemConstraint
+import femtools.femutils as FemUtils
+from . import ViewProviderFemConstraint
 from FreeCAD import Units
 
 import FreeCADGui as Gui
 from . import FemSelectionWidgets
 
 
-class ViewProxy(FemConstraint.ViewProxy):
+class ViewProxy(ViewProviderFemConstraint.ViewProxy):
 
     def getIcon(self):
         return ":/icons/fem-constraint-flow-velocity.svg"
@@ -61,12 +61,16 @@ class _TaskPanel(object):
         self._refWidget = FemSelectionWidgets.BoundarySelector()
         self._refWidget.setReferences(obj.References)
         self._paramWidget = Gui.PySideUic.loadUi(
-            App.getHomePath() + "Mod/Fem/PyGui/TaskPanelFemFlowVelocity.ui")
+            App.getHomePath() + "Mod/Fem/Resources/ui/FlowVelocity.ui")
         self._initParamWidget()
         self.form = [self._refWidget, self._paramWidget]
         analysis = FemUtils.findAnalysisOfMember(obj)
         self._mesh = FemUtils.getSingleMember(analysis, "Fem::FemMeshObject")
-        self._part = self._mesh.Part if self._mesh is not None else None
+        self._part = None
+        if hasattr(self._mesh, "Part"):  # Geometry of Gmesh mesh obj
+            self._part = self._mesh.Part
+        elif hasattr(self._mesh, "Shape"):  # Geometry of Netgen mesh obj
+            self._part = self._mesh.Shape
         self._partVisible = None
         self._meshVisible = None
 

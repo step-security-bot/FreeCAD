@@ -277,7 +277,7 @@ class DraftTool:
         self.commitList.append((name,func))
 
     def getStrings(self,addrot=None):
-        "returns a couple of useful strings fro building python commands"
+        "returns a couple of useful strings for building python commands"
 
         # current plane rotation
         p = plane.getRotation()
@@ -538,6 +538,9 @@ class Line(Creator):
                 self.ui.wireUi(name)
             else:
                 self.ui.lineUi(name)
+            if sys.version_info.major < 3:
+                if isinstance(self.featureName,unicode):
+                    self.featureName = self.featureName.encode("utf8")
             self.obj=self.doc.addObject("Part::Feature",self.featureName)
             # self.obj.ViewObject.Selectable = False
             Draft.formatObject(self.obj)
@@ -917,7 +920,8 @@ class BezCurve(Line):
     def finish(self,closed=False,cont=False):
         "terminates the operation and closes the poly if asked"
         if self.ui:
-            self.bezcurvetrack.finalize()
+            if hasattr(self,"bezcurvetrack"):
+                self.bezcurvetrack.finalize()
         if not Draft.getParam("UiMode",1):
             FreeCADGui.Control.closeDialog()
         if self.obj:
@@ -1783,7 +1787,9 @@ class Text(Creator):
         for l in self.text:
             if len(tx) > 1:
                 tx += ','
-            tx += '"'+str(unicode(l).encode("utf8"))+'"' #Python3 no more unicode
+            if sys.version_info.major < 3:
+                l = unicode(l)
+            tx += '"'+str(l.encode("utf8"))+'"' #Python3 no more unicode
         tx += ']'
         FreeCADGui.addModule("Draft")
         self.commit(translate("draft","Create Text"),
@@ -5107,8 +5113,8 @@ class Draft_Slope():
 
     def GetResources(self):
         return {'Pixmap'  : 'Draft_Slope',
-                'MenuText': QtCore.QT_TRANSLATE_NOOP("Draft_Slope", "Set slope"),
-                'ToolTip' : QtCore.QT_TRANSLATE_NOOP("Draft_Slope", "Sets the slope of a selected line or wire")}
+                'MenuText': QtCore.QT_TRANSLATE_NOOP("Draft_Slope", "Set Slope"),
+                'ToolTip' : QtCore.QT_TRANSLATE_NOOP("Draft_Slope", "Sets the slope of a selected Line or Wire")}
 
     def Activated(self):
         if not FreeCADGui.Selection.getSelection():
@@ -5127,7 +5133,7 @@ class Draft_Slope():
         self.spinbox.setMinimum(-9999.99)
         self.spinbox.setMaximum(9999.99)
         self.spinbox.setSingleStep(0.01)
-        self.spinbox.setToolTip(translate("Draft", "Slope to give toselected Wires/Lines: 0 = horizontal, 1 = 45deg up, -1 = 45deg down"))
+        self.spinbox.setToolTip(translate("Draft", "Slope to give selected Wires/Lines: 0 = horizontal, 1 = 45deg up, -1 = 45deg down"))
         layout.addWidget(self.spinbox)
         taskwidget = QtGui.QWidget()
         taskwidget.form = w

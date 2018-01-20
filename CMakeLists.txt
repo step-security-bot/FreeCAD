@@ -194,7 +194,7 @@ endif(MSVC)
 OPTION(BUILD_QT5 "Build with Qt5." OFF)
 OPTION(BUILD_QT5_WEBKIT "Build with Qt5." ON)
 OPTION(BUILD_GUI "Build FreeCAD Gui. Otherwise you have only the command line and the Python import module." ON)
-OPTION(FREECAD_MAINTAINERS_BUILD "Build FreeCAD for Maintainers, with Docu and 3rd party libs. On Windows the Installer is build." OFF)
+OPTION(FREECAD_MAINTAINERS_BUILD "Build FreeCAD for Maintainers, with Docu and 3rd party libs. On Windows the Installer is built." OFF)
 OPTION(FREECAD_USE_EXTERNAL_ZIPIOS "Use system installed zipios++ instead of the bundled." OFF)
 OPTION(FREECAD_USE_EXTERNAL_SMESH "Use system installed smesh instead of the bundled." OFF)
 OPTION(FREECAD_USE_EXTERNAL_KDL "Use system installed orocos-kdl instead of the bundled." OFF)
@@ -921,8 +921,15 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
     if(BUILD_QT5)
         # set(PYTHON_SUFFIX -python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
-        SET(PYTHON_SUFFIX -python2.7) # for shiboken
-        SET(PYTHON_BASENAME -python2.7) # for PySide
+        # Below are two variables that can be left empty for standard python 3 version,
+        # but must be set by the user for different python versions such as 2.7, 3.5 ...
+        if (PYTHON_VERSION_MAJOR LESS 3)
+            SET(PYTHON_SUFFIX -python2.7 CACHE STRING "Shiboken cmake file suffix. If left empty, system default will be used: <ShibokenConfigPYTHON_SUFFIX.cmake>")
+            SET(PYTHON_BASENAME -python2.7 CACHE STRING "Same as PYTHON_SUFFIX but for PySide. If left empty, PYTHON_SUFFIX will be used: <PySideConfigPYTHON_BASENAME.cmake>")
+        else()
+            SET(PYTHON_SUFFIX "" CACHE STRING "Shiboken cmake file suffix. If left empty, system default will be used: <ShibokenConfigPYTHON_SUFFIX.cmake>")
+            SET(PYTHON_BASENAME "" CACHE STRING "Same as PYTHON_SUFFIX but for PySide. If left empty, PYTHON_SUFFIX will be used: <PySideConfigPYTHON_BASENAME.cmake>")
+        endif()
 
         if(DEFINED MACPORTS_PREFIX)
             find_package(Shiboken REQUIRED HINTS "${PYTHON_LIBRARY_DIR}/cmake")
@@ -946,7 +953,9 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         find_package(PySide2Tools REQUIRED) # PySide2 utilities (pyside2-uic & pyside2-rcc)
 
         file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Ext/PySide)
-        file(WRITE ${CMAKE_BINARY_DIR}/Ext/PySide/__init__.py "# PySide wrapper\n")
+        file(WRITE ${CMAKE_BINARY_DIR}/Ext/PySide/__init__.py "# PySide wrapper\n"
+                                                              "from PySide2 import __version__\n"
+                                                              "from PySide2 import __version_info__\n")
         file(WRITE ${CMAKE_BINARY_DIR}/Ext/PySide/QtCore.py "from PySide2.QtCore import *\n\n"
                                                             "#QCoreApplication.CodecForTr=0\n"
                                                             "#QCoreApplication.UnicodeUTF8=1\n")
@@ -971,15 +980,17 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
             )
 	endif()
     else()
-        if (PYTHON_VERSION_MAJOR LESS 3)
-            SET(PYTHON_SUFFIX -python2.7)
-            SET(PYTHON_BASENAME -python2.7)
-        else(PYTHON_VERSION_MAJOR LESS 3)
         # set(PYTHON_SUFFIX -python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
-        # below are two variables that can be left empty for standard python, but must be set by the user for different python versions such as 3.5
-            SET(PYTHON_SUFFIX "" CACHE STRING "Shiboken cmake file suffix. If left empty, system default python version will be used: <ShibokenConfigPYTHON_SUFFIX.cmake>")
-            SET(PYTHON_BASENAME "" CACHE STRING "Same as PYTHON_SUFFIX but for PySide. if left empty, PYTHON_SUFFIX will be used: <PySideConfigPYTHON_BASENAME.cmake>")
-        endif(PYTHON_VERSION_MAJOR LESS 3)
+        # Below are two variables that can be left empty for standard python 3 version,
+        # but must be set by the user for different python versions such as 2.7, 3.5 ...
+        if (PYTHON_VERSION_MAJOR LESS 3)
+            SET(PYTHON_SUFFIX -python2.7 CACHE STRING "Shiboken cmake file suffix. If left empty, system default will be used: <ShibokenConfigPYTHON_SUFFIX.cmake>")
+            SET(PYTHON_BASENAME -python2.7 CACHE STRING "Same as PYTHON_SUFFIX but for PySide. If left empty, PYTHON_SUFFIX will be used: <PySideConfigPYTHON_BASENAME.cmake>")
+        else()
+            SET(PYTHON_SUFFIX "" CACHE STRING "Shiboken cmake file suffix. If left empty, system default will be used: <ShibokenConfigPYTHON_SUFFIX.cmake>")
+            SET(PYTHON_BASENAME "" CACHE STRING "Same as PYTHON_SUFFIX but for PySide. If left empty, PYTHON_SUFFIX will be used: <PySideConfigPYTHON_BASENAME.cmake>")
+        endif()
+
         if(DEFINED MACPORTS_PREFIX)
             find_package(Shiboken REQUIRED HINTS "${PYTHON_LIBRARY_DIR}/cmake")
             find_package(PySide REQUIRED HINTS "${PYTHON_LIBRARY_DIR}/cmake")
@@ -1077,7 +1088,7 @@ IF(MSVC)
 	ENDIF(FREECAD_RELEASE_PDB)
 
 	# Mark 32 bit executables large address aware so they can use > 2GB address space
-	# NOTE: This setting only has an effect on machines with at least 3GB of RAM, although it sets the linker option it doesn't set the the linker switch 'Enable Large Addresses'
+	# NOTE: This setting only has an effect on machines with at least 3GB of RAM, although it sets the linker option it doesn't set the linker switch 'Enable Large Addresses'
 	IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 		set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /LARGEADDRESSAWARE")
 		SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /LARGEADDRESSAWARE")
