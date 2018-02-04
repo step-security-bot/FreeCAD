@@ -20,10 +20,22 @@
 # *                                                                         *
 # ***************************************************************************
 
-__title__ = "Fem object modules"
+__title__ = "FemElementRotation1D"
 __author__ = "Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
-## @package PyObjects
-#  \ingroup Fem
-#  \brief Fem objects module
+## @package FemElementRotation1D
+#  \ingroup FEM
+
+
+class _FemElementRotation1D:
+    "The FemElementRotation1D object"
+
+    def __init__(self, obj):
+        obj.addProperty("App::PropertyAngle", "Rotation", "BeamRotation", "Set the rotation of beam elements")
+        obj.addProperty("App::PropertyLinkSubList", "References", "BeamRotation", "List of beam rotation shapes")
+        obj.Proxy = self
+        self.Type = "Fem::FemElementRotation1D"
+
+    def execute(self, obj):
+        return

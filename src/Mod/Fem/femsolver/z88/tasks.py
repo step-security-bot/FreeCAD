@@ -64,7 +64,7 @@ class Prepare(run.Prepare):
             c.selfweight_constraints, c.force_constraints,
             c.pressure_constraints, c.temperature_constraints,
             c.heatflux_constraints, c.initialtemperature_constraints,
-            c.beam_sections, c.shell_thicknesses, c.fluid_sections,
+            c.beam_sections, c.beam_rotations, c.shell_thicknesses, c.fluid_sections,
             self.solver.AnalysisType, self.directory)
         path = w.write_z88_input()
         # report to user if task succeeded
@@ -80,9 +80,9 @@ class Prepare(run.Prepare):
 class Solve(run.Solve):
 
     def run(self):
-        # AFAIK: z88r needs to be run twice, once in test mode ond once in real solve mode
-        # the subprocess was just copied, it seams to work :-)
-        # TODO: search out for "Vektor GS" and "Vektor KOI" and print values, may be compare with the used ones
+        # AFAIK: z88r needs to be run twice, once in test mode and once in real solve mode
+        # the subprocess was just copied, it seems to work :-)
+        # TODO: search out for "Vektor GS" and "Vektor KOI" and print values, may be compared with the used ones
         self.pushStatus("Executing test solver...\n")
         binary = settings.getBinary("Z88")
         self._process = subprocess.Popen(
@@ -163,6 +163,7 @@ class _Container(object):
         self.force_constraints = []
         self.pressure_constraints = []
         self.beam_sections = []
+        self.beam_rotations = []
         self.fluid_sections = []
         self.shell_thicknesses = []
         self.displacement_constraints = []
@@ -237,6 +238,10 @@ class _Container(object):
                 beam_section_dict = {}
                 beam_section_dict['Object'] = m
                 self.beam_sections.append(beam_section_dict)
+            elif hasattr(m, "Proxy") and m.Proxy.Type == "Fem::FemElementRotation1D":
+                beam_rotation_dict = {}
+                beam_rotation_dict['Object'] = m
+                self.beam_rotations.append(beam_rotation_dict)
             elif hasattr(m, "Proxy") and m.Proxy.Type == "Fem::FemElementFluid1D":
                 fluid_section_dict = {}
                 fluid_section_dict['Object'] = m
@@ -249,11 +254,11 @@ class _Container(object):
     def get_refshape_type(self, fem_doc_object):
         # returns the reference shape type
         # for force object:
-        # in GUI defined frc_obj all frc_obj have at leas one ref_shape and ref_shape have all the same shape type
+        # in GUI defined frc_obj all frc_obj have at least one ref_shape and ref_shape have all the same shape type
         # for material object:
         # in GUI defined material_obj could have no RefShape and RefShapes could be different type
-        # we gone need the RefShapes to be the same type inside one fem_doc_object
-        # TODO here: check if all RefShapes inside the object really have the same type
+        # we're going to need the RefShapes to be the same type inside one fem_doc_object
+        # TODO: check if all RefShapes inside the object really have the same type
         import femmesh.meshtools as FemMeshTools
         if hasattr(fem_doc_object, 'References') and fem_doc_object.References:
             first_ref_obj = fem_doc_object.References[0]

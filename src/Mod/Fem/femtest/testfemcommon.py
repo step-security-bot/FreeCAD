@@ -373,6 +373,7 @@ class FemTest(unittest.TestCase):
         analysis.addObject(ObjectsFem.makeElementFluid1D(doc))
         analysis.addObject(ObjectsFem.makeElementGeometry1D(doc))
         analysis.addObject(ObjectsFem.makeElementGeometry2D(doc))
+        analysis.addObject(ObjectsFem.makeElementRotation1D(doc))
 
         analysis.addObject(ObjectsFem.makeMaterialFluid(doc))
         mat = analysis.addObject(ObjectsFem.makeMaterialSolid(doc))[0]
@@ -429,6 +430,7 @@ class FemTest(unittest.TestCase):
         self.assertEqual('Fem::FemElementFluid1D', typeOfObj(ObjectsFem.makeElementFluid1D(doc)))
         self.assertEqual('Fem::FemElementGeometry1D', typeOfObj(ObjectsFem.makeElementGeometry1D(doc)))
         self.assertEqual('Fem::FemElementGeometry2D', typeOfObj(ObjectsFem.makeElementGeometry2D(doc)))
+        self.assertEqual('Fem::FemElementRotation1D', typeOfObj(ObjectsFem.makeElementRotation1D(doc)))
         materialsolid = ObjectsFem.makeMaterialSolid(doc)
         self.assertEqual('Fem::Material', typeOfObj(ObjectsFem.makeMaterialFluid(doc)))
         self.assertEqual('Fem::Material', typeOfObj(materialsolid))
@@ -442,7 +444,7 @@ class FemTest(unittest.TestCase):
         self.assertEqual('Fem::FemMeshResult', typeOfObj(ObjectsFem.makeMeshResult(doc)))
         self.assertEqual('Fem::FemResultMechanical', typeOfObj(ObjectsFem.makeResultMechanical(doc)))
         solverelmer = ObjectsFem.makeSolverElmer(doc)
-        self.assertEqual('Fem::FemSolverCalculix', typeOfObj(ObjectsFem.makeSolverCalculixCcxTools(doc)))
+        self.assertEqual('Fem::FemSolverCalculixCcxTools', typeOfObj(ObjectsFem.makeSolverCalculixCcxTools(doc)))
         self.assertEqual('Fem::FemSolverObjectCalculix', typeOfObj(ObjectsFem.makeSolverCalculix(doc)))
         self.assertEqual('Fem::FemSolverObjectElmer', typeOfObj(solverelmer))
         self.assertEqual('Fem::FemSolverObjectZ88', typeOfObj(ObjectsFem.makeSolverZ88(doc)))
@@ -480,6 +482,7 @@ class FemTest(unittest.TestCase):
         self.assertTrue(isOfTypeNew(ObjectsFem.makeElementFluid1D(doc), 'Fem::FemElementFluid1D'))
         self.assertTrue(isOfTypeNew(ObjectsFem.makeElementGeometry1D(doc), 'Fem::FemElementGeometry1D'))
         self.assertTrue(isOfTypeNew(ObjectsFem.makeElementGeometry2D(doc), 'Fem::FemElementGeometry2D'))
+        self.assertTrue(isOfTypeNew(ObjectsFem.makeElementRotation1D(doc), 'Fem::FemElementRotation1D'))
         materialsolid = ObjectsFem.makeMaterialSolid(doc)
         self.assertTrue(isOfTypeNew(ObjectsFem.makeMaterialFluid(doc), 'Fem::Material'))
         self.assertTrue(isOfTypeNew(materialsolid, 'Fem::Material'))
@@ -493,7 +496,7 @@ class FemTest(unittest.TestCase):
         self.assertTrue(isOfTypeNew(ObjectsFem.makeMeshResult(doc), 'Fem::FemMeshResult'))
         self.assertTrue(isOfTypeNew(ObjectsFem.makeResultMechanical(doc), 'Fem::FemResultMechanical'))
         solverelmer = ObjectsFem.makeSolverElmer(doc)
-        self.assertTrue(isOfTypeNew(ObjectsFem.makeSolverCalculixCcxTools(doc), 'Fem::FemSolverCalculix'))
+        self.assertTrue(isOfTypeNew(ObjectsFem.makeSolverCalculixCcxTools(doc), 'Fem::FemSolverCalculixCcxTools'))
         self.assertTrue(isOfTypeNew(ObjectsFem.makeSolverCalculix(doc), 'Fem::FemSolverObjectCalculix'))
         self.assertTrue(isOfTypeNew(solverelmer, 'Fem::FemSolverObjectElmer'))
         self.assertTrue(isOfTypeNew(ObjectsFem.makeSolverZ88(doc), 'Fem::FemSolverObjectZ88'))
@@ -530,6 +533,7 @@ class FemTest(unittest.TestCase):
         self.assertTrue(isDerivedFromFem(ObjectsFem.makeElementFluid1D(doc), 'Fem::FemElementFluid1D'))
         self.assertTrue(isDerivedFromFem(ObjectsFem.makeElementGeometry1D(doc), 'Fem::FemElementGeometry1D'))
         self.assertTrue(isDerivedFromFem(ObjectsFem.makeElementGeometry2D(doc), 'Fem::FemElementGeometry2D'))
+        self.assertTrue(isDerivedFromFem(ObjectsFem.makeElementRotation1D(doc), 'Fem::FemElementRotation1D'))
         materialsolid = ObjectsFem.makeMaterialSolid(doc)
         self.assertTrue(isDerivedFromFem(ObjectsFem.makeMaterialFluid(doc), 'Fem::Material'))
         self.assertTrue(isDerivedFromFem(materialsolid, 'Fem::Material'))
@@ -543,7 +547,7 @@ class FemTest(unittest.TestCase):
         self.assertTrue(isDerivedFromFem(ObjectsFem.makeMeshResult(doc), 'Fem::FemMeshResult'))
         self.assertTrue(isDerivedFromFem(ObjectsFem.makeResultMechanical(doc), 'Fem::FemResultMechanical'))
         solverelmer = ObjectsFem.makeSolverElmer(doc)
-        self.assertTrue(isDerivedFromFem(ObjectsFem.makeSolverCalculixCcxTools(doc), 'Fem::FemSolverCalculix'))
+        self.assertTrue(isDerivedFromFem(ObjectsFem.makeSolverCalculixCcxTools(doc), 'Fem::FemSolverCalculixCcxTools'))
         self.assertTrue(isDerivedFromFem(ObjectsFem.makeSolverCalculix(doc), 'Fem::FemSolverObjectCalculix'))
         self.assertTrue(isDerivedFromFem(solverelmer, 'Fem::FemSolverObjectElmer'))
         self.assertTrue(isDerivedFromFem(ObjectsFem.makeSolverZ88(doc), 'Fem::FemSolverObjectZ88'))
@@ -579,6 +583,7 @@ class FemTest(unittest.TestCase):
         self.assertTrue(ObjectsFem.makeElementFluid1D(doc).isDerivedFrom('Fem::FeaturePython'))
         self.assertTrue(ObjectsFem.makeElementGeometry1D(doc).isDerivedFrom('Fem::FeaturePython'))
         self.assertTrue(ObjectsFem.makeElementGeometry2D(doc).isDerivedFrom('Fem::FeaturePython'))
+        self.assertTrue(ObjectsFem.makeElementRotation1D(doc).isDerivedFrom('Fem::FeaturePython'))
         materialsolid = ObjectsFem.makeMaterialSolid(doc)
         self.assertTrue(ObjectsFem.makeMaterialFluid(doc).isDerivedFrom('App::MaterialObjectPython'))
         self.assertTrue(materialsolid.isDerivedFrom('App::MaterialObjectPython'))
@@ -602,6 +607,22 @@ class FemTest(unittest.TestCase):
         self.assertTrue(ObjectsFem.makeEquationFluxsolver(doc, solverelmer).isDerivedFrom('App::FeaturePython'))
         self.assertTrue(ObjectsFem.makeEquationHeat(doc, solverelmer).isDerivedFrom('App::FeaturePython'))
 
+    def test_adding_refshaps(self):
+        doc = self.active_doc
+        slab = doc.addObject("Part::Plane", "Face")
+        slab.Length = 500.00
+        slab.Width = 500.00
+        cf = ObjectsFem.makeConstraintFixed(doc)
+        ref_eles = []
+        # FreeCAD list property seam not to support append, thus we need some workaround, which is on many elements even much faster
+        for i, face in enumerate(slab.Shape.Edges):
+            ref_eles.append("Edge%d" % (i + 1))
+        cf.References = [(slab, ref_eles)]
+        doc.recompute()
+        expected_reflist = [(slab, ('Edge1', 'Edge2', 'Edge3', 'Edge4'))]
+        assert_err_message = 'Adding reference shapes did not result in expected list ' + str(cf.References) + ' != ' + str(expected_reflist)
+        self.assertEqual(cf.References, expected_reflist, assert_err_message)
+
     def test_pyimport_all_FEM_modules(self):
         # we're going to try to import all python modules from FreeCAD Fem
         pymodules = []
@@ -612,10 +633,10 @@ class FemTest(unittest.TestCase):
         pymodules += collect_python_modules('femmesh')
         pymodules += collect_python_modules('femresult')
         pymodules += collect_python_modules('femtest')
-        pymodules += collect_python_modules('PyObjects')
+        pymodules += collect_python_modules('femobjects')
         if FreeCAD.GuiUp:
             pymodules += collect_python_modules('femcommands')
-            pymodules += collect_python_modules('PyGui')
+            pymodules += collect_python_modules('femguiobjects')
         pymodules += collect_python_modules('femsolver')
         pymodules += collect_python_modules('femsolver/elmer')
         pymodules += collect_python_modules('femsolver/elmer/equations')
@@ -1307,7 +1328,7 @@ class SolverFrameWorkTest(unittest.TestCase):
         solver_elmer_eqobj = ObjectsFem.makeEquationElasticity(self.active_doc, solver_elmer_object)
         self.assertTrue(solver_elmer_eqobj, "FemTest of elmer elasticity equation failed")
 
-        # set ThermalExpansionCoefficient, current elmer seams to need it even on simple elasticity analysis
+        # set ThermalExpansionCoefficient, current elmer seems to need it even on simple elasticity analysis
         mat = material_object.Material
         mat['ThermalExpansionCoefficient'] = "0 um/m/K"  # FIXME elmer elasticity needs the dictionary key, otherwise it fails
         material_object.Material = mat

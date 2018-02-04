@@ -1,6 +1,6 @@
 # ***************************************************************************
 # *                                                                         *
-# *   Copyright (c) 2015 - Bernd Hahnebach <bernd@bimstatik.org>            *
+# *   Copyright (c) 2017 - Bernd Hahnebach <bernd@bimstatik.org>            *
 # *                                                                         *
 # *   This program is free software; you can redistribute it and/or modify  *
 # *   it under the terms of the GNU Lesser General Public License (LGPL)    *
@@ -20,11 +20,11 @@
 # *                                                                         *
 # ***************************************************************************
 
-__title__ = "_ViewProviderFemElementGeometry1D"
+__title__ = "_ViewProviderFemElementRotation1D"
 __author__ = "Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
-## @package ViewProviderFemElementGeometry1D
+## @package ViewProviderFemElementRotation1D
 #  \ingroup FEM
 
 import FreeCAD
@@ -32,19 +32,17 @@ import FreeCADGui
 
 
 # for the panel
-from PyObjects import _FemElementGeometry1D
 from PySide import QtCore
 from PySide import QtGui
 
 
-class _ViewProviderFemElementGeometry1D:
-    "A View Provider for the FemElementGeometry1D object"
-
+class _ViewProviderFemElementRotation1D:
+    "A View Provider for the FemElementRotation1D object"
     def __init__(self, vobj):
         vobj.Proxy = self
 
     def getIcon(self):
-        return ":/icons/fem-beam-section.svg"
+        return ":/icons/fem-beam-rotation.svg"
 
     def attach(self, vobj):
         from pivy import coin
@@ -65,8 +63,10 @@ class _ViewProviderFemElementGeometry1D:
     def onChanged(self, vobj, prop):
         return
 
+    '''
+    # do not activate the task panel, since rotation with reference shapes is not yet supported
     def setEdit(self, vobj, mode=0):
-        taskd = _TaskPanelFemElementGeometry1D(self.Object)
+        taskd = _TaskPanelFemElementRotation1D(self.Object)
         taskd.obj = vobj.Object
         FreeCADGui.Control.showDialog(taskd)
         return True
@@ -82,6 +82,7 @@ class _ViewProviderFemElementGeometry1D:
         else:
             FreeCAD.Console.PrintError('Active Task Dialog found! Please close this one first!\n')
         return True
+    '''
 
     def __getstate__(self):
         return None
@@ -90,35 +91,27 @@ class _ViewProviderFemElementGeometry1D:
         return None
 
 
-class _TaskPanelFemElementGeometry1D:
-    '''The TaskPanel for editing References property of FemElementGeometry1D objects'''
-
+class _TaskPanelFemElementRotation1D:
+    '''The TaskPanel for editing References property of FemElementRotation1D objects'''
     def __init__(self, obj):
         FreeCADGui.Selection.clearSelection()
         self.sel_server = None
         self.obj = obj
         self.obj_notvisible = []
 
-        self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Fem/Resources/ui/ElementGeometry1D.ui")
-        QtCore.QObject.connect(self.form.cb_crosssectiontype, QtCore.SIGNAL("activated(int)"), self.sectiontype_changed)
-        QtCore.QObject.connect(self.form.if_rec_height, QtCore.SIGNAL("valueChanged(Base::Quantity)"), self.rec_height_changed)
-        QtCore.QObject.connect(self.form.if_rec_width, QtCore.SIGNAL("valueChanged(Base::Quantity)"), self.rec_width_changed)
-        QtCore.QObject.connect(self.form.if_circ_diameter, QtCore.SIGNAL("valueChanged(Base::Quantity)"), self.circ_diameter_changed)
-        QtCore.QObject.connect(self.form.if_pipe_diameter, QtCore.SIGNAL("valueChanged(Base::Quantity)"), self.pipe_diameter_changed)
-        QtCore.QObject.connect(self.form.if_pipe_thickness, QtCore.SIGNAL("valueChanged(Base::Quantity)"), self.pipe_thickness_changed)
+        self.form = FreeCADGui.PySideUic.loadUi(FreeCAD.getHomePath() + "Mod/Fem/Resources/ui/ElementRotation1D.ui")
+        QtCore.QObject.connect(self.form.if_rotation, QtCore.SIGNAL("valueChanged(Base::Quantity)"), self.rotation_changed)
         QtCore.QObject.connect(self.form.pushButton_Reference, QtCore.SIGNAL("clicked()"), self.add_references)
         self.form.list_References.itemSelectionChanged.connect(self.select_clicked_reference_shape)
         self.form.list_References.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.form.list_References.connect(self.form.list_References, QtCore.SIGNAL("customContextMenuRequested(QPoint)"), self.references_list_right_clicked)
-
-        self.form.cb_crosssectiontype.addItems(_FemElementGeometry1D._FemElementGeometry1D.known_beam_types)  # it is inside the class thus double _FemElementGeometry1D
 
         self.get_beamsection_props()
         self.update()
 
     def accept(self):
         self.setback_listobj_visibility()
-        self.set_beamsection_props()
+        self.set_beamrotation_props()
         if self.sel_server:
             FreeCADGui.Selection.removeObserver(self.sel_server)
         FreeCADGui.ActiveDocument.resetEdit()
@@ -137,53 +130,19 @@ class _TaskPanelFemElementGeometry1D:
         if self.obj.References:
             self.tuplereferences = self.obj.References
             self.get_references()
-        self.SectionType = self.obj.SectionType
-        self.RectHeight = self.obj.RectHeight
-        self.RectWidth = self.obj.RectWidth
-        self.CircDiameter = self.obj.CircDiameter
-        self.PipeDiameter = self.obj.PipeDiameter
-        self.PipeThickness = self.obj.PipeThickness
+        self.Rotation = self.obj.Rotation
 
-    def set_beamsection_props(self):
+    def set_beamrotation_props(self):
         self.obj.References = self.references
-        self.obj.SectionType = self.SectionType
-        self.obj.RectHeight = self.RectHeight
-        self.obj.RectWidth = self.RectWidth
-        self.obj.CircDiameter = self.CircDiameter
-        self.obj.PipeDiameter = self.PipeDiameter
-        self.obj.PipeThickness = self.PipeThickness
+        self.obj.Rotation = self.Rotation
 
     def update(self):
         'fills the widgets'
-        index_crosssectiontype = self.form.cb_crosssectiontype.findText(self.SectionType)
-        self.form.cb_crosssectiontype.setCurrentIndex(index_crosssectiontype)
-        self.form.if_rec_height.setText(self.RectHeight.UserString)
-        self.form.if_rec_width.setText(self.RectWidth.UserString)
-        self.form.if_circ_diameter.setText(self.CircDiameter.UserString)
-        self.form.if_pipe_diameter.setText(self.PipeDiameter.UserString)
-        self.form.if_pipe_thickness.setText(self.PipeThickness.UserString)
+        self.form.if_rotation.setText(self.Rotation.UserString)
         self.rebuild_list_References()
 
-    def sectiontype_changed(self, index):
-        if index < 0:
-            return
-        self.form.cb_crosssectiontype.setCurrentIndex(index)
-        self.SectionType = str(self.form.cb_crosssectiontype.itemText(index))  # form returns unicode
-
-    def rec_height_changed(self, base_quantity_value):
-        self.RectHeight = base_quantity_value
-
-    def rec_width_changed(self, base_quantity_value):
-        self.RectWidth = base_quantity_value
-
-    def circ_diameter_changed(self, base_quantity_value):
-        self.CircDiameter = base_quantity_value
-
-    def pipe_diameter_changed(self, base_quantity_value):
-        self.PipeDiameter = base_quantity_value
-
-    def pipe_thickness_changed(self, base_quantity_value):
-        self.PipeThickness = base_quantity_value
+    def rotation_changed(self, base_quantity_value):
+        self.Rotation = base_quantity_value
 
     def get_references(self):
         for ref in self.tuplereferences:
