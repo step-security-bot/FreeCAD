@@ -59,6 +59,7 @@
 #include "QGICaption.h"
 #include "QGCustomClip.h"
 #include "QGIViewClip.h"
+#include "ViewProviderDrawingView.h"
 
 #include <Mod/TechDraw/App/DrawViewClip.h>
 #include <Mod/TechDraw/App/DrawProjGroup.h>
@@ -310,7 +311,7 @@ void QGIView::setViewFeature(TechDraw::DrawView *obj)
 
     viewObj = obj;
     viewName = obj->getNameInDocument();
-    
+
     //mark the actual QGraphicsItem so we can check what's in the scene later
     setData(0,QString::fromUtf8("QGIV"));
     setData(1,QString::fromUtf8(obj->getNameInDocument()));
@@ -354,7 +355,8 @@ void QGIView::drawCaption()
     QPointF displayCenter = displayArea.center();
     m_caption->setX(displayCenter.x() - captionArea.width()/2.);
     double labelHeight = (1 - labelCaptionFudge) * m_label->boundingRect().height();
-    if (borderVisible || viewObj->KeepLabel.getValue()) {            //place below label if label visible
+    auto vp = static_cast<ViewProviderDrawingView*>(getViewProvider(getViewObject()));
+    if (borderVisible || vp->KeepLabel.getValue()) {            //place below label if label visible
         m_caption->setY(displayArea.bottom() + labelHeight);
     } else {
         m_caption->setY(displayArea.bottom() + labelCaptionFudge * getPrefFontSize());
@@ -366,7 +368,8 @@ void QGIView::drawBorder()
 {
     drawCaption();
     //show neither
-    if (!borderVisible && !viewObj->KeepLabel.getValue()) {
+    auto vp = static_cast<ViewProviderDrawingView*>(getViewProvider(getViewObject()));
+    if (!borderVisible && !vp->KeepLabel.getValue()) {
          m_label->hide();
          m_border->hide();
         return;
@@ -525,7 +528,7 @@ double QGIView::getPrefFontSize()
 {
     Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter().
                                          GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("Mod/TechDraw/Labels");
-    double fontSize = hGrp->GetFloat("LabelSize", 5.0);
+    double fontSize = hGrp->GetFloat("LabelSize", 3.5);
     return Rez::guiX(fontSize);
 }
 

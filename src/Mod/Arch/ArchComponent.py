@@ -215,13 +215,13 @@ class ComponentTaskPanel:
 
     def getIcon(self,obj):
         if hasattr(obj.ViewObject,"Proxy"):
-            return QtGui.QIcon(obj.ViewObject.Proxy.getIcon())
-        elif obj.isDerivedFrom("Sketcher::SketchObject"):
+            if hasattr(obj.ViewObject.Proxy,"getIcon"):
+                return QtGui.QIcon(obj.ViewObject.Proxy.getIcon())
+        if obj.isDerivedFrom("Sketcher::SketchObject"):
             return QtGui.QIcon(":/icons/Sketcher_Sketch.svg")
-        elif obj.isDerivedFrom("App::DocumentObjectGroup"):
+        if obj.isDerivedFrom("App::DocumentObjectGroup"):
             return QtGui.QApplication.style().standardIcon(QtGui.QStyle.SP_DirIcon)
-        else:
-            return QtGui.QIcon(":/icons/Tree_Part.svg")
+        return QtGui.QIcon(":/icons/Tree_Part.svg")
 
     def update(self):
         'fills the treewidget'
@@ -338,7 +338,10 @@ class Component:
         if self.clone(obj):
             return
         if obj.Base:
-            obj.Shape = self.spread(obj,obj.Base.Shape)
+            shape = self.spread(obj,obj.Base.Shape)
+            if obj.Additions or obj.Subtractions:
+                shape = self.processSubShapes(obj,shape)
+            obj.Shape = shape
 
     def __getstate__(self):
         return self.Type
