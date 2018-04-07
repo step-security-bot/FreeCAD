@@ -2980,6 +2980,9 @@ def clone(obj,delta=None,forcedraft=False):
             pass
         if gui:
             cl.ViewObject.DiffuseColor = base.ViewObject.DiffuseColor
+            if obj[0].Proxy.Type == "Window":
+                from DraftGui import todo
+                todo.delay(Arch.recolorize,cl)
         select(cl)
         return cl
     else:
@@ -3706,6 +3709,7 @@ def makeWorkingPlaneProxy(placement):
             obj.ViewObject.Proxy.writeCamera()
             obj.ViewObject.Proxy.writeState()
         obj.Placement = placement
+        return obj
 
 
 #---------------------------------------------------------------------------
