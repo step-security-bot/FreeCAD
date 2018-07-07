@@ -46,6 +46,7 @@ __url__ = "http://www.freecadweb.org"
 #  Arch objects
 
 def makeMaterial(name="Material"):
+
     '''makeMaterial(name): makes an Material object'''
     if not FreeCAD.ActiveDocument:
         FreeCAD.Console.PrintError("No active document. Aborting\n")
@@ -60,6 +61,7 @@ def makeMaterial(name="Material"):
 
 
 def getMaterialContainer():
+
     '''getMaterialContainer(): returns a group object to put materials in'''
     for obj in FreeCAD.ActiveDocument.Objects:
         if obj.Name == "MaterialContainer":
@@ -73,6 +75,7 @@ def getMaterialContainer():
 
 
 def makeMultiMaterial(name="MultiMaterial"):
+
     '''makeMultiMaterial(name): makes an Material object'''
     obj = FreeCAD.ActiveDocument.addObject("App::FeaturePython",name)
     obj.Label = name
@@ -84,6 +87,7 @@ def makeMultiMaterial(name="MultiMaterial"):
 
 
 def getDocumentMaterials():
+
     '''getDocumentMaterials(): returns all the arch materials of the document'''
     for obj in FreeCAD.ActiveDocument.Objects:
         if obj.Name == "MaterialContainer":
@@ -96,14 +100,19 @@ def getDocumentMaterials():
 
 
 class _CommandArchMaterial:
+
+
     "the Arch Material command definition"
+
     def GetResources(self):
+
         return {'Pixmap': 'Arch_Material_Group',
                 'MenuText': QT_TRANSLATE_NOOP("Arch_Material","Material"),
                 'Accel': "M, T",
                 'ToolTip': QT_TRANSLATE_NOOP("Arch_Material","Creates or edits the material definition of a selected object.")}
 
     def Activated(self):
+
         sel = FreeCADGui.Selection.getSelection()
         FreeCAD.ActiveDocument.openTransaction(translate("Arch","Create material"))
         FreeCADGui.addModule("Arch")
@@ -117,6 +126,7 @@ class _CommandArchMaterial:
         FreeCAD.ActiveDocument.recompute()
 
     def IsActive(self):
+
         if FreeCAD.ActiveDocument:
             return True
         else:
@@ -125,15 +135,18 @@ class _CommandArchMaterial:
 
 class _CommandArchMultiMaterial:
 
+
     "the Arch MultiMaterial command definition"
 
     def GetResources(self):
+
         return {'Pixmap': 'Arch_Material_Multi',
                 'MenuText': QT_TRANSLATE_NOOP("Arch_MultiMaterial","Multi-Material"),
                 'Accel': "M, T",
                 'ToolTip': QT_TRANSLATE_NOOP("Arch_MultiMaterial","Creates or edits multi-materials")}
 
     def Activated(self):
+
         sel = FreeCADGui.Selection.getSelection()
         FreeCAD.ActiveDocument.openTransaction(translate("Arch","Create multi-material"))
         FreeCADGui.addModule("Arch")
@@ -148,6 +161,7 @@ class _CommandArchMultiMaterial:
         FreeCAD.ActiveDocument.recompute()
 
     def IsActive(self):
+
         if FreeCAD.ActiveDocument:
             return True
         else:
@@ -155,6 +169,7 @@ class _CommandArchMultiMaterial:
 
 
 class _ArchMaterialContainer:
+
 
     "The Material Container"
 
@@ -165,8 +180,17 @@ class _ArchMaterialContainer:
     def execute(self,obj):
         return
 
+    def __getstate__(self):
+        if hasattr(self,"Type"):
+            return self.Type
+
+    def __setstate__(self,state):
+        if state:
+            self.Type = state
+
 
 class _ViewProviderArchMaterialContainer:
+
 
     "A View Provider for the Material Container"
 
@@ -176,8 +200,52 @@ class _ViewProviderArchMaterialContainer:
     def getIcon(self):
         return ":/icons/Arch_Material_Group.svg"
 
+    def attach(self,vobj):
+        self.Object = vobj.Object
+
+    def setupContextMenu(self,vobj,menu):
+        from PySide import QtCore,QtGui
+        action1 = QtGui.QAction(QtGui.QIcon(":/icons/Arch_Material_Group.svg"),"Merge duplicates",menu)
+        QtCore.QObject.connect(action1,QtCore.SIGNAL("triggered()"),self.mergeByName)
+        menu.addAction(action1)
+
+    def mergeByName(self):
+        if hasattr(self,"Object"):
+            mats = [o for o in self.Object.Group if o.isDerivedFrom("App::MaterialObject")]
+            todelete = []
+            for mat in mats:
+                if mat.Label[-1].isdigit() and mat.Label[-2].isdigit() and mat.Label[-3].isdigit():
+                    orig = None
+                    for om in mats:
+                        if om.Label == mat.Label[:-3].strip():
+                            orig = om
+                            break
+                    if orig:
+                        for par in mat.InList:
+                            for prop in par.PropertiesList:
+                                if getattr(par,prop) == mat:
+                                    FreeCAD.Console.PrintMessage("Changed property '"+prop+"' of object "+par.Label+" from "+mat.Label+" to "+orig.Label+"\n")
+                                    setattr(par,prop,orig)
+                        todelete.append(mat)
+            for tod in todelete:
+                if not tod.InList:
+                    FreeCAD.Console.PrintMessage("Merging duplicate material "+tod.Label+"\n")
+                    FreeCAD.ActiveDocument.removeObject(tod.Name)
+                elif (len(tod.InList) == 1) and (tod.InList[0].isDerivedFrom("App::DocumentObjectGroup")):
+                    FreeCAD.Console.PrintMessage("Merging duplicate material "+tod.Label+"\n")
+                    FreeCAD.ActiveDocument.removeObject(tod.Name)
+                else:
+                    FreeCAD.Console.PrintMessage("Unable to delete material "+tod.Label+": InList not empty\n")
+
+    def __getstate__(self):
+        return None
+
+    def __setstate__(self,state):
+        return None
+
 
 class _ArchMaterial:
+
 
     "The Material object"
 
@@ -262,7 +330,8 @@ class _ArchMaterial:
                     d["Description"] = val
         if d:
             obj.Material = d
-            if FreeCADGui:
+            if FreeCAD.GuiUp:
+                import FreeCADGui
                 # not sure why this is needed, but it is...
                 FreeCADGui.ActiveDocument.resetEdit()
 
@@ -276,6 +345,14 @@ class _ArchMaterial:
                             if p.Material.Name == obj.Name:
                                 p.ViewObject.ShapeColor = c
         return
+
+    def __getstate__(self):
+        if hasattr(self,"Type"):
+            return self.Type
+
+    def __setstate__(self,state):
+        if state:
+            self.Type = state
 
 
 class _ViewProviderArchMaterial:
@@ -474,6 +551,13 @@ class _ArchMultiMaterial:
         obj.addProperty("App::PropertyLinkList","Materials","Arch",QT_TRANSLATE_NOOP("App::Property","The list of layer materials"))
         obj.addProperty("App::PropertyFloatList","Thicknesses","Arch",QT_TRANSLATE_NOOP("App::Property","The list of layer thicknesses"))
 
+    def __getstate__(self):
+        if hasattr(self,"Type"):
+            return self.Type
+
+    def __setstate__(self,state):
+        if state:
+            self.Type = state
 
 class _ViewProviderArchMultiMaterial:
 
