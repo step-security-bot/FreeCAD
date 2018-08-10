@@ -72,7 +72,7 @@ class ObjectSurface(PathOp.ObjectOp):
         obj.addProperty("App::PropertyEnumeration", "Algorithm", "Algorithm", QtCore.QT_TRANSLATE_NOOP("App::Property", "The library to use to generate the path"))
         obj.addProperty("App::PropertyEnumeration", "DropCutterDir", "Algorithm", QtCore.QT_TRANSLATE_NOOP("App::Property", "The direction along which dropcutter lines are created"))
         obj.addProperty("App::PropertyEnumeration", "BoundBox", "Algorithm", QtCore.QT_TRANSLATE_NOOP("App::Property", "Should the operation be limited by the stock object or by the bounding box of the base object"))
-        obj.addProperty("App::PropertyVector", "DropCutterExtraOffset", "Algorithm", QtCore.QT_TRANSLATE_NOOP("App::Property", "Additional offset to the selected bounding box"))
+        obj.addProperty("App::PropertyVectorDistance", "DropCutterExtraOffset", "Algorithm", QtCore.QT_TRANSLATE_NOOP("App::Property", "Additional offset to the selected bounding box"))
         obj.addProperty("App::PropertyPercent", "StepOver", "Surface", QtCore.QT_TRANSLATE_NOOP("App::Property", "Step over percentage of the drop cutter path"))
         obj.addProperty("App::PropertyDistance", "DepthOffset", "Surface", QtCore.QT_TRANSLATE_NOOP("App::Property", "Z-axis offset from the surface of the object"))
         obj.addProperty("App::PropertyFloatConstraint", "SampleInterval", "Surface", QtCore.QT_TRANSLATE_NOOP("App::Property", "The Sample Interval. Small values cause long wait times"))
@@ -98,6 +98,15 @@ class ObjectSurface(PathOp.ObjectOp):
     def opExecute(self, obj):
         '''opExecute(obj) ... process surface operation'''
         PathLog.track()
+
+        # OCL must be installed
+        try:
+            import ocl
+        except:
+            FreeCAD.Console.PrintError(
+                translate("Path_Surface", "This operation requires OpenCamLib to be installed.") + "\n")
+            return
+
         print("StepOver is  " + str(obj.StepOver))
         if obj.StepOver > 100:
             obj.StepOver = 100
@@ -115,14 +124,6 @@ class ObjectSurface(PathOp.ObjectOp):
             return
 
         print("base object: " + self.baseobject.Name)
-
-        if obj.Algorithm in ['OCL Dropcutter', 'OCL Waterline']:
-            try:
-                import ocl
-            except:
-                FreeCAD.Console.PrintError(
-                    translate("Path_Surface", "This operation requires OpenCamLib to be installed.") + "\n")
-                return
 
         if self.baseobject.TypeId.startswith('Mesh'):
             mesh = self.baseobject.Mesh

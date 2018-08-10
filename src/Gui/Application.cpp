@@ -678,7 +678,11 @@ void Application::slotNewDocument(const App::Document& Doc)
 
     signalNewDocument(*pDoc);
     pDoc->createView(View3DInventor::getClassTypeId());
+    // FIXME: Do we really need this further? Calling processEvents() mixes up order of execution in an
+    // unpredicatable way. At least it seems that with Qt5 we don't need this any more.
+#if QT_VERSION < 0x050000
     qApp->processEvents(); // make sure to show the window stuff on the right place
+#endif
 }
 
 void Application::slotDeleteDocument(const App::Document& Doc)
@@ -1577,6 +1581,19 @@ void Application::initTypes(void)
             (ViewProviderDocumentObject::getClassTypeId());
 }
 
+void Application::initOpenInventor(void)
+{
+    // init the Inventor subsystem
+    SoDB::init();
+    SIM::Coin3D::Quarter::Quarter::init();
+    SoFCDB::init();
+}
+
+void Application::runInitGuiScript(void)
+{
+    Base::Interpreter().runString(Base::ScriptFactory().ProduceScript("FreeCADGuiInit"));
+}
+
 void Application::runApplication(void)
 {
     const std::map<std::string,std::string>& cfg = App::Application::Config();
@@ -1722,13 +1739,22 @@ void Application::runApplication(void)
 
     Application app(true);
     MainWindow mw;
+    mw.setProperty("QuitOnClosed", true);
 
-    // set main window title with FreeCAD Version
-    std::map<std::string, std::string>& config = App::Application::Config();
-    QString major  = QString::fromLatin1(config["BuildVersionMajor"].c_str());
-    QString minor  = QString::fromLatin1(config["BuildVersionMinor"].c_str());
-    QString title = QString::fromLatin1("%1 %2.%3").arg(mainApp.applicationName()).arg(major).arg(minor);
-    mw.setWindowTitle(title);
+    // allow to disable version number
+    ParameterGrp::handle hGen = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/General");
+    bool showVersion = hGen->GetBool("ShowVersionInTitle",true);
+
+    if (showVersion) {
+        // set main window title with FreeCAD Version
+        std::map<std::string, std::string>& config = App::Application::Config();
+        QString major  = QString::fromLatin1(config["BuildVersionMajor"].c_str());
+        QString minor  = QString::fromLatin1(config["BuildVersionMinor"].c_str());
+        QString title = QString::fromLatin1("%1 %2.%3").arg(mainApp.applicationName()).arg(major).arg(minor);
+        mw.setWindowTitle(title);
+    } else {
+        mw.setWindowTitle(mainApp.applicationName());
+    }
 
     QObject::connect(&mainApp, SIGNAL(messageReceived(const QList<QByteArray> &)),
                      &mw, SLOT(processMessages(const QList<QByteArray> &)));
@@ -1771,9 +1797,7 @@ void Application::runApplication(void)
 #endif
 
     // init the Inventor subsystem
-    SoDB::init();
-    SIM::Coin3D::Quarter::Quarter::init();
-    SoFCDB::init();
+    initOpenInventor();
 
     QString home = QString::fromUtf8(App::GetApplication().getHomePath());
 
@@ -1817,7 +1841,7 @@ void Application::runApplication(void)
     // running the GUI init script
     try {
         Base::Console().Log("Run Gui init script\n");
-        Base::Interpreter().runString(Base::ScriptFactory().ProduceScript("FreeCADGuiInit"));
+        runInitGuiScript();
     }
     catch (const Base::Exception& e) {
         Base::Console().Error("Error in FreeCADGuiInit.py: %s\n", e.what());
