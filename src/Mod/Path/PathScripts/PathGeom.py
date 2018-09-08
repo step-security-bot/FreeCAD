@@ -465,6 +465,8 @@ def removeDuplicateEdges(wire):
             unique.append(e)
     return Part.Wire(unique)
 
+OddsAndEnds = []
+
 def flipEdge(edge):
     '''flipEdge(edge)
     Flips given edge around so the new Vertexes[0] was the old Vertexes[-1] and vice versa, without changing the shape.
@@ -506,6 +508,10 @@ def flipEdge(edge):
         flipped.buildFromPolesMultsKnots(poles, mults , knots, perio, degree, weights, ratio)
 
         return Part.Edge(flipped)
+
+    global OddsAndEnds
+    OddsAndEnds.append(edge)
+    PathLog.warning(translate('PathGeom', "%s not support for flipping") % type(edge.Curve))
 
 def flipWire(wire):
     '''Flip the entire wire and all its edges so it is being processed the other way around.'''

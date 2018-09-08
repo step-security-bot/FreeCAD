@@ -83,7 +83,7 @@ def createResourceClone(obj, orig, name, icon):
     clone.addProperty('App::PropertyString', 'PathResource')
     clone.PathResource = name
     if clone.ViewObject:
-        PathIconViewProvider.ViewProvider(clone.ViewObject, icon)
+        PathIconViewProvider.Attach(clone.ViewObject, icon)
         clone.ViewObject.Visibility = False
     obj.Document.recompute() # necessary to create the clone shape
     return clone
@@ -117,6 +117,9 @@ class ObjectJob:
         obj.GeometryTolerance = PathPreferences.defaultGeometryTolerance()
 
         ops = FreeCAD.ActiveDocument.addObject("Path::FeatureCompoundPython", "Operations")
+        if ops.ViewObject:
+            ops.ViewObject.Proxy = 0
+            ops.ViewObject.Visibility = False
         obj.Operations = ops
         obj.setEditorMode('Operations', 2) # hide
         obj.setEditorMode('Placement', 2)
@@ -141,7 +144,7 @@ class ObjectJob:
             obj.addProperty('App::PropertyLink', 'SetupSheet', 'Base', QtCore.QT_TRANSLATE_NOOP('PathJob', 'SetupSheet holding the settings for this job'))
             obj.SetupSheet = PathSetupSheet.Create()
             if obj.SetupSheet.ViewObject:
-                PathIconViewProvider.ViewProvider(obj.SetupSheet.ViewObject, 'SetupSheet')
+                PathIconViewProvider.Attach(obj.SetupSheet.ViewObject, 'SetupSheet')
         self.setupSheet = obj.SetupSheet.Proxy
 
     def onDelete(self, obj, arg2=None):
@@ -189,9 +192,28 @@ class ObjectJob:
             if orig:
                 setattr(obj, name, createResourceClone(obj, orig, name, icon))
 
+    def fixupOperations(self, obj):
+        if obj.Operations.ViewObject:
+            try:
+                obj.Operations.ViewObject.DisplayMode
+            except:
+                name = obj.Operations.Name
+                label = obj.Operations.Label
+                ops = FreeCAD.ActiveDocument.addObject("Path::FeatureCompoundPython", "Operations")
+                ops.ViewObject.Proxy = 0
+                ops.Group = obj.Operations.Group
+                obj.Operations.Group = []
+                obj.Operations = ops
+                FreeCAD.ActiveDocument.removeObject(name)
+                ops.Label = label
+
+
     def onDocumentRestored(self, obj):
         self.fixupResourceClone(obj, 'Base', 'BaseGeometry')
+        self.fixupOperations(obj)
         self.setupSetupSheet(obj)
+        obj.setEditorMode('Operations', 2) # hide
+        obj.setEditorMode('Placement', 2)
 
     def onChanged(self, obj, prop):
         if prop == "PostProcessor" and obj.PostProcessor:

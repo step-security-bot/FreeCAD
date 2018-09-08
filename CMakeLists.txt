@@ -19,7 +19,7 @@ if(COMMAND cmake_policy)
     endif(POLICY CMP0020)
     # added in cmake 3.0
     if(POLICY CMP0050)
-        cmake_policy(SET CMP0050 OLD)
+        cmake_policy(SET CMP0050 NEW)
     endif(POLICY CMP0050)
     if (POLICY CMP0045)
         cmake_policy(SET CMP0045 NEW)
@@ -46,14 +46,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cMake")
 #   set(DEBUG_MAIN_OUTPUT_PATH ${CMAKE_BINARY_DIR}/src/Main/Debug)
 #   set(RELEASE_MAIN_OUTPUT_PATH ${CMAKE_BINARY_DIR}/src/Main/Release)
 #endif(CMAKE_CFG_INTDIR STREQUAL .)
-
-if(WIN32)
-    set(PLATFORM_CP xcopy /Y /S)
-    set(PLATFORM_MK mkdir)
-else(WIN32)
-    set(PLATFORM_CP cp)
-    set(PLATFORM_MK mkdir -p)
-endif(WIN32)
 
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     set(CMAKE_COMPILER_IS_CLANGXX TRUE)
@@ -603,8 +595,9 @@ endif()
 
     SET(_boost_TEST_VERSIONS ${Boost_ADDITIONAL_VERSIONS})
 
+    set (BOOST_COMPONENTS filesystem program_options regex signals system thread)
     find_package(Boost ${BOOST_MIN_VERSION}
-        COMPONENTS filesystem program_options regex signals system thread REQUIRED)
+        COMPONENTS ${BOOST_COMPONENTS} REQUIRED)
 
     if(UNIX AND NOT APPLE)
         # Boost.Thread 1.67+ headers reference pthread_condattr_*
@@ -612,15 +605,19 @@ endif()
     endif()
 
     IF(NOT Boost_FOUND)
-        MESSAGE(FATAL_ERROR "========================================\n"
-                            "boost not found, install the components:\n"
-                            " * filesystem\n"
-                            " * program_options\n"
-                            " * regex\n"
-                            " * signals\n"
-                            " * system\n"
-                            " * thread\n"
-                            "========================================\n")
+        set (NO_BOOST_COMPONENTS)
+        foreach (comp ${BOOST_COMPONENTS})
+            string(TOUPPER ${comp} uppercomp)
+            if (NOT Boost_${uppercomp}_FOUND)
+                list(APPEND NO_BOOST_COMPONENTS ${comp})
+            endif()
+        endforeach()
+        MESSAGE(FATAL_ERROR "=============================================\n"
+                            "Required components:\n"
+                            " ${BOOST_COMPONENTS}\n"
+                            "Not found, install the components:\n"
+                            " ${NO_BOOST_COMPONENTS}\n"
+                            "=============================================\n")
     ENDIF(NOT Boost_FOUND)
 
 # -------------------------------- XercesC --------------------------------
@@ -925,7 +922,7 @@ endif()
         if(OPENGL_GLU_FOUND)
             find_package_message(OPENGL_GLU
                 "Found OpenGLU: ${OPENGL_glu_LIBRARY}"
-                "[${OPENGL_glu_LIBRARY}][${OEPNGL_INCLUDE_DIR}]")
+                "[${OPENGL_glu_LIBRARY}][${OPENGL_INCLUDE_DIR}]")
         else(OPENGL_GLU_FOUND)
             message(FATAL_ERROR "======================\n"
                                 "GLU library not found.\n"

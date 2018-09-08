@@ -108,8 +108,13 @@ class ObjectOp(object):
         if 'tooldia' in values:
             obj.addProperty("App::PropertyDistance", "OpToolDiameter", "Op Values", QtCore.QT_TRANSLATE_NOOP("PathOp", "Holds the diameter of the tool"))
             obj.setEditorMode('OpToolDiameter', 1)  # read-only
+        if 'stockz' in values:
+            obj.addProperty("App::PropertyDistance", "OpStockZMax", "Op Values", QtCore.QT_TRANSLATE_NOOP("PathOp", "Holds the max Z value of Stock"))
+            obj.setEditorMode('OpStockZMax', 1)  # read-only
+            obj.addProperty("App::PropertyDistance", "OpStockZMin", "Op Values", QtCore.QT_TRANSLATE_NOOP("PathOp", "Holds the min Z value of Stock"))
+            obj.setEditorMode('OpStockZMin', 1)  # read-only
 
-    def __init__(self, obj):
+    def __init__(self, obj, name):
         PathLog.track()
 
         obj.addProperty("App::PropertyBool", "Active", "Path", QtCore.QT_TRANSLATE_NOOP("PathOp", "Make False, to prevent operation from generating code"))
@@ -139,6 +144,8 @@ class ObjectOp(object):
             obj.addProperty("App::PropertyDistance", "StartDepth", "Depth", QtCore.QT_TRANSLATE_NOOP("PathOp", "Starting Depth internal use only for derived values"))
             obj.setEditorMode('StartDepth', 1)  # read-only
 
+        self.addOpValues(obj, ['stockz'])
+
         if FeatureStepDown & features:
             obj.addProperty("App::PropertyDistance", "StepDown", "Depth", QtCore.QT_TRANSLATE_NOOP("PathOp", "Incremental Step Down of Tool"))
 
@@ -155,8 +162,23 @@ class ObjectOp(object):
 
         self.initOperation(obj)
 
-        if self.setDefaultValues(obj):
-            obj.Proxy = self
+        if not hasattr(obj, 'DoNotSetDefaultValues') or not obj.DoNotSetDefaultValues:
+            job = self.setDefaultValues(obj)
+            if job:
+                job.SetupSheet.Proxy.setOperationProperties(obj, name)
+                obj.recompute()
+                obj.Proxy = self
+
+    def setEditorModes(self, obj, features):
+        '''Editor modes are not preserved during document store/restore, set editor modes for all properties'''
+
+        for op in ['OpStartDepth', 'OpFinalDepth', 'OpToolDiameter']:
+            if hasattr(obj, op):
+                obj.setEditorMode(op, 1) # read-only
+
+        if FeatureDepths & features:
+            if FeatureNoFinalDepth & features:
+                obj.setEditorMode('OpFinalDepth', 2)
 
     def onDocumentRestored(self, obj):
         features = self.opFeatures(obj)
@@ -176,6 +198,12 @@ class ObjectOp(object):
             self.addOpValues(obj, ['start', 'final'])
             if FeatureNoFinalDepth & features:
                 obj.setEditorMode('OpFinalDepth', 2)
+
+        if not hasattr(obj, 'OpStockZMax'):
+            self.addOpValues(obj, ['stockz'])
+
+        self.setEditorModes(obj, features)
+        self.opOnDocumentRestored(obj)
 
     def __getstate__(self):
         '''__getstat__(self) ... called when receiver is saved.
@@ -198,6 +226,11 @@ class ObjectOp(object):
         Should be overwritten by subclasses.'''
         pass
 
+    def opOnDocumentRestored(self, obj):
+        '''opOnDocumentRestored(obj) ... implement if an op needs special handling like migrating the data model.
+        Should be overwritten by subclasses.'''
+        pass
+
     def opOnChanged(self, obj, prop):
         '''opOnChanged(obj, prop) ... overwrite to process property changes.
         This is a callback function that is invoked each time a property of the
@@ -207,8 +240,8 @@ class ObjectOp(object):
         Can safely be overwritten by subclasses.'''
         pass
 
-    def opSetDefaultValues(self, obj):
-        '''opSetDefaultValues(obj) ... overwrite to set initial default values.
+    def opSetDefaultValues(self, obj, job):
+        '''opSetDefaultValues(obj, job) ... overwrite to set initial default values.
         Called after the receiver has been fully created with all properties.
         Can safely be overwritten by subclasses.'''
         pass
@@ -255,9 +288,12 @@ class ObjectOp(object):
         features = self.opFeatures(obj)
 
         if FeatureTool & features:
-            obj.ToolController = PathUtils.findToolController(obj)
+            if 1 < len(job.Operations.Group):
+                obj.ToolController = PathUtil.toolControllerForOp(job.Operations.Group[-2])
+            else:
+                obj.ToolController = PathUtils.findToolController(obj)
             if not obj.ToolController:
-                return False
+                return None
             obj.OpToolDiameter = obj.ToolController.Tool.Diameter
 
         if FeatureDepths & features:
@@ -287,9 +323,8 @@ class ObjectOp(object):
         if FeatureStartPoint & features:
             obj.UseStartPoint = False
 
-        self.opSetDefaultValues(obj)
-        obj.recompute()
-        return True
+        self.opSetDefaultValues(obj, job)
+        return job
 
     def _setBaseAndStock(self, obj, ignoreErrors=False):
         job = PathUtils.findParentJob(obj)
@@ -334,6 +369,9 @@ class ObjectOp(object):
         stockBB = self.stock.Shape.BoundBox
         zmin = stockBB.ZMin
         zmax = stockBB.ZMax
+
+        obj.OpStockZMin = zmin
+        obj.OpStockZMax = zmax
 
         if hasattr(obj, 'Base') and obj.Base:
             for base, sublist in obj.Base:

@@ -55,7 +55,13 @@ class ObjectPocket(PathPocketBase.ObjectPocket):
 
     def initPocketOp(self, obj):
         '''initPocketOp(obj) ... setup receiver'''
-        pass
+        obj.addProperty("App::PropertyBool", "UseOutline", "Pocket", QtCore.QT_TRANSLATE_NOOP("App::Property", "Uses the outline of the base geometry."))
+        obj.UseOutline = False
+
+    def opOnDocumentRestored(self, obj):
+        '''opOnDocumentRestored(obj) ... adds the UseOutline property if it doesn't exist.'''
+        if not hasattr(obj, 'UseOutline'):
+            self.initPocketOp(obj)
 
     def pocketInvertExtraOffset(self):
         return False
@@ -110,10 +116,16 @@ class ObjectPocket(PathPocketBase.ObjectPocket):
                 f.translate(FreeCAD.Vector(0, 0, obj.FinalDepth.Value - f.BoundBox.ZMin))
 
             # check all faces and see if they are touching/overlapping and combine those into a compound
-            self.horizontal = PathGeom.combineConnectedShapes(self.horiz)
-            for shape in self.horizontal:
+            self.horizontal = []
+            for shape in PathGeom.combineConnectedShapes(self.horiz):
                 shape.sewShape()
                 shape.tessellate(0.1)
+                if obj.UseOutline:
+                    wire = TechDraw.findShapeOutline(shape, 1, FreeCAD.Vector(0, 0, 1))
+                    wire.translate(FreeCAD.Vector(0, 0, obj.FinalDepth.Value - wire.BoundBox.ZMin))
+                    self.horizontal.append(Part.Face(wire))
+                else:
+                    self.horizontal.append(shape)
 
             # extrude all faces up to StartDepth and those are the removal shapes
             extent = FreeCAD.Vector(0, 0, obj.StartDepth.Value - obj.FinalDepth.Value)
@@ -135,18 +147,21 @@ class ObjectPocket(PathPocketBase.ObjectPocket):
             obj.removalshape = self.removalshapes[0][0]
         return self.removalshapes
 
-    def areaOpSetDefaultValues(self, obj):
-        '''areaOpSetDefaultValues(obj) ... set default values'''
+    def areaOpSetDefaultValues(self, obj, job):
+        '''areaOpSetDefaultValues(obj, job) ... set default values'''
         obj.StepOver = 100
         obj.ZigZagAngle = 45
-        job = PathUtils.findParentJob(obj)
         if job and job.Stock:
             bb = job.Stock.Shape.BoundBox
             obj.OpFinalDepth = bb.ZMin
             obj.OpStartDepth = bb.ZMax
 
-def Create(name):
+def SetupProperties():
+    return PathPocketBase.SetupProperties() + [ 'UseOutline' ]
+
+def Create(name, obj = None):
     '''Create(name) ... Creates and returns a Pocket operation.'''
-    obj = FreeCAD.ActiveDocument.addObject("Path::FeaturePython", name)
-    proxy = ObjectPocket(obj)
+    if obj is None:
+        obj = FreeCAD.ActiveDocument.addObject("Path::FeaturePython", name)
+    proxy = ObjectPocket(obj, name)
     return obj
