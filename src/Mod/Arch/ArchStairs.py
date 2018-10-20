@@ -89,7 +89,6 @@ def makeStairs(baseobj=None,length=None,width=None,height=None,steps=None,name="
     if baseobj:
         lenSelection = len(baseobj)
         if lenSelection > 1:
-            print (len(baseobj))
             stair = FreeCAD.ActiveDocument.addObject("Part::FeaturePython","Stairs")
             stair.Label = translate("Arch",name)
             _Stairs(stair)
@@ -129,6 +128,7 @@ def makeStairs(baseobj=None,length=None,width=None,height=None,steps=None,name="
         obj.Label = translate("Arch",name)
         _Stairs(obj)
         setProperty(obj,length,width,height,steps,name)
+        stairs.append(obj)
 
     if FreeCAD.GuiUp:
         if baseobj:
@@ -164,7 +164,8 @@ def makeRailing(stairs):
                 stairs0OutlineWireLR = "OutlineWireRight"
                 stairOutlineWireLR = "OutlineWireRight"
             if outlineLR or OutlineLRAll:
-                lrRail = ArchPipe.makePipe()
+                lrRail = ArchPipe.makePipe(baseobj=None,diameter=0,length=0,placement=None,name="Rail")
+
                 if OutlineLRAll:
                     lrRailWire = Draft.makeWire(OutlineLRAll)
                     lrRail.Base = lrRailWire
@@ -181,6 +182,25 @@ def makeRailing(stairs):
                     railList = stair.Additions
                     railList.append(lrRail)
                     stair.Additions = railList
+
+    if stairs == None:
+        sel = FreeCADGui.Selection.getSelection()
+        sel0 = sel[0]
+        stairs = []
+        if Draft.getType(sel[0]) == "Stairs":					# TODO currently consider 1st selected object, then would tackle multiple objects ?
+            stairs.append(sel0)
+            if Draft.getType(sel0.Base) == "Stairs":
+                stairs.append(sel0.Base)
+                additions = sel0.Additions
+                for additionsI in additions:
+                    if Draft.getType(additionsI) == "Stairs":
+                        stairs.append(additionsI)
+            else:
+                stairs.append(sel[0])
+        else:
+            print("No Stairs object selected")
+            return
+
     makeRailingLorR(stairs,"L")
     makeRailingLorR(stairs,"R")
 
@@ -327,6 +347,10 @@ class _Stairs(ArchComponent.Component):
         if not "Align" in pl:
             obj.addProperty("App::PropertyEnumeration","Align","Stairs",QT_TRANSLATE_NOOP("App::Property","The alignment of these stairs on their baseline, if applicable"))
             obj.Align = ['Left','Right','Center']
+
+        # TODO - To be combined into Width when PropertyLengthList is available
+        if not "WidthOfLanding" in pl:
+            obj.addProperty("App::PropertyFloatList","WidthOfLanding","Stairs",QT_TRANSLATE_NOOP("App::Property","The width of a Landing (Second edge and after - First edge follows Width property"))
 
         # steps properties
         if not "NumberOfSteps" in pl:
@@ -594,9 +618,16 @@ class _Stairs(ArchComponent.Component):
             vLength.append(Vector(v[i].x,v[i].y,v[i].z)) # TODO vLength in this f() is 3d
 
             # TODO obj.Width[i].Value for different 'edges' / 'sections' of the landing
-            netWidth = obj.Width.Value - offsetHLeft.Value - offsetHRight.Value  #2*offsetH
-
-            vWidth.append(DraftVecUtils.scaleTo(vLength[i].cross(Vector(0,0,1)),netWidth))
+            netWidthI = 0
+            if i > 0:
+                try:
+                    if obj.WidthOfLanding[i-1] > 0:
+                        netWidthI = obj.WidthOfLanding[i-1] - offsetHLeft.Value - offsetHRight.Value  #2*offsetH
+                except:
+                    pass
+            if netWidthI == 0:
+                netWidthI = obj.Width.Value - offsetHLeft.Value - offsetHRight.Value  #2*offsetH
+            vWidth.append(DraftVecUtils.scaleTo(vLength[i].cross(Vector(0,0,1)),netWidthI))
 
             vBase.append(edges[i].Vertexes[0].Point)
             vBase[i] = self.vbaseFollowLastSement(obj, vBase[i])
@@ -677,7 +708,7 @@ class _Stairs(ArchComponent.Component):
     def vbaseFollowLastSement(obj, vBase):
         if obj.LastSegment:
             lastSegmentAbsTop = obj.LastSegment.AbsTop
-            vBase = Vector(vBase.x, vBase.y,lastSegmentAbsTop.z) # use Last Segment top's z-coordinate 
+            vBase = Vector(vBase.x, vBase.y,lastSegmentAbsTop.z) # use Last Segment top's z-coordinate
         return vBase
 
 
@@ -896,7 +927,7 @@ class _Stairs(ArchComponent.Component):
                 lastSegmentAbsTop = obj.LastSegment.AbsTop
                 print("lastSegmentAbsTop is: ")
                 print(lastSegmentAbsTop)
-                vBase = Vector(vBase.x, vBase.y,lastSegmentAbsTop.z)		# use Last Segment top's z-coordinate 
+                vBase = Vector(vBase.x, vBase.y,lastSegmentAbsTop.z)		# use Last Segment top's z-coordinate
             obj.AbsTop = vBase.add(Vector(0,0,h))
 
         vNose = DraftVecUtils.scaleTo(vLength,-abs(obj.Nosing.Value))
@@ -1045,7 +1076,7 @@ class _Stairs(ArchComponent.Component):
             hstep = h/obj.NumberOfSteps
             obj.RiserHeight = hstep
         else:
-            h = obj.RiserHeightEnforce.Value * (obj.NumberOfSteps) 
+            h = obj.RiserHeightEnforce.Value * (obj.NumberOfSteps)
             hstep = obj.RiserHeightEnforce.Value
             obj.RiserHeight = hstep
         if obj.Landings == "At center":
@@ -1055,7 +1086,7 @@ class _Stairs(ArchComponent.Component):
 
         if obj.LastSegment:
             lastSegmentAbsTop = obj.LastSegment.AbsTop
-            p1 = Vector(p1.x, p1.y,lastSegmentAbsTop.z)				# use Last Segment top's z-coordinate 
+            p1 = Vector(p1.x, p1.y,lastSegmentAbsTop.z)				# use Last Segment top's z-coordinate
 
         obj.AbsTop = p1.add(Vector(0,0,h))
         p2 = p1.add(DraftVecUtils.scale(vLength,landing-1).add(Vector(0,0,landing*hstep)))
@@ -1065,8 +1096,7 @@ class _Stairs(ArchComponent.Component):
                 p3 = p2.add(DraftVecUtils.scaleTo(vLength,obj.LandingDepth.Value))
             else:
                 p3 = p2.add(DraftVecUtils.scaleTo(vLength,obj.Width.Value))
-   
-            if obj.Flight in ["HalfTurnLeft HalfTurnLeft", "HalfTurnRight"]:
+            if obj.Flight in ["HalfTurnLeft", "HalfTurnRight"]:
                 if (obj.Align == "Left" and obj.Flight == "HalfTurnLeft") or (obj.Align == "Right" and obj.Flight == "HalfTurnRight"):
                     p3r = p2
                 elif (obj.Align == "Left" and obj.Flight == "HalfTurnRight"):

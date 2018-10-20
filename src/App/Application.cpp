@@ -206,7 +206,7 @@ PyDoc_STRVAR(FreeCAD_doc,
 PyDoc_STRVAR(Console_doc,
      "FreeCAD Console\n"
     );
-    
+
 PyDoc_STRVAR(Base_doc,
     "The Base module contains the classes for the geometric basics\n"
     "like vector, matrix, bounding box, placement, rotation, axis, ...\n"
@@ -416,13 +416,23 @@ Document* Application::newDocument(const char * Name, const char * UserName)
 
 
     // connect the signals to the application for the new document
+    _pActiveDoc->signalBeforeChange.connect(boost::bind(&App::Application::slotBeforeChangeDocument, this, _1, _2));
+    _pActiveDoc->signalChanged.connect(boost::bind(&App::Application::slotChangedDocument, this, _1, _2));
     _pActiveDoc->signalNewObject.connect(boost::bind(&App::Application::slotNewObject, this, _1));
     _pActiveDoc->signalDeletedObject.connect(boost::bind(&App::Application::slotDeletedObject, this, _1));
+    _pActiveDoc->signalBeforeChangeObject.connect(boost::bind(&App::Application::slotBeforeChangeObject, this, _1, _2));
     _pActiveDoc->signalChangedObject.connect(boost::bind(&App::Application::slotChangedObject, this, _1, _2));
     _pActiveDoc->signalRelabelObject.connect(boost::bind(&App::Application::slotRelabelObject, this, _1));
     _pActiveDoc->signalActivatedObject.connect(boost::bind(&App::Application::slotActivatedObject, this, _1));
     _pActiveDoc->signalUndo.connect(boost::bind(&App::Application::slotUndoDocument, this, _1));
     _pActiveDoc->signalRedo.connect(boost::bind(&App::Application::slotRedoDocument, this, _1));
+    _pActiveDoc->signalRecomputedObject.connect(boost::bind(&App::Application::slotRecomputedObject, this, _1));
+    _pActiveDoc->signalRecomputed.connect(boost::bind(&App::Application::slotRecomputed, this, _1));
+    _pActiveDoc->signalOpenTransaction.connect(boost::bind(&App::Application::slotOpenTransaction, this, _1, _2));
+    _pActiveDoc->signalCommitTransaction.connect(boost::bind(&App::Application::slotCommitTransaction, this, _1));
+    _pActiveDoc->signalAbortTransaction.connect(boost::bind(&App::Application::slotAbortTransaction, this, _1));
+    _pActiveDoc->signalStartSave.connect(boost::bind(&App::Application::slotStartSaveDocument, this, _1, _2));
+    _pActiveDoc->signalFinishSave.connect(boost::bind(&App::Application::slotFinishSaveDocument, this, _1, _2));
 
     // make sure that the active document is set in case no GUI is up
     {
@@ -972,6 +982,16 @@ std::map<std::string, std::string> Application::getExportFilters(void) const
 
 //**************************************************************************
 // signaling
+void Application::slotBeforeChangeDocument(const App::Document& doc, const Property& prop)
+{
+    this->signalBeforeChangeDocument(doc, prop);
+}
+
+void Application::slotChangedDocument(const App::Document& doc, const Property& prop)
+{
+    this->signalChangedDocument(doc, prop);
+}
+
 void Application::slotNewObject(const App::DocumentObject&O)
 {
     this->signalNewObject(O);
@@ -980,6 +1000,11 @@ void Application::slotNewObject(const App::DocumentObject&O)
 void Application::slotDeletedObject(const App::DocumentObject&O)
 {
     this->signalDeletedObject(O);
+}
+
+void Application::slotBeforeChangeObject(const DocumentObject& O, const Property& Prop)
+{
+    this->signalBeforeChangeObject(O, Prop);
 }
 
 void Application::slotChangedObject(const App::DocumentObject&O, const App::Property& P)
@@ -1005,6 +1030,41 @@ void Application::slotUndoDocument(const App::Document& d)
 void Application::slotRedoDocument(const App::Document& d)
 {
     this->signalRedoDocument(d);
+}
+
+void Application::slotRecomputedObject(const DocumentObject& obj)
+{
+    this->signalObjectRecomputed(obj);
+}
+
+void Application::slotRecomputed(const Document& doc)
+{
+    this->signalRecomputed(doc);
+}
+
+void Application::slotOpenTransaction(const Document& d, string s)
+{
+    this->signalOpenTransaction(d, s);
+}
+
+void Application::slotCommitTransaction(const Document& d)
+{
+    this->signalCommitTransaction(d);
+}
+
+void Application::slotAbortTransaction(const Document& d)
+{
+    this->signalAbortTransaction(d);
+}
+
+void Application::slotStartSaveDocument(const App::Document& doc, const std::string& filename)
+{
+    this->signalStartSaveDocument(doc, filename);
+}
+
+void Application::slotFinishSaveDocument(const App::Document& doc, const std::string& filename)
+{
+    this->signalFinishSaveDocument(doc, filename);
 }
 
 //**************************************************************************
@@ -1576,6 +1636,11 @@ void Application::initApplication(void)
     UnitsApi::setSchema((UnitSystem)hGrp->GetInt("UserSchema",0));
     UnitsApi::setDecimals(hGrp->GetInt("Decimals", Base::UnitsApi::getDecimals()));
 
+    // In case we are using fractional inches, get user setting for min unit
+    int denom = hGrp->GetInt("FracInch", Base::QuantityFormat::getDefaultDenominator());
+    Base::QuantityFormat::setDefaultDenominator(denom);
+
+
 #if defined (_DEBUG)
     Console().Log("Application is built with debug information\n");
 #endif
@@ -1588,7 +1653,7 @@ void Application::initApplication(void)
         ObjectLabelObserver::instance();
     }
     catch (const Base::Exception& e) {
-        Base::Console().Error("%s\n", e.what());
+        e.ReportException();
     }
 }
 
@@ -2410,8 +2475,8 @@ std::string Application::FindHomePath(const char* sCall)
             absPath = path;
     }
     else {
-        // Find the path of the executable. Theoretically, there could  occur a
-        // race condition when using readlink, but we only use  this method to
+        // Find the path of the executable. Theoretically, there could occur a
+        // race condition when using readlink, but we only use this method to
         // get the absolute path of the executable to compute the actual home
         // path. In the worst case we simply get q wrong path and FreeCAD is not
         // able to load its modules.

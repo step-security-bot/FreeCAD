@@ -35,7 +35,6 @@ iconprovider = QtGui.QFileIconProvider()
 iconbank = {} # to store already created icons so we don't overpollute the temp dir
 tempfolder = None # store icons inside a subfolder in temp dir
 
-
 def gethexcolor(color):
 
     "returns a color hex value #000000"
@@ -106,7 +105,11 @@ def getInfo(filename):
 
         # get additional info from fcstd files
         if filename.lower().endswith(".fcstd"):
-            zfile=zipfile.ZipFile(filename)
+            try:
+                zfile=zipfile.ZipFile(filename)
+            except:
+                print("Cannot read file: ",filename)
+                return None
             files=zfile.namelist()
             # check for meta-file if it's really a FreeCAD document
             if files[0] == "Document.xml":
@@ -304,7 +307,10 @@ def handle():
         SECTION_RECENTFILES += "<ul>"
         SECTION_RECENTFILES += '<a href="LoadNew.py" title="'+TranslationTexts.T_CREATENEW+'">'
         SECTION_RECENTFILES += '<li class="icon">'
-        SECTION_RECENTFILES += '<img src="images/new_file_thumbnail.svg">'
+        if FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Start").GetBool("NewFileGradient",False):
+            SECTION_RECENTFILES += '<img src="'+iconbank["createimg"]+'">'
+        else:
+            SECTION_RECENTFILES += '<img src="images/new_file_thumbnail.svg">'
         SECTION_RECENTFILES += '<div class="caption">'
         SECTION_RECENTFILES += '<h4>'+TranslationTexts.T_CREATENEW+'</h4>'
         SECTION_RECENTFILES += '</div>'
@@ -466,11 +472,14 @@ def handle():
     Start.iconbank = iconbank
     Start.tempfolder = tempfolder
 
-    # encode if necessary
+    # make sure we are always returning unicode
+    # HTML should be a str-object and therefore:
+    # - for py2 HTML is a bytes object and has to be decoded to unicode
+    # - for py3 HTML is already a unicode object and the next 2 lines can be removed
+    #    once py2-support is removed.
 
-    if sys.version_info.major < 3:
-        if isinstance(HTML,unicode):
-            HTML = HTML.encode("utf8")
+    if isinstance(HTML, bytes):
+        HTML = HTML.decode("utf8")
 
     return HTML
 
@@ -480,7 +489,7 @@ def exportTestFile():
 
     "Allow to check if everything is Ok"
 
-    f = open(os.path.expanduser("~")+os.sep+"freecad-startpage.html","wb")
+    f = open(os.path.expanduser("~")+os.sep+"freecad-startpage.html","w")
     f.write(handle())
     f.close()
 

@@ -166,11 +166,12 @@ MESSAGE(STATUS "datadir: ${CMAKE_INSTALL_DATADIR}")
 MESSAGE(STATUS "docdir: ${CMAKE_INSTALL_DOCDIR}")
 MESSAGE(STATUS "includedir: ${CMAKE_INSTALL_INCLUDEDIR}")
 MESSAGE(STATUS "libdir: ${CMAKE_INSTALL_LIBDIR}")
+MESSAGE(STATUS "cmake: ${CMAKE_VERSION}")
 
 # ==============================================================================
 # == Win32 is default behaviour use the LibPack copied in Source tree ==========
 if(MSVC)
-    OPTION(FREECAD_RELEASE_PDB "Create PDB file for Release version." OFF)
+    OPTION(FREECAD_RELEASE_PDB "Create PDB file for Release version." ON)
     OPTION(FREECAD_LIBPACK_USE "Use the LibPack to Build FreeCAD (only Win32 so far)." ON)
     OPTION(FREECAD_LIBPACK_USEPYSIDE "Use PySide in LibPack rather to PyQt and Swig." ON)
     set(FREECAD_LIBPACK_DIR ${CMAKE_SOURCE_DIR} CACHE PATH  "Directory of the FreeCAD LibPack")
@@ -186,7 +187,6 @@ endif(MSVC)
 # Switch to build FreeCAD with Qt5
 OPTION(BUILD_QT5 "Build with Qt5." OFF)
 OPTION(BUILD_GUI "Build FreeCAD Gui. Otherwise you have only the command line and the Python import module." ON)
-OPTION(FREECAD_MAINTAINERS_BUILD "Build FreeCAD for Maintainers, with Docu and 3rd party libs. On Windows the Installer is built." OFF)
 OPTION(FREECAD_USE_EXTERNAL_ZIPIOS "Use system installed zipios++ instead of the bundled." OFF)
 OPTION(FREECAD_USE_EXTERNAL_SMESH "Use system installed smesh instead of the bundled." OFF)
 OPTION(FREECAD_USE_EXTERNAL_KDL "Use system installed orocos-kdl instead of the bundled." OFF)
@@ -377,16 +377,6 @@ if(FREECAD_LIBPACK_USE)
     IF(FREECAD_LIBPACK_CHECKFILE_CLBUNDLER)
         set(FREECAD_LIBPACK_VERSION "CLbundler" CACHE STRING "Displays if the libpack has been found" FORCE)
         include(cMake/UseLibPackCLbundler.cmake)
-    ELSEIF(FREECAD_LIBPACK_CHECKFILE6X)
-        set(FREECAD_LIBPACK_VERSION "6.x" CACHE STRING "Displays if the libpack has been found" FORCE)
-        include(cMake/UseLibPack6x.cmake)
-    ELSEIF(FREECAD_LIBPACK_CHECKFILE7X)
-        set(FREECAD_LIBPACK_VERSION "7.x" CACHE STRING "Displays if the libpack has been found" FORCE)
-        include(cMake/UseLibPack7x.cmake)
-    ELSEIF(FREECAD_LIBPACK_CHECKFILE8X)
-        set(FREECAD_LIBPACK_VERSION "8.x" CACHE STRING "Displays if the libpack has been found" FORCE)
-        include(cMake/UseLibPack8x.cmake)
-        set(SWIG_EXECUTABLE ${FREECAD_LIBPACK_DIR}/tools/swigwin-1.3.40/swig.exe CACHE STRING "Swig" FORCE)
     ELSEIF(FREECAD_LIBPACK_CHECKFILE9X)
         set(FREECAD_LIBPACK_VERSION "9.x" CACHE STRING "Displays if the libpack has been found" FORCE)
         include(cMake/UseLibPack9x.cmake)
@@ -651,10 +641,11 @@ endif()
     # Salome SMESH sources are under src/3rdParty now
     IF(BUILD_SMESH)
         # set the internal smesh version:
-        set(SMESH_VERSION_MAJOR 5)  # in src/3rdParty it says smesh is version 5.*, is this true?
-        set(SMESH_VERSION_MINOR 1)
-        set(SMESH_VERSION_PATCH 2)
-        set(SMESH_VERSION_TWEAK 2)
+        # see src/3rdParty/salomonemesh/CMakeLists.txt and commit https://github.com/FreeCAD/FreeCAD/commit/666a3e5 and https://forum.freecadweb.org/viewtopic.php?f=10&t=30838
+        set(SMESH_VERSION_MAJOR 7)
+        set(SMESH_VERSION_MINOR 7)
+        set(SMESH_VERSION_PATCH 1)
+        set(SMESH_VERSION_TWEAK 0)
 
         #if we use smesh we definitely also need vtk, no matter of external or internal smesh
         set (VTK_COMPONENTS
@@ -1158,102 +1149,17 @@ add_subdirectory(data)
 
 # ================================================================================
 # == Packaging ===================================================================
-if(FREECAD_MAINTAINERS_BUILD AND NOT WIN32)
-	set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "An extensible Open Source CAx program")
-	set(CPACK_PACKAGE_VENDOR "FreeCAD development team")
-	if(WIN32)
-		set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.Win32")
-	else(WIN32)
-		set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.Linux")
-	endif(WIN32)
-	set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/copying.lib")
-	set(CPACK_PACKAGE_VERSION_MAJOR ${PACKAGE_VERSION_MAJOR})
-	set(CPACK_PACKAGE_VERSION_MINOR ${PACKAGE_VERSION_MINOR})
-	set(CPACK_PACKAGE_VERSION_PATCH ${PACKAGE_VERSION_PATCH})
-	set(CPACK_SOURCE_PACKAGE_FILE_NAME ${PACKAGE_NAME}-${PACKAGE_VERSION})
-
-	#for debian: 'cmake .. -DFREECAD_MAINTAINERS_BUILD=TRUE -DCPACK_GENERATOR="DEB"'
-	IF( CMAKE_SIZEOF_VOID_P EQUAL 4 )
-		set(PKG_ARCH i386)
-	ELSE( CMAKE_SIZEOF_VOID_P EQUAL 4 )
-		set(PKG_ARCH amd64)
-	ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 4 )
-	set(CPACK_DEBIAN_PACKAGE_SECTION "science")
-	set(CPACK_DEBIAN_PACKAGE_DEPENDS "python, oce | opencascade, libqtgui4, libcoin60, libxerces-c3.1, zlib1g, libboost-dev, libeigen2-dev")
-	set(CPACK_PACKAGE_CONTACT "<root@localhost>")
-	set(CPACK_PACKAGE_FILE_NAME "${PACKAGE_NAME}-${PACKAGE_VERSION}_${PKG_ARCH}")
-
-	if(WIN32)
-		set(CPACK_GENERATOR "ZIP")
-		set(CPACK_SOURCE_GENERATOR "ZIP")
-	else(WIN32)
-		if( CPACK_GENERATOR STREQUAL "" )
-			set(CPACK_GENERATOR "TGZ")
-			set(CPACK_SOURCE_GENERATOR "TGZ")
-		endif()
-	endif(WIN32)
-	file(GLOB DOT ".*")
-	file(GLOB TILD "*~")
-	set(CPACK_SOURCE_IGNORE_FILES
-	  "${DOT}"
-	  "${TILD}"
-	  ".a$"
-	  ".am$"
-	  ".in$"
-	  ".bat$"
-	  ".o$"
-	  ".so$"
-	  ".m4$"
-	  "/_build/"
-	  "/_cmake/"
-	  "/.deps/"
-	  "/.svn/"
-	  "/CMakeFiles/"
-	  "/CVS/"
-	  "/autom4te.cache/"
-	  "/build/"
-	  "/debian/"
-	  "/debug/"
-	  "/docs/"
-	  "/m4/"
-	  "/qt-build/"
-	  "/CxImage/"
-	  "/WindowsInstaller/"
-	  "AdditionalInfo.txt$"
-	  "CMakeCache.txt$"
-	  "Makefile$"
-	  "\\\\.sh$"
-	  "_CPack_"
-	  "config.h$"
-	  "config.log$"
-	  "config.status$"
-	  "configure$"
-	  "configure.ac$"
-	  "Doxyfile"
-	  "html$"
-	  "stamp-h1$"
-	  ".swp$"
-	  "tar.bz2"
-	  "tar.gz"
-	  "~$"
-	)
-	set(CPACK_SOURCE_STRIP_FILES "")
-	include(CPack)
-
-	#ADD_CUSTOM_TARGET(DIST make package_source)
-
-endif(FREECAD_MAINTAINERS_BUILD AND NOT WIN32)
-    #add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
-    add_custom_target(dist-git
+#add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+add_custom_target(dist-git
             COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/src/Tools/makedist.py
               --srcdir=${CMAKE_SOURCE_DIR} --bindir=${CMAKE_BINARY_DIR}
               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-    add_custom_target(distdfsg-git
+)
+add_custom_target(distdfsg-git
             COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/src/Tools/makedist.py
               --srcdir=${CMAKE_SOURCE_DIR} --bindir=${CMAKE_BINARY_DIR} --dfsg
               WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
+)
 if(CMAKE_COMPILER_IS_GNUCXX OR MINGW)
     add_custom_target(distcheck-git
             COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/src/Tools/makedist.py

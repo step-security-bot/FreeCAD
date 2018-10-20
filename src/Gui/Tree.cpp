@@ -348,7 +348,7 @@ void TreeWidget::onMarkRecompute()
         App::Document* doc = docitem->document()->getDocument();
         std::vector<App::DocumentObject*> obj = doc->getObjects();
         for (std::vector<App::DocumentObject*>::iterator it = obj.begin(); it != obj.end(); ++it)
-            (*it)->touch();
+            (*it)->enforceRecompute();
     }
     // mark all selected objects
     else {
@@ -357,7 +357,7 @@ void TreeWidget::onMarkRecompute()
             if ((*it)->type() == ObjectType) {
                 DocumentObjectItem* objitem = static_cast<DocumentObjectItem*>(*it);
                 App::DocumentObject* obj = objitem->object()->getObject();
-                obj->touch();
+                obj->enforceRecompute();
             }
         }
     }
@@ -706,12 +706,19 @@ void TreeWidget::slotActiveDocument(const Gui::Document& Doc)
     std::map<const Gui::Document*, DocumentItem*>::iterator jt = DocumentMap.find(&Doc);
     if (jt == DocumentMap.end())
         return; // signal is emitted before the item gets created
+    ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/View");
+    int displayMode = hGrp->GetInt("TreeViewDocument", 0);
     for (std::map<const Gui::Document*, DocumentItem*>::iterator it = DocumentMap.begin();
          it != DocumentMap.end(); ++it)
     {
         QFont f = it->second->font(0);
         f.setBold(it == jt);
-        it->second->setFont(0,f);
+        it->second->setHidden(0 == displayMode && it != jt);
+        if (2 == displayMode) {
+            it->second->setExpanded(it == jt);
+        }
+        // this must be done as last step
+        it->second->setFont(0, f);
     }
 }
 
@@ -1249,11 +1256,12 @@ void DocumentItem::slotChangeObject(const Gui::ViewProviderDocumentObject& view)
 void DocumentItem::slotRenameObject(const Gui::ViewProviderDocumentObject& obj)
 {
     // Do nothing here because the Label is set in slotChangeObject
-    Q_UNUSED(obj); 
+    Q_UNUSED(obj);
 }
 
 void DocumentItem::slotActiveObject(const Gui::ViewProviderDocumentObject& obj)
 {
+#if 0
     std::string objectName = obj.getObject()->getNameInDocument();
     if (ObjectMap.find(objectName) == ObjectMap.end())
         return; // signal is emitted before the item gets created
@@ -1265,6 +1273,9 @@ void DocumentItem::slotActiveObject(const Gui::ViewProviderDocumentObject& obj)
             item->setFont(0,f);
         }
     }
+#else
+    Q_UNUSED(obj);
+#endif
 }
 
 void DocumentItem::slotHighlightObject (const Gui::ViewProviderDocumentObject& obj, const Gui::HighlightMode& high, bool set)
@@ -1302,9 +1313,11 @@ void DocumentItem::slotHighlightObject (const Gui::ViewProviderDocumentObject& o
             QColor color(230,230,255);
             if (set) {
                 ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/TreeView");
+                bool bold = hGrp->GetBool("TreeActiveBold",true);
                 bool italic = hGrp->GetBool("TreeActiveItalic",false);
                 bool underlined = hGrp->GetBool("TreeActiveUnderlined",false);
                 bool overlined = hGrp->GetBool("TreeActiveOverlined",false);
+                f.setBold(bold);
                 f.setItalic(italic);
                 f.setUnderline(underlined);
                 f.setOverline(overlined);
@@ -1313,6 +1326,7 @@ void DocumentItem::slotHighlightObject (const Gui::ViewProviderDocumentObject& o
                 color = QColor((col >> 24) & 0xff,(col >> 16) & 0xff,(col >> 8) & 0xff);
             }
             else {
+                f.setBold(false);
                 f.setItalic(false);
                 f.setUnderline(false);
                 f.setOverline(false);
@@ -1366,21 +1380,6 @@ const Gui::Document* DocumentItem::document() const
 {
     return this->pDocument;
 }
-
-//void DocumentItem::markItem(const App::DocumentObject* Obj,bool mark)
-//{
-//    // never call without Object!
-//    assert(Obj);
-//
-//
-//    std::map<std::string,DocumentObjectItem*>::iterator pos;
-//    pos = ObjectMap.find(Obj->getNameInDocument());
-//    if (pos != ObjectMap.end()) {
-//        QFont f = pos->second->font(0);
-//        f.setUnderline(mark);
-//        pos->second->setFont(0,f);
-//    }
-//}
 
 //void DocumentItem::markItem(const App::DocumentObject* Obj,bool mark)
 //{
@@ -1560,9 +1559,9 @@ void DocumentObjectItem::testStatus()
 
     // if status has changed then continue
     int currentStatus =
-        ((pObject->isError()          ? 1 : 0) << 2) |
-        ((pObject->mustExecute() == 1 ? 1 : 0) << 1) |
-        (viewObject->isShow()         ? 1 : 0);
+        ((pObject->isError()            ? 1 : 0) << 2) |
+        ((pObject->mustRecompute() == 1 ? 1 : 0) << 1) |
+        (viewObject->isShow()           ? 1 : 0);
     if (previousStatus == currentStatus)
         return;
     previousStatus = currentStatus;

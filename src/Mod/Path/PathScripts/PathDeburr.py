@@ -58,17 +58,17 @@ def toolDepthAndOffset(width, extraDepth, tool):
     offset = toolOffset + extraOffset
     return (depth, offset)
 
-class ObjectChamfer(PathEngraveBase.ObjectOp):
-    '''Proxy class for Chamfer operation.'''
+class ObjectDeburr(PathEngraveBase.ObjectOp):
+    '''Proxy class for Deburr operation.'''
 
     def opFeatures(self, obj):
         return PathOp.FeatureTool | PathOp.FeatureHeights | PathOp.FeatureBaseEdges | PathOp.FeatureBaseFaces
 
     def initOperation(self, obj):
         PathLog.track(obj.Label)
-        obj.addProperty('App::PropertyDistance',    'Width',      'Chamfer', QtCore.QT_TRANSLATE_NOOP('PathChamfer', 'The desired width of the chamfer'))
-        obj.addProperty('App::PropertyDistance',    'ExtraDepth', 'Chamfer', QtCore.QT_TRANSLATE_NOOP('PathChamfer', 'The additional depth of the tool path'))
-        obj.addProperty('App::PropertyEnumeration', 'Join',       'Chamfer', QtCore.QT_TRANSLATE_NOOP('PathChamfer', 'How to join chamfer segments'))
+        obj.addProperty('App::PropertyDistance',    'Width',      'Deburr', QtCore.QT_TRANSLATE_NOOP('PathDeburr', 'The desired width of the chamfer'))
+        obj.addProperty('App::PropertyDistance',    'ExtraDepth', 'Deburr', QtCore.QT_TRANSLATE_NOOP('PathDeburr', 'The additional depth of the tool path'))
+        obj.addProperty('App::PropertyEnumeration', 'Join',       'Deburr', QtCore.QT_TRANSLATE_NOOP('PathDeburr', 'How to join chamfer segments'))
         obj.Join = ['Round', 'Miter']
         obj.setEditorMode('Join', 2) # hide for now
 
@@ -100,7 +100,7 @@ class ObjectChamfer(PathEngraveBase.ObjectOp):
 
             self.basewires.extend(basewires)
 
-            for w in self.adjustWirePlacement(obj, base, basewires):
+            for w in basewires:
                 self.adjusted_basewires.append(w)
                 wire = PathOpTools.offsetWire(w, base.Shape, offset, True)
                 if wire:
@@ -111,7 +111,7 @@ class ObjectChamfer(PathEngraveBase.ObjectOp):
 
     def opRejectAddBase(self, obj, base, sub):
         '''The chamfer op can only deal with features of the base model, all others are rejected.'''
-        return base != self.baseobject
+        return not base in self.model
 
     def opSetDefaultValues(self, obj, job):
         PathLog.track(obj.Label, job.Label)
@@ -126,9 +126,9 @@ def SetupProperties():
     return setup
 
 def Create(name, obj = None):
-    '''Create(name) ... Creates and returns a Chamfer operation.'''
+    '''Create(name) ... Creates and returns a Deburr operation.'''
     if obj is None:
         obj = FreeCAD.ActiveDocument.addObject("Path::FeaturePython", name)
-    proxy = ObjectChamfer(obj, name)
+    proxy = ObjectDeburr(obj, name)
     return obj
 

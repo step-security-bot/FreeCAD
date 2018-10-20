@@ -43,6 +43,7 @@ class MDIView;
 class MainWindow;
 class MenuItem;
 class ViewProvider;
+class ViewProviderDocumentObject;
 
 /** The Application main class
  * This is the central class of the GUI 
@@ -115,6 +116,10 @@ public:
     boost::signal<void (const char*)> signalRemoveWorkbench;
     /// signal on activating view
     boost::signal<void (const Gui::MDIView*)> signalActivateView;
+    /// signal on entering in edit mode
+    boost::signal<void (const Gui::ViewProviderDocumentObject&)> signalInEdit;
+    /// signal on leaving edit mode
+    boost::signal<void (const Gui::ViewProviderDocumentObject&)> signalResetEdit;
     //@}
 
     /** @name methods for Document handling */
@@ -131,6 +136,8 @@ protected:
     void slotChangedObject(const ViewProvider&, const App::Property& Prop);
     void slotRelabelObject(const ViewProvider&);
     void slotActivatedObject(const ViewProvider&);
+    void slotInEdit(const Gui::ViewProviderDocumentObject&);
+    void slotResetEdit(const Gui::ViewProviderDocumentObject&);
 
 public:
     /// message when a GuiDocument is about to vanish
@@ -149,6 +156,8 @@ public:
     Gui::Document* getDocument(const App::Document* pDoc) const;
     /// Getter for the active view of the active document or null
     Gui::MDIView* activeView(void) const;
+    /// Activate a view of the given type of the active document
+    void activateView(const Base::Type&, bool create=false);
     /// Shows the associated view provider of the given object
     void showViewProvider(const App::DocumentObject*);
     /// Hides the associated view provider of the given object
@@ -237,6 +246,7 @@ public:
     static PyObject* sActiveDocument           (PyObject *self,PyObject *args);
     static PyObject* sSetActiveDocument        (PyObject *self,PyObject *args);
     static PyObject* sActiveView               (PyObject *self,PyObject *args);
+    static PyObject* sActivateView             (PyObject *self,PyObject *args);
     static PyObject* sGetDocument              (PyObject *self,PyObject *args);
 
     static PyObject* sDoCommand                (PyObject *self,PyObject *args);
@@ -248,6 +258,9 @@ public:
 
     static PyObject* sCreateViewer             (PyObject *self,PyObject *args);
     static PyObject* sGetMarkerIndex           (PyObject *self,PyObject *args);
+    
+    static PyObject* sAddDocObserver           (PyObject *self,PyObject *args);
+    static PyObject* sRemoveDocObserver        (PyObject *self,PyObject *args);
 
     static PyMethodDef    Methods[]; 
 

@@ -56,6 +56,9 @@ namespace @self.export.Namespace@
  */
 class @self.export.Namespace@Export @self.export.Name@ : public @self.export.FatherNamespace@::@self.export.Father@
 {
+protected:
+    ~@self.export.Name@();
+
 public:
     static PyTypeObject   Type;
     static PyMethodDef    Methods[];
@@ -76,8 +79,7 @@ public:
     @self.export.Name@(@self.export.TwinPointer@ *pcObject, PyTypeObject *T = &Type);
     static PyObject *PyMake(struct _typeobject *, PyObject *, PyObject *);
     virtual int PyInit(PyObject* args, PyObject*k);
-    ~@self.export.Name@();
-    
+
 + if (self.export.Initialization):
     int initialization();
     int finalization();
@@ -798,7 +800,7 @@ PyObject *@self.export.Name@::_getattr(const char *attr)			// __getattr__ functi
 int @self.export.Name@::_setattr(const char *attr, PyObject *value) // __setattr__ function: note only need to handle new state
 {
     try {
-        // setter for  special Attributes (e.g. dynamic ones)
+        // setter for special Attributes (e.g. dynamic ones)
         int r = setCustomAttributes(attr, value);
         // r = 1: handled
         // r = -1: error

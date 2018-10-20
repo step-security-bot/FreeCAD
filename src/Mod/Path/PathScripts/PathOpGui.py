@@ -72,6 +72,7 @@ class ViewProvider(object):
 
     def attach(self, vobj):
         PathLog.track()
+        self.vobj = vobj
         self.Object = vobj.Object
         self.panel = None
         return
@@ -84,16 +85,21 @@ class ViewProvider(object):
         PathLog.track()
         return hasattr(self, 'deleteOnReject') and self.deleteOnReject
 
-    def setEdit(self, vobj, mode=0):
+    def setEdit(self, vobj=None, mode=0):
         '''setEdit(vobj, mode=0) ... initiate editing of receivers model.'''
         PathLog.track()
-        page = self.getTaskPanelOpPage(vobj.Object)
-        page.setTitle(self.OpName)
-        page.setIcon(self.OpIcon)
-        selection = self.getSelectionFactory()
-        self.setupTaskPanel(TaskPanel(vobj.Object, self.deleteObjectsOnReject(), page, selection))
-        self.deleteOnReject = False
-        return True
+        if 0 == mode:
+            if vobj is None:
+                vobj = self.vobj
+            page = self.getTaskPanelOpPage(vobj.Object)
+            page.setTitle(self.OpName)
+            page.setIcon(self.OpIcon)
+            selection = self.getSelectionFactory()
+            self.setupTaskPanel(TaskPanel(vobj.Object, self.deleteObjectsOnReject(), page, selection))
+            self.deleteOnReject = False
+            return True
+        # no other editing possible
+        return False
 
     def setupTaskPanel(self, panel):
         '''setupTaskPanel(panel) ... internal function to start the editor.'''
@@ -162,6 +168,13 @@ class ViewProvider(object):
         PathUtil.clearExpressionEngine(vobj.Object)
         return True
 
+    def setupContextMenu(self, vobj, menu):
+        PathLog.track()
+        for action in menu.actions():
+            menu.removeAction(action)
+        action = QtGui.QAction(translate('Path', 'Edit'), menu)
+        action.triggered.connect(self.setEdit)
+        menu.addAction(action)
 
 class TaskPanelPage(object):
     '''Base class for all task panel pages.'''
@@ -381,20 +394,15 @@ class TaskPanelBaseGeometryPage(TaskPanelPage):
             return 'edges'
         return 'nothing'
 
-    def addBaseGeometry(self, selection):
-        PathLog.track(selection)
-        if len(selection) != 1:
-            PathLog.error(translate("PathProject", "Please select %s from a single solid" % self.featureName()))
-            return False
-        sel = selection[0]
+    def addBaseGeometrySelection(self, sel):
         if sel.HasSubObjects:
-            if not self.supportsVertexes() and selection[0].SubObjects[0].ShapeType == "Vertex":
+            if not self.supportsVertexes() and sel.SubObjects[0].ShapeType == "Vertex":
                 PathLog.error(translate("PathProject", "Vertexes are not supported"))
                 return False
-            if not self.supportsEdges() and selection[0].SubObjects[0].ShapeType == "Edge":
+            if not self.supportsEdges() and sel.SubObjects[0].ShapeType == "Edge":
                 PathLog.error(translate("PathProject", "Edges are not supported"))
                 return False
-            if not self.supportsFaces() and selection[0].SubObjects[0].ShapeType == "Face":
+            if not self.supportsFaces() and sel.SubObjects[0].ShapeType == "Face":
                 PathLog.error(translate("PathProject", "Faces are not supported"))
                 return False
         else:
@@ -405,6 +413,17 @@ class TaskPanelBaseGeometryPage(TaskPanelPage):
         for sub in sel.SubElementNames:
             self.obj.Proxy.addBase(self.obj, sel.Object, sub)
         return True
+
+    def addBaseGeometry(self, selection):
+        PathLog.track(selection)
+        #if len(selection) != 1:
+        #    PathLog.error(translate("PathProject", "Please select %s from a single solid" % self.featureName()))
+        #    return False
+        changed = False
+        for sel in selection:
+            if self.addBaseGeometrySelection(sel):
+                changed = True
+        return changed
 
     def addBase(self):
         if self.addBaseGeometry(FreeCADGui.Selection.getSelectionEx()):
@@ -946,7 +965,7 @@ def Create(res):
         vobj = ViewProvider(obj.ViewObject, res)
 
         FreeCAD.ActiveDocument.commitTransaction()
-        obj.ViewObject.startEditing()
+        obj.ViewObject.Document.setEdit(obj.ViewObject, 0)
         return obj
     FreeCAD.ActiveDocument.abortTransaction()
     return None

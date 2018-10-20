@@ -33,6 +33,7 @@
 # include <GL/gl.h>
 # endif
 # include <Inventor/SbBox.h>
+# include <Inventor/SoEventManager.h>
 # include <Inventor/actions/SoGetBoundingBoxAction.h>
 # include <Inventor/actions/SoGetMatrixAction.h>
 # include <Inventor/actions/SoHandleEventAction.h>
@@ -720,6 +721,13 @@ SbBool View3DInventorViewer::setEditingViewProvider(Gui::ViewProvider* p, int Mo
 void View3DInventorViewer::resetEditingViewProvider()
 {
     if (this->editViewProvider) {
+        // In case the event action still has grabbed a node when leaving edit mode
+        // force to release it now
+        SoEventManager* mgr = this->getSoEventManager();
+        SoHandleEventAction* heaction = mgr->getHandleEventAction();
+        if (heaction && heaction->getGrabber())
+            heaction->releaseGrabber();
+
         this->editViewProvider->unsetEditViewer(this);
         removeEventCallback(SoEvent::getClassTypeId(), Gui::ViewProvider::eventCallback,this->editViewProvider);
         this->editViewProvider = 0;
@@ -1167,9 +1175,9 @@ bool View3DInventorViewer::isSelecting() const
     return navigation->isSelecting();
 }
 
-const std::vector<SbVec2s>& View3DInventorViewer::getPolygon(SbBool* clip_inner) const
+const std::vector<SbVec2s>& View3DInventorViewer::getPolygon(SelectionRole* role) const
 {
-    return navigation->getPolygon(clip_inner);
+    return navigation->getPolygon(role);
 }
 
 SbVec2f View3DInventorViewer::screenCoordsOfPath(SoPath* path) const
@@ -1255,9 +1263,9 @@ std::vector<SbVec2f> View3DInventorViewer::getGLPolygon(const std::vector<SbVec2
     return poly;
 }
 
-std::vector<SbVec2f> View3DInventorViewer::getGLPolygon(SbBool* clip_inner) const
+std::vector<SbVec2f> View3DInventorViewer::getGLPolygon(SelectionRole* role) const
 {
-    const std::vector<SbVec2s>& pnts = navigation->getPolygon(clip_inner);
+    const std::vector<SbVec2s>& pnts = navigation->getPolygon(role);
     return getGLPolygon(pnts);
 }
 
@@ -2199,6 +2207,8 @@ void View3DInventorViewer::animatedViewAll(int steps, int ms)
 
     SbSphere sphere;
     sphere.circumscribe(box);
+    if (sphere.getRadius() == 0)
+        return;
 
     SbVec3f direction, pos;
     camrot.multVec(SbVec3f(0, 0, -1), direction);
@@ -2271,6 +2281,19 @@ void View3DInventorViewer::boxZoom(const SbBox2s& box)
 
 void View3DInventorViewer::viewAll()
 {
+    SbViewportRegion vp = this->getSoRenderManager()->getViewportRegion();
+    SoGetBoundingBoxAction action(vp);
+    action.apply(this->getSoRenderManager()->getSceneGraph());
+    SbBox3f box = action.getBoundingBox();
+
+    if (box.isEmpty())
+        return;
+
+    SbSphere sphere;
+    sphere.circumscribe(box);
+    if (sphere.getRadius() == 0)
+        return;
+
     // in the scene graph we may have objects which we want to exclude
     // when doing a fit all. Such objects must be part of the group
     // SoSkipBoundingGroup.

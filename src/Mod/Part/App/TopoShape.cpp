@@ -1486,7 +1486,7 @@ TopoDS_Shape TopoShape::cut(TopoDS_Shape shape) const
     if (shape.IsNull())
         Standard_Failure::Raise("Tool shape is null");
     BRepAlgoAPI_Cut mkCut(this->_Shape, shape);
-    return mkCut.Shape();
+    return makeShell(mkCut.Shape());
 }
 
 TopoDS_Shape TopoShape::cut(const std::vector<TopoDS_Shape>& shapes, Standard_Real tolerance) const
@@ -1521,7 +1521,7 @@ TopoDS_Shape TopoShape::cut(const std::vector<TopoDS_Shape>& shapes, Standard_Re
         throw Base::RuntimeError("Multi cut failed");
 
     TopoDS_Shape resShape = mkCut.Shape();
-    return resShape;
+    return makeShell(resShape);
 #endif
 }
 
@@ -1532,7 +1532,7 @@ TopoDS_Shape TopoShape::common(TopoDS_Shape shape) const
     if (shape.IsNull())
         Standard_Failure::Raise("Tool shape is null");
     BRepAlgoAPI_Common mkCommon(this->_Shape, shape);
-    return mkCommon.Shape();
+    return makeShell(mkCommon.Shape());
 }
 
 TopoDS_Shape TopoShape::common(const std::vector<TopoDS_Shape>& shapes, Standard_Real tolerance) const
@@ -1567,7 +1567,7 @@ TopoDS_Shape TopoShape::common(const std::vector<TopoDS_Shape>& shapes, Standard
         throw Base::RuntimeError("Multi common failed");
 
     TopoDS_Shape resShape = mkCommon.Shape();
-    return resShape;
+    return makeShell(resShape);
 #endif
 }
 
@@ -1578,7 +1578,7 @@ TopoDS_Shape TopoShape::fuse(TopoDS_Shape shape) const
     if (shape.IsNull())
         Standard_Failure::Raise("Tool shape is null");
     BRepAlgoAPI_Fuse mkFuse(this->_Shape, shape);
-    return mkFuse.Shape();
+    return makeShell(mkFuse.Shape());
 }
 
 TopoDS_Shape TopoShape::fuse(const std::vector<TopoDS_Shape>& shapes, Standard_Real tolerance) const
@@ -1627,7 +1627,7 @@ TopoDS_Shape TopoShape::fuse(const std::vector<TopoDS_Shape>& shapes, Standard_R
 
     TopoDS_Shape resShape = mkFuse.Shape();
 #endif
-    return resShape;
+    return makeShell(resShape);
 }
 
 TopoDS_Shape TopoShape::oldFuse(TopoDS_Shape shape) const
@@ -2317,14 +2317,33 @@ TopoDS_Shape TopoShape::makeOffsetShape(double offset, double tol, bool intersec
                                         bool selfInter, short offsetMode, short join,
                                         bool fill) const
 {
+    // If the input shape is a compound with a single solid then the offset
+    // algorithm creates only a shell instead of a solid which causes errors
+    // when using it e.g. for boolean operations. (#0003571)
+    // But when extracting the solid and passing it to the algorithm the output
+    // shape is a solid.
+    TopoDS_Shape inputShape = this->_Shape;
+    TopExp_Explorer xp;
+    xp.Init(inputShape, TopAbs_VERTEX, TopAbs_SOLID);
+    if (!xp.More()) {
+        xp.Init(inputShape, TopAbs_SOLID);
+        if (xp.More()) {
+            // If exactly one solid then get it
+            TopoDS_Shape inputSolid = xp.Current();
+            xp.Next();
+            if (xp.More() == Standard_False)
+                inputShape = inputSolid;
+        }
+    }
+
 #if OCC_VERSION_HEX < 0x070200
-    BRepOffsetAPI_MakeOffsetShape mkOffset(this->_Shape, offset, tol, BRepOffset_Mode(offsetMode),
+    BRepOffsetAPI_MakeOffsetShape mkOffset(inputShape, offset, tol, BRepOffset_Mode(offsetMode),
         intersection ? Standard_True : Standard_False,
         selfInter ? Standard_True : Standard_False,
         GeomAbs_JoinType(join));
 #else
     BRepOffsetAPI_MakeOffsetShape mkOffset;
-    mkOffset.PerformByJoin(this->_Shape, offset, tol, BRepOffset_Mode(offsetMode),
+    mkOffset.PerformByJoin(inputShape, offset, tol, BRepOffset_Mode(offsetMode),
                            intersection ? Standard_True : Standard_False,
                            selfInter ? Standard_True : Standard_False,
                            GeomAbs_JoinType(join));
@@ -3448,4 +3467,74 @@ TopoDS_Shape TopoShape::defeaturing(const std::vector<TopoDS_Shape>& s) const
 //     }
     return defeat.Shape();
 #endif
+}
+
+/**
+ * @brief TopoShape::makeShell
+ * If the input shape is a compound with faces not being part of a shell
+ * it tries to make a shell.
+ * If this operation fails or if the input shape is not a compound or a compound
+ * with not only faces the input shape is returned.
+ * @return Shell or passed shape
+ */
+TopoDS_Shape TopoShape::makeShell(const TopoDS_Shape& input) const
+{
+    // For comparison see also:
+    // GEOMImpl_BooleanDriver::makeCompoundShellFromFaces
+    if (input.IsNull())
+        return input;
+    if (input.ShapeType() != TopAbs_COMPOUND)
+        return input;
+
+    // we need a compound that consists of only faces
+    TopExp_Explorer it;
+    // no shells
+    it.Init(input, TopAbs_SHELL);
+    if (it.More())
+        return input;
+
+    // no wires outside a face
+    it.Init(input, TopAbs_WIRE, TopAbs_FACE);
+    if (it.More())
+        return input;
+
+    // no edges outside a wire
+    it.Init(input, TopAbs_EDGE, TopAbs_WIRE);
+    if (it.More())
+        return input;
+
+    // no vertexes outside an edge
+    it.Init(input, TopAbs_VERTEX, TopAbs_EDGE);
+    if (it.More())
+        return input;
+
+    BRep_Builder builder;
+    TopoDS_Shape shape;
+    TopoDS_Shell shell;
+    builder.MakeShell(shell);
+
+    try {
+        for (it.Init(input, TopAbs_FACE); it.More(); it.Next()) {
+            if (!it.Current().IsNull())
+                builder.Add(shell, it.Current());
+        }
+
+        shape = shell;
+        BRepCheck_Analyzer check(shell);
+        if (!check.IsValid()) {
+            ShapeUpgrade_ShellSewing sewShell;
+            shape = sewShell.ApplySewing(shell);
+        }
+
+        if (shape.IsNull())
+            return input;
+
+        if (shape.ShapeType() != TopAbs_SHELL)
+            return input;
+
+        return shape; // success
+    }
+    catch (Standard_Failure&) {
+        return input;
+    }
 }

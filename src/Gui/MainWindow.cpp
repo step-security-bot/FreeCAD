@@ -976,8 +976,10 @@ void MainWindow::closeEvent (QCloseEvent * e)
         }
 
         /*emit*/ mainWindowClosed();
-        if (this->property("QuitOnClosed").isValid())
+        if (this->property("QuitOnClosed").isValid()) {
+            QApplication::closeAllWindows();
             qApp->quit(); // stop the event loop
+        }
     }
 }
 
@@ -1069,7 +1071,9 @@ void MainWindow::delayedStartup()
     // Create new document?
     ParameterGrp::handle hGrp = WindowParameter::getDefaultParameter()->GetGroup("Document");
     if (hGrp->GetBool("CreateNewDoc", false)) {
-        App::GetApplication().newDocument();
+        if (App::GetApplication().getDocuments().size()==0){
+            App::GetApplication().newDocument();
+        }
     }
 
     if (hGrp->GetBool("RecoveryEnabled", true)) {
@@ -1285,8 +1289,8 @@ void MainWindow::dropEvent (QDropEvent* e)
 {
     const QMimeData* data = e->mimeData();
     if (data->hasUrls()) {
-        // pass no document to let create a new one if needed
-        loadUrls(0, data->urls());
+        // load the files into the active document if there is one, otherwise let create one
+        loadUrls(App::GetApplication().getActiveDocument(), data->urls());
     }
     else {
         QMainWindow::dropEvent(e);
@@ -1536,7 +1540,7 @@ void MainWindow::loadUrls(App::Document* doc, const QList<QUrl>& url)
         }
     }
 
-    const char *docName = doc ? doc->getName() : "Unnamed";
+    QByteArray docName = doc ? QByteArray(doc->getName()) : qApp->translate("StdCmdNew","Unnamed").toUtf8();
     SelectModule::Dict dict = SelectModule::importHandler(files);
     // load the files with the associated modules
     for (SelectModule::Dict::iterator it = dict.begin(); it != dict.end(); ++it) {

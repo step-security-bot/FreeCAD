@@ -272,7 +272,7 @@ void CmdTechDrawNewView::activated(int iMsg)
     if ((shapes.empty()) &&
         (groups.empty())) {
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-            QObject::tr("Can not make a View from this selection"));
+            QObject::tr("No Shapes or Groups in this selection"));
         return;
     }
     if (!groups.empty()) {
@@ -506,7 +506,7 @@ void CmdTechDrawProjGroup::activated(int iMsg)
     if ((shapes.empty()) &&
         (groups.empty())) {
         QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-            QObject::tr("Can not make a ProjectionGroup from this selection"));
+            QObject::tr("No Shapes or Groups in this selection"));
         return;
     }
     if (!groups.empty()) {
@@ -612,7 +612,7 @@ bool CmdTechDrawProjGroup::isActive(void)
 //    std::vector<App::DocumentObject*> shapes = getSelection().getObjectsOfType(App::DocumentObject::getClassTypeId());
 //    if (shapes.empty()) {
 //        QMessageBox::warning(Gui::getMainWindow(), QObject::tr("Wrong selection"),
-//            QObject::tr("Can not make a MultiView from this selection."));
+//            QObject::tr("Can not  MultiView from this selection."));
 //        return;
 //    }
 
@@ -913,7 +913,11 @@ void CmdTechDrawSymbol::activated(int iMsg)
     {
         std::string FeatName = getUniqueObjectName("Symbol");
         openCommand("Create Symbol");
+#if PY_MAJOR_VERSION < 3
         doCommand(Doc,"f = open(unicode(\"%s\",'utf-8'),'r')",(const char*)filename.toUtf8());
+#else
+        doCommand(Doc,"f = open(\"%s\",'r')",(const char*)filename.toUtf8());
+#endif
         doCommand(Doc,"svg = f.read()");
         doCommand(Doc,"f.close()");
         doCommand(Doc,"App.activeDocument().addObject('TechDraw::DrawViewSymbol','%s')",FeatName.c_str());

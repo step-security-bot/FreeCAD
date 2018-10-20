@@ -142,6 +142,17 @@ SketchObject::~SketchObject()
     delete analyser;
 }
 
+short SketchObject::mustExecute() const
+{
+    if (Geometry.isTouched())
+        return 1;
+    if (Constraints.isTouched())
+        return 1;
+    if (ExternalGeometry.isTouched())
+        return 1;
+    return Part2DObject::mustExecute();
+}
+
 App::DocumentObjectExecReturn *SketchObject::execute(void)
 {
     try {
@@ -1137,8 +1148,18 @@ int SketchObject::transferConstraints(int fromGeoId, PointPos fromPosId, int toG
             constNew->First = toGeoId;
             constNew->FirstPos = toPosId;
 
-            if(vals[i]->Type == Sketcher::Tangent || vals[i]->Type == Sketcher::Perpendicular)
+            if(vals[i]->Type == Sketcher::Tangent || vals[i]->Type == Sketcher::Perpendicular){
                 constNew->Type = Sketcher::Coincident;
+            }
+            // With respect to angle constraints, if it is a DeepSOIC style angle constraint (segment+segment+point),
+            // then no problem arises as the segments are PosId=none. In this case there is no call to this function.
+            //
+            // However, other angle constraints are problematic because they are created on segments, but internally
+            // operate on vertices, PosId=start
+            // Such constraint may not be successfully transferred on deletion of the segments.
+            else if(vals[i]->Type == Sketcher::Angle) {
+                continue;
+            }
 
             newVals[i] = constNew;
             changed.push_back(constNew);
@@ -1153,8 +1174,12 @@ int SketchObject::transferConstraints(int fromGeoId, PointPos fromPosId, int toG
             // Nothing guarantees that a tangent can be freely transferred to another coincident point, as
             // the transfer destination edge most likely won't be intended to be tangent. However, if it is
             // an end to end point tangency, the user expects it to be substituted by a coincidence constraint.
-            if(vals[i]->Type == Sketcher::Tangent || vals[i]->Type == Sketcher::Perpendicular)
+            if(vals[i]->Type == Sketcher::Tangent || vals[i]->Type == Sketcher::Perpendicular) {
                 constNew->Type = Sketcher::Coincident;
+            }
+            else if(vals[i]->Type == Sketcher::Angle) {
+                continue;
+            }
 
             newVals[i] = constNew;
             changed.push_back(constNew);
@@ -5767,8 +5792,9 @@ bool SketchObject::evaluateConstraints() const
             return false;
     }
 
-    if(constraints.size()>0){
-        if (!Constraints.scanGeometry(geometry)) return false;
+    if (!constraints.empty()) {
+        if (!Constraints.scanGeometry(geometry))
+            return false;
     }
 
     return true;
@@ -5777,7 +5803,7 @@ bool SketchObject::evaluateConstraints() const
 void SketchObject::validateConstraints()
 {
     std::vector<Part::Geometry *> geometry = getCompleteGeometry();
-    const std::vector<Sketcher::Constraint *>& constraints = Constraints.getValues();
+    const std::vector<Sketcher::Constraint *>& constraints = Constraints.getValuesForce();
 
     std::vector<Sketcher::Constraint *> newConstraints;
     std::vector<Sketcher::Constraint *>::const_iterator it;
@@ -5790,6 +5816,9 @@ void SketchObject::validateConstraints()
     if (newConstraints.size() != constraints.size()) {
         Constraints.setValues(newConstraints);
         acceptGeometry();
+    }
+    else if (!Constraints.scanGeometry(geometry)) {
+        Constraints.acceptGeometry(geometry);
     }
 }
 
