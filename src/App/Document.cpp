@@ -1029,6 +1029,15 @@ bool Document::hasPendingTransaction() const
         return false;
 }
 
+bool Document::isTransactionEmpty() const
+{
+    if (d->activeUndoTransaction) {
+        return d->activeUndoTransaction->isEmpty();
+    }
+
+    return true;
+}
+
 void Document::clearUndos()
 {
     if (d->activeUndoTransaction)
@@ -1274,7 +1283,11 @@ Document::~Document()
     Console().Log("-App::Document: %s %p\n",getName(), this);
 #endif
 
-    clearUndos();
+    try {
+        clearUndos();
+    }
+    catch (const boost::exception&) {
+    }
 
     std::map<std::string,DocumentObject*>::iterator it;
 
@@ -1293,6 +1306,7 @@ Document::~Document()
     // not to dec'ref the Python object any more.
     // But we must still invalidate the Python object because it doesn't need to be
     // destructed right now because the interpreter can own several references to it.
+    Base::PyGILStateLocker lock;
     Base::PyObjectBase* doc = (Base::PyObjectBase*)DocumentPythonObject.ptr();
     // Call before decrementing the reference counter, otherwise a heap error can occur
     doc->setInvalid();
@@ -1327,11 +1341,6 @@ std::string Document::getTransientDirectoryName(const std::string& uuid, const s
 
 void Document::Save (Base::Writer &writer) const
 {
-    writer.Stream() << "<?xml version='1.0' encoding='utf-8'?>" << endl
-    << "<!--" << endl
-    << " FreeCAD Document, see http://www.freecadweb.org for more information..." << endl
-    << "-->" << endl;
-
     writer.Stream() << "<Document SchemaVersion=\"4\" ProgramVersion=\""
                     << App::Application::Config()["BuildVersionMajor"] << "."
                     << App::Application::Config()["BuildVersionMinor"] << "R"
@@ -1550,7 +1559,23 @@ Document::readObjects(Base::XMLReader& reader)
         DocumentObject* pObj = getObject(name.c_str());
         if (pObj) { // check if this feature has been registered
             pObj->setStatus(ObjectStatus::Restore, true);
-            pObj->Restore(reader);
+            try {
+                pObj->Restore(reader);
+            }
+            // Try to continue only for certain exception types if not handled
+            // by the feature type. For all other exception types abort the process.
+            catch (const Base::UnicodeError &e) {
+                e.ReportException();
+            }
+            catch (const Base::ValueError &e) {
+                e.ReportException();
+            }
+            catch (const Base::IndexError &e) {
+                e.ReportException();
+            }
+            catch (const Base::RuntimeError &e) {
+                e.ReportException();
+            }
             pObj->setStatus(ObjectStatus::Restore, false);
         }
         reader.readEndElement("Object");
@@ -1696,6 +1721,10 @@ bool Document::saveToFile(const char* filename) const
         if (hGrp->GetBool("SaveBinaryBrep", false))
             writer.setMode("BinaryBrep");
 
+        writer.Stream() << "<?xml version='1.0' encoding='utf-8'?>" << endl
+                        << "<!--" << endl
+                        << " FreeCAD Document, see http://www.freecadweb.org for more information..." << endl
+                        << "-->" << endl;
         Document::Save(writer);
 
         // Special handling for Gui document.
