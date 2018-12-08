@@ -215,6 +215,9 @@ def deformat(text):
                     ns += ss.decode("latin1")
                 except UnicodeError:
                     print("unable to decode text: ",text)
+            except AttributeError:
+                # this is python3 (nothing to do)
+                ns += ss
     t = ns
     # replace degrees, diameters chars
     t = re.sub('%%d',u'°',t)
@@ -977,10 +980,9 @@ def addText(text,attrib=False):
         hgt = vec(text.height)
     if val:
         if attrib:
-            newob = doc.addObject("App::Annotation","Attribute")
+            name = "Attribute"
         else:
-            newob = doc.addObject("App::Annotation","Text")
-        lay.addObject(newob)
+            name = "Text"
         val = deformat(val)
         # the following stores text as Latin1 in annotations, which
         # displays ok in coin texts, but causes errors later on.
@@ -992,6 +994,8 @@ def addText(text,attrib=False):
         #        val = val.encode("latin1")
         #    except:
         #        pass
+        newob = Draft.makeText(val.split("\n"))
+        lay.addObject(newob)
         rx = rawValue(text,11)
         ry = rawValue(text,21)
         rz = rawValue(text,31)
@@ -1013,7 +1017,6 @@ def addText(text,attrib=False):
             attrot = rawValue(text,50)
             if attrot:
                 Draft.rotate(newob,attrot)
-        newob.LabelText = val.split("\n")
         if gui and draftui and dxfUseStandardSize:
             fsize = draftui.fontsize
         else:
@@ -1027,7 +1030,7 @@ def addText(text,attrib=False):
             elif text.alignment in [4,5,6]:
                 sup = DraftVecUtils.scaleTo(yv,fsize/(2*TEXTSCALING)).negative()
                 pos = pos.add(sup)
-        newob.Position = pos
+        newob.Placement.Base = pos
         if gui:
             newob.ViewObject.FontSize = fsize
             if hasattr(text,"alignment"):
@@ -1035,7 +1038,7 @@ def addText(text,attrib=False):
                     newob.ViewObject.Justification = "Center"
                 elif text.alignment in [3,6,9]:
                     newob.ViewObject.Justification = "Right"
-            newob.ViewObject.DisplayMode = "World"
+            #newob.ViewObject.DisplayMode = "World"
             formatObject(newob,text)
 
 def addToBlock(obj,layer):
@@ -1226,7 +1229,7 @@ def processdxf(document,filename,getShapes=False,reComputeFlag=True):
     # drawing solids
 
     solids = drawing.entities.get_type("solid")
-    if solids: FreeCAD.Console.PrintMessage("drawing "+str(len(circles))+" solids...\n")
+    if solids: FreeCAD.Console.PrintMessage("drawing "+str(len(solids))+" solids...\n")
     for solid in solids:
         lay = rawValue(solid,8)
         if dxfImportLayouts or (not rawValue(solid,67)):

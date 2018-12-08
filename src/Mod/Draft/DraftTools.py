@@ -376,6 +376,8 @@ class SelectPlane(DraftTool):
                                             if o.Visibility != (v == "True"):
                                                 FreeCADGui.doCommand("FreeCADGui.ActiveDocument.getObject(\""+k+"\").Visibility = "+v)
                     self.display(plane.axis)
+                    self.ui.wplabel.setText(sel.Object.Label)
+                    self.ui.wplabel.setToolTip(translate("draft", "Current working plane:",utf8_decode=True)+self.ui.wplabel.text())
                     self.finish()
                     return
                 elif sel.HasSubObjects:
@@ -2221,17 +2223,23 @@ class ShapeString(Creator):
         Creator.Activated(self,name)
         if self.ui:
             self.ui.sourceCmd = self
-            self.dialog = None
-            self.text = ''
-            self.ui.sourceCmd = self
-            self.ui.pointUi(name)
-            self.active = True
-            self.call = self.view.addEventCallback("SoEvent",self.action)
-            self.ssBase = None
-            self.ui.xValue.setFocus()
-            self.ui.xValue.selectAll()
-            msg(translate("draft", "Pick ShapeString location point:")+"\n")
-            FreeCADGui.draftToolBar.show()
+            self.taskmode = Draft.getParam("UiMode",1)
+            if self.taskmode:
+                self.task = DraftGui.ShapeStringTaskPanel()
+                self.task.sourceCmd = self
+                DraftGui.todo.delay(FreeCADGui.Control.showDialog,self.task)
+            else:
+                self.dialog = None
+                self.text = ''
+                self.ui.sourceCmd = self
+                self.ui.pointUi(name)
+                self.active = True
+                self.call = self.view.addEventCallback("SoEvent",self.action)
+                self.ssBase = None
+                self.ui.xValue.setFocus()
+                self.ui.xValue.selectAll()
+                msg(translate("draft", "Pick ShapeString location point:")+"\n")
+                FreeCADGui.draftToolBar.show()
 
     def createObject(self):
         "creates object in the current doc"
@@ -2357,14 +2365,7 @@ class Move(Modifier):
     def proceed(self):
         if self.call: self.view.removeEventCallback("SoEvent",self.call)
         self.sel = FreeCADGui.Selection.getSelection()
-        # testing for special case: only Arch groups in selection
-        onlyarchgroups = True
-        for o in self.sel:
-            if not(Draft.getType(o) in ["Floor","Building","Site"]):
-                onlyarchgroups = False
-        if not onlyarchgroups:
-            # arch groups can be moved, no need to add their children
-            self.sel = Draft.getGroupContents(self.sel,addgroups=True,spaces=True)
+        self.sel = Draft.getGroupContents(self.sel,addgroups=True,spaces=True,noarchchild=True)
         self.ui.pointUi(self.name)
         self.ui.modUi()
         if self.copymode:
@@ -2521,7 +2522,7 @@ class Rotate(Modifier):
     def proceed(self):
         if self.call: self.view.removeEventCallback("SoEvent",self.call)
         self.sel = FreeCADGui.Selection.getSelection()
-        self.sel = Draft.getGroupContents(self.sel,addgroups=True,spaces=True)
+        self.sel = Draft.getGroupContents(self.sel,addgroups=True,spaces=True,noarchchild=True)
         self.step = 0
         self.center = None
         self.ui.arcUi()
@@ -4972,8 +4973,11 @@ class Draft_Clone(Modifier):
             l = len(FreeCADGui.Selection.getSelection())
             FreeCADGui.addModule("Draft")
             FreeCAD.ActiveDocument.openTransaction("Clone")
+            nonRepeatList = []
             for obj in FreeCADGui.Selection.getSelection():
-                FreeCADGui.doCommand("Draft.clone(FreeCAD.ActiveDocument."+obj.Name+")")
+                if obj not in nonRepeatList:
+                    FreeCADGui.doCommand("Draft.clone(FreeCAD.ActiveDocument."+obj.Name+")")
+                    nonRepeatList.append(obj)
             FreeCAD.ActiveDocument.commitTransaction()
             FreeCAD.ActiveDocument.recompute()
             FreeCADGui.Selection.clearSelection()

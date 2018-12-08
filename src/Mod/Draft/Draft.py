@@ -359,7 +359,7 @@ def shapify(obj):
     FreeCAD.ActiveDocument.recompute()
     return newobj
 
-def getGroupContents(objectslist,walls=False,addgroups=False,spaces=False):
+def getGroupContents(objectslist,walls=False,addgroups=False,spaces=False,noarchchild=False):
     '''getGroupContents(objectlist,[walls,addgroups]): if any object of the given list
     is a group, its content is appened to the list, which is returned. If walls is True,
     walls and structures are also scanned for included windows or rebars. If addgroups
@@ -387,7 +387,7 @@ def getGroupContents(objectslist,walls=False,addgroups=False,spaces=False):
         objectslist = [objectslist]
     for obj in objectslist:
         if obj:
-            if obj.isDerivedFrom("App::DocumentObjectGroup") or ((getType(obj) in ["BuildingPart","Space","Site"]) and hasattr(obj,"Group")):
+            if obj.isDerivedFrom("App::DocumentObjectGroup") or ((getType(obj) in ["Building","BuildingPart","Space","Site"]) and hasattr(obj,"Group")):
                 if getType(obj) == "Site":
                     if obj.Shape:
                         newlist.append(obj)
@@ -397,7 +397,10 @@ def getGroupContents(objectslist,walls=False,addgroups=False,spaces=False):
                 else:
                     if addgroups or (spaces and (getType(obj) == "Space")):
                         newlist.append(obj)
-                    newlist.extend(getGroupContents(obj.Group,walls,addgroups))
+                    if noarchchild and (getType(obj) in ["Building","BuildingPart"]):
+                        pass
+                    else:
+                        newlist.extend(getGroupContents(obj.Group,walls,addgroups))
             else:
                 #print("adding ",obj.Name)
                 newlist.append(obj)
@@ -1432,6 +1435,20 @@ def move(objectslist,vector,copy=False):
             else:
                 newobj = obj
             newobj.Position = obj.Position.add(vector)
+        elif getType(obj) == "DraftText":
+            if copy:
+                newobj = FreeCAD.ActiveDocument.addObject("App::FeaturePython",getRealName(obj.Name))
+                DraftText(newobj)
+                if gui:
+                    ViewProviderDraftText(newobj.ViewObject)
+                    formatObject(newobj,obj)
+                newobj.Text = obj.Text
+                newobj.Placement = obj.Placement
+                if gui:
+                    formatObject(newobj,obj)
+            else:
+                newobj = obj
+            newobj.Placement.Base = obj.Placement.Base.add(vector)
         elif getType(obj) == "Dimension":
             if copy:
                 newobj = FreeCAD.ActiveDocument.addObject("App::FeaturePython",getRealName(obj.Name))
@@ -1769,12 +1786,15 @@ def offset(obj,delta,copy=False,bind=False,sym=False,occ=False):
             else:
                 s1 = obj.Shape
                 s2 = newwire
-            w1 = s1.Edges
-            w2 = s2.Edges
-            w3 = Part.LineSegment(s1.Vertexes[0].Point,s2.Vertexes[0].Point).toShape()
-            w4 = Part.LineSegment(s1.Vertexes[-1].Point,s2.Vertexes[-1].Point).toShape()
-            newobj = FreeCAD.ActiveDocument.addObject("Part::Feature","Offset")
-            newobj.Shape = Part.Face(Part.Wire(w1+[w3]+w2+[w4]))
+            if s1 and s2:
+                w1 = s1.Edges
+                w2 = s2.Edges
+                w3 = Part.LineSegment(s1.Vertexes[0].Point,s2.Vertexes[0].Point).toShape()
+                w4 = Part.LineSegment(s1.Vertexes[-1].Point,s2.Vertexes[-1].Point).toShape()
+                newobj = FreeCAD.ActiveDocument.addObject("Part::Feature","Offset")
+                newobj.Shape = Part.Face(Part.Wire(w1+[w3]+w2+[w4]))
+            else:
+                print("Draft.offset: Unable to bind wires")
         else:
             newobj = FreeCAD.ActiveDocument.addObject("Part::Feature","Offset")
             newobj.Shape = Part.Face(obj.Shape.Wires[0])
@@ -3178,10 +3198,8 @@ def makePoint(X=0, Y=0, Z=0,color=None,name = "Point", point_size= 5):
     return obj
 
 def makeShapeString(String,FontFile,Size = 100,Tracking = 0):
-
     '''ShapeString(Text,FontFile,Height,Track): Turns a text string
     into a Compound Shape'''
-
     if not FreeCAD.ActiveDocument:
         FreeCAD.Console.PrintError("No active document. Aborting\n")
         return
@@ -3227,6 +3245,8 @@ def clone(obj,delta=None,forcedraft=False):
         base = getCloneBase(obj[0])
         cl.Label = prefix + base.Label
         cl.CloneOf = base
+        if hasattr(cl,"Material") and hasattr(obj[0],"Material"):
+            cl.Material = obj[0].Material
         if getType(obj[0]) != "BuildingPart":
             cl.Placement = obj[0].Placement
         try:

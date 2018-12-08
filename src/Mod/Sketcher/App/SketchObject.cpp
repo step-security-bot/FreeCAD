@@ -83,8 +83,8 @@
 #include <Mod/Sketcher/App/SketchObjectPy.h>
 
 
-//#undef DEBUG
-#define DEBUG
+#undef DEBUG
+//#define DEBUG
 
 using namespace Sketcher;
 using namespace Base;
@@ -103,6 +103,8 @@ SketchObject::SketchObject()
     ADD_PROPERTY_TYPE(Geometry,        (0)  ,"Sketch",(App::PropertyType)(App::Prop_None),"Sketch geometry");
     ADD_PROPERTY_TYPE(Constraints,     (0)  ,"Sketch",(App::PropertyType)(App::Prop_None),"Sketch constraints");
     ADD_PROPERTY_TYPE(ExternalGeometry,(0,0),"Sketch",(App::PropertyType)(App::Prop_None),"Sketch external geometry");
+
+    Geometry.setOrderRelevant(true);
 
     allowOtherBody = true;
     allowUnaligned = true;
@@ -1650,10 +1652,20 @@ int SketchObject::fillet(int GeoId1, int GeoId2,
             THROWM(Base::CADKernelError,"Unable to find intersection between offset curves.")
         }
 
+#ifdef DEBUG
+        for(auto inter:offsetintersectionpoints) {
+                Base::Console().Log("offset int(%f,%f,0)\n",inter.first.x,inter.first.y);
+        }
+#endif
+
         int res = selectintersection(offsetintersectionpoints,filletcenterpoint,refPnt1, refPnt2);
 
         if(res != 0)
             return res;
+
+#ifdef DEBUG
+        Base::Console().Log("selected offset int(%f,%f,0)\n",filletcenterpoint.first.x,filletcenterpoint.first.y);
+#endif
 
         double refoparam1;
         double refoparam2;
@@ -1713,16 +1725,12 @@ int SketchObject::fillet(int GeoId1, int GeoId2,
 
         // add arc to sketch geometry
         int filletId;
-        if (arc) {
-            Part::Geometry *newgeo = arc;
-            filletId = addGeometry(newgeo);
-            if (filletId < 0) {
-                delete arc;
-                return -1;
-            }
-        }
-        else
+        Part::Geometry *newgeo = arc;
+        filletId = addGeometry(newgeo);
+        if (filletId < 0) {
+            delete arc;
             return -1;
+        }
 
         if (trim) {
             auto selectend = [](double intparam, double refparam, double startparam) {
@@ -1861,13 +1869,13 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
         std::swap(GeoId1,GeoId2);
         std::swap(point1,point2);
     }
-    
+
     auto handlemultipleintersection = [this] (Constraint * constr, int GeoId, PointPos pos, PointPos & secondPos) {
-        
+
         Base::Vector3d cp = getPoint(constr->First,constr->FirstPos);
-    
+
         Base::Vector3d ee = getPoint(GeoId,pos);
-    
+
         if( (ee-cp).Length() < Precision::Confusion() ) {
             secondPos = constr->FirstPos;
         }
@@ -2072,8 +2080,8 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
                     handlemultipleintersection(constr, GeoId, end, secondPos2);
                 }
             }
-            
-            if( (constrType1 == Sketcher::Coincident && secondPos1 == Sketcher::none) || 
+
+            if( (constrType1 == Sketcher::Coincident && secondPos1 == Sketcher::none) ||
                 (constrType2 == Sketcher::Coincident && secondPos2 == Sketcher::none))
                 THROWM(ValueError,"Invalid position Sketcher::none when creating a Coincident constraint")
 
@@ -2153,17 +2161,17 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
             delete geoNew;
             rebuildVertexIndex();
 
-            
+
             auto handleinternalalignment = [this] (Constraint * constr, int GeoId, PointPos & secondPos) {
-                if( constr->Type == Sketcher::InternalAlignment && 
-                    ( constr->AlignmentType == Sketcher::EllipseMajorDiameter ||   
+                if( constr->Type == Sketcher::InternalAlignment &&
+                    ( constr->AlignmentType == Sketcher::EllipseMajorDiameter ||
                         constr->AlignmentType == Sketcher::EllipseMinorDiameter ) ) {
-                    
+
                     Base::Vector3d sp = getPoint(constr->First,start);
                     Base::Vector3d ep = getPoint(constr->First,end);
-                
+
                     Base::Vector3d ee = getPoint(GeoId,start);
-                
+
                     if( (ee-sp).Length() < (ee-ep).Length() ) {
                         secondPos = Sketcher::start;
                     }
@@ -2171,8 +2179,8 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
                         secondPos = Sketcher::end;
                     }
                 }
-            };            
-            
+            };
+
             PointPos secondPos1 = Sketcher::none, secondPos2 = Sketcher::none;
             ConstraintType constrType1 = Sketcher::PointOnObject, constrType2 = Sketcher::PointOnObject;
             for (std::vector<Constraint *>::const_iterator it=constraints.begin();
@@ -2186,10 +2194,10 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
                     else {
                         handlemultipleintersection(constr, GeoId, start, secondPos1);
                     }
-                    
+
                 } else if(secondPos2 == Sketcher::none && (constr->First == GeoId2  && constr->Second == GeoId)) {
                     constrType2 = Sketcher::Coincident;
-                    
+
                     if(constr->FirstPos == Sketcher::none){
                         handleinternalalignment(constr, GeoId, secondPos2);
                     }
@@ -2198,8 +2206,8 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
                     }
                 }
             }
-            
-            if( (constrType1 == Sketcher::Coincident && secondPos1 == Sketcher::none) || 
+
+            if( (constrType1 == Sketcher::Coincident && secondPos1 == Sketcher::none) ||
                 (constrType2 == Sketcher::Coincident && secondPos2 == Sketcher::none))
                 THROWM(ValueError,"Invalid position Sketcher::none when creating a Coincident constraint")
 
@@ -6943,6 +6951,16 @@ int SketchObject::autoRemoveRedundants(bool updategeo)
     delConstraints(redundants,updategeo);
 
     return redundants.size();
+}
+
+std::vector<Base::Vector3d> SketchObject::getOpenVertices(void) const
+{
+    std::vector<Base::Vector3d> points;
+
+    if(analyser)
+        points = analyser->getOpenVertices();
+
+    return points;
 }
 
 // Python Sketcher feature ---------------------------------------------------------
