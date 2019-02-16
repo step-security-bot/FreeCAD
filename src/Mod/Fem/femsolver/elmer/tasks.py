@@ -78,7 +78,7 @@ class Prepare(run.Prepare):
         except writer.WriteError as e:
             self.report.error(str(e))
             self.fail()
-        except IOError as e:
+        except IOError:
             self.report.error("Can't access working directory.")
             self.fail()
 
@@ -109,23 +109,10 @@ class Solve(run.Solve):
             self.report.error("ElmerSolver executable not found.")
             self.fail()
 
-    def _observeSolver(self, process):
-        output = ""
-        line = process.stdout.readline()
-        self.pushStatus(line)
-        output += line
-        line = process.stdout.readline()
-        while line:
-            line = "\n%s" % line.rstrip()
-            self.pushStatus(line)
-            output += line
-            line = process.stdout.readline()
-        return output
-
     def _updateOutput(self, output):
         if self.solver.ElmerOutput is None:
             self._createOutput()
-        self.solver.ElmerOutput.Text = output
+        self.solver.ElmerOutput.Text = output.decode("utf-8")
 
     def _createOutput(self):
         self.solver.ElmerOutput = self.analysis.Document.addObject(

@@ -103,6 +103,7 @@ DrawViewDetail::DrawViewDetail()
     static const char *dgroup = "Detail";
 
     ADD_PROPERTY_TYPE(BaseView ,(0),dgroup,App::Prop_None,"2D View source for this Section");
+    BaseView.setScope(App::LinkScope::Global);
     ADD_PROPERTY_TYPE(AnchorPoint ,(0,0,0) ,dgroup,App::Prop_None,"Location of detail in BaseView");
     ADD_PROPERTY_TYPE(Radius,(10.0),dgroup, App::Prop_None, "Size of detail area");
     ADD_PROPERTY_TYPE(Reference ,("1"),dgroup,App::Prop_None,"An identifier for this detail");
@@ -207,12 +208,20 @@ App::DocumentObjectExecReturn *DrawViewDetail::execute(void)
     if (dpgi != nullptr) {
         viewAxis = dpgi->getViewAxis(shapeCenter, dirDetail);
         vaBase = TechDrawGeometry::getViewAxis(shapeCenter,dirDetail,false);
-        if (!vaBase.Direction().IsEqual(viewAxis.Direction(), Precision::Angular())) {
+
+        Base::Vector3d vaDir(vaBase.Direction().X(),vaBase.Direction().Y(),vaBase.Direction().Z());
+        Base::Vector3d vabDir(vaBase.Direction().X(),vaBase.Direction().Y(),vaBase.Direction().Z());
+        double vaDot = vaDir.Dot(vabDir);
+
+        if (DrawUtil::fpCompare(vaDot,-1.0)) {                //anti-parallel, flip
             myShape = TechDrawGeometry::rotateShape(myShape,
                                                     viewAxis,
                                                     180.0);
         }
-        if (!vaBase.XDirection().IsEqual(viewAxis.XDirection(), Precision::Angular())) {
+        Base::Vector3d vaxDir(vaBase.XDirection().X(),vaBase.XDirection().Y(),vaBase.XDirection().Z());
+        Base::Vector3d vabxDir(vaBase.XDirection().X(),vaBase.XDirection().Y(),vaBase.XDirection().Z());
+        double vaxDot = vaxDir.Dot(vabxDir);
+        if (DrawUtil::fpCompare(vaxDot,-1.0)) {
             myShape = TechDrawGeometry::rotateShape(myShape,
                                                     viewAxis,
                                                     180.0);

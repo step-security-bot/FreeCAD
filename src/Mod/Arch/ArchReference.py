@@ -91,6 +91,8 @@ class ArchReference:
             obj.addProperty("App::PropertyFile","File","Reference",QT_TRANSLATE_NOOP("App::Property","The base file this component is built upon"))
         if not "Part" in pl:
             obj.addProperty("App::PropertyString","Part","Reference",QT_TRANSLATE_NOOP("App::Property","The part to use from the base file"))
+        if not "TransientReference" in pl:
+            obj.addProperty("App::PropertyBool","TransientReference","Reference",QT_TRANSLATE_NOOP("App::Property","If True, the shape will be discarded when turning visibility off, resulting in a lighter file, but with an additional loading time when turning the object back on"))
         self.Type = "Reference"
 
     def onDocumentRestored(self,obj):
@@ -110,9 +112,24 @@ class ArchReference:
 
         if prop in ["File","Part"]:
             self.reload = True
+        elif prop == "TransientReference":
+            if obj.TransientReference:
+                if (not obj.Shape) or obj.Shape.isNull():
+                    self.reload = True
+                    obj.touch()
+            else:
+                if obj.ViewObject:
+                    obj.ViewObject.Visibility = False
+                else:
+                    self.reload = False
+                    import Part
+                    pl = obj.Placement
+                    obj.Shape = Part.Shape()
+                    obj.Placement = pl
 
     def execute(self,obj):
 
+        pl = obj.Placement
         filename = self.getFile(obj)
         if filename and obj.Part and self.reload:
             self.parts = self.getPartsList(obj)
@@ -130,6 +147,8 @@ class ArchReference:
                                 shapedata = shapedata.decode("utf8")
                             shape.importBrepFromString(shapedata)
                             obj.Shape = shape
+                            if not pl.isIdentity():
+                                obj.Placement = pl
                         else:
                             print("Part not found in file")
             self.reload = False
@@ -147,13 +166,21 @@ class ArchReference:
         if not os.path.exists(filename):
             # search for the file in the current directory if not found
             basename = os.path.basename(filename)
-            currentdir = os.path.dirname(FreeCAD.ActiveDocument.FileName)
+            currentdir = os.path.dirname(obj.Document.FileName)
             altfile = os.path.join(currentdir,basename)
-            if altfile == FreeCAD.ActiveDocument.FileName:
+            if altfile == obj.Document.FileName:
                 return None
             elif os.path.exists(altfile):
-                filename = altfile
+                return altfile
             else:
+                # search for subpaths in current folder
+                altfile = None
+                subdirs = splitall(os.path.dirname(filename))
+                for i in range(len(subdirs)):
+                    subpath = [currentdir]+subdirs[-i:]+[basename]
+                    altfile = os.path.join(*subpath)
+                    if os.path.exists(altfile):
+                        return altfile
                 return None
         return filename
 
@@ -305,9 +332,12 @@ class ViewProviderArchReference:
     def updateData(self,obj,prop):
         
         if (prop == "Shape") and hasattr(obj.ViewObject,"UpdateColors") and obj.ViewObject.UpdateColors:
-            colors = obj.Proxy.getColors(obj)
-            if colors:
-                obj.ViewObject.DiffuseColor = colors
+            if obj.Shape and not obj.Shape.isNull():
+                colors = obj.Proxy.getColors(obj)
+                if colors:
+                    obj.ViewObject.DiffuseColor = colors
+                from DraftGui import todo
+                todo.delay(self.recolorize,obj.ViewObject)
 
     def recolorize(self,vobj):
         
@@ -344,12 +374,25 @@ class ViewProviderArchReference:
             if hasattr(vobj,"DiffuseColor") and hasattr(vobj,"UpdateColors"):
                 if vobj.DiffuseColor and vobj.UpdateColors:
                     vobj.DiffuseColor = vobj.DiffuseColor
+        elif prop == "Visibility":
+            if vobj.Visibility == True:
+                if (not vobj.Object.Shape) or vobj.Object.Shape.isNull():
+                    vobj.Object.Proxy.reload = True
+                    vobj.Object.Proxy.execute(vobj.Object)
+            else:
+                if hasattr(vobj.Object,"TransientReference") and vobj.Object.TransientReference:
+                    vobj.Object.Proxy.reload = False
+                    import Part
+                    pl = vobj.Object.Placement
+                    vobj.Object.Shape = Part.Shape()
+                    vobj.Object.Placement = pl
 
     def onDelete(self,obj,doc):
 
         if hasattr(self,"timer"):
             self.timer.stop()
             del self.timer
+            return True
 
     def setupContextMenu(self,vobj,menu):
 
@@ -421,6 +464,28 @@ class ArchReferenceTaskPanel:
         QtCore.QObject.connect(self.fileButton, QtCore.SIGNAL("clicked()"), self.chooseFile)
         QtCore.QObject.connect(self.openButton, QtCore.SIGNAL("clicked()"), self.openFile)
 
+    def accept(self):
+
+        if self.filename:
+            if self.filename != self.obj.File:
+                self.obj.File = self.filename
+                FreeCAD.ActiveDocument.recompute()
+        if self.partCombo.currentText():
+            i = self.partCombo.currentIndex()
+            if self.partCombo.itemData(i) != self.obj.Part:
+                self.obj.Part = self.partCombo.itemData(i)
+                if self.obj.Label == "External Reference":
+                    self.obj.Label = self.partCombo.itemText(i)
+                FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        return True
+
+    def reject(self):
+
+        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        return True
+
     def chooseFile(self):
 
         loc = QtCore.QDir.homePath()
@@ -440,27 +505,11 @@ class ArchReferenceTaskPanel:
                         self.partCombo.setCurrentIndex(sorted(parts.keys()).index(self.obj.Part))
 
     def openFile(self):
+
         if self.obj.File:
             FreeCAD.openDocument(self.obj.File)
             FreeCADGui.Control.closeDialog()
             FreeCADGui.ActiveDocument.resetEdit()
-
-    def accept(self):
-
-        if self.filename:
-            if self.filename != self.obj.File:
-                self.obj.File = self.filename
-                FreeCAD.ActiveDocument.recompute()
-        if self.partCombo.currentText():
-            i = self.partCombo.currentIndex()
-            if self.partCombo.itemData(i) != self.obj.Part:
-                self.obj.Part = self.partCombo.itemData(i)
-                if self.obj.Label == "External Reference":
-                    self.obj.Label = self.partCombo.itemText(i)
-                FreeCAD.ActiveDocument.recompute()
-        FreeCADGui.ActiveDocument.resetEdit()
-        return True
-
 
 
 class ArchReferenceCommand:
@@ -492,3 +541,19 @@ class ArchReferenceCommand:
 
 if FreeCAD.GuiUp:
     FreeCADGui.addCommand('Arch_Reference', ArchReferenceCommand())
+
+
+def splitall(path):
+    allparts = []
+    while 1:
+        parts = os.path.split(path)
+        if parts[0] == path:  # sentinel for absolute paths
+            allparts.insert(0, parts[0])
+            break
+        elif parts[1] == path: # sentinel for relative paths
+            allparts.insert(0, parts[1])
+            break
+        else:
+            path = parts[0]
+            allparts.insert(0, parts[1])
+    return allparts

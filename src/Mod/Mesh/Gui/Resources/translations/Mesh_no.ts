@@ -447,6 +447,21 @@
     </message>
   </context>
   <context>
+    <name>CmdMeshSegmentationBestFit</name>
+    <message>
+      <source>Mesh</source>
+      <translation>Nett</translation>
+    </message>
+    <message>
+      <source>Create mesh segments from best-fit surfaces...</source>
+      <translation type="unfinished">Create mesh segments from best-fit surfaces...</translation>
+    </message>
+    <message>
+      <source>Create mesh segments from best-fit surfaces</source>
+      <translation type="unfinished">Create mesh segments from best-fit surfaces</translation>
+    </message>
+  </context>
+  <context>
     <name>CmdMeshSmoothing</name>
     <message>
       <source>Mesh</source>
@@ -925,6 +940,10 @@ Please run the command to repair folds first</source>
       <source>Export AMF files using compression</source>
       <translation type="unfinished">Export AMF files using compression</translation>
     </message>
+    <message>
+      <source>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:600;"&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;span style=" font-weight:400;"&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed which results in increased detail/resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+      <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:600;"&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;span style=" font-weight:400;"&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed which results in increased detail/resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
   </context>
   <context>
     <name>MeshGui::DlgSettingsMeshView</name>
@@ -1059,6 +1078,45 @@ Please run the command to repair folds first</source>
     </message>
   </context>
   <context>
+    <name>MeshGui::ParametersDialog</name>
+    <message>
+      <source>Surface fit</source>
+      <translation type="unfinished">Surface fit</translation>
+    </message>
+    <message>
+      <source>Parameters</source>
+      <translation type="unfinished">Parameters</translation>
+    </message>
+    <message>
+      <source>Selection</source>
+      <translation>Utvalg</translation>
+    </message>
+    <message>
+      <source>Region</source>
+      <translation>Region</translation>
+    </message>
+    <message>
+      <source>Triangle</source>
+      <translation>Trekant</translation>
+    </message>
+    <message>
+      <source>Clear</source>
+      <translation>Tøm</translation>
+    </message>
+    <message>
+      <source>Compute</source>
+      <translation type="unfinished">Compute</translation>
+    </message>
+    <message>
+      <source>No selection</source>
+      <translation>Ingen valg</translation>
+    </message>
+    <message>
+      <source>Before fitting the surface select an area.</source>
+      <translation type="unfinished">Before fitting the surface select an area.</translation>
+    </message>
+  </context>
+  <context>
     <name>MeshGui::RemoveComponents</name>
     <message>
       <source>Remove components</source>
@@ -1163,6 +1221,73 @@ Please run the command to repair folds first</source>
       <source>Sphere</source>
       <translation>Sfære</translation>
     </message>
+    <message>
+      <source>Curvature</source>
+      <translation type="unfinished">Curvature</translation>
+    </message>
+    <message>
+      <source>Freeform</source>
+      <translation type="unfinished">Freeform</translation>
+    </message>
+    <message>
+      <source>Max. Curvature</source>
+      <translation type="unfinished">Max. Curvature</translation>
+    </message>
+    <message>
+      <source>Min. Curvature</source>
+      <translation type="unfinished">Min. Curvature</translation>
+    </message>
+  </context>
+  <context>
+    <name>MeshGui::SegmentationBestFit</name>
+    <message>
+      <source>Mesh segmentation</source>
+      <translation type="unfinished">Mesh segmentation</translation>
+    </message>
+    <message>
+      <source>Sphere</source>
+      <translation>Sfære</translation>
+    </message>
+    <message>
+      <source>Tolerance</source>
+      <translation>Toleranse</translation>
+    </message>
+    <message>
+      <source>Minimum number of faces</source>
+      <translation type="unfinished">Minimum number of faces</translation>
+    </message>
+    <message>
+      <source>Parameters...</source>
+      <translation type="unfinished">Parameters...</translation>
+    </message>
+    <message>
+      <source>Plane</source>
+      <translation>Plan</translation>
+    </message>
+    <message>
+      <source>Cylinder</source>
+      <translation>Sylinder</translation>
+    </message>
+    <message>
+      <source>Base</source>
+      <translation>Base</translation>
+    </message>
+    <message>
+      <source>Normal</source>
+      <translation>Normal</translation>
+    </message>
+    <message>
+      <source>Axis</source>
+      <translation>Akse</translation>
+    </message>
+    <message>
+      <source>Radius</source>
+      <translation>Radius</translation>
+    </message>
+    <message>
+      <source>Center</source>
+      <translation type="unfinished">Center</translation>
+    </message>
   </context>
   <context>
     <name>MeshGui::Selection</name>
@@ -1204,6 +1329,13 @@ Please run the command to repair folds first</source>
     <message>
       <source>Invert</source>
       <translation>Inverter</translation>
+    </message>
+  </context>
+  <context>
+    <name>Mesh_BoundingBox</name>
+    <message>
+      <source>Boundings of %1:</source>
+      <translation type="unfinished">Boundings of %1:</translation>
     </message>
   </context>
   <context>
@@ -1470,6 +1602,10 @@ Maks=&lt;%4,%5,%6&gt;</translation>
     <message>
       <source>Enter scaling factor:</source>
       <translation type="unfinished">Enter scaling factor:</translation>
+    </message>
+    <message>
+      <source>Simple Model Format</source>
+      <translation type="unfinished">Simple Model Format</translation>
     </message>
   </context>
   <context>

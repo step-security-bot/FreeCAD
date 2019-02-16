@@ -27,14 +27,15 @@ import FreeCAD
 import ObjectsFem
 import femsolver.run
 import unittest
-from . import testtools
-from .testtools import fcc_print
+from . import utilstest as testtools
+from .utilstest import fcc_print
 
 
-class SolverFrameWorkTest(unittest.TestCase):
+class TestSolverFrameWork(unittest.TestCase):
+    fcc_print('import TestSolverFrameWork')
 
     def setUp(self):
-        self.doc_name = "TestsFemSolverFrameWork"
+        self.doc_name = "TestSolverFrameWork"
         try:
             FreeCAD.setActiveDocument(self.doc_name)
         except:
@@ -175,7 +176,7 @@ class SolverFrameWorkTest(unittest.TestCase):
         ret = testtools.compare_files(test_file_dir_elmer + 'group_mesh.geo', solverframework_analysis_dir + 'group_mesh.geo')
         self.assertFalse(ret, "GMSH geo write file test failed.\n{}".format(ret))
 
-        save_fc_file = solverframework_analysis_dir + static_base_name + '.fcstd'
+        save_fc_file = solverframework_analysis_dir + static_base_name + '.FCStd'
         fcc_print('Save FreeCAD file for static2 analysis to {}...'.format(save_fc_file))
         self.active_doc.saveAs(save_fc_file)
         fcc_print('--------------- End of FEM tests solver frame work ---------------')

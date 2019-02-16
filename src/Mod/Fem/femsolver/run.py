@@ -187,8 +187,11 @@ class Machine(BaseTask):
         self._confTasks()
         self._isReset = False
         self._pendingState = self.state
-        while (not self.aborted and not self.failed and
-                self._pendingState <= self.target):
+        while (
+            not self.aborted
+            and not self.failed
+            and self._pendingState <= self.target
+        ):
             task = self._getTask(self._pendingState)
             self._runTask(task)
             self.report.extend(task.report)
@@ -296,7 +299,19 @@ class Check(BaseTask):
 
 
 class Solve(BaseTask):
-    pass
+
+    def _observeSolver(self, process):
+        output = ""
+        line = FemUtils.pydecode(process.stdout.readline())
+        self.pushStatus(line)
+        output += line
+        line = FemUtils.pydecode(process.stdout.readline())
+        while line:
+            line = "\n%s" % line.rstrip()
+            self.pushStatus(line)
+            output += line
+            line = FemUtils.pydecode(process.stdout.readline())
+        return output
 
 
 class Prepare(BaseTask):
@@ -323,7 +338,7 @@ class _DocObserver(object):
 
     def __init__(self):
         self._saved = {}
-        for doc in App.listDocuments().itervalues():
+        for doc in iter(App.listDocuments().values()):
             for obj in doc.Objects:
                 if obj.isDerivedFrom("Fem::FemAnalysis"):
                     self._saved[obj] = obj.Group
@@ -368,19 +383,22 @@ class _DocObserver(object):
 
     def _checkEquation(self, obj):
         for o in obj.Document.Objects:
-            if (FemUtils.isDerivedFrom(o, "Fem::FemSolverObject") and
-                    hasattr(o, "Group") and obj in o.Group):
+            if (
+                FemUtils.is_derived_from(o, "Fem::FemSolverObject")
+                and hasattr(o, "Group")
+                and obj in o.Group
+            ):
                 if o in _machines:
                     _machines[o].reset()
 
     def _checkSolver(self, obj):
         analysis = FemUtils.findAnalysisOfMember(obj)
-        for m in _machines.itervalues():
+        for m in iter(_machines.values()):
             if analysis == m.analysis and obj == m.solver:
                 m.reset()
 
     def _checkAnalysis(self, obj):
-        if FemUtils.isDerivedFrom(obj, "Fem::FemAnalysis"):
+        if FemUtils.is_derived_from(obj, "Fem::FemAnalysis"):
             deltaObjs = self._getAdded(obj)
             if deltaObjs:
                 reset = False
@@ -404,13 +422,13 @@ class _DocObserver(object):
         return delta
 
     def _resetAll(self, analysis):
-        for m in _machines.itervalues():
+        for m in iter(_machines.values()):
             if analysis == m.analysis:
                 m.reset()
 
     def _partOfModel(self, obj):
         for t in self._WHITELIST:
-            if FemUtils.isDerivedFrom(obj, t):
+            if FemUtils.is_derived_from(obj, t):
                 return True
         return False
 

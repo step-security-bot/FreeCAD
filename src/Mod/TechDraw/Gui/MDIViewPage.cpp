@@ -118,9 +118,17 @@ MDIViewPage::MDIViewPage(ViewProviderPage *pageVp, Gui::Document* doc, QWidget* 
     m_exportSVGAction = new QAction(tr("&Export SVG"), this);
     connect(m_exportSVGAction, SIGNAL(triggered()), this, SLOT(saveSVG()));
 
+    m_exportDXFAction = new QAction(tr("Export DXF"), this);
+    connect(m_exportDXFAction, SIGNAL(triggered()), this, SLOT(saveDXF()));
+
+    m_exportPDFAction = new QAction(tr("Export PDF"), this);
+    connect(m_exportPDFAction, SIGNAL(triggered()), this, SLOT(savePDF()));
+
     isSelectionBlocked = false;
 
-    setWindowTitle(tr("dummy[*]"));      //Yuck. prevents "QWidget::setWindowModified: The window title does not contain a '[*]' placeholder"
+    QString tabText = QString::fromUtf8(pageVp->getDrawPage()->getNameInDocument());
+    tabText += QString::fromUtf8("[*]");
+    setWindowTitle(tabText);
     setCentralWidget(m_view);            //this makes m_view a Qt child of MDIViewPage
 
     // Connect Signals and Slots
@@ -313,6 +321,9 @@ void MDIViewPage::onDeleteObject(const App::DocumentObject& obj)
     //if this page has a QView for this obj, delete it.
     if (obj.isDerivedFrom(TechDraw::DrawView::getClassTypeId())) {
         (void) m_view->removeQViewByName(obj.getNameInDocument());
+    } else if (m_objectName == obj.getNameInDocument()) {
+        // if obj is me, hide myself and my tab
+        m_vpPage->hide();
     }
 }
 
@@ -645,7 +656,7 @@ void MDIViewPage::print(QPrinter* printer)
     if (!p.isActive() && !printer->outputFileName().isEmpty()) {
         qApp->setOverrideCursor(Qt::ArrowCursor);
         QMessageBox::critical(this, tr("Opening file failed"),
-            tr("Can't open file %1 for writing.").arg(printer->outputFileName()));
+            tr("Can not open file %1 for writing.").arg(printer->outputFileName()));
         qApp->restoreOverrideCursor();
         return;
     }
@@ -758,6 +769,8 @@ void MDIViewPage::contextMenuEvent(QContextMenuEvent *event)
     menu.addAction(m_toggleFrameAction);
     menu.addAction(m_toggleKeepUpdatedAction);
     menu.addAction(m_exportSVGAction);
+    menu.addAction(m_exportDXFAction);
+    menu.addAction(m_exportPDFAction);
     menu.exec(event->globalPos());
 }
 
@@ -804,6 +817,43 @@ void MDIViewPage::saveSVG(std::string file)
     m_view->saveSvg(filename);
 }
 
+void MDIViewPage::saveDXF()
+{
+//    TechDraw::DrawPage* page = m_vpPage->getDrawPage();
+    QString defaultDir;
+    QString fileName = Gui::FileDialog::getSaveFileName(Gui::getMainWindow(),
+                                                   QString::fromUtf8(QT_TR_NOOP("Save Dxf File ")),
+                                                   defaultDir,
+                                                   QString::fromUtf8(QT_TR_NOOP("Dxf (*.dxf)")));
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    std::string sFileName = fileName.toUtf8().constData();
+    saveDXF(sFileName);
+}
+
+void MDIViewPage::saveDXF(std::string fileName)
+{
+    TechDraw::DrawPage* page = m_vpPage->getDrawPage();
+    std::string PageName = page->getNameInDocument();
+    Gui::Command::openCommand("Save page to dxf");
+    Gui::Command::doCommand(Gui::Command::Doc,"import TechDraw");
+    Gui::Command::doCommand(Gui::Command::Doc,"TechDraw.writeDXFPage(App.activeDocument().%s,u\"%s\")",
+                            PageName.c_str(),(const char*)fileName.c_str());
+    Gui::Command::updateActive();
+    Gui::Command::commitCommand();
+}
+
+void MDIViewPage::savePDF()
+{
+    printPdf();
+}
+
+void MDIViewPage::savePDF(std::string file)
+{
+    printPdf(file);
+}
 
 /////////////// Selection Routines ///////////////////
 // wf: this is never executed???
@@ -973,10 +1023,10 @@ void MDIViewPage::sceneSelectionManager()
         }
         if (!found) {
             m_sceneSelected.push_back(qts);
-            break;    
+            break;
         }
     }
-    
+
     //remove items from m_sceneSelected that are not in q_sceneSel
     QList<QGraphicsItem*> m_new;
     for (auto m: m_sceneSelected) {
@@ -997,7 +1047,7 @@ void MDIViewPage::sceneSelectionChanged()
     sceneSelectionManager();
 
     QList<QGraphicsItem*> dbsceneSel = m_view->scene()->selectedItems();
- 
+
     if(isSelectionBlocked)  {
         return;
     }
@@ -1005,7 +1055,7 @@ void MDIViewPage::sceneSelectionChanged()
     std::vector<Gui::SelectionObject> treeSel = Gui::Selection().getSelectionEx();
 //    QList<QGraphicsItem*> sceneSel = m_view->scene()->selectedItems();
     QList<QGraphicsItem*> sceneSel = m_sceneSelected;
-    
+
     //check if really need to change selection
     bool sameSel = compareSelections(treeSel,sceneSel);
     if (sameSel) {
@@ -1213,12 +1263,11 @@ bool MDIViewPage::compareSelections(std::vector<Gui::SelectionObject> treeSel, Q
 
 void MDIViewPage::showStatusMsg(const char* s1, const char* s2, const char* s3) const
 {
-    QString msg = QString::fromUtf8("Selected: ");
-    msg.append(QObject::tr(" %1.%2.%3 ")
-               .arg(QString::fromUtf8(s1))
-               .arg(QString::fromUtf8(s2))
-               .arg(QString::fromUtf8(s3))
-               );
+    QString msg = QString::fromLatin1("%1 %2.%3.%4 ")
+            .arg(tr("Selected:"),
+                 QString::fromUtf8(s1),
+                 QString::fromUtf8(s2),
+                 QString::fromUtf8(s3));
     if (Gui::getMainWindow()) {
         Gui::getMainWindow()->showMessage(msg,3000);
     }

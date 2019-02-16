@@ -27,6 +27,7 @@ __author__ = "Markus Hovorka, Bernd Hahnebach"
 __url__ = "http://www.freecadweb.org"
 
 
+import sys
 import FreeCAD
 import FreeCAD as App
 
@@ -107,8 +108,7 @@ def is_derived_from(obj, t):
     '''returns True if an object or its inheritance chain is of a given TypeId (C++ objects) or Proxy.Type (Python objects)'''
     # returns true for all FEM objects if given t == 'App::DocumentObject' since this is a father of the given object
     # see https://forum.freecadweb.org/viewtopic.php?f=10&t=32625
-    if (hasattr(obj, "Proxy") and hasattr(obj.Proxy, "Type") and
-            obj.Proxy.Type == t):
+    if (hasattr(obj, "Proxy") and hasattr(obj.Proxy, "Type") and obj.Proxy.Type == t):
         return True
     return obj.isDerivedFrom(t)
 
@@ -166,3 +166,10 @@ def get_refshape_type(fem_doc_object):
     else:
         FreeCAD.Console.PrintMessage(fem_doc_object.Name + ' has empty References.\n')
         return ''
+
+
+def pydecode(bytestring):
+    if sys.version_info.major < 3:
+        return bytestring
+    else:
+        return bytestring.decode("utf-8")

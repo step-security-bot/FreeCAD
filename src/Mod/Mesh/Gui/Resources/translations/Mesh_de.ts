@@ -447,6 +447,21 @@
     </message>
   </context>
   <context>
+    <name>CmdMeshSegmentationBestFit</name>
+    <message>
+      <source>Mesh</source>
+      <translation>Netz</translation>
+    </message>
+    <message>
+      <source>Create mesh segments from best-fit surfaces...</source>
+      <translation>Erstelle Netzsegmente aus angenäherten Oberflächen...</translation>
+    </message>
+    <message>
+      <source>Create mesh segments from best-fit surfaces</source>
+      <translation>Erstelle Netzsegmente aus angenäherten Oberflächen</translation>
+    </message>
+  </context>
+  <context>
     <name>CmdMeshSmoothing</name>
     <message>
       <source>Mesh</source>
@@ -926,6 +941,10 @@ Bitte starten Sie vorher den Befehl zum Reparieren von Falten</translation>
       <source>Export AMF files using compression</source>
       <translation>Export von AMF-Dateien mit Komprimierung</translation>
     </message>
+    <message>
+      <source>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:600;"&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;span style=" font-weight:400;"&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed which results in increased detail/resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+      <translation>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:600;"&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;span style=" font-weight:400;"&gt;Definiert die maximale Abweichung des tessellierten Netzes von der Oberfläche. Je kleiner der Wert ist, desto geringer ist die Rendergeschwindigkeit, was jedoch zu einer höheren Detaillierung/Auflösung führt.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
   </context>
   <context>
     <name>MeshGui::DlgSettingsMeshView</name>
@@ -1060,6 +1079,45 @@ Bitte starten Sie vorher den Befehl zum Reparieren von Falten</translation>
     </message>
   </context>
   <context>
+    <name>MeshGui::ParametersDialog</name>
+    <message>
+      <source>Surface fit</source>
+      <translation>Oberflächen Annäherung</translation>
+    </message>
+    <message>
+      <source>Parameters</source>
+      <translation>Parameter</translation>
+    </message>
+    <message>
+      <source>Selection</source>
+      <translation>Auswahl</translation>
+    </message>
+    <message>
+      <source>Region</source>
+      <translation>Bereich</translation>
+    </message>
+    <message>
+      <source>Triangle</source>
+      <translation>Dreieck</translation>
+    </message>
+    <message>
+      <source>Clear</source>
+      <translation>Löschen</translation>
+    </message>
+    <message>
+      <source>Compute</source>
+      <translation>Berechnen</translation>
+    </message>
+    <message>
+      <source>No selection</source>
+      <translation>Keine Auswahl</translation>
+    </message>
+    <message>
+      <source>Before fitting the surface select an area.</source>
+      <translation>Bevor Sie die Oberfläche annähern, wählen Sie einen Bereich aus.</translation>
+    </message>
+  </context>
+  <context>
     <name>MeshGui::RemoveComponents</name>
     <message>
       <source>Remove components</source>
@@ -1164,6 +1222,73 @@ Bitte starten Sie vorher den Befehl zum Reparieren von Falten</translation>
       <source>Sphere</source>
       <translation>Kugel</translation>
     </message>
+    <message>
+      <source>Curvature</source>
+      <translation>Krümmung</translation>
+    </message>
+    <message>
+      <source>Freeform</source>
+      <translation>Freiform</translation>
+    </message>
+    <message>
+      <source>Max. Curvature</source>
+      <translation>Max. Krümmung</translation>
+    </message>
+    <message>
+      <source>Min. Curvature</source>
+      <translation>Min. Krümmung</translation>
+    </message>
+  </context>
+  <context>
+    <name>MeshGui::SegmentationBestFit</name>
+    <message>
+      <source>Mesh segmentation</source>
+      <translation>Netz Segmentierung</translation>
+    </message>
+    <message>
+      <source>Sphere</source>
+      <translation>Kugel</translation>
+    </message>
+    <message>
+      <source>Tolerance</source>
+      <translation>Toleranz</translation>
+    </message>
+    <message>
+      <source>Minimum number of faces</source>
+      <translation>Minimale Anzahl von Dreiecken</translation>
+    </message>
+    <message>
+      <source>Parameters...</source>
+      <translation>Parameter...</translation>
+    </message>
+    <message>
+      <source>Plane</source>
+      <translation>Ebene</translation>
+    </message>
+    <message>
+      <source>Cylinder</source>
+      <translation>Zylinder</translation>
+    </message>
+    <message>
+      <source>Base</source>
+      <translation>Basis</translation>
+    </message>
+    <message>
+      <source>Normal</source>
+      <translation>Normal</translation>
+    </message>
+    <message>
+      <source>Axis</source>
+      <translation>Achse</translation>
+    </message>
+    <message>
+      <source>Radius</source>
+      <translation>Radius</translation>
+    </message>
+    <message>
+      <source>Center</source>
+      <translation>Mittelpunkt</translation>
+    </message>
   </context>
   <context>
     <name>MeshGui::Selection</name>
@@ -1205,6 +1330,13 @@ Bitte starten Sie vorher den Befehl zum Reparieren von Falten</translation>
     <message>
       <source>Invert</source>
       <translation>Umkehren</translation>
+    </message>
+  </context>
+  <context>
+    <name>Mesh_BoundingBox</name>
+    <message>
+      <source>Boundings of %1:</source>
+      <translation>Grenzen von %1:</translation>
     </message>
   </context>
   <context>
@@ -1471,6 +1603,10 @@ Max=&lt;%4,%5,%6&gt;</translation>
     <message>
       <source>Enter scaling factor:</source>
       <translation>Geben Sie den Skalierungsfaktor an:</translation>
+    </message>
+    <message>
+      <source>Simple Model Format</source>
+      <translation>Einfaches Modellformat</translation>
     </message>
   </context>
   <context>

@@ -29,12 +29,12 @@
     <message>
       <location line="+1"/>
       <source>Place robot...</source>
-      <translation>Место робота ...</translation>
+      <translation>Разместить робота...</translation>
     </message>
     <message>
       <location line="+1"/>
       <source>Place a robot (experimental!)</source>
-      <translation>Место робота (временно!)</translation>
+      <translation>Разместить робота (экспериментально!)</translation>
     </message>
   </context>
   <context>
@@ -52,7 +52,7 @@
     <message>
       <location line="+1"/>
       <source>Create a new empty trajectory </source>
-      <translation>Создайте новую траекторию</translation>
+      <translation>Создать новую траекторию </translation>
     </message>
   </context>
   <context>
@@ -124,7 +124,7 @@
     <message>
       <location line="+1"/>
       <source>Insert a Kuka IR125 into the document.</source>
-      <translation>Внести IR125 Кuka в документ.</translation>
+      <translation>Вставить Кuka IR125 в документ.</translation>
     </message>
   </context>
   <context>
@@ -142,7 +142,7 @@
     <message>
       <location line="+1"/>
       <source>Insert a Kuka IR16 into the document.</source>
-      <translation>Внести IR16 Кuka в документ.</translation>
+      <translation>Вставить Кuka IR16 в документ.</translation>
     </message>
   </context>
   <context>
@@ -160,7 +160,7 @@
     <message>
       <location line="+1"/>
       <source>Insert a Kuka IR210 into the document.</source>
-      <translation>Внести IR500 Кuka в документ.</translation>
+      <translation>Вставить Кuka IR500 в документ.</translation>
     </message>
   </context>
   <context>
@@ -178,7 +178,7 @@
     <message>
       <location line="+1"/>
       <source>Insert a Kuka IR500 into the document.</source>
-      <translation>Внести IR500 Кuka в документ.</translation>
+      <translation>Вставить Кuka IR500 в документ.</translation>
     </message>
   </context>
   <context>
@@ -191,12 +191,12 @@
     <message>
       <location line="+1"/>
       <source>Insert in trajectory</source>
-      <translation>Вставьте в траекторию</translation>
+      <translation>Вставить в траекторию</translation>
     </message>
     <message>
       <location line="+1"/>
       <source>Insert robot Tool location into trajectory</source>
-      <translation>Вставьте местоположение робота на траектории</translation>
+      <translation>Вставить местоположение робота на траектории</translation>
     </message>
   </context>
   <context>
@@ -209,12 +209,12 @@
     <message>
       <location line="+1"/>
       <source>Insert in trajectory</source>
-      <translation>Вставьте в траекторию</translation>
+      <translation>Вставить в траекторию</translation>
     </message>
     <message>
       <location line="+1"/>
       <source>Insert preselection position into trajectory (W)</source>
-      <translation>Вставте предварительную позицию на траектории (W)</translation>
+      <translation>Вставить предварительную позицию на траектории (W)</translation>
     </message>
   </context>
   <context>
@@ -245,8 +245,12 @@
     </message>
     <message>
       <location line="+1"/>
+      <source>Set the default orientation for subsequent commands for waypoint creation</source>
+      <translation>Задать ориентацию по умолчанию для последующих команд для создания маршрутной точки</translation>
+    </message>
+    <message>
       <source>set the default orientation for subsequent commands for waypoint creation</source>
-      <translation>Задайте ориентацию по умолчанию для последующих команд для создания точки</translation>
+      <translation>задать ориентацию по умолчанию для последующих команд для создания точки</translation>
     </message>
   </context>
   <context>
@@ -263,6 +267,10 @@
     </message>
     <message>
       <location line="+1"/>
+      <source>Set the default values for speed, acceleration and continuity for subsequent commands of waypoint creation</source>
+      <translation>Задать значения по умолчанию для скорости, ускорения и непрерывности для последующих команд создания маршрутной точки</translation>
+    </message>
+    <message>
       <source>set the default values for speed, acceleration and continuity for subsequent commands of waypoint creation</source>
       <translation>Установка значения по умолчанию для скорости, ускорения и целостности для последующих команд создания точки</translation>
     </message>
@@ -309,12 +317,12 @@
     <message>
       <location line="+1"/>
       <source>Trajectory compound...</source>
-      <translation>Траектория соединения ...</translation>
+      <translation>Соединение траекторий...</translation>
     </message>
     <message>
       <location line="+1"/>
       <source>Group and connect some trajectories to one</source>
-      <translation>Группировать и подключить траекторий в одну</translation>
+      <translation>Группировать и соединить траектории в одну</translation>
     </message>
   </context>
   <context>
@@ -353,12 +361,12 @@
     <message>
       <location line="+1"/>
       <source>Robot tools</source>
-      <translation>Робот инструменты</translation>
+      <translation>Инструменты робота</translation>
     </message>
     <message>
       <location line="+1"/>
       <source>Insert Robot</source>
-      <translation>Вставьте Робот</translation>
+      <translation>Вставить Робота</translation>
     </message>
   </context>
   <context>
@@ -390,15 +398,19 @@
       <location line="+62"/>
       <location filename="../../CommandTrajectory.cpp" line="-301"/>
       <source>Select one Robot and one Trajectory object.</source>
-      <translation>Выберите устройство и траекторию движения.</translation>
+      <translation>Выберите робота и траекторию движения объекта.</translation>
     </message>
     <message>
       <location line="-24"/>
       <source>Trajectory not valid</source>
-      <translation>Траектория не действительна</translation>
+      <translation>Траектория неправильная</translation>
     </message>
     <message>
       <location line="+1"/>
+      <source>You need at least two waypoints in a trajectory to simulate.</source>
+      <translation>Вам нужно, по крайней мере, две маршрутные точки в траектории для симуляции.</translation>
+    </message>
+    <message>
       <source>You need at least two way points in a trajectory to simulate.</source>
       <translation>Вам нужно хотя бы две точки, чтобы смоделировать траекторию.</translation>
     </message>
@@ -444,6 +456,21 @@
       <translation>Чтобы использовать данную команду, наведите курсор на выбранную фигуру. См. документацию.</translation>
     </message>
     <message>
+      <location line="+77"/>
+      <source>Set default speed</source>
+      <translation>Установить скорость по умолчанию</translation>
+    </message>
+    <message>
+      <location line="+10"/>
+      <source>Set default continuity</source>
+      <translation>Установить непрерывность по умолчанию</translation>
+    </message>
+    <message>
+      <location line="+7"/>
+      <source>Set default acceleration</source>
+      <translation>Установить ускорение по умолчанию</translation>
+    </message>
+    <message>
       <source>Select one Robot to set home postion</source>
       <translation>Выберите домашнюю позицию одного из роботов</translation>
     </message>
@@ -453,38 +480,35 @@
       <translation>Выберите одного робота</translation>
     </message>
     <message>
-      <location filename="../../CommandTrajectory.cpp" line="-24"/>
+      <location filename="../../CommandTrajectory.cpp" line="-118"/>
       <location line="+17"/>
       <source>Select one Trajectory object.</source>
-      <translation>Выделите один объект с траекторией.</translation>
+      <translation>Выделите один объект траектории.</translation>
     </message>
     <message>
-      <location line="+84"/>
       <source>set default speed</source>
       <translation>установить скорость по умолчанию</translation>
     </message>
     <message>
-      <location line="+1"/>
+      <location line="+85"/>
       <source>speed: (e.g. 1 m/s or 3 cm/s)</source>
       <translation>скорость: (3 см/с или 1 м/с)</translation>
     </message>
     <message>
-      <location line="+9"/>
       <source>set default continuity</source>
       <translation>установить целостность по умолчанию</translation>
     </message>
     <message>
-      <location line="+1"/>
+      <location line="+10"/>
       <source>continuous ?</source>
       <translation>продолжительность ?</translation>
     </message>
     <message>
-      <location line="+6"/>
       <source>set default acceleration</source>
       <translation>Установка ускорение по умолчанию</translation>
     </message>
     <message>
-      <location line="+1"/>
+      <location line="+7"/>
       <source>acceleration: (e.g. 1 m/s^2 or 3 cm/s^2)</source>
       <translation>ускорение: (например, 1 м/с ^ 2 или 3 см/с ^ 2)</translation>
     </message>
@@ -502,6 +526,11 @@
       <location line="+1"/>
       <source>Please visit %1 and copy the files to %2</source>
       <translation>Пожалуйста, посетите %1 и скопируйте файлы в %2</translation>
+    </message>
+    <message>
+      <location filename="../../ViewProviderTrajectory.cpp" line="+164"/>
+      <source>Modify</source>
+      <translation>Изменить</translation>
     </message>
   </context>
   <context>
@@ -795,7 +824,7 @@
     <message>
       <location line="+31"/>
       <source>Use orientation of edge</source>
-      <translation>Используйте ориентацию края</translation>
+      <translation>Используйте ориентацию ребра</translation>
     </message>
     <message>
       <source>TaskEdge2TracParameter</source>
@@ -981,7 +1010,7 @@
     <message>
       <location line="-26"/>
       <source>Accel:</source>
-      <translation>Accel:</translation>
+      <translation>Ускорение:</translation>
     </message>
     <message>
       <location line="+36"/>
@@ -1053,7 +1082,7 @@
     <message>
       <location line="+1"/>
       <source>&amp;Robot</source>
-      <translation>И робот</translation>
+      <translation>&amp;робот</translation>
     </message>
     <message>
       <location line="+1"/>

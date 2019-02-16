@@ -4,7 +4,7 @@
   <context>
     <name>CmdDrawingAnnotation</name>
     <message>
-      <location filename="../../Command.cpp" line="+474"/>
+      <location filename="../../Command.cpp" line="+478"/>
       <source>Drawing</source>
       <translation>Rajz</translation>
     </message>
@@ -42,7 +42,7 @@
   <context>
     <name>CmdDrawingDraftView</name>
     <message>
-      <location line="+185"/>
+      <location line="+193"/>
       <source>Drawing</source>
       <translation>Rajz</translation>
     </message>
@@ -61,7 +61,7 @@
   <context>
     <name>CmdDrawingExportPage</name>
     <message>
-      <location line="-92"/>
+      <location line="-96"/>
       <source>File</source>
       <translation>Fájl</translation>
     </message>
@@ -80,7 +80,7 @@
   <context>
     <name>CmdDrawingNewA3Landscape</name>
     <message>
-      <location line="-359"/>
+      <location line="-363"/>
       <source>Drawing</source>
       <translation>Rajz</translation>
     </message>
@@ -88,7 +88,7 @@
       <location line="+1"/>
       <location line="+1"/>
       <source>Insert new A3 landscape drawing</source>
-      <translation>Új A3 tájkép rajzot illeszt</translation>
+      <translation>Új A3 fekvő rajzot illeszt</translation>
     </message>
   </context>
   <context>
@@ -126,7 +126,7 @@
   <context>
     <name>CmdDrawingOpen</name>
     <message>
-      <location line="-250"/>
+      <location line="-254"/>
       <source>Drawing</source>
       <translation>Rajz</translation>
     </message>
@@ -144,7 +144,7 @@
   <context>
     <name>CmdDrawingOpenBrowserView</name>
     <message>
-      <location line="+375"/>
+      <location line="+379"/>
       <source>Drawing</source>
       <translation>Rajz</translation>
     </message>
@@ -181,7 +181,7 @@
   <context>
     <name>CmdDrawingProjectShape</name>
     <message>
-      <location line="+287"/>
+      <location line="+295"/>
       <source>Drawing</source>
       <translation>Rajz</translation>
     </message>
@@ -219,7 +219,7 @@
   <context>
     <name>CmdDrawingSymbol</name>
     <message>
-      <location line="-179"/>
+      <location line="-187"/>
       <source>Drawing</source>
       <translation>Rajz</translation>
     </message>
@@ -238,7 +238,7 @@
   <context>
     <name>DrawingGui::DrawingView</name>
     <message>
-      <location filename="../../DrawingView.cpp" line="+211"/>
+      <location filename="../../DrawingView.cpp" line="+215"/>
       <source>&amp;Background</source>
       <translation>Háttér</translation>
     </message>
@@ -268,7 +268,7 @@
       <translation>Magas minőségű élsimítás</translation>
     </message>
     <message>
-      <location line="+33"/>
+      <location line="+38"/>
       <source>Open SVG File</source>
       <translation>SVG fájl megnyitása</translation>
     </message>
@@ -331,7 +331,7 @@ Szeretné folytatni?</translation>
     <message>
       <location line="+2"/>
       <source>A4</source>
-      <translation>A4-es</translation>
+      <translation>A4</translation>
     </message>
     <message>
       <location line="+2"/>
@@ -490,6 +490,10 @@ Szeretné folytatni?</translation>
     </message>
     <message>
       <location line="+7"/>
+      <source>View projection</source>
+      <translation type="unfinished">View projection</translation>
+    </message>
+    <message>
       <source> View projection   </source>
       <translation> Vetítés megtekintése   </translation>
     </message>
@@ -564,7 +568,7 @@ Szeretné folytatni?</translation>
     </message>
     <message>
       <source>- Rotate</source>
-      <translation>-Forgatás</translation>
+      <translation>- Forgatás</translation>
     </message>
     <message>
       <source>90</source>
@@ -737,7 +741,7 @@ Szeretné folytatni?</translation>
     </message>
     <message>
       <source>Insert new A3 landscape drawing</source>
-      <translation>Új A3 tájkép rajzot illeszt</translation>
+      <translation>Új A3 fekvő rajzot illeszt</translation>
     </message>
     <message>
       <source>A4 landscape</source>
@@ -753,7 +757,7 @@ Szeretné folytatni?</translation>
     </message>
     <message>
       <source>A%1 landscape</source>
-      <translation>A%1 lfekvő</translation>
+      <translation>A%1 fekvő</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="-355"/>
@@ -789,8 +793,8 @@ Szeretné folytatni?</translation>
   <context>
     <name>QObject</name>
     <message>
-      <location line="-169"/>
-      <location line="+517"/>
+      <location line="-173"/>
+      <location line="+521"/>
       <source>Choose an SVG file to open</source>
       <translation>SVG fájl kiválasztása megnyitáshoz</translation>
     </message>
@@ -806,13 +810,13 @@ Szeretné folytatni?</translation>
       <location line="-268"/>
       <location line="+79"/>
       <location line="+50"/>
-      <location line="+187"/>
-      <location line="+119"/>
+      <location line="+191"/>
+      <location line="+123"/>
       <source>Wrong selection</source>
       <translation>Nem megfelelő kiválasztás</translation>
     </message>
     <message>
-      <location line="-434"/>
+      <location line="-442"/>
       <source>Select a Part object.</source>
       <translation>Objektum rész kiválasztása.</translation>
     </message>
@@ -829,40 +833,40 @@ Szeretné folytatni?</translation>
       <translation>Hozzon létre egy lapot a nézet beszúrásához.</translation>
     </message>
     <message>
-      <location line="-249"/>
-      <location line="+517"/>
-      <location line="+53"/>
+      <location line="-253"/>
+      <location line="+521"/>
+      <location line="+57"/>
       <source>Scalable Vector Graphic</source>
       <translation>Méretezhető vektorgrafika</translation>
     </message>
     <message>
-      <location line="-313"/>
+      <location line="-317"/>
       <location line="+79"/>
       <location line="+81"/>
       <location line="+48"/>
       <location line="+45"/>
-      <location line="+179"/>
+      <location line="+187"/>
       <source>No page found</source>
       <translation>Az oldal nem található</translation>
     </message>
     <message>
-      <location line="-431"/>
+      <location line="-439"/>
       <location line="+79"/>
       <location line="+81"/>
       <location line="+48"/>
       <location line="+45"/>
-      <location line="+179"/>
+      <location line="+187"/>
       <source>Create a page first.</source>
       <translation>Először hozzon létre egy oldalt.</translation>
     </message>
     <message>
-      <location line="-362"/>
+      <location line="-370"/>
       <source>Select exactly one Part object.</source>
       <translation>Jelöljön ki pontosan egy tárgy alkotórészt.</translation>
     </message>
     <message>
       <location line="+50"/>
-      <location line="+187"/>
+      <location line="+191"/>
       <source>Select one Page object.</source>
       <translation>Válasszon ki egy teljes oldal tárgyat.</translation>
     </message>
@@ -872,7 +876,7 @@ Szeretné folytatni?</translation>
       <translation>Összes fájl</translation>
     </message>
     <message>
-      <location line="+113"/>
+      <location line="+117"/>
       <source>Select exactly one Spreadsheet object.</source>
       <translation>Jelöljön ki pontosan egy számolótábla tárgyat.</translation>
     </message>
@@ -889,7 +893,7 @@ Szeretné folytatni?</translation>
       <translation>Összes fájl (*.*)</translation>
     </message>
     <message>
-      <location line="-111"/>
+      <location line="-115"/>
       <source>Export page</source>
       <translation>Oldal exportálása</translation>
     </message>
@@ -924,19 +928,19 @@ Szeretné folytatni?</translation>
     </message>
     <message>
       <location filename="../../TaskOrthoViews.cpp" line="+51"/>
-      <location line="+926"/>
+      <location line="+930"/>
       <source>Make axonometric...</source>
       <translation>Axonometrikus létrehozás...</translation>
     </message>
     <message>
-      <location line="-925"/>
-      <location line="+926"/>
+      <location line="-929"/>
+      <location line="+930"/>
       <source>Edit axonometric settings...</source>
       <translation>Axonometrikus beállítások szerkesztése...</translation>
     </message>
     <message>
-      <location line="-925"/>
-      <location line="+926"/>
+      <location line="-929"/>
+      <location line="+930"/>
       <source>Make orthographic</source>
       <translation>Ortografikus létrehozás</translation>
     </message>

@@ -203,11 +203,11 @@
     </message>
     <message>
       <source>Flip normals</source>
-      <translation>Normál tükrözés</translation>
+      <translation>Normák tükrözés</translation>
     </message>
     <message>
       <source>Flips the normals of the mesh</source>
-      <translation>A háló normál tükrözése</translation>
+      <translation>A háló normák tükrözése</translation>
     </message>
   </context>
   <context>
@@ -248,11 +248,11 @@
     </message>
     <message>
       <source>Harmonize normals</source>
-      <translation>Normálisok összehangolása</translation>
+      <translation>Normák összehangolása</translation>
     </message>
     <message>
       <source>Harmonizes the normals of the mesh</source>
-      <translation>A hálón lévő normálisok összehangolása</translation>
+      <translation>A hálón lévő normák összehangolása</translation>
     </message>
   </context>
   <context>
@@ -447,6 +447,21 @@
     </message>
   </context>
   <context>
+    <name>CmdMeshSegmentationBestFit</name>
+    <message>
+      <source>Mesh</source>
+      <translation type="unfinished">Mesh</translation>
+    </message>
+    <message>
+      <source>Create mesh segments from best-fit surfaces...</source>
+      <translation>Háló szegmensek létrehozása a legjobban illeszkedő felületekből...</translation>
+    </message>
+    <message>
+      <source>Create mesh segments from best-fit surfaces</source>
+      <translation>Háló szegmensek létrehozása a legjobban illeszkedő felületekből</translation>
+    </message>
+  </context>
+  <context>
     <name>CmdMeshSmoothing</name>
     <message>
       <source>Mesh</source>
@@ -551,7 +566,7 @@
     <name>MeshGui::DlgEvaluateMesh</name>
     <message>
       <source>&amp;Help</source>
-      <translation>&amp;Súgó</translation>
+      <translation>Súgó</translation>
     </message>
     <message>
       <source>F1</source>
@@ -559,7 +574,7 @@
     </message>
     <message>
       <source>&amp;Close</source>
-      <translation>&amp;Bezárás</translation>
+      <translation>Bezárás</translation>
     </message>
     <message>
       <source>Alt+C</source>
@@ -678,11 +693,11 @@
     </message>
     <message>
       <source>No flipped normals</source>
-      <translation>Nincsenek tükrözött normálisok</translation>
+      <translation>Nincsenek tükrözött normák</translation>
     </message>
     <message>
       <source>%1 flipped normals</source>
-      <translation>%1 tükrözött normálisok</translation>
+      <translation>%1 tükrözött normák</translation>
     </message>
     <message>
       <source>No non-manifolds</source>
@@ -750,7 +765,7 @@
     </message>
     <message>
       <source>Flipped normals found</source>
-      <translation>Tükrözött normát talált</translation>
+      <translation>Tükrözött normákat talált</translation>
     </message>
     <message>
       <source>Check failed due to folds on the surface.
@@ -806,7 +821,7 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
     </message>
     <message>
       <source>&amp;Create</source>
-      <translation>Létrehozás &amp;C</translation>
+      <translation>Létrehozás</translation>
     </message>
     <message>
       <source>Alt+C</source>
@@ -926,6 +941,10 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
       <source>Export AMF files using compression</source>
       <translation>AMF-fájlok exportálása tömörítéssel</translation>
     </message>
+    <message>
+      <source>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:600;"&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;span style=" font-weight:400;"&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed which results in increased detail/resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+      <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:600;"&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;span style=" font-weight:400;"&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed which results in increased detail/resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
   </context>
   <context>
     <name>MeshGui::DlgSettingsMeshView</name>
@@ -967,7 +986,7 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
     </message>
     <message>
       <source>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;&lt;span style=" font-weight:600;"&gt;Hint&lt;/span&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;Defining the normals per vertex is also called &lt;span style=" font-style:italic;"&gt;Phong shading&lt;/span&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-style:italic;"&gt;&lt;span style=" font-style:normal;"&gt;while defining the normals per face is called &lt;/span&gt;Flat shading&lt;span style=" font-style:normal;"&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;&lt;span style=" font-weight:600;"&gt;Hint&lt;/span&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;A normálisok vertexként való megjelenítését úgy is nevezik, hogy&lt;span style=" font-style:italic;"&gt;Phong árnyékolás&lt;/span&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-style:italic;"&gt;&lt;span style=" font-style:normal;"&gt;while defining the normals per face is called &lt;/span&gt;Flat shading&lt;span style=" font-style:normal;"&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <translation>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;&lt;span style=" font-weight:600;"&gt;Hint&lt;/span&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;A végpontonkénti normál meghatározás más néven&lt;span style=" font-style:italic;"&gt;Phong árnyékolás&lt;/span&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; font-style:italic;"&gt;&lt;span style=" font-style:normal;"&gt;amíg a felülenténki normák más néven &lt;/span&gt;Flat shading&lt;span style=" font-style:normal;"&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <source>Default appearance for new meshes</source>
@@ -1060,6 +1079,45 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
     </message>
   </context>
   <context>
+    <name>MeshGui::ParametersDialog</name>
+    <message>
+      <source>Surface fit</source>
+      <translation>Felület illesztés</translation>
+    </message>
+    <message>
+      <source>Parameters</source>
+      <translation>Paraméterek</translation>
+    </message>
+    <message>
+      <source>Selection</source>
+      <translation>Kijelölés</translation>
+    </message>
+    <message>
+      <source>Region</source>
+      <translation>Régió</translation>
+    </message>
+    <message>
+      <source>Triangle</source>
+      <translation>Háromszög</translation>
+    </message>
+    <message>
+      <source>Clear</source>
+      <translation>Törlés</translation>
+    </message>
+    <message>
+      <source>Compute</source>
+      <translation>Kiszámítás</translation>
+    </message>
+    <message>
+      <source>No selection</source>
+      <translation>Nincs kijelölés</translation>
+    </message>
+    <message>
+      <source>Before fitting the surface select an area.</source>
+      <translation>Felület illesztése előtt jelöljön ki egy területet.</translation>
+    </message>
+  </context>
+  <context>
     <name>MeshGui::RemoveComponents</name>
     <message>
       <source>Remove components</source>
@@ -1067,7 +1125,7 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
     </message>
     <message>
       <source>Select</source>
-      <translation>Kijelölés</translation>
+      <translation>Kiválaszt</translation>
     </message>
     <message>
       <source>Select whole component</source>
@@ -1111,7 +1169,7 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
     </message>
     <message>
       <source>Respect only triangles with normals facing screen</source>
-      <translation>Csak a normál felülettel kijelzett háromszögeket részesíti előnyben</translation>
+      <translation>Csak a normák felülettel kijelzett háromszögeket részesíti előnyben</translation>
     </message>
     <message>
       <source>Respect only visible triangles</source>
@@ -1164,6 +1222,73 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
       <source>Sphere</source>
       <translation>Gömb</translation>
     </message>
+    <message>
+      <source>Curvature</source>
+      <translation>Görbület</translation>
+    </message>
+    <message>
+      <source>Freeform</source>
+      <translation>Szabad formájú</translation>
+    </message>
+    <message>
+      <source>Max. Curvature</source>
+      <translation>Max. görbület</translation>
+    </message>
+    <message>
+      <source>Min. Curvature</source>
+      <translation>Min. görbület</translation>
+    </message>
+  </context>
+  <context>
+    <name>MeshGui::SegmentationBestFit</name>
+    <message>
+      <source>Mesh segmentation</source>
+      <translation>Háló szegmentálás</translation>
+    </message>
+    <message>
+      <source>Sphere</source>
+      <translation>Gömb</translation>
+    </message>
+    <message>
+      <source>Tolerance</source>
+      <translation>Tűrés</translation>
+    </message>
+    <message>
+      <source>Minimum number of faces</source>
+      <translation>Felületek minimum száma</translation>
+    </message>
+    <message>
+      <source>Parameters...</source>
+      <translation>Paraméterek...</translation>
+    </message>
+    <message>
+      <source>Plane</source>
+      <translation>Sík</translation>
+    </message>
+    <message>
+      <source>Cylinder</source>
+      <translation>Henger</translation>
+    </message>
+    <message>
+      <source>Base</source>
+      <translation>Alap</translation>
+    </message>
+    <message>
+      <source>Normal</source>
+      <translation>Normál</translation>
+    </message>
+    <message>
+      <source>Axis</source>
+      <translation>Tengely</translation>
+    </message>
+    <message>
+      <source>Radius</source>
+      <translation>Sugár</translation>
+    </message>
+    <message>
+      <source>Center</source>
+      <translation>Középre</translation>
+    </message>
   </context>
   <context>
     <name>MeshGui::Selection</name>
@@ -1185,7 +1310,7 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
     </message>
     <message>
       <source>Respect only triangles with normals facing screen</source>
-      <translation>Csak a normál felülettel kijelzett háromszögeket részesíti előnyben</translation>
+      <translation>Csak a normák felülettel kijelzett háromszögeket részesíti előnyben</translation>
     </message>
     <message>
       <source>Use a brush tool to select the area</source>
@@ -1205,6 +1330,13 @@ Kérjük először futtassa a hajlítás javítása parancsot</translation>
     <message>
       <source>Invert</source>
       <translation>Invertálás</translation>
+    </message>
+  </context>
+  <context>
+    <name>Mesh_BoundingBox</name>
+    <message>
+      <source>Boundings of %1:</source>
+      <translation>%1 kötései:</translation>
     </message>
   </context>
   <context>
@@ -1361,7 +1493,7 @@ Max=&lt;%4,%5,%6&gt;</translation>
     </message>
     <message>
       <source>All Mesh Files (*.stl *.ast *.bms *.obj *.ply)</source>
-      <translation>Minden háló Fájl (*.stl *.ast *.bms *.obj *.ply)</translation>
+      <translation>Összes háló Fájl (*.stl *.ast *.bms *.obj *.ply)</translation>
     </message>
     <message>
       <source>Stanford Polygon (*.ply)</source>
@@ -1389,7 +1521,7 @@ Max=&lt;%4,%5,%6&gt;</translation>
     </message>
     <message>
       <source>All Mesh Files (*.stl *.ast *.bms *.obj *.off *.ply)</source>
-      <translation>Minden háló fájl (*.stl *.ast *.bms *.obj *.off * .ply)</translation>
+      <translation>Összes háló fájl (*.stl *.ast *.bms *.obj *.off *.ply)</translation>
     </message>
     <message>
       <source>X3D Extensible 3D (*.x3d)</source>
@@ -1470,6 +1602,10 @@ Max=&lt;%4,%5,%6&gt;</translation>
     <message>
       <source>Enter scaling factor:</source>
       <translation>Adja meg a skálafaktort:</translation>
+    </message>
+    <message>
+      <source>Simple Model Format</source>
+      <translation>Egyszerű modell formátum</translation>
     </message>
   </context>
   <context>

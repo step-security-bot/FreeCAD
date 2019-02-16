@@ -447,6 +447,21 @@
     </message>
   </context>
   <context>
+    <name>CmdMeshSegmentationBestFit</name>
+    <message>
+      <source>Mesh</source>
+      <translation type="unfinished">Mesh</translation>
+    </message>
+    <message>
+      <source>Create mesh segments from best-fit surfaces...</source>
+      <translation>Vytvořit segmenty sítě z nejlépe odpovídajících ploch...</translation>
+    </message>
+    <message>
+      <source>Create mesh segments from best-fit surfaces</source>
+      <translation>Vytvořit segmenty sítě z nejlépe odpovídajících ploch</translation>
+    </message>
+  </context>
+  <context>
     <name>CmdMeshSmoothing</name>
     <message>
       <source>Mesh</source>
@@ -926,6 +941,10 @@ Prosím spusťte nejdřív příkaz pro opravu záhybů</translation>
       <source>Export AMF files using compression</source>
       <translation>Exportovat soubory AMF za použití komprese</translation>
     </message>
+    <message>
+      <source>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:600;"&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;span style=" font-weight:400;"&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed which results in increased detail/resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+      <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;&lt;span style=" font-weight:600;"&gt;Tessellation&lt;/span&gt;&lt;/p&gt;&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;/p&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;"&gt;&lt;span style=" font-weight:400;"&gt;Defines the maximum deviation of the tessellated mesh to the surface. The smaller the value is the slower the render speed which results in increased detail/resolution.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
   </context>
   <context>
     <name>MeshGui::DlgSettingsMeshView</name>
@@ -1060,6 +1079,45 @@ Prosím spusťte nejdřív příkaz pro opravu záhybů</translation>
     </message>
   </context>
   <context>
+    <name>MeshGui::ParametersDialog</name>
+    <message>
+      <source>Surface fit</source>
+      <translation>Proložení povrchu</translation>
+    </message>
+    <message>
+      <source>Parameters</source>
+      <translation>Parametry</translation>
+    </message>
+    <message>
+      <source>Selection</source>
+      <translation>Výběr</translation>
+    </message>
+    <message>
+      <source>Region</source>
+      <translation>Region</translation>
+    </message>
+    <message>
+      <source>Triangle</source>
+      <translation>Trojúhelník</translation>
+    </message>
+    <message>
+      <source>Clear</source>
+      <translation>Vyčistit</translation>
+    </message>
+    <message>
+      <source>Compute</source>
+      <translation>Vypočítat</translation>
+    </message>
+    <message>
+      <source>No selection</source>
+      <translation>Žádný výběr</translation>
+    </message>
+    <message>
+      <source>Before fitting the surface select an area.</source>
+      <translation>Vyberte oblast před proložením plochy.</translation>
+    </message>
+  </context>
+  <context>
     <name>MeshGui::RemoveComponents</name>
     <message>
       <source>Remove components</source>
@@ -1164,6 +1222,73 @@ Prosím spusťte nejdřív příkaz pro opravu záhybů</translation>
       <source>Sphere</source>
       <translation>Koule</translation>
     </message>
+    <message>
+      <source>Curvature</source>
+      <translation>Křivost</translation>
+    </message>
+    <message>
+      <source>Freeform</source>
+      <translation>Volný tvar</translation>
+    </message>
+    <message>
+      <source>Max. Curvature</source>
+      <translation>Max. křivost</translation>
+    </message>
+    <message>
+      <source>Min. Curvature</source>
+      <translation>Min. křivost</translation>
+    </message>
+  </context>
+  <context>
+    <name>MeshGui::SegmentationBestFit</name>
+    <message>
+      <source>Mesh segmentation</source>
+      <translation>Segmentace sítě</translation>
+    </message>
+    <message>
+      <source>Sphere</source>
+      <translation>Koule</translation>
+    </message>
+    <message>
+      <source>Tolerance</source>
+      <translation>Odchylka</translation>
+    </message>
+    <message>
+      <source>Minimum number of faces</source>
+      <translation>Minimální počet ploch</translation>
+    </message>
+    <message>
+      <source>Parameters...</source>
+      <translation>Parametry...</translation>
+    </message>
+    <message>
+      <source>Plane</source>
+      <translation>Rovina</translation>
+    </message>
+    <message>
+      <source>Cylinder</source>
+      <translation>Válec</translation>
+    </message>
+    <message>
+      <source>Base</source>
+      <translation>Základna</translation>
+    </message>
+    <message>
+      <source>Normal</source>
+      <translation>Normála</translation>
+    </message>
+    <message>
+      <source>Axis</source>
+      <translation>Osa</translation>
+    </message>
+    <message>
+      <source>Radius</source>
+      <translation>Poloměr</translation>
+    </message>
+    <message>
+      <source>Center</source>
+      <translation>Střed</translation>
+    </message>
   </context>
   <context>
     <name>MeshGui::Selection</name>
@@ -1205,6 +1330,13 @@ Prosím spusťte nejdřív příkaz pro opravu záhybů</translation>
     <message>
       <source>Invert</source>
       <translation>Převrátit</translation>
+    </message>
+  </context>
+  <context>
+    <name>Mesh_BoundingBox</name>
+    <message>
+      <source>Boundings of %1:</source>
+      <translation>Hranice %1:</translation>
     </message>
   </context>
   <context>
@@ -1471,6 +1603,10 @@ Max = &lt;%4,%5,%6&gt;</translation>
     <message>
       <source>Enter scaling factor:</source>
       <translation>Vložte měřítko:</translation>
+    </message>
+    <message>
+      <source>Simple Model Format</source>
+      <translation>Jednoduchá formát modelu</translation>
     </message>
   </context>
   <context>

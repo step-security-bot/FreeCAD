@@ -27,10 +27,10 @@ KindOfMaterial
 KindOfMaterialDE
 MaterialNumber
 Model
-ModulusOfShare
 Norm
 SectionFillPattern
 SectionLinewidth
+ShearModulus
 Shininess
 SoundTransmissionClass
 SpecificHeat
