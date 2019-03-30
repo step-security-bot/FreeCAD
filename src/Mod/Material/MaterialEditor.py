@@ -51,6 +51,7 @@ class MaterialEditor:
         self.customprops = []
         self.internalprops = []
         self.groups = []
+        self.directory = FreeCAD.getResourceDir() + "Mod/Material"
 
         # load the UI file from the same directory as this script
         self.widget = FreeCADGui.PySideUic.loadUi(
@@ -152,7 +153,7 @@ class MaterialEditor:
            - a dictionary, if the editor was called with data.'''
 
         if isinstance(data, dict):
-
+            # a standard material property dict is provided
             model = self.widget.treeView.model()
             root = model.invisibleRootItem()
             for gg in range(root.rowCount() - 1):
@@ -181,7 +182,7 @@ class MaterialEditor:
                 self.customprops.append(k)
 
         elif isinstance(data, unicode):
-
+            # a card name is provided, search card, read material data and call this def once more with std material property dict
             k = str(data)
             if k:
                 if k in self.cards:
@@ -229,7 +230,7 @@ class MaterialEditor:
         self.cards = {}
         for p in self.resources:
             if os.path.exists(p):
-                for f in os.listdir(p):
+                for f in sorted(os.listdir(p)):
                     b, e = os.path.splitext(f)
                     if e.upper() == ".FCMAT":
                         self.cards[b] = p + os.sep + f
@@ -412,10 +413,11 @@ class MaterialEditor:
 
     def openfile(self):
         "Opens a FCMat file"
-        filetuple = QtGui.QFileDialog.getOpenFileName(QtGui.QApplication.activeWindow(), 'Open FreeCAD Material file', '*.FCMat')
+        filetuple = QtGui.QFileDialog.getOpenFileName(QtGui.QApplication.activeWindow(), 'Open FreeCAD Material file', self.directory, '*.FCMat')
         filename = filetuple[0]  # a tuple of two empty strings returns True, so use the filename directly
         if filename:
             import importFCMat
+            self.directory = os.path.dirname(filename)
             d = importFCMat.read(filename)
             if d:
                 self.updateContents(d)
@@ -437,9 +439,10 @@ class MaterialEditor:
         filetuple =\
             QtGui.QFileDialog.getSaveFileName(QtGui.QApplication.activeWindow(),
                                               'Save FreeCAD Material file',
-                                              name + '.FCMat')
+                                              self.directory + '/' + name + '.FCMat', '*.FCMat')
         filename = filetuple[0]  # a tuple of two empty strings returns True, so use the filename directly
         if filename:
+            self.directory = os.path.dirname(filename)
             d = self.getDict()
             # self.outputDict(d)
             if d:
@@ -639,10 +642,32 @@ def openEditor(obj=None, prop=None):
 
 def editMaterial(material):
     """editMaterial(material): opens the editor to edit the contents
-    of the given material dictionary. Returns the modified material."""
+    of the given material dictionary. Returns the modified material dictionary."""
+    # if the material editor is opened with this def the combo box with the card name is empty
+    # this makes sense, because the editor was not opened with a card but with material dictionary instead
+    # TODO: add some text in combo box, may be "custom material data" or "user material data"
+    # TODO: all card could be checked if one fits exact ALL provided data and than this card name could be displayed
     editor = MaterialEditor(material=material)
     result = editor.exec_()
     if result:
         return editor.getDict()
     else:
         return material
+
+
+'''
+# some examples how to open the material editor in Python:
+import MaterialEditor
+MaterialEditor.openEditor()
+
+doc = FreeCAD.open(FreeCAD.ConfigGet("AppHomePath") + 'data/examples/FemCalculixCantilever3D.FCStd')
+import MaterialEditor
+MaterialEditor.openEditor('SolidMaterial', 'Material')
+
+import MaterialEditor
+MaterialEditor.editMaterial({'Density': '1234.0 kg/m^3', 'Name': 'My-Material-Data', 'PoissonRatio': '0.66', 'YoungsModulus': '123456 MPa'})
+
+import MaterialEditor
+MaterialEditor.editMaterial('ABS')
+
+'''

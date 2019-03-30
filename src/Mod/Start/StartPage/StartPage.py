@@ -24,6 +24,8 @@
 # This is the start page template. It builds a HTML global variable that contains
 # the html code of the start page. It is built only once per FreeCAD session for now...
 
+import six
+
 import sys,os,FreeCAD,FreeCADGui,tempfile,time,zipfile,urllib,re
 from . import TranslationTexts
 from PySide import QtCore,QtGui
@@ -41,8 +43,8 @@ def encode(text):
 
     "make sure we are always working with unicode in python2"
 
-    if sys.version_info.major < 3:
-        if not isinstance(text,unicode):
+    if six.PY2:
+        if not isinstance(text,six.text_type):
             return text.decode("utf8")
     return text
 
@@ -217,9 +219,9 @@ def buildCard(filename,method,arg=None):
                 result += '<li class="icon">'
                 result += '<img src="file:///'+image+'">'
                 result += '<div class="caption">'
-                result += '<h4>'+basename+'</h4>'
+                result += '<h4>'+encode(basename)+'</h4>'
                 result += '<p>'+size+'</p>'
-                result += '<p>'+author+'</p>'
+                result += '<p>'+encode(author)+'</p>'
                 result += '</div>'
                 result += '</li>'
                 result += '</a>'
@@ -388,6 +390,8 @@ def handle():
             wn = "cadquery_module"
         elif wn == "DefeaturingWB":
             wn = "Defeaturing"
+        elif wn == "ksuWB":
+            wn = "kicadStepUp"
         elif wn == "ManipulatorWB":
             wn = "Manipulator"
         elif wn == "PartOMagic":

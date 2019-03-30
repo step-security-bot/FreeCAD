@@ -1660,6 +1660,9 @@ void Application::runApplication(void)
     GUISingleApplication mainApp(argc, App::Application::GetARGV());
     // http://forum.freecadweb.org/viewtopic.php?f=3&t=15540
     mainApp.setAttribute(Qt::AA_DontShowIconsInMenus, false);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+    mainApp.setAttribute(Qt::AA_UseDesktopOpenGL);
+#endif
 
 #ifdef Q_OS_UNIX
     // Make sure that we use '.' as decimal point. See also
@@ -1726,6 +1729,13 @@ void Application::runApplication(void)
              << QString::fromUtf8((App::Application::getResourceDir() + "Gui/Stylesheets/").c_str())
              << QLatin1String(":/stylesheets");
     QDir::setSearchPaths(QString::fromLatin1("qss"), qssPaths);
+
+    // set search paths for images
+    QStringList imagePaths;
+    imagePaths << QString::fromUtf8((App::Application::getUserAppDataDir() + "Gui/images").c_str())
+               << QString::fromUtf8((App::Application::getUserAppDataDir() + "pixmaps").c_str())
+               << QLatin1String(":/icons");
+    QDir::setSearchPaths(QString::fromLatin1("images"), imagePaths);
 
     // register action style event type
     ActionStyleEvent::EventType = QEvent::registerEventType(QEvent::User + 1);
@@ -1949,8 +1959,11 @@ void Application::runApplication(void)
             qApp->sendEvent(&mw, &e);
         }
     }
-#if QT_VERSION == 0x050600 && defined(Q_OS_WIN32)
     else {
+        if (hGrp->GetBool("TiledBackground", false)) {
+            mdi->setBackground(QPixmap(QLatin1String("images:background.png")));
+        }
+#if QT_VERSION == 0x050600 && defined(Q_OS_WIN32)
         // Under Windows the tree indicator branch gets corrupted after a while.
         // For more details see also https://bugreports.qt.io/browse/QTBUG-52230
         // and https://codereview.qt-project.org/#/c/154357/2//ALL,unified
@@ -1964,8 +1977,8 @@ void Application::runApplication(void)
                "    image: url(:/icons/style/windows_branch_open.png);\n"
                "}\n");
         qApp->setStyleSheet(qss);
-    }
 #endif
+    }
 
     //initialize spaceball.
     mainApp.initSpaceball(&mw);

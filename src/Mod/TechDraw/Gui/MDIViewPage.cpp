@@ -268,6 +268,11 @@ void MDIViewPage::centerOnPage(void)
     }
 }
 
+bool MDIViewPage::addView(const App::DocumentObject *obj)
+{
+    return attachView(const_cast<App::DocumentObject*>(obj));
+}
+
 bool MDIViewPage::attachView(App::DocumentObject *obj)
 {
     auto typeId(obj->getTypeId());
@@ -493,11 +498,9 @@ bool MDIViewPage::onMsg(const char *pMsg, const char **)
         return true;
     } else if (strcmp("Save", pMsg) == 0 ) {
         doc->save();
-        Gui::Command::updateActive();
         return true;
     } else if (strcmp("SaveAs", pMsg) == 0 ) {
         doc->saveAs();
-        Gui::Command::updateActive();
         return true;
     } else if (strcmp("Undo", pMsg) == 0 ) {
         doc->undo(1);
@@ -571,7 +574,12 @@ void MDIViewPage::printPdf(std::string file)
     printer.setFullPage(true);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(filename);
-    printer.setOrientation(m_orientation);
+//    printer.setOrientation(m_orientation);
+    if (m_paperSize == QPrinter::Ledger)  {
+        printer.setOrientation((QPrinter::Orientation) (1 - m_orientation));  //reverse 0/1
+    } else {
+        printer.setOrientation(m_orientation);
+    }
     printer.setPaperSize(m_paperSize);
     print(&printer);
 }
@@ -728,8 +736,8 @@ QPrinter::PaperSize MDIViewPage::getPaperSize(int w, int h) const
         {105, 241}, // US Common
         {110, 220}, // DLE
         {210, 330}, // Folio
-        {431.8f, 279.4f}, // Ledger
-        {279.4f, 431.8f} // Tabloid
+        {431.8f, 279.4f}, // Ledger (28)   note, two names for same size paper (ANSI B)
+        {279.4f, 431.8f} // Tabloid (29)   causes trouble with orientation on PDF export
     };
 
     QPrinter::PaperSize ps = QPrinter::Custom;
@@ -739,13 +747,19 @@ QPrinter::PaperSize MDIViewPage::getPaperSize(int w, int h) const
             ps = static_cast<QPrinter::PaperSize>(i);
             break;
         }
-        else
+        else                                          //handle landscape & portrait w/h
         if (std::abs(paperSizes[i][0]-h) <= 1 &&
             std::abs(paperSizes[i][1]-w) <= 1) {
             ps = static_cast<QPrinter::PaperSize>(i);
             break;
         }
     }
+    if (ps == QPrinter::Ledger)  {                    //check if really Tabloid
+        if (w < 431) {
+            ps = QPrinter::Tabloid;
+        }
+    }
+
     return ps;
 }
 
@@ -841,7 +855,6 @@ void MDIViewPage::saveDXF(std::string fileName)
     Gui::Command::doCommand(Gui::Command::Doc,"import TechDraw");
     Gui::Command::doCommand(Gui::Command::Doc,"TechDraw.writeDXFPage(App.activeDocument().%s,u\"%s\")",
                             PageName.c_str(),(const char*)fileName.c_str());
-    Gui::Command::updateActive();
     Gui::Command::commitCommand();
 }
 

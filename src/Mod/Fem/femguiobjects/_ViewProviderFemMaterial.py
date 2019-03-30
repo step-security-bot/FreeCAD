@@ -120,17 +120,17 @@ class _TaskPanelFemMaterial:
         QtCore.QObject.connect(self.parameterWidget.chbu_allow_edit, QtCore.SIGNAL("clicked()"), self.toggleInputFieldsReadOnly)
         QtCore.QObject.connect(self.parameterWidget.pushButton_editMat, QtCore.SIGNAL("clicked()"), self.edit_material)
         # basic properties must be provided
-        QtCore.QObject.connect(self.parameterWidget.input_fd_density, QtCore.SIGNAL("valueChanged(double)"), self.density_changed)
+        QtCore.QObject.connect(self.parameterWidget.input_fd_density, QtCore.SIGNAL("editingFinished()"), self.density_changed)
         # mechanical properties
-        QtCore.QObject.connect(self.parameterWidget.input_fd_young_modulus, QtCore.SIGNAL("valueChanged(double)"), self.ym_changed)
-        QtCore.QObject.connect(self.parameterWidget.spinBox_poisson_ratio, QtCore.SIGNAL("valueChanged(double)"), self.pr_changed)
+        QtCore.QObject.connect(self.parameterWidget.input_fd_young_modulus, QtCore.SIGNAL("editingFinished()"), self.ym_changed)
+        QtCore.QObject.connect(self.parameterWidget.spinBox_poisson_ratio, QtCore.SIGNAL("editingFinished()"), self.pr_changed)
         # thermal properties
-        QtCore.QObject.connect(self.parameterWidget.input_fd_thermal_conductivity, QtCore.SIGNAL("valueChanged(double)"), self.tc_changed)
-        QtCore.QObject.connect(self.parameterWidget.input_fd_expansion_coefficient, QtCore.SIGNAL("valueChanged(double)"), self.tec_changed)
-        QtCore.QObject.connect(self.parameterWidget.input_fd_specific_heat, QtCore.SIGNAL("valueChanged(double)"), self.sh_changed)
+        QtCore.QObject.connect(self.parameterWidget.input_fd_thermal_conductivity, QtCore.SIGNAL("editingFinished()"), self.tc_changed)
+        QtCore.QObject.connect(self.parameterWidget.input_fd_expansion_coefficient, QtCore.SIGNAL("editingFinished()"), self.tec_changed)
+        QtCore.QObject.connect(self.parameterWidget.input_fd_specific_heat, QtCore.SIGNAL("editingFinished()"), self.sh_changed)
         # fluidic properties, only volumetric thermal expansion coeff makes sense
-        QtCore.QObject.connect(self.parameterWidget.input_fd_kinematic_viscosity, QtCore.SIGNAL("valueChanged(double)"), self.kinematic_viscosity_changed)
-        QtCore.QObject.connect(self.parameterWidget.input_fd_vol_expansion_coefficient, QtCore.SIGNAL("valueChanged(double)"), self.vtec_changed)
+        QtCore.QObject.connect(self.parameterWidget.input_fd_kinematic_viscosity, QtCore.SIGNAL("editingFinished()"), self.kinematic_viscosity_changed)
+        QtCore.QObject.connect(self.parameterWidget.input_fd_vol_expansion_coefficient, QtCore.SIGNAL("editingFinished()"), self.vtec_changed)
 
         # init all parameter input files with read only
         self.parameterWidget.chbu_allow_edit.setCheckState(QtCore.Qt.CheckState.Unchecked)
@@ -315,7 +315,14 @@ class _TaskPanelFemMaterial:
             else:
                 print('YoungsModulus not found in material data of: ' + self.material['Name'])
                 self.material['YoungsModulus'] = '0 MPa'
-            if 'PoissonRatio' not in self.material:  # PoissonRatio does not have a unit, we're not going to check for a unit
+            if 'PoissonRatio' in self.material:
+                # PoissonRatio does not have a unit, but it is checked it there is no value at all
+                try:
+                    float(self.material['PoissonRatio'])
+                except:
+                    print('PoissonRatio has wrong or no data (reset the value): ' + self.material['PoissonRatio'])
+                    self.material['PoissonRatio'] = '0'
+            else:
                 print('PoissonRatio not found in material data of: ' + self.material['Name'])
                 self.material['PoissonRatio'] = '0'
         if self.obj.Category == 'Fluid':
@@ -359,8 +366,9 @@ class _TaskPanelFemMaterial:
             self.material['SpecificHeat'] = '0 J/kg/K'
 
     # mechanical input fields
-    def ym_changed(self, value):
+    def ym_changed(self):
         # FreeCADs standard unit for stress is kPa
+        value = self.parameterWidget.input_fd_young_modulus.property("rawValue")
         old_ym = Units.Quantity(self.material['YoungsModulus']).getValueAs("kPa")
         variation = 0.001
         if value:
@@ -374,8 +382,9 @@ class _TaskPanelFemMaterial:
                 else:
                     self.set_transient_material()
 
-    def density_changed(self, value):
+    def density_changed(self):
         # FreeCADs standard unit for density is kg/mm^3
+        value = self.parameterWidget.input_fd_density.property("rawValue")
         old_density = Units.Quantity(self.material['Density']).getValueAs("kg/m^3")
         variation = 0.001
         if value:
@@ -390,7 +399,8 @@ class _TaskPanelFemMaterial:
                 else:
                     self.set_transient_material()
 
-    def pr_changed(self, value):
+    def pr_changed(self):
+        value = self.parameterWidget.spinBox_poisson_ratio.value()
         old_pr = Units.Quantity(self.material['PoissonRatio'])
         variation = 0.001
         if value:
@@ -414,7 +424,8 @@ class _TaskPanelFemMaterial:
                 self.set_transient_material()
 
     # thermal input fields
-    def tc_changed(self, value):
+    def tc_changed(self):
+        value = self.parameterWidget.input_fd_thermal_conductivity.property("rawValue")
         old_tc = Units.Quantity(self.material['ThermalConductivity']).getValueAs("W/m/K")
         variation = 0.001
         if value:
@@ -429,7 +440,8 @@ class _TaskPanelFemMaterial:
                 else:
                     self.set_transient_material()
 
-    def tec_changed(self, value):
+    def tec_changed(self):
+        value = self.parameterWidget.input_fd_expansion_coefficient.property("rawValue")
         old_tec = Units.Quantity(self.material['ThermalExpansionCoefficient']).getValueAs("um/m/K")
         variation = 0.001
         if value:
@@ -444,7 +456,8 @@ class _TaskPanelFemMaterial:
                 else:
                     self.set_transient_material()
 
-    def sh_changed(self, value):
+    def sh_changed(self):
+        value = self.parameterWidget.input_fd_specific_heat.property("rawValue")
         old_sh = Units.Quantity(self.material['SpecificHeat']).getValueAs("J/kg/K")
         variation = 0.001
         if value:
@@ -460,7 +473,8 @@ class _TaskPanelFemMaterial:
                     self.set_transient_material()
 
     # fluidic input fields
-    def vtec_changed(self, value):
+    def vtec_changed(self):
+        value = self.parameterWidget.input_fd_vol_expansion_coefficient.property("rawValue")
         old_vtec = Units.Quantity(self.material['VolumetricThermalExpansionCoefficient']).getValueAs("m/m/K")
         variation = 0.001
         if value:
@@ -475,7 +489,8 @@ class _TaskPanelFemMaterial:
                 else:
                     self.set_transient_material()
 
-    def kinematic_viscosity_changed(self, value):
+    def kinematic_viscosity_changed(self):
+        value = self.parameterWidget.input_fd_kinematic_viscosity.property("rawValue")
         old_nu = Units.Quantity(self.material['KinematicViscosity']).getValueAs("m^2/s")
         variation = 0.000001
         if value:

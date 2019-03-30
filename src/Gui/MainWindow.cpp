@@ -1237,8 +1237,7 @@ QPixmap MainWindow::splashImage() const
 {
     // search in the UserAppData dir as very first
     QPixmap splash_image;
-    QDir dir(QString::fromUtf8(App::Application::Config()["UserAppData"].c_str()));
-    QFileInfo fi(dir.filePath(QString::fromLatin1("pixmaps/splash_image.png")));
+    QFileInfo fi(QString::fromLatin1("images:splash_image.png"));
     if (fi.isFile() && fi.exists())
         splash_image.load(fi.filePath(), "PNG");
 
@@ -1319,7 +1318,7 @@ QPixmap MainWindow::splashImage() const
             painter.setFont(fontExe);
             painter.drawText(x, y, title);
             painter.setFont(fontVer);
-            painter.drawText(x - (l + 5), y, version);
+            painter.drawText(x + (l + 5), y, version);
             painter.end();
         }
     }
