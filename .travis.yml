@@ -69,11 +69,11 @@ matrix:
         script: flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics
 
       # macOS build is failing. See: https://forum.freecadweb.org/viewtopic.php?f=10&t=32272
-      - os: osx
-        compiler: clang
-        env:
-          - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON" QT=Qt5
-          - PYTHON_MAJOR_VERSION=2
+#      - os: osx
+#        compiler: clang
+#        env:
+#          - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON" QT=Qt5
+#          - PYTHON_MAJOR_VERSION=2
 
 git:
   depth: 5000
@@ -132,6 +132,7 @@ before_install:
                                python3-matplotlib               \
                                qt4-dev-tools                    \
                                qt4-qmake                        \
+                               qtwebengine5-dev                 \
                                libqt4-opengl-dev                \
                                shiboken                         \
                                swig                             \
