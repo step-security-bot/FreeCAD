@@ -132,7 +132,6 @@ before_install:
                                python3-matplotlib               \
                                qt4-dev-tools                    \
                                qt4-qmake                        \
-                               qtwebengine5-dev                 \
                                libqt4-opengl-dev                \
                                shiboken                         \
                                swig                             \
