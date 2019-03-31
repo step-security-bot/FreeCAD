@@ -113,7 +113,7 @@ before_install:
                                liboce-visualization-dev         \
                                libpyside-dev                    \
                                libqtcore4                       \
-                               libshiboken-dev                  \
+                               libshiboken2-dev                 \
                                libxerces-c-dev                  \
                                libxmu-dev                       \
                                libxmu-headers                   \
@@ -133,7 +133,7 @@ before_install:
                                qt4-dev-tools                    \
                                qt4-qmake                        \
                                libqt4-opengl-dev                \
-                               shiboken                         \
+                               shiboken2                        \
                                swig                             \
                                libvtk6-dev                      \
                                libmed-dev                       \
