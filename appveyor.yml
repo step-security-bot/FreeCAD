@@ -31,9 +31,11 @@ clone_depth: 1600
 #todo cleanup libpacks on the FreeCAD-ports-cache repo
 install:
   - cd C:\projects\freecad
+  - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-win64-x64.zip)
   - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z)
   - if [%ARCH%] == [Win64] (
       powershell -Command 7z x FreeCADLibs_12.1.2_x64_VC15.7z -oFreeCADLibs > nul &&
+      7z x cmake-3.14.1-win64-x64.zip > nul &&
       call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 &&
       call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64)
   - if [%ARCH%] == [Win32] (appveyor DownloadFile https://github.com/FreeCAD/FreeCAD-ports-cache/releases/download/v0.17/FreeCADLibs_11.5.1_x86_VC12.7z)
@@ -46,9 +48,8 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
-    -DBOOST_LIBRARYDIR=C:\projects\freecad\FreeCADLibs\include\boost
-    -DBOOST_ROOT=C:\projects\freecad\FreeCADLibs\include\boost
+  - C:\projects\freecad\cmake-3.14.1-win64-x64\bin\cmake.exe -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
+    -DBOOST_ROOT=C:\Libraries\boost_1_67_0
     -DBUILD_FEM_NETGEN=OFF
     -DBUILD_QT5=ON
     -G "%generator%" ..
