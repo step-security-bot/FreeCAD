@@ -30,6 +30,10 @@ clone_depth: 1600
 # scripts that run after cloning repository
 #todo cleanup libpacks on the FreeCAD-ports-cache repo
 install:
+  - cd C:\Libraries\boost_1_67_0
+  - dir
+  - bootstrap.bat
+  - b2 install
   - cd C:\projects\freecad
   - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-win64-x64.zip)
   - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z)
