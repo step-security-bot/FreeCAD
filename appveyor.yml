@@ -30,8 +30,6 @@ clone_depth: 1600
 # scripts that run after cloning repository
 #todo cleanup libpacks on the FreeCAD-ports-cache repo
 install:
-  - set INCLUDE=C:\Libraries\boost_1_67_0;%INCLUDE%
-  - set LIB=C:\Libraries\boost_1_67_0\lib64-msvc-14.0;%LIB%
   - cd C:\projects\freecad
   - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-win64-x64.zip)
   - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z)
@@ -44,6 +42,7 @@ install:
   - if [%ARCH%] == [Win32] (
       powershell -Command 7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
+  - xcopy C:\Libraries\boost_1_67_0 C:\projects\freecad\FreeCADLibs\include
   - dir
 
 build_script:
