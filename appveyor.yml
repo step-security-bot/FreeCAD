@@ -31,14 +31,14 @@ clone_depth: 1600
 #todo cleanup libpacks on the FreeCAD-ports-cache repo
 install:
   - cd C:\projects\freecad
-  - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-win64-x64.msi)
+  - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-win64-x64.zip)
   - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z)
   - if [%ARCH%] == [Win64] (
       powershell -Command 7z x FreeCADLibs_12.1.2_x64_VC15.7z -oFreeCADLibs > nul &&
-       msiexec /i cmake-3.14.1-win64-x64.msi /quiet /qn /norestart &&
-       call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 &&
-       call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64)
-#      ren FreeCADLibs_12.1.2_x64_VC15_bin_release FreeCADLibs)
+      7z x cmake-3.14.1-win64-x64.zip > nul &&
+#      ren FreeCADLibs_12.1.2_x64_VC15_bin_release FreeCADLibs
+      call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 &&
+      call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64)
   - if [%ARCH%] == [Win32] (appveyor DownloadFile https://github.com/FreeCAD/FreeCAD-ports-cache/releases/download/v0.17/FreeCADLibs_11.5.1_x86_VC12.7z)
   - if [%ARCH%] == [Win32] (
       powershell -Command 7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
@@ -49,7 +49,7 @@ build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
+  - C:\projects\freecad\cmake-3.14.1-win64-x64\bin\cmake.exe -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
     -DBUILD_FEM_NETGEN=OFF
     -G "%generator%" ..
   - mkdir bin
