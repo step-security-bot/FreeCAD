@@ -49,7 +49,6 @@ build_script:
   - mkdir build
   - cd build
   - C:\projects\freecad\cmake-3.14.1-win64-x64\bin\cmake.exe -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
-    -DBoost_INCLUDE_DIR=C:\Libraries\boost_1_67_0
     -DBUILD_FEM_NETGEN=OFF
     -DBUILD_QT5=ON
     -G "%generator%" ..
