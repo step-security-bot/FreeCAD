@@ -47,8 +47,8 @@ build_script:
   - mkdir build
   - cd build
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
-    -DBOOST_LIBRARYDIR=C:\Libraries\boost_1_67_0
-    -DBOOST_ROOT=C:\Libraries\boost_1_67_0
+    -DBOOST_LIBRARYDIR=C:\projects\freecad\FreeCADLibs\include\boost
+    -DBOOST_ROOT=C:\projects\freecad\FreeCADLibs\include\boost
     -DBUILD_FEM_NETGEN=OFF
     -DBUILD_QT5=ON
     -G "%generator%" ..
