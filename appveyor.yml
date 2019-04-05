@@ -31,11 +31,11 @@ clone_depth: 1600
 #todo cleanup libpacks on the FreeCAD-ports-cache repo
 install:
   - cd C:\projects\freecad
-  - appveyor DownloadFile https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.7z
+  - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-win64-x64.msi)
   - if [%ARCH%] == [Win64] (appveyor DownloadFile https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z)
   - if [%ARCH%] == [Win64] (
       powershell -Command 7z x FreeCADLibs_12.1.2_x64_VC15.7z -oFreeCADLibs > nul &&
-       7z x boost_1_67_0.7z -oFreeCADLibs\include > nul &&
+       msiexec /i cmake-3.14.1-win64-x64.msi /quiet /qn /norestart &&
        call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 &&
        call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64)
 #      ren FreeCADLibs_12.1.2_x64_VC15_bin_release FreeCADLibs)
