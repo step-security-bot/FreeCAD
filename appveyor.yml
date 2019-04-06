@@ -47,8 +47,8 @@ install:
   - if [%ARCH%] == [Win32] (
       powershell -Command 7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
-  - xcopy C:\projects\freecad\FreeCADLibs\lib C:\projects\freecad\FreeCADLibs\include /Y /Q
-  - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\FreeCADLibs\include /Y /Q
+  - xcopy C:\projects\freecad\FreeCADLibs\lib C:\projects\freecad\FreeCADLibs\include\lib /Y /Q
+  - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\FreeCADLibs\include\lib /Y /Q
   - dir
 
 build_script:
