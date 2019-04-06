@@ -47,8 +47,8 @@ install:
   - if [%ARCH%] == [Win32] (
       powershell -Command 7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
-  - xcopy C:\projects\freecad\FreeCADLibs\lib C:\projects\freecad\FreeCADLibs\include\lib /Y /Q
-  - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\FreeCADLibs\include\lib /Y /Q
+#  - xcopy C:\projects\freecad\FreeCADLibs\lib C:\projects\freecad\FreeCADLibs\include\lib /Y /Q
+#  - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\FreeCADLibs\include\lib /Y /Q
   - dir
 
 build_script:
@@ -56,6 +56,7 @@ build_script:
   - mkdir build
   - cd build
   - C:\projects\freecad\cmake-3.14.1-win64-x64\bin\cmake.exe -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
+    -DBOOST_LIBRARYDIR=C:\projects\freecad\FreeCADLibs\lib
     -DBUILD_FEM_NETGEN=OFF
     -DBUILD_QT5=ON
     -G "%generator%" ..
