@@ -56,9 +56,7 @@ build_script:
   - mkdir build
   - cd build
   - C:\projects\freecad\cmake-3.14.1-win64-x64\bin\cmake.exe -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
-    -DBoost_ATOMIC_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_atomic-vc141-mt-x64-1_67.lib
-    -DBoost_CHRONO_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_chrono-vc141-mt-x64-1_67.lib
-    -DBoost_FILESYSTEM_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_filesystem-vc141-mt-x64-1_67.lib
+    -DBoost_LIBRARY_DIR_RELEASE=C:\projects\freecad\FreeCADLibs\lib
     -DBUILD_FEM_NETGEN=OFF
     -DBUILD_QT5=ON
     -G "%generator%" ..
