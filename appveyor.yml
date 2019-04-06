@@ -7,6 +7,7 @@ environment:
     - generator: "Visual Studio 14 Win64"
       ARCH: "Win64"
       Compiler: "MSVC2015"
+      FREECAD_LIBPACK_DIR: C:\projects\freecad\FreeCADLibs
 #    - generator: "Visual Studio 14"
 #      ARCH: "Win32"
 #      Compiler: "MSVC2015"
@@ -47,7 +48,7 @@ install:
   - if [%ARCH%] == [Win32] (
       powershell -Command 7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
-  - cmd: set FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
+#  - cmd: set FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
 #  - xcopy C:\projects\freecad\FreeCADLibs\lib C:\Libraries\boost_1_67_0\lib64-msvc-14.0 /Y /Q
 #  - xcopy C:\projects\freecad\FreeCADLibs\bin C:\Libraries\boost_1_67_0\lib64-msvc-14.0 /Y /Q
   - dir
