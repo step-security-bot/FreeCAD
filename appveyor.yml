@@ -59,7 +59,7 @@ build_script:
     -G "%generator%" ..
   - mkdir bin
   - xcopy C:\projects\freecad\FreeCADLibs\bin C:\projects\freecad\build\bin /E /Q
-  - msbuild /MP FreeCAD_Trunk.sln
+  - msbuild /m FreeCAD_Trunk.sln
 
 #after_build:
   - cd C:\projects\freecad\build\bin\
