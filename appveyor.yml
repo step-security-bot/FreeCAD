@@ -54,6 +54,7 @@ build_script:
     -DBoost_THREAD_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_thread-vc141-mt-x64-1_67.lib
     -DBoost_PYTHON36_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_python36-vc141-mt-x64-1_67.lib
     -DBUILD_FEM_NETGEN=OFF
+    -DBUILD_PATH=OFF
     -DBUILD_QT5=ON
     -G "%generator%" ..
   - mkdir bin
