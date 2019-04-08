@@ -47,8 +47,12 @@ build_script:
   - mkdir build
   - cd build
   - cmake -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
-    -DCMAKE_LIBRARY_PATH=C:\projects\freecad\FreeCADLibs\lib
-    -DCMAKE_INCLUDE_PATH=C:\projects\freecad\FreeCADLibs\include
+    -DBoost_FILESYSTEM_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_filesystem-vc141-mt-x64-1_67.lib
+    -DBoost_PROGRAM_OPTIONS_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_program_options-vc141-mt-x64-1_67.lib
+    -DBoost_REGEX_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_regex-vc141-mt-x64-1_67.lib
+    -DBoost_SYSTEM_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_system-vc141-mt-x64-1_67.lib
+    -DBoost_THREAD_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_thread-vc141-mt-x64-1_67.lib
+    -DBoost_PYTHON36_LIBRARY_RELEASE=C:\projects\freecad\FreeCADLibs\lib\boost_python36-vc141-mt-x64-1_67.lib
     -DBUILD_FEM_NETGEN=OFF
     -DBUILD_PATH=OFF
     -DBUILD_QT5=ON
