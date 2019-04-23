@@ -42,13 +42,14 @@ install:
   - if [%ARCH%] == [Win32] (
       powershell -Command 7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
+  - cmd: set FREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
   - dir
 
 build_script:
   - cd C:\projects\freecad
   - mkdir build
   - cd build
-  - C:\projects\freecad\cmake-3.14.3-win64-x64\bin\cmake.exe -DFREECAD_LIBPACK_DIR=C:\projects\freecad\FreeCADLibs
+  - C:\projects\freecad\cmake-3.14.3-win64-x64\bin\cmake.exe
     -DBUILD_FEM_NETGEN=OFF
     -DBUILD_PATH=OFF
     -DBUILD_QT5=ON
