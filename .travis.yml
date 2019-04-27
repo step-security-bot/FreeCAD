@@ -68,6 +68,7 @@ matrix:
         env:
           - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON"
           - PYTHON_MAJOR_VERSION=3
+          - GENERATOR="Visual Studio 15 2017 Win64"
           - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
 
       - language: python
@@ -221,7 +222,7 @@ before_install:
        7z x FreeCADLibs.7z -oFreeCADLibs > /dev/null
        export LIBPACK_DIR="$TRAVIS_BUILD_DIR\FreeCADLibs"
 
-       export CMAKE_ARGS="${CMAKE_OPTS} -G="Visual Studio 15 2017 Win64" -DFREECAD_LIBPACK_DIR=$TRAVIS_BUILD_DIR\FreeCADLibs -DPYTHON_EXECUTABLE=$TRAVIS_BUILD_DIR\FreeCADLibs\bin\python.exe \
+       export CMAKE_ARGS="${CMAKE_OPTS} -G=${GENERATOR} -DFREECAD_LIBPACK_DIR=$TRAVIS_BUILD_DIR\FreeCADLibs -DPYTHON_EXECUTABLE=$TRAVIS_BUILD_DIR\FreeCADLibs\bin\python.exe \
        -DBUILD_QT5=TRUE"
        export PATH=$MSBUILD_PATH:$PATH
        ;;
@@ -244,7 +245,7 @@ script:
 ##
   - |
     if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
-        MSBuild.exe /m FreeCAD_Trunk.sln 
+        MSBuild.exe /m FreeCAD_Trunk.sln
     else
         sudo make -j2 install
     fi
