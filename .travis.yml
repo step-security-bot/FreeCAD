@@ -222,7 +222,7 @@ before_install:
        7z x FreeCADLibs.7z -oFreeCADLibs > /dev/null
        export LIBPACK_DIR="$TRAVIS_BUILD_DIR\FreeCADLibs"
 
-       export CMAKE_ARGS="${CMAKE_OPTS} -G=${GENERATOR} -DFREECAD_LIBPACK_DIR=$TRAVIS_BUILD_DIR\FreeCADLibs -DPYTHON_EXECUTABLE=$TRAVIS_BUILD_DIR\FreeCADLibs\bin\python.exe \
+       export CMAKE_ARGS="${CMAKE_OPTS} -G ${GENERATOR} -DFREECAD_LIBPACK_DIR=$TRAVIS_BUILD_DIR\FreeCADLibs -DPYTHON_EXECUTABLE=$TRAVIS_BUILD_DIR\FreeCADLibs\bin\python.exe \
        -DBUILD_QT5=TRUE"
        export PATH=$MSBUILD_PATH:$PATH
        ;;
