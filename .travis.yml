@@ -221,6 +221,10 @@ before_install:
        ;;
 
    "windows")
+       curl -L https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z --output FreeCADLibs.7z
+       7z x FreeCADLibs.7z -oFreeCADLibs > /dev/null
+       export LIBPACK_DIR="$TRAVIS_BUILD_DIR\FreeCADLibs"
+       
        export CMAKE_ARGS="${CMAKE_OPTS} -DFREECAD_LIBPACK_DIR=$TRAVIS_BUILD_DIR\FreeCADLibs -DPYTHON_EXECUTABLE=$TRAVIS_BUILD_DIR\FreeCADLibs\bin\python.exe \
        -DBUILD_QT5=TRUE"
        export PATH=$MSBUILD_PATH:$PATH
@@ -232,14 +236,11 @@ before_install:
        ;;
   esac
 
-#  curl -L https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z --output FreeCADLibs.7z
-#  7z x FreeCADLibs.7z -oFreeCADLibs > /dev/null
-#  export LIBPACK_DIR="$TRAVIS_BUILD_DIR\FreeCADLibs"
-
 install:
 ####
 #  Build FreeCAD with cmake options set above for each platform
 ##
+  - WMIC CPU Get DeviceID,NumberOfCores,NumberOfLogicalProcessors
   - mkdir build && cd build && cmake -G"${GENERATOR}" ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ../
 
 script:
