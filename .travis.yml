@@ -24,6 +24,7 @@ env:
     - CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE:-Release}
     - OSX_PORTS_CACHE=${OSX_PORTS_CACHE:-FreeCAD/FreeCAD-ports-cache}
     - DEPLOY=${DEPLOY:-0}
+    - GENERATOR="Unix Makefiles"
   matrix:
     # chunk.io key (if needed, obtain it with Yorik, PrzemoF, Kunda1)
     secure: MJu0ZU/9Yqut6bUkHoSrXTV/c/WhCLR0KnHKCsnEU081PYoukzH6ngzgKk7/trAH2In080d/ra4B2OmTNl/LAgV6DXKFY9dO1aG8QwcrHgaMPf0pHYUy/OfwQSFYFByQDV2OEMAHcIWc/dtNkzK2QUi44Kn7d0GtSEiN4s816lriWtjg0vmEGAU8MjvcAGss4gKyn05Xm1NUCYPKgpgIHsywLbpE76lv0eOYoosEuKv5Q9Pb4FMQts02+JUlqE8eY4ZZ3nV8iQbgIDdseOSA7Ixn05zWjU/ZRZ74TrYxMnzfUAwQcJe9OcqoESq+pPWQt5HYG66VmeVxQim1gmsiDASH51U/nswKt0Q4bISj3tVk0YZMFV8Ax+SzPvLEmFZJQGfgO1mg7HdNcz9N9G5JHPawrV19DwYIEFbAw8MCSAoIXFOcPQZUWXCbtjm7NO9vCjMrqyVJMDD9L8omvQajHoajuHbOT8KB250gFokeLj3z8yu++Tz+IrZX5inUMrXsARVt/ALXpi8rJPXmoFMpMUjyWmDPqPWlnqUhLtTtEtKpuOWP8ZnWVwkg4QYOUhCy95C1okJSGkG+ylHWncWfY4mS+UBT525laoh+GOhH+sRW+p2xkI21xGFRqg1oHjjgY1yIYF6nnSHPzxMBRYmZwagyXsjkFG5FPMWR2oYk0Yg
@@ -31,10 +32,9 @@ cache:
     ccache: true
 
 language: cpp
-dist: xenial
 python:
     - 2.7
-    - 3.7
+    - 3.4
 
 # Inject osx build into matrix - needed to specify image/dist
 matrix:
@@ -44,36 +44,50 @@ matrix:
     fast_finish: true  # https://blog.travis-ci.com/2013-11-27-fast-finishing-builds
     include:
       - os: linux
+        dist: trusty
         compiler: clang
         env:
           - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON"
           - PYTHON_MAJOR_VERSION=2
 
       - os: linux
+        dist: trusty
         compiler: gcc
         env:
           - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON"
           - PYTHON_MAJOR_VERSION=2
 
       - os: linux
+        dist: trusty
         compiler: gcc
         env:
           - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON"
           - PYTHON_MAJOR_VERSION=3
 
+      - os: windows
+        language: cpp
+        env:
+          - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON"
+          - GENERATOR="Visual Studio 15 2017 Win64"
+          - PYTHON_MAJOR_VERSION=3
+          - MSBUILD_EXE="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe /m FreeCAD_Trunk.sln"
+          - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
+          - VS15=true
+
       - language: python
         python: 3.7
+        dist: xenial  # required for Python >= 3.7 (travis-ci/travis-ci#9069)
         before_install: true
         install: python3 -m pip install flake8
         # fail the build if there are Python syntax errors or undefined names
         script: flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics
 
       # macOS build is failing. See: https://forum.freecadweb.org/viewtopic.php?f=10&t=32272
-#      - os: osx
-#        compiler: clang
-#        env:
-#          - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON" QT=Qt5
-#          - PYTHON_MAJOR_VERSION=2
+      - os: osx
+        compiler: clang
+        env:
+          - CMAKE_OPTS="-DBUILD_FEM_NETGEN=ON" QT=Qt5
+          - PYTHON_MAJOR_VERSION=2
 
 git:
   depth: 5000
@@ -96,15 +110,15 @@ before_install:
        sudo apt-get update -qq
        sudo apt-get install -y --no-install-recommends          \
                                doxygen                          \
-                               libboost-dev                     \
-                               libboost-filesystem-dev          \
-                               libboost-program-options-dev     \
-                               libboost-python-dev              \
-                               libboost-regex-dev               \
-                               libboost-signals-dev             \
-                               libboost-system-dev              \
-                               libboost-thread-dev              \
-                               libcoin80v5                      \
+                               libboost1.55-dev                 \
+                               libboost-filesystem1.55-dev      \
+                               libboost-program-options1.55-dev \
+                               libboost-python1.55-dev          \
+                               libboost-regex1.55-dev           \
+                               libboost-signals1.55-dev         \
+                               libboost-system1.55-dev          \
+                               libboost-thread1.55-dev          \
+                               libcoin80                        \
                                libcoin80-dev                    \
                                liboce-foundation-dev            \
                                liboce-modeling-dev              \
@@ -163,8 +177,8 @@ before_install:
        then
         export CMAKE_ARGS="${CMAKE_OPTS} -DPYTHON_EXECUTABLE=/usr/bin/python"
        else
-        export CMAKE_ARGS="${CMAKE_OPTS} -DPYTHON_EXECUTABLE=/usr/bin/python3.5 -DPYTHON_BASENAME=.cpython-35m \
-        -DPYTHON_SUFFIX=.cpython-35m"
+        export CMAKE_ARGS="${CMAKE_OPTS} -DPYTHON_EXECUTABLE=/usr/bin/python3.4 -DPYTHON_BASENAME=.cpython-34m \
+        -DPYTHON_SUFFIX=.cpython-34m"
        fi
        export INSTALLED_APP_PATH="/usr/local/bin/FreeCAD"
        ;;
@@ -206,6 +220,16 @@ before_install:
        export CMAKE_ARGS="${CMAKE_OPTS} -DFREECAD_USE_EXTERNAL_KDL=ON"
        ;;
 
+   "windows")
+       curl -L https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z --output FreeCADLibs.7z
+       7z x FreeCADLibs.7z -oFreeCADLibs > /dev/null
+       export LIBPACK_DIR="$TRAVIS_BUILD_DIR\FreeCADLibs"
+
+       export CMAKE_ARGS="${CMAKE_OPTS} -DFREECAD_LIBPACK_DIR=$TRAVIS_BUILD_DIR\FreeCADLibs -DPYTHON_EXECUTABLE=$TRAVIS_BUILD_DIR\FreeCADLibs\bin\python.exe \
+       -DBUILD_QT5=TRUE"
+       export PATH=$MSBUILD_PATH:$PATH
+       ;;
+
    *)
        echo "Invalid or unsupported operating system ${TRAVIS_OS_NAME}"
        exit 1
@@ -216,13 +240,19 @@ install:
 ####
 #  Build FreeCAD with cmake options set above for each platform
 ##
-  - mkdir build && cd build && cmake ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ../
+  - mkdir build && cd build && cmake -G"${GENERATOR}" ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ../
 
 script:
 ####
 #  Install FreeCAD and run unit tests.  Test failures will fail the build
 ##
-  - sudo make -j2 install
+#        MSBuild.exe /m FreeCAD_Trunk.sln
+  - |
+    if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
+        MSBuild.exe /m FreeCAD_Trunk.sln
+    else
+        sudo make -j2 install
+    fi
   - ${INSTALLED_APP_PATH} --console --run-test 0
   - ${INSTALLED_APP_PATH} --log-file /tmp/FreeCAD_installed.log &
   - sleep 10 && pkill FreeCAD
