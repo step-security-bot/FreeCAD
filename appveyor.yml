@@ -39,6 +39,7 @@ install:
   - if [%ARCH%] == [Win32] (
       powershell -Command 7z x FreeCADLibs_11.5.1_x86_VC12.7z > nul &&
       ren FreeCADLibs_11.5_x86_VC12 FreeCADLibs)
+  - WMIC CPU Get DeviceID,NumberOfCores,NumberOfLogicalProcessors
   - dir
 
 build_script:
