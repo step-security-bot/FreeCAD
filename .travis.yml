@@ -221,20 +221,13 @@ before_install:
        ;;
 
    "windows")
-       dir
-       if [ ! -d "FreeCADLibs\bin" ]; then
-            curl -L https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z --output FreeCADLibs.7z
-            7z x FreeCADLibs.7z -oFreeCADLibs > /dev/null
-       fi
-       cd FreeCADLibs
-       dir
-       cd ..
+       curl -L https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z --output FreeCADLibs.7z
+       7z x FreeCADLibs.7z -oFreeCADLibs > /dev/null
        export LIBPACK_DIR="$TRAVIS_BUILD_DIR\FreeCADLibs"
 
        export CMAKE_ARGS="${CMAKE_OPTS} -DFREECAD_LIBPACK_DIR=$TRAVIS_BUILD_DIR\FreeCADLibs -DPYTHON_EXECUTABLE=$TRAVIS_BUILD_DIR\FreeCADLibs\bin\python.exe \
        -DBUILD_QT5=TRUE"
        export PATH=$MSBUILD_PATH:$PATH
-       export XCOPY_ARGS="FreeCADLibs\bin build\bin /E /Q"
        ;;
 
    *)
@@ -256,15 +249,11 @@ script:
 #        MSBuild.exe /m FreeCAD_Trunk.sln
   - |
     if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
-        dir
         mkdir bin
-        dir
         cp -a ../FreeCADLibs/bin/* bin/
+        MSBuild.exe //m FreeCAD_Trunk.sln
         cd bin
-        dir
         FreeCADCmd.exe --run-test 0
-        cd ..
-        cd ..
     else
         sudo make -j2 install
         ${INSTALLED_APP_PATH} --console --run-test 0
