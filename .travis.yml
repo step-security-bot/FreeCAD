@@ -259,10 +259,7 @@ script:
         dir
         mkdir bin
         dir
-        cd ..
-        dir
-        xcopy FreeCADLibs//bin build//bin //E //Q
-        cd build
+        cp -a ../FreeCADLibs/bin/* bin/
         cd bin
         dir
         FreeCADCmd.exe --run-test 0
