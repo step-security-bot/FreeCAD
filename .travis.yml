@@ -261,7 +261,7 @@ script:
         dir
         cd ..
         dir
-        xcopy FreeCADLibs\\bin build\\bin /E /Q
+        xcopy ${XCOPY_ARGS}
         cd build
         cd bin
         dir
