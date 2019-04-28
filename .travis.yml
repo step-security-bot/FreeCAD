@@ -250,7 +250,9 @@ script:
   - |
     if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
         dir
-        cd ${TRAVIS_BUILD_DIR}\build\bin\
+        cd bin
+        dir
+        xcopy ${TRAVIS_BUILD_DIR}\FreeCADLibs\bin ${TRAVIS_BUILD_DIR}\build\bin /E /Q
         dir
         FreeCADCmd.exe --run-test 0
     else
