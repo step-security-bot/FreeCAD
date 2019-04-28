@@ -222,9 +222,6 @@ before_install:
 
    "windows")
        dir
-       cd FreeCADLibs
-       dir
-       cd ..
        if [ ! -d "FreeCADLibs\bin" ]; then
             curl -L https://github.com/apeltauer/FreeCAD/releases/download/LibPack_12.1/FreeCADLibs_12.1.2_x64_VC15.7z --output FreeCADLibs.7z
             7z x FreeCADLibs.7z -oFreeCADLibs > /dev/null
