@@ -252,9 +252,11 @@ script:
         dir
         mkdir bin
         dir
-        cd ${TRAVIS_BUILD_DIR}/build/bin/
+        cd ..
         dir
-        xcopy ${TRAVIS_BUILD_DIR}/FreeCADLibs/bin ${TRAVIS_BUILD_DIR}/build/bin /E /Q
+        xcopy FreeCADLibs/bin build/bin /E /Q
+        cd build
+        cd bin
         dir
         FreeCADCmd.exe --run-test 0
     else
