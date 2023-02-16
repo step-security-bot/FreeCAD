@@ -1251,9 +1251,9 @@
       <source>Measure the linear distance between two points;
 if edges or faces are picked, it will measure
 between two vertices of them.</source>
-      <translation>Mesurer la distance linéaire entre deux points ;
-si des arêtes ou des faces sont sélectionnées, ce sera
-la distance entre deux sommets d’entre elles.</translation>
+      <translation>Mesurer la distance linéaire entre deux points. Si des 
+arêtes ou des faces sont sélectionnées, cela mesurera
+entre deux de leurs sommets.</translation>
     </message>
   </context>
   <context>
@@ -1334,8 +1334,8 @@ directes, orthogonales et angulaires.</translation>
 meaning that a direct dimension will be decomposed
 into its X, Y, and Z components.</source>
       <translation>Basculer toutes les cotes orthogonales,
-ce qui signifie qu’une cote directe sera décomposée
-en ses composantes X, Y et Z.</translation>
+ce qui signifie qu’une cote directe sera 
+décomposée en ses composantes X, Y et Z.</translation>
     </message>
   </context>
   <context>
@@ -1534,8 +1534,8 @@ en ses composantes X, Y et Z.</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="686"/>
-      <source>Shape splitting tools. Compsolid creation tools. OCC 6.9.0 or later is required.</source>
-      <translation>Outils de division de forme. Outils de création de Compsolid. OCC 6.9.0 ou ultérieur est requis.</translation>
+      <source>Shape splitting and Compsolid creation tools.</source>
+      <translation>Outils pour éclater des formes et créer des composés.</translation>
     </message>
   </context>
   <context>
@@ -1948,7 +1948,7 @@ en ses composantes X, Y et Z.</translation>
     <message>
       <location filename="../../Command.cpp" line="2502"/>
       <source>Create projection on surface...</source>
-      <translation>Créer une projection sur la surface...</translation>
+      <translation>Créer une projection sur une surface...</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="2503"/>
@@ -2725,7 +2725,7 @@ Remarque : le placement est exprimé localement par rapport à l'objet auquel il
     <message>
       <location filename="../../DlgExportStep.ui" line="72"/>
       <source>Uncheck this to skip invisible object when exporting, which is useful for CADs that do not support invisibility STEP styling.</source>
-      <translation>Décochez cette case pour ignorer l'objet invisible lors de l'exportation, ce qui est utile pour les CAO qui ne prennent pas en charge l'invisibilité du style STEP.</translation>
+      <translation>Décochez cette case pour ignorer l'objet invisible lors de l'exportation, ce qui est utile pour les logiciels de CAO qui ne prennent pas en charge l'invisibilité du style STEP.</translation>
     </message>
     <message>
       <location filename="../../DlgExportStep.ui" line="75"/>
@@ -3893,7 +3893,7 @@ during file reading (slower but higher details).</source>
     <message>
       <location filename="../../DlgProjectionOnSurface.ui" line="14"/>
       <source>Projection on surface</source>
-      <translation>Projection sur surface</translation>
+      <translation>Projection sur une surface</translation>
     </message>
     <message>
       <location filename="../../DlgProjectionOnSurface.ui" line="20"/>
@@ -3908,7 +3908,7 @@ during file reading (slower but higher details).</source>
     <message>
       <location filename="../../DlgProjectionOnSurface.ui" line="38"/>
       <source>Add wire</source>
-      <translation>Ajouter un fil</translation>
+      <translation>Ajouter une polyligne</translation>
     </message>
     <message>
       <location filename="../../DlgProjectionOnSurface.ui" line="45"/>
@@ -4641,62 +4641,89 @@ le vecteur normal du plan de l'esquisse sera utilisé</translation>
     </message>
     <message>
       <location filename="../../SectionCutting.ui" line="254"/>
+      <location filename="../../SectionCutting.ui" line="394"/>
       <source>Color of cut face</source>
       <translation>Couleur de la face coupée</translation>
     </message>
     <message>
       <location filename="../../SectionCutting.ui" line="257"/>
+      <location filename="../../SectionCutting.ui" line="397"/>
       <source>Color</source>
       <translation>Couleur</translation>
     </message>
     <message>
       <location filename="../../SectionCutting.ui" line="302"/>
+      <location filename="../../SectionCutting.ui" line="445"/>
       <source>If checked, the color and transparency
 will be taken from the cut objects.
-Works only if all objects have the same values.</source>
-      <translation>Si coché, la couleur et la transparence
-vont être prises sur les objets coupés.
-Marche uniquement si tous les objets ont les mêmes valeurs.</translation>
+Works only properly if all objects
+have the same values.</source>
+      <translation type="unfinished">If checked, the color and transparency
+will be taken from the cut objects.
+Works only properly if all objects
+have the same values.</translation>
     </message>
     <message>
-      <location filename="../../SectionCutting.ui" line="307"/>
+      <location filename="../../SectionCutting.ui" line="308"/>
+      <location filename="../../SectionCutting.ui" line="451"/>
       <source>Auto</source>
       <translation>Auto</translation>
     </message>
     <message>
-      <location filename="../../SectionCutting.ui" line="329"/>
+      <location filename="../../SectionCutting.ui" line="330"/>
+      <location filename="../../SectionCutting.ui" line="473"/>
       <source>Transparency of cut face</source>
       <translation>Transparence de la face coupée</translation>
     </message>
     <message>
-      <location filename="../../SectionCutting.ui" line="332"/>
+      <location filename="../../SectionCutting.ui" line="333"/>
+      <location filename="../../SectionCutting.ui" line="476"/>
       <source>Transparency</source>
       <translation>Transparence</translation>
     </message>
     <message>
-      <location filename="../../SectionCutting.ui" line="367"/>
+      <location filename="../../SectionCutting.ui" line="371"/>
+      <source>Allows to cut objects intersecting each other
+for the price that all cut objects
+will get the same color</source>
+      <translation type="unfinished">Allows to cut objects intersecting each other
+for the price that all cut objects
+will get the same color</translation>
+    </message>
+    <message>
+      <location filename="../../SectionCutting.ui" line="376"/>
+      <source>Cut intersecting objects</source>
+      <translation type="unfinished">Cut intersecting objects</translation>
+    </message>
+    <message>
+      <location filename="../../SectionCutting.ui" line="419"/>
+      <source>Color for all objects</source>
+      <translation type="unfinished">Color for all objects</translation>
+    </message>
+    <message>
+      <location filename="../../SectionCutting.ui" line="511"/>
       <source>Refreshes the list of visible objects</source>
       <translation>Rafraîchit la liste des objets visibles</translation>
     </message>
     <message>
-      <location filename="../../SectionCutting.ui" line="370"/>
+      <location filename="../../SectionCutting.ui" line="514"/>
       <source>Refresh view</source>
       <translation>Rafraîchir la vue</translation>
     </message>
     <message>
-      <location filename="../../SectionCutting.ui" line="400"/>
+      <location filename="../../SectionCutting.ui" line="544"/>
       <source>When the dialog is closed,
 only created cuts will be visible</source>
       <translation>Lorsque la boîte de dialogue sera fermée,
 seules les coupes créées seront visibles</translation>
     </message>
     <message>
-      <location filename="../../SectionCutting.ui" line="404"/>
+      <location filename="../../SectionCutting.ui" line="548"/>
       <source>Keep only cuts visible when closing</source>
       <translation>Garder uniquement les coupes visibles lors de la fermeture</translation>
     </message>
     <message>
-      <location filename="../../SectionCutting.cpp" line="466"/>
+      <location filename="../../SectionCutting.cpp" line="520"/>
       <source>Sliders are disabled for assemblies</source>
       <translation>Les curseurs sont désactivés pour les assemblages</translation>
     </message>
@@ -5088,13 +5115,13 @@ Remarque : le placement est exprimé dans le système de coordonnées local de l
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1010"/>
       <source>Skip settings page</source>
-      <translation>Passer la page de paramètres</translation>
+      <translation>Sauter cette page des paramètres</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1011"/>
       <source>Skip this settings page and run the geometry check automatically.
 Default: false</source>
-      <translation>Ignorer cette page de paramètres et exécuter la vérification de la géométrie automatiquement.
+      <translation>Sauter cette page de paramètres et exécuter la vérification de la géométrie automatiquement.
 Valeur par défaut : false</translation>
     </message>
     <message>
@@ -5107,21 +5134,23 @@ Valeur par défaut : false</translation>
       <source>Extra boolean operations check that can sometimes find errors that
 the standard BRep geometry check misses. These errors do not always 
 mean the checked object is unusable.  Default: false</source>
-      <translation>Les opérations booléennes supplémentaires peuvent parfois trouver des erreurs que
-la vérification de géométrie standard BRep rate. Ces erreurs ne signifient pas toujours 
-que l'objet vérifié est inutilisable. Valeur par dar défaut : false</translation>
+      <translation>Vérification supplémentaire des opérations booléennes. Elle peut parfois
+trouver des erreurs que la vérification standard de la géométrie BRep aura 
+manqué. Ces erreurs ne signifient pas toujours que l'objet vérifié est inutilisable.
+Valeur par défaut : false</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1031"/>
       <source>Single-threaded</source>
-      <translation>Fil unique</translation>
+      <translation>Exécution non parallélisée</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1032"/>
       <source>Run the geometry check in a single thread.  This is slower,
 but more stable.  Default: false</source>
-      <translation>Lancer la vérification de la géométrie dans un seul thread.
-C'est plus lent, mais plus stable. Valeur par défaut : false</translation>
+      <translation>Lancer la vérification de la géométrie avec un seul thread.
+C'est plus lent, mais plus stable.
+Valeur par défaut : false</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1041"/>
@@ -5131,7 +5160,8 @@ C'est plus lent, mais plus stable. Valeur par défaut : false</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1042"/>
       <source>Log errors to report view.  Default: true</source>
-      <translation>Journal des erreurs vers la vue rapport. Par défaut: vrai</translation>
+      <translation>Journal des erreurs vers la vue rapport.
+Par défaut: true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1049"/>
@@ -5142,8 +5172,9 @@ C'est plus lent, mais plus stable. Valeur par défaut : false</translation>
       <location filename="../../TaskCheckGeometry.cpp" line="1050"/>
       <source>Expand shape content.  Changes will take effect next time you use 
 the check geometry tool.  Default: false</source>
-      <translation>Développer le contenu de la forme. Les modifications prendront effet la prochaine fois que vous utiliserez 
-l'outil de vérification de la géométrie. valeur par défaut : false</translation>
+      <translation>Développer le contenu de la forme. Les modifications prendront effet la
+prochaine fois que vous utiliserez l'outil de vérification de la géométrie.
+Valeur par défaut : false</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1059"/>
@@ -5154,15 +5185,16 @@ l'outil de vérification de la géométrie. valeur par défaut : false</translat
       <location filename="../../TaskCheckGeometry.cpp" line="1060"/>
       <source>Show advanced shape content.  Changes will take effect next time you use 
 the check geometry tool.  Default: false</source>
-      <translation>Afficher le contenu avancé de la forme. Les modifications prendront effet la prochaine fois que vous utiliserez 
-l'outil de vérification de la géométrie. Valeur par défaut : false</translation>
+      <translation>Afficher le contenu avancé de la forme. Les modifications prendront effet la
+prochaine fois que vous utiliserez l'outil de vérification de la géométrie.
+Valeur par défaut : false</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1068"/>
       <source>
 Individual BOP Checks:</source>
       <translation>
-Vérifications individuelles du BOP :</translation>
+Vérifications des opérations booléennes :</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1071"/>
@@ -5172,7 +5204,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1072"/>
       <source>Check for bad argument types.  Default: true</source>
-      <translation>Vérifier les mauvais types d'arguments. Valeur par défaut : true</translation>
+      <translation>Vérifier la présence de mauvais types d'arguments.
+Valeur par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1079"/>
@@ -5182,7 +5215,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1080"/>
       <source>Check for self-intersections.  Default: true</source>
-      <translation>Rechercher la présence d'auto-intersections. Valeur par défaut : true</translation>
+      <translation>Vérifier la présence d'auto-intersections.
+Valeur par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1087"/>
@@ -5192,7 +5226,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1088"/>
       <source>Check for edges that are too small.  Default: true</source>
-      <translation>Rechercher la présence d'arêtes trop petites. Valeur par défaut: true</translation>
+      <translation>Vérifier la présence d'arêtes trop petites.
+Valeur par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1095"/>
@@ -5202,7 +5237,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1096"/>
       <source>Check for nonrecoverable faces.  Default: true</source>
-      <translation>Rechercher la présence de faces non-récupérables. Valeur par défaut : true</translation>
+      <translation>Vérifier la présence de faces non-récupérables. 
+Valeur par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1103"/>
@@ -5212,7 +5248,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1104"/>
       <source>Check for continuity.  Default: true</source>
-      <translation>Vérifier la continuité. Par défaut: vrai</translation>
+      <translation>Vérifier la continuité.
+Par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1111"/>
@@ -5222,7 +5259,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1112"/>
       <source>Check for incompatible faces.  Default: true</source>
-      <translation>Vérifier s'il y a des faces incompatibles. Par défaut: vrai</translation>
+      <translation>Vérifier la présence de faces incompatibles.
+Par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1119"/>
@@ -5232,7 +5270,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1120"/>
       <source>Check for incompatible vertices.  Default: true</source>
-      <translation>Vérifier s'il y a des faces incompatibles. Valeur par défaut: vrai</translation>
+      <translation>Vérifier la présence de sommets incompatibles.
+Valeur par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1127"/>
@@ -5242,7 +5281,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1128"/>
       <source>Check for incompatible edges.  Default: true</source>
-      <translation>Rechercher la présende d'arêtes incompatibles. Valeur par défaut : true</translation>
+      <translation>Vérifier la présence d'arêtes incompatibles.
+Valeur par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1135"/>
@@ -5252,7 +5292,8 @@ Vérifications individuelles du BOP :</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1136"/>
       <source>Check for invalid curves on surfaces.  Default: true</source>
-      <translation>Rechercher la présence de courbes de surfaces invalides. Valeur par défaut : true</translation>
+      <translation>Vérifier la présence de courbes invalides sur des surfaces.
+Valeur par défaut : true</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="1199"/>
@@ -5561,7 +5602,7 @@ in the 3D view for the sweep path.</source>
       <location filename="../../TaskThickness.cpp" line="273"/>
       <location filename="../../TaskThickness.cpp" line="283"/>
       <source>Thickness</source>
-      <translation>Coque</translation>
+      <translation>Evidement</translation>
     </message>
     <message>
       <location filename="../../TaskThickness.cpp" line="171"/>
@@ -6088,7 +6129,7 @@ Voulez-vous continuer ?</translation>
     <message>
       <location filename="../../ViewProviderAttachExtension.cpp" line="118"/>
       <source>Attachment editor</source>
-      <translation>Éditeur de pièces jointes</translation>
+      <translation>Éditeur de l'accrochage</translation>
     </message>
     <message>
       <location filename="../../../BasicShapes/CommandShapes.py" line="52"/>
@@ -6430,7 +6471,7 @@ Cela créera un "filtre composé" pour chaque forme.</translation>
     <message>
       <location filename="../../../AttachmentEditor/TaskAttachmentEditor.py" line="91"/>
       <source>Failed to parse link (more than one colon encountered)</source>
-      <translation>Échec de l'analyse du lien (plus d'un deux-points rencontré)</translation>
+      <translation>Échec de l'analyse du lien (plus d'un double point rencontré)</translation>
     </message>
     <message>
       <location filename="../../../AttachmentEditor/TaskAttachmentEditor.py" line="204"/>

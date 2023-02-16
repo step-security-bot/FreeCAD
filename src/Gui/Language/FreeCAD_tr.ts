@@ -439,7 +439,7 @@
   <context>
     <name>Gui::AccelLineEdit</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="495"/>
+      <location filename="../DlgActionsImp.cpp" line="493"/>
       <source>none</source>
       <translation>hiçbiri</translation>
     </message>
@@ -589,7 +589,7 @@ while doing a left or right click and move the mouse up or down</source>
   <context>
     <name>Gui::ControlSingleton</name>
     <message>
-      <location filename="../Control.cpp" line="140"/>
+      <location filename="../Control.cpp" line="141"/>
       <source>Task panel</source>
       <translation>Görev paneli</translation>
     </message>
@@ -757,37 +757,37 @@ while doing a left or right click and move the mouse up or down</source>
   <context>
     <name>Gui::Dialog::CameraDialog</name>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="277"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="285"/>
       <source>Camera settings</source>
       <translation>Kamera ayarları</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="284"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="292"/>
       <source>Orientation</source>
       <translation>Yönlendirme</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="298"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="306"/>
       <source>Q0</source>
       <translation>Q0</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="308"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="316"/>
       <source>Q1</source>
       <translation>Q1</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="318"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="326"/>
       <source>Q2</source>
       <translation>Q2</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="328"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="336"/>
       <source>Q3</source>
       <translation>Q3</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="337"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="345"/>
       <source>Current view</source>
       <translation>Geçerli görünüm</translation>
     </message>
@@ -2753,25 +2753,25 @@ Lütfen başka bir dizin belirtin.</translation>
     <name>Gui::Dialog::DlgParameterImp</name>
     <message>
       <location filename="../DlgParameterImp.cpp" line="67"/>
-      <location filename="../DlgParameterImp.cpp" line="218"/>
+      <location filename="../DlgParameterImp.cpp" line="217"/>
       <source>Group</source>
       <translation>Grup</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="219"/>
+      <location filename="../DlgParameterImp.cpp" line="218"/>
       <source>Name</source>
       <translation>Isim</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="220"/>
+      <location filename="../DlgParameterImp.cpp" line="219"/>
       <source>Type</source>
       <translation>Türü</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="221"/>
+      <location filename="../DlgParameterImp.cpp" line="220"/>
       <source>Value</source>
       <translation>Değer</translation>
     </message>
@@ -2786,17 +2786,17 @@ Lütfen başka bir dizin belirtin.</translation>
       <translation>Kullanıcı parametresi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="121"/>
+      <location filename="../DlgParameterImp.cpp" line="120"/>
       <source>Search Group</source>
       <translation>Arama Grubu</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="439"/>
+      <location filename="../DlgParameterImp.cpp" line="438"/>
       <source>Invalid input</source>
       <translation>Geçersiz giriş</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="440"/>
+      <location filename="../DlgParameterImp.cpp" line="439"/>
       <source>Invalid key name '%1'</source>
       <translation>Geçersiz anahtar adı '%1'</translation>
     </message>
@@ -4169,62 +4169,77 @@ Ayrıca formu da kullanabilirsiniz: John Doe &lt;john@doe.com&gt;</translation>
       <translation>Yeni belgeler için varsayılan lisans</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="685"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="39"/>
       <source>All rights reserved</source>
       <translation>Her hakkı saklıdır</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="690"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="40"/>
       <source>Creative Commons Attribution</source>
       <translation>Creative Commons Atıf</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="695"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="41"/>
       <source>Creative Commons Attribution-ShareAlike</source>
       <translation>Genel yaratıcılar atıf benzer-paylaşım</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="700"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="42"/>
       <source>Creative Commons Attribution-NoDerivatives</source>
       <translation>Genel yaratıcılar atıf-türetilemez</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="705"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="43"/>
       <source>Creative Commons Attribution-NonCommercial</source>
       <translation>Genel yaratıcılar atıf-ticari olmayan</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="710"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="44"/>
       <source>Creative Commons Attribution-NonCommercial-ShareAlike</source>
       <translation>Genel yaratıcı atıf-ticari olmayan-benzer paylaşım</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="715"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="45"/>
       <source>Creative Commons Attribution-NonCommercial-NoDerivatives</source>
       <translation>Genel yaratıcılar atıf-ticari olmayan-türetilemez</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="720"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="46"/>
       <source>Public Domain</source>
       <translation>Halka Açık Alan</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="725"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="47"/>
       <source>FreeArt</source>
       <translation>ÖzgürSanat</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="730"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="48"/>
+      <source>CERN Open Hardware Licence strongly-reciprocal</source>
+      <translation type="unfinished">CERN Open Hardware Licence strongly-reciprocal</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="49"/>
+      <source>CERN Open Hardware Licence weakly-reciprocal</source>
+      <translation type="unfinished">CERN Open Hardware Licence weakly-reciprocal</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="50"/>
+      <source>CERN Open Hardware Licence permissive</source>
+      <translation type="unfinished">CERN Open Hardware Licence permissive</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="51"/>
       <source>Other</source>
       <translation>Diğer</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="738"/>
+      <location filename="../DlgSettingsDocument.ui" line="688"/>
       <source>License URL</source>
       <translation>Lisans URL (Automatic Translation)</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="745"/>
+      <location filename="../DlgSettingsDocument.ui" line="695"/>
       <source>URL describing more about the license</source>
       <translation>Lisans hakkında daha fazlasını anlatan URL</translation>
     </message>
@@ -4232,17 +4247,17 @@ Ayrıca formu da kullanabilirsiniz: John Doe &lt;john@doe.com&gt;</translation>
   <context>
     <name>Gui::Dialog::DlgSettingsDocumentImp</name>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>The format of the date to use.</source>
       <translation>Kullanılacak tarih biçimi.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>Default</source>
       <translation>Varsayılan</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>Format</source>
       <translation>Biçim</translation>
     </message>
@@ -4726,7 +4741,6 @@ Ayrıca formu da kullanabilirsiniz: John Doe &lt;john@doe.com&gt;</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="87"/>
-      <location filename="../DlgSettingsNavigation.ui" line="149"/>
       <source>Corner where navigation cube is shown</source>
       <translation>Gezinme küpünün gösterildiği köşe</translation>
     </message>
@@ -4766,6 +4780,11 @@ Ayrıca formu da kullanabilirsiniz: John Doe &lt;john@doe.com&gt;</translation>
       <translation type="unfinished">Font name:</translation>
     </message>
     <message>
+      <location filename="../DlgSettingsNavigation.ui" line="149"/>
+      <source>Font name of the navigation cube</source>
+      <translation type="unfinished">Font name of the navigation cube</translation>
+    </message>
+    <message>
       <location filename="../DlgSettingsNavigation.ui" line="165"/>
       <source>Cube size</source>
       <translation>Küp boyutu</translation>
@@ -4782,8 +4801,8 @@ Ayrıca formu da kullanabilirsiniz: John Doe &lt;john@doe.com&gt;</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="213"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Font size for the NaviCube text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Font size for the NaviCube text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Font size of the navigation cube</source>
+      <translation type="unfinished">Font size of the navigation cube</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="250"/>
@@ -4947,52 +4966,52 @@ Bu ayarla fareyi eğme devre dışı bırakılmaz.</translation>
       <translation>DokunmatikEkran eğim hareketini devre dışı bırak</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="155"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="161"/>
       <source>Isometric</source>
       <translation>İzometrik</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="156"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="162"/>
       <source>Dimetric</source>
       <translation>Dimetrik</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="157"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="163"/>
       <source>Trimetric</source>
       <translation>Trimetrik</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="158"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="164"/>
       <source>Top</source>
       <translation>üst</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="159"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="165"/>
       <source>Front</source>
       <translation>Ön</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="160"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="166"/>
       <source>Left</source>
       <translation>Sol</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="161"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="167"/>
       <source>Right</source>
       <translation>Sağ</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="162"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="168"/>
       <source>Rear</source>
       <translation>Arka</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="163"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="169"/>
       <source>Bottom</source>
       <translation>Alt</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="164"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="170"/>
       <source>Custom</source>
       <translation>Özel</translation>
     </message>
@@ -5400,12 +5419,12 @@ Tercih edilen sistem, genel tercihlerdeki tek ayardır.</translation>
   <context>
     <name>Gui::Dialog::DlgUnitsCalculator</name>
     <message>
-      <location filename="../DlgUnitsCalculatorImp.cpp" line="147"/>
+      <location filename="../DlgUnitsCalculatorImp.cpp" line="149"/>
       <source>unknown unit:</source>
       <translation>bilinmeyen birim:</translation>
     </message>
     <message>
-      <location filename="../DlgUnitsCalculatorImp.cpp" line="152"/>
+      <location filename="../DlgUnitsCalculatorImp.cpp" line="154"/>
       <source>unit mismatch</source>
       <translation>birim uyuşmazlığı</translation>
     </message>
@@ -5716,12 +5735,12 @@ The 'Status' column shows whether the document could be recovered.</source>
   <context>
     <name>Gui::Dialog::IconDialog</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="431"/>
+      <location filename="../DlgActionsImp.cpp" line="429"/>
       <source>Icon folders</source>
       <translation>Simge klasörleri</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="567"/>
+      <location filename="../DlgActionsImp.cpp" line="563"/>
       <source>Add icon folder</source>
       <translation>Simgesini klasör ekle</translation>
     </message>
@@ -5729,17 +5748,17 @@ The 'Status' column shows whether the document could be recovered.</source>
   <context>
     <name>Gui::Dialog::IconFolders</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="544"/>
+      <location filename="../DlgActionsImp.cpp" line="540"/>
       <source>Add or remove custom icon folders</source>
       <translation>Özel simge klasörleri ekleyebilir ve kaldırabilirsiniz</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="591"/>
+      <location filename="../DlgActionsImp.cpp" line="587"/>
       <source>Remove folder</source>
       <translation>Klasörü Kaldır</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="592"/>
+      <location filename="../DlgActionsImp.cpp" line="588"/>
       <source>Removing a folder only takes effect after an application restart.</source>
       <translation>Bir klasörü kaldırmak, yalnızca bir uygulamanın yeniden başlatılmasından sonra etkili olur.</translation>
     </message>
@@ -5808,80 +5827,80 @@ The 'Status' column shows whether the document could be recovered.</source>
   <context>
     <name>Gui::Dialog::ParameterGroup</name>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="456"/>
-      <location filename="../DlgParameterImp.cpp" line="483"/>
-      <location filename="../DlgParameterImp.cpp" line="631"/>
+      <location filename="../DlgParameterImp.cpp" line="455"/>
+      <location filename="../DlgParameterImp.cpp" line="482"/>
+      <location filename="../DlgParameterImp.cpp" line="630"/>
       <source>Expand</source>
       <translation>Genişlet</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="458"/>
-      <location filename="../DlgParameterImp.cpp" line="632"/>
+      <location filename="../DlgParameterImp.cpp" line="457"/>
+      <location filename="../DlgParameterImp.cpp" line="631"/>
       <source>Add sub-group</source>
       <translation>Alt-Grup ekle</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="459"/>
-      <location filename="../DlgParameterImp.cpp" line="506"/>
-      <location filename="../DlgParameterImp.cpp" line="633"/>
+      <location filename="../DlgParameterImp.cpp" line="458"/>
+      <location filename="../DlgParameterImp.cpp" line="505"/>
+      <location filename="../DlgParameterImp.cpp" line="632"/>
       <source>Remove group</source>
       <translation>Grubu sil</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="460"/>
-      <location filename="../DlgParameterImp.cpp" line="634"/>
+      <location filename="../DlgParameterImp.cpp" line="459"/>
+      <location filename="../DlgParameterImp.cpp" line="633"/>
       <source>Rename group</source>
       <translation>Grubu yeniden adlandır</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="462"/>
-      <location filename="../DlgParameterImp.cpp" line="635"/>
+      <location filename="../DlgParameterImp.cpp" line="461"/>
+      <location filename="../DlgParameterImp.cpp" line="634"/>
       <source>Export parameter</source>
       <translation>Parametreyi dışa aktar</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="463"/>
-      <location filename="../DlgParameterImp.cpp" line="636"/>
+      <location filename="../DlgParameterImp.cpp" line="462"/>
+      <location filename="../DlgParameterImp.cpp" line="635"/>
       <source>Import parameter</source>
       <translation>Parametreyi içe aktar</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="481"/>
+      <location filename="../DlgParameterImp.cpp" line="480"/>
       <source>Collapse</source>
       <translation>Daralt</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="506"/>
+      <location filename="../DlgParameterImp.cpp" line="505"/>
       <source>Do you really want to remove this parameter group?</source>
       <translation>Bu değişken grubunu gerçekten kaldırmak istiyor musunuz?</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="553"/>
+      <location filename="../DlgParameterImp.cpp" line="552"/>
       <source>Existing sub-group</source>
       <translation>Varolan alt grup</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="554"/>
+      <location filename="../DlgParameterImp.cpp" line="553"/>
       <source>The sub-group '%1' already exists.</source>
       <translation>Altgrup '%1' zaten mevcut.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="567"/>
+      <location filename="../DlgParameterImp.cpp" line="566"/>
       <source>Export parameter to file</source>
       <translation>Parametreyi dosyaya (dışarı) aktar</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="583"/>
+      <location filename="../DlgParameterImp.cpp" line="582"/>
       <source>Import parameter from file</source>
       <translation>Parametreyi dosyadan içeri aktar</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="613"/>
+      <location filename="../DlgParameterImp.cpp" line="612"/>
       <source>Import Error</source>
       <translation>İçe aktarım hatası</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="613"/>
+      <location filename="../DlgParameterImp.cpp" line="612"/>
       <source>Reading from '%1' failed.</source>
       <translation>'%1'den okuma başarısız oldu.</translation>
     </message>
@@ -5889,49 +5908,58 @@ The 'Status' column shows whether the document could be recovered.</source>
   <context>
     <name>Gui::Dialog::ParameterValue</name>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="650"/>
+      <location filename="../DlgParameterImp.cpp" line="649"/>
       <source>Change value</source>
       <translation>Değeri değiştir</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="652"/>
+      <location filename="../DlgParameterImp.cpp" line="651"/>
       <source>Remove key</source>
       <translation>Anahtarı kaldır</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="653"/>
+      <location filename="../DlgParameterImp.cpp" line="652"/>
       <source>Rename key</source>
       <translation>Anahtarı yeniden adlandır</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="657"/>
+      <location filename="../DlgParameterImp.cpp" line="656"/>
       <source>New</source>
       <translation>Yeni</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="658"/>
+      <location filename="../DlgParameterImp.cpp" line="657"/>
       <source>New string item</source>
       <translation>Yeni dize öğesi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="659"/>
+      <location filename="../DlgParameterImp.cpp" line="658"/>
       <source>New float item</source>
       <translation>Yeni float öğesi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="660"/>
+      <location filename="../DlgParameterImp.cpp" line="659"/>
       <source>New integer item</source>
       <translation>Yeni tamsayı öğesi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="661"/>
+      <location filename="../DlgParameterImp.cpp" line="660"/>
       <source>New unsigned item</source>
       <translation>Yeni mutlak değerli öğe</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="662"/>
+      <location filename="../DlgParameterImp.cpp" line="661"/>
       <source>New Boolean item</source>
       <translation>Yeni Boolean (mantıksal) öğesi</translation>
+    </message>
+    <message>
+      <location filename="../DlgParameterImp.cpp" line="773"/>
+      <location filename="../DlgParameterImp.cpp" line="802"/>
+      <location filename="../DlgParameterImp.cpp" line="832"/>
+      <location filename="../DlgParameterImp.cpp" line="868"/>
+      <location filename="../DlgParameterImp.cpp" line="897"/>
+      <source>Existing item</source>
+      <translation>Varsayılan öğe</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="774"/>
@@ -5939,15 +5967,6 @@ The 'Status' column shows whether the document could be recovered.</source>
       <location filename="../DlgParameterImp.cpp" line="833"/>
       <location filename="../DlgParameterImp.cpp" line="869"/>
       <location filename="../DlgParameterImp.cpp" line="898"/>
-      <source>Existing item</source>
-      <translation>Varsayılan öğe</translation>
-    </message>
-    <message>
-      <location filename="../DlgParameterImp.cpp" line="775"/>
-      <location filename="../DlgParameterImp.cpp" line="804"/>
-      <location filename="../DlgParameterImp.cpp" line="834"/>
-      <location filename="../DlgParameterImp.cpp" line="870"/>
-      <location filename="../DlgParameterImp.cpp" line="899"/>
       <source>The item '%1' already exists.</source>
       <translation>'%1' öğesi zaten var.</translation>
     </message>
@@ -6247,13 +6266,13 @@ The 'Status' column shows whether the document could be recovered.</source>
     <name>Gui::Dialog::Transform</name>
     <message>
       <location filename="../Transform.cpp" line="291"/>
-      <location filename="../Transform.cpp" line="414"/>
+      <location filename="../Transform.cpp" line="419"/>
       <source>Cancel</source>
       <translation>İptal</translation>
     </message>
     <message>
       <location filename="../Transform.cpp" line="292"/>
-      <location filename="../Transform.cpp" line="415"/>
+      <location filename="../Transform.cpp" line="420"/>
       <source>Transform</source>
       <translation>Dönüştür</translation>
     </message>
@@ -6350,14 +6369,14 @@ kutusunu açmadan önce seçilen nesnelerle devam et</translation>
       <translation>Birleşik görünüm</translation>
     </message>
     <message>
-      <location filename="../ComboView.cpp" line="73"/>
-      <location filename="../ComboView.cpp" line="141"/>
+      <location filename="../ComboView.cpp" line="74"/>
+      <location filename="../ComboView.cpp" line="142"/>
       <source>Model</source>
       <translation>Model</translation>
     </message>
     <message>
-      <location filename="../ComboView.cpp" line="82"/>
-      <location filename="../ComboView.cpp" line="142"/>
+      <location filename="../ComboView.cpp" line="83"/>
+      <location filename="../ComboView.cpp" line="143"/>
       <source>Tasks</source>
       <translation>Görevler</translation>
     </message>
@@ -6495,72 +6514,72 @@ kutusunu açmadan önce seçilen nesnelerle devam et</translation>
       <translation>Özel seçilen nesne listesi</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="590"/>
+      <location filename="../SelectionView.cpp" line="589"/>
       <source>Select only</source>
       <translation>Yalnızca seçili</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="592"/>
+      <location filename="../SelectionView.cpp" line="593"/>
       <source>Selects only this object</source>
       <translation>Sadece bu nesneyi seçer</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="593"/>
+      <location filename="../SelectionView.cpp" line="595"/>
       <source>Deselect</source>
       <translation>Seçimi kaldır</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="595"/>
+      <location filename="../SelectionView.cpp" line="597"/>
       <source>Deselects this object</source>
       <translation>Bu nesneyi sil</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="596"/>
+      <location filename="../SelectionView.cpp" line="599"/>
       <source>Zoom fit</source>
       <translation>Uzaklaştır</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="598"/>
+      <location filename="../SelectionView.cpp" line="601"/>
       <source>Selects and fits this object in the 3D window</source>
       <translation>Bu nesneyi seçer ve 3B Penceresine sığdırır</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="599"/>
+      <location filename="../SelectionView.cpp" line="603"/>
       <source>Go to selection</source>
       <translation>Seçime git</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="600"/>
+      <location filename="../SelectionView.cpp" line="604"/>
       <source>Selects and locates this object in the tree view</source>
       <translation>Bu nesneyi unsur ağacında bulur ve seçer</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="601"/>
+      <location filename="../SelectionView.cpp" line="606"/>
       <source>Mark to recompute</source>
       <translation>Yeniden hesaplamak için işaretle</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="603"/>
+      <location filename="../SelectionView.cpp" line="608"/>
       <source>Mark this object to be recomputed</source>
       <translation>Bu nesneyi yeniden hesaplanacak şekilde işaretleyin</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="604"/>
+      <location filename="../SelectionView.cpp" line="610"/>
       <source>To python console</source>
       <translation>Python konsolu</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="606"/>
+      <location filename="../SelectionView.cpp" line="612"/>
       <source>Reveals this object and its subelements in the python console.</source>
       <translation>Bu nesneyi ve alt öğelerini python konsolunda gösterir.</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="611"/>
+      <location filename="../SelectionView.cpp" line="617"/>
       <source>Duplicate subshape</source>
       <translation>Yinelenen şekleAlt şekli çoğalt</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="613"/>
+      <location filename="../SelectionView.cpp" line="619"/>
       <source>Creates a standalone copy of this subshape in the document</source>
       <translation>Belgede bu alt şablonun bağımsız bir kopyasını oluşturur</translation>
     </message>
@@ -6581,12 +6600,12 @@ kutusunu açmadan önce seçilen nesnelerle devam et</translation>
   <context>
     <name>Gui::EditorView</name>
     <message>
-      <location filename="../EditorView.cpp" line="196"/>
+      <location filename="../EditorView.cpp" line="197"/>
       <source>Modified file</source>
       <translation>Değiştirilmiş dosya</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="197"/>
+      <location filename="../EditorView.cpp" line="198"/>
       <source>%1.
 
 This has been modified outside of the source editor. Do you want to reload it?</source>
@@ -6595,53 +6614,53 @@ This has been modified outside of the source editor. Do you want to reload it?</
 Bu kaynak Düzenleyicisi dışında değiştirildi. Yeniden yüklemek istiyor musunuz?</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="320"/>
+      <location filename="../EditorView.cpp" line="321"/>
       <source>Unsaved document</source>
       <translation>Kaydedilmemiş belge</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="321"/>
+      <location filename="../EditorView.cpp" line="322"/>
       <source>The document has been modified.
 Do you want to save your changes?</source>
       <translation>Belge değiştirildi. Yaptığınız değişiklikleri kaydetmek istiyor musunuz?</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="347"/>
+      <location filename="../EditorView.cpp" line="348"/>
       <source>FreeCAD macro</source>
       <translation>FreeCAD makro</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="469"/>
+      <location filename="../EditorView.cpp" line="470"/>
       <source>Export PDF</source>
       <translation>PDF olarak dışa aktar</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="470"/>
+      <location filename="../EditorView.cpp" line="471"/>
       <source>PDF file</source>
       <translation>PDF dosyası</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="501"/>
+      <location filename="../EditorView.cpp" line="502"/>
       <source>untitled[*]</source>
       <translation>Adsız [*]</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="504"/>
+      <location filename="../EditorView.cpp" line="505"/>
       <source> - Editor</source>
       <translation> -Editör(Düzenleyici)</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="558"/>
+      <location filename="../EditorView.cpp" line="559"/>
       <source>%1 chars removed</source>
       <translation>%1 karakter kaldırıldı</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="560"/>
+      <location filename="../EditorView.cpp" line="561"/>
       <source>%1 chars added</source>
       <translation>%1 karakter eklendi</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="562"/>
+      <location filename="../EditorView.cpp" line="563"/>
       <source>Formatted</source>
       <translation>Biçimlendirilmiş</translation>
     </message>
@@ -7290,7 +7309,7 @@ sağ görünümde %2 nokta seçili.</translation>
   <context>
     <name>Gui::PropertyEditor::LinkLabel</name>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4314"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4313"/>
       <source>Change the linked object</source>
       <translation>Bağlı nesneyi değiştir</translation>
     </message>
@@ -7298,12 +7317,12 @@ sağ görünümde %2 nokta seçili.</translation>
   <context>
     <name>Gui::PropertyEditor::LinkSelection</name>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4283"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4282"/>
       <source>Error</source>
       <translation>Hata</translation>
     </message>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4283"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4282"/>
       <source>Object not found</source>
       <translation>Nesne bulunamadı</translation>
     </message>
@@ -7427,77 +7446,77 @@ Do you want to exit without saving your data?</source>
       <translation>İşlenmemiş bilinmeyen c++ özel durum.</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1315"/>
+      <location filename="../PythonConsole.cpp" line="1314"/>
       <source>&amp;Copy</source>
       <translation>&amp;amp; Kopyala</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1318"/>
+      <location filename="../PythonConsole.cpp" line="1317"/>
       <source>&amp;Copy command</source>
       <translation>&amp;Kopyala komutu</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1321"/>
+      <location filename="../PythonConsole.cpp" line="1320"/>
       <source>&amp;Copy history</source>
       <translation>&amp;Kopyalama tarihi</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1324"/>
+      <location filename="../PythonConsole.cpp" line="1323"/>
       <source>Save history as...</source>
       <translation>Geçmişi olarak kaydet...</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1327"/>
+      <location filename="../PythonConsole.cpp" line="1326"/>
       <source>Save history</source>
       <translation>Geçmişi kaydet</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1328"/>
+      <location filename="../PythonConsole.cpp" line="1327"/>
       <source>Saves Python history across %1 sessions</source>
       <translation>Python geçmişini %1 oturum boyunca kaydeder</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1334"/>
+      <location filename="../PythonConsole.cpp" line="1333"/>
       <source>&amp;Paste</source>
       <translation>&amp; Yapıştır</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1338"/>
+      <location filename="../PythonConsole.cpp" line="1337"/>
       <source>Select All</source>
       <translation>Tümünü Seç</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1341"/>
+      <location filename="../PythonConsole.cpp" line="1340"/>
       <source>Clear console</source>
       <translation>Konsolü temizle</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1345"/>
+      <location filename="../PythonConsole.cpp" line="1344"/>
       <source>Insert file name...</source>
       <translation>Dosya adı Ekle...</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1348"/>
+      <location filename="../PythonConsole.cpp" line="1347"/>
       <source>Word wrap</source>
       <translation>Sözcük kaydırma</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1372"/>
+      <location filename="../PythonConsole.cpp" line="1371"/>
       <source>Save History</source>
       <translation>Geçmişi Kaydet</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1373"/>
+      <location filename="../PythonConsole.cpp" line="1372"/>
       <source>Macro Files</source>
       <translation>Makro dosyaları</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1392"/>
+      <location filename="../PythonConsole.cpp" line="1391"/>
       <source>Insert file name</source>
       <translation>Dosya adı Ekle</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1393"/>
+      <location filename="../PythonConsole.cpp" line="1392"/>
       <source>All Files</source>
       <translation>Tüm Dosyalar</translation>
     </message>
@@ -7505,12 +7524,12 @@ Do you want to exit without saving your data?</source>
   <context>
     <name>Gui::PythonEditor</name>
     <message>
-      <location filename="../PythonEditor.cpp" line="155"/>
+      <location filename="../PythonEditor.cpp" line="153"/>
       <source>Comment</source>
       <translation>Yorum</translation>
     </message>
     <message>
-      <location filename="../PythonEditor.cpp" line="156"/>
+      <location filename="../PythonEditor.cpp" line="154"/>
       <source>Uncomment</source>
       <translation>Yorumu Geri al</translation>
     </message>
@@ -7582,22 +7601,22 @@ Do you want to exit without saving your data?</source>
   <context>
     <name>Gui::SearchBar</name>
     <message>
-      <location filename="../EditorView.cpp" line="748"/>
+      <location filename="../EditorView.cpp" line="749"/>
       <source>Previous</source>
       <translation>Önceki</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="749"/>
+      <location filename="../EditorView.cpp" line="750"/>
       <source>Next</source>
       <translation type="unfinished">Next</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="750"/>
+      <location filename="../EditorView.cpp" line="751"/>
       <source>Case sensitive</source>
       <translation type="unfinished">Case sensitive</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="751"/>
+      <location filename="../EditorView.cpp" line="752"/>
       <source>Whole words</source>
       <translation>Tüm kelimeler</translation>
     </message>
@@ -7698,7 +7717,7 @@ Başka bir dizin belirlemek ister misiniz?</translation>
   <context>
     <name>Gui::TaskBoxAngle</name>
     <message>
-      <location filename="../TaskDlgRelocation.cpp" line="69"/>
+      <location filename="../TaskDlgRelocation.cpp" line="67"/>
       <source>Angle</source>
       <translation>Açı</translation>
     </message>
@@ -8349,22 +8368,22 @@ Başka bir dizin belirlemek ister misiniz?</translation>
   <context>
     <name>Gui::View3DInventor</name>
     <message>
-      <location filename="../View3DInventor.cpp" line="485"/>
+      <location filename="../View3DInventor.cpp" line="511"/>
       <source>Export PDF</source>
       <translation>PDF olarak dışa aktar</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="486"/>
+      <location filename="../View3DInventor.cpp" line="512"/>
       <source>PDF file</source>
       <translation>PDF dosyası</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="516"/>
+      <location filename="../View3DInventor.cpp" line="542"/>
       <source>Opening file failed</source>
       <translation>Dosya açılamadı</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="517"/>
+      <location filename="../View3DInventor.cpp" line="543"/>
       <source>Can't open file '%1' for writing.</source>
       <translation>Dosya '%1' yazmak için açılamıyor.</translation>
     </message>
@@ -8855,102 +8874,102 @@ Do you want to continue?</source>
       <translation>Resmi kaydet</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="540"/>
+      <location filename="../DlgParameterImp.cpp" line="539"/>
       <source>New sub-group</source>
       <translation>Yeni alt grup</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="540"/>
-      <location filename="../DlgParameterImp.cpp" line="764"/>
-      <location filename="../DlgParameterImp.cpp" line="793"/>
-      <location filename="../DlgParameterImp.cpp" line="823"/>
-      <location filename="../DlgParameterImp.cpp" line="859"/>
-      <location filename="../DlgParameterImp.cpp" line="888"/>
+      <location filename="../DlgParameterImp.cpp" line="539"/>
+      <location filename="../DlgParameterImp.cpp" line="763"/>
+      <location filename="../DlgParameterImp.cpp" line="792"/>
+      <location filename="../DlgParameterImp.cpp" line="822"/>
+      <location filename="../DlgParameterImp.cpp" line="858"/>
+      <location filename="../DlgParameterImp.cpp" line="887"/>
       <source>Enter the name:</source>
       <translation>Adı girin:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="764"/>
-      <location filename="../DlgParameterImp.cpp" line="780"/>
+      <location filename="../DlgParameterImp.cpp" line="763"/>
+      <location filename="../DlgParameterImp.cpp" line="779"/>
       <source>New text item</source>
       <translation>Yeni metin öğesi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="780"/>
-      <location filename="../DlgParameterImp.cpp" line="1047"/>
+      <location filename="../DlgParameterImp.cpp" line="779"/>
+      <location filename="../DlgParameterImp.cpp" line="1046"/>
       <source>Enter your text:</source>
       <translation>Metninizi girin:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="793"/>
-      <location filename="../DlgParameterImp.cpp" line="809"/>
+      <location filename="../DlgParameterImp.cpp" line="792"/>
+      <location filename="../DlgParameterImp.cpp" line="808"/>
       <source>New integer item</source>
       <translation>Yeni tamsayı öğesi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="809"/>
-      <location filename="../DlgParameterImp.cpp" line="839"/>
-      <location filename="../DlgParameterImp.cpp" line="875"/>
-      <location filename="../DlgParameterImp.cpp" line="1091"/>
-      <location filename="../DlgParameterImp.cpp" line="1135"/>
-      <location filename="../DlgParameterImp.cpp" line="1188"/>
+      <location filename="../DlgParameterImp.cpp" line="808"/>
+      <location filename="../DlgParameterImp.cpp" line="838"/>
+      <location filename="../DlgParameterImp.cpp" line="874"/>
+      <location filename="../DlgParameterImp.cpp" line="1090"/>
+      <location filename="../DlgParameterImp.cpp" line="1134"/>
+      <location filename="../DlgParameterImp.cpp" line="1187"/>
       <source>Enter your number:</source>
       <translation>Numaranızı girin:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="823"/>
-      <location filename="../DlgParameterImp.cpp" line="840"/>
+      <location filename="../DlgParameterImp.cpp" line="822"/>
+      <location filename="../DlgParameterImp.cpp" line="839"/>
       <source>New unsigned item</source>
       <translation>Yeni mutlak değerli öğe</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="859"/>
-      <location filename="../DlgParameterImp.cpp" line="875"/>
+      <location filename="../DlgParameterImp.cpp" line="858"/>
+      <location filename="../DlgParameterImp.cpp" line="874"/>
       <source>New float item</source>
       <translation>Yeni float öğesi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="888"/>
+      <location filename="../DlgParameterImp.cpp" line="887"/>
       <source>New Boolean item</source>
       <translation>Yeni Boolean (mantıksal) öğesi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="906"/>
-      <location filename="../DlgParameterImp.cpp" line="1236"/>
+      <location filename="../DlgParameterImp.cpp" line="905"/>
+      <location filename="../DlgParameterImp.cpp" line="1235"/>
       <source>Choose an item:</source>
       <translation>Bir öğe seçin:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="906"/>
+      <location filename="../DlgParameterImp.cpp" line="905"/>
       <source>New boolean item</source>
       <translation>Yeni Boolean (birbirinden çıkarma) öğesi</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="965"/>
+      <location filename="../DlgParameterImp.cpp" line="964"/>
       <source>Rename group</source>
       <translation>Grubu yeniden adlandır</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="966"/>
+      <location filename="../DlgParameterImp.cpp" line="965"/>
       <source>The group '%1' cannot be renamed.</source>
       <translation>'%1' grubu yeniden adlandırılamaz.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="971"/>
+      <location filename="../DlgParameterImp.cpp" line="970"/>
       <source>Existing group</source>
       <translation>Mevcut grup</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="972"/>
+      <location filename="../DlgParameterImp.cpp" line="971"/>
       <source>The group '%1' already exists.</source>
       <translation>'%1' Grubu zaten var.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="1047"/>
-      <location filename="../DlgParameterImp.cpp" line="1091"/>
-      <location filename="../DlgParameterImp.cpp" line="1136"/>
-      <location filename="../DlgParameterImp.cpp" line="1188"/>
-      <location filename="../DlgParameterImp.cpp" line="1236"/>
+      <location filename="../DlgParameterImp.cpp" line="1046"/>
+      <location filename="../DlgParameterImp.cpp" line="1090"/>
+      <location filename="../DlgParameterImp.cpp" line="1135"/>
+      <location filename="../DlgParameterImp.cpp" line="1187"/>
+      <location filename="../DlgParameterImp.cpp" line="1235"/>
       <source>Change value</source>
       <translation>Değeri değiştir</translation>
     </message>
@@ -9148,7 +9167,7 @@ Sadece etkin belgeyi geri almak için 'Hayır' ı seçin.
 Vazgeçmek için 'Vazgeç' i seçin</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="346"/>
+      <location filename="../EditorView.cpp" line="347"/>
       <source>Save Macro</source>
       <translation>Makroyu kaydet </translation>
     </message>
@@ -9220,12 +9239,12 @@ Please open a browser window and type in: http://localhost:%1.</source>
       <translation>Seçenekler...</translation>
     </message>
     <message>
-      <location filename="../View3DInventorViewer.cpp" line="2119"/>
+      <location filename="../View3DInventorViewer.cpp" line="2110"/>
       <source>Out of memory</source>
       <translation>Yetersiz bellek</translation>
     </message>
     <message>
-      <location filename="../View3DInventorViewer.cpp" line="2120"/>
+      <location filename="../View3DInventorViewer.cpp" line="2111"/>
       <source>Not enough memory available to display the data.</source>
       <translation>Verileri görüntülemek için yetersiz bellek.</translation>
     </message>
@@ -12141,12 +12160,12 @@ Hala ilerlemek istiyor musunuz?</translation>
   <context>
     <name>ViewIsometricCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1807"/>
+      <location filename="../NaviCube.cpp" line="1848"/>
       <source>Isometric</source>
       <translation>İzometrik</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1808"/>
+      <location filename="../NaviCube.cpp" line="1849"/>
       <source>Set NaviCube to Isometric mode</source>
       <translation>NaviKüp'ü izometrik moda ayarla</translation>
     </message>
@@ -12154,12 +12173,12 @@ Hala ilerlemek istiyor musunuz?</translation>
   <context>
     <name>ViewOrthographicCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1827"/>
+      <location filename="../NaviCube.cpp" line="1868"/>
       <source>Orthographic</source>
       <translation>Ortografik</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1828"/>
+      <location filename="../NaviCube.cpp" line="1869"/>
       <source>Set View to Orthographic mode</source>
       <translation>Görüntüyü ortografik moda ayarla</translation>
     </message>
@@ -12167,12 +12186,12 @@ Hala ilerlemek istiyor musunuz?</translation>
   <context>
     <name>ViewPerspectiveCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1848"/>
+      <location filename="../NaviCube.cpp" line="1889"/>
       <source>Perspective</source>
       <translation>Perspektif</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1849"/>
+      <location filename="../NaviCube.cpp" line="1890"/>
       <source>Set View to Perspective mode</source>
       <translation>Görüntüyü perspektif moduna ayarla</translation>
     </message>
@@ -12180,12 +12199,12 @@ Hala ilerlemek istiyor musunuz?</translation>
   <context>
     <name>ViewZoomToFitCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1869"/>
+      <location filename="../NaviCube.cpp" line="1910"/>
       <source>Zoom to fit</source>
       <translation>Sığacak şekilde yakınlaştır</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1870"/>
+      <location filename="../NaviCube.cpp" line="1911"/>
       <source>Zoom so that model fills the view</source>
       <translation>Modeli görünümü dolduracak şekilde yakınlaştır</translation>
     </message>

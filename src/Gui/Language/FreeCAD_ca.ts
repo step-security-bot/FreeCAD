@@ -439,7 +439,7 @@
   <context>
     <name>Gui::AccelLineEdit</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="495"/>
+      <location filename="../DlgActionsImp.cpp" line="493"/>
       <source>none</source>
       <translation>cap</translation>
     </message>
@@ -589,7 +589,7 @@ while doing a left or right click and move the mouse up or down</source>
   <context>
     <name>Gui::ControlSingleton</name>
     <message>
-      <location filename="../Control.cpp" line="140"/>
+      <location filename="../Control.cpp" line="141"/>
       <source>Task panel</source>
       <translation>Tauler de tasques</translation>
     </message>
@@ -682,7 +682,7 @@ while doing a left or right click and move the mouse up or down</source>
     <message>
       <location filename="../Splashscreen.cpp" line="425"/>
       <source>FreeCAD would not be possible without the contributions of</source>
-      <translation>FreeCAD no seria possible sense les contribucions de</translation>
+      <translation>El FreeCAD no seria possible sense les contribucions de</translation>
     </message>
     <message>
       <location filename="../Splashscreen.cpp" line="428"/>
@@ -757,37 +757,37 @@ while doing a left or right click and move the mouse up or down</source>
   <context>
     <name>Gui::Dialog::CameraDialog</name>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="277"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="285"/>
       <source>Camera settings</source>
       <translation>Paràmetres de la càmera</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="284"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="292"/>
       <source>Orientation</source>
       <translation>Orientació</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="298"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="306"/>
       <source>Q0</source>
       <translation>Q0</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="308"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="316"/>
       <source>Q1</source>
       <translation>Q1</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="318"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="326"/>
       <source>Q2</source>
       <translation>Q2</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="328"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="336"/>
       <source>Q3</source>
       <translation>Q3</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="337"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="345"/>
       <source>Current view</source>
       <translation>Vista actual</translation>
     </message>
@@ -1036,7 +1036,7 @@ Si no està activat, la propietat ha de tenir un nom únic, i s'accedeix a ella 
     <message>
       <location filename="../DlgCheckableMessageBox.ui" line="45"/>
       <source>TextLabel</source>
-      <translation>Etiqueta de Text</translation>
+      <translation>Etiqueta de text</translation>
     </message>
     <message>
       <location filename="../DlgCheckableMessageBox.ui" line="69"/>
@@ -1285,7 +1285,7 @@ same time. The one with the highest priority will be triggered.</translation>
     <message>
       <location filename="../DlgKeyboard.ui" line="188"/>
       <source>Shortcut priority list:</source>
-      <translation type="unfinished">Shortcut priority list:</translation>
+      <translation>Llista de prioritats de les dreceres:</translation>
     </message>
     <message>
       <location filename="../DlgKeyboard.ui" line="235"/>
@@ -1465,7 +1465,7 @@ same time. The one with the highest priority will be triggered.</translation>
     <message>
       <location filename="../DlgToolbars.ui" line="334"/>
       <source>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;&lt;span style=" font-weight:600;"&gt;Note:&lt;/span&gt; The changes become active the next time you load the appropriate workbench&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;&lt;span style=" font-weight:600;"&gt;Note:&lt;/span&gt; The changes become active the next time you load the appropriate workbench&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <translation>&lt;html&gt;&lt;head&gt;&lt;meta name="qrichtext" content="1" /&gt;&lt;/head&gt;&lt;body style=" white-space: pre-wrap; font-size:7.8pt; font-weight:400; font-style:normal; text-decoration:none;"&gt;&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"&gt;&lt;span style=" font-weight:600;"&gt;Nota:&lt;/span&gt; Els canvis s'activaran la propera vegada que carregueu el banc de treball apropiat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../DlgToolbarsImp.cpp" line="84"/>
@@ -1582,7 +1582,7 @@ same time. The one with the highest priority will be triggered.</translation>
     <message>
       <location filename="../DlgCustomizeSpaceball.cpp" line="753"/>
       <source>Print Reference</source>
-      <translation>Imprimeix les referències</translation>
+      <translation>Imprimeix la referència</translation>
     </message>
   </context>
   <context>
@@ -1630,7 +1630,7 @@ same time. The one with the highest priority will be triggered.</translation>
     <message>
       <location filename="../DlgDisplayProperties.ui" line="193"/>
       <source>Point color:</source>
-      <translation type="unfinished">Point color:</translation>
+      <translation>Color del punt:</translation>
     </message>
     <message>
       <location filename="../DlgDisplayProperties.ui" line="208"/>
@@ -1790,7 +1790,7 @@ same time. The one with the highest priority will be triggered.</translation>
     <message>
       <location filename="../DlgEditor.ui" line="59"/>
       <source>Code lines will be numbered</source>
-      <translation>Les línies de codi seran numerades</translation>
+      <translation>Les línies de codi es numeraran</translation>
     </message>
     <message>
       <location filename="../DlgEditor.ui" line="62"/>
@@ -1951,15 +1951,12 @@ same time. The one with the highest priority will be triggered.</translation>
 will be substituted with locale separator, except
 in Python Console and Macro Editor where a
 dot/period will always be printed.</source>
-      <translation type="unfinished">If enabled, numerical keypad decimal separator
-will be substituted with locale separator, except
-in Python Console and Macro Editor where a
-dot/period will always be printed.</translation>
+      <translation>Si s'habilita, el separador decimal numèric del teclat numèric se substituirà amb el separador local, excepte a la consola Python i a l'editor de macros en què sempre s'imprimirà un punt/període.</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="114"/>
       <source>Substitute decimal separator (numpad)</source>
-      <translation type="unfinished">Substitute decimal separator (numpad)</translation>
+      <translation>Substitueix el separador decimal (teclat numèric)</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="130"/>
@@ -1979,12 +1976,12 @@ dot/period will always be printed.</translation>
     <message>
       <location filename="../DlgGeneral.ui" line="218"/>
       <source>Load</source>
-      <translation type="unfinished">Load</translation>
+      <translation>Carrega</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="241"/>
       <source>Import config...</source>
-      <translation type="unfinished">Import config...</translation>
+      <translation>Importa la configuració...</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="248"/>
@@ -1994,12 +1991,12 @@ dot/period will always be printed.</translation>
     <message>
       <location filename="../DlgGeneral.ui" line="261"/>
       <source>Manage...</source>
-      <translation>Administrar...</translation>
+      <translation>Administra...</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="268"/>
       <source>Revert...</source>
-      <translation>Desfer...</translation>
+      <translation>Desfes...</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="282"/>
@@ -2014,7 +2011,7 @@ dot/period will always be printed.</translation>
     <message>
       <location filename="../DlgGeneral.ui" line="343"/>
       <source>How many files should be listed in recent files list</source>
-      <translation>Indica la quantitat de fitxers s’han d’enumerar en la llista de fitxers recents</translation>
+      <translation>Indica la quantitat de fitxers que s’han d’enumerar en la llista de fitxers recents</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="378"/>
@@ -2081,7 +2078,7 @@ això segons la mida de la pantalla o el gust personal</translation>
     <message>
       <location filename="../DlgGeneral.ui" line="531"/>
       <source>Workbench selector position :</source>
-      <translation type="unfinished">Workbench selector position :</translation>
+      <translation>Posició del selector del banc de treball:</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="538"/>
@@ -2090,11 +2087,11 @@ això segons la mida de la pantalla o el gust personal</translation>
 'Toolbar': In the toolbars, as a movable toolbar.
 'Left Corner': In the menu bar, on the left corner.
 'Right Corner': In the menu bar, on the right corner.</source>
-      <translation type="unfinished">Customize where the workbench selector appears (restart required).
+      <translation>Personalitza on apareix el selector del banc de treball (cal reiniciar).
 
-'Toolbar': In the toolbars, as a movable toolbar.
-'Left Corner': In the menu bar, on the left corner.
-'Right Corner': In the menu bar, on the right corner.</translation>
+«Barra d'eines»: a les barres d'eines, com una barra d'eines mòbil.
+«Cantonada esquerra»: a la barra de menús, a la cantonada esquerra.
+«Cantonada dreta»: a la barra de menús, a la cantonada dreta.</translation>
     </message>
     <message>
       <location filename="../DlgGeneral.ui" line="554"/>
@@ -2202,12 +2199,12 @@ quan arrenca FreeCAD. Si aquesta opció està marcada, FreeCAD en mostrarà una<
     <message>
       <location filename="../DlgGeneralImp.cpp" line="474"/>
       <source>Choose a FreeCAD config file to import</source>
-      <translation type="unfinished">Choose a FreeCAD config file to import</translation>
+      <translation>Trieu un fitxer de configuració del FreeCAD per importar</translation>
     </message>
     <message>
       <location filename="../DlgGeneralImp.cpp" line="485"/>
       <source>File exists</source>
-      <translation type="unfinished">File exists</translation>
+      <translation>El fitxer ja existeix</translation>
     </message>
     <message>
       <location filename="../DlgGeneralImp.cpp" line="486"/>
@@ -2535,7 +2532,7 @@ Potser per un error de permisos del fitxer?</translation>
     <message>
       <location filename="../DlgMacroRecordImp.cpp" line="88"/>
       <source>Specify first a place to save.</source>
-      <translation>Especifiqueu en primer lloc una ubicació on desar.</translation>
+      <translation>Especifiqueu primer un lloc per desar.</translation>
     </message>
     <message>
       <location filename="../DlgMacroRecordImp.cpp" line="95"/>
@@ -2678,7 +2675,7 @@ Specify another directory, please.</source>
     <message>
       <location filename="../DlgParameter.ui" line="109"/>
       <source>Save to disk</source>
-      <translation>Guarda al disc</translation>
+      <translation>Desa al disc</translation>
     </message>
     <message>
       <location filename="../DlgParameter.ui" line="112"/>
@@ -2749,25 +2746,25 @@ Specify another directory, please.</source>
     <name>Gui::Dialog::DlgParameterImp</name>
     <message>
       <location filename="../DlgParameterImp.cpp" line="67"/>
-      <location filename="../DlgParameterImp.cpp" line="218"/>
+      <location filename="../DlgParameterImp.cpp" line="217"/>
       <source>Group</source>
       <translation>Grup</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="219"/>
+      <location filename="../DlgParameterImp.cpp" line="218"/>
       <source>Name</source>
       <translation>Nom</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="220"/>
+      <location filename="../DlgParameterImp.cpp" line="219"/>
       <source>Type</source>
       <translation>Tipus</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="221"/>
+      <location filename="../DlgParameterImp.cpp" line="220"/>
       <source>Value</source>
       <translation>Valor</translation>
     </message>
@@ -2782,17 +2779,17 @@ Specify another directory, please.</source>
       <translation>Paràmetre de l'usuari</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="121"/>
+      <location filename="../DlgParameterImp.cpp" line="120"/>
       <source>Search Group</source>
       <translation>Cerca un grup</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="439"/>
+      <location filename="../DlgParameterImp.cpp" line="438"/>
       <source>Invalid input</source>
       <translation>L'entrada no és vàlida</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="440"/>
+      <location filename="../DlgParameterImp.cpp" line="439"/>
       <source>Invalid key name '%1'</source>
       <translation>El nom de clau '%1' no és vàlid</translation>
     </message>
@@ -2815,9 +2812,7 @@ Specify another directory, please.</source>
     <message>
       <location filename="../DlgPreferencePackManagementImp.cpp" line="88"/>
       <source>User-Saved Preference Packs</source>
-      <translation>Catalán
-
-Paquets de preferències guardats per l'usuari</translation>
+      <translation>Paquets de preferències desats per l'usuari</translation>
     </message>
     <message>
       <location filename="../DlgPreferencePackManagementImp.cpp" line="92"/>
@@ -2960,7 +2955,7 @@ Paquets de preferències guardats per l'usuari</translation>
     <message>
       <location filename="../DlgProjectInformation.ui" line="300"/>
       <source>&amp;Comment:</source>
-      <translation type="unfinished">&amp;Comment:</translation>
+      <translation>&amp;Comentari:</translation>
     </message>
     <message>
       <source/>
@@ -3308,7 +3303,7 @@ de la consola Python al tauler de Vista d'informes</translation>
     <message>
       <location filename="../DlgRunExternal.ui" line="38"/>
       <source>TextLabel</source>
-      <translation>Etiqueta de Text</translation>
+      <translation>Etiqueta de text</translation>
     </message>
     <message>
       <location filename="../DlgRunExternal.ui" line="58"/>
@@ -3712,12 +3707,12 @@ mida de la caixa contenidora de l'objecte 3D que es mostra actualment.</translat
     <message>
       <location filename="../DlgSettingsCacheDirectory.ui" line="88"/>
       <source>Daily</source>
-      <translation type="unfinished">Daily</translation>
+      <translation>Diàriament</translation>
     </message>
     <message>
       <location filename="../DlgSettingsCacheDirectory.ui" line="93"/>
       <source>Weekly</source>
-      <translation type="unfinished">Weekly</translation>
+      <translation>Setmanalment</translation>
     </message>
     <message>
       <location filename="../DlgSettingsCacheDirectory.ui" line="98"/>
@@ -3732,7 +3727,7 @@ mida de la caixa contenidora de l'objecte 3D que es mostra actualment.</translat
     <message>
       <location filename="../DlgSettingsCacheDirectory.ui" line="108"/>
       <source>Never</source>
-      <translation type="unfinished">Never</translation>
+      <translation>Mai</translation>
     </message>
     <message>
       <location filename="../DlgSettingsCacheDirectory.ui" line="116"/>
@@ -3952,7 +3947,7 @@ a més de la barra de colors</translation>
       <location filename="../DlgSettingsDocument.ui" line="90"/>
       <source>Document save compression level
 (0 = none, 9 = highest, 3 = default)</source>
-      <translation>Nivell de compressió per a guardar el document
+      <translation>Nivell de compressió per a desar el document
 (0 = cap, 9 = el més alt, 3 = per defecte)</translation>
     </message>
     <message>
@@ -4000,12 +3995,12 @@ Aquesta característica pot augmentar lleugerament el temps de recàlcul.</trans
     <message>
       <location filename="../DlgSettingsDocument.ui" line="226"/>
       <source>Saving transactions (Auto-save)</source>
-      <translation>S'estan desantt les transaccions (desat automàtic)</translation>
+      <translation>S'estan desant les operacions (desament automàtic)</translation>
     </message>
     <message>
       <location filename="../DlgSettingsDocument.ui" line="242"/>
       <source>Discard saved transaction after saving document</source>
-      <translation>Descarta les transaccions desades després de desar el document</translation>
+      <translation>Descarta les operacions desades després de desar el document</translation>
     </message>
     <message>
       <location filename="../DlgSettingsDocument.ui" line="255"/>
@@ -4172,62 +4167,77 @@ També podeu utilitzar la forma: Joan Peris &lt;joan@peris.com&gt;</translation>
       <translation>La llicència per defecte per als documents nous</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="685"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="39"/>
       <source>All rights reserved</source>
       <translation>Tots els drets reservats</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="690"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="40"/>
       <source>Creative Commons Attribution</source>
       <translation>Creative Commons Reconeixement</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="695"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="41"/>
       <source>Creative Commons Attribution-ShareAlike</source>
       <translation>Creative Commons Reconeixement-CompartirIgual</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="700"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="42"/>
       <source>Creative Commons Attribution-NoDerivatives</source>
       <translation>Creative Commons Reconeixement-SenseObraDerivada</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="705"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="43"/>
       <source>Creative Commons Attribution-NonCommercial</source>
       <translation>Creative Commons Reconeixement-NoComercial</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="710"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="44"/>
       <source>Creative Commons Attribution-NonCommercial-ShareAlike</source>
       <translation>Creative Commons Reconeixement-NoComercial-CompartirIgual</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="715"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="45"/>
       <source>Creative Commons Attribution-NonCommercial-NoDerivatives</source>
       <translation>Llicència Creative Commons Reconeixement-NoComercial-SenseObraDerivada</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="720"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="46"/>
       <source>Public Domain</source>
       <translation>Domini públic</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="725"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="47"/>
       <source>FreeArt</source>
       <translation>FreeArt</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="730"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="48"/>
+      <source>CERN Open Hardware Licence strongly-reciprocal</source>
+      <translation type="unfinished">CERN Open Hardware Licence strongly-reciprocal</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="49"/>
+      <source>CERN Open Hardware Licence weakly-reciprocal</source>
+      <translation type="unfinished">CERN Open Hardware Licence weakly-reciprocal</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="50"/>
+      <source>CERN Open Hardware Licence permissive</source>
+      <translation type="unfinished">CERN Open Hardware Licence permissive</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="51"/>
       <source>Other</source>
       <translation>Altres</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="738"/>
+      <location filename="../DlgSettingsDocument.ui" line="688"/>
       <source>License URL</source>
       <translation>URL de la llicència</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="745"/>
+      <location filename="../DlgSettingsDocument.ui" line="695"/>
       <source>URL describing more about the license</source>
       <translation>URL que descriu més informació sobre la llicència</translation>
     </message>
@@ -4235,17 +4245,17 @@ També podeu utilitzar la forma: Joan Peris &lt;joan@peris.com&gt;</translation>
   <context>
     <name>Gui::Dialog::DlgSettingsDocumentImp</name>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>The format of the date to use.</source>
       <translation>El format de la data que s'ha d'utilitzar.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>Default</source>
       <translation>Per defecte</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>Format</source>
       <translation>Format</translation>
     </message>
@@ -4729,7 +4739,6 @@ També podeu utilitzar la forma: Joan Peris &lt;joan@peris.com&gt;</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="87"/>
-      <location filename="../DlgSettingsNavigation.ui" line="149"/>
       <source>Corner where navigation cube is shown</source>
       <translation>Cantonada on es mostra el cub de navegació</translation>
     </message>
@@ -4766,7 +4775,12 @@ També podeu utilitzar la forma: Joan Peris &lt;joan@peris.com&gt;</translation>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="142"/>
       <source>Font name:</source>
-      <translation type="unfinished">Font name:</translation>
+      <translation>Nom del tipus de lletra:</translation>
+    </message>
+    <message>
+      <location filename="../DlgSettingsNavigation.ui" line="149"/>
+      <source>Font name of the navigation cube</source>
+      <translation type="unfinished">Font name of the navigation cube</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="165"/>
@@ -4781,12 +4795,12 @@ També podeu utilitzar la forma: Joan Peris &lt;joan@peris.com&gt;</translation>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="200"/>
       <source>Font size:</source>
-      <translation type="unfinished">Font size:</translation>
+      <translation>Mida del tipus de lletra:</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="213"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Font size for the NaviCube text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Font size for the NaviCube text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Font size of the navigation cube</source>
+      <translation type="unfinished">Font size of the navigation cube</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="250"/>
@@ -4948,52 +4962,52 @@ Mouse tilting is not disabled by this setting.</source>
       <translation>Desactiva el gest d'inclinació de la pantalla tàctil</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="155"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="161"/>
       <source>Isometric</source>
       <translation>Isomètrica</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="156"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="162"/>
       <source>Dimetric</source>
       <translation>Dimètric</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="157"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="163"/>
       <source>Trimetric</source>
       <translation>Trimètric</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="158"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="164"/>
       <source>Top</source>
       <translation>Planta</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="159"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="165"/>
       <source>Front</source>
       <translation>Alçat</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="160"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="166"/>
       <source>Left</source>
       <translation>Esquerra</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="161"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="167"/>
       <source>Right</source>
       <translation>Dreta</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="162"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="168"/>
       <source>Rear</source>
       <translation>Posterior</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="163"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="169"/>
       <source>Bottom</source>
       <translation>Inferior</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="164"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="170"/>
       <source>Custom</source>
       <translation>Personalitzat</translation>
     </message>
@@ -5170,7 +5184,7 @@ horizontal space in Python console</source>
     <message>
       <location filename="../DlgSettingsUnitsImp.cpp" line="52"/>
       <source>FEM (mm, N, s)</source>
-      <translation type="unfinished">FEM (mm, N, s)</translation>
+      <translation>FEM (mm, N, s)</translation>
     </message>
   </context>
   <context>
@@ -5244,12 +5258,12 @@ horizontal space in Python console</source>
     <message>
       <location filename="../DlgSettingsViewColor.ui" line="309"/>
       <source>Switches the colors of the gradient</source>
-      <translation type="unfinished">Switches the colors of the gradient</translation>
+      <translation>Canvia els colors del degradat</translation>
     </message>
     <message>
       <location filename="../DlgSettingsViewColor.ui" line="312"/>
       <source>Switch</source>
-      <translation type="unfinished">Switch</translation>
+      <translation>Canvia</translation>
     </message>
     <message>
       <location filename="../DlgSettingsViewColor.ui" line="332"/>
@@ -5400,12 +5414,12 @@ El sistema de preferències és el fixat en les preferències generals.</transla
   <context>
     <name>Gui::Dialog::DlgUnitsCalculator</name>
     <message>
-      <location filename="../DlgUnitsCalculatorImp.cpp" line="147"/>
+      <location filename="../DlgUnitsCalculatorImp.cpp" line="149"/>
       <source>unknown unit:</source>
       <translation>unitat desconeguda:</translation>
     </message>
     <message>
-      <location filename="../DlgUnitsCalculatorImp.cpp" line="152"/>
+      <location filename="../DlgUnitsCalculatorImp.cpp" line="154"/>
       <source>unit mismatch</source>
       <translation>la unitat no coincideix</translation>
     </message>
@@ -5486,7 +5500,7 @@ El sistema de preferències és el fixat en les preferències generals.</transla
     <message>
       <location filename="../DlgWorkbenches.ui" line="272"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-size:8pt; font-weight:600;"&gt;Note:&lt;/span&gt;&lt;span style=" font-family:'MS Shell Dlg 2'; font-size:8pt;"&gt; The changes become active the next time you start the application&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-size:8pt; font-weight:600;"&gt;Note:&lt;/span&gt;&lt;span style=" font-family:'MS Shell Dlg 2'; font-size:8pt;"&gt; The changes become active the next time you start the application&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-size:8pt; font-weight:600;"&gt;Nota:&lt;/span&gt;&lt;span style=" font-family:'MS Shell Dlg 2'; font-size:8pt;"&gt; Els canvis s'activaran la propera vegada que inicieu l'aplicació&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
   </context>
   <context>
@@ -5715,12 +5729,12 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
   <context>
     <name>Gui::Dialog::IconDialog</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="431"/>
+      <location filename="../DlgActionsImp.cpp" line="429"/>
       <source>Icon folders</source>
       <translation>Carpetes d'icones</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="567"/>
+      <location filename="../DlgActionsImp.cpp" line="563"/>
       <source>Add icon folder</source>
       <translation>Afegeix una carpeta d'icones</translation>
     </message>
@@ -5728,17 +5742,17 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
   <context>
     <name>Gui::Dialog::IconFolders</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="544"/>
+      <location filename="../DlgActionsImp.cpp" line="540"/>
       <source>Add or remove custom icon folders</source>
       <translation>Afegeix o elimina carpetes d'icones personalitzades</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="591"/>
+      <location filename="../DlgActionsImp.cpp" line="587"/>
       <source>Remove folder</source>
       <translation>Elimina la carpeta</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="592"/>
+      <location filename="../DlgActionsImp.cpp" line="588"/>
       <source>Removing a folder only takes effect after an application restart.</source>
       <translation>L'acció d'eliminar una carpeta només té efecte després de reiniciar l'aplicació.</translation>
     </message>
@@ -5791,7 +5805,7 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
     <message>
       <location filename="../MouseButtons.ui" line="48"/>
       <source>Panning:</source>
-      <translation type="unfinished">Panning:</translation>
+      <translation>Panoràmica:</translation>
     </message>
     <message>
       <location filename="../MouseButtons.ui" line="68"/>
@@ -5807,80 +5821,80 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
   <context>
     <name>Gui::Dialog::ParameterGroup</name>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="456"/>
-      <location filename="../DlgParameterImp.cpp" line="483"/>
-      <location filename="../DlgParameterImp.cpp" line="631"/>
+      <location filename="../DlgParameterImp.cpp" line="455"/>
+      <location filename="../DlgParameterImp.cpp" line="482"/>
+      <location filename="../DlgParameterImp.cpp" line="630"/>
       <source>Expand</source>
       <translation>Expandeix</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="458"/>
-      <location filename="../DlgParameterImp.cpp" line="632"/>
+      <location filename="../DlgParameterImp.cpp" line="457"/>
+      <location filename="../DlgParameterImp.cpp" line="631"/>
       <source>Add sub-group</source>
       <translation>Afegeix un subgrup</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="459"/>
-      <location filename="../DlgParameterImp.cpp" line="506"/>
-      <location filename="../DlgParameterImp.cpp" line="633"/>
+      <location filename="../DlgParameterImp.cpp" line="458"/>
+      <location filename="../DlgParameterImp.cpp" line="505"/>
+      <location filename="../DlgParameterImp.cpp" line="632"/>
       <source>Remove group</source>
       <translation>Elimina el grup</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="460"/>
-      <location filename="../DlgParameterImp.cpp" line="634"/>
+      <location filename="../DlgParameterImp.cpp" line="459"/>
+      <location filename="../DlgParameterImp.cpp" line="633"/>
       <source>Rename group</source>
       <translation>Reanomena el grup</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="462"/>
-      <location filename="../DlgParameterImp.cpp" line="635"/>
+      <location filename="../DlgParameterImp.cpp" line="461"/>
+      <location filename="../DlgParameterImp.cpp" line="634"/>
       <source>Export parameter</source>
       <translation>Exporta el paràmetre</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="463"/>
-      <location filename="../DlgParameterImp.cpp" line="636"/>
+      <location filename="../DlgParameterImp.cpp" line="462"/>
+      <location filename="../DlgParameterImp.cpp" line="635"/>
       <source>Import parameter</source>
       <translation>Importa el paràmetre</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="481"/>
+      <location filename="../DlgParameterImp.cpp" line="480"/>
       <source>Collapse</source>
       <translation>Replega</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="506"/>
+      <location filename="../DlgParameterImp.cpp" line="505"/>
       <source>Do you really want to remove this parameter group?</source>
       <translation>Segur que voleu eliminar aquest grup de paràmetres?</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="553"/>
+      <location filename="../DlgParameterImp.cpp" line="552"/>
       <source>Existing sub-group</source>
       <translation>Subgrup existent</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="554"/>
+      <location filename="../DlgParameterImp.cpp" line="553"/>
       <source>The sub-group '%1' already exists.</source>
       <translation>El subgrup '%1' ja existeix.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="567"/>
+      <location filename="../DlgParameterImp.cpp" line="566"/>
       <source>Export parameter to file</source>
       <translation>Exporta el paràmetre al fitxer</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="583"/>
+      <location filename="../DlgParameterImp.cpp" line="582"/>
       <source>Import parameter from file</source>
       <translation>Importa el paràmetre des del fitxer</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="613"/>
+      <location filename="../DlgParameterImp.cpp" line="612"/>
       <source>Import Error</source>
       <translation>Error d'importació</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="613"/>
+      <location filename="../DlgParameterImp.cpp" line="612"/>
       <source>Reading from '%1' failed.</source>
       <translation>La lectura de '%1' ha fallat.</translation>
     </message>
@@ -5888,49 +5902,58 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
   <context>
     <name>Gui::Dialog::ParameterValue</name>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="650"/>
+      <location filename="../DlgParameterImp.cpp" line="649"/>
       <source>Change value</source>
       <translation>Canvia el valor</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="652"/>
+      <location filename="../DlgParameterImp.cpp" line="651"/>
       <source>Remove key</source>
       <translation>Elimina la clau</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="653"/>
+      <location filename="../DlgParameterImp.cpp" line="652"/>
       <source>Rename key</source>
       <translation>Reanomena la clau</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="657"/>
+      <location filename="../DlgParameterImp.cpp" line="656"/>
       <source>New</source>
       <translation>Nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="658"/>
+      <location filename="../DlgParameterImp.cpp" line="657"/>
       <source>New string item</source>
       <translation>Element de cadena nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="659"/>
+      <location filename="../DlgParameterImp.cpp" line="658"/>
       <source>New float item</source>
       <translation>Element flotant nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="660"/>
+      <location filename="../DlgParameterImp.cpp" line="659"/>
       <source>New integer item</source>
       <translation>Element enter nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="661"/>
+      <location filename="../DlgParameterImp.cpp" line="660"/>
       <source>New unsigned item</source>
       <translation>Element sense signe nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="662"/>
+      <location filename="../DlgParameterImp.cpp" line="661"/>
       <source>New Boolean item</source>
       <translation>Element booleà nou</translation>
+    </message>
+    <message>
+      <location filename="../DlgParameterImp.cpp" line="773"/>
+      <location filename="../DlgParameterImp.cpp" line="802"/>
+      <location filename="../DlgParameterImp.cpp" line="832"/>
+      <location filename="../DlgParameterImp.cpp" line="868"/>
+      <location filename="../DlgParameterImp.cpp" line="897"/>
+      <source>Existing item</source>
+      <translation>Element existent</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="774"/>
@@ -5938,15 +5961,6 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
       <location filename="../DlgParameterImp.cpp" line="833"/>
       <location filename="../DlgParameterImp.cpp" line="869"/>
       <location filename="../DlgParameterImp.cpp" line="898"/>
-      <source>Existing item</source>
-      <translation>Element existent</translation>
-    </message>
-    <message>
-      <location filename="../DlgParameterImp.cpp" line="775"/>
-      <location filename="../DlgParameterImp.cpp" line="804"/>
-      <location filename="../DlgParameterImp.cpp" line="834"/>
-      <location filename="../DlgParameterImp.cpp" line="870"/>
-      <location filename="../DlgParameterImp.cpp" line="899"/>
       <source>The item '%1' already exists.</source>
       <translation>L'element '%1' ja existeix.</translation>
     </message>
@@ -5994,7 +6008,7 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
     <message>
       <location filename="../Placement.ui" line="114"/>
       <source>Apply axial</source>
-      <translation>Aplicar axial</translation>
+      <translation>Aplica axial</translation>
     </message>
     <message>
       <location filename="../Placement.ui" line="124"/>
@@ -6009,7 +6023,7 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
     <message>
       <location filename="../Placement.ui" line="200"/>
       <source>Selected points</source>
-      <translation>Punts escollits</translation>
+      <translation>Punts seleccionats</translation>
     </message>
     <message>
       <location filename="../Placement.ui" line="210"/>
@@ -6246,13 +6260,13 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
     <name>Gui::Dialog::Transform</name>
     <message>
       <location filename="../Transform.cpp" line="291"/>
-      <location filename="../Transform.cpp" line="414"/>
+      <location filename="../Transform.cpp" line="419"/>
       <source>Cancel</source>
       <translation>Cancel·la</translation>
     </message>
     <message>
       <location filename="../Transform.cpp" line="292"/>
-      <location filename="../Transform.cpp" line="415"/>
+      <location filename="../Transform.cpp" line="420"/>
       <source>Transform</source>
       <translation>Transformar</translation>
     </message>
@@ -6277,7 +6291,7 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
     <message>
       <location filename="../DlgObjectSelection.ui" line="164"/>
       <source>Show dependencies</source>
-      <translation type="unfinished">Show dependencies</translation>
+      <translation>Mostra les dependències</translation>
     </message>
     <message>
       <location filename="../DlgObjectSelection.cpp" line="115"/>
@@ -6314,7 +6328,7 @@ La columna 'Estat' mostra si el document es pot recuperar.</translation>
     <message>
       <location filename="../DlgObjectSelection.cpp" line="157"/>
       <source>&amp;Use Original Selections</source>
-      <translation>&amp;Usar les seleccions originals</translation>
+      <translation>&amp;Utilitza les seleccions originals</translation>
     </message>
     <message>
       <location filename="../DlgObjectSelection.cpp" line="158"/>
@@ -6349,14 +6363,14 @@ seleccionats abans d'obrir aquest diàleg</translation>
       <translation>Visualització combinada</translation>
     </message>
     <message>
-      <location filename="../ComboView.cpp" line="73"/>
-      <location filename="../ComboView.cpp" line="141"/>
+      <location filename="../ComboView.cpp" line="74"/>
+      <location filename="../ComboView.cpp" line="142"/>
       <source>Model</source>
       <translation>Model</translation>
     </message>
     <message>
-      <location filename="../ComboView.cpp" line="82"/>
-      <location filename="../ComboView.cpp" line="142"/>
+      <location filename="../ComboView.cpp" line="83"/>
+      <location filename="../ComboView.cpp" line="143"/>
       <source>Tasks</source>
       <translation>Tasques</translation>
     </message>
@@ -6408,7 +6422,7 @@ seleccionats abans d'obrir aquest diàleg</translation>
     <message>
       <location filename="../ReportView.cpp" line="574"/>
       <source>Show Report view on</source>
-      <translation type="unfinished">Show Report view on</translation>
+      <translation>Mostra la vista de l'informe a</translation>
     </message>
     <message>
       <location filename="../ReportView.cpp" line="595"/>
@@ -6494,72 +6508,72 @@ seleccionats abans d'obrir aquest diàleg</translation>
       <translation>Llista d'objectes seleccionats</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="590"/>
+      <location filename="../SelectionView.cpp" line="589"/>
       <source>Select only</source>
       <translation>Selecciona només</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="592"/>
+      <location filename="../SelectionView.cpp" line="593"/>
       <source>Selects only this object</source>
       <translation>Selecciona només aquest objecte</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="593"/>
+      <location filename="../SelectionView.cpp" line="595"/>
       <source>Deselect</source>
       <translation>Desselecciona</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="595"/>
+      <location filename="../SelectionView.cpp" line="597"/>
       <source>Deselects this object</source>
       <translation>Desselecciona aquest objecte</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="596"/>
+      <location filename="../SelectionView.cpp" line="599"/>
       <source>Zoom fit</source>
       <translation>Ajust del zoom</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="598"/>
+      <location filename="../SelectionView.cpp" line="601"/>
       <source>Selects and fits this object in the 3D window</source>
       <translation>Selecciona i ajusta l'objecte en una finestra 3D</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="599"/>
+      <location filename="../SelectionView.cpp" line="603"/>
       <source>Go to selection</source>
       <translation>Vés a la selecció</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="600"/>
+      <location filename="../SelectionView.cpp" line="604"/>
       <source>Selects and locates this object in the tree view</source>
       <translation>Selecciona i col·loca l'objecte en una vista d'arbre</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="601"/>
+      <location filename="../SelectionView.cpp" line="606"/>
       <source>Mark to recompute</source>
       <translation>Marca per a recalcular</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="603"/>
+      <location filename="../SelectionView.cpp" line="608"/>
       <source>Mark this object to be recomputed</source>
       <translation>Marca aquest objecte per a recalcular-lo</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="604"/>
+      <location filename="../SelectionView.cpp" line="610"/>
       <source>To python console</source>
       <translation>A la consola Python</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="606"/>
+      <location filename="../SelectionView.cpp" line="612"/>
       <source>Reveals this object and its subelements in the python console.</source>
       <translation>Mostra aquest objecte i els seus subelements a la consola Python.</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="611"/>
+      <location filename="../SelectionView.cpp" line="617"/>
       <source>Duplicate subshape</source>
       <translation>Subforma duplicada</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="613"/>
+      <location filename="../SelectionView.cpp" line="619"/>
       <source>Creates a standalone copy of this subshape in the document</source>
       <translation>Crea una còpia independent d'aquesta subforma en el document</translation>
     </message>
@@ -6580,12 +6594,12 @@ seleccionats abans d'obrir aquest diàleg</translation>
   <context>
     <name>Gui::EditorView</name>
     <message>
-      <location filename="../EditorView.cpp" line="196"/>
+      <location filename="../EditorView.cpp" line="197"/>
       <source>Modified file</source>
       <translation>S'ha modificat el fitxer</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="197"/>
+      <location filename="../EditorView.cpp" line="198"/>
       <source>%1.
 
 This has been modified outside of the source editor. Do you want to reload it?</source>
@@ -6594,53 +6608,53 @@ This has been modified outside of the source editor. Do you want to reload it?</
 El fitxer s'ha modificat fora de l'editor de codi font. Voleu tornar-lo a carregar?</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="320"/>
+      <location filename="../EditorView.cpp" line="321"/>
       <source>Unsaved document</source>
       <translation>El document no s'ha desat</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="321"/>
+      <location filename="../EditorView.cpp" line="322"/>
       <source>The document has been modified.
 Do you want to save your changes?</source>
       <translation>El document s'ha modificat. Voleu desar-ne els canvis?</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="347"/>
+      <location filename="../EditorView.cpp" line="348"/>
       <source>FreeCAD macro</source>
       <translation>Macro de FreeCAD</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="469"/>
+      <location filename="../EditorView.cpp" line="470"/>
       <source>Export PDF</source>
       <translation>Exporta a PDF</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="470"/>
+      <location filename="../EditorView.cpp" line="471"/>
       <source>PDF file</source>
       <translation>Arxiu PDF</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="501"/>
+      <location filename="../EditorView.cpp" line="502"/>
       <source>untitled[*]</source>
       <translation>sense títol[*]</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="504"/>
+      <location filename="../EditorView.cpp" line="505"/>
       <source> - Editor</source>
       <translation> - Editor</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="558"/>
+      <location filename="../EditorView.cpp" line="559"/>
       <source>%1 chars removed</source>
       <translation>S'han eliminat %1 caràcters</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="560"/>
+      <location filename="../EditorView.cpp" line="561"/>
       <source>%1 chars added</source>
       <translation>S'han afegit %1 caràcters</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="562"/>
+      <location filename="../EditorView.cpp" line="563"/>
       <source>Formatted</source>
       <translation>Formatat</translation>
     </message>
@@ -7286,7 +7300,7 @@ How do you want to proceed?</source>
   <context>
     <name>Gui::PropertyEditor::LinkLabel</name>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4314"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4313"/>
       <source>Change the linked object</source>
       <translation>Canvia l'objecte enllaçat</translation>
     </message>
@@ -7294,12 +7308,12 @@ How do you want to proceed?</source>
   <context>
     <name>Gui::PropertyEditor::LinkSelection</name>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4283"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4282"/>
       <source>Error</source>
       <translation>Error</translation>
     </message>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4283"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4282"/>
       <source>Object not found</source>
       <translation>No s'ha trobat l'objecte.</translation>
     </message>
@@ -7424,77 +7438,77 @@ Esteu segur que voleu sortir sense desar les dades?</translation>
       <translation>S'ha produït una excepció de C++ no gestionada desconeguda.</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1315"/>
+      <location filename="../PythonConsole.cpp" line="1314"/>
       <source>&amp;Copy</source>
       <translation>&amp;Copia</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1318"/>
+      <location filename="../PythonConsole.cpp" line="1317"/>
       <source>&amp;Copy command</source>
       <translation>&amp;Copia l'ordre</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1321"/>
+      <location filename="../PythonConsole.cpp" line="1320"/>
       <source>&amp;Copy history</source>
       <translation>&amp;Copia l'historial</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1324"/>
+      <location filename="../PythonConsole.cpp" line="1323"/>
       <source>Save history as...</source>
-      <translation>Anomena i guarda l'historial...</translation>
+      <translation>Anomena i desa l'historial...</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1327"/>
+      <location filename="../PythonConsole.cpp" line="1326"/>
       <source>Save history</source>
       <translation>Desa l'historial</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1328"/>
+      <location filename="../PythonConsole.cpp" line="1327"/>
       <source>Saves Python history across %1 sessions</source>
       <translation>Desa l'historial de Python entre %1 sessions</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1334"/>
+      <location filename="../PythonConsole.cpp" line="1333"/>
       <source>&amp;Paste</source>
       <translation>A&amp;pega</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1338"/>
+      <location filename="../PythonConsole.cpp" line="1337"/>
       <source>Select All</source>
       <translation>Selecciona-ho tot</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1341"/>
+      <location filename="../PythonConsole.cpp" line="1340"/>
       <source>Clear console</source>
       <translation>Neteja la consola</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1345"/>
+      <location filename="../PythonConsole.cpp" line="1344"/>
       <source>Insert file name...</source>
       <translation>Inseriu un nom de fitxer...</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1348"/>
+      <location filename="../PythonConsole.cpp" line="1347"/>
       <source>Word wrap</source>
       <translation>Ajust de paraules</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1372"/>
+      <location filename="../PythonConsole.cpp" line="1371"/>
       <source>Save History</source>
-      <translation>Guarda l'historial</translation>
+      <translation>Desa l'historial</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1373"/>
+      <location filename="../PythonConsole.cpp" line="1372"/>
       <source>Macro Files</source>
       <translation>Fitxers de macro</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1392"/>
+      <location filename="../PythonConsole.cpp" line="1391"/>
       <source>Insert file name</source>
       <translation>Inseriu un nom de fitxer</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1393"/>
+      <location filename="../PythonConsole.cpp" line="1392"/>
       <source>All Files</source>
       <translation>Tots els fitxers</translation>
     </message>
@@ -7502,12 +7516,12 @@ Esteu segur que voleu sortir sense desar les dades?</translation>
   <context>
     <name>Gui::PythonEditor</name>
     <message>
-      <location filename="../PythonEditor.cpp" line="155"/>
+      <location filename="../PythonEditor.cpp" line="153"/>
       <source>Comment</source>
       <translation>Comentari</translation>
     </message>
     <message>
-      <location filename="../PythonEditor.cpp" line="156"/>
+      <location filename="../PythonEditor.cpp" line="154"/>
       <source>Uncomment</source>
       <translation>Sense comentari</translation>
     </message>
@@ -7579,22 +7593,22 @@ Esteu segur que voleu sortir sense desar les dades?</translation>
   <context>
     <name>Gui::SearchBar</name>
     <message>
-      <location filename="../EditorView.cpp" line="748"/>
+      <location filename="../EditorView.cpp" line="749"/>
       <source>Previous</source>
       <translation>Anterior</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="749"/>
+      <location filename="../EditorView.cpp" line="750"/>
       <source>Next</source>
       <translation>Següent</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="750"/>
+      <location filename="../EditorView.cpp" line="751"/>
       <source>Case sensitive</source>
       <translation>Distingeix entre majúscules i minúscules</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="751"/>
+      <location filename="../EditorView.cpp" line="752"/>
       <source>Whole words</source>
       <translation>Paraules senceres</translation>
     </message>
@@ -7691,7 +7705,7 @@ Do you want to specify another directory?</source>
   <context>
     <name>Gui::TaskBoxAngle</name>
     <message>
-      <location filename="../TaskDlgRelocation.cpp" line="69"/>
+      <location filename="../TaskDlgRelocation.cpp" line="67"/>
       <source>Angle</source>
       <translation>Angle</translation>
     </message>
@@ -7732,7 +7746,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="../TaskElementColors.ui" line="22"/>
       <source>TextLabel</source>
-      <translation>Etiqueta de Text</translation>
+      <translation>Etiqueta de text</translation>
     </message>
     <message>
       <location filename="../TaskElementColors.ui" line="40"/>
@@ -7858,7 +7872,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="../TextDocumentEditorView.cpp" line="231"/>
       <source>Do you want to save your changes before closing?</source>
-      <translation>Voleu guardar els canvis abans de tancar?</translation>
+      <translation>Voleu desar els canvis abans de tancar?</translation>
     </message>
     <message>
       <location filename="../TextDocumentEditorView.cpp" line="232"/>
@@ -7938,7 +7952,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="Translator.cpp" line="139"/>
       <source>Belarusian</source>
-      <translation type="unfinished">Belarusian</translation>
+      <translation>Belarús</translation>
     </message>
     <message>
       <location filename="Translator.cpp" line="140"/>
@@ -8058,7 +8072,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="Translator.cpp" line="164"/>
       <source>Portuguese, Brazilian</source>
-      <translation>Portuguès, brasiler</translation>
+      <translation>Portuguès, Brasil</translation>
     </message>
     <message>
       <location filename="Translator.cpp" line="165"/>
@@ -8083,7 +8097,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="Translator.cpp" line="169"/>
       <source>Serbian, Latin</source>
-      <translation type="unfinished">Serbian, Latin</translation>
+      <translation>Serbi, llatí</translation>
     </message>
     <message>
       <location filename="Translator.cpp" line="170"/>
@@ -8103,7 +8117,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="Translator.cpp" line="173"/>
       <source>Spanish, Argentina</source>
-      <translation>Espanyol, Argentí</translation>
+      <translation>Espanyol, Argentina</translation>
     </message>
     <message>
       <location filename="Translator.cpp" line="174"/>
@@ -8133,7 +8147,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="Translator.cpp" line="152"/>
       <source>Georgian</source>
-      <translation>Georgia</translation>
+      <translation>Georgià</translation>
     </message>
   </context>
   <context>
@@ -8342,22 +8356,22 @@ Do you want to specify another directory?</source>
   <context>
     <name>Gui::View3DInventor</name>
     <message>
-      <location filename="../View3DInventor.cpp" line="485"/>
+      <location filename="../View3DInventor.cpp" line="511"/>
       <source>Export PDF</source>
       <translation>Exporta a PDF</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="486"/>
+      <location filename="../View3DInventor.cpp" line="512"/>
       <source>PDF file</source>
       <translation>Arxiu PDF</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="516"/>
+      <location filename="../View3DInventor.cpp" line="542"/>
       <source>Opening file failed</source>
       <translation>No s'ha pogut obrir l'arxiu</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="517"/>
+      <location filename="../View3DInventor.cpp" line="543"/>
       <source>Can't open file '%1' for writing.</source>
       <translation>No s'ha pogut obrir l'arxiu '%1' per escriure-hi.</translation>
     </message>
@@ -8626,7 +8640,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="../Application.cpp" line="746"/>
       <source>Cannot save to unknown filetype: %1</source>
-      <translation>No es pot guardar el tipus de fitxer desconegut: %1</translation>
+      <translation>No es pot desar el tipus de fitxer desconegut: %1</translation>
     </message>
     <message>
       <location filename="../Application.cpp" line="1427"/>
@@ -8658,12 +8672,12 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="../CommandDoc.cpp" line="165"/>
       <source>There were errors while loading the file. Some data might have been modified or not recovered at all. Look in the report view for more specific information about the objects involved.</source>
-      <translation>Hi hagué errors quan es carregava el fitxer. Algunes dades s'han pogut modificar o no s'han recuperat. Cerqueu a la vista d'informes per a obtindre informació més específica sobre els objectes implicats.</translation>
+      <translation>S'han produït errors en carregar el fitxer. Algunes dades es poden haver modificades o no s'han recuperat. Consulteu la vista d'informe per a obtenir informació més específica sobre els objectes implicats.</translation>
     </message>
     <message>
       <location filename="../CommandDoc.cpp" line="170"/>
       <source>There were serious errors while loading the file. Some data might have been modified or not recovered at all. Saving the project will most likely result in loss of data.</source>
-      <translation>Hi ha hagut greus errors en carregar l'arxiu. Pot ser que s'hagin modificat dades o no s'hagin recuperat. Guardar el projecte molt probablement resulti en pèrdua de dades.</translation>
+      <translation>Hi ha hagut errors greus en carregar el fitxer. Pot ser que s'hagin modificat dades o no s'hagin recuperat. Desar el projecte probablement provocarà la pèrdua de dades.</translation>
     </message>
     <message>
       <location filename="../CommandDoc.cpp" line="233"/>
@@ -8777,7 +8791,7 @@ Be aware the point where you click matters.</source>
       <location filename="../CommandView.cpp" line="342"/>
       <location filename="../CommandView.cpp" line="575"/>
       <source>Save views...</source>
-      <translation>Guarda les visualitzacions...</translation>
+      <translation>Desa les visualitzacions...</translation>
     </message>
     <message>
       <location filename="../CommandView.cpp" line="344"/>
@@ -8807,7 +8821,7 @@ Be aware the point where you click matters.</source>
     <message>
       <location filename="../CommandView.cpp" line="425"/>
       <source>Save frozen views</source>
-      <translation>Guarda les visualitzacions congelades</translation>
+      <translation>Desa les visualitzacions congelades</translation>
     </message>
     <message>
       <location filename="../CommandView.cpp" line="426"/>
@@ -8845,127 +8859,127 @@ Do you want to continue?</source>
     <message>
       <location filename="../CommandView.cpp" line="1851"/>
       <source>Save picture</source>
-      <translation>Guarda la imatge</translation>
+      <translation>Desa la imatge</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="540"/>
+      <location filename="../DlgParameterImp.cpp" line="539"/>
       <source>New sub-group</source>
       <translation>Subgrup nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="540"/>
-      <location filename="../DlgParameterImp.cpp" line="764"/>
-      <location filename="../DlgParameterImp.cpp" line="793"/>
-      <location filename="../DlgParameterImp.cpp" line="823"/>
-      <location filename="../DlgParameterImp.cpp" line="859"/>
-      <location filename="../DlgParameterImp.cpp" line="888"/>
+      <location filename="../DlgParameterImp.cpp" line="539"/>
+      <location filename="../DlgParameterImp.cpp" line="763"/>
+      <location filename="../DlgParameterImp.cpp" line="792"/>
+      <location filename="../DlgParameterImp.cpp" line="822"/>
+      <location filename="../DlgParameterImp.cpp" line="858"/>
+      <location filename="../DlgParameterImp.cpp" line="887"/>
       <source>Enter the name:</source>
       <translation>Introduïu el nom nou:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="764"/>
-      <location filename="../DlgParameterImp.cpp" line="780"/>
+      <location filename="../DlgParameterImp.cpp" line="763"/>
+      <location filename="../DlgParameterImp.cpp" line="779"/>
       <source>New text item</source>
       <translation>Nou element de text</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="780"/>
-      <location filename="../DlgParameterImp.cpp" line="1047"/>
+      <location filename="../DlgParameterImp.cpp" line="779"/>
+      <location filename="../DlgParameterImp.cpp" line="1046"/>
       <source>Enter your text:</source>
       <translation>Introduïu el text:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="793"/>
-      <location filename="../DlgParameterImp.cpp" line="809"/>
+      <location filename="../DlgParameterImp.cpp" line="792"/>
+      <location filename="../DlgParameterImp.cpp" line="808"/>
       <source>New integer item</source>
       <translation>Element enter nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="809"/>
-      <location filename="../DlgParameterImp.cpp" line="839"/>
-      <location filename="../DlgParameterImp.cpp" line="875"/>
-      <location filename="../DlgParameterImp.cpp" line="1091"/>
-      <location filename="../DlgParameterImp.cpp" line="1135"/>
-      <location filename="../DlgParameterImp.cpp" line="1188"/>
+      <location filename="../DlgParameterImp.cpp" line="808"/>
+      <location filename="../DlgParameterImp.cpp" line="838"/>
+      <location filename="../DlgParameterImp.cpp" line="874"/>
+      <location filename="../DlgParameterImp.cpp" line="1090"/>
+      <location filename="../DlgParameterImp.cpp" line="1134"/>
+      <location filename="../DlgParameterImp.cpp" line="1187"/>
       <source>Enter your number:</source>
       <translation>Introduïu el vostre número:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="823"/>
-      <location filename="../DlgParameterImp.cpp" line="840"/>
+      <location filename="../DlgParameterImp.cpp" line="822"/>
+      <location filename="../DlgParameterImp.cpp" line="839"/>
       <source>New unsigned item</source>
       <translation>Element sense signe nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="859"/>
-      <location filename="../DlgParameterImp.cpp" line="875"/>
+      <location filename="../DlgParameterImp.cpp" line="858"/>
+      <location filename="../DlgParameterImp.cpp" line="874"/>
       <source>New float item</source>
       <translation>Element flotant nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="888"/>
+      <location filename="../DlgParameterImp.cpp" line="887"/>
       <source>New Boolean item</source>
       <translation>Element booleà nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="906"/>
-      <location filename="../DlgParameterImp.cpp" line="1236"/>
+      <location filename="../DlgParameterImp.cpp" line="905"/>
+      <location filename="../DlgParameterImp.cpp" line="1235"/>
       <source>Choose an item:</source>
       <translation>Trieu un element:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="906"/>
+      <location filename="../DlgParameterImp.cpp" line="905"/>
       <source>New boolean item</source>
       <translation>Element booleà nou</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="965"/>
+      <location filename="../DlgParameterImp.cpp" line="964"/>
       <source>Rename group</source>
       <translation>Reanomena el grup</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="966"/>
+      <location filename="../DlgParameterImp.cpp" line="965"/>
       <source>The group '%1' cannot be renamed.</source>
       <translation>El grup '%1' no es pot reanomenar.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="971"/>
+      <location filename="../DlgParameterImp.cpp" line="970"/>
       <source>Existing group</source>
       <translation>Grup existent</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="972"/>
+      <location filename="../DlgParameterImp.cpp" line="971"/>
       <source>The group '%1' already exists.</source>
       <translation>El grup '%1' ja existeix.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="1047"/>
-      <location filename="../DlgParameterImp.cpp" line="1091"/>
-      <location filename="../DlgParameterImp.cpp" line="1136"/>
-      <location filename="../DlgParameterImp.cpp" line="1188"/>
-      <location filename="../DlgParameterImp.cpp" line="1236"/>
+      <location filename="../DlgParameterImp.cpp" line="1046"/>
+      <location filename="../DlgParameterImp.cpp" line="1090"/>
+      <location filename="../DlgParameterImp.cpp" line="1135"/>
+      <location filename="../DlgParameterImp.cpp" line="1187"/>
+      <location filename="../DlgParameterImp.cpp" line="1235"/>
       <source>Change value</source>
       <translation>Canvia el valor</translation>
     </message>
     <message>
       <location filename="../Document.cpp" line="131"/>
       <source>Do you want to skip confirmation of further critical message notifications while loading the file?</source>
-      <translation type="unfinished">Do you want to skip confirmation of further critical message notifications while loading the file?</translation>
+      <translation>Voleu ometre la confirmació de més missatges de notificacions crítiques mentre es carrega el fitxer?</translation>
     </message>
     <message>
       <location filename="../Document.cpp" line="132"/>
       <source>Critical Message</source>
-      <translation type="unfinished">Critical Message</translation>
+      <translation>Missatge crític</translation>
     </message>
     <message>
       <location filename="../Document.cpp" line="190"/>
       <source>Too many message notifications. Notification temporarily stopped. Look at the report view for more information.</source>
-      <translation type="unfinished">Too many message notifications. Notification temporarily stopped. Look at the report view for more information.</translation>
+      <translation>Massa notificacions de missatges. S'ha aturat temporalment la notificació. Consulteu la vista de l'informe per a més informació.</translation>
     </message>
     <message>
       <location filename="../Document.cpp" line="209"/>
       <source>Warning</source>
-      <translation type="unfinished">Warning</translation>
+      <translation>Avís</translation>
     </message>
     <message>
       <location filename="../Document.cpp" line="213"/>
@@ -8975,7 +8989,7 @@ Do you want to continue?</source>
     <message>
       <location filename="../Document.cpp" line="217"/>
       <source>Critical</source>
-      <translation type="unfinished">Critical</translation>
+      <translation>Crític</translation>
     </message>
     <message>
       <location filename="../Document.cpp" line="1221"/>
@@ -9041,7 +9055,7 @@ Voleu desar-lo amb un nom diferent?</translation>
       <location filename="../Document.cpp" line="1414"/>
       <location filename="../Document.cpp" line="1497"/>
       <source>Saving aborted</source>
-      <translation>S'avorta el procés de guardar.</translation>
+      <translation>S'ha interromput el desament</translation>
     </message>
     <message>
       <location filename="../Document.cpp" line="1329"/>
@@ -9057,7 +9071,7 @@ Voleu desar-lo amb un nom diferent?</translation>
       <location filename="../Document.cpp" line="1364"/>
       <location filename="../Document.cpp" line="1408"/>
       <source>Saving document failed</source>
-      <translation>No s'ha pogut guardar el document.</translation>
+      <translation>No s'ha pogut desar el document</translation>
     </message>
     <message>
       <location filename="../Document.cpp" line="1378"/>
@@ -9141,9 +9155,9 @@ Trieu «No» per a desfer només en el document actiu.
 Trieu «Interromp» per a interrompre</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="346"/>
+      <location filename="../EditorView.cpp" line="347"/>
       <source>Save Macro</source>
-      <translation>Guarda la macro</translation>
+      <translation>Desa la macro</translation>
     </message>
     <message>
       <location filename="../MouseSelection.cpp" line="214"/>
@@ -9213,12 +9227,12 @@ Please open a browser window and type in: http://localhost:%1.</source>
       <translation>Opcions...</translation>
     </message>
     <message>
-      <location filename="../View3DInventorViewer.cpp" line="2119"/>
+      <location filename="../View3DInventorViewer.cpp" line="2110"/>
       <source>Out of memory</source>
       <translation>No hi ha prou memòria.</translation>
     </message>
     <message>
-      <location filename="../View3DInventorViewer.cpp" line="2120"/>
+      <location filename="../View3DInventorViewer.cpp" line="2111"/>
       <source>Not enough memory available to display the data.</source>
       <translation>No hi ha prou memòria disponible per a mostrar les dades.</translation>
     </message>
@@ -9257,7 +9271,7 @@ Please open a browser window and type in: http://localhost:%1.</source>
     <message>
       <location filename="../MainWindow.cpp" line="593"/>
       <source>Do you want to save your changes to document '%1' before closing?</source>
-      <translation>Voleu guardar els vostres canvis en el document '%1' abans de tancar?</translation>
+      <translation>Voleu desar els canvis en el document '%1' abans de tancar?</translation>
     </message>
     <message>
       <location filename="../MainWindow.cpp" line="596"/>
@@ -10036,12 +10050,12 @@ la còpia actual es perdrà.</translation>
       <location filename="../CommandStd.cpp" line="539"/>
       <location filename="../CommandStd.cpp" line="542"/>
       <source>FreeCAD Website</source>
-      <translation>LLoc web del FreeCAD</translation>
+      <translation>Lloc web del FreeCAD</translation>
     </message>
     <message>
       <location filename="../CommandStd.cpp" line="540"/>
       <source>The FreeCAD website</source>
-      <translation>El lLoc web del FreeCAD</translation>
+      <translation>El lloc web del FreeCAD</translation>
     </message>
   </context>
   <context>
@@ -10611,7 +10625,7 @@ la còpia actual es perdrà.</translation>
     <message>
       <location filename="../CommandStd.cpp" line="680"/>
       <source>The official Python website</source>
-      <translation>El llloc web oficial del Python</translation>
+      <translation>El lloc web oficial del Python</translation>
     </message>
   </context>
   <context>
@@ -10733,7 +10747,7 @@ la còpia actual es perdrà.</translation>
       <location filename="../CommandDoc.cpp" line="636"/>
       <location filename="../CommandDoc.cpp" line="638"/>
       <source>Save the active document</source>
-      <translation>Guarda el document actiu</translation>
+      <translation>Desa el document actiu</translation>
     </message>
   </context>
   <context>
@@ -10755,7 +10769,7 @@ la còpia actual es perdrà.</translation>
     <message>
       <location filename="../CommandDoc.cpp" line="664"/>
       <source>Save &amp;As...</source>
-      <translation>&amp;Anomena i guarda...</translation>
+      <translation>&amp;Anomena i desa...</translation>
     </message>
     <message>
       <location filename="../CommandDoc.cpp" line="665"/>
@@ -10769,7 +10783,7 @@ la còpia actual es perdrà.</translation>
     <message>
       <location filename="../CommandDoc.cpp" line="693"/>
       <source>Save a &amp;Copy...</source>
-      <translation>Guarda una &amp;còpia...</translation>
+      <translation>Desa una &amp;còpia...</translation>
     </message>
     <message>
       <location filename="../CommandDoc.cpp" line="694"/>
@@ -11699,7 +11713,7 @@ la còpia actual es perdrà.</translation>
     <message>
       <location filename="../CommandView.cpp" line="3681"/>
       <source>Store working view</source>
-      <translation type="unfinished">Store working view</translation>
+      <translation>Desa la vista de treball</translation>
     </message>
     <message>
       <location filename="../CommandView.cpp" line="3682"/>
@@ -11746,7 +11760,7 @@ la còpia actual es perdrà.</translation>
       <location filename="../CommandView.cpp" line="3422"/>
       <location filename="../CommandView.cpp" line="3424"/>
       <source>Display all documents in the tree view</source>
-      <translation>Mostrar tots els documents en la vista d'arbre</translation>
+      <translation>Mostra tots els documents en la vista d'arbre</translation>
     </message>
   </context>
   <context>
@@ -11899,7 +11913,7 @@ la còpia actual es perdrà.</translation>
     <message>
       <location filename="../CommandView.cpp" line="1810"/>
       <source>Save picture...</source>
-      <translation>Guarda la imatge...</translation>
+      <translation>Desa la imatge...</translation>
     </message>
     <message>
       <location filename="../CommandView.cpp" line="1811"/>
@@ -12089,7 +12103,7 @@ Encara voleu continuar?</translation>
     <message>
       <location filename="../CommandDoc.cpp" line="762"/>
       <source>This will discard all the changes since last file save.</source>
-      <translation>Això descartarà tots els canvis des de l'última acció de guardar el fitxer. </translation>
+      <translation>Això descartarà tots els canvis des de l'última acció de desar el fitxer.</translation>
     </message>
     <message>
       <location filename="../CommandDoc.cpp" line="763"/>
@@ -12127,18 +12141,18 @@ Encara voleu continuar?</translation>
     <message>
       <location filename="../TreeParams.cpp" line="1279"/>
       <source>Allow tree view columns to be manually resized.</source>
-      <translation type="unfinished">Allow tree view columns to be manually resized.</translation>
+      <translation>Permet redimensionar manualment les columnes de la vista en arbre.</translation>
     </message>
   </context>
   <context>
     <name>ViewIsometricCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1807"/>
+      <location filename="../NaviCube.cpp" line="1848"/>
       <source>Isometric</source>
       <translation>Isomètrica</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1808"/>
+      <location filename="../NaviCube.cpp" line="1849"/>
       <source>Set NaviCube to Isometric mode</source>
       <translation>Estableix NaviCube en el mode isomètric</translation>
     </message>
@@ -12146,12 +12160,12 @@ Encara voleu continuar?</translation>
   <context>
     <name>ViewOrthographicCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1827"/>
+      <location filename="../NaviCube.cpp" line="1868"/>
       <source>Orthographic</source>
       <translation>Ortogonal</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1828"/>
+      <location filename="../NaviCube.cpp" line="1869"/>
       <source>Set View to Orthographic mode</source>
       <translation>Estableix la visualització al mode ortogonal</translation>
     </message>
@@ -12159,12 +12173,12 @@ Encara voleu continuar?</translation>
   <context>
     <name>ViewPerspectiveCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1848"/>
+      <location filename="../NaviCube.cpp" line="1889"/>
       <source>Perspective</source>
       <translation>Perspectiva</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1849"/>
+      <location filename="../NaviCube.cpp" line="1890"/>
       <source>Set View to Perspective mode</source>
       <translation>Defineix la visualització en mode de perspectiva</translation>
     </message>
@@ -12172,12 +12186,12 @@ Encara voleu continuar?</translation>
   <context>
     <name>ViewZoomToFitCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1869"/>
+      <location filename="../NaviCube.cpp" line="1910"/>
       <source>Zoom to fit</source>
       <translation>Zoom per a encabir</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1870"/>
+      <location filename="../NaviCube.cpp" line="1911"/>
       <source>Zoom so that model fills the view</source>
       <translation>Zoom perquè el model ompli la visualització</translation>
     </message>

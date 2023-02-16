@@ -439,7 +439,7 @@
   <context>
     <name>Gui::AccelLineEdit</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="495"/>
+      <location filename="../DlgActionsImp.cpp" line="493"/>
       <source>none</source>
       <translation>無</translation>
     </message>
@@ -589,7 +589,7 @@ while doing a left or right click and move the mouse up or down</source>
   <context>
     <name>Gui::ControlSingleton</name>
     <message>
-      <location filename="../Control.cpp" line="140"/>
+      <location filename="../Control.cpp" line="141"/>
       <source>Task panel</source>
       <translation>工作面板</translation>
     </message>
@@ -757,37 +757,37 @@ while doing a left or right click and move the mouse up or down</source>
   <context>
     <name>Gui::Dialog::CameraDialog</name>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="277"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="285"/>
       <source>Camera settings</source>
       <translation>相機視角設定</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="284"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="292"/>
       <source>Orientation</source>
       <translation>定位</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="298"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="306"/>
       <source>Q0</source>
       <translation>Q0</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="308"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="316"/>
       <source>Q1</source>
       <translation>Q1</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="318"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="326"/>
       <source>Q2</source>
       <translation>Q2</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="328"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="336"/>
       <source>Q3</source>
       <translation>Q3</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="337"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="345"/>
       <source>Current view</source>
       <translation>目前視角</translation>
     </message>
@@ -2745,25 +2745,25 @@ Specify another directory, please.</source>
     <name>Gui::Dialog::DlgParameterImp</name>
     <message>
       <location filename="../DlgParameterImp.cpp" line="67"/>
-      <location filename="../DlgParameterImp.cpp" line="218"/>
+      <location filename="../DlgParameterImp.cpp" line="217"/>
       <source>Group</source>
       <translation>群組</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="219"/>
+      <location filename="../DlgParameterImp.cpp" line="218"/>
       <source>Name</source>
       <translation>名稱</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="220"/>
+      <location filename="../DlgParameterImp.cpp" line="219"/>
       <source>Type</source>
       <translation>類型</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="221"/>
+      <location filename="../DlgParameterImp.cpp" line="220"/>
       <source>Value</source>
       <translation>值</translation>
     </message>
@@ -2778,17 +2778,17 @@ Specify another directory, please.</source>
       <translation>使用者參數</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="121"/>
+      <location filename="../DlgParameterImp.cpp" line="120"/>
       <source>Search Group</source>
       <translation>搜尋群組</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="439"/>
+      <location filename="../DlgParameterImp.cpp" line="438"/>
       <source>Invalid input</source>
       <translation>無效的輸入</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="440"/>
+      <location filename="../DlgParameterImp.cpp" line="439"/>
       <source>Invalid key name '%1'</source>
       <translation>無效的鍵名'%1'</translation>
     </message>
@@ -4163,62 +4163,77 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
       <translation type="unfinished">Default license for new documents</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="685"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="39"/>
       <source>All rights reserved</source>
       <translation>版權所有</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="690"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="40"/>
       <source>Creative Commons Attribution</source>
       <translation type="unfinished">Creative Commons Attribution</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="695"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="41"/>
       <source>Creative Commons Attribution-ShareAlike</source>
       <translation type="unfinished">Creative Commons Attribution-ShareAlike</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="700"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="42"/>
       <source>Creative Commons Attribution-NoDerivatives</source>
       <translation type="unfinished">Creative Commons Attribution-NoDerivatives</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="705"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="43"/>
       <source>Creative Commons Attribution-NonCommercial</source>
       <translation type="unfinished">Creative Commons Attribution-NonCommercial</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="710"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="44"/>
       <source>Creative Commons Attribution-NonCommercial-ShareAlike</source>
       <translation type="unfinished">Creative Commons Attribution-NonCommercial-ShareAlike</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="715"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="45"/>
       <source>Creative Commons Attribution-NonCommercial-NoDerivatives</source>
       <translation type="unfinished">Creative Commons Attribution-NonCommercial-NoDerivatives</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="720"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="46"/>
       <source>Public Domain</source>
       <translation>公眾領域</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="725"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="47"/>
       <source>FreeArt</source>
       <translation>自由藝術</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="730"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="48"/>
+      <source>CERN Open Hardware Licence strongly-reciprocal</source>
+      <translation type="unfinished">CERN Open Hardware Licence strongly-reciprocal</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="49"/>
+      <source>CERN Open Hardware Licence weakly-reciprocal</source>
+      <translation type="unfinished">CERN Open Hardware Licence weakly-reciprocal</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="50"/>
+      <source>CERN Open Hardware Licence permissive</source>
+      <translation type="unfinished">CERN Open Hardware Licence permissive</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="51"/>
       <source>Other</source>
       <translation>其他</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="738"/>
+      <location filename="../DlgSettingsDocument.ui" line="688"/>
       <source>License URL</source>
       <translation>授權連結</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="745"/>
+      <location filename="../DlgSettingsDocument.ui" line="695"/>
       <source>URL describing more about the license</source>
       <translation type="unfinished">URL describing more about the license</translation>
     </message>
@@ -4226,17 +4241,17 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
   <context>
     <name>Gui::Dialog::DlgSettingsDocumentImp</name>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>The format of the date to use.</source>
       <translation type="unfinished">The format of the date to use.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>Default</source>
       <translation>預設</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>Format</source>
       <translation type="unfinished">Format</translation>
     </message>
@@ -4720,7 +4735,6 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="87"/>
-      <location filename="../DlgSettingsNavigation.ui" line="149"/>
       <source>Corner where navigation cube is shown</source>
       <translation type="unfinished">Corner where navigation cube is shown</translation>
     </message>
@@ -4760,6 +4774,11 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
       <translation type="unfinished">Font name:</translation>
     </message>
     <message>
+      <location filename="../DlgSettingsNavigation.ui" line="149"/>
+      <source>Font name of the navigation cube</source>
+      <translation type="unfinished">Font name of the navigation cube</translation>
+    </message>
+    <message>
       <location filename="../DlgSettingsNavigation.ui" line="165"/>
       <source>Cube size</source>
       <translation type="unfinished">Cube size</translation>
@@ -4776,8 +4795,8 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="213"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Font size for the NaviCube text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Font size for the NaviCube text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Font size of the navigation cube</source>
+      <translation type="unfinished">Font size of the navigation cube</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="250"/>
@@ -4941,52 +4960,52 @@ Mouse tilting is not disabled by this setting.</translation>
       <translation type="unfinished">Disable touchscreen tilt gesture</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="155"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="161"/>
       <source>Isometric</source>
       <translation>等角立體</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="156"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="162"/>
       <source>Dimetric</source>
       <translation>二等角立體</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="157"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="163"/>
       <source>Trimetric</source>
       <translation>不等角立體</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="158"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="164"/>
       <source>Top</source>
       <translation>上視圖</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="159"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="165"/>
       <source>Front</source>
       <translation>前視圖</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="160"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="166"/>
       <source>Left</source>
       <translation>左視圖</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="161"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="167"/>
       <source>Right</source>
       <translation>右視圖</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="162"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="168"/>
       <source>Rear</source>
       <translation>後視圖</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="163"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="169"/>
       <source>Bottom</source>
       <translation>底視圖</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="164"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="170"/>
       <source>Custom</source>
       <translation>自訂</translation>
     </message>
@@ -5394,12 +5413,12 @@ The preference system is the one set in the general preferences.</translation>
   <context>
     <name>Gui::Dialog::DlgUnitsCalculator</name>
     <message>
-      <location filename="../DlgUnitsCalculatorImp.cpp" line="147"/>
+      <location filename="../DlgUnitsCalculatorImp.cpp" line="149"/>
       <source>unknown unit:</source>
       <translation type="unfinished">unknown unit:</translation>
     </message>
     <message>
-      <location filename="../DlgUnitsCalculatorImp.cpp" line="152"/>
+      <location filename="../DlgUnitsCalculatorImp.cpp" line="154"/>
       <source>unit mismatch</source>
       <translation type="unfinished">unit mismatch</translation>
     </message>
@@ -5710,12 +5729,12 @@ The 'Status' column shows whether the document could be recovered.</translation>
   <context>
     <name>Gui::Dialog::IconDialog</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="431"/>
+      <location filename="../DlgActionsImp.cpp" line="429"/>
       <source>Icon folders</source>
       <translation>圖示資料夾</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="567"/>
+      <location filename="../DlgActionsImp.cpp" line="563"/>
       <source>Add icon folder</source>
       <translation>增加圖示資料夾</translation>
     </message>
@@ -5723,17 +5742,17 @@ The 'Status' column shows whether the document could be recovered.</translation>
   <context>
     <name>Gui::Dialog::IconFolders</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="544"/>
+      <location filename="../DlgActionsImp.cpp" line="540"/>
       <source>Add or remove custom icon folders</source>
       <translation>增加或刪除自訂圖示資料夾</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="591"/>
+      <location filename="../DlgActionsImp.cpp" line="587"/>
       <source>Remove folder</source>
       <translation>刪除資料夾</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="592"/>
+      <location filename="../DlgActionsImp.cpp" line="588"/>
       <source>Removing a folder only takes effect after an application restart.</source>
       <translation>僅於應用程式重新啟動後才移除資料夾</translation>
     </message>
@@ -5802,80 +5821,80 @@ The 'Status' column shows whether the document could be recovered.</translation>
   <context>
     <name>Gui::Dialog::ParameterGroup</name>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="456"/>
-      <location filename="../DlgParameterImp.cpp" line="483"/>
-      <location filename="../DlgParameterImp.cpp" line="631"/>
+      <location filename="../DlgParameterImp.cpp" line="455"/>
+      <location filename="../DlgParameterImp.cpp" line="482"/>
+      <location filename="../DlgParameterImp.cpp" line="630"/>
       <source>Expand</source>
       <translation>展開</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="458"/>
-      <location filename="../DlgParameterImp.cpp" line="632"/>
+      <location filename="../DlgParameterImp.cpp" line="457"/>
+      <location filename="../DlgParameterImp.cpp" line="631"/>
       <source>Add sub-group</source>
       <translation>新增子群組</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="459"/>
-      <location filename="../DlgParameterImp.cpp" line="506"/>
-      <location filename="../DlgParameterImp.cpp" line="633"/>
+      <location filename="../DlgParameterImp.cpp" line="458"/>
+      <location filename="../DlgParameterImp.cpp" line="505"/>
+      <location filename="../DlgParameterImp.cpp" line="632"/>
       <source>Remove group</source>
       <translation>移除群組</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="460"/>
-      <location filename="../DlgParameterImp.cpp" line="634"/>
+      <location filename="../DlgParameterImp.cpp" line="459"/>
+      <location filename="../DlgParameterImp.cpp" line="633"/>
       <source>Rename group</source>
       <translation>重命名群組</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="462"/>
-      <location filename="../DlgParameterImp.cpp" line="635"/>
+      <location filename="../DlgParameterImp.cpp" line="461"/>
+      <location filename="../DlgParameterImp.cpp" line="634"/>
       <source>Export parameter</source>
       <translation>匯出參數</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="463"/>
-      <location filename="../DlgParameterImp.cpp" line="636"/>
+      <location filename="../DlgParameterImp.cpp" line="462"/>
+      <location filename="../DlgParameterImp.cpp" line="635"/>
       <source>Import parameter</source>
       <translation>匯入參數</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="481"/>
+      <location filename="../DlgParameterImp.cpp" line="480"/>
       <source>Collapse</source>
       <translation>瓦解</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="506"/>
+      <location filename="../DlgParameterImp.cpp" line="505"/>
       <source>Do you really want to remove this parameter group?</source>
       <translation type="unfinished">Do you really want to remove this parameter group?</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="553"/>
+      <location filename="../DlgParameterImp.cpp" line="552"/>
       <source>Existing sub-group</source>
       <translation>現有子群組</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="554"/>
+      <location filename="../DlgParameterImp.cpp" line="553"/>
       <source>The sub-group '%1' already exists.</source>
       <translation>子群組'%1'已經存在。</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="567"/>
+      <location filename="../DlgParameterImp.cpp" line="566"/>
       <source>Export parameter to file</source>
       <translation>匯出參數到檔案</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="583"/>
+      <location filename="../DlgParameterImp.cpp" line="582"/>
       <source>Import parameter from file</source>
       <translation>從檔案中匯入參數</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="613"/>
+      <location filename="../DlgParameterImp.cpp" line="612"/>
       <source>Import Error</source>
       <translation>匯入錯誤</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="613"/>
+      <location filename="../DlgParameterImp.cpp" line="612"/>
       <source>Reading from '%1' failed.</source>
       <translation>讀取'%1'失敗。</translation>
     </message>
@@ -5883,49 +5902,58 @@ The 'Status' column shows whether the document could be recovered.</translation>
   <context>
     <name>Gui::Dialog::ParameterValue</name>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="650"/>
+      <location filename="../DlgParameterImp.cpp" line="649"/>
       <source>Change value</source>
       <translation>變更值</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="652"/>
+      <location filename="../DlgParameterImp.cpp" line="651"/>
       <source>Remove key</source>
       <translation>移除鍵</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="653"/>
+      <location filename="../DlgParameterImp.cpp" line="652"/>
       <source>Rename key</source>
       <translation>重命名鍵</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="657"/>
+      <location filename="../DlgParameterImp.cpp" line="656"/>
       <source>New</source>
       <translation>新增</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="658"/>
+      <location filename="../DlgParameterImp.cpp" line="657"/>
       <source>New string item</source>
       <translation>新增字串項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="659"/>
+      <location filename="../DlgParameterImp.cpp" line="658"/>
       <source>New float item</source>
       <translation>新增浮點項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="660"/>
+      <location filename="../DlgParameterImp.cpp" line="659"/>
       <source>New integer item</source>
       <translation>新增整數項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="661"/>
+      <location filename="../DlgParameterImp.cpp" line="660"/>
       <source>New unsigned item</source>
       <translation>新的無符號項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="662"/>
+      <location filename="../DlgParameterImp.cpp" line="661"/>
       <source>New Boolean item</source>
       <translation>新增布林項目</translation>
+    </message>
+    <message>
+      <location filename="../DlgParameterImp.cpp" line="773"/>
+      <location filename="../DlgParameterImp.cpp" line="802"/>
+      <location filename="../DlgParameterImp.cpp" line="832"/>
+      <location filename="../DlgParameterImp.cpp" line="868"/>
+      <location filename="../DlgParameterImp.cpp" line="897"/>
+      <source>Existing item</source>
+      <translation>現有項目</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="774"/>
@@ -5933,15 +5961,6 @@ The 'Status' column shows whether the document could be recovered.</translation>
       <location filename="../DlgParameterImp.cpp" line="833"/>
       <location filename="../DlgParameterImp.cpp" line="869"/>
       <location filename="../DlgParameterImp.cpp" line="898"/>
-      <source>Existing item</source>
-      <translation>現有項目</translation>
-    </message>
-    <message>
-      <location filename="../DlgParameterImp.cpp" line="775"/>
-      <location filename="../DlgParameterImp.cpp" line="804"/>
-      <location filename="../DlgParameterImp.cpp" line="834"/>
-      <location filename="../DlgParameterImp.cpp" line="870"/>
-      <location filename="../DlgParameterImp.cpp" line="899"/>
       <source>The item '%1' already exists.</source>
       <translation>該項目'%1'已存在。</translation>
     </message>
@@ -6241,13 +6260,13 @@ The 'Status' column shows whether the document could be recovered.</translation>
     <name>Gui::Dialog::Transform</name>
     <message>
       <location filename="../Transform.cpp" line="291"/>
-      <location filename="../Transform.cpp" line="414"/>
+      <location filename="../Transform.cpp" line="419"/>
       <source>Cancel</source>
       <translation>取消</translation>
     </message>
     <message>
       <location filename="../Transform.cpp" line="292"/>
-      <location filename="../Transform.cpp" line="415"/>
+      <location filename="../Transform.cpp" line="420"/>
       <source>Transform</source>
       <translation>轉換</translation>
     </message>
@@ -6344,14 +6363,14 @@ originally selected prior to opening this dialog</translation>
       <translation>複合檢視</translation>
     </message>
     <message>
-      <location filename="../ComboView.cpp" line="73"/>
-      <location filename="../ComboView.cpp" line="141"/>
+      <location filename="../ComboView.cpp" line="74"/>
+      <location filename="../ComboView.cpp" line="142"/>
       <source>Model</source>
       <translation>模型</translation>
     </message>
     <message>
-      <location filename="../ComboView.cpp" line="82"/>
-      <location filename="../ComboView.cpp" line="142"/>
+      <location filename="../ComboView.cpp" line="83"/>
+      <location filename="../ComboView.cpp" line="143"/>
       <source>Tasks</source>
       <translation>任務</translation>
     </message>
@@ -6489,72 +6508,72 @@ originally selected prior to opening this dialog</translation>
       <translation type="unfinished">Picked object list</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="590"/>
+      <location filename="../SelectionView.cpp" line="589"/>
       <source>Select only</source>
       <translation>僅選擇</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="592"/>
+      <location filename="../SelectionView.cpp" line="593"/>
       <source>Selects only this object</source>
       <translation>僅選擇此物件</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="593"/>
+      <location filename="../SelectionView.cpp" line="595"/>
       <source>Deselect</source>
       <translation>取消選擇</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="595"/>
+      <location filename="../SelectionView.cpp" line="597"/>
       <source>Deselects this object</source>
       <translation>取消選擇此物件</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="596"/>
+      <location filename="../SelectionView.cpp" line="599"/>
       <source>Zoom fit</source>
       <translation>最適化縮放</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="598"/>
+      <location filename="../SelectionView.cpp" line="601"/>
       <source>Selects and fits this object in the 3D window</source>
       <translation>於3D視窗選取並聚焦於此物件</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="599"/>
+      <location filename="../SelectionView.cpp" line="603"/>
       <source>Go to selection</source>
       <translation>進行選擇</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="600"/>
+      <location filename="../SelectionView.cpp" line="604"/>
       <source>Selects and locates this object in the tree view</source>
       <translation>於樹狀圖中選取並定位此物件</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="601"/>
+      <location filename="../SelectionView.cpp" line="606"/>
       <source>Mark to recompute</source>
       <translation>執行重新運算</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="603"/>
+      <location filename="../SelectionView.cpp" line="608"/>
       <source>Mark this object to be recomputed</source>
       <translation>對此物件執行重新運算</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="604"/>
+      <location filename="../SelectionView.cpp" line="610"/>
       <source>To python console</source>
       <translation>至 python 主控台</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="606"/>
+      <location filename="../SelectionView.cpp" line="612"/>
       <source>Reveals this object and its subelements in the python console.</source>
       <translation>將此物件及其子元素於python主控台中顯示</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="611"/>
+      <location filename="../SelectionView.cpp" line="617"/>
       <source>Duplicate subshape</source>
       <translation type="unfinished">Duplicate subshape</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="613"/>
+      <location filename="../SelectionView.cpp" line="619"/>
       <source>Creates a standalone copy of this subshape in the document</source>
       <translation type="unfinished">Creates a standalone copy of this subshape in the document</translation>
     </message>
@@ -6575,12 +6594,12 @@ originally selected prior to opening this dialog</translation>
   <context>
     <name>Gui::EditorView</name>
     <message>
-      <location filename="../EditorView.cpp" line="196"/>
+      <location filename="../EditorView.cpp" line="197"/>
       <source>Modified file</source>
       <translation>已修改檔案</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="197"/>
+      <location filename="../EditorView.cpp" line="198"/>
       <source>%1.
 
 This has been modified outside of the source editor. Do you want to reload it?</source>
@@ -6589,53 +6608,53 @@ This has been modified outside of the source editor. Do you want to reload it?</
 這已在源碼編輯器之外被修改過。您想重新載入它嗎？</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="320"/>
+      <location filename="../EditorView.cpp" line="321"/>
       <source>Unsaved document</source>
       <translation>未儲存文件</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="321"/>
+      <location filename="../EditorView.cpp" line="322"/>
       <source>The document has been modified.
 Do you want to save your changes?</source>
       <translation>該文件已被修改。您想儲存您的變更嗎？</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="347"/>
+      <location filename="../EditorView.cpp" line="348"/>
       <source>FreeCAD macro</source>
       <translation>FreeCAD巨集</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="469"/>
+      <location filename="../EditorView.cpp" line="470"/>
       <source>Export PDF</source>
       <translation>匯出 PDF</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="470"/>
+      <location filename="../EditorView.cpp" line="471"/>
       <source>PDF file</source>
       <translation>PDF 檔</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="501"/>
+      <location filename="../EditorView.cpp" line="502"/>
       <source>untitled[*]</source>
       <translation>未命名[*]</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="504"/>
+      <location filename="../EditorView.cpp" line="505"/>
       <source> - Editor</source>
       <translation>-編輯器</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="558"/>
+      <location filename="../EditorView.cpp" line="559"/>
       <source>%1 chars removed</source>
       <translation>移除 %1 字元</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="560"/>
+      <location filename="../EditorView.cpp" line="561"/>
       <source>%1 chars added</source>
       <translation>添加 %1 字元</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="562"/>
+      <location filename="../EditorView.cpp" line="563"/>
       <source>Formatted</source>
       <translation>格式化了的</translation>
     </message>
@@ -7281,7 +7300,7 @@ How do you want to proceed?</source>
   <context>
     <name>Gui::PropertyEditor::LinkLabel</name>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4314"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4313"/>
       <source>Change the linked object</source>
       <translation type="unfinished">Change the linked object</translation>
     </message>
@@ -7289,12 +7308,12 @@ How do you want to proceed?</source>
   <context>
     <name>Gui::PropertyEditor::LinkSelection</name>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4283"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4282"/>
       <source>Error</source>
       <translation>錯誤</translation>
     </message>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4283"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4282"/>
       <source>Object not found</source>
       <translation>未發現物件</translation>
     </message>
@@ -7419,77 +7438,77 @@ Do you want to exit without saving your data?</source>
       <translation>未處理未知的C++例外。</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1315"/>
+      <location filename="../PythonConsole.cpp" line="1314"/>
       <source>&amp;Copy</source>
       <translation>複製(&amp;C)</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1318"/>
+      <location filename="../PythonConsole.cpp" line="1317"/>
       <source>&amp;Copy command</source>
       <translation>複製指令(&amp;C)</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1321"/>
+      <location filename="../PythonConsole.cpp" line="1320"/>
       <source>&amp;Copy history</source>
       <translation>複製歷史(&amp;C)</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1324"/>
+      <location filename="../PythonConsole.cpp" line="1323"/>
       <source>Save history as...</source>
       <translation>另存歷史為新檔...</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1327"/>
+      <location filename="../PythonConsole.cpp" line="1326"/>
       <source>Save history</source>
       <translation>儲存歷史紀錄</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1328"/>
+      <location filename="../PythonConsole.cpp" line="1327"/>
       <source>Saves Python history across %1 sessions</source>
       <translation type="unfinished">Saves Python history across %1 sessions</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1334"/>
+      <location filename="../PythonConsole.cpp" line="1333"/>
       <source>&amp;Paste</source>
       <translation>&amp;貼上</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1338"/>
+      <location filename="../PythonConsole.cpp" line="1337"/>
       <source>Select All</source>
       <translation>全選</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1341"/>
+      <location filename="../PythonConsole.cpp" line="1340"/>
       <source>Clear console</source>
       <translation>清除工作台</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1345"/>
+      <location filename="../PythonConsole.cpp" line="1344"/>
       <source>Insert file name...</source>
       <translation>插入檔案名稱...</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1348"/>
+      <location filename="../PythonConsole.cpp" line="1347"/>
       <source>Word wrap</source>
       <translation>自動換行</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1372"/>
+      <location filename="../PythonConsole.cpp" line="1371"/>
       <source>Save History</source>
       <translation>儲存歷史記錄</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1373"/>
+      <location filename="../PythonConsole.cpp" line="1372"/>
       <source>Macro Files</source>
       <translation>巨集檔</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1392"/>
+      <location filename="../PythonConsole.cpp" line="1391"/>
       <source>Insert file name</source>
       <translation>插入檔案名稱</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1393"/>
+      <location filename="../PythonConsole.cpp" line="1392"/>
       <source>All Files</source>
       <translation>所有檔案</translation>
     </message>
@@ -7497,12 +7516,12 @@ Do you want to exit without saving your data?</source>
   <context>
     <name>Gui::PythonEditor</name>
     <message>
-      <location filename="../PythonEditor.cpp" line="155"/>
+      <location filename="../PythonEditor.cpp" line="153"/>
       <source>Comment</source>
       <translation>評論</translation>
     </message>
     <message>
-      <location filename="../PythonEditor.cpp" line="156"/>
+      <location filename="../PythonEditor.cpp" line="154"/>
       <source>Uncomment</source>
       <translation>取消註釋</translation>
     </message>
@@ -7574,22 +7593,22 @@ Do you want to exit without saving your data?</source>
   <context>
     <name>Gui::SearchBar</name>
     <message>
-      <location filename="../EditorView.cpp" line="748"/>
+      <location filename="../EditorView.cpp" line="749"/>
       <source>Previous</source>
       <translation>上一個</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="749"/>
+      <location filename="../EditorView.cpp" line="750"/>
       <source>Next</source>
       <translation type="unfinished">Next</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="750"/>
+      <location filename="../EditorView.cpp" line="751"/>
       <source>Case sensitive</source>
       <translation type="unfinished">Case sensitive</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="751"/>
+      <location filename="../EditorView.cpp" line="752"/>
       <source>Whole words</source>
       <translation type="unfinished">Whole words</translation>
     </message>
@@ -7686,7 +7705,7 @@ Do you want to specify another directory?</source>
   <context>
     <name>Gui::TaskBoxAngle</name>
     <message>
-      <location filename="../TaskDlgRelocation.cpp" line="69"/>
+      <location filename="../TaskDlgRelocation.cpp" line="67"/>
       <source>Angle</source>
       <translation>角度</translation>
     </message>
@@ -8337,22 +8356,22 @@ Do you want to specify another directory?</source>
   <context>
     <name>Gui::View3DInventor</name>
     <message>
-      <location filename="../View3DInventor.cpp" line="485"/>
+      <location filename="../View3DInventor.cpp" line="511"/>
       <source>Export PDF</source>
       <translation>匯出 PDF</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="486"/>
+      <location filename="../View3DInventor.cpp" line="512"/>
       <source>PDF file</source>
       <translation>PDF 檔</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="516"/>
+      <location filename="../View3DInventor.cpp" line="542"/>
       <source>Opening file failed</source>
       <translation>開啟檔案失敗</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="517"/>
+      <location filename="../View3DInventor.cpp" line="543"/>
       <source>Can't open file '%1' for writing.</source>
       <translation>無法開啟並寫入檔案 '%1' </translation>
     </message>
@@ -8843,102 +8862,102 @@ Do you want to continue?</source>
       <translation>儲存圖片</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="540"/>
+      <location filename="../DlgParameterImp.cpp" line="539"/>
       <source>New sub-group</source>
       <translation>新的分組</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="540"/>
-      <location filename="../DlgParameterImp.cpp" line="764"/>
-      <location filename="../DlgParameterImp.cpp" line="793"/>
-      <location filename="../DlgParameterImp.cpp" line="823"/>
-      <location filename="../DlgParameterImp.cpp" line="859"/>
-      <location filename="../DlgParameterImp.cpp" line="888"/>
+      <location filename="../DlgParameterImp.cpp" line="539"/>
+      <location filename="../DlgParameterImp.cpp" line="763"/>
+      <location filename="../DlgParameterImp.cpp" line="792"/>
+      <location filename="../DlgParameterImp.cpp" line="822"/>
+      <location filename="../DlgParameterImp.cpp" line="858"/>
+      <location filename="../DlgParameterImp.cpp" line="887"/>
       <source>Enter the name:</source>
       <translation>輸入名稱：</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="764"/>
-      <location filename="../DlgParameterImp.cpp" line="780"/>
+      <location filename="../DlgParameterImp.cpp" line="763"/>
+      <location filename="../DlgParameterImp.cpp" line="779"/>
       <source>New text item</source>
       <translation>新增文字項</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="780"/>
-      <location filename="../DlgParameterImp.cpp" line="1047"/>
+      <location filename="../DlgParameterImp.cpp" line="779"/>
+      <location filename="../DlgParameterImp.cpp" line="1046"/>
       <source>Enter your text:</source>
       <translation>輸入您的文字：</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="793"/>
-      <location filename="../DlgParameterImp.cpp" line="809"/>
+      <location filename="../DlgParameterImp.cpp" line="792"/>
+      <location filename="../DlgParameterImp.cpp" line="808"/>
       <source>New integer item</source>
       <translation>新增整數項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="809"/>
-      <location filename="../DlgParameterImp.cpp" line="839"/>
-      <location filename="../DlgParameterImp.cpp" line="875"/>
-      <location filename="../DlgParameterImp.cpp" line="1091"/>
-      <location filename="../DlgParameterImp.cpp" line="1135"/>
-      <location filename="../DlgParameterImp.cpp" line="1188"/>
+      <location filename="../DlgParameterImp.cpp" line="808"/>
+      <location filename="../DlgParameterImp.cpp" line="838"/>
+      <location filename="../DlgParameterImp.cpp" line="874"/>
+      <location filename="../DlgParameterImp.cpp" line="1090"/>
+      <location filename="../DlgParameterImp.cpp" line="1134"/>
+      <location filename="../DlgParameterImp.cpp" line="1187"/>
       <source>Enter your number:</source>
       <translation>輸入您的號碼：</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="823"/>
-      <location filename="../DlgParameterImp.cpp" line="840"/>
+      <location filename="../DlgParameterImp.cpp" line="822"/>
+      <location filename="../DlgParameterImp.cpp" line="839"/>
       <source>New unsigned item</source>
       <translation>新的無符號項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="859"/>
-      <location filename="../DlgParameterImp.cpp" line="875"/>
+      <location filename="../DlgParameterImp.cpp" line="858"/>
+      <location filename="../DlgParameterImp.cpp" line="874"/>
       <source>New float item</source>
       <translation>新增浮點項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="888"/>
+      <location filename="../DlgParameterImp.cpp" line="887"/>
       <source>New Boolean item</source>
       <translation>新增布林項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="906"/>
-      <location filename="../DlgParameterImp.cpp" line="1236"/>
+      <location filename="../DlgParameterImp.cpp" line="905"/>
+      <location filename="../DlgParameterImp.cpp" line="1235"/>
       <source>Choose an item:</source>
       <translation>選擇一個項目：</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="906"/>
+      <location filename="../DlgParameterImp.cpp" line="905"/>
       <source>New boolean item</source>
       <translation>新布林項目</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="965"/>
+      <location filename="../DlgParameterImp.cpp" line="964"/>
       <source>Rename group</source>
       <translation>重命名群組</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="966"/>
+      <location filename="../DlgParameterImp.cpp" line="965"/>
       <source>The group '%1' cannot be renamed.</source>
       <translation>'%1'群組法重新命名</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="971"/>
+      <location filename="../DlgParameterImp.cpp" line="970"/>
       <source>Existing group</source>
       <translation>現有群組</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="972"/>
+      <location filename="../DlgParameterImp.cpp" line="971"/>
       <source>The group '%1' already exists.</source>
       <translation>該群組'%1'已存在。</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="1047"/>
-      <location filename="../DlgParameterImp.cpp" line="1091"/>
-      <location filename="../DlgParameterImp.cpp" line="1136"/>
-      <location filename="../DlgParameterImp.cpp" line="1188"/>
-      <location filename="../DlgParameterImp.cpp" line="1236"/>
+      <location filename="../DlgParameterImp.cpp" line="1046"/>
+      <location filename="../DlgParameterImp.cpp" line="1090"/>
+      <location filename="../DlgParameterImp.cpp" line="1135"/>
+      <location filename="../DlgParameterImp.cpp" line="1187"/>
+      <location filename="../DlgParameterImp.cpp" line="1235"/>
       <source>Change value</source>
       <translation>變更值</translation>
     </message>
@@ -9136,7 +9155,7 @@ Choose 'No' to roll back in the active document only.
 Choose 'Abort' to abort</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="346"/>
+      <location filename="../EditorView.cpp" line="347"/>
       <source>Save Macro</source>
       <translation>儲存巨集</translation>
     </message>
@@ -9208,12 +9227,12 @@ Please open a browser window and type in: http://localhost:%1.</source>
       <translation>選項 ...</translation>
     </message>
     <message>
-      <location filename="../View3DInventorViewer.cpp" line="2119"/>
+      <location filename="../View3DInventorViewer.cpp" line="2110"/>
       <source>Out of memory</source>
       <translation>記憶體不足</translation>
     </message>
     <message>
-      <location filename="../View3DInventorViewer.cpp" line="2120"/>
+      <location filename="../View3DInventorViewer.cpp" line="2111"/>
       <source>Not enough memory available to display the data.</source>
       <translation>沒有足夠的記憶體可用來顯示資料。</translation>
     </message>
@@ -12130,12 +12149,12 @@ Do you still want to proceed?</translation>
   <context>
     <name>ViewIsometricCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1807"/>
+      <location filename="../NaviCube.cpp" line="1848"/>
       <source>Isometric</source>
       <translation>等角立體</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1808"/>
+      <location filename="../NaviCube.cpp" line="1849"/>
       <source>Set NaviCube to Isometric mode</source>
       <translation>設定導覽方塊為立體正投影模式</translation>
     </message>
@@ -12143,12 +12162,12 @@ Do you still want to proceed?</translation>
   <context>
     <name>ViewOrthographicCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1827"/>
+      <location filename="../NaviCube.cpp" line="1868"/>
       <source>Orthographic</source>
       <translation>正投影法</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1828"/>
+      <location filename="../NaviCube.cpp" line="1869"/>
       <source>Set View to Orthographic mode</source>
       <translation>將視圖切換到正投影模式</translation>
     </message>
@@ -12156,12 +12175,12 @@ Do you still want to proceed?</translation>
   <context>
     <name>ViewPerspectiveCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1848"/>
+      <location filename="../NaviCube.cpp" line="1889"/>
       <source>Perspective</source>
       <translation>透視法</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1849"/>
+      <location filename="../NaviCube.cpp" line="1890"/>
       <source>Set View to Perspective mode</source>
       <translation>將視角切換至透視法投影模式</translation>
     </message>
@@ -12169,12 +12188,12 @@ Do you still want to proceed?</translation>
   <context>
     <name>ViewZoomToFitCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1869"/>
+      <location filename="../NaviCube.cpp" line="1910"/>
       <source>Zoom to fit</source>
       <translation type="unfinished">Zoom to fit</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1870"/>
+      <location filename="../NaviCube.cpp" line="1911"/>
       <source>Zoom so that model fills the view</source>
       <translation type="unfinished">Zoom so that model fills the view</translation>
     </message>

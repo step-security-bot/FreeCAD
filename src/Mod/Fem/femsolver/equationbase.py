@@ -129,4 +129,24 @@ class HeatViewProxy(BaseViewProxy):
         return ":/icons/FEM_EquationHeat.svg"
 
 
+class MagnetodynamicProxy(BaseProxy):
+    pass
+
+
+class MagnetodynamicViewProxy(BaseViewProxy):
+
+    def getIcon(self):
+        return ":/icons/FEM_EquationMagnetodynamic.svg"
+
+
+class Magnetodynamic2DProxy(BaseProxy):
+    pass
+
+
+class Magnetodynamic2DViewProxy(BaseViewProxy):
+
+    def getIcon(self):
+        return ":/icons/FEM_EquationMagnetodynamic2D.svg"
+
+
 ##  @}

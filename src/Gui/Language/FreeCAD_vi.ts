@@ -439,7 +439,7 @@
   <context>
     <name>Gui::AccelLineEdit</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="495"/>
+      <location filename="../DlgActionsImp.cpp" line="493"/>
       <source>none</source>
       <translation>không có</translation>
     </message>
@@ -590,7 +590,7 @@ while doing a left or right click and move the mouse up or down</source>
   <context>
     <name>Gui::ControlSingleton</name>
     <message>
-      <location filename="../Control.cpp" line="140"/>
+      <location filename="../Control.cpp" line="141"/>
       <source>Task panel</source>
       <translation>Bảng điều khiển công việc</translation>
     </message>
@@ -758,37 +758,37 @@ while doing a left or right click and move the mouse up or down</source>
   <context>
     <name>Gui::Dialog::CameraDialog</name>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="277"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="285"/>
       <source>Camera settings</source>
       <translation>Cài đặt máy ảnh</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="284"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="292"/>
       <source>Orientation</source>
       <translation>Sự định hướng</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="298"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="306"/>
       <source>Q0</source>
       <translation>Q0</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="308"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="316"/>
       <source>Q1</source>
       <translation>Q1</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="318"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="326"/>
       <source>Q2</source>
       <translation>Q2</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="328"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="336"/>
       <source>Q3</source>
       <translation type="unfinished">Q3</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="337"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="345"/>
       <source>Current view</source>
       <translation>Ô xem hiện tại</translation>
     </message>
@@ -2754,25 +2754,25 @@ Hãy chọn mục khác.</translation>
     <name>Gui::Dialog::DlgParameterImp</name>
     <message>
       <location filename="../DlgParameterImp.cpp" line="67"/>
-      <location filename="../DlgParameterImp.cpp" line="218"/>
+      <location filename="../DlgParameterImp.cpp" line="217"/>
       <source>Group</source>
       <translation>Nhóm</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="219"/>
+      <location filename="../DlgParameterImp.cpp" line="218"/>
       <source>Name</source>
       <translation>Tên</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="220"/>
+      <location filename="../DlgParameterImp.cpp" line="219"/>
       <source>Type</source>
       <translation>Kiểu</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="76"/>
-      <location filename="../DlgParameterImp.cpp" line="221"/>
+      <location filename="../DlgParameterImp.cpp" line="220"/>
       <source>Value</source>
       <translation>Giá trị</translation>
     </message>
@@ -2787,17 +2787,17 @@ Hãy chọn mục khác.</translation>
       <translation>Tham số người dùng</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="121"/>
+      <location filename="../DlgParameterImp.cpp" line="120"/>
       <source>Search Group</source>
       <translation type="unfinished">Search Group</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="439"/>
+      <location filename="../DlgParameterImp.cpp" line="438"/>
       <source>Invalid input</source>
       <translation>Đầu vào không hợp lệ</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="440"/>
+      <location filename="../DlgParameterImp.cpp" line="439"/>
       <source>Invalid key name '%1'</source>
       <translation>Tên phím '%1' không hợp lệ</translation>
     </message>
@@ -4175,62 +4175,77 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
       <translation type="unfinished">Default license for new documents</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="685"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="39"/>
       <source>All rights reserved</source>
       <translation>Đã đăng ký Bản quyền</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="690"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="40"/>
       <source>Creative Commons Attribution</source>
       <translation type="unfinished">Creative Commons Attribution</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="695"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="41"/>
       <source>Creative Commons Attribution-ShareAlike</source>
       <translation type="unfinished">Creative Commons Attribution-ShareAlike</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="700"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="42"/>
       <source>Creative Commons Attribution-NoDerivatives</source>
       <translation type="unfinished">Creative Commons Attribution-NoDerivatives</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="705"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="43"/>
       <source>Creative Commons Attribution-NonCommercial</source>
       <translation type="unfinished">Creative Commons Attribution-NonCommercial</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="710"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="44"/>
       <source>Creative Commons Attribution-NonCommercial-ShareAlike</source>
       <translation type="unfinished">Creative Commons Attribution-NonCommercial-ShareAlike</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="715"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="45"/>
       <source>Creative Commons Attribution-NonCommercial-NoDerivatives</source>
       <translation type="unfinished">Creative Commons Attribution-NonCommercial-NoDerivatives</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="720"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="46"/>
       <source>Public Domain</source>
       <translation>Phạm vi công cộng</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="725"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="47"/>
       <source>FreeArt</source>
       <translation>FreeArt</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="730"/>
+      <location filename="../DlgProjectInformationImp.cpp" line="48"/>
+      <source>CERN Open Hardware Licence strongly-reciprocal</source>
+      <translation type="unfinished">CERN Open Hardware Licence strongly-reciprocal</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="49"/>
+      <source>CERN Open Hardware Licence weakly-reciprocal</source>
+      <translation type="unfinished">CERN Open Hardware Licence weakly-reciprocal</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="50"/>
+      <source>CERN Open Hardware Licence permissive</source>
+      <translation type="unfinished">CERN Open Hardware Licence permissive</translation>
+    </message>
+    <message>
+      <location filename="../DlgProjectInformationImp.cpp" line="51"/>
       <source>Other</source>
       <translation>Khác</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="738"/>
+      <location filename="../DlgSettingsDocument.ui" line="688"/>
       <source>License URL</source>
       <translation>Đường dẫn URL Giấy phép</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocument.ui" line="745"/>
+      <location filename="../DlgSettingsDocument.ui" line="695"/>
       <source>URL describing more about the license</source>
       <translation type="unfinished">URL describing more about the license</translation>
     </message>
@@ -4238,17 +4253,17 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
   <context>
     <name>Gui::Dialog::DlgSettingsDocumentImp</name>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>The format of the date to use.</source>
       <translation type="unfinished">The format of the date to use.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>Default</source>
       <translation>Mặc định</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsDocumentImp.cpp" line="51"/>
+      <location filename="../DlgSettingsDocumentImp.cpp" line="54"/>
       <source>Format</source>
       <translation type="unfinished">Format</translation>
     </message>
@@ -4732,7 +4747,6 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="87"/>
-      <location filename="../DlgSettingsNavigation.ui" line="149"/>
       <source>Corner where navigation cube is shown</source>
       <translation type="unfinished">Corner where navigation cube is shown</translation>
     </message>
@@ -4772,6 +4786,11 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
       <translation type="unfinished">Font name:</translation>
     </message>
     <message>
+      <location filename="../DlgSettingsNavigation.ui" line="149"/>
+      <source>Font name of the navigation cube</source>
+      <translation type="unfinished">Font name of the navigation cube</translation>
+    </message>
+    <message>
       <location filename="../DlgSettingsNavigation.ui" line="165"/>
       <source>Cube size</source>
       <translation type="unfinished">Cube size</translation>
@@ -4788,8 +4807,8 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="213"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Font size for the NaviCube text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Font size for the NaviCube text&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Font size of the navigation cube</source>
+      <translation type="unfinished">Font size of the navigation cube</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="250"/>
@@ -4953,52 +4972,52 @@ Mouse tilting is not disabled by this setting.</translation>
       <translation type="unfinished">Disable touchscreen tilt gesture</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="155"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="161"/>
       <source>Isometric</source>
       <translation>Isometric</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="156"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="162"/>
       <source>Dimetric</source>
       <translation>Dimetric</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="157"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="163"/>
       <source>Trimetric</source>
       <translation>Trimetric</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="158"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="164"/>
       <source>Top</source>
       <translation>Đỉnh</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="159"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="165"/>
       <source>Front</source>
       <translation>Phía trước</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="160"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="166"/>
       <source>Left</source>
       <translation>Trái</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="161"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="167"/>
       <source>Right</source>
       <translation>Phải</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="162"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="168"/>
       <source>Rear</source>
       <translation>Phía sau</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="163"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="169"/>
       <source>Bottom</source>
       <translation>Đáy</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="164"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="170"/>
       <source>Custom</source>
       <translation>Tùy chọn</translation>
     </message>
@@ -5406,12 +5425,12 @@ The preference system is the one set in the general preferences.</translation>
   <context>
     <name>Gui::Dialog::DlgUnitsCalculator</name>
     <message>
-      <location filename="../DlgUnitsCalculatorImp.cpp" line="147"/>
+      <location filename="../DlgUnitsCalculatorImp.cpp" line="149"/>
       <source>unknown unit:</source>
       <translation type="unfinished">unknown unit:</translation>
     </message>
     <message>
-      <location filename="../DlgUnitsCalculatorImp.cpp" line="152"/>
+      <location filename="../DlgUnitsCalculatorImp.cpp" line="154"/>
       <source>unit mismatch</source>
       <translation type="unfinished">unit mismatch</translation>
     </message>
@@ -5722,12 +5741,12 @@ Cột 'Trạng thái' cho biết liệu tài liệu có thể được khôi ph�
   <context>
     <name>Gui::Dialog::IconDialog</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="431"/>
+      <location filename="../DlgActionsImp.cpp" line="429"/>
       <source>Icon folders</source>
       <translation>Thư mục biểu tượng</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="567"/>
+      <location filename="../DlgActionsImp.cpp" line="563"/>
       <source>Add icon folder</source>
       <translation>Thêm thư mục biểu tượng</translation>
     </message>
@@ -5735,17 +5754,17 @@ Cột 'Trạng thái' cho biết liệu tài liệu có thể được khôi ph�
   <context>
     <name>Gui::Dialog::IconFolders</name>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="544"/>
+      <location filename="../DlgActionsImp.cpp" line="540"/>
       <source>Add or remove custom icon folders</source>
       <translation>Thêm hay xóa bỏ thư mục biểu tượng tự chọn</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="591"/>
+      <location filename="../DlgActionsImp.cpp" line="587"/>
       <source>Remove folder</source>
       <translation>Xóa bỏ thư mục</translation>
     </message>
     <message>
-      <location filename="../DlgActionsImp.cpp" line="592"/>
+      <location filename="../DlgActionsImp.cpp" line="588"/>
       <source>Removing a folder only takes effect after an application restart.</source>
       <translation>Việc xóa bỏ một thư mục chỉ có hiệu lực sau khi ứng dụng được khởi động lại.</translation>
     </message>
@@ -5814,80 +5833,80 @@ Cột 'Trạng thái' cho biết liệu tài liệu có thể được khôi ph�
   <context>
     <name>Gui::Dialog::ParameterGroup</name>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="456"/>
-      <location filename="../DlgParameterImp.cpp" line="483"/>
-      <location filename="../DlgParameterImp.cpp" line="631"/>
+      <location filename="../DlgParameterImp.cpp" line="455"/>
+      <location filename="../DlgParameterImp.cpp" line="482"/>
+      <location filename="../DlgParameterImp.cpp" line="630"/>
       <source>Expand</source>
       <translation>Mở rộng</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="458"/>
-      <location filename="../DlgParameterImp.cpp" line="632"/>
+      <location filename="../DlgParameterImp.cpp" line="457"/>
+      <location filename="../DlgParameterImp.cpp" line="631"/>
       <source>Add sub-group</source>
       <translation>Thêm nhóm phụ</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="459"/>
-      <location filename="../DlgParameterImp.cpp" line="506"/>
-      <location filename="../DlgParameterImp.cpp" line="633"/>
+      <location filename="../DlgParameterImp.cpp" line="458"/>
+      <location filename="../DlgParameterImp.cpp" line="505"/>
+      <location filename="../DlgParameterImp.cpp" line="632"/>
       <source>Remove group</source>
       <translation>Xoá nhóm</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="460"/>
-      <location filename="../DlgParameterImp.cpp" line="634"/>
+      <location filename="../DlgParameterImp.cpp" line="459"/>
+      <location filename="../DlgParameterImp.cpp" line="633"/>
       <source>Rename group</source>
       <translation>Đổi tên nhóm</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="462"/>
-      <location filename="../DlgParameterImp.cpp" line="635"/>
+      <location filename="../DlgParameterImp.cpp" line="461"/>
+      <location filename="../DlgParameterImp.cpp" line="634"/>
       <source>Export parameter</source>
       <translation>Tham số xuất</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="463"/>
-      <location filename="../DlgParameterImp.cpp" line="636"/>
+      <location filename="../DlgParameterImp.cpp" line="462"/>
+      <location filename="../DlgParameterImp.cpp" line="635"/>
       <source>Import parameter</source>
       <translation>Tham số nhập</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="481"/>
+      <location filename="../DlgParameterImp.cpp" line="480"/>
       <source>Collapse</source>
       <translation>Thu gọn</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="506"/>
+      <location filename="../DlgParameterImp.cpp" line="505"/>
       <source>Do you really want to remove this parameter group?</source>
       <translation type="unfinished">Do you really want to remove this parameter group?</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="553"/>
+      <location filename="../DlgParameterImp.cpp" line="552"/>
       <source>Existing sub-group</source>
       <translation>Nhóm phụ sẵn có</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="554"/>
+      <location filename="../DlgParameterImp.cpp" line="553"/>
       <source>The sub-group '%1' already exists.</source>
       <translation>Nhóm phụ '%1' đã tồn tại.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="567"/>
+      <location filename="../DlgParameterImp.cpp" line="566"/>
       <source>Export parameter to file</source>
       <translation>Xuất tham số ra tập tin</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="583"/>
+      <location filename="../DlgParameterImp.cpp" line="582"/>
       <source>Import parameter from file</source>
       <translation>Nhập tham số từ tập tin</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="613"/>
+      <location filename="../DlgParameterImp.cpp" line="612"/>
       <source>Import Error</source>
       <translation>Lỗi nhập dữ liệu</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="613"/>
+      <location filename="../DlgParameterImp.cpp" line="612"/>
       <source>Reading from '%1' failed.</source>
       <translation>Đọc dữ liệu từ '%1' không thành công.</translation>
     </message>
@@ -5895,49 +5914,58 @@ Cột 'Trạng thái' cho biết liệu tài liệu có thể được khôi ph�
   <context>
     <name>Gui::Dialog::ParameterValue</name>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="650"/>
+      <location filename="../DlgParameterImp.cpp" line="649"/>
       <source>Change value</source>
       <translation>Đổi giá trị</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="652"/>
+      <location filename="../DlgParameterImp.cpp" line="651"/>
       <source>Remove key</source>
       <translation>Gỡ bỏ khóa</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="653"/>
+      <location filename="../DlgParameterImp.cpp" line="652"/>
       <source>Rename key</source>
       <translation>Đổi tên khóa</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="657"/>
+      <location filename="../DlgParameterImp.cpp" line="656"/>
       <source>New</source>
       <translation>Mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="658"/>
+      <location filename="../DlgParameterImp.cpp" line="657"/>
       <source>New string item</source>
       <translation>Mục tin chuỗi mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="659"/>
+      <location filename="../DlgParameterImp.cpp" line="658"/>
       <source>New float item</source>
       <translation>Mục tin số thực mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="660"/>
+      <location filename="../DlgParameterImp.cpp" line="659"/>
       <source>New integer item</source>
       <translation>Mục tin số nguyên mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="661"/>
+      <location filename="../DlgParameterImp.cpp" line="660"/>
       <source>New unsigned item</source>
       <translation>Mục tin số nguyên không dấu mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="662"/>
+      <location filename="../DlgParameterImp.cpp" line="661"/>
       <source>New Boolean item</source>
       <translation>Mục tin luận lý mới</translation>
+    </message>
+    <message>
+      <location filename="../DlgParameterImp.cpp" line="773"/>
+      <location filename="../DlgParameterImp.cpp" line="802"/>
+      <location filename="../DlgParameterImp.cpp" line="832"/>
+      <location filename="../DlgParameterImp.cpp" line="868"/>
+      <location filename="../DlgParameterImp.cpp" line="897"/>
+      <source>Existing item</source>
+      <translation>Mục đã có</translation>
     </message>
     <message>
       <location filename="../DlgParameterImp.cpp" line="774"/>
@@ -5945,15 +5973,6 @@ Cột 'Trạng thái' cho biết liệu tài liệu có thể được khôi ph�
       <location filename="../DlgParameterImp.cpp" line="833"/>
       <location filename="../DlgParameterImp.cpp" line="869"/>
       <location filename="../DlgParameterImp.cpp" line="898"/>
-      <source>Existing item</source>
-      <translation>Mục đã có</translation>
-    </message>
-    <message>
-      <location filename="../DlgParameterImp.cpp" line="775"/>
-      <location filename="../DlgParameterImp.cpp" line="804"/>
-      <location filename="../DlgParameterImp.cpp" line="834"/>
-      <location filename="../DlgParameterImp.cpp" line="870"/>
-      <location filename="../DlgParameterImp.cpp" line="899"/>
       <source>The item '%1' already exists.</source>
       <translation>Mục '%1' đã tồn tại.</translation>
     </message>
@@ -6253,13 +6272,13 @@ Cột 'Trạng thái' cho biết liệu tài liệu có thể được khôi ph�
     <name>Gui::Dialog::Transform</name>
     <message>
       <location filename="../Transform.cpp" line="291"/>
-      <location filename="../Transform.cpp" line="414"/>
+      <location filename="../Transform.cpp" line="419"/>
       <source>Cancel</source>
       <translation>Hủy</translation>
     </message>
     <message>
       <location filename="../Transform.cpp" line="292"/>
-      <location filename="../Transform.cpp" line="415"/>
+      <location filename="../Transform.cpp" line="420"/>
       <source>Transform</source>
       <translation>Biến đổi</translation>
     </message>
@@ -6356,14 +6375,14 @@ originally selected prior to opening this dialog</translation>
       <translation>Chế độ xem kết hợp</translation>
     </message>
     <message>
-      <location filename="../ComboView.cpp" line="73"/>
-      <location filename="../ComboView.cpp" line="141"/>
+      <location filename="../ComboView.cpp" line="74"/>
+      <location filename="../ComboView.cpp" line="142"/>
       <source>Model</source>
       <translation>Mô hình</translation>
     </message>
     <message>
-      <location filename="../ComboView.cpp" line="82"/>
-      <location filename="../ComboView.cpp" line="142"/>
+      <location filename="../ComboView.cpp" line="83"/>
+      <location filename="../ComboView.cpp" line="143"/>
       <source>Tasks</source>
       <translation>Nhiệm vụ</translation>
     </message>
@@ -6501,72 +6520,72 @@ originally selected prior to opening this dialog</translation>
       <translation type="unfinished">Picked object list</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="590"/>
+      <location filename="../SelectionView.cpp" line="589"/>
       <source>Select only</source>
       <translation>Chỉ lựa chọn</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="592"/>
+      <location filename="../SelectionView.cpp" line="593"/>
       <source>Selects only this object</source>
       <translation>Chỉ chọn lựa đối tượng này</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="593"/>
+      <location filename="../SelectionView.cpp" line="595"/>
       <source>Deselect</source>
       <translation>Bỏ chọn</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="595"/>
+      <location filename="../SelectionView.cpp" line="597"/>
       <source>Deselects this object</source>
       <translation>Bỏ chọn đối tượng này</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="596"/>
+      <location filename="../SelectionView.cpp" line="599"/>
       <source>Zoom fit</source>
       <translation>Phóng vừa khít</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="598"/>
+      <location filename="../SelectionView.cpp" line="601"/>
       <source>Selects and fits this object in the 3D window</source>
       <translation>Chọn và điều chỉnh phù hợp đối tượng này trong cửa sổ 3D</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="599"/>
+      <location filename="../SelectionView.cpp" line="603"/>
       <source>Go to selection</source>
       <translation>Chuyển đến lựa chọn</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="600"/>
+      <location filename="../SelectionView.cpp" line="604"/>
       <source>Selects and locates this object in the tree view</source>
       <translation>Chọn và định vị đối tượng này trong chế độ xem dạng cây</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="601"/>
+      <location filename="../SelectionView.cpp" line="606"/>
       <source>Mark to recompute</source>
       <translation>Đánh dấu để tính toán lại</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="603"/>
+      <location filename="../SelectionView.cpp" line="608"/>
       <source>Mark this object to be recomputed</source>
       <translation>Đánh dấu đối tượng để tính toán lại</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="604"/>
+      <location filename="../SelectionView.cpp" line="610"/>
       <source>To python console</source>
       <translation>Để bàn điều khiển python</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="606"/>
+      <location filename="../SelectionView.cpp" line="612"/>
       <source>Reveals this object and its subelements in the python console.</source>
       <translation>Tiết lộ đối tượng này và các phần con của nó trong giao diện điều khiển python.</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="611"/>
+      <location filename="../SelectionView.cpp" line="617"/>
       <source>Duplicate subshape</source>
       <translation>Nhân bản phụ</translation>
     </message>
     <message>
-      <location filename="../SelectionView.cpp" line="613"/>
+      <location filename="../SelectionView.cpp" line="619"/>
       <source>Creates a standalone copy of this subshape in the document</source>
       <translation>Tạo một bản sao độc lập của hình dạng phụ này trong tài liệu</translation>
     </message>
@@ -6587,12 +6606,12 @@ originally selected prior to opening this dialog</translation>
   <context>
     <name>Gui::EditorView</name>
     <message>
-      <location filename="../EditorView.cpp" line="196"/>
+      <location filename="../EditorView.cpp" line="197"/>
       <source>Modified file</source>
       <translation>Tệp đã sửa đổi</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="197"/>
+      <location filename="../EditorView.cpp" line="198"/>
       <source>%1.
 
 This has been modified outside of the source editor. Do you want to reload it?</source>
@@ -6601,54 +6620,54 @@ This has been modified outside of the source editor. Do you want to reload it?</
 Điều này đã được sửa đổi bên ngoài trình chỉnh sửa nguồn. Bạn có muốn tải lại không?</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="320"/>
+      <location filename="../EditorView.cpp" line="321"/>
       <source>Unsaved document</source>
       <translation>Tài liệu chưa được lưu</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="321"/>
+      <location filename="../EditorView.cpp" line="322"/>
       <source>The document has been modified.
 Do you want to save your changes?</source>
       <translation>Tài liệu đã được sửa đổi.
 Bạn có muốn lưu các thay đổi của bạn?</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="347"/>
+      <location filename="../EditorView.cpp" line="348"/>
       <source>FreeCAD macro</source>
       <translation>Macro FreeCAD</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="469"/>
+      <location filename="../EditorView.cpp" line="470"/>
       <source>Export PDF</source>
       <translation>Xuất tệp PDF</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="470"/>
+      <location filename="../EditorView.cpp" line="471"/>
       <source>PDF file</source>
       <translation>Tệp PDF</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="501"/>
+      <location filename="../EditorView.cpp" line="502"/>
       <source>untitled[*]</source>
       <translation>không có tiêu đề [*]</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="504"/>
+      <location filename="../EditorView.cpp" line="505"/>
       <source> - Editor</source>
       <translation> Trình chỉnh sửa</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="558"/>
+      <location filename="../EditorView.cpp" line="559"/>
       <source>%1 chars removed</source>
       <translation>Đã xóa %1 ký tự</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="560"/>
+      <location filename="../EditorView.cpp" line="561"/>
       <source>%1 chars added</source>
       <translation>đã thêm %1 ký tự</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="562"/>
+      <location filename="../EditorView.cpp" line="563"/>
       <source>Formatted</source>
       <translation>Đã định dạng</translation>
     </message>
@@ -7297,7 +7316,7 @@ Bạn muốn tiến hành như thế nào?</translation>
   <context>
     <name>Gui::PropertyEditor::LinkLabel</name>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4314"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4313"/>
       <source>Change the linked object</source>
       <translation>Thay đổi đối tượng được liên kết</translation>
     </message>
@@ -7305,12 +7324,12 @@ Bạn muốn tiến hành như thế nào?</translation>
   <context>
     <name>Gui::PropertyEditor::LinkSelection</name>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4283"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4282"/>
       <source>Error</source>
       <translation>Lỗi</translation>
     </message>
     <message>
-      <location filename="../propertyeditor/PropertyItem.cpp" line="4283"/>
+      <location filename="../propertyeditor/PropertyItem.cpp" line="4282"/>
       <source>Object not found</source>
       <translation>Không tìm thấy đối tượng</translation>
     </message>
@@ -7435,77 +7454,77 @@ Bạn có muốn thoát mà không lưu dữ liệu của mình không?</transla
       <translation>Ngoại lệ C++ chưa biết không thể chỉnh sửa.</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1315"/>
+      <location filename="../PythonConsole.cpp" line="1314"/>
       <source>&amp;Copy</source>
       <translation>&amp;Sao chép</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1318"/>
+      <location filename="../PythonConsole.cpp" line="1317"/>
       <source>&amp;Copy command</source>
       <translation>&amp;Sao chép lệnh</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1321"/>
+      <location filename="../PythonConsole.cpp" line="1320"/>
       <source>&amp;Copy history</source>
       <translation>&amp;Sao chép lịch sử</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1324"/>
+      <location filename="../PythonConsole.cpp" line="1323"/>
       <source>Save history as...</source>
       <translation>Lưu lịch sử thành...</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1327"/>
+      <location filename="../PythonConsole.cpp" line="1326"/>
       <source>Save history</source>
       <translation type="unfinished">Save history</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1328"/>
+      <location filename="../PythonConsole.cpp" line="1327"/>
       <source>Saves Python history across %1 sessions</source>
       <translation type="unfinished">Saves Python history across %1 sessions</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1334"/>
+      <location filename="../PythonConsole.cpp" line="1333"/>
       <source>&amp;Paste</source>
       <translation>&amp;Dán</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1338"/>
+      <location filename="../PythonConsole.cpp" line="1337"/>
       <source>Select All</source>
       <translation>Chọn tất cả</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1341"/>
+      <location filename="../PythonConsole.cpp" line="1340"/>
       <source>Clear console</source>
       <translation>Xóa bảng điều khiển</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1345"/>
+      <location filename="../PythonConsole.cpp" line="1344"/>
       <source>Insert file name...</source>
       <translation>Chèn tên tập tin...</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1348"/>
+      <location filename="../PythonConsole.cpp" line="1347"/>
       <source>Word wrap</source>
       <translation>Ngắt dòng</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1372"/>
+      <location filename="../PythonConsole.cpp" line="1371"/>
       <source>Save History</source>
       <translation>Lưu Lịch sử</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1373"/>
+      <location filename="../PythonConsole.cpp" line="1372"/>
       <source>Macro Files</source>
       <translation>Tập tin Macro</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1392"/>
+      <location filename="../PythonConsole.cpp" line="1391"/>
       <source>Insert file name</source>
       <translation>Chèn tên tập tin</translation>
     </message>
     <message>
-      <location filename="../PythonConsole.cpp" line="1393"/>
+      <location filename="../PythonConsole.cpp" line="1392"/>
       <source>All Files</source>
       <translation>Tất cả các tệp</translation>
     </message>
@@ -7513,12 +7532,12 @@ Bạn có muốn thoát mà không lưu dữ liệu của mình không?</transla
   <context>
     <name>Gui::PythonEditor</name>
     <message>
-      <location filename="../PythonEditor.cpp" line="155"/>
+      <location filename="../PythonEditor.cpp" line="153"/>
       <source>Comment</source>
       <translation>Ghi chú</translation>
     </message>
     <message>
-      <location filename="../PythonEditor.cpp" line="156"/>
+      <location filename="../PythonEditor.cpp" line="154"/>
       <source>Uncomment</source>
       <translation>Bỏ ghi chú</translation>
     </message>
@@ -7590,22 +7609,22 @@ Bạn có muốn thoát mà không lưu dữ liệu của mình không?</transla
   <context>
     <name>Gui::SearchBar</name>
     <message>
-      <location filename="../EditorView.cpp" line="748"/>
+      <location filename="../EditorView.cpp" line="749"/>
       <source>Previous</source>
       <translation type="unfinished">Previous</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="749"/>
+      <location filename="../EditorView.cpp" line="750"/>
       <source>Next</source>
       <translation type="unfinished">Next</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="750"/>
+      <location filename="../EditorView.cpp" line="751"/>
       <source>Case sensitive</source>
       <translation type="unfinished">Case sensitive</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="751"/>
+      <location filename="../EditorView.cpp" line="752"/>
       <source>Whole words</source>
       <translation type="unfinished">Whole words</translation>
     </message>
@@ -7706,7 +7725,7 @@ Bạn có muốn chỉ định thư mục khác không?</translation>
   <context>
     <name>Gui::TaskBoxAngle</name>
     <message>
-      <location filename="../TaskDlgRelocation.cpp" line="69"/>
+      <location filename="../TaskDlgRelocation.cpp" line="67"/>
       <source>Angle</source>
       <translation>Góc</translation>
     </message>
@@ -8357,22 +8376,22 @@ Bạn có muốn chỉ định thư mục khác không?</translation>
   <context>
     <name>Gui::View3DInventor</name>
     <message>
-      <location filename="../View3DInventor.cpp" line="485"/>
+      <location filename="../View3DInventor.cpp" line="511"/>
       <source>Export PDF</source>
       <translation>Xuất tệp PDF</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="486"/>
+      <location filename="../View3DInventor.cpp" line="512"/>
       <source>PDF file</source>
       <translation>Tệp PDF</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="516"/>
+      <location filename="../View3DInventor.cpp" line="542"/>
       <source>Opening file failed</source>
       <translation>Không thể mở tệp</translation>
     </message>
     <message>
-      <location filename="../View3DInventor.cpp" line="517"/>
+      <location filename="../View3DInventor.cpp" line="543"/>
       <source>Can't open file '%1' for writing.</source>
       <translation>Không thể mở tệp '% 1' để viết.</translation>
     </message>
@@ -8866,102 +8885,102 @@ Bạn có muốn tiếp tục?</translation>
       <translation>Lưu hình ảnh</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="540"/>
+      <location filename="../DlgParameterImp.cpp" line="539"/>
       <source>New sub-group</source>
       <translation>Nhóm phụ mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="540"/>
-      <location filename="../DlgParameterImp.cpp" line="764"/>
-      <location filename="../DlgParameterImp.cpp" line="793"/>
-      <location filename="../DlgParameterImp.cpp" line="823"/>
-      <location filename="../DlgParameterImp.cpp" line="859"/>
-      <location filename="../DlgParameterImp.cpp" line="888"/>
+      <location filename="../DlgParameterImp.cpp" line="539"/>
+      <location filename="../DlgParameterImp.cpp" line="763"/>
+      <location filename="../DlgParameterImp.cpp" line="792"/>
+      <location filename="../DlgParameterImp.cpp" line="822"/>
+      <location filename="../DlgParameterImp.cpp" line="858"/>
+      <location filename="../DlgParameterImp.cpp" line="887"/>
       <source>Enter the name:</source>
       <translation>Nhập tên:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="764"/>
-      <location filename="../DlgParameterImp.cpp" line="780"/>
+      <location filename="../DlgParameterImp.cpp" line="763"/>
+      <location filename="../DlgParameterImp.cpp" line="779"/>
       <source>New text item</source>
       <translation>Mục văn bản mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="780"/>
-      <location filename="../DlgParameterImp.cpp" line="1047"/>
+      <location filename="../DlgParameterImp.cpp" line="779"/>
+      <location filename="../DlgParameterImp.cpp" line="1046"/>
       <source>Enter your text:</source>
       <translation>Nhập văn bản của bạn:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="793"/>
-      <location filename="../DlgParameterImp.cpp" line="809"/>
+      <location filename="../DlgParameterImp.cpp" line="792"/>
+      <location filename="../DlgParameterImp.cpp" line="808"/>
       <source>New integer item</source>
       <translation>Mục tin số nguyên mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="809"/>
-      <location filename="../DlgParameterImp.cpp" line="839"/>
-      <location filename="../DlgParameterImp.cpp" line="875"/>
-      <location filename="../DlgParameterImp.cpp" line="1091"/>
-      <location filename="../DlgParameterImp.cpp" line="1135"/>
-      <location filename="../DlgParameterImp.cpp" line="1188"/>
+      <location filename="../DlgParameterImp.cpp" line="808"/>
+      <location filename="../DlgParameterImp.cpp" line="838"/>
+      <location filename="../DlgParameterImp.cpp" line="874"/>
+      <location filename="../DlgParameterImp.cpp" line="1090"/>
+      <location filename="../DlgParameterImp.cpp" line="1134"/>
+      <location filename="../DlgParameterImp.cpp" line="1187"/>
       <source>Enter your number:</source>
       <translation>Nhập số của bạn:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="823"/>
-      <location filename="../DlgParameterImp.cpp" line="840"/>
+      <location filename="../DlgParameterImp.cpp" line="822"/>
+      <location filename="../DlgParameterImp.cpp" line="839"/>
       <source>New unsigned item</source>
       <translation>Mục tin số nguyên không dấu mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="859"/>
-      <location filename="../DlgParameterImp.cpp" line="875"/>
+      <location filename="../DlgParameterImp.cpp" line="858"/>
+      <location filename="../DlgParameterImp.cpp" line="874"/>
       <source>New float item</source>
       <translation>Mục tin số thực mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="888"/>
+      <location filename="../DlgParameterImp.cpp" line="887"/>
       <source>New Boolean item</source>
       <translation>Mục tin luận lý mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="906"/>
-      <location filename="../DlgParameterImp.cpp" line="1236"/>
+      <location filename="../DlgParameterImp.cpp" line="905"/>
+      <location filename="../DlgParameterImp.cpp" line="1235"/>
       <source>Choose an item:</source>
       <translation>Chọn một mục:</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="906"/>
+      <location filename="../DlgParameterImp.cpp" line="905"/>
       <source>New boolean item</source>
       <translation>Mục tin luận lý mới</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="965"/>
+      <location filename="../DlgParameterImp.cpp" line="964"/>
       <source>Rename group</source>
       <translation>Đổi tên nhóm</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="966"/>
+      <location filename="../DlgParameterImp.cpp" line="965"/>
       <source>The group '%1' cannot be renamed.</source>
       <translation>Không thể đổi tên nhóm '%1'.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="971"/>
+      <location filename="../DlgParameterImp.cpp" line="970"/>
       <source>Existing group</source>
       <translation>Nhóm đã tồn tại</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="972"/>
+      <location filename="../DlgParameterImp.cpp" line="971"/>
       <source>The group '%1' already exists.</source>
       <translation>Nhóm '%1' đã tồn tại.</translation>
     </message>
     <message>
-      <location filename="../DlgParameterImp.cpp" line="1047"/>
-      <location filename="../DlgParameterImp.cpp" line="1091"/>
-      <location filename="../DlgParameterImp.cpp" line="1136"/>
-      <location filename="../DlgParameterImp.cpp" line="1188"/>
-      <location filename="../DlgParameterImp.cpp" line="1236"/>
+      <location filename="../DlgParameterImp.cpp" line="1046"/>
+      <location filename="../DlgParameterImp.cpp" line="1090"/>
+      <location filename="../DlgParameterImp.cpp" line="1135"/>
+      <location filename="../DlgParameterImp.cpp" line="1187"/>
+      <location filename="../DlgParameterImp.cpp" line="1235"/>
       <source>Change value</source>
       <translation>Đổi giá trị</translation>
     </message>
@@ -9159,7 +9178,7 @@ Choose 'No' to roll back in the active document only.
 Choose 'Abort' to abort</translation>
     </message>
     <message>
-      <location filename="../EditorView.cpp" line="346"/>
+      <location filename="../EditorView.cpp" line="347"/>
       <source>Save Macro</source>
       <translation>Lưu Macro</translation>
     </message>
@@ -9233,12 +9252,12 @@ Hãy mở cửa sổ trình duyệt và nhập: http://localhost:%1.</translatio
       <translation>Tùy chọn...</translation>
     </message>
     <message>
-      <location filename="../View3DInventorViewer.cpp" line="2119"/>
+      <location filename="../View3DInventorViewer.cpp" line="2110"/>
       <source>Out of memory</source>
       <translation>Thiếu bộ nhớ</translation>
     </message>
     <message>
-      <location filename="../View3DInventorViewer.cpp" line="2120"/>
+      <location filename="../View3DInventorViewer.cpp" line="2111"/>
       <source>Not enough memory available to display the data.</source>
       <translation>Không đủ bộ nhớ để hiển thị dữ liệu.</translation>
     </message>
@@ -12155,12 +12174,12 @@ Do you still want to proceed?</translation>
   <context>
     <name>ViewIsometricCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1807"/>
+      <location filename="../NaviCube.cpp" line="1848"/>
       <source>Isometric</source>
       <translation>Isometric</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1808"/>
+      <location filename="../NaviCube.cpp" line="1849"/>
       <source>Set NaviCube to Isometric mode</source>
       <translation type="unfinished">Set NaviCube to Isometric mode</translation>
     </message>
@@ -12168,12 +12187,12 @@ Do you still want to proceed?</translation>
   <context>
     <name>ViewOrthographicCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1827"/>
+      <location filename="../NaviCube.cpp" line="1868"/>
       <source>Orthographic</source>
       <translation type="unfinished">Orthographic</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1828"/>
+      <location filename="../NaviCube.cpp" line="1869"/>
       <source>Set View to Orthographic mode</source>
       <translation type="unfinished">Set View to Orthographic mode</translation>
     </message>
@@ -12181,12 +12200,12 @@ Do you still want to proceed?</translation>
   <context>
     <name>ViewPerspectiveCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1848"/>
+      <location filename="../NaviCube.cpp" line="1889"/>
       <source>Perspective</source>
       <translation>Phối cảnh</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1849"/>
+      <location filename="../NaviCube.cpp" line="1890"/>
       <source>Set View to Perspective mode</source>
       <translation type="unfinished">Set View to Perspective mode</translation>
     </message>
@@ -12194,12 +12213,12 @@ Do you still want to proceed?</translation>
   <context>
     <name>ViewZoomToFitCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1869"/>
+      <location filename="../NaviCube.cpp" line="1910"/>
       <source>Zoom to fit</source>
       <translation>Phóng vừa khít</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1870"/>
+      <location filename="../NaviCube.cpp" line="1911"/>
       <source>Zoom so that model fills the view</source>
       <translation>Phóng cho mô hình vừa khít với ô xem</translation>
     </message>

@@ -750,7 +750,7 @@
     <message>
       <location filename="../../Command.cpp" line="238"/>
       <source>Mesh union</source>
-      <translation>Объеденить полигональные сетки</translation>
+      <translation>Объединить полигональные сетки</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="307"/>
@@ -1801,7 +1801,7 @@ to a smoother appearance.
     <message>
       <location filename="../../RemeshGmsh.ui" line="134"/>
       <source>Path</source>
-      <translation>Траектория</translation>
+      <translation>Path</translation>
     </message>
     <message>
       <location filename="../../RemeshGmsh.ui" line="154"/>

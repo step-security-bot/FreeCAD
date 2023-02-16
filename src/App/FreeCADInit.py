@@ -806,7 +806,9 @@ App.Units.Gauss         = App.Units.Quantity('G')
 
 App.Units.Weber         = App.Units.Quantity('Wb')
 
-App.Units.Oersted       = App.Units.Quantity('Oe')
+# disable Oersted because people need to input e.g. a field strength of
+# 1 ampere per meter -> 1 A/m and not get the recalculation to Oersted
+# App.Units.Oersted       = App.Units.Quantity('Oe')
 
 App.Units.PicoFarad     = App.Units.Quantity('pF')
 App.Units.NanoFarad     = App.Units.Quantity('nF')
@@ -859,15 +861,18 @@ App.Units.Velocity      = App.Units.Unit(1,0,-1)
 App.Units.Acceleration  = App.Units.Unit(1,0,-2)
 App.Units.Temperature   = App.Units.Unit(0,0,0,0,1)
 
+App.Units.CurrentDensity        = App.Units.Unit(-2,0,0,1)
 App.Units.ElectricCurrent       = App.Units.Unit(0,0,0,1)
 App.Units.ElectricPotential     = App.Units.Unit(2,1,-3,-1)
 App.Units.ElectricCharge        = App.Units.Unit(0,0,1,1)
 App.Units.MagneticFluxDensity   = App.Units.Unit(0,1,-2,-1)
+App.Units.Magnetization         = App.Units.Unit(-1,0,0,1)
 App.Units.ElectricalCapacitance = App.Units.Unit(-2,-1,4,2)
 App.Units.ElectricalInductance  = App.Units.Unit(2,1,-2,-2)
 App.Units.ElectricalConductance = App.Units.Unit(-2,-1,3,2)
 App.Units.ElectricalResistance  = App.Units.Unit(2,1,-3,-2)
 App.Units.ElectricalConductivity = App.Units.Unit(-3,-1,3,2)
+
 App.Units.AmountOfSubstance = App.Units.Unit(0,0,0,0,0,1)
 App.Units.LuminousIntensity = App.Units.Unit(0,0,0,0,0,0,1)
 
@@ -941,6 +946,17 @@ class PropertyType(IntEnum):
     Prop_NoPersist = 32
 
 App.PropertyType = PropertyType
+
+class ReturnType(IntEnum):
+    PyObject = 0
+    DocObject = 1
+    DocAndPyObject = 2
+    Placement = 3
+    Matrix = 4
+    LinkAndPlacement = 5
+    LinkAndMatrix = 6
+
+App.ReturnType = ReturnType
 
 # clean up namespace
 del(InitApplications)

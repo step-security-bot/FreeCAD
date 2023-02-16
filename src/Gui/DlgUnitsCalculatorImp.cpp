@@ -77,6 +77,7 @@ DlgUnitsCalculator::DlgUnitsCalculator( QWidget* parent, Qt::WindowFlags fl )
           << Base::Unit::Angle
           << Base::Unit::Area
           << Base::Unit::Density
+          << Base::Unit::CurrentDensity
           << Base::Unit::ElectricalCapacitance
           << Base::Unit::ElectricalInductance
           << Base::Unit::ElectricalConductance
@@ -95,6 +96,7 @@ DlgUnitsCalculator::DlgUnitsCalculator( QWidget* parent, Qt::WindowFlags fl )
           << Base::Unit::MagneticFieldStrength
           << Base::Unit::MagneticFlux
           << Base::Unit::MagneticFluxDensity
+          << Base::Unit::Magnetization
           << Base::Unit::Pressure
           << Base::Unit::Power
           << Base::Unit::SpecificHeat

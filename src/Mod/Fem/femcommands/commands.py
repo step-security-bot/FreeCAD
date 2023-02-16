@@ -209,6 +209,23 @@ class _ConstraintCentrif(CommandManager):
         self.is_active = "with_analysis"
         self.do_activated = "add_obj_on_gui_set_edit"
 
+class _ConstraintCurrentDensity(CommandManager):
+    "The FEM_ConstraintCurrentDensity command definition"
+
+    def __init__(self):
+        super(_ConstraintCurrentDensity, self).__init__()
+        self.pixmap = "FEM_ConstraintCurrentDensity"
+        self.menutext = Qt.QT_TRANSLATE_NOOP(
+            "FEM_ConstraintCurrentDensity",
+            "Constraint current density"
+        )
+        self.tooltip = Qt.QT_TRANSLATE_NOOP(
+            "FEM_ConstraintCurrentDensity",
+            "Creates a FEM constraint current density"
+        )
+        self.is_active = "with_analysis"
+        self.do_activated = "add_obj_on_gui_set_edit"
+
 
 class _ConstraintElectrostaticPotential(CommandManager):
     "The FEM_ConstraintElectrostaticPotential command definition"
@@ -273,6 +290,23 @@ class _ConstraintInitialPressure(CommandManager):
         self.tooltip = Qt.QT_TRANSLATE_NOOP(
             "FEM_ConstraintInitialPressure",
             "Creates a FEM constraint initial pressure"
+        )
+        self.is_active = "with_analysis"
+        self.do_activated = "add_obj_on_gui_set_edit"
+
+
+class _ConstraintMagnetization(CommandManager):
+    "The FEM_ConstraintMagnetization command definition"
+
+    def __init__(self):
+        super(_ConstraintMagnetization, self).__init__()
+        self.menutext = Qt.QT_TRANSLATE_NOOP(
+            "FEM_ConstraintMagnetization",
+            "Constraint magnetization"
+        )
+        self.tooltip = Qt.QT_TRANSLATE_NOOP(
+            "FEM_ConstraintMagnetization",
+            "Creates a FEM constraint magnetization"
         )
         self.is_active = "with_analysis"
         self.do_activated = "add_obj_on_gui_set_edit"
@@ -494,6 +528,40 @@ class _EquationHeat(CommandManager):
         self.tooltip = Qt.QT_TRANSLATE_NOOP(
             "FEM_EquationHeat",
             "Creates a FEM equation for heat"
+        )
+        self.is_active = "with_solver_elmer"
+        self.do_activated = "add_obj_on_gui_selobj_noset_edit"
+
+
+class _EquationMagnetodynamic(CommandManager):
+    "The FEM_EquationMagnetodynamic command definition"
+
+    def __init__(self):
+        super(_EquationMagnetodynamic, self).__init__()
+        self.menutext = Qt.QT_TRANSLATE_NOOP(
+            "FEM_EquationMagnetodynamic",
+            "Magnetodynamic equation"
+        )
+        self.tooltip = Qt.QT_TRANSLATE_NOOP(
+            "FEM_EquationMagnetodynamic",
+            "Creates a FEM equation for\n magentodynamic forces"
+        )
+        self.is_active = "with_solver_elmer"
+        self.do_activated = "add_obj_on_gui_selobj_noset_edit"
+
+
+class _EquationMagnetodynamic2D(CommandManager):
+    "The FEM_EquationMagnetodynamic2D command definition"
+
+    def __init__(self):
+        super(_EquationMagnetodynamic2D, self).__init__()
+        self.menutext = Qt.QT_TRANSLATE_NOOP(
+            "FEM_EquationMagnetodynamic2D",
+            "Magnetodynamic2D equation"
+        )
+        self.tooltip = Qt.QT_TRANSLATE_NOOP(
+            "FEM_EquationMagnetodynamic2D",
+            "Creates a FEM equation for\n2D magentodynamic forces"
         )
         self.is_active = "with_solver_elmer"
         self.do_activated = "add_obj_on_gui_selobj_noset_edit"
@@ -1113,6 +1181,10 @@ FreeCADGui.addCommand(
     _ConstraintCentrif()
 )
 FreeCADGui.addCommand(
+    "FEM_ConstraintCurrentDensity",
+    _ConstraintCurrentDensity()
+)
+FreeCADGui.addCommand(
     "FEM_ConstraintElectrostaticPotential",
     _ConstraintElectrostaticPotential()
 )
@@ -1127,6 +1199,10 @@ FreeCADGui.addCommand(
 FreeCADGui.addCommand(
     "FEM_ConstraintInitialPressure",
     _ConstraintInitialPressure()
+)
+FreeCADGui.addCommand(
+    "FEM_ConstraintMagnetization",
+    _ConstraintMagnetization()
 )
 FreeCADGui.addCommand(
     "FEM_ConstraintSectionPrint",
@@ -1179,6 +1255,14 @@ FreeCADGui.addCommand(
 FreeCADGui.addCommand(
     "FEM_EquationHeat",
     _EquationHeat()
+)
+FreeCADGui.addCommand(
+    "FEM_EquationMagnetodynamic",
+    _EquationMagnetodynamic()
+)
+FreeCADGui.addCommand(
+    "FEM_EquationMagnetodynamic2D",
+    _EquationMagnetodynamic2D()
 )
 FreeCADGui.addCommand(
     "FEM_Examples",

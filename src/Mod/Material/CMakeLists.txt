@@ -37,6 +37,7 @@ SET (MaterialLib_Files
     StandardMaterial/Glass-Generic.FCMat
     StandardMaterial/Glass-S2-GlassFibre.FCMat
     StandardMaterial/Graphite.FCMat
+    StandardMaterial/Iron-Generic.FCMat
     StandardMaterial/Invar-Generic.FCMat
     StandardMaterial/PA6-Generic.FCMat
     StandardMaterial/PET-Generic.FCMat
@@ -147,6 +148,7 @@ SET (FluidMaterial_Files
     FluidMaterial/None.FCMat
     FluidMaterial/Air.FCMat
     FluidMaterial/Argon.FCMat
+    FluidMaterial/Carbon_dioxide.FCMat
     FluidMaterial/Nitrogen.FCMat
     FluidMaterial/Water.FCMat
     FluidMaterial/Readme.md

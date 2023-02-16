@@ -373,7 +373,7 @@
       <location filename="../../SheetTableView.cpp" line="632"/>
       <location filename="../../SpreadsheetView.cpp" line="159"/>
       <source>Clear cell(s)</source>
-      <translation>Ачысціць клетку(і)</translation>
+      <translation>Ачысціць клеткі</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="132"/>
@@ -687,44 +687,44 @@ switch the design configuration. The property will be created if not exist.</sou
     <message>
       <location filename="../../Command.cpp" line="187"/>
       <source>Import file</source>
-      <translation type="unfinished">Import file</translation>
+      <translation>Імпартаваць файл</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="243"/>
       <source>Export file</source>
-      <translation type="unfinished">Export file</translation>
+      <translation>Экспартаваць файл</translation>
     </message>
     <message>
       <location filename="../../ViewProviderSpreadsheet.cpp" line="129"/>
       <source>Show spreadsheet</source>
-      <translation>Адлюстраваць аркуш</translation>
+      <translation>Паказаць аркуш</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="91"/>
       <location filename="../../Workbench.cpp" line="93"/>
       <source>Set cell(s) foreground color</source>
-      <translation>Задаць колер зместу клеткі(ак)</translation>
+      <translation>Задаць колер зместу клетак</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="92"/>
       <source>Sets the Spreadsheet cell(s) foreground color</source>
-      <translation>Задаць колер зместу клеткі(ак) аркуша</translation>
+      <translation>Задаць колер зместу клетак аркуша</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="106"/>
       <location filename="../../Workbench.cpp" line="108"/>
       <source>Set cell(s) background color</source>
-      <translation>Задаць колер фону клеткі(ак)</translation>
+      <translation>Задаць колер фону клетак</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="107"/>
       <source>Sets the Spreadsheet cell(s) background color</source>
-      <translation>Задаць колер фону клеткі(ак) аркуша</translation>
+      <translation>Задаць колер фону клетак аркуша</translation>
     </message>
     <message>
       <location filename="../../SheetTableView.cpp" line="752"/>
       <source>Copy &amp; Paste failed</source>
-      <translation>Не атрымалася скапіяваць і ўставіць</translation>
+      <translation>Не атрымалася скапіраваць і ўставіць</translation>
     </message>
     <message>
       <location filename="../../SpreadsheetView.cpp" line="426"/>
@@ -919,17 +919,17 @@ Do you want to continue?</source>
     <message>
       <location filename="../../DlgSettings.ui" line="26"/>
       <source>Display Settings</source>
-      <translation type="unfinished">Display Settings</translation>
+      <translation>Налады дысплея</translation>
     </message>
     <message>
       <location filename="../../DlgSettings.ui" line="32"/>
       <source>If checked, use the custom presentation to display cell string.</source>
-      <translation type="unfinished">If checked, use the custom presentation to display cell string.</translation>
+      <translation>Калі ўключана, ужывае сваю ўласную прэзентацыю для адлюстравання радка клетак.</translation>
     </message>
     <message>
       <location filename="../../DlgSettings.ui" line="35"/>
       <source>Show alias in cell with format</source>
-      <translation type="unfinished">Show alias in cell with format</translation>
+      <translation>Паказаць псеўданім у клетцы з фарматам</translation>
     </message>
     <message>
       <location filename="../../DlgSettings.ui" line="64"/>
@@ -938,11 +938,11 @@ Defaults to: %V = %A
 
 %A - alias name
 %V - cell value</source>
-      <translation type="unfinished">The format of the custom cell string presentation.
-Defaults to: %V = %A
+      <translation>Фармат прадстаўлення карыстальніцкага радка клетак.
+Першапачатковае значэнне: %V = %A
 
-%A - alias name
-%V - cell value</translation>
+%A - імя псеўданіма
+%V - значэнне клеткі</translation>
     </message>
     <message>
       <location filename="../../DlgSettings.ui" line="84"/>
@@ -1132,7 +1132,7 @@ Defaults to: %V = %A
       <location filename="../../SheetTableView.cpp" line="207"/>
       <location filename="../../SheetTableView.cpp" line="619"/>
       <source>Paste</source>
-      <translation type="unfinished">Paste</translation>
+      <translation>Уставіць</translation>
     </message>
     <message>
       <location filename="../../SheetTableView.cpp" line="209"/>
@@ -1146,7 +1146,7 @@ Defaults to: %V = %A
     <message>
       <location filename="../../SpreadsheetView.cpp" line="254"/>
       <source>Export PDF</source>
-      <translation type="unfinished">Export PDF</translation>
+      <translation>Экспартаваць у PDF</translation>
     </message>
     <message>
       <location filename="../../SpreadsheetView.cpp" line="255"/>
@@ -1213,7 +1213,7 @@ Defaults to: %V = %A
     <message>
       <location filename="../../../App/Spreadsheet_legacy.py" line="759"/>
       <source>Compute</source>
-      <translation type="unfinished">Compute</translation>
+      <translation>Вылічыць</translation>
     </message>
     <message>
       <location filename="../../../App/Spreadsheet_legacy.py" line="761"/>

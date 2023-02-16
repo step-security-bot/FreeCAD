@@ -118,6 +118,7 @@ public:
 
     /// Observer message from the ParameterGrp
     void OnChange(ParameterGrp::SubjectType& rCaller, ParameterGrp::MessageType Reason) override;
+    void applySettings(ParameterGrp&);
 
     bool processSoEvent(const SoEvent* ev);
 
@@ -295,24 +296,18 @@ void NaviCube::setFontSize(int size)
 // the Helvetica font is a good start for most OSes
 QFont NaviCube::getDefaultSansserifFont()
 {
-    QFont font(QString::fromLatin1("Helvetica"));
-    if (font.styleHint() & QFont::SansSerif)
+    // Windows versions since 2017 have the 'Bahnschrift' font (a condensed
+    // sans serif font, optimized for readability despite being condensed),
+    // we first check for that.
+    QFont font(QString::fromLatin1("Bahnschrift"));
+    if (font.exactMatch())
         return font;
-    // on Windows 10 or newer there is no Helvetia font
-    // therefore if we did not found a Helvetica font check for
-    // first the Bahnschrift font (in all Windows since 2017
-    // if this is also not found (on Win 7), we check for the 
-    // the DejaVu Sans fonts
-    font.setFamily(QString::fromLatin1("Bahnschrift"));
-    // on Windows 11 sansserif fonts like Bahnschrift do not have the
-    // styleHint QFont::SansSerif but QFont::AnyStyle
-    // however, in future they might have, thus allow both
-    if (font.styleHint() == QFont::SansSerif || font.styleHint() == QFont::AnyStyle)
-        return font;
-    font.setFamily(QString::fromLatin1("DejaVu Sans"));
-    if (font.styleHint() == QFont::SansSerif || font.styleHint() == QFont::AnyStyle)
-        return font;
-    return font; // We failed, but return whatever we have anyway
+
+    // On systems without 'Bahnschrift' we check for 'Helvetica' or its closest match
+    // as default sans serif font. (For Windows 7 this will e.g. result in 'Arial'.)
+    font = QString::fromLatin1("Helvetica");
+    font.setStyleHint(QFont::SansSerif);
+    return font;
 }
 
 int NaviCube::getDefaultFontSize()
@@ -329,18 +324,7 @@ NaviCubeImplementation::NaviCubeImplementation(
         "User parameter:BaseApp/Preferences/NaviCube");
     hGrp->Attach(this);
 
-    OnChange(*hGrp, "TextColor");
-    OnChange(*hGrp, "FrontColor");
-    OnChange(*hGrp, "HiliteColor");
-    OnChange(*hGrp, "ButtonColor");
-    OnChange(*hGrp, "CornerNaviCube");
-    OnChange(*hGrp, "CubeSize");
-    OnChange(*hGrp, "NaviRotateToNearest");
-    OnChange(*hGrp, "NaviStepByTurn");
-    OnChange(*hGrp, "BorderWidth");
-    OnChange(*hGrp, "BorderColor");
-    OnChange(*hGrp, "FontSize");
-    OnChange(*hGrp, "FontString");
+    applySettings(*hGrp);
 
     m_PickingFramebuffer = nullptr;
     m_Menu = createNaviCubeMenu();
@@ -366,11 +350,27 @@ int NaviCubeImplementation::getDefaultFontSize()
     return int(0.18 * texSize);
 }
 
+void NaviCubeImplementation::applySettings(ParameterGrp& rGrp)
+{
+    NaviCubeImplementation::OnChange(rGrp, "TextColor");
+    NaviCubeImplementation::OnChange(rGrp, "FrontColor");
+    NaviCubeImplementation::OnChange(rGrp, "HiliteColor");
+    NaviCubeImplementation::OnChange(rGrp, "ButtonColor");
+    NaviCubeImplementation::OnChange(rGrp, "CornerNaviCube");
+    NaviCubeImplementation::OnChange(rGrp, "CubeSize");
+    NaviCubeImplementation::OnChange(rGrp, "NaviRotateToNearest");
+    NaviCubeImplementation::OnChange(rGrp, "NaviStepByTurn");
+    NaviCubeImplementation::OnChange(rGrp, "BorderWidth");
+    NaviCubeImplementation::OnChange(rGrp, "BorderColor");
+    NaviCubeImplementation::OnChange(rGrp, "FontSize");
+    NaviCubeImplementation::OnChange(rGrp, "FontString");
+}
+
 void NaviCubeImplementation::OnChange(ParameterGrp::SubjectType& rCaller,
                                       ParameterGrp::MessageType reason)
 {
     const auto& rGrp = static_cast<ParameterGrp&>(rCaller);
-    
+
     if (strcmp(reason, "TextColor") == 0) {
         m_TextColor.setRgba(rGrp.GetUnsigned(reason, QColor(0, 0, 0, 255).rgba()));
     }
@@ -472,7 +472,7 @@ auto convertWeights = [](int weight) -> QFont::Weight {
 
 GLuint NaviCubeImplementation::createCubeFaceTex(QtGLWidget* gl, float gap, const char* text,
                                                  int shape)
-{  
+{
     int texSize = m_CubeWidgetSize * m_OverSample;
     float gapi = texSize * gap;
     QImage image(texSize, texSize, QImage::Format_ARGB32);
@@ -487,7 +487,7 @@ GLuint NaviCubeImplementation::createCubeFaceTex(QtGLWidget* gl, float gap, cons
         paint.setPen(Qt::white);
         QFont sansFont;
         // check the user settings
-        QString fontString = QString::fromUtf8(m_CubeTextFont.c_str());
+        QString fontString = QString::fromStdString(m_CubeTextFont);
         // Override fromString
         if (hGrp->GetInt("FontWeight") > 0) {
             sansFont.setWeight(convertWeights(hGrp->GetInt("FontWeight")));

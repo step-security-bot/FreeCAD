@@ -112,13 +112,19 @@ void DlgSettingsNavigation::saveSettings()
         "User parameter:BaseApp/Preferences/NaviCube");
     hGrp->SetASCII("FontString", ui->naviCubeFontName->currentText().toLatin1());
 
+    recreateNaviCubes();
+}
+
+void DlgSettingsNavigation::recreateNaviCubes()
+{
     // we changed the cube's layout, therefore we must re-initialize it
     // by deleting and the subsequently recreating
-    auto mdi = qobject_cast<View3DInventor*>(getMainWindow()->activeWindow());
-    if (mdi) {
-        auto currentView = mdi->getViewer();
-        currentView->deleteNavigationCube();
-        currentView->createNavigationCube();
+    auto views = getMainWindow()->windows();
+    for (auto view : views) {
+        if (auto view3d = qobject_cast<View3DInventor*>(view)) {
+            auto viewer = view3d->getViewer();
+            viewer->updateNavigationCube();
+        }
     }
 }
 
@@ -138,7 +144,7 @@ void DlgSettingsNavigation::loadSettings()
 
     ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath
         ("User parameter:BaseApp/Preferences/View");
-    std::string model = hGrp->GetASCII("NavigationStyle",CADNavigationStyle::getClassTypeId().getName());
+    std::string model = hGrp->GetASCII("NavigationStyle", CADNavigationStyle::getClassTypeId().getName());
     int index = ui->comboNavigationStyle->findData(QByteArray(model.c_str()));
     if (index > -1) ui->comboNavigationStyle->setCurrentIndex(index);
 
@@ -175,6 +181,8 @@ void DlgSettingsNavigation::loadSettings()
 
     connect(ui->comboNewDocView, qOverload<int>(&QComboBox::currentIndexChanged),
         this, &DlgSettingsNavigation::onNewDocViewChanged);
+    connect(ui->mouseButton, &QPushButton::clicked,
+        this, &DlgSettingsNavigation::onMouseButtonClicked);
 
     // fill up font styles
     hGrp = App::GetApplication().GetParameterGroupByPath(
@@ -188,14 +196,28 @@ void DlgSettingsNavigation::loadSettings()
     QStringList familyNames = QFontDatabase::families(QFontDatabase::Any);
 #endif
     ui->naviCubeFontName->addItems(familyNames);
+
+    // if the parameter has not yet been set, do so immediately
+    // this assures it is set even if the user cancels the dialog
+    if (hGrp->GetASCII("FontString", "").empty())
+        hGrp->SetASCII("FontString", defaultSansserifFont.constData());
     int indexFamilyNames = familyNames.indexOf(
-        QString::fromLatin1(hGrp->GetASCII("FontString", defaultSansserifFont).c_str()));
+        QString::fromStdString(hGrp->GetASCII("FontString", defaultSansserifFont)));
     if (indexFamilyNames < 0)
         indexFamilyNames = 0;
     ui->naviCubeFontName->setCurrentIndex(indexFamilyNames);
+
+    // if the FontSize parameter does not yet exist, set the default value
+    // the default is defined in NaviCubeImplementation::getDefaultFontSize()
+    // but not accessible if there is no cube yet drawn
+    if (hGrp->GetInt("FontSize", 0) == 0) {
+        // the "4" is the hardcoded m_OverSample from getDefaultFontSize()
+        hGrp->SetInt("FontSize", int(0.18 * 4 * ui->prefCubeSize->value()));
+        ui->naviCubeFontSize->onRestore();
+    }
 }
 
-void DlgSettingsNavigation::on_mouseButton_clicked()
+void DlgSettingsNavigation::onMouseButtonClicked()
 {
     QDialog dlg(this);
     Ui_MouseButtons uimb;
