@@ -1066,6 +1066,22 @@ std::list<int> FemMesh::getElementNodes(int id) const
         for (int i = 0; i < elem->NbNodes(); i++)
             result.push_back(elem->GetNode(i)->GetID());
     }
+
+    return result;
+}
+
+std::list<int> FemMesh::getNodeElements(int id, SMDSAbs_ElementType type) const
+{
+    std::list<int> result;
+    const SMDS_MeshNode* node = myMesh->GetMeshDS()->FindNode(id);
+    if (node) {
+        SMDS_ElemIteratorPtr it = node->GetInverseElementIterator(type);
+        while (it->more()) {
+            const SMDS_MeshElement* elem = it->next();
+            result.push_back(elem->GetID());
+        }
+    }
+
     return result;
 }
 
@@ -2578,6 +2594,23 @@ Data::Segment* FemMesh::getSubElement(const char* /*Type*/, unsigned long /*n*/)
     //std::string temp = str.str();
     //return new ShapeSegment(getSubShape(temp.c_str()));
     return nullptr;
+}
+
+void FemMesh::getPoints(std::vector<Base::Vector3d> &Points,
+                        std::vector<Base::Vector3d> & /*Normals*/,
+                        double /*Accuracy*/, uint16_t /*flags*/) const
+{
+    const SMESHDS_Mesh* data = getSMesh()->GetMeshDS();
+    std::vector<Base::Vector3d> nodes;
+    nodes.reserve(data->NbNodes());
+
+    SMDS_NodeIteratorPtr aNodeIter = data->nodesIterator();
+    for (;aNodeIter->more();) {
+        const SMDS_MeshNode* aNode = aNodeIter->next();
+        nodes.emplace_back(aNode->X(), aNode->Y(), aNode->Z());
+    }
+
+    Points = transformPointsToOutside(nodes);
 }
 
 struct Fem::FemMesh::FemMeshInfo FemMesh::getInfo() const{
