@@ -129,6 +129,7 @@ SET(Document_CPP_SRCS
     DocumentObjectExtensionPyImp.cpp
     ExtensionContainer.cpp
     ExtensionContainerPyImp.cpp
+    Graphviz.cpp
     GroupExtension.cpp
     GroupExtensionPyImp.cpp
     DocumentObjectFileIncluded.cpp
@@ -165,7 +166,6 @@ SET(Document_CPP_SRCS
     TextDocument.cpp
     Link.cpp
     LinkBaseExtensionPyImp.cpp
-    License.cpp
     License.h
 )
 
@@ -261,6 +261,7 @@ SET(FreeCADApp_CPP_SRCS
     ComplexGeoData.cpp
     ComplexGeoDataPyImp.cpp
     Enumeration.cpp
+    IndexedName.cpp
     Material.cpp
     MaterialPyImp.cpp
     Metadata.cpp
@@ -277,6 +278,7 @@ SET(FreeCADApp_HPP_SRCS
     ColorModel.h
     ComplexGeoData.h
     Enumeration.h
+    IndexedName.h
     Material.h
     Metadata.h
 )

@@ -23,6 +23,7 @@
 
 #include "PreCompiled.h"
 #ifndef _PreComp_
+# include <QActionGroup>
 # include <QApplication>
 # include <QByteArray>
 # include <QCheckBox>
@@ -67,6 +68,7 @@
 #include <Base/FileInfo.h>
 #include <Base/Interpreter.h>
 #include <Base/Stream.h>
+#include <Base/UnitsApi.h>
 #include <DAGView/DAGView.h>
 #include <TaskView/TaskView.h>
 
@@ -80,6 +82,7 @@
 #include "DownloadManager.h"
 #include "FileDialog.h"
 #include "MenuManager.h"
+#include "NotificationArea.h"
 #include "ProgressBar.h"
 #include "PropertyView.h"
 #include "PythonConsole.h"
@@ -151,7 +154,7 @@ private:
 // Pimpl class
 struct MainWindowP
 {
-    QLabel* sizeLabel;
+    QToolButton* sizeLabel;
     QLabel* actionLabel;
     QTimer* actionTimer;
     QTimer* statusTimer;
@@ -251,7 +254,6 @@ protected:
 
 } // namespace Gui
 
-
 /* TRANSLATOR Gui::MainWindow */
 
 MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags f)
@@ -297,13 +299,25 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags f)
     d->status = new StatusBarObserver();
     d->actionLabel = new QLabel(statusBar());
     // d->actionLabel->setMinimumWidth(120);
-    d->sizeLabel = new QLabel(tr("Dimension"), statusBar());
-    d->sizeLabel->setMinimumWidth(120);
+
+    initialiseSizeLabel();
+
     statusBar()->addWidget(d->actionLabel, 1);
     QProgressBar* progressBar = Gui::SequencerBar::instance()->getProgressBar(statusBar());
     statusBar()->addPermanentWidget(progressBar, 0);
     statusBar()->addPermanentWidget(d->sizeLabel, 0);
 
+    auto hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/NotificationArea");
+
+    auto notificationAreaEnabled = hGrp->GetBool("NotificationAreaEnabled", true);
+
+    if(notificationAreaEnabled) {
+        NotificationArea* notificationArea = new NotificationArea(statusBar());
+        notificationArea->setObjectName(QString::fromLatin1("notificationArea"));
+        notificationArea->setIcon(QIcon(QString::fromLatin1(":/icons/InTray.svg")));
+        notificationArea->setStyleSheet(QStringLiteral("text-align:left;"));
+        statusBar()->addPermanentWidget(notificationArea);
+    }
     // clears the action label
     d->actionTimer = new QTimer( this );
     d->actionTimer->setObjectName(QString::fromLatin1("actionTimer"));
@@ -2068,6 +2082,44 @@ void MainWindow::setPaneText(int i, QString text)
     }
 }
 
+void MainWindow::initialiseSizeLabel()
+{
+    d->sizeLabel = new QToolButton(statusBar());
+    d->sizeLabel->setText(tr("Dimension"));
+    d->sizeLabel->setPopupMode(QToolButton::MenuButtonPopup);
+    QObject::connect(
+        d->sizeLabel, &QToolButton::clicked,
+        d->sizeLabel, &QToolButton::showMenu
+    );
+    d->sizeLabel->setMinimumWidth(120);
+
+    //create the button actions
+    ParameterGrp::handle hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Units");
+    int userSchema = hGrp->GetInt("UserSchema", 0);
+    QActionGroup* actionGrp = new QActionGroup(this);
+    actionGrp->setExclusive(true);
+
+    int num = static_cast<int>(Base::UnitSystem::NumUnitSystemTypes);
+    for (int i = 0; i < num; i++) {
+        QAction* action = new QAction(qApp->translate("Gui::Dialog::DlgSettingsUnits", Base::UnitsApi::getDescription(static_cast<Base::UnitSystem>(i))), this);
+        action->setCheckable(true);
+        action->setChecked(i == userSchema);
+        actionGrp->addAction(action);
+
+        QObject::connect(action, &QAction::changed,
+            this, [i, hGrp] {
+                // Set and save the Unit System
+                Base::UnitsApi::setSchema(static_cast<Base::UnitSystem>(i));
+                hGrp->SetInt("UserSchema", i); //Note : saving parameter will trigger EditModeCoinManager::ParameterObserver
+
+                // Update the application to show the unit change
+                Gui::Application::Instance->onUpdate();
+            }
+        );
+    }
+    d->sizeLabel->addActions(actionGrp->actions());
+}
+
 void MainWindow::customEvent(QEvent* e)
 {
     if (e->type() == QEvent::User) {
@@ -2146,10 +2198,16 @@ void StatusBarObserver::OnChange(Base::Subject<const char*> &rCaller, const char
         unsigned long col = rclGrp.GetUnsigned( sReason );
         this->err = format.arg(App::Color::fromPackedRGB<QColor>(col).name());
     }
+    else if (strcmp(sReason, "colorCritical") == 0) {
+        unsigned long col = rclGrp.GetUnsigned( sReason );
+        this->critical = format.arg(QColor((col >> 24) & 0xff,(col >> 16) & 0xff,(col >> 8) & 0xff).name());
+    }
 }
 
-void StatusBarObserver::SendLog(const std::string& msg, Base::LogStyle level)
+void StatusBarObserver::SendLog(const std::string& notifiername, const std::string& msg, Base::LogStyle level)
 {
+    (void) notifiername;
+
     int messageType = -1;
     switch(level){
         case Base::LogStyle::Warning:
@@ -2163,6 +2221,11 @@ void StatusBarObserver::SendLog(const std::string& msg, Base::LogStyle level)
             break;
         case Base::LogStyle::Log:
             messageType = MainWindow::Log;
+            break;
+        case Base::LogStyle::Critical:
+            messageType = MainWindow::Critical;
+            break;
+        default:
             break;
     }
 
