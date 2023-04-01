@@ -65,6 +65,7 @@
 #include "DrawSketchHandler.h"
 #include "EditDatumDialog.h"
 #include "EditModeCoinManager.h"
+#include "SnapManager.h"
 #include "TaskDlgEditSketch.h"
 #include "TaskSketcherValidation.h"
 #include "Utils.h"
@@ -220,10 +221,6 @@ void ViewProviderSketch::ParameterObserver::initParameters()
             {[this](const std::string & string, App::Property * property){ updateBoolProperty(string, property, true);}, &Client.Autoconstraints }},
         {"AvoidRedundantAutoconstraints",
             {[this](const std::string & string, App::Property * property){ updateBoolProperty(string, property, true);}, &Client.AvoidRedundant }},
-        {"SketchEdgeColor",
-            {[this](const std::string & string, App::Property * property){ updateColorProperty(string, property, 1.f, 1.f, 1.f);}, &Client.LineColor }},
-        {"SketchVertexColor",
-            {[this](const std::string & string, App::Property * property){ updateColorProperty(string, property, 1.f, 1.f, 1.f);}, &Client.PointColor }},
         {"updateEscapeKeyBehaviour",
             {[this](const std::string & string, App::Property * property){ updateEscapeKeyBehaviour(string, property);}, nullptr }},
         {"AutoRecompute",
@@ -304,6 +301,7 @@ ViewProviderSketch::ViewProviderSketch()
     Mode(STATUS_NONE),
     listener(nullptr),
     editCoinManager(nullptr),
+    snapManager(nullptr),
     pObserver(std::make_unique<ViewProviderSketch::ParameterObserver>(*this)),
     sketchHandler(nullptr),
     viewOrientationFactor(1)
@@ -551,36 +549,10 @@ bool ViewProviderSketch::keyPressed(bool pressed, int key)
     return true; // handle all other key events
 }
 
-void ViewProviderSketch::setSnapMode(SnapMode mode)
+void ViewProviderSketch::setAngleSnapping(bool enable, Base::Vector2d referencePoint)
 {
-    snapMode = mode; // to be redirected to SnapManager
-}
-
-SnapMode ViewProviderSketch::getSnapMode() const
-{
-    return snapMode; // to be redirected to SnapManager
-}
-
-void ViewProviderSketch::snapToGrid(double &x, double &y) // Paddle, when resolving this conflict, make sure to use the function in ViewProviderGridExtension
-{
-    if (snapMode == SnapMode::SnapToGrid && ShowGrid.getValue()) {
-        // Snap Tolerance in pixels
-        const double snapTol = getGridSize() / 5;
-
-        double tmpX = x, tmpY = y;
-
-        getClosestGridPoint(tmpX, tmpY);
-
-        // Check if x within snap tolerance
-        if (x < tmpX + snapTol && x > tmpX - snapTol) {
-            x = tmpX; // Snap X Mouse Position
-        }
-
-         // Check if y within snap tolerance
-        if (y < tmpY + snapTol && y > tmpY - snapTol) {
-            y = tmpY; // Snap Y Mouse Position
-        }
-    }
+    assert(snapManager);
+    snapManager->setAngleSnapping(enable, referencePoint);
 }
 
 void ViewProviderSketch::getProjectingLine(const SbVec2s& pnt, const Gui::View3DInventorViewer *viewer, SbLine& line) const
@@ -679,7 +651,7 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
 
     try {
         getCoordsOnSketchPlane(pos,normal,x,y);
-        snapToGrid(x, y);
+        snapManager->snap(x, y);
     }
     catch (const Base::ZeroDivisionError&) {
         return false;
@@ -830,7 +802,7 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                         if (GeoId != Sketcher::GeoEnum::GeoUndef && PosId != Sketcher::PointPos::none) {
                             getDocument()->openCommand(QT_TRANSLATE_NOOP("Command", "Drag Point"));
                             try {
-                                Gui::cmdAppObjectArgs(getObject(), "movePoint(%i,%i,App.Vector(%f,%f,0),%i)"
+                                Gui::cmdAppObjectArgs(getObject(), "movePoint(%d,%d,App.Vector(%f,%f,0),%d)"
                                         ,GeoId, static_cast<int>(PosId), x-drag.xInit, y-drag.yInit, 0);
 
                                 getDocument()->commitCommand();
@@ -891,7 +863,7 @@ bool ViewProviderSketch::mouseButtonPressed(int Button, bool pressed, const SbVe
                             }
 
                             try {
-                                Gui::cmdAppObjectArgs(getObject(), "movePoint(%i,%i,App.Vector(%f,%f,0),%i)"
+                                Gui::cmdAppObjectArgs(getObject(), "movePoint(%d,%d,App.Vector(%f,%f,0),%d)"
                                         ,drag.DragCurve, static_cast<int>(Sketcher::PointPos::none), vec.x, vec.y, drag.relative ? 1 : 0);
 
                                 getDocument()->commitCommand();
@@ -1148,7 +1120,7 @@ bool ViewProviderSketch::mouseMove(const SbVec2s &cursorPos, Gui::View3DInventor
     double x,y;
     try {
         getCoordsOnSketchPlane(line.getPosition(),line.getDirection(),x,y);
-        snapToGrid(x, y);
+        snapManager->snap(x, y);
     }
     catch (const Base::ZeroDivisionError&) {
         return false;
@@ -1275,7 +1247,7 @@ bool ViewProviderSketch::mouseMove(const SbVec2s &cursorPos, Gui::View3DInventor
                     SbLine line2;
                     getProjectingLine(DoubleClick::prvCursorPos, viewer, line2);
                     getCoordsOnSketchPlane(line2.getPosition(),line2.getDirection(),drag.xInit,drag.yInit);
-                    snapToGrid(drag.xInit, drag.yInit);
+                    snapManager->snap(drag.xInit, drag.yInit);
                 } else {
                     drag.resetVector();
                 }
@@ -1416,16 +1388,23 @@ void ViewProviderSketch::moveConstraint(int constNum, const Base::Vector2d &toPo
         if (Constr->SecondPos != Sketcher::PointPos::none) { // point to point distance
             p1 = getSolvedSketch().getPoint(Constr->First, Constr->FirstPos);
             p2 = getSolvedSketch().getPoint(Constr->Second, Constr->SecondPos);
-        } else if (Constr->Second != GeoEnum::GeoUndef) { // point to line distance
+        } else if (Constr->Second != GeoEnum::GeoUndef) {
             p1 = getSolvedSketch().getPoint(Constr->First, Constr->FirstPos);
             const Part::Geometry *geo = GeoList::getGeometryFromGeoId (geomlist, Constr->Second);
-            if (geo->getTypeId() == Part::GeomLineSegment::getClassTypeId()) {
+            if (geo->getTypeId() == Part::GeomLineSegment::getClassTypeId()) { // point to line distance
                 const Part::GeomLineSegment *lineSeg = static_cast<const Part::GeomLineSegment *>(geo);
                 Base::Vector3d l2p1 = lineSeg->getStartPoint();
                 Base::Vector3d l2p2 = lineSeg->getEndPoint();
                 // calculate the projection of p1 onto line2
                 p2.ProjectToLine(p1-l2p1, l2p2-l2p1);
                 p2 += p1;
+            } else if (geo->getTypeId() == Part::GeomCircle::getClassTypeId()) { // circle to circle distance
+                const Part::Geometry *geo1 = GeoList::getGeometryFromGeoId (geomlist, Constr->First);
+                if (geo1->getTypeId() == Part::GeomCircle::getClassTypeId()) {
+                    const Part::GeomCircle *circleSeg1 = static_cast<const Part::GeomCircle *>(geo1);
+                    const Part::GeomCircle *circleSeg2 = static_cast<const Part::GeomCircle *>(geo);
+                    GetCirclesMinimalDistance(circleSeg1, circleSeg2, p1, p2);
+                }
             } else
                 return;
         } else if (Constr->FirstPos != Sketcher::PointPos::none) {
@@ -2828,7 +2807,7 @@ bool ViewProviderSketch::setEdit(int ModNum)
         msgBox.setDefaultButton(QMessageBox::Yes);
         int ret = msgBox.exec();
         if (ret == QMessageBox::Yes)
-            Gui::Control().reject();
+            Gui::Control().closeDialog();
         else
             return false;
     }
@@ -2870,6 +2849,7 @@ bool ViewProviderSketch::setEdit(int ModNum)
     preselection.reset();
     selection.reset();
     editCoinManager = std::make_unique<EditModeCoinManager>(*this);
+    snapManager = std::make_unique<SnapManager>(*this);
 
     auto editDoc = Gui::Application::Instance->editDocument();
     App::DocumentObject *editObj = getSketchObject();
@@ -3116,6 +3096,7 @@ void ViewProviderSketch::unsetEdit(int ModNum)
             deactivateHandler();
 
         editCoinManager = nullptr;
+        snapManager = nullptr;
         preselection.reset();
         selection.reset();
         this->detachSelection();
@@ -3399,7 +3380,7 @@ bool ViewProviderSketch::onDelete(const std::vector<std::string> &subList)
 
         for (rit = delConstraints.rbegin(); rit != delConstraints.rend(); ++rit) {
             try {
-                Gui::cmdAppObjectArgs(getObject(), "delConstraint(%i)", *rit);
+                Gui::cmdAppObjectArgs(getObject(), "delConstraint(%d)", *rit);
             }
             catch (const Base::Exception& e) {
                 Base::Console().Error("%s\n", e.what());
@@ -3423,7 +3404,7 @@ bool ViewProviderSketch::onDelete(const std::vector<std::string> &subList)
                     if (((*it)->Type == Sketcher::Coincident) && (((*it)->First == GeoId && (*it)->FirstPos == PosId) ||
                         ((*it)->Second == GeoId && (*it)->SecondPos == PosId)) ) {
                         try {
-                            Gui::cmdAppObjectArgs(getObject(), "delConstraintOnPoint(%i,%i)", GeoId, (int)PosId);
+                            Gui::cmdAppObjectArgs(getObject(), "delConstraintOnPoint(%d,%d)", GeoId, (int)PosId);
                         }
                         catch (const Base::Exception& e) {
                             Base::Console().Error("%s\n", e.what());
@@ -3458,7 +3439,7 @@ bool ViewProviderSketch::onDelete(const std::vector<std::string> &subList)
 
         for (rit = delExternalGeometries.rbegin(); rit != delExternalGeometries.rend(); ++rit) {
             try {
-                Gui::cmdAppObjectArgs(getObject(), "delExternal(%i)", *rit);
+                Gui::cmdAppObjectArgs(getObject(), "delExternal(%d)", *rit);
             }
             catch (const Base::Exception& e) {
                 Base::Console().Error("%s\n", e.what());
