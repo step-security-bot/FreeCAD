@@ -34,7 +34,6 @@ import FreeCADGui
 from FreeCAD import Qt
 
 from .manager import CommandManager
-from femsolver import settings
 from femtools.femutils import expandParentObject
 from femtools.femutils import is_of_type
 from femsolver.settings import get_default_solver
@@ -72,7 +71,8 @@ class _Analysis(CommandManager):
         FreeCAD.ActiveDocument.commitTransaction()
         if get_default_solver() != "None":
             FreeCAD.ActiveDocument.openTransaction("Create default solver")
-            FreeCADGui.doCommand("ObjectsFem.makeSolver{}(FreeCAD.ActiveDocument)"
+            FreeCADGui.doCommand(
+                "ObjectsFem.makeSolver{}(FreeCAD.ActiveDocument)"
                 .format(get_default_solver())
             )
             FreeCADGui.doCommand(
@@ -218,6 +218,7 @@ class _ConstraintCentrif(CommandManager):
         )
         self.is_active = "with_analysis"
         self.do_activated = "add_obj_on_gui_set_edit"
+
 
 class _ConstraintCurrentDensity(CommandManager):
     "The FEM_ConstraintCurrentDensity command definition"

@@ -36,6 +36,7 @@ from femtools import membertools
 from femmesh import meshtools
 from . import heat
 
+
 class Heatwriter:
 
     def __init__(self, writer, solver):
@@ -94,7 +95,10 @@ class Heatwriter:
         i = -1
         for obj in self.write.getMember("Fem::ConstraintTemperature"):
             i = i + 1
-            femobjects = membertools.get_several_member(self.write.analysis, "Fem::ConstraintTemperature")
+            femobjects = membertools.get_several_member(
+                self.write.analysis,
+                "Fem::ConstraintTemperature"
+            )
             femobjects[i]["Nodes"] = meshtools.get_femnodes_by_femobj_with_references(
                 self.write.getSingleMember("Fem::FemMeshObject").FemMesh,
                 femobjects[i]

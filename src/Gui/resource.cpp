@@ -39,14 +39,12 @@
 #include "DlgSettingsNotificationArea.h"
 #include "DlgSettingsPythonConsole.h"
 #include "DlgSettingsMacroImp.h"
-#include "DlgSettingsUnitsImp.h"
 #include "DlgSettingsDocumentImp.h"
 #include "DlgReportViewImp.h"
 #include "DlgSettingsWorkbenchesImp.h"
 
 #include "DlgToolbarsImp.h"
 #include "DlgActionsImp.h"
-#include "DlgCommandsImp.h"
 #include "DlgKeyboardImp.h"
 #include "DlgCustomizeSpaceball.h"
 #include "DlgCustomizeSpNavSettings.h"
@@ -70,21 +68,19 @@ WidgetFactorySupplier::WidgetFactorySupplier()
     new PrefPageProducer<DlgSettingsDocumentImp>      ( QT_TRANSLATE_NOOP("QObject","General") );
     new PrefPageProducer<DlgSettingsSelection>        ( QT_TRANSLATE_NOOP("QObject","General") );
     new PrefPageProducer<DlgSettingsCacheDirectory>   ( QT_TRANSLATE_NOOP("QObject","General") );
-    new PrefPageProducer<DlgSettingsEditorImp>        ( QT_TRANSLATE_NOOP("QObject","General") );
     new PrefPageProducer<DlgSettingsNotificationArea> ( QT_TRANSLATE_NOOP("QObject","General") );
-    new PrefPageProducer<DlgSettingsPythonConsole>    ( QT_TRANSLATE_NOOP("QObject","General") );
     new PrefPageProducer<DlgReportViewImp>            ( QT_TRANSLATE_NOOP("QObject","General") );
-    new PrefPageProducer<DlgSettingsMacroImp>         ( QT_TRANSLATE_NOOP("QObject","General") );
-    new PrefPageProducer<DlgSettingsUnitsImp>         ( QT_TRANSLATE_NOOP("QObject","General") );
     new PrefPageProducer<DlgSettings3DViewImp>        ( QT_TRANSLATE_NOOP("QObject","Display") );
     new PrefPageProducer<DlgSettingsNavigation>       ( QT_TRANSLATE_NOOP("QObject","Display") );
     new PrefPageProducer<DlgSettingsViewColor>        ( QT_TRANSLATE_NOOP("QObject","Display") );
     new PrefPageProducer<DlgSettingsWorkbenchesImp>   ( QT_TRANSLATE_NOOP("QObject","Workbenches") );
+    new PrefPageProducer<DlgSettingsMacroImp>         ( QT_TRANSLATE_NOOP("QObject", "Python"));
+    new PrefPageProducer<DlgSettingsPythonConsole>    ( QT_TRANSLATE_NOOP("QObject", "Python"));
+    new PrefPageProducer<DlgSettingsEditorImp>        ( QT_TRANSLATE_NOOP("QObject", "Python"));
 
     // ADD YOUR CUSTOMIZE PAGES HERE
     //
     //
-    new CustomPageProducer<DlgCustomCommandsImp>;
     new CustomPageProducer<DlgCustomKeyboardImp>;
     new CustomPageProducer<DlgCustomToolbarsImp>;
     new CustomPageProducer<DlgCustomActionsImp>;
