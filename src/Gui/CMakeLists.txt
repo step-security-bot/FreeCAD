@@ -342,8 +342,8 @@ SET(Gui_UIC_SRCS
     Placement.ui
     TextureMapping.ui
     TaskView/TaskAppearance.ui
-    TaskView/TaskImageScale.ui
     TaskView/TaskOrientation.ui
+    TaskView/TaskImage.ui
     TaskView/TaskSelectLinkProperty.ui
     TaskElementColors.ui
     DlgObjectSelection.ui
@@ -378,6 +378,7 @@ SET(Command_CPP_SRCS
     CommandPyImp.cpp
     ShortcutManager.cpp
     CommandCompleter.cpp
+    CommandActionPy.cpp
 )
 SET(Command_SRCS
     ${Command_CPP_SRCS}
@@ -387,6 +388,7 @@ SET(Command_SRCS
     CommandT.h
     ShortcutManager.h
     CommandCompleter.h
+    CommandActionPy.h
 )
 SOURCE_GROUP("Command" FILES ${Command_SRCS})
 
@@ -718,12 +720,12 @@ SET(Task_View_SRCS
     TaskView/TaskAppearance.cpp
     TaskView/TaskAppearance.h
     TaskView/TaskAppearance.ui
-    TaskView/TaskImageScale.cpp
-    TaskView/TaskImageScale.h
-    TaskView/TaskImageScale.ui
     TaskView/TaskOrientation.cpp
     TaskView/TaskOrientation.h
     TaskView/TaskOrientation.ui
+    TaskView/TaskImage.cpp
+    TaskView/TaskImage.h
+    TaskView/TaskImage.ui
     TaskView/TaskSelectLinkProperty.cpp
     TaskView/TaskSelectLinkProperty.h
     TaskView/TaskSelectLinkProperty.ui
@@ -966,6 +968,7 @@ SET(Inventor_CPP_SRCS
     SoNavigationDragger.cpp
     SoAxisCrossKit.cpp
     SoTextLabel.cpp
+    SoDatumLabel.cpp
     SoTouchEvents.cpp
     SoMouseWheelEvent.cpp
     SoFCCSysDragger.cpp
@@ -993,6 +996,7 @@ SET(Inventor_SRCS
     SoNavigationDragger.h
     SoAxisCrossKit.h
     SoTextLabel.h
+    SoDatumLabel.h
     SoTouchEvents.h
     SoMouseWheelEvent.h
     SoFCCSysDragger.h
@@ -1233,8 +1237,8 @@ if(MSVC)
         propertyeditor/PropertyItemDelegate.cpp
         propertyeditor/PropertyModel.cpp
         TaskView/TaskAppearance.cpp
-        TaskView/TaskImageScale.cpp
         TaskView/TaskOrientation.cpp
+        TaskView/TaskImage.cpp
         TaskView/TaskSelectLinkProperty.cpp
         TaskView/TaskEditControl.cpp
         TaskView/TaskView.cpp

@@ -73,7 +73,7 @@ void DrawGuiUtil::loadArrowBox(QComboBox* qcb)
     qcb->clear();
     int i = 0;
     for (; i < ArrowPropEnum::ArrowCount; i++) {
-        qcb->addItem(tr(ArrowPropEnum::ArrowTypeEnums[i]));
+        qcb->addItem(QCoreApplication::translate("ArrowPropEnum", ArrowPropEnum::ArrowTypeEnums[i]));
         QIcon itemIcon(QString::fromUtf8(ArrowPropEnum::ArrowTypeIcons[i].c_str()));
         qcb->setItemIcon(i, itemIcon);
     }
@@ -434,6 +434,5 @@ std::pair<Base::Vector3d, Base::Vector3d> DrawGuiUtil::getProjDirFromFace(App::D
         }
     }
 
-    dirs = std::make_pair(projDir, rotVec);
-    return dirs;
+    return std::make_pair(projDir, rotVec);
 }

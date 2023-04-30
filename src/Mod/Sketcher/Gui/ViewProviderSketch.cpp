@@ -260,6 +260,8 @@ void ViewProviderSketch::ParameterObserver::initParameters()
     }
 
     // unsubscribed parameters which update a property on just once upon construction (and before restore if properties are being restored from a file)
+    updateColorProperty("SketchEdgeColor", &Client.LineColor, 1.0f, 1.0f, 1.0f);
+    updateColorProperty("SketchVertexColor", &Client.PointColor, 1.0f, 1.0f, 1.0f);
     updateBoolProperty("ShowGrid", &Client.ShowGrid, false);
     updateBoolProperty("GridAuto", &Client.GridAuto, true);
     updateGridSize("GridSize", &Client.GridSize);
@@ -533,7 +535,7 @@ bool ViewProviderSketch::keyPressed(bool pressed, int key)
                viewProviderParameters.buttonPress = pressed;
 
                 // More control over Sketcher edit mode Esc key behavior
-                // https://forum.freecadweb.org/viewtopic.php?f=3&t=42207
+                // https://forum.freecad.org/viewtopic.php?f=3&t=42207
                 return viewProviderParameters.handleEscapeButton;
             }
             return false;

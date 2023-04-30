@@ -346,7 +346,7 @@ void TaskCenterLine::updateOrientation()
 {
     // When the orientation was changed, it can be that the centerline becomes invalid
     // this can lead to a crash, see e.g.
-    // https://forum.freecadweb.org/viewtopic.php?f=35&t=44255&start=20#p503220
+    // https://forum.freecad.org/viewtopic.php?f=35&t=44255&start=20#p503220
     // The centerline creation can fail if m_type is edge and both selected edges are vertical or horizontal.
     // To test the validity before an existing centerline is changed, we create a new one with the desired parameters.
     int orientation = m_cl->m_mode;
@@ -417,9 +417,7 @@ double TaskCenterLine::getCenterWidth()
 
 Qt::PenStyle TaskCenterLine::getCenterStyle()
 {
-    Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter().GetGroup("BaseApp")->
-                                         GetGroup("Preferences")->GetGroup("Mod/TechDraw/Decorations");
-    Qt::PenStyle centerStyle = static_cast<Qt::PenStyle> (hGrp->GetInt("CenterLine", 2));
+    Qt::PenStyle centerStyle = static_cast<Qt::PenStyle> (Preferences::getPreferenceGroup("Decorations")->GetInt("CenterLine", 2));
     return centerStyle;
 }
 
@@ -430,10 +428,7 @@ QColor TaskCenterLine::getCenterColor()
 
 double TaskCenterLine::getExtendBy()
 {
-    Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter().GetGroup("BaseApp")->
-                                         GetGroup("Preferences")->GetGroup("Mod/TechDraw/Decorations");
-    double ext = hGrp->GetFloat("CosmoCLExtend", 3.0);
-    return ext;
+    return Preferences::getPreferenceGroup("Decorations")->GetFloat("CosmoCLExtend", 3.0);
 }
 
 //******************************************************************************
