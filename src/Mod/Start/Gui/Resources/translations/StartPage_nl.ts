@@ -56,17 +56,17 @@
     <message>
       <location filename="TranslationTexts.py" line="52"/>
       <source>This section contains documentation useful for FreeCAD users in general: a list of all the workbenches, detailed instructions on how to install and use the FreeCAD application, tutorials, and all you need to get started.</source>
-      <translation>Deze sectie bevat documentatie die nuttig is voor FreeCAD-gebruikers in het algemeen: een lijst van alle werkbanken, gedetailleerde instructies over het installeren en gebruiken van de FreeCAD applicatie, tutorials, en alles wat je nodig hebt om te beginnen.</translation>
+      <translation>Deze sectie bevat nuttige algemene documentatie voor FreeCAD-gebruikers: een lijst van alle werkbanken, gedetailleerde instructies over het installeren en gebruiken van FreeCAD, tutorials, en alles wat je nodig hebt om te beginnen.</translation>
     </message>
     <message>
       <location filename="TranslationTexts.py" line="53"/>
       <source>Power users hub</source>
-      <translation>Vergevorderden gebruikers hub</translation>
+      <translation>Hub voor gevorderde gebruikers</translation>
     </message>
     <message>
       <location filename="TranslationTexts.py" line="54"/>
       <source>This section gathers documentation for advanced users and people interested in writing python scripts. You will also find there a repository of macros, instructions on how to install and use them, and more information about customizing FreeCAD to your specific needs.</source>
-      <translation>Deze sectie verzamelt documentatie voor ervaren gebruikers en mensen die geïnteresseerd zijn in het schrijven van python scripts. U vindt er ook een opslagplaats van macro's, instructies over hoe te installeren en gebruik ervan, en meer informatie over het aanpassen van FreeCAD aan uw specifieke behoeften.</translation>
+      <translation>Deze sectie verzamelt documentatie voor ervaren gebruikers en mensen die geïnteresseerd zijn in het schrijven van Python scripts. U vindt hier ook een bibliotheek van macro's, instructies over hoe deze te installeren en gebruiken, en meer informatie over het aanpassen van FreeCAD aan uw specifieke behoeften.</translation>
     </message>
     <message>
       <location filename="TranslationTexts.py" line="55"/>
@@ -76,17 +76,17 @@
     <message>
       <location filename="TranslationTexts.py" line="56"/>
       <source>This section contains material for developers: How to compile FreeCAD yourself, how the FreeCAD source code is structured + how to navigate in it, how to develop new workbenches and/or embed FreeCAD in your own application.</source>
-      <translation>Deze sectie bevat materiaal voor ontwikkelaars: Hoe zelf FreeCAD te compileren, hoe de broncode van FreeCAD is gestructureerd en hoe daarin te navigeren, hoe nieuwe werkbanken te ontwikkelen of FreeCAD in uw eigen toepassing in te voegen.</translation>
+      <translation>Deze sectie bevat materiaal voor ontwikkelaars: Hoe zelf FreeCAD te compileren, hoe de broncode van FreeCAD gestructureerd is en hoe erin te navigeren, hoe nieuwe werkbanken te ontwikkelen en/of FreeCAD in uw eigen toepassing in te voegen.</translation>
     </message>
     <message>
       <location filename="TranslationTexts.py" line="57"/>
       <source>Manual</source>
-      <translation>Handmatig</translation>
+      <translation>Handleiding</translation>
     </message>
     <message>
       <location filename="TranslationTexts.py" line="58"/>
       <source>The FreeCAD manual is another, more linear way to present the information contained in this wiki. It is made to be read like a book, and will gently introduce you to many other pages from the hubs above. &lt;a href="https://www.gitbook.com/book/yorikvanhavre/a-freecad-manual/details"&gt;e-book versions&lt;/a&gt; are also available.</source>
-      <translation>De handleiding van FreeCAD is een andere, meer lineaire manier om de informatie te presenteren in deze wiki. Het is gemaakt om te worden gelezen als een boek en zal U zachtjes kennis laten maken met de vele andere pagina's van de bovenstaande hubs. &lt;a href="https://www.gitbook.com/book/yorikvanhavre/a-freecad-manual/details"&gt;e-boek versies&lt;/a&gt; zijn ook beschikbaar.</translation>
+      <translation>De FreeCAD handleiding is een andere, meer lineaire manier om de informatie uit deze wiki te presenteren. Het is gemaakt om als een boek te worden gelezen en zal u rustig kennis laten maken met de vele andere pagina's van de bovenstaande hubs. &lt;a href="https://www.gitbook.com/book/yorikvanhavre/a-freecad-manual/details"&gt;E-boek versies&lt;/a&gt; zijn ook beschikbaar.</translation>
     </message>
     <message>
       <location filename="TranslationTexts.py" line="59"/>
@@ -206,7 +206,7 @@
     <message>
       <location filename="TranslationTexts.py" line="82"/>
       <source>Notes</source>
-      <translation>Notities</translation>
+      <translation>Aantekeningen</translation>
     </message>
     <message>
       <location filename="TranslationTexts.py" line="83"/>
@@ -291,18 +291,18 @@
       <location filename="../../DlgStartPreferences.ui" line="110"/>
       <source>An optional custom folder to be displayed at the bottom of the first page.
 By using ";;" to separate paths, you can add several folders here</source>
-      <translation type="unfinished">An optional custom folder to be displayed at the bottom of the first page.
-By using ";;" to separate paths, you can add several folders here</translation>
+      <translation>Een optionele aangepaste map, die onderaan de eerste pagina wordt weergegeven.
+Door ";" te gebruiken kan je ook meerdere mappen toevoegen</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="127"/>
       <source>Show notepad</source>
-      <translation>Toon notitieblok</translation>
+      <translation>Kladblok weergeven</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="134"/>
       <source>Shows a notepad next to the file thumbnails, where you can keep notes across sessions</source>
-      <translation type="unfinished">Shows a notepad next to the file thumbnails, where you can keep notes across sessions</translation>
+      <translation>Toont een kladblok naast de bestandsminiaturen, om aantekeningen te bewaren tussen sessies</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="153"/>
@@ -312,7 +312,7 @@ By using ";;" to separate paths, you can add several folders here</translation>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="163"/>
       <source>Displays help tips in the Start workbench Documents tab</source>
-      <translation type="unfinished">Displays help tips in the Start workbench Documents tab</translation>
+      <translation>Toon help tips op het tabblad Documenten in de Start werkbank</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="185"/>
@@ -342,7 +342,7 @@ By using ";;" to separate paths, you can add several folders here</translation>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="266"/>
       <source>Background color down gradient</source>
-      <translation type="unfinished">Background color down gradient</translation>
+      <translation>Achtergrond kleur gradient</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="279"/>
@@ -362,7 +362,7 @@ By using ";;" to separate paths, you can add several folders here</translation>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="319"/>
       <source>If this is checked and a style sheet is specified in General preferences, it will be used and override the colors below</source>
-      <translation type="unfinished">If this is checked and a style sheet is specified in General preferences, it will be used and override the colors below</translation>
+      <translation>Als dit aangevinkt is, en een stijlblad is gespecificeerd in de Algemene Voorkeuren, zal het stijlblad gebruikt worden in plaats van de onderstaande kleuren</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="338"/>
@@ -397,7 +397,7 @@ By using ";;" to separate paths, you can add several folders here</translation>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="437"/>
       <source>Box background color</source>
-      <translation>Achtergrondkleur van de kader</translation>
+      <translation>Achtergrondkleur van de kaders</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="450"/>
@@ -452,12 +452,12 @@ By using ";;" to separate paths, you can add several folders here</translation>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="572"/>
       <source>Use gradient for New File icon</source>
-      <translation>Gebruik gradiënt voor nieuw bestandspictogram</translation>
+      <translation>Gebruik een kleurgradiënt in het 'Nieuw bestand' pictogram</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="579"/>
       <source>If this is selected, the 'New File' icon shows a gradient icon instead of the normal icon</source>
-      <translation type="unfinished">If this is selected, the 'New File' icon shows a gradient icon instead of the normal icon</translation>
+      <translation>Als dit is geselecteerd, toont het 'Nieuw bestand' pictogram een gradiënt icoon in plaats van het normale icoon</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="601"/>
@@ -467,17 +467,17 @@ By using ";;" to separate paths, you can add several folders here</translation>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="607"/>
       <source>Choose which workbench to switch to after the program launches</source>
-      <translation type="unfinished">Choose which workbench to switch to after the program launches</translation>
+      <translation>Kies naar welke werkbank moet worden overgeschakeld nadat het programma is gestart</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="614"/>
       <source>If checked, will automatically close the Start page when FreeCAD launches</source>
-      <translation type="unfinished">If checked, will automatically close the Start page when FreeCAD launches</translation>
+      <translation>Indien aangevinkt, wordt de startpagina automatisch gesloten als FreeCAD start</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="633"/>
       <source>Switch workbench after loading</source>
-      <translation>Werkbank na het laden overschakelen</translation>
+      <translation>Na opstarten naar deze Werkbank overschakelen</translation>
     </message>
     <message>
       <location filename="../../DlgStartPreferences.ui" line="640"/>
