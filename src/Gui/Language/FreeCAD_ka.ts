@@ -194,8 +194,8 @@
     </message>
     <message>
       <location filename="../Transform.cpp" line="105"/>
-      <location filename="../ViewProviderAnnotation.cpp" line="416"/>
       <location filename="../ViewProviderDragger.cpp" line="222"/>
+      <location filename="../ViewProviderAnnotation.cpp" line="416"/>
       <source>Transform</source>
       <translation>გარდაქმნა</translation>
     </message>
@@ -4645,7 +4645,7 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</source>
     <name>Gui::Dialog::DlgSettingsNavigation</name>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="14"/>
-      <location filename="../DlgSettingsNavigation.ui" line="234"/>
+      <location filename="../DlgSettingsNavigation.ui" line="238"/>
       <source>Navigation</source>
       <translation>ნავიგაცია</translation>
     </message>
@@ -4715,56 +4715,59 @@ You can also use the form: John Doe &lt;john@doe.com&gt;</source>
       <translation>ნავიგაციის კუბის ფონტის სახელი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="165"/>
+      <location filename="../DlgSettingsNavigation.ui" line="162"/>
+      <source>Default</source>
+      <translation>ნაგულისხმევი</translation>
+    </message>
+    <message>
+      <location filename="../DlgSettingsNavigation.ui" line="170"/>
       <source>Cube size</source>
       <translation>კუბის ზომა</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="172"/>
+      <location filename="../DlgSettingsNavigation.ui" line="177"/>
       <source>Size of the navigation cube</source>
       <translation>ნავიგაციის კუბის ზომა</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="200"/>
+      <location filename="../DlgSettingsNavigation.ui" line="205"/>
       <source>Color</source>
       <translation>ფერი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="207"/>
-      <source>color for all elements
-around the cube</source>
-      <translation>კუბის გარშემო არსებული
-ყველა ელემენტის ფერი</translation>
+      <location filename="../DlgSettingsNavigation.ui" line="212"/>
+      <source>Base color for all elements</source>
+      <translation>ყველა ელემენტის ძირითადი ფერი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="240"/>
+      <location filename="../DlgSettingsNavigation.ui" line="244"/>
       <source>3D Navigation</source>
       <translation>3D ნავიგაცია</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="277"/>
+      <location filename="../DlgSettingsNavigation.ui" line="281"/>
       <source>List the mouse button configs for each chosen navigation setting.
 Select a set and then press the button to view said configurations.</source>
       <translation>მაუსის ღილაკის კონფიგურაციების ჩამოთვლა არჩეული ნავიგაციის თითოეული პარამეტრისთვის.
 აირჩიეთ ნაკრები და შემდეგ დააჭირეთ ღილაკს აღნიშნული კონფიგურაციების სანახავად.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="281"/>
+      <location filename="../DlgSettingsNavigation.ui" line="285"/>
       <source>Mouse...</source>
       <translation>თაგუნა...</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="302"/>
+      <location filename="../DlgSettingsNavigation.ui" line="306"/>
       <source>Navigation settings set</source>
       <translation>ნავიგაციის პარამეტრების ნაკრები</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="312"/>
+      <location filename="../DlgSettingsNavigation.ui" line="316"/>
       <source>Orbit style</source>
       <translation>ტრიალის სტილი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="331"/>
+      <location filename="../DlgSettingsNavigation.ui" line="335"/>
       <source>Rotation orbit style.
 Trackball: moving the mouse horizontally will rotate the part around the y-axis
 Turntable: the part will be rotated around the z-axis (with constrained axes).
@@ -4775,116 +4778,116 @@ Free Turntable: the part will be rotated around the z-axis.</source>
 თავისუფალი ბრუნავი დისკო: ნაწილი Z-ღერძის გარშემო შებრუნდება.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="341"/>
+      <location filename="../DlgSettingsNavigation.ui" line="345"/>
       <source>Turntable</source>
       <translation>გრუნტი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="346"/>
+      <location filename="../DlgSettingsNavigation.ui" line="350"/>
       <source>Trackball</source>
       <translation>ტრეკბოლი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="351"/>
+      <location filename="../DlgSettingsNavigation.ui" line="355"/>
       <source>Free Turntable</source>
       <translation>თავისუფალი გრუნტი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="359"/>
+      <location filename="../DlgSettingsNavigation.ui" line="363"/>
       <source>Rotation mode</source>
       <translation>ბრუნვის რეჟიმი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="378"/>
+      <location filename="../DlgSettingsNavigation.ui" line="382"/>
       <source>Rotations in 3D will use current cursor position as center for rotation</source>
       <translation>3D-ში ბრუნვის დროს მობრუნების ცენტრი კურსორის მიმდინარე მდებარეობა იქნება</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="385"/>
+      <location filename="../DlgSettingsNavigation.ui" line="389"/>
       <source>Window center</source>
       <translation>ფანჯრის ცენტრი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="390"/>
+      <location filename="../DlgSettingsNavigation.ui" line="394"/>
       <source>Drag at cursor</source>
       <translation>კურსორთან გადათრევა</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="395"/>
+      <location filename="../DlgSettingsNavigation.ui" line="399"/>
       <source>Object center</source>
       <translation>ობიექტის ცენტრი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="403"/>
+      <location filename="../DlgSettingsNavigation.ui" line="407"/>
       <source>Default camera orientation</source>
       <translation>კამერის ნაგულისხმევი ორიენტაცია</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="422"/>
+      <location filename="../DlgSettingsNavigation.ui" line="426"/>
       <source>Default camera orientation when creating a new document or selecting the home view</source>
       <translation>კამერის ნაგულისხმევი ორიენტაცია ახალი დოკუმენტის შექმნისას ან საწყისი ხედის არჩევისას</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="429"/>
+      <location filename="../DlgSettingsNavigation.ui" line="433"/>
       <source>Camera zoom</source>
       <translation>კამერის გადიდება</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="448"/>
+      <location filename="../DlgSettingsNavigation.ui" line="452"/>
       <source>Sets camera zoom for new documents.
 The value is the diameter of the sphere to fit on the screen.</source>
       <translation>აყენებს ახალი დოკუმენტების კამერის მასშტაბს.
 მნიშვნელობას წარმოადგენს სფეროს დიამეტრი, რომელიც ეკრანზე ეტევა.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="452"/>
+      <location filename="../DlgSettingsNavigation.ui" line="456"/>
       <source>mm</source>
       <translation>მმ</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="477"/>
+      <location filename="../DlgSettingsNavigation.ui" line="481"/>
       <source>Enable animated rotations</source>
       <translation>ანიმირებული შებრუნების ჩართვა</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="480"/>
+      <location filename="../DlgSettingsNavigation.ui" line="484"/>
       <source>Enable animation</source>
       <translation>ანიმაციის ჩართვა</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="496"/>
+      <location filename="../DlgSettingsNavigation.ui" line="500"/>
       <source>Zoom operations will be performed at position of mouse pointer</source>
       <translation>გადიდების მოქმედება თაგუნას მაჩვენებლის პოზიციაზე მოხდება</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="499"/>
+      <location filename="../DlgSettingsNavigation.ui" line="503"/>
       <source>Zoom at cursor</source>
       <translation>კურსორთან გადიდება</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="515"/>
+      <location filename="../DlgSettingsNavigation.ui" line="519"/>
       <source> Zoom step</source>
       <translation> გადიდების ბიჯი</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="533"/>
+      <location filename="../DlgSettingsNavigation.ui" line="537"/>
       <source>How much will be zoomed.
 Zoom step of '1' means a factor of 7.5 for every zoom step.</source>
       <translation>რამდენად შეიძლება გაადიდოთ.
 გადიდების ბიჯი 1 ნიშნავს 7,5-ჯერ გადიდებას ყოველ ბიჯზე.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="577"/>
+      <location filename="../DlgSettingsNavigation.ui" line="581"/>
       <source>Direction of zoom operations will be inverted</source>
       <translation>გადიდების ოპერაციების ინვერსია</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="580"/>
+      <location filename="../DlgSettingsNavigation.ui" line="584"/>
       <source>Invert zoom</source>
       <translation>გადიდების ინვერსია</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="596"/>
+      <location filename="../DlgSettingsNavigation.ui" line="600"/>
       <source>Prevents view tilting when pinch-zooming.
 Affects only gesture navigation style.
 Mouse tilting is not disabled by this setting.</source>
@@ -4893,57 +4896,57 @@ Mouse tilting is not disabled by this setting.</source>
 თაგუნათი დახრილობა ამ პარამეტრით არ არის ითიშება.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="601"/>
+      <location filename="../DlgSettingsNavigation.ui" line="605"/>
       <source>Disable touchscreen tilt gesture</source>
       <translation>სენსორული ეკრანის მისახვედრი ჟესტების გამორთვა</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="147"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="150"/>
       <source>Isometric</source>
       <translation>იზომეტრიული</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="148"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="151"/>
       <source>Dimetric</source>
       <translation>დიმეტრიული</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="149"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="152"/>
       <source>Trimetric</source>
       <translation>ტრიმეტრული</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="150"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="153"/>
       <source>Top</source>
       <translation>თავზე</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="151"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="154"/>
       <source>Front</source>
       <translation>წინ</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="152"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="155"/>
       <source>Left</source>
       <translation>მარცხნივ</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="153"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="156"/>
       <source>Right</source>
       <translation>მარჯვნივ</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="154"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="157"/>
       <source>Rear</source>
       <translation>უკან</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="155"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="158"/>
       <source>Bottom</source>
       <translation>ძირზე</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="156"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="159"/>
       <source>Custom</source>
       <translation>მომხმარებლის</translation>
     </message>
@@ -6807,62 +6810,62 @@ Do you want to save your changes?</source>
     <name>Gui::MainWindow</name>
     <message>
       <location filename="../MainWindow.cpp" line="166"/>
-      <location filename="../MainWindow.cpp" line="2065"/>
+      <location filename="../MainWindow.cpp" line="2055"/>
       <source>Dimension</source>
       <translation>ზომა</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="459"/>
+      <location filename="../MainWindow.cpp" line="449"/>
       <source>Ready</source>
       <translation>მზადაა</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="871"/>
+      <location filename="../MainWindow.cpp" line="861"/>
       <source>Help addon needed!</source>
       <translation>საჭიროა დამატების დახმარება!</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="872"/>
+      <location filename="../MainWindow.cpp" line="862"/>
       <source>The Help system of %1 is now handled by the "Help" addon. It can easily be installed via the Addons Manager</source>
       <translation>%1-ის დახმარების სისტემა ახლა "Help" დამატების მიერაა მხარდაჭერილი. მისი დაყენება ადვილად შეგიძლიათ დამატების მმართველიდან</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="874"/>
+      <location filename="../MainWindow.cpp" line="864"/>
       <source>Open Addon Manager</source>
       <translation>დამატებების მმართველის გახსნა</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1069"/>
+      <location filename="../MainWindow.cpp" line="1059"/>
       <source>Close All</source>
       <translation>ყველას დახურვა</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1273"/>
-      <location filename="../MainWindow.cpp" line="1274"/>
-      <location filename="../MainWindow.cpp" line="1275"/>
+      <location filename="../MainWindow.cpp" line="1263"/>
+      <location filename="../MainWindow.cpp" line="1264"/>
+      <location filename="../MainWindow.cpp" line="1265"/>
       <source>Toggles this toolbar</source>
       <translation>ამ ზოლის ჩართ/გამორთ</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1288"/>
-      <location filename="../MainWindow.cpp" line="1289"/>
-      <location filename="../MainWindow.cpp" line="1290"/>
+      <location filename="../MainWindow.cpp" line="1278"/>
+      <location filename="../MainWindow.cpp" line="1279"/>
+      <location filename="../MainWindow.cpp" line="1280"/>
       <source>Toggles this dockable window</source>
       <translation>მიმაგრებადი ფანჯრის ჩვენების ჩართ/გამორთ</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1856"/>
-      <location filename="../MainWindow.cpp" line="1948"/>
+      <location filename="../MainWindow.cpp" line="1846"/>
+      <location filename="../MainWindow.cpp" line="1938"/>
       <source>Unsaved document</source>
       <translation>შეუნახავი დოკუმენტი</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1857"/>
+      <location filename="../MainWindow.cpp" line="1847"/>
       <source>The exported object contains external link. Please save the documentat least once before exporting.</source>
       <translation>გატანილი ობიექტი შეიცავს გარე ბმულს. გთხოვთ გატანამდე დოკუმენტი ერთხელ მაინც შეინახოთ.</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1949"/>
+      <location filename="../MainWindow.cpp" line="1939"/>
       <source>To link to external objects, the document must be saved at least once.
 Do you want to save the document now?</source>
       <translation>გარე ობიექტებთან დასაკავშირებლად, დოკუმენტი უნდა იყოს შენახული ერთხელ მაინც. 
@@ -7993,7 +7996,7 @@ Do you want to specify another directory?</source>
   <context>
     <name>Gui::TreeDockWidget</name>
     <message>
-      <location filename="../Tree.cpp" line="3140"/>
+      <location filename="../Tree.cpp" line="3159"/>
       <source>Tree view</source>
       <translation>ელემენტების ხე</translation>
     </message>
@@ -8001,7 +8004,7 @@ Do you want to specify another directory?</source>
   <context>
     <name>Gui::TreePanel</name>
     <message>
-      <location filename="../Tree.cpp" line="3066"/>
+      <location filename="../Tree.cpp" line="3085"/>
       <source>Search</source>
       <translation>ძებნა</translation>
     </message>
@@ -8009,173 +8012,183 @@ Do you want to specify another directory?</source>
   <context>
     <name>Gui::TreeWidget</name>
     <message>
-      <location filename="../Tree.cpp" line="461"/>
+      <location filename="../Tree.cpp" line="460"/>
       <source>Search...</source>
       <translation>ძებნა...</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="462"/>
+      <location filename="../Tree.cpp" line="461"/>
       <source>Search for objects</source>
       <translation>ობიექტების ძებნა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="888"/>
+      <location filename="../Tree.cpp" line="887"/>
       <source>Activate document</source>
       <translation>დოკუმენტის აქტივაცია</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="895"/>
+      <location filename="../Tree.cpp" line="894"/>
       <source>Activate document %1</source>
       <translation>დოკუმენტის აქტივაცია %1</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="932"/>
+      <location filename="../Tree.cpp" line="906"/>
+      <source>Tree settings</source>
+      <translation>ხის მორგება</translation>
+    </message>
+    <message>
+      <location filename="../Tree.cpp" line="910"/>
+      <source>Show description column</source>
+      <translation>აღწერის სვეტის ჩვენება</translation>
+    </message>
+    <message>
+      <location filename="../Tree.cpp" line="911"/>
+      <source>Show an extra tree view column for item description. The item's description can be set by pressing F2 (or your OS's edit button) or by editing the 'label2' property.</source>
+      <translation>ელემენტის აღწერისთვის დამატებითი სვეტის ჩვენება. ელემენტის აღწერა F2 (ან თქვენი ოს-ის ჩასწორების ღილაკით) ღილაკით ან 'label2' თვისების ჩასწორებით შეგძლიათ.</translation>
+    </message>
+    <message>
+      <location filename="../Tree.cpp" line="952"/>
       <source>Group</source>
       <translation>ჯგუფი</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2770"/>
+      <location filename="../Tree.cpp" line="2790"/>
       <source>Labels &amp; Attributes</source>
       <translation>ჭდეები &amp; ატრიბუტები</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2771"/>
+      <location filename="../Tree.cpp" line="2791"/>
       <source>Description</source>
       <translation>აღწერა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2772"/>
-      <source>Application</source>
-      <translation>აპლიკაცია</translation>
-    </message>
-    <message>
-      <location filename="../Tree.cpp" line="2774"/>
+      <location filename="../Tree.cpp" line="2793"/>
       <source>Show items hidden in tree view</source>
       <translation>ხის ხედში დამალული ელემენტების ჩვენება</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2775"/>
+      <location filename="../Tree.cpp" line="2794"/>
       <source>Show items that are marked as 'hidden' in the tree view</source>
       <translation>ხის ხედში 'დამალულად' მონიშნული ელემენტების ჩვენება</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2777"/>
+      <location filename="../Tree.cpp" line="2796"/>
       <source>Toggle visibility in tree view</source>
       <translation>ხის ხედში ხილვადობის გადართვა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2778"/>
+      <location filename="../Tree.cpp" line="2797"/>
       <source>Toggles the visibility of selected items in the tree view</source>
       <translation>ხის ხედში მონიშნული ელემენტების ხილვადობის გადართვა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2780"/>
+      <location filename="../Tree.cpp" line="2799"/>
       <source>Create group...</source>
       <translation>ჯგუფის შექმნა...</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2781"/>
+      <location filename="../Tree.cpp" line="2800"/>
       <source>Create a group</source>
       <translation>ჯგუფის შექმნა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2783"/>
-      <location filename="../Tree.cpp" line="4921"/>
+      <location filename="../Tree.cpp" line="2802"/>
+      <location filename="../Tree.cpp" line="4940"/>
       <source>Rename</source>
       <translation>სახელის გადარქმევა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2784"/>
+      <location filename="../Tree.cpp" line="2803"/>
       <source>Rename object</source>
       <translation>ობიექტის სახელის გადარქმევა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2786"/>
+      <location filename="../Tree.cpp" line="2805"/>
       <source>Finish editing</source>
       <translation>ჩასწორების დასრულება</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2787"/>
+      <location filename="../Tree.cpp" line="2806"/>
       <source>Finish editing object</source>
       <translation>ობიექტის ჩასწორების დასრულება</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2789"/>
+      <location filename="../Tree.cpp" line="2808"/>
       <source>Add dependent objects to selection</source>
       <translation>დამოკიდებული ობიექტების მონიშნულში ჩამატება</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2790"/>
+      <location filename="../Tree.cpp" line="2809"/>
       <source>Adds all dependent objects to the selection</source>
       <translation>მონიშნულში ყველა დამოკიდებული ობიექტის ჩამატება</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2792"/>
+      <location filename="../Tree.cpp" line="2811"/>
       <source>Close document</source>
       <translation>დოკუმენტის დახურვა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2793"/>
+      <location filename="../Tree.cpp" line="2812"/>
       <source>Close the document</source>
       <translation>დოკუმენტის დახურვა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2795"/>
+      <location filename="../Tree.cpp" line="2814"/>
       <source>Reload document</source>
       <translation>დოკუმენტის თავიდან ჩატვირთვა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2796"/>
+      <location filename="../Tree.cpp" line="2815"/>
       <source>Reload a partially loaded document</source>
       <translation>ნაწილობრივ ჩატვირთული დოკუმენტის თავიდან ჩატვირთვა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2798"/>
+      <location filename="../Tree.cpp" line="2817"/>
       <source>Skip recomputes</source>
       <translation>გადათვლების გამოტოვება</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2799"/>
+      <location filename="../Tree.cpp" line="2818"/>
       <source>Enable or disable recomputations of document</source>
       <translation>დოკუმენტის გადათვლების ჩართვა ან გამორთვა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2801"/>
+      <location filename="../Tree.cpp" line="2820"/>
       <source>Allow partial recomputes</source>
       <translation>ნაწილობრივი გადაანგარიშებების ჩართვა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2803"/>
+      <location filename="../Tree.cpp" line="2822"/>
       <source>Enable or disable recomputating editing object when 'skip recomputation' is enabled</source>
       <translation>როცა 'გადათვლის გამოტოვება' ჩართულია, რთავს ან თიშავს ობიექტის გადათვლას მისი ჩასწორებისას</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2805"/>
+      <location filename="../Tree.cpp" line="2824"/>
       <source>Mark to recompute</source>
       <translation>გადათვლისთვის მონიშვნა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2806"/>
+      <location filename="../Tree.cpp" line="2825"/>
       <source>Mark this object to be recomputed</source>
       <translation>ამ ობიექტის მონიშვნა, როგორც გადასართველის</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2809"/>
+      <location filename="../Tree.cpp" line="2828"/>
       <source>Recompute object</source>
       <translation>ობიექტის გადათვლა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2810"/>
+      <location filename="../Tree.cpp" line="2829"/>
       <source>Recompute the selected object</source>
       <translation>მონიშნული ობიექტის თავიდან გამოთვლა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="4892"/>
+      <location filename="../Tree.cpp" line="4911"/>
       <source> (but must be executed)</source>
       <translation> (მაგრამ უნდა შესრულდეს)</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="4894"/>
+      <location filename="../Tree.cpp" line="4913"/>
       <source>%1, Internal name: %2</source>
       <translation>%1, შიდა სახელი: %2</translation>
     </message>
@@ -8392,37 +8405,37 @@ Do you want to specify another directory?</source>
   <context>
     <name>QDockWidget</name>
     <message>
-      <location filename="../MainWindow.cpp" line="509"/>
+      <location filename="../MainWindow.cpp" line="499"/>
       <source>Tree view</source>
       <translation>ელემენტების ხე</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="537"/>
+      <location filename="../MainWindow.cpp" line="527"/>
       <source>Property view</source>
       <translation>თვისებაზე გადახედვა</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="555"/>
+      <location filename="../MainWindow.cpp" line="545"/>
       <source>Selection view</source>
       <translation>მონიშნულის ხედი</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="577"/>
+      <location filename="../MainWindow.cpp" line="567"/>
       <source>Combo View</source>
       <translation>კომბო ხედი</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="611"/>
+      <location filename="../MainWindow.cpp" line="601"/>
       <source>DAG View</source>
       <translation>DAG ხედი</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="629"/>
+      <location filename="../MainWindow.cpp" line="619"/>
       <source>Report view</source>
       <translation>ანგარიში</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="649"/>
+      <location filename="../MainWindow.cpp" line="639"/>
       <source>Python console</source>
       <translation>Python-ის კონსოლი</translation>
     </message>
@@ -8543,8 +8556,8 @@ Do you want to specify another directory?</source>
       <translation>PDF-ად გატანა...</translation>
     </message>
     <message>
+      <location filename="../MainWindow.cpp" line="692"/>
       <location filename="../CommandDoc.cpp" line="1189"/>
-      <location filename="../MainWindow.cpp" line="702"/>
       <source>Unsaved document</source>
       <translation>შეუნახავი დოკუმენტი</translation>
     </message>
@@ -9109,7 +9122,7 @@ Please open a browser window and type in: http://localhost:%1.</source>
       <translation>ვერ ვიპოვე ფაილი %1, ვერც %2 და ვერც %3</translation>
     </message>
     <message>
-      <location filename="../NavigationStyle.cpp" line="1729"/>
+      <location filename="../NavigationStyle.cpp" line="1732"/>
       <source>Navigation styles</source>
       <translation>ნავიგაციის სტილები</translation>
     </message>
@@ -9130,32 +9143,32 @@ Please open a browser window and type in: http://localhost:%1.</source>
       <translation type="unfinished">Do you want to close this dialog?</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="704"/>
+      <location filename="../MainWindow.cpp" line="694"/>
       <source>Do you want to save your changes to document '%1' before closing?</source>
       <translation>გსურთ შეინახოთ ცვლილებები %1 -ში მის დახურვამდე?</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="707"/>
+      <location filename="../MainWindow.cpp" line="697"/>
       <source>Do you want to save your changes to document before closing?</source>
       <translation>გსურთ შეინახოთ დოკუმენტის ცვლილებები მის დახურვამდე?</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="709"/>
+      <location filename="../MainWindow.cpp" line="699"/>
       <source>If you don't save, your changes will be lost.</source>
       <translation>თუ არ შეინახავთ, ყველა თქვენი ცვლილება დაიკარგება.</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="714"/>
+      <location filename="../MainWindow.cpp" line="704"/>
       <source>Apply answer to all</source>
       <translation>პასუხის ყველაზე გადატარება</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="804"/>
+      <location filename="../MainWindow.cpp" line="794"/>
       <source>%1 Document(s) not saved</source>
       <translation>%1 დოკუმენტი არ იქნა შენახული</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="805"/>
+      <location filename="../MainWindow.cpp" line="795"/>
       <source>Some documents could not be saved. Do you want to cancel closing?</source>
       <translation>ზოგიერთი დოკუმენტის შენახვა შეუძლებელია. გნებავთ დახურვის გაუქმება?</translation>
     </message>
@@ -9285,8 +9298,8 @@ underscore, and must not start with a digit.</source>
       <translation>%1-სთვის თვისების დამატება: %2</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2059"/>
-      <location filename="../Tree.cpp" line="2255"/>
+      <location filename="../Tree.cpp" line="2079"/>
+      <location filename="../Tree.cpp" line="2275"/>
       <source>Drag &amp; drop failed</source>
       <translation>გადათრევის შეცდომა</translation>
     </message>
@@ -9335,7 +9348,7 @@ option to apply only to this link.</source>
     <message>
       <location filename="../ViewProviderLink.cpp" line="2500"/>
       <source>Tracking</source>
-      <translation>სიმბოლოებს შორის მანძილი</translation>
+      <translation>ტრეკინგი</translation>
     </message>
     <message>
       <location filename="../ViewProviderLink.cpp" line="2501"/>
@@ -10336,8 +10349,8 @@ the current copy will be lost.
       <translation>ახალი ცარიელი პროექტის შექმნა</translation>
     </message>
     <message>
+      <location filename="../MainWindow.cpp" line="2043"/>
       <location filename="../DocumentRecovery.cpp" line="393"/>
-      <location filename="../MainWindow.cpp" line="2053"/>
       <source>Unnamed</source>
       <translation>უსახელო</translation>
     </message>
@@ -12240,27 +12253,27 @@ Do you still want to proceed?</source>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="67"/>
       <source>Additional data sources</source>
-      <translation type="unfinished">Additional data sources</translation>
+      <translation>დამატებითი მონაცემის წყაროები</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="73"/>
       <source>Errors intended for developers will appear in the notification area</source>
-      <translation type="unfinished">Errors intended for developers will appear in the notification area</translation>
+      <translation>პროგრამისტებისთვის განკუთვნილი შეცდომები გაფრთხილების ადგილზე გამოჩნდება</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="76"/>
       <source>Debug errors</source>
-      <translation type="unfinished">Debug errors</translation>
+      <translation>გამართვის შეცდომები</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="92"/>
       <source>Warnings intended for developers will appear in the notification area</source>
-      <translation type="unfinished">Warnings intended for developers will appear in the notification area</translation>
+      <translation>პროგრამისტებისთვის განკუთვნილი გაფრთხილებები გაფრთხილების ადგილზე გამოჩნდება</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="95"/>
       <source>Debug warnings</source>
-      <translation type="unfinished">Debug warnings</translation>
+      <translation>გამართვის გაფრთხილებები</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="114"/>
@@ -12710,12 +12723,12 @@ FreeCAD-ის გაშვების შემდეგ</translation>
   <context>
     <name>NaviCubeDraggableCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1093"/>
+      <location filename="../NaviCube.cpp" line="1092"/>
       <source>Movable navigation cube</source>
       <translation>მოძრავი ნავიგაციის კუბი</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1094"/>
+      <location filename="../NaviCube.cpp" line="1093"/>
       <source>Drag and place NaviCube</source>
       <translation>გადაათრიეთ და მოათავსეთ ნავიგაციის კუბი</translation>
     </message>
@@ -12723,32 +12736,32 @@ FreeCAD-ის გაშვების შემდეგ</translation>
   <context>
     <name>NaviCubeSettings</name>
     <message>
-      <location filename="../View3DSettings.cpp" line="545"/>
+      <location filename="../View3DSettings.cpp" line="533"/>
       <source>FRONT</source>
       <translation>წინა</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="547"/>
+      <location filename="../View3DSettings.cpp" line="535"/>
       <source>TOP</source>
       <translation>თავზე</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="549"/>
+      <location filename="../View3DSettings.cpp" line="537"/>
       <source>RIGHT</source>
       <translation>მარჯვენა</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="551"/>
+      <location filename="../View3DSettings.cpp" line="539"/>
       <source>REAR</source>
       <translation>უკანა</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="553"/>
+      <location filename="../View3DSettings.cpp" line="541"/>
       <source>BOTTOM</source>
       <translation>ფსკერი</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="555"/>
+      <location filename="../View3DSettings.cpp" line="543"/>
       <source>LEFT</source>
       <translation>მარცხენა</translation>
     </message>
@@ -12759,7 +12772,7 @@ FreeCAD-ის გაშვების შემდეგ</translation>
       <location filename="../Widgets.cpp" line="1600"/>
       <location filename="../Widgets.cpp" line="1667"/>
       <source>An error occurred -- see Report View for information</source>
-      <translation type="unfinished">An error occurred -- see Report View for information</translation>
+      <translation>დაფიქსირდა შეცდომა - ინფორმაციისთვის იხილეთ ანგარიშის ხედი</translation>
     </message>
   </context>
 </TS>

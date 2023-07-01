@@ -2014,8 +2014,8 @@
       <translation>Создать электронную таблицу</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="1610"/>
       <location filename="../../MDIViewPage.cpp" line="716"/>
+      <location filename="../../Command.cpp" line="1610"/>
       <source>Save page to dxf</source>
       <translation>Сохранить лист в DXF формате</translation>
     </message>
@@ -2603,6 +2603,16 @@
   <context>
     <name>QObject</name>
     <message>
+      <location filename="../../CommandAnnotate.cpp" line="316"/>
+      <location filename="../../CommandAnnotate.cpp" line="415"/>
+      <location filename="../../CommandAnnotate.cpp" line="1152"/>
+      <location filename="../../CommandAnnotate.cpp" line="1160"/>
+      <location filename="../../CommandAnnotate.cpp" line="1207"/>
+      <location filename="../../CommandAnnotate.cpp" line="1349"/>
+      <location filename="../../CommandAnnotate.cpp" line="1356"/>
+      <location filename="../../CommandAnnotate.cpp" line="1420"/>
+      <location filename="../../CommandCreateDims.cpp" line="1277"/>
+      <location filename="../../CommandCreateDims.cpp" line="1286"/>
       <location filename="../../Command.cpp" line="375"/>
       <location filename="../../Command.cpp" line="601"/>
       <location filename="../../Command.cpp" line="718"/>
@@ -2620,16 +2630,6 @@
       <location filename="../../Command.cpp" line="1429"/>
       <location filename="../../Command.cpp" line="1435"/>
       <location filename="../../Command.cpp" line="1478"/>
-      <location filename="../../CommandAnnotate.cpp" line="316"/>
-      <location filename="../../CommandAnnotate.cpp" line="415"/>
-      <location filename="../../CommandAnnotate.cpp" line="1152"/>
-      <location filename="../../CommandAnnotate.cpp" line="1160"/>
-      <location filename="../../CommandAnnotate.cpp" line="1207"/>
-      <location filename="../../CommandAnnotate.cpp" line="1349"/>
-      <location filename="../../CommandAnnotate.cpp" line="1356"/>
-      <location filename="../../CommandAnnotate.cpp" line="1420"/>
-      <location filename="../../CommandCreateDims.cpp" line="1277"/>
-      <location filename="../../CommandCreateDims.cpp" line="1286"/>
       <source>Wrong selection</source>
       <translation>Неправильный выбор</translation>
     </message>
@@ -2661,10 +2661,9 @@
       <translation>Не найдено объектов профиля в выборке</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="951"/>
-      <location filename="../../Command.cpp" line="958"/>
-      <location filename="../../Command.cpp" line="966"/>
-      <location filename="../../Command.cpp" line="978"/>
+      <location filename="../../CommandDecorate.cpp" line="344"/>
+      <location filename="../../CommandDecorate.cpp" line="351"/>
+      <location filename="../../CommandDecorate.cpp" line="358"/>
       <location filename="../../CommandCreateDims.cpp" line="166"/>
       <location filename="../../CommandCreateDims.cpp" line="292"/>
       <location filename="../../CommandCreateDims.cpp" line="418"/>
@@ -2676,33 +2675,33 @@
       <location filename="../../CommandCreateDims.cpp" line="1437"/>
       <location filename="../../CommandCreateDims.cpp" line="1445"/>
       <location filename="../../CommandCreateDims.cpp" line="1454"/>
-      <location filename="../../CommandDecorate.cpp" line="344"/>
-      <location filename="../../CommandDecorate.cpp" line="351"/>
-      <location filename="../../CommandDecorate.cpp" line="358"/>
+      <location filename="../../Command.cpp" line="951"/>
+      <location filename="../../Command.cpp" line="958"/>
+      <location filename="../../Command.cpp" line="966"/>
+      <location filename="../../Command.cpp" line="978"/>
       <location filename="../../CommandExtensionPack.cpp" line="1808"/>
       <source>Incorrect selection</source>
       <translation>Некорректный выбор</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="952"/>
       <location filename="../../CommandCreateDims.cpp" line="1438"/>
+      <location filename="../../Command.cpp" line="952"/>
       <source>Select an object first</source>
       <translation>Сначала выберите объект</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="959"/>
       <location filename="../../CommandCreateDims.cpp" line="1446"/>
+      <location filename="../../Command.cpp" line="959"/>
       <source>Too many objects selected</source>
       <translation>Выбрано слишком много объектов</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="967"/>
       <location filename="../../CommandCreateDims.cpp" line="1455"/>
+      <location filename="../../Command.cpp" line="967"/>
       <source>Create a page first.</source>
       <translation>Сначала создайте страницу.</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="979"/>
       <location filename="../../CommandCreateDims.cpp" line="167"/>
       <location filename="../../CommandCreateDims.cpp" line="293"/>
       <location filename="../../CommandCreateDims.cpp" line="419"/>
@@ -2711,6 +2710,7 @@
       <location filename="../../CommandCreateDims.cpp" line="714"/>
       <location filename="../../CommandCreateDims.cpp" line="810"/>
       <location filename="../../CommandCreateDims.cpp" line="1085"/>
+      <location filename="../../Command.cpp" line="979"/>
       <source>No View of a Part in selection.</source>
       <translation>Нет видов детали в выбранном.</translation>
     </message>
@@ -2822,6 +2822,8 @@
       <translation>Выбранная грань - BSpline. Радиус будет приблизительным. Продолжить?</translation>
     </message>
     <message>
+      <location filename="../../CommandDecorate.cpp" line="365"/>
+      <location filename="../../CommandDecorate.cpp" line="371"/>
       <location filename="../../CommandCreateDims.cpp" line="187"/>
       <location filename="../../CommandCreateDims.cpp" line="202"/>
       <location filename="../../CommandCreateDims.cpp" line="313"/>
@@ -2841,12 +2843,10 @@
       <location filename="../../CommandCreateDims.cpp" line="1112"/>
       <location filename="../../CommandCreateDims.cpp" line="1126"/>
       <location filename="../../CommandCreateDims.cpp" line="1218"/>
-      <location filename="../../CommandDecorate.cpp" line="365"/>
-      <location filename="../../CommandDecorate.cpp" line="371"/>
-      <location filename="../../TaskDimension.cpp" line="400"/>
       <location filename="../../TaskDimRepair.cpp" line="126"/>
       <location filename="../../TaskDimRepair.cpp" line="138"/>
       <location filename="../../TaskDimRepair.cpp" line="149"/>
+      <location filename="../../TaskDimension.cpp" line="400"/>
       <source>Incorrect Selection</source>
       <translation>Некорректный выбор</translation>
     </message>
@@ -2974,9 +2974,6 @@
       <translation>Выберите 2 точечные объекты и 1 Вид. (2)</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="479"/>
-      <location filename="../../Command.cpp" line="572"/>
-      <location filename="../../Command.cpp" line="634"/>
       <location filename="../../CommandAnnotate.cpp" line="104"/>
       <location filename="../../CommandAnnotate.cpp" line="165"/>
       <location filename="../../CommandAnnotate.cpp" line="217"/>
@@ -3002,6 +2999,11 @@
       <location filename="../../CommandCreateDims.cpp" line="966"/>
       <location filename="../../CommandCreateDims.cpp" line="1064"/>
       <location filename="../../CommandCreateDims.cpp" line="1177"/>
+      <location filename="../../CommandStack.cpp" line="75"/>
+      <location filename="../../CommandStack.cpp" line="191"/>
+      <location filename="../../CommandStack.cpp" line="251"/>
+      <location filename="../../CommandStack.cpp" line="311"/>
+      <location filename="../../CommandStack.cpp" line="371"/>
       <location filename="../../CommandExtensionDims.cpp" line="266"/>
       <location filename="../../CommandExtensionDims.cpp" line="475"/>
       <location filename="../../CommandExtensionDims.cpp" line="767"/>
@@ -3009,23 +3011,18 @@
       <location filename="../../CommandExtensionDims.cpp" line="1440"/>
       <location filename="../../CommandExtensionDims.cpp" line="1803"/>
       <location filename="../../CommandExtensionDims.cpp" line="2062"/>
+      <location filename="../../Command.cpp" line="479"/>
+      <location filename="../../Command.cpp" line="572"/>
+      <location filename="../../Command.cpp" line="634"/>
       <location filename="../../CommandExtensionPack.cpp" line="274"/>
       <location filename="../../CommandExtensionPack.cpp" line="588"/>
       <location filename="../../CommandExtensionPack.cpp" line="1079"/>
       <location filename="../../CommandExtensionPack.cpp" line="1315"/>
       <location filename="../../CommandExtensionPack.cpp" line="1688"/>
-      <location filename="../../CommandStack.cpp" line="75"/>
-      <location filename="../../CommandStack.cpp" line="191"/>
-      <location filename="../../CommandStack.cpp" line="251"/>
-      <location filename="../../CommandStack.cpp" line="311"/>
-      <location filename="../../CommandStack.cpp" line="371"/>
       <source>Task In Progress</source>
       <translation>Задача в процессе</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="480"/>
-      <location filename="../../Command.cpp" line="573"/>
-      <location filename="../../Command.cpp" line="635"/>
       <location filename="../../CommandAnnotate.cpp" line="105"/>
       <location filename="../../CommandAnnotate.cpp" line="166"/>
       <location filename="../../CommandAnnotate.cpp" line="218"/>
@@ -3051,6 +3048,11 @@
       <location filename="../../CommandCreateDims.cpp" line="967"/>
       <location filename="../../CommandCreateDims.cpp" line="1065"/>
       <location filename="../../CommandCreateDims.cpp" line="1178"/>
+      <location filename="../../CommandStack.cpp" line="76"/>
+      <location filename="../../CommandStack.cpp" line="192"/>
+      <location filename="../../CommandStack.cpp" line="252"/>
+      <location filename="../../CommandStack.cpp" line="312"/>
+      <location filename="../../CommandStack.cpp" line="372"/>
       <location filename="../../CommandExtensionDims.cpp" line="267"/>
       <location filename="../../CommandExtensionDims.cpp" line="476"/>
       <location filename="../../CommandExtensionDims.cpp" line="768"/>
@@ -3058,16 +3060,14 @@
       <location filename="../../CommandExtensionDims.cpp" line="1441"/>
       <location filename="../../CommandExtensionDims.cpp" line="1804"/>
       <location filename="../../CommandExtensionDims.cpp" line="2063"/>
+      <location filename="../../Command.cpp" line="480"/>
+      <location filename="../../Command.cpp" line="573"/>
+      <location filename="../../Command.cpp" line="635"/>
       <location filename="../../CommandExtensionPack.cpp" line="275"/>
       <location filename="../../CommandExtensionPack.cpp" line="589"/>
       <location filename="../../CommandExtensionPack.cpp" line="1080"/>
       <location filename="../../CommandExtensionPack.cpp" line="1316"/>
       <location filename="../../CommandExtensionPack.cpp" line="1689"/>
-      <location filename="../../CommandStack.cpp" line="76"/>
-      <location filename="../../CommandStack.cpp" line="192"/>
-      <location filename="../../CommandStack.cpp" line="252"/>
-      <location filename="../../CommandStack.cpp" line="312"/>
-      <location filename="../../CommandStack.cpp" line="372"/>
       <source>Close active task dialog and try again.</source>
       <translation>Закройте окно активной задачи и повторите снова.</translation>
     </message>
@@ -3317,8 +3317,8 @@
     </message>
     <message>
       <location filename="../../ViewProviderPage.cpp" line="211"/>
-      <location filename="../../ViewProviderProjGroup.cpp" line="161"/>
       <location filename="../../ViewProviderTemplate.cpp" line="201"/>
+      <location filename="../../ViewProviderProjGroup.cpp" line="161"/>
       <source>Are you sure you want to continue?</source>
       <translation>Вы уверены, что хотите продолжить?</translation>
     </message>
@@ -3353,9 +3353,9 @@
       <translation>Создатель форматированного текста</translation>
     </message>
     <message>
-      <location filename="../../QGIRichAnno.cpp" line="310"/>
       <location filename="../../TaskRichAnno.cpp" line="102"/>
       <location filename="../../TaskRichAnno.cpp" line="240"/>
+      <location filename="../../QGIRichAnno.cpp" line="310"/>
       <source>Rich text editor</source>
       <translation>Редактор форматированного текста</translation>
     </message>
@@ -3473,12 +3473,18 @@
       <translation>Править выносной элемент</translation>
     </message>
     <message>
+      <location filename="../../ViewProviderDimension.cpp" line="123"/>
       <location filename="../../ViewProviderBalloon.cpp" line="88"/>
-      <location filename="../../ViewProviderDimension.cpp" line="120"/>
       <source>Edit %1</source>
       <translation>Редактировать %1</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="363"/>
+      <source>TechDraw Increase/Decrease Decimal</source>
+      <translation>TechDraw Увеличение/уменьшение десятичного числа</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="558"/>
       <location filename="../../CommandExtensionDims.cpp" line="567"/>
       <source>TechDraw PosHorizChainDimension</source>
       <translation>Чертеж размеров позиций горизонтальной цепи</translation>
@@ -3490,6 +3496,7 @@
       <translation>Не выбраны горизонтальные размеры</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="619"/>
       <location filename="../../CommandExtensionDims.cpp" line="628"/>
       <source>TechDraw PosVertChainDimension</source>
       <translation>Чертеж размеров вертикальной цепи</translation>
@@ -3501,6 +3508,7 @@
       <translation>Размеры вертикали не выбраны</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="681"/>
       <location filename="../../CommandExtensionDims.cpp" line="690"/>
       <source>TechDraw PosObliqueChainDimension</source>
       <translation>Чертеж размеров наклона (наклонной?) цепи</translation>
@@ -3512,19 +3520,72 @@
       <translation>Размеры наклона не выбраны</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="867"/>
       <location filename="../../CommandExtensionDims.cpp" line="876"/>
       <source>TechDraw CascadeHorizDimension</source>
       <translation>Чертёж, горизонтальные размеры каскада</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="933"/>
       <location filename="../../CommandExtensionDims.cpp" line="942"/>
       <source>TechDraw CascadeVertDimension</source>
       <translation>Чертёж, вертикальные размеры каскада</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1000"/>
       <location filename="../../CommandExtensionDims.cpp" line="1009"/>
       <source>TechDraw CascadeObliqueDimension</source>
       <translation>Чертёж, размер наклона каскада</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1199"/>
+      <source>TechDraw Create Horizontal Chain Dimension</source>
+      <translation>TechDraw Создать размер горизонтальной цепочки</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1265"/>
+      <source>TechDraw Create Vertical Chain Dimension</source>
+      <translation>TechDraw Создать размер вертикальной цепочки</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1331"/>
+      <source>TechDraw Create Oblique Chain Dimension</source>
+      <translation>TechDraw Создать размер косой цепи</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1539"/>
+      <source>TechDraw Create Horizontal Coord Dimension</source>
+      <translation>TechDraw Создать горизонтальное координатное измерение</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1612"/>
+      <source>TechDraw Create Vertical Coord Dimension</source>
+      <translation>TechDraw Создать вертикальное координатное измерение</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1685"/>
+      <source>TechDraw Create Oblique Coord Dimension</source>
+      <translation>TechDraw Создать косой координатный размер</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1908"/>
+      <source>TechDraw Create Horizontal Chamfer Dimension</source>
+      <translation>TechDraw Создать размер горизонтальной фаски</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1977"/>
+      <source>TechDraw Create Vertical Chamfer Dimension</source>
+      <translation>TechDraw Создание вертикального размера фаски</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="2163"/>
+      <source>TechDraw Create Arc Length Dimension</source>
+      <translation>TechDraw Создание размера длины дуги</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="2240"/>
+      <source>TechDraw Customize Format</source>
+      <translation>TechDraw Настройка формата</translation>
     </message>
     <message>
       <location filename="../../CommandExtensionDims.cpp" line="2304"/>
@@ -3684,19 +3745,19 @@ it has a weld symbol that would become broken.</source>
 содержит символ сварки, который может быть повреждён.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderLeader.cpp" line="226"/>
-      <location filename="../../ViewProviderPage.cpp" line="214"/>
-      <location filename="../../ViewProviderProjGroup.cpp" line="148"/>
-      <location filename="../../ViewProviderProjGroup.cpp" line="164"/>
+      <location filename="../../ViewProviderViewPart.cpp" line="317"/>
+      <location filename="../../ViewProviderViewPart.cpp" line="325"/>
+      <location filename="../../ViewProviderViewPart.cpp" line="333"/>
       <location filename="../../ViewProviderProjGroupItem.cpp" line="148"/>
       <location filename="../../ViewProviderProjGroupItem.cpp" line="157"/>
       <location filename="../../ViewProviderProjGroupItem.cpp" line="165"/>
       <location filename="../../ViewProviderProjGroupItem.cpp" line="173"/>
-      <location filename="../../ViewProviderTemplate.cpp" line="205"/>
-      <location filename="../../ViewProviderViewPart.cpp" line="317"/>
-      <location filename="../../ViewProviderViewPart.cpp" line="325"/>
-      <location filename="../../ViewProviderViewPart.cpp" line="333"/>
+      <location filename="../../ViewProviderLeader.cpp" line="226"/>
       <location filename="../../ViewProviderWeld.cpp" line="145"/>
+      <location filename="../../ViewProviderPage.cpp" line="214"/>
+      <location filename="../../ViewProviderTemplate.cpp" line="205"/>
+      <location filename="../../ViewProviderProjGroup.cpp" line="148"/>
+      <location filename="../../ViewProviderProjGroup.cpp" line="164"/>
       <source>Object dependencies</source>
       <translation>Зависимости объектов</translation>
     </message>
@@ -3706,20 +3767,20 @@ it has a weld symbol that would become broken.</source>
       <translation>Вы не можете удалить вид якоря группы проекции.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderProjGroupItem.cpp" line="154"/>
       <location filename="../../ViewProviderViewPart.cpp" line="314"/>
+      <location filename="../../ViewProviderProjGroupItem.cpp" line="154"/>
       <source>You cannot delete this view because it has a section view that would become broken.</source>
       <translation>Вы не можете удалить этот вид, потому что он имеет вид сечения, который будет нарушен.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderProjGroupItem.cpp" line="162"/>
       <location filename="../../ViewProviderViewPart.cpp" line="322"/>
+      <location filename="../../ViewProviderProjGroupItem.cpp" line="162"/>
       <source>You cannot delete this view because it has a detail view that would become broken.</source>
       <translation>Вы не можете удалить этот вид, потому что он имеет выносной элемент, который будет нарушен.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderProjGroupItem.cpp" line="170"/>
       <location filename="../../ViewProviderViewPart.cpp" line="330"/>
+      <location filename="../../ViewProviderProjGroupItem.cpp" line="170"/>
       <source>You cannot delete this view because it has a leader line that would become broken.</source>
       <translation>Невозможно удалить этот вид, так как он имеет линию выноски, которая может быть разорвана.</translation>
     </message>
@@ -4175,6 +4236,11 @@ Only change unless you know what you are doing!</source>
       <translation>Использовать Алгоритм поиска новых граней</translation>
     </message>
     <message>
+      <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="574"/>
+      <source>The number of times FreeCAD should try to remove overlapping edges returned by the Hidden Line Removal algorithm. A value of 0 indicates no scrubbing, 1 indicates a single pass and 2 indicates a second pass should be performed. Values above 2 are generally not productive. Each pass adds to the time required to produce the drawing.</source>
+      <translation>Сколько раз FreeCAD должен пытаться удалить перекрывающиеся ребра, возвращенные алгоритмом удаления невидимых линий. Значение 0 указывает на отсутствие очистки, 1 указывает на один проход, а 2 указывает на необходимость выполнения второго прохода. Значения выше 2 обычно непродуктивны. Каждый проход увеличивает время, необходимое для создания чертежа.</translation>
+    </message>
+    <message>
       <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="213"/>
       <source>Max SVG Hatch Tiles</source>
       <translation>Максимум фрагментов штриховки SVG</translation>
@@ -4219,11 +4285,6 @@ when hatching a face with a PAT pattern</source>
       <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="567"/>
       <source>Overlap Edges Scrub Passes</source>
       <translation>Удалить перекрывающиеся ребра, возвращаемых алгоритмом HLR</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="574"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The number of times FreeCAD should try to remove overlapping edges returned by the Hidden Line Removal algorithm.  A value of 0 indicates no scrubbing, 1 indicates a single pass and 2 indicates a second pass should be performed.  Values above 2 are generally not productive.   Each pass adds to the time required to produce the drawing.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Количество раз, когда FreeCAD должен пытаться удалить перекрывающиеся края, возвращенные алгоритмом удаления скрытых линий. Значение 0 указывает на отсутствие очистки, 1 указывает на один проход, а 2 указывает на необходимость выполнения второго прохода. Значения выше 2 обычно непродуктивны. Каждый проход увеличивает время, необходимое для создания чертежа.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="607"/>
@@ -4637,11 +4698,6 @@ when hatching a face with a PAT pattern</source>
       <translation>Цвет текста монохрома</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawColors.ui" line="180"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check this to use light text and lines on dark backgrounds.  Set Page Color to a dark color. Transparent or light color faces are recommended with this option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt; Установите этот флажок, чтобы использовать светлый текст и линии на темном фоне. Установите Цвет страницы на темный цвет. С этим параметром рекомендуется использовать прозрачные или светлые лица.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
       <location filename="../../DlgPrefsTechDrawColors.ui" line="183"/>
       <source>Light on dark</source>
       <translation>Свет на тёмном</translation>
@@ -4672,6 +4728,15 @@ when hatching a face with a PAT pattern</source>
       <translation>Цвет вершин в представлениях</translation>
     </message>
     <message>
+      <location filename="../../DlgPrefsTechDrawColors.ui" line="620"/>
+      <source>If checked FreeCAD will use a single colour for all text and lines. If unchecked FreeCAD will attempt to use lighter versions of preferred colours.
+
+</source>
+      <translation>Если флажок установлен, FreeCAD будет использовать один цвет для всего текста и линий. Если флажок не установлен, FreeCAD попытается использовать более светлые версии предпочтительных цветов.
+
+</translation>
+    </message>
+    <message>
       <location filename="../../DlgPrefsTechDrawColors.ui" line="161"/>
       <source>Detail Highlight</source>
       <translation>Подсветка деталей</translation>
@@ -4692,6 +4757,11 @@ when hatching a face with a PAT pattern</source>
       <translation>Цвет сетки</translation>
     </message>
     <message>
+      <location filename="../../DlgPrefsTechDrawColors.ui" line="180"/>
+      <source>Check this to use light text and lines on dark backgrounds. Set Page Color to a dark color. Transparent or light color faces are recommended with this option.</source>
+      <translation>Установите этот флажок, чтобы использовать светлый текст и линии на темном фоне. Установите Цвет страницы на темный цвет. С этой опцией рекомендуются прозрачные или светлые грани.</translation>
+    </message>
+    <message>
       <location filename="../../DlgPrefsTechDrawColors.ui" line="565"/>
       <source>Object faces will be transparent</source>
       <translation>Грани объекта будут прозрачными</translation>
@@ -4707,17 +4777,12 @@ when hatching a face with a PAT pattern</source>
       <translation>Цвет грани (если не прозрачный)</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawColors.ui" line="620"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked FreeCAD will use a single colour for all text and lines.  If unchecked FreeCAD will attempt to use lighter versions of preferred colours.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Если флажок установлен, FreeCAD будет использовать один цвет для всего текста и линий. Если флажок снят, FreeCAD попытается использовать более светлые версии предпочтительных цветов.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt; /тело&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawColors.ui" line="623"/>
+      <location filename="../../DlgPrefsTechDrawColors.ui" line="625"/>
       <source>Monochrome</source>
       <translation>Монохромный</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawColors.ui" line="654"/>
+      <location filename="../../DlgPrefsTechDrawColors.ui" line="656"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; Items in &lt;span style=&quot; font-style:italic;&quot;&gt;italics&lt;/span&gt; are default values for new objects. They have no effect on existing objects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
       <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Примечание:&lt;/span&gt; Элементы выделенные &lt;span style=&quot; font-style:italic;&quot;&gt;курсивом&lt;/span&gt; являются значениями по умолчанию для новых объектов. Они не влияют на существующие объекты.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -4771,29 +4836,14 @@ when hatching a face with a PAT pattern</source>
       <translation>Брать количество знаков после запятой из глобальных настроек</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="527"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls the size of gap between dimension point and start of extension line for ISO dimensions. Value * linewidth is the gap.  Normally, no gap is used.  If using a gap, the recommended value 8.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Управляет размером зазора между точкой размера и началом выносной линии для размеров ISO. Значение * ширина линии — это зазор. Обычно пробел не используется. При использовании пробела рекомендуется значение 8.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="546"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls the size of gap between dimension point and start of extension line for ASME dimensions. Value * linewidth is the gap.  Normally, no gap is used.  If a gap is used, the recommended value is 6.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Управляет размером зазора между точкой размера и началом выносной линии для размеров ASME. Значение * ширина линии — это зазор. Обычно пробел не используется. Если используется пробел, рекомендуемое значение равно 6.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="570"/>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="573"/>
       <source>Controls the size of spacing between dimension line and dimension text for ISO dimensions.</source>
       <translation>Управляет размером интервала между размерной линией и размерным текстом для размеров ISO.</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="573"/>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="576"/>
       <source>Line Spacing - ISO</source>
       <translation>Расстояние между строками - ISO</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="580"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls the size of spacing between dimension line and dimension text. Value * linewidth is the line spacing.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Управляет размером интервала между размерной линией и размерным текстом. Значение * linewidth — межстрочный интервал.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../DlgPrefsTechDrawDimensions.ui" line="199"/>
@@ -4829,11 +4879,6 @@ when hatching a face with a PAT pattern</source>
       <location filename="../../DlgPrefsTechDrawDimensions.ui" line="489"/>
       <source>Extension Gap Factor - ISO</source>
       <translation>Коэффициент зазора удлинения — ISO</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="496"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Leave blank for automatic dimension format.  Use %f, %g or %w specifiers to override.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Оставьте поле пустым для автоматического формата размера. Используйте спецификаторы %f, %g или %w для переопределения.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../DlgPrefsTechDrawDimensions.ui" line="180"/>
@@ -4888,6 +4933,11 @@ Multiplier of &apos;Font Size&apos;</source>
       <translation>Размер вершины стрелки </translation>
     </message>
     <message>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="496"/>
+      <source>Leave blank for automatic dimension format. Use %f, %g or %w specifiers to override.</source>
+      <translation>Оставьте пустым для автоматического формата размера. Используйте спецификаторы %f, %g или %w для переопределения.</translation>
+    </message>
+    <message>
       <location filename="../../DlgPrefsTechDrawDimensions.ui" line="517"/>
       <source>Controls the size of gap between dimension point and start of extension line for ASME dimensions.</source>
       <translation>Управляет размером зазора между точкой размера и началом выносной линии для размеров ASME.</translation>
@@ -4898,7 +4948,30 @@ Multiplier of &apos;Font Size&apos;</source>
       <translation>Коэффициент зазора удлинения - ASME</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="610"/>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="527"/>
+      <source>Controls the size of gap between dimension point and start of extension line for ISO dimensions. 
+Value * linewidth is the gap. 
+Normally, no gap is used. If using a gap, the recommended value 8.</source>
+      <translation>Управляет размером зазора между точкой размера и началом выносной линии для размеров ISO.
+Значение * ширина линии — это зазор.
+Обычно пробел не используется. При использовании гэпа рекомендуемое значение 8.</translation>
+    </message>
+    <message>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="548"/>
+      <source>Controls the size of gap between dimension point and start of extension line for ASME dimensions. Value * linewidth is the gap. 
+Normally, no gap is used. If a gap is used, the recommended value is 6.</source>
+      <translation>Управляет размером зазора между точкой размера и началом выносной линии для размеров ASME. Значение * ширина линии — это зазор.
+Обычно пробел не используется. Если используется пробел, рекомендуемое значение равно 6.</translation>
+    </message>
+    <message>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="583"/>
+      <source>Controls the size of spacing between dimension line and dimension text.
+ Value * linewidth is the line spacing.</source>
+      <translation>Управляет размером интервала между размерной линией и размерным текстом.
+ Значение * ширина линии — межстрочный интервал.</translation>
+    </message>
+    <message>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="614"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; Items in &lt;span style=&quot; font-style:italic;&quot;&gt;italics&lt;/span&gt; are default values for new objects. They have no effect on existing objects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
       <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Примечание:&lt;/span&gt; Элементы выделенные &lt;span style=&quot; font-style:italic;&quot;&gt;курсивом&lt;/span&gt; являются значениями по умолчанию для новых объектов. Они не влияют на существующие объекты.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -7828,33 +7901,48 @@ using the given X/Y Spacing</source>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="34"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Material removal prohibited, whole part&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Удаление материалов запрещено, вся часть&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Material removal prohibited, whole part</source>
+      <translation>Удаление материала запрещено, целая часть</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="44"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Any method allowed, whole part&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешен любой метод, целая часть&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Any method allowed, whole part</source>
+      <translation>Разрешен любой метод, целая часть</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="54"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Material removal required, whole part&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Требуется удаление материала, вся часть&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Material removal required, whole part</source>
+      <translation>Требуется удаление материала, целая деталь</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="64"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Material removal required&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Требуется удаление материала&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Material removal required</source>
+      <translation>Требуется удаление материала</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="74"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Material removal prohibited&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Удаление материалов запрещено&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Material removal prohibited</source>
+      <translation>Удаление материала запрещено</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="84"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Any method allowed&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Любой разрешенный метод&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Any method allowed</source>
+      <translation>Любой разрешенный метод</translation>
+    </message>
+    <message>
+      <location filename="../../TaskSurfaceFinishSymbols.ui" line="105"/>
+      <source>Rotation angle</source>
+      <translation>Угол поворота</translation>
+    </message>
+    <message>
+      <location filename="../../TaskSurfaceFinishSymbols.ui" line="115"/>
+      <source>Use ISO standard</source>
+      <translation>Использовать ISO стандарт</translation>
+    </message>
+    <message>
+      <location filename="../../TaskSurfaceFinishSymbols.ui" line="128"/>
+      <source>Use ASME standard</source>
+      <translation>Использовать стандарт ASME</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="98"/>
@@ -7862,24 +7950,9 @@ using the given X/Y Spacing</source>
       <translation>Символ угла:</translation>
     </message>
     <message>
-      <location filename="../../TaskSurfaceFinishSymbols.ui" line="105"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rotation angle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Угол поворота&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-      <location filename="../../TaskSurfaceFinishSymbols.ui" line="115"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use ISO standard&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Использовать стандарт ISO&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="118"/>
       <source>ISO</source>
       <translation>ISO</translation>
-    </message>
-    <message>
-      <location filename="../../TaskSurfaceFinishSymbols.ui" line="128"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use ASME standard&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Использовать стандарт ASME&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="131"/>
@@ -8147,7 +8220,7 @@ using the given X/Y Spacing</source>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="40"/>
-      <location filename="../../Workbench.cpp" line="60"/>
+      <location filename="../../Workbench.cpp" line="61"/>
       <source>Extensions: Centerlines/Threading</source>
       <translation>Расширения: осевые линии/резьба</translation>
     </message>
@@ -8163,81 +8236,86 @@ using the given X/Y Spacing</source>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="43"/>
+      <source>Stacking</source>
+      <translation>Укладка</translation>
+    </message>
+    <message>
+      <location filename="../../Workbench.cpp" line="44"/>
       <source>Add Lines</source>
       <translation>Добавить линии</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="44"/>
+      <location filename="../../Workbench.cpp" line="45"/>
       <source>Add Vertices</source>
       <translation>Добавить вершины</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="45"/>
+      <location filename="../../Workbench.cpp" line="46"/>
       <source>TechDraw</source>
       <translation>Технический чертёж</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="48"/>
+      <location filename="../../Workbench.cpp" line="49"/>
       <source>TechDraw Attributes</source>
       <translation>Характеристики Чертежа(TechDraw)</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="49"/>
+      <location filename="../../Workbench.cpp" line="50"/>
       <source>TechDraw Centerlines</source>
       <translation>Осевые линии чертежа</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="53"/>
+      <location filename="../../Workbench.cpp" line="54"/>
       <source>TechDraw Extend Dimensions</source>
       <translation>Расширить размеры чертежа</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="55"/>
+      <location filename="../../Workbench.cpp" line="56"/>
       <source>TechDraw Pages</source>
       <translation>TechDraw Листы</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="56"/>
+      <location filename="../../Workbench.cpp" line="57"/>
       <source>TechDraw Stacking</source>
       <translation>Сборка чертежей</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="58"/>
+      <location filename="../../Workbench.cpp" line="59"/>
       <source>TechDraw Views</source>
       <translation>TechDraw Виды</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="50"/>
+      <location filename="../../Workbench.cpp" line="51"/>
       <source>TechDraw Clips</source>
       <translation>TechDraw Сечения</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="52"/>
+      <location filename="../../Workbench.cpp" line="53"/>
       <source>TechDraw Dimensions</source>
       <translation>TechDraw Размеры</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="57"/>
+      <location filename="../../Workbench.cpp" line="58"/>
       <source>TechDraw Tool Attributes</source>
       <translation>Характеристики инструмента TechDraw</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="54"/>
+      <location filename="../../Workbench.cpp" line="55"/>
       <source>TechDraw File Access</source>
       <translation>Доступ к файлу TechDraw</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="51"/>
+      <location filename="../../Workbench.cpp" line="52"/>
       <source>TechDraw Decoration</source>
       <translation>Декор TechDraw</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="47"/>
+      <location filename="../../Workbench.cpp" line="48"/>
       <source>TechDraw Annotation</source>
       <translation>Надпись в TechDraw</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="59"/>
+      <location filename="../../Workbench.cpp" line="60"/>
       <source>Views</source>
       <translation>Виды</translation>
     </message>
@@ -8577,12 +8655,12 @@ using the given X/Y Spacing</source>
     <message>
       <location filename="../../../App/DrawProjGroupItem.cpp" line="50"/>
       <source>FrontTopLeft</source>
-      <translation>Спереди вверху слева</translation>
+      <translation>Спереди сверху слева</translation>
     </message>
     <message>
       <location filename="../../../App/DrawProjGroupItem.cpp" line="51"/>
       <source>FrontTopRight</source>
-      <translation>Спереди вверху справа</translation>
+      <translation>Спереди сверху справа</translation>
     </message>
     <message>
       <location filename="../../../App/DrawProjGroupItem.cpp" line="52"/>
@@ -8601,13 +8679,13 @@ using the given X/Y Spacing</source>
       <location filename="../../ViewProviderBalloon.cpp" line="181"/>
       <source>You cannot delete this balloon now because
 there is an open task dialog.</source>
-      <translation type="unfinished">You cannot delete this balloon now because
-there is an open task dialog.</translation>
+      <translation>Вы не можете удалить этот шар, потому что
+есть открытый диалог задач.</translation>
     </message>
     <message>
       <location filename="../../ViewProviderBalloon.cpp" line="184"/>
       <source>Can Not Delete</source>
-      <translation type="unfinished">Can Not Delete</translation>
+      <translation>Невозможно удалить</translation>
     </message>
   </context>
 </TS>

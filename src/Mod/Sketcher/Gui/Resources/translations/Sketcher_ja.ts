@@ -70,7 +70,7 @@
     <name>CmdSketcherCarbonCopy</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1658"/>
-      <source>Create a carbon copy</source>
+      <source>Create carbon copy</source>
       <translation>カーボンコピーを作成</translation>
     </message>
     <message>
@@ -193,7 +193,7 @@
     <name>CmdSketcherCompCreateBSpline</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1047"/>
-      <source>Create a B-spline</source>
+      <source>Create B-spline</source>
       <translation>B-スプラインを作成</translation>
     </message>
     <message>
@@ -229,7 +229,7 @@
     <name>CmdSketcherCompCreateConic</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="742"/>
-      <source>Create a conic</source>
+      <source>Create conic</source>
       <translation>円錐曲線を作成</translation>
     </message>
     <message>
@@ -267,8 +267,8 @@
     <name>CmdSketcherCompCreateFillets</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1431"/>
-      <source>Fillets</source>
-      <translation>フィレット</translation>
+      <source>Create fillet</source>
+      <translation>フィレットを作成</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1432"/>
@@ -290,7 +290,7 @@
     <name>CmdSketcherCompCreateRectangles</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="236"/>
-      <source>Create rectangles</source>
+      <source>Create rectangle</source>
       <translation>長方形を作成</translation>
     </message>
     <message>
@@ -586,7 +586,7 @@ on the selected vertex</source>
     <message>
       <location filename="../../CommandConstraints.cpp" line="8152"/>
       <source>Constrain refraction (Snell's law)</source>
-      <translation type="unfinished">Constrain refraction (Snell's law)</translation>
+      <translation>屈折率拘束（スネルの法則）</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="8153"/>
@@ -704,7 +704,7 @@ with respect to a line or a third point</source>
     <name>CmdSketcherCreateArcOfEllipse</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="652"/>
-      <source>Create an arc of ellipse</source>
+      <source>Create arc of ellipse</source>
       <translation>楕円弧を作成</translation>
     </message>
     <message>
@@ -717,7 +717,7 @@ with respect to a line or a third point</source>
     <name>CmdSketcherCreateArcOfHyperbola</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="681"/>
-      <source>Create an arc of hyperbola</source>
+      <source>Create arc of hyperbola</source>
       <translation>双曲線の円弧を作成</translation>
     </message>
     <message>
@@ -730,7 +730,7 @@ with respect to a line or a third point</source>
     <name>CmdSketcherCreateArcOfParabola</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="709"/>
-      <source>Create an arc of parabola</source>
+      <source>Create arc of parabola</source>
       <translation>放物線の円弧を作成</translation>
     </message>
     <message>
@@ -748,7 +748,7 @@ with respect to a line or a third point</source>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="916"/>
-      <source>Create a B-spline via control points in the sketch.</source>
+      <source>Create a B-spline by control points in the sketch.</source>
       <translation>スケッチの制御点からB-スプラインを作成</translation>
     </message>
   </context>
@@ -891,7 +891,7 @@ with respect to a line or a third point</source>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="949"/>
-      <source>Create a periodic B-spline via control points in the sketch.</source>
+      <source>Create a periodic B-spline by control points in the sketch.</source>
       <translation>スケッチの制御点から周期的なB-スプラインを作成</translation>
     </message>
   </context>
@@ -1094,7 +1094,7 @@ with respect to a line or a third point</source>
     <name>CmdSketcherExternal</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1629"/>
-      <source>Create an external geometry</source>
+      <source>Create external geometry</source>
       <translation>外部ジオメトリーを作成</translation>
     </message>
     <message>
@@ -2119,7 +2119,7 @@ invalid constraints, degenerated geometry, etc.</source>
   <context>
     <name>CommandGroup</name>
     <message>
-      <location filename="../../Workbench.cpp" line="34"/>
+      <location filename="../../Workbench.cpp" line="36"/>
       <source>Sketcher</source>
       <translation>スケッチャー</translation>
     </message>
@@ -2280,8 +2280,20 @@ invalid constraints, degenerated geometry, etc.</source>
       <translation>アタッチしない</translation>
     </message>
     <message>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="119"/>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="128"/>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="154"/>
       <location filename="../../CommandAlterGeometry.cpp" line="145"/>
       <location filename="../../CommandAlterGeometry.cpp" line="154"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="482"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="555"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="637"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="690"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="748"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="834"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="882"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1232"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1342"/>
       <location filename="../../CommandConstraints.cpp" line="162"/>
       <location filename="../../CommandConstraints.cpp" line="169"/>
       <location filename="../../CommandConstraints.cpp" line="1047"/>
@@ -2407,15 +2419,6 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../CommandConstraints.cpp" line="8443"/>
       <location filename="../../CommandConstraints.cpp" line="8519"/>
       <location filename="../../CommandConstraints.cpp" line="8531"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="482"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="555"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="637"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="690"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="748"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="834"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="882"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1232"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1342"/>
       <location filename="../../CommandSketcherTools.cpp" line="93"/>
       <location filename="../../CommandSketcherTools.cpp" line="769"/>
       <location filename="../../CommandSketcherTools.cpp" line="885"/>
@@ -2431,9 +2434,6 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../CommandSketcherTools.cpp" line="2164"/>
       <location filename="../../CommandSketcherTools.cpp" line="2174"/>
       <location filename="../../CommandSketcherTools.cpp" line="2221"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="119"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="128"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="154"/>
       <source>Wrong selection</source>
       <translation>誤った選択</translation>
     </message>
@@ -2614,16 +2614,16 @@ invalid constraints, degenerated geometry, etc.</source>
       <translation>選択したオブジェクトの数が3ではありません。</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="583"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="872"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="1365"/>
+      <location filename="../../CommandConstraints.cpp" line="583"/>
       <source>Error</source>
       <translation>エラー</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="584"/>
       <source>Unexpected error. More information may be available in the Report View.</source>
-      <translation type="unfinished">Unexpected error. More information may be available in the Report View.</translation>
+      <translation>予期しないエラーです。詳細についてはレポートビューで確認できます。</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="2229"/>
@@ -3015,19 +3015,19 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <translation>スケッチからの拘束（複数可）を選択します。</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="245"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="246"/>
       <source>B-Spline Degree</source>
       <translation>B-スプラインの次数</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="246"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="247"/>
       <source>Define B-Spline Degree, between 1 and %1:</source>
       <translation>1から %1 の間でB-スプラインの次数を定義してください:</translation>
     </message>
     <message>
+      <location filename="../../DrawSketchHandlerFillet.h" line="277"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="731"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="1096"/>
-      <location filename="../../DrawSketchHandlerFillet.h" line="277"/>
       <source>CAD Kernel Error</source>
       <translation>CADカーネルエラー</translation>
     </message>
@@ -3190,7 +3190,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../DrawSketchHandlerFillet.h" line="286"/>
       <source>Value Error</source>
-      <translation type="unfinished">Value Error</translation>
+      <translation>値エラー</translation>
     </message>
   </context>
   <context>
@@ -4665,12 +4665,12 @@ However, no constraints linking to the endpoints were found.</source>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="1153"/>
       <source>Impossible to update visibility tracking</source>
-      <translation type="unfinished">Impossible to update visibility tracking</translation>
+      <translation>表示トラッキングを更新できません。</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="1546"/>
       <source>Impossible to update visibility tracking: </source>
-      <translation type="unfinished">Impossible to update visibility tracking: </translation>
+      <translation>表示トラッキングを更新できません: </translation>
     </message>
   </context>
   <context>
@@ -5906,44 +5906,54 @@ Eigen Sparse QR algorithm is optimized for sparse matrices; usually faster</sour
   <context>
     <name>Workbench</name>
     <message>
-      <location filename="../../Workbench.cpp" line="35"/>
+      <location filename="../../Workbench.cpp" line="37"/>
       <source>P&amp;rofiles</source>
       <translation>プロファイル(&amp;R)</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="36"/>
+      <location filename="../../Workbench.cpp" line="38"/>
       <source>S&amp;ketch</source>
       <translation>スケッチ(&amp;K)</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="37"/>
+      <location filename="../../Workbench.cpp" line="39"/>
       <source>Sketcher</source>
       <translation>スケッチャー</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="38"/>
+      <location filename="../../Workbench.cpp" line="40"/>
+      <source>Sketcher edit mode</source>
+      <translation>スケッチャー編集モード</translation>
+    </message>
+    <message>
+      <location filename="../../Workbench.cpp" line="41"/>
       <source>Sketcher geometries</source>
       <translation>スケッチャージオメトリ</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="39"/>
+      <location filename="../../Workbench.cpp" line="42"/>
       <source>Sketcher constraints</source>
       <translation>スケッチャー拘束</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="40"/>
+      <location filename="../../Workbench.cpp" line="43"/>
       <source>Sketcher tools</source>
       <translation>スケッチャー ツール</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="41"/>
+      <location filename="../../Workbench.cpp" line="44"/>
       <source>Sketcher B-spline tools</source>
       <translation>スケッチャーB-スプラインツール</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="42"/>
+      <location filename="../../Workbench.cpp" line="45"/>
       <source>Sketcher virtual space</source>
       <translation>スケッチャー仮想スペース</translation>
+    </message>
+    <message>
+      <location filename="../../Workbench.cpp" line="46"/>
+      <source>Sketcher edit tools</source>
+      <translation>スケッチャー編集ツール</translation>
     </message>
   </context>
   <context>
@@ -6079,7 +6089,7 @@ The grid spacing change if it becomes smaller than this number of pixel.</source
     <name>GridSpaceAction</name>
     <message>
       <location filename="../../Command.cpp" line="1118"/>
-      <source>Grid Auto Spacing</source>
+      <source>Grid auto spacing</source>
       <translation>グリッド間隔を自動調整</translation>
     </message>
     <message>
@@ -6094,8 +6104,8 @@ The grid spacing change if it becomes smaller than this number of pixel.</source
     </message>
     <message>
       <location filename="../../Command.cpp" line="1123"/>
-      <source>Distance between two subsequent grid lines</source>
-      <translation>2本の連続するグリッド線の間の距離</translation>
+      <source>Distance between two subsequent grid lines.</source>
+      <translation>2本の隣り合ったグリッド線の間の距離</translation>
     </message>
   </context>
   <context>
@@ -6118,58 +6128,61 @@ The grid spacing change if it becomes smaller than this number of pixel.</source
 </translation>
     </message>
     <message>
-      <location filename="../../CommandSketcherTools.cpp" line="1221"/>
-      <location filename="../../CommandSketcherTools.cpp" line="1798"/>
-      <location filename="../../CommandSketcherTools.cpp" line="2243"/>
-      <location filename="../../DrawSketchHandlerArc.h" line="198"/>
-      <location filename="../../DrawSketchHandlerArc.h" line="470"/>
+      <location filename="../../DrawSketchHandlerLine.h" line="121"/>
+      <location filename="../../DrawSketchHandlerRectangle.h" line="291"/>
+      <location filename="../../DrawSketchHandlerRectangle.h" line="699"/>
+      <location filename="../../DrawSketchHandlerTrimming.h" line="149"/>
       <location filename="../../DrawSketchHandlerArcOfEllipse.h" line="321"/>
-      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="253"/>
-      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="329"/>
+      <location filename="../../DrawSketchHandlerExtend.h" line="324"/>
+      <location filename="../../DrawSketchHandlerSlot.h" line="306"/>
+      <location filename="../../DrawSketchHandlerCarbonCopy.h" line="171"/>
       <location filename="../../DrawSketchHandlerArcOfParabola.h" line="259"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="128"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="204"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="304"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="516"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="123"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="194"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="303"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="613"/>
-      <location filename="../../DrawSketchHandlerCarbonCopy.h" line="171"/>
+      <location filename="../../DrawSketchHandlerArc.h" line="198"/>
+      <location filename="../../DrawSketchHandlerArc.h" line="470"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="127"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="317"/>
-      <location filename="../../DrawSketchHandlerEllipse.h" line="799"/>
-      <location filename="../../DrawSketchHandlerExtend.h" line="324"/>
+      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="253"/>
+      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="329"/>
+      <location filename="../../DrawSketchHandlerSplitting.h" line="148"/>
       <location filename="../../DrawSketchHandlerExternal.h" line="172"/>
-      <location filename="../../DrawSketchHandlerLine.h" line="121"/>
+      <location filename="../../DrawSketchHandlerPolygon.h" line="157"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="431"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="461"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="128"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="205"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="305"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="517"/>
+      <location filename="../../DrawSketchHandlerEllipse.h" line="799"/>
+      <location filename="../../CommandSketcherTools.cpp" line="1221"/>
+      <location filename="../../CommandSketcherTools.cpp" line="1798"/>
+      <location filename="../../CommandSketcherTools.cpp" line="2243"/>
       <location filename="../../DrawSketchHandlerPoint.h" line="80"/>
-      <location filename="../../DrawSketchHandlerPolygon.h" line="157"/>
-      <location filename="../../DrawSketchHandlerRectangle.h" line="291"/>
-      <location filename="../../DrawSketchHandlerRectangle.h" line="699"/>
-      <location filename="../../DrawSketchHandlerSlot.h" line="306"/>
-      <location filename="../../DrawSketchHandlerSplitting.h" line="148"/>
-      <location filename="../../DrawSketchHandlerTrimming.h" line="149"/>
       <source>Error</source>
       <translation>エラー</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="2040"/>
       <source>Failed to delete all geometry</source>
-      <translation type="unfinished">Failed to delete all geometry</translation>
+      <translation>すべてのジオメトリーを削除することができませんでした。</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="2109"/>
       <source>Failed to delete all constraints</source>
-      <translation type="unfinished">Failed to delete all constraints</translation>
+      <translation>すべての拘束を削除することができませんでした。</translation>
     </message>
     <message>
-      <location filename="../../../App/SketchObjectPyImp.cpp" line="382"/>
+      <location filename="../../../App/SketchObjectPyImp.cpp" line="384"/>
       <source>The constraint has invalid index information and is malformed.</source>
-      <translation type="unfinished">The constraint has invalid index information and is malformed.</translation>
+      <translation>この拘束には無効なインデックス情報が含まれており、形式が正しくありません。</translation>
     </message>
     <message>
+      <location filename="../../CommandSketcherBSpline.cpp" line="775"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="909"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1130"/>
       <location filename="../../CommandConstraints.cpp" line="253"/>
       <location filename="../../CommandConstraints.cpp" line="328"/>
       <location filename="../../CommandConstraints.cpp" line="419"/>
@@ -6177,102 +6190,99 @@ The grid spacing change if it becomes smaller than this number of pixel.</source
       <location filename="../../CommandConstraints.cpp" line="573"/>
       <location filename="../../CommandConstraints.cpp" line="4461"/>
       <location filename="../../CommandConstraints.cpp" line="4676"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="775"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="909"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1130"/>
       <location filename="../../CommandSketcherTools.cpp" line="833"/>
       <location filename="../../CommandSketcherTools.cpp" line="1053"/>
       <source>Invalid Constraint</source>
-      <translation type="unfinished">Invalid Constraint</translation>
+      <translation>拘束が正しくありません。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArc.h" line="199"/>
       <location filename="../../DrawSketchHandlerArc.h" line="471"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="462"/>
       <source>Failed to add arc</source>
-      <translation type="unfinished">Failed to add arc</translation>
+      <translation>円弧を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfEllipse.h" line="322"/>
       <source>Failed to add arc of ellipse</source>
-      <translation type="unfinished">Failed to add arc of ellipse</translation>
+      <translation>楕円弧を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="254"/>
       <source>Cannot create arc of hyperbola from invalid angles, try again!</source>
-      <translation type="unfinished">Cannot create arc of hyperbola from invalid angles, try again!</translation>
+      <translation>角度が正しくないため双曲線の円弧を作成できません。再度、試してください！</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="330"/>
       <source>Cannot create arc of hyperbola</source>
-      <translation type="unfinished">Cannot create arc of hyperbola</translation>
+      <translation>双曲線の円弧を作成できません。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfParabola.h" line="260"/>
       <source>Cannot create arc of parabola</source>
-      <translation type="unfinished">Cannot create arc of parabola</translation>
+      <translation>放物線の円弧を作成できません。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSpline.h" line="129"/>
       <source>Error adding B-Spline pole</source>
-      <translation type="unfinished">Error adding B-Spline pole</translation>
+      <translation>B-スプラインの極の追加エラー</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="205"/>
-      <source>Error creating BSpline pole</source>
-      <translation type="unfinished">Error creating BSpline pole</translation>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="206"/>
+      <source>Error creating B-spline pole</source>
+      <translation>B-スプラインの極の作成エラー</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="305"/>
-      <source>Error deleting last pole</source>
-      <translation type="unfinished">Error deleting last pole</translation>
-    </message>
-    <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="517"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="614"/>
-      <source>Error creating B-Spline</source>
-      <translation type="unfinished">Error creating B-Spline</translation>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="518"/>
+      <source>Error creating B-spline</source>
+      <translation>B-スプラインの作成エラー</translation>
+    </message>
+    <message>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="306"/>
+      <source>Error deleting last pole</source>
+      <translation>最後の極の削除エラー</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="124"/>
       <source>Cannot add knot point</source>
-      <translation type="unfinished">Cannot add knot point</translation>
+      <translation>ノット点を追加できません。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="195"/>
       <source>Cannot add internal alignment points</source>
-      <translation type="unfinished">Cannot add internal alignment points</translation>
+      <translation>内部配置点を追加できません。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="304"/>
       <source>Error removing knot</source>
-      <translation type="unfinished">Error removing knot</translation>
+      <translation>ノット削除エラー</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerCarbonCopy.h" line="172"/>
       <source>Failed to add carbon copy</source>
-      <translation type="unfinished">Failed to add carbon copy</translation>
+      <translation>カーボンコピーを追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerCircle.h" line="128"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="318"/>
       <source>Failed to add circle</source>
-      <translation type="unfinished">Failed to add circle</translation>
+      <translation>円を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerEllipse.h" line="800"/>
       <source>Failed to add an ellipse</source>
-      <translation type="unfinished">Failed to add an ellipse</translation>
+      <translation>楕円を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerExtend.h" line="325"/>
       <source>Failed to extend edge</source>
-      <translation type="unfinished">Failed to extend edge</translation>
+      <translation>エッジを延長できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerExternal.h" line="173"/>
       <source>Failed to add external geometry</source>
-      <translation type="unfinished">Failed to add external geometry</translation>
+      <translation>外部ジオメトリーを追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerFillet.h" line="184"/>
@@ -6283,75 +6293,49 @@ The grid spacing change if it becomes smaller than this number of pixel.</source
       <location filename="../../DrawSketchHandlerLine.h" line="122"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="432"/>
       <source>Failed to add line</source>
-      <translation type="unfinished">Failed to add line</translation>
+      <translation>線を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerPoint.h" line="81"/>
       <source>Failed to add point</source>
-      <translation type="unfinished">Failed to add point</translation>
+      <translation>点を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerPolygon.h" line="158"/>
       <source>Failed to add polygon</source>
-      <translation type="unfinished">Failed to add polygon</translation>
+      <translation>多角形を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerRectangle.h" line="292"/>
       <source>Failed to add box</source>
-      <translation type="unfinished">Failed to add box</translation>
+      <translation>長方形を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerRectangle.h" line="700"/>
       <source>Failed to add rounded rectangle</source>
-      <translation type="unfinished">Failed to add rounded rectangle</translation>
+      <translation>角丸長方形を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerSlot.h" line="307"/>
       <source>Failed to add slot</source>
-      <translation type="unfinished">Failed to add slot</translation>
+      <translation>長円を追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerSplitting.h" line="149"/>
       <source>Failed to add edge</source>
-      <translation type="unfinished">Failed to add edge</translation>
+      <translation>エジイを追加できませんでした。</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerTrimming.h" line="150"/>
       <source>Failed to trim edge</source>
-      <translation type="unfinished">Failed to trim edge</translation>
+      <translation>エッジをトリムできませんでした。</translation>
     </message>
     <message>
-      <location filename="../../EditDatumDialog.cpp" line="239"/>
       <location filename="../../TaskSketcherConstraints.cpp" line="1240"/>
       <location filename="../../TaskSketcherConstraints.cpp" line="1258"/>
+      <location filename="../../EditDatumDialog.cpp" line="239"/>
       <source>Value Error</source>
-      <translation type="unfinished">Value Error</translation>
-    </message>
-  </context>
-  <context>
-    <name>CmdSketcherCreateBSplineByInterpolation</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="979"/>
-      <source>Interpolate B-spline</source>
-      <translation>B-スプラインを補間</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="980"/>
-      <source>Create a B-spline by interpolation, i.e. via knots in the sketch.</source>
-      <translation>補間、つまりスケッチのノットを介してB-スプラインを作成</translation>
-    </message>
-  </context>
-  <context>
-    <name>CmdSketcherCreatePeriodicBSplineByInterpolation</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1011"/>
-      <source>Interpolate periodic B-spline</source>
-      <translation>周期的なB-スプラインを補間</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1013"/>
-      <source>Create a periodic B-spline by interpolation, i.e. via knots in the sketch.</source>
-      <translation>補間、つまりスケッチのノットを介して周期的なB-スプラインを作成</translation>
+      <translation>値エラー</translation>
     </message>
   </context>
   <context>
@@ -6397,7 +6381,7 @@ The grid spacing change if it becomes smaller than this number of pixel.</source
     <message>
       <location filename="../../Command.cpp" line="1365"/>
       <source>Snap to grid</source>
-      <translation type="unfinished">Snap to grid</translation>
+      <translation>グリッドにスナップ</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1367"/>
@@ -6413,8 +6397,8 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     </message>
     <message>
       <location filename="../../Command.cpp" line="1373"/>
-      <source>Angular step for tools that use 'Snap at Angle' (line for instance). Hold CTRL to enable 'Snap at Angle'. The angle start from the East axis (horizontal right)</source>
-      <translation>「角度でスナップ」（例えば線）を使用するツールの角度ステップ。 CTRLキーを押していると「角度でスナップ」が有効になります。角度は東向きの軸（水平線の右方向）から開始します。</translation>
+      <source>Angular step for tools that use 'Snap at Angle' (line for instance). Hold CTRL to enable 'Snap at Angle'. The angle starts from the positive X axis of the sketch.</source>
+      <translation>「角度でスナップ」（例えば線）を使用するツールの角度ステップ。 CTRLキーを押していると「角度でスナップ」が有効になります。角度はスケッチのX軸正の向きから開始します。</translation>
     </message>
   </context>
   <context>
@@ -6463,8 +6447,8 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     </message>
     <message>
       <location filename="../../Command.cpp" line="1220"/>
-      <source>Toggle the grid in the sketch. In the menu you can change grid settings</source>
-      <translation type="unfinished">Toggle the grid in the sketch. In the menu you can change grid settings</translation>
+      <source>Toggle the grid in the sketch. In the menu you can change grid settings.</source>
+      <translation>スケッチのグリッドを切り替えます。メニューでグリッド設定を変更できます。</translation>
     </message>
   </context>
   <context>
@@ -6472,12 +6456,38 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     <message>
       <location filename="../../Command.cpp" line="1474"/>
       <source>Toggle snap</source>
-      <translation type="unfinished">Toggle snap</translation>
+      <translation>スナップの切り替え</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1476"/>
-      <source>Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings</source>
-      <translation type="unfinished">Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings</translation>
+      <source>Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings.</source>
+      <translation>すべてのスナップ機能を切り替えます。メニューでは「グリッドにスナップ」と「オブジェクトにスナップ」のそれぞれの切り替えや、さらに多くのスナップ設定の変更が可能です。</translation>
+    </message>
+  </context>
+  <context>
+    <name>CmdSketcherCreateBSplineByInterpolation</name>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="979"/>
+      <source>Create B-spline by knots</source>
+      <translation>ノットによるB-スプラインを作成</translation>
+    </message>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="980"/>
+      <source>Create a B-spline by knots, i.e. by interpolation, in the sketch.</source>
+      <translation>ノット、つまり補間によってスケッチにB-スプラインを作成。</translation>
+    </message>
+  </context>
+  <context>
+    <name>CmdSketcherCreatePeriodicBSplineByInterpolation</name>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="1011"/>
+      <source>Create periodic B-spline by knots</source>
+      <translation>ノットによる周期的なB-スプラインを作成</translation>
+    </message>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="1013"/>
+      <source>Create a periodic B-spline by knots, i.e. by interpolation, in the sketch.</source>
+      <translation>ノット、つまり補間によってスケッチに周期的なB-スプラインを作成。</translation>
     </message>
   </context>
 </TS>

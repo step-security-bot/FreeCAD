@@ -2014,8 +2014,8 @@
       <translation>Sortu kalkulu-orriaren bista</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="1610"/>
       <location filename="../../MDIViewPage.cpp" line="716"/>
+      <location filename="../../Command.cpp" line="1610"/>
       <source>Save page to dxf</source>
       <translation>Gorde orria DXF fitxategi batean</translation>
     </message>
@@ -2603,6 +2603,16 @@
   <context>
     <name>QObject</name>
     <message>
+      <location filename="../../CommandAnnotate.cpp" line="316"/>
+      <location filename="../../CommandAnnotate.cpp" line="415"/>
+      <location filename="../../CommandAnnotate.cpp" line="1152"/>
+      <location filename="../../CommandAnnotate.cpp" line="1160"/>
+      <location filename="../../CommandAnnotate.cpp" line="1207"/>
+      <location filename="../../CommandAnnotate.cpp" line="1349"/>
+      <location filename="../../CommandAnnotate.cpp" line="1356"/>
+      <location filename="../../CommandAnnotate.cpp" line="1420"/>
+      <location filename="../../CommandCreateDims.cpp" line="1277"/>
+      <location filename="../../CommandCreateDims.cpp" line="1286"/>
       <location filename="../../Command.cpp" line="375"/>
       <location filename="../../Command.cpp" line="601"/>
       <location filename="../../Command.cpp" line="718"/>
@@ -2620,16 +2630,6 @@
       <location filename="../../Command.cpp" line="1429"/>
       <location filename="../../Command.cpp" line="1435"/>
       <location filename="../../Command.cpp" line="1478"/>
-      <location filename="../../CommandAnnotate.cpp" line="316"/>
-      <location filename="../../CommandAnnotate.cpp" line="415"/>
-      <location filename="../../CommandAnnotate.cpp" line="1152"/>
-      <location filename="../../CommandAnnotate.cpp" line="1160"/>
-      <location filename="../../CommandAnnotate.cpp" line="1207"/>
-      <location filename="../../CommandAnnotate.cpp" line="1349"/>
-      <location filename="../../CommandAnnotate.cpp" line="1356"/>
-      <location filename="../../CommandAnnotate.cpp" line="1420"/>
-      <location filename="../../CommandCreateDims.cpp" line="1277"/>
-      <location filename="../../CommandCreateDims.cpp" line="1286"/>
       <source>Wrong selection</source>
       <translation>Hautapen okerra</translation>
     </message>
@@ -2661,10 +2661,9 @@
       <translation>Ez da profil-objekturik aurkitu hautapenean</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="951"/>
-      <location filename="../../Command.cpp" line="958"/>
-      <location filename="../../Command.cpp" line="966"/>
-      <location filename="../../Command.cpp" line="978"/>
+      <location filename="../../CommandDecorate.cpp" line="344"/>
+      <location filename="../../CommandDecorate.cpp" line="351"/>
+      <location filename="../../CommandDecorate.cpp" line="358"/>
       <location filename="../../CommandCreateDims.cpp" line="166"/>
       <location filename="../../CommandCreateDims.cpp" line="292"/>
       <location filename="../../CommandCreateDims.cpp" line="418"/>
@@ -2676,33 +2675,33 @@
       <location filename="../../CommandCreateDims.cpp" line="1437"/>
       <location filename="../../CommandCreateDims.cpp" line="1445"/>
       <location filename="../../CommandCreateDims.cpp" line="1454"/>
-      <location filename="../../CommandDecorate.cpp" line="344"/>
-      <location filename="../../CommandDecorate.cpp" line="351"/>
-      <location filename="../../CommandDecorate.cpp" line="358"/>
+      <location filename="../../Command.cpp" line="951"/>
+      <location filename="../../Command.cpp" line="958"/>
+      <location filename="../../Command.cpp" line="966"/>
+      <location filename="../../Command.cpp" line="978"/>
       <location filename="../../CommandExtensionPack.cpp" line="1808"/>
       <source>Incorrect selection</source>
       <translation>Hautapen okerra</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="952"/>
       <location filename="../../CommandCreateDims.cpp" line="1438"/>
+      <location filename="../../Command.cpp" line="952"/>
       <source>Select an object first</source>
       <translation>Hautatu objektu bat</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="959"/>
       <location filename="../../CommandCreateDims.cpp" line="1446"/>
+      <location filename="../../Command.cpp" line="959"/>
       <source>Too many objects selected</source>
       <translation>Objektu gehiegi hautatuta</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="967"/>
       <location filename="../../CommandCreateDims.cpp" line="1455"/>
+      <location filename="../../Command.cpp" line="967"/>
       <source>Create a page first.</source>
       <translation>Lehenengo, sortu orrialde bat.</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="979"/>
       <location filename="../../CommandCreateDims.cpp" line="167"/>
       <location filename="../../CommandCreateDims.cpp" line="293"/>
       <location filename="../../CommandCreateDims.cpp" line="419"/>
@@ -2711,6 +2710,7 @@
       <location filename="../../CommandCreateDims.cpp" line="714"/>
       <location filename="../../CommandCreateDims.cpp" line="810"/>
       <location filename="../../CommandCreateDims.cpp" line="1085"/>
+      <location filename="../../Command.cpp" line="979"/>
       <source>No View of a Part in selection.</source>
       <translation>Ez dago piezaren bistarik hautapenean.</translation>
     </message>
@@ -2814,14 +2814,16 @@
       <location filename="../../CommandCreateDims.cpp" line="223"/>
       <location filename="../../CommandCreateDims.cpp" line="349"/>
       <source>BSpline Curve Warning</source>
-      <translation>BSpline kurbaren abisua</translation>
+      <translation>B-spline kurbaren abisua</translation>
     </message>
     <message>
       <location filename="../../CommandCreateDims.cpp" line="224"/>
       <source>Selected edge is a BSpline.  Radius will be approximate. Continue?</source>
-      <translation>Hautatutako ertza BSpline bat da. Erradioa gutxi gorabeherakoa izango da. Jarraitu?</translation>
+      <translation>Hautatutako ertza B-spline bat da. Erradioa gutxi gorabeherakoa izango da. Jarraitu?</translation>
     </message>
     <message>
+      <location filename="../../CommandDecorate.cpp" line="365"/>
+      <location filename="../../CommandDecorate.cpp" line="371"/>
       <location filename="../../CommandCreateDims.cpp" line="187"/>
       <location filename="../../CommandCreateDims.cpp" line="202"/>
       <location filename="../../CommandCreateDims.cpp" line="313"/>
@@ -2841,12 +2843,10 @@
       <location filename="../../CommandCreateDims.cpp" line="1112"/>
       <location filename="../../CommandCreateDims.cpp" line="1126"/>
       <location filename="../../CommandCreateDims.cpp" line="1218"/>
-      <location filename="../../CommandDecorate.cpp" line="365"/>
-      <location filename="../../CommandDecorate.cpp" line="371"/>
-      <location filename="../../TaskDimension.cpp" line="400"/>
       <location filename="../../TaskDimRepair.cpp" line="126"/>
       <location filename="../../TaskDimRepair.cpp" line="138"/>
       <location filename="../../TaskDimRepair.cpp" line="149"/>
+      <location filename="../../TaskDimension.cpp" line="400"/>
       <source>Incorrect Selection</source>
       <translation>Hautapen okerra</translation>
     </message>
@@ -2864,7 +2864,7 @@
       <location filename="../../CommandCreateDims.cpp" line="234"/>
       <location filename="../../CommandCreateDims.cpp" line="360"/>
       <source>BSpline Curve Error</source>
-      <translation>BSpline kurbaren errorea</translation>
+      <translation>B-spline kurbaren errorea</translation>
     </message>
     <message>
       <location filename="../../CommandCreateDims.cpp" line="235"/>
@@ -2889,7 +2889,7 @@
     <message>
       <location filename="../../CommandCreateDims.cpp" line="350"/>
       <source>Selected edge is a BSpline.  Diameter will be approximate. Continue?</source>
-      <translation>Hautatutako ertza BSpline bat da. Diametroa gutxi gorabeherakoa izango da. Jarraitu?</translation>
+      <translation>Hautatutako ertza B-spline bat da. Diametroa gutxi gorabeherakoa izango da. Jarraitu?</translation>
     </message>
     <message>
       <location filename="../../CommandCreateDims.cpp" line="361"/>
@@ -2974,9 +2974,6 @@
       <translation>Hautatu bi puntu-objektu eta bista bat. (2)</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="479"/>
-      <location filename="../../Command.cpp" line="572"/>
-      <location filename="../../Command.cpp" line="634"/>
       <location filename="../../CommandAnnotate.cpp" line="104"/>
       <location filename="../../CommandAnnotate.cpp" line="165"/>
       <location filename="../../CommandAnnotate.cpp" line="217"/>
@@ -3002,6 +2999,11 @@
       <location filename="../../CommandCreateDims.cpp" line="966"/>
       <location filename="../../CommandCreateDims.cpp" line="1064"/>
       <location filename="../../CommandCreateDims.cpp" line="1177"/>
+      <location filename="../../CommandStack.cpp" line="75"/>
+      <location filename="../../CommandStack.cpp" line="191"/>
+      <location filename="../../CommandStack.cpp" line="251"/>
+      <location filename="../../CommandStack.cpp" line="311"/>
+      <location filename="../../CommandStack.cpp" line="371"/>
       <location filename="../../CommandExtensionDims.cpp" line="266"/>
       <location filename="../../CommandExtensionDims.cpp" line="475"/>
       <location filename="../../CommandExtensionDims.cpp" line="767"/>
@@ -3009,23 +3011,18 @@
       <location filename="../../CommandExtensionDims.cpp" line="1440"/>
       <location filename="../../CommandExtensionDims.cpp" line="1803"/>
       <location filename="../../CommandExtensionDims.cpp" line="2062"/>
+      <location filename="../../Command.cpp" line="479"/>
+      <location filename="../../Command.cpp" line="572"/>
+      <location filename="../../Command.cpp" line="634"/>
       <location filename="../../CommandExtensionPack.cpp" line="274"/>
       <location filename="../../CommandExtensionPack.cpp" line="588"/>
       <location filename="../../CommandExtensionPack.cpp" line="1079"/>
       <location filename="../../CommandExtensionPack.cpp" line="1315"/>
       <location filename="../../CommandExtensionPack.cpp" line="1688"/>
-      <location filename="../../CommandStack.cpp" line="75"/>
-      <location filename="../../CommandStack.cpp" line="191"/>
-      <location filename="../../CommandStack.cpp" line="251"/>
-      <location filename="../../CommandStack.cpp" line="311"/>
-      <location filename="../../CommandStack.cpp" line="371"/>
       <source>Task In Progress</source>
       <translation>Ataza abian</translation>
     </message>
     <message>
-      <location filename="../../Command.cpp" line="480"/>
-      <location filename="../../Command.cpp" line="573"/>
-      <location filename="../../Command.cpp" line="635"/>
       <location filename="../../CommandAnnotate.cpp" line="105"/>
       <location filename="../../CommandAnnotate.cpp" line="166"/>
       <location filename="../../CommandAnnotate.cpp" line="218"/>
@@ -3051,6 +3048,11 @@
       <location filename="../../CommandCreateDims.cpp" line="967"/>
       <location filename="../../CommandCreateDims.cpp" line="1065"/>
       <location filename="../../CommandCreateDims.cpp" line="1178"/>
+      <location filename="../../CommandStack.cpp" line="76"/>
+      <location filename="../../CommandStack.cpp" line="192"/>
+      <location filename="../../CommandStack.cpp" line="252"/>
+      <location filename="../../CommandStack.cpp" line="312"/>
+      <location filename="../../CommandStack.cpp" line="372"/>
       <location filename="../../CommandExtensionDims.cpp" line="267"/>
       <location filename="../../CommandExtensionDims.cpp" line="476"/>
       <location filename="../../CommandExtensionDims.cpp" line="768"/>
@@ -3058,16 +3060,14 @@
       <location filename="../../CommandExtensionDims.cpp" line="1441"/>
       <location filename="../../CommandExtensionDims.cpp" line="1804"/>
       <location filename="../../CommandExtensionDims.cpp" line="2063"/>
+      <location filename="../../Command.cpp" line="480"/>
+      <location filename="../../Command.cpp" line="573"/>
+      <location filename="../../Command.cpp" line="635"/>
       <location filename="../../CommandExtensionPack.cpp" line="275"/>
       <location filename="../../CommandExtensionPack.cpp" line="589"/>
       <location filename="../../CommandExtensionPack.cpp" line="1080"/>
       <location filename="../../CommandExtensionPack.cpp" line="1316"/>
       <location filename="../../CommandExtensionPack.cpp" line="1689"/>
-      <location filename="../../CommandStack.cpp" line="76"/>
-      <location filename="../../CommandStack.cpp" line="192"/>
-      <location filename="../../CommandStack.cpp" line="252"/>
-      <location filename="../../CommandStack.cpp" line="312"/>
-      <location filename="../../CommandStack.cpp" line="372"/>
       <source>Close active task dialog and try again.</source>
       <translation>Itxi ataza aktiboaren elkarrizketa-koadroa eta saiatu berriro.</translation>
     </message>
@@ -3317,8 +3317,8 @@
     </message>
     <message>
       <location filename="../../ViewProviderPage.cpp" line="211"/>
-      <location filename="../../ViewProviderProjGroup.cpp" line="161"/>
       <location filename="../../ViewProviderTemplate.cpp" line="201"/>
+      <location filename="../../ViewProviderProjGroup.cpp" line="161"/>
       <source>Are you sure you want to continue?</source>
       <translation>Ziur zaude jarraitu nahi duzula?</translation>
     </message>
@@ -3353,9 +3353,9 @@
       <translation>Testu aberatsaren sortzailea</translation>
     </message>
     <message>
-      <location filename="../../QGIRichAnno.cpp" line="310"/>
       <location filename="../../TaskRichAnno.cpp" line="102"/>
       <location filename="../../TaskRichAnno.cpp" line="240"/>
+      <location filename="../../QGIRichAnno.cpp" line="310"/>
       <source>Rich text editor</source>
       <translation>Testu aberatsaren editorea</translation>
     </message>
@@ -3473,12 +3473,18 @@
       <translation>Editatu xehetasun-bista</translation>
     </message>
     <message>
+      <location filename="../../ViewProviderDimension.cpp" line="123"/>
       <location filename="../../ViewProviderBalloon.cpp" line="88"/>
-      <location filename="../../ViewProviderDimension.cpp" line="120"/>
       <source>Edit %1</source>
       <translation>Editatu %1</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="363"/>
+      <source>TechDraw Increase/Decrease Decimal</source>
+      <translation>TechDraw gehitu/gutxitu dezimalak</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="558"/>
       <location filename="../../CommandExtensionDims.cpp" line="567"/>
       <source>TechDraw PosHorizChainDimension</source>
       <translation>TechDraw kate-kota horizontalaren posizioa</translation>
@@ -3490,6 +3496,7 @@
       <translation>Ez da kota horizontalik hautatu</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="619"/>
       <location filename="../../CommandExtensionDims.cpp" line="628"/>
       <source>TechDraw PosVertChainDimension</source>
       <translation>TechDraw kate-kota bertikalaren posizioa</translation>
@@ -3501,6 +3508,7 @@
       <translation>Ez da kota bertikalik hautatu</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="681"/>
       <location filename="../../CommandExtensionDims.cpp" line="690"/>
       <source>TechDraw PosObliqueChainDimension</source>
       <translation>TechDraw zeharkako kate-kotaren posizioa</translation>
@@ -3512,19 +3520,72 @@
       <translation>Ez da zeharkako kotarik hautatu</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="867"/>
       <location filename="../../CommandExtensionDims.cpp" line="876"/>
       <source>TechDraw CascadeHorizDimension</source>
       <translation>TechDraw kota horizontal teilakatua</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="933"/>
       <location filename="../../CommandExtensionDims.cpp" line="942"/>
       <source>TechDraw CascadeVertDimension</source>
       <translation>TechDraw kota bertikal teilakatua</translation>
     </message>
     <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1000"/>
       <location filename="../../CommandExtensionDims.cpp" line="1009"/>
       <source>TechDraw CascadeObliqueDimension</source>
       <translation>TechDraw zeharkako kota teilakatua</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1199"/>
+      <source>TechDraw Create Horizontal Chain Dimension</source>
+      <translation>TechDraw sortu kate-kota horizontala</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1265"/>
+      <source>TechDraw Create Vertical Chain Dimension</source>
+      <translation>TechDraw sortu kate-kota bertikala</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1331"/>
+      <source>TechDraw Create Oblique Chain Dimension</source>
+      <translation>TechDraw sortu zeharkako kate-kota</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1539"/>
+      <source>TechDraw Create Horizontal Coord Dimension</source>
+      <translation>TechDraw sortu kota horizontal koordinatua</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1612"/>
+      <source>TechDraw Create Vertical Coord Dimension</source>
+      <translation>TechDraw sortu kota bertikal koordinatua</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1685"/>
+      <source>TechDraw Create Oblique Coord Dimension</source>
+      <translation>TechDraw sortu zeharkako kota koordinatua</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1908"/>
+      <source>TechDraw Create Horizontal Chamfer Dimension</source>
+      <translation>TechDraw sortu alaka-kota horizontala</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="1977"/>
+      <source>TechDraw Create Vertical Chamfer Dimension</source>
+      <translation>TechDraw sortu alaka-kota bertikala</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="2163"/>
+      <source>TechDraw Create Arc Length Dimension</source>
+      <translation>TechDraw sortu arku-luzeraren kota</translation>
+    </message>
+    <message>
+      <location filename="../../CommandExtensionDims.cpp" line="2240"/>
+      <source>TechDraw Customize Format</source>
+      <translation>TechDraw pertsonalizatu formatua</translation>
     </message>
     <message>
       <location filename="../../CommandExtensionDims.cpp" line="2304"/>
@@ -3684,19 +3745,19 @@ it has a weld symbol that would become broken.</source>
 hautsi daitekeen soldadura-ikur bat duelako.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderLeader.cpp" line="226"/>
-      <location filename="../../ViewProviderPage.cpp" line="214"/>
-      <location filename="../../ViewProviderProjGroup.cpp" line="148"/>
-      <location filename="../../ViewProviderProjGroup.cpp" line="164"/>
+      <location filename="../../ViewProviderViewPart.cpp" line="317"/>
+      <location filename="../../ViewProviderViewPart.cpp" line="325"/>
+      <location filename="../../ViewProviderViewPart.cpp" line="333"/>
       <location filename="../../ViewProviderProjGroupItem.cpp" line="148"/>
       <location filename="../../ViewProviderProjGroupItem.cpp" line="157"/>
       <location filename="../../ViewProviderProjGroupItem.cpp" line="165"/>
       <location filename="../../ViewProviderProjGroupItem.cpp" line="173"/>
-      <location filename="../../ViewProviderTemplate.cpp" line="205"/>
-      <location filename="../../ViewProviderViewPart.cpp" line="317"/>
-      <location filename="../../ViewProviderViewPart.cpp" line="325"/>
-      <location filename="../../ViewProviderViewPart.cpp" line="333"/>
+      <location filename="../../ViewProviderLeader.cpp" line="226"/>
       <location filename="../../ViewProviderWeld.cpp" line="145"/>
+      <location filename="../../ViewProviderPage.cpp" line="214"/>
+      <location filename="../../ViewProviderTemplate.cpp" line="205"/>
+      <location filename="../../ViewProviderProjGroup.cpp" line="148"/>
+      <location filename="../../ViewProviderProjGroup.cpp" line="164"/>
       <source>Object dependencies</source>
       <translation>Objektuaren mendekotasunak</translation>
     </message>
@@ -3706,20 +3767,20 @@ hautsi daitekeen soldadura-ikur bat duelako.</translation>
       <translation>Ezin da proiekzio-talde baten aingura-bista ezabatu.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderProjGroupItem.cpp" line="154"/>
       <location filename="../../ViewProviderViewPart.cpp" line="314"/>
+      <location filename="../../ViewProviderProjGroupItem.cpp" line="154"/>
       <source>You cannot delete this view because it has a section view that would become broken.</source>
       <translation>Ezin da bista hau ezabatu hautsita geratuko litzatekeen sekzio-bista bat duelako.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderProjGroupItem.cpp" line="162"/>
       <location filename="../../ViewProviderViewPart.cpp" line="322"/>
+      <location filename="../../ViewProviderProjGroupItem.cpp" line="162"/>
       <source>You cannot delete this view because it has a detail view that would become broken.</source>
       <translation>Ezin da bista hau ezabatu hautsita geratuko litzatekeen bista xehe bat duelako.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderProjGroupItem.cpp" line="170"/>
       <location filename="../../ViewProviderViewPart.cpp" line="330"/>
+      <location filename="../../ViewProviderProjGroupItem.cpp" line="170"/>
       <source>You cannot delete this view because it has a leader line that would become broken.</source>
       <translation>Ezin da bista hau ezabatu hautsita geratuko litzatekeen gida-marra bat duelako.</translation>
     </message>
@@ -4179,6 +4240,11 @@ Zertan ari zaren ondo badakizu soilik aldatu hau!</translation>
       <translation>Erabili aurpegiak aurkitzeko algoritmo berria</translation>
     </message>
     <message>
+      <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="574"/>
+      <source>The number of times FreeCAD should try to remove overlapping edges returned by the Hidden Line Removal algorithm. A value of 0 indicates no scrubbing, 1 indicates a single pass and 2 indicates a second pass should be performed. Values above 2 are generally not productive. Each pass adds to the time required to produce the drawing.</source>
+      <translation>Lerro ezkutuak kentzeko algoritmoak itzulitako ertz gainjarriak kentzeko FreeCADek zenbat saialdi egin behar dituen. Balioa 0 bada, esan nahi du ez dela lixatzerik egongo, 1 balioak pasaldi bakarra adierazten du eta 2 balioak bigarren pasaldi bat ere egingo dela. 2 baino altuagoak diren balioek ez dute emaitza onik ematen. Pasaldi bakoitzak denbora gehitzen dio marrazkia ekoizteko denborari.</translation>
+    </message>
+    <message>
       <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="213"/>
       <source>Max SVG Hatch Tiles</source>
       <translation>SVG itzaleztadura-lauza kopuru maximoa</translation>
@@ -4223,11 +4289,6 @@ erabiliko den itzal-lerro kopuru maximoa</translation>
       <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="567"/>
       <source>Overlap Edges Scrub Passes</source>
       <translation>Ertz gainjarriak lixatzeko pasaldiak</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="574"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The number of times FreeCAD should try to remove overlapping edges returned by the Hidden Line Removal algorithm.  A value of 0 indicates no scrubbing, 1 indicates a single pass and 2 indicates a second pass should be performed.  Values above 2 are generally not productive.   Each pass adds to the time required to produce the drawing.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lerro ezkutuak kentzeko algoritmoak itzulitako ertz gainjarriak kentzeko FreeCADek zenbat saialdi egin behar dituen. Balioa 0 bada, esan nahi du ez dela lixatzerik egongo, 1 balioak pasaldi bakarra adierazten du eta 2 balioak bigarren pasaldi bat ere egingo dela. 2 baino altuagoak diren balioek ez dute emaitza onik ematen. Pasaldi bakoitzak denbora gehitzen dio marrazkia ekoizteko denborari.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../DlgPrefsTechDrawAdvanced.ui" line="607"/>
@@ -4641,11 +4702,6 @@ erabiliko den itzal-lerro kopuru maximoa</translation>
       <translation>Testu-kolore monokromoa</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawColors.ui" line="180"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check this to use light text and lines on dark backgrounds.  Set Page Color to a dark color. Transparent or light color faces are recommended with this option.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Markatu hau testu eta lerro argiak erabiltzeko atzeko plano ilunetan. Ezarri orriaren kolore iluna. Aukera honekin, kolore mota gardenak edo argiak gomendatzen dira.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
       <location filename="../../DlgPrefsTechDrawColors.ui" line="183"/>
       <source>Light on dark</source>
       <translation>Argia ilunean</translation>
@@ -4676,6 +4732,15 @@ erabiliko den itzal-lerro kopuru maximoa</translation>
       <translation>Bistetako erpinen kolorea</translation>
     </message>
     <message>
+      <location filename="../../DlgPrefsTechDrawColors.ui" line="620"/>
+      <source>If checked FreeCAD will use a single colour for all text and lines. If unchecked FreeCAD will attempt to use lighter versions of preferred colours.
+
+</source>
+      <translation>Hau aktibatuta badago, FreeCADek kolore bakarra erabiliko du testu eta lerro guztietarako. Ez badago aktibatuta, hobetsitako koloreen bertsio argiagoak erabiltzen saiatuko da FreeCAD.
+
+</translation>
+    </message>
+    <message>
       <location filename="../../DlgPrefsTechDrawColors.ui" line="161"/>
       <source>Detail Highlight</source>
       <translation>Xehetasunen nabarmentzea</translation>
@@ -4696,6 +4761,11 @@ erabiliko den itzal-lerro kopuru maximoa</translation>
       <translation>Sareta-kolorea</translation>
     </message>
     <message>
+      <location filename="../../DlgPrefsTechDrawColors.ui" line="180"/>
+      <source>Check this to use light text and lines on dark backgrounds. Set Page Color to a dark color. Transparent or light color faces are recommended with this option.</source>
+      <translation>Aktiabatu hau atzeko plano ilunetan testu eta lerro argiak erabiltzeko. Ezarri orriaren kolore iluna. Aukera honekin, kolore gardenak edo argiak gomendatzen dira.</translation>
+    </message>
+    <message>
       <location filename="../../DlgPrefsTechDrawColors.ui" line="565"/>
       <source>Object faces will be transparent</source>
       <translation>Objektu-aurpegiak gardenak izango dira</translation>
@@ -4711,17 +4781,12 @@ erabiliko den itzal-lerro kopuru maximoa</translation>
       <translation>Aurpegi-kolorea (gardena ez bada)</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawColors.ui" line="620"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked FreeCAD will use a single colour for all text and lines.  If unchecked FreeCAD will attempt to use lighter versions of preferred colours.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aktibatuta badago, FreeCADek kolore bakarra erabiliko du testu eta lerro guztietarako. Ez badago aktibatuta, FreeCAD kolore hobetsien bertsio argiagoak erabiltzen saiatuko da.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawColors.ui" line="623"/>
+      <location filename="../../DlgPrefsTechDrawColors.ui" line="625"/>
       <source>Monochrome</source>
       <translation>Monokromoa</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawColors.ui" line="654"/>
+      <location filename="../../DlgPrefsTechDrawColors.ui" line="656"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; Items in &lt;span style=&quot; font-style:italic;&quot;&gt;italics&lt;/span&gt; are default values for new objects. They have no effect on existing objects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
       <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Oharra:&lt;/span&gt; &lt;span style=&quot; font-style:italic;&quot;&gt;Etzanean&lt;/span&gt; dauden elementuak objektu berrien balio lehenetsiak dira. Ez dute eraginik lehendik dauden objektuetan.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -4775,29 +4840,14 @@ erabiliko den itzal-lerro kopuru maximoa</translation>
       <translation>Erabili dezimal globalak</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="527"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls the size of gap between dimension point and start of extension line for ISO dimensions. Value * linewidth is the gap.  Normally, no gap is used.  If using a gap, the recommended value 8.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dimentsio-puntuaren eta luzapen-lerroaren hasieraren arteko tartearen tamaina kontrolatzen du ISO kotetarako. Tartea da balioa * lerro-zabalera. Normalean ez da tarterik erabiltzen. Erabiltzen bada, gomendatutako balioa 8 da.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="546"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls the size of gap between dimension point and start of extension line for ASME dimensions. Value * linewidth is the gap.  Normally, no gap is used.  If a gap is used, the recommended value is 6.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dimentsio-puntuaren eta luzapen-lerroaren hasieraren arteko tartearen tamaina kontrolatzen du ASME kotetarako. Tartea da balioa * lerro-zabalera. Normalean ez da tarterik erabiltzen. Erabiltzen bada, gomendatutako balioa 6 da.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="570"/>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="573"/>
       <source>Controls the size of spacing between dimension line and dimension text for ISO dimensions.</source>
       <translation>Kota-lerroaren eta kota-testuaren arteko tartearen tamaina kontrolatzen du, ISO kotetarako.</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="573"/>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="576"/>
       <source>Line Spacing - ISO</source>
       <translation>Lerro-tartea - ISO</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="580"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls the size of spacing between dimension line and dimension text. Value * linewidth is the line spacing.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dimentsio-lerroaren eta diimentsio-testuaren arteko tartearen tamaina kontrolatzen du. Tartea da balioa * lerro-zabalera.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../DlgPrefsTechDrawDimensions.ui" line="199"/>
@@ -4833,11 +4883,6 @@ erabiliko den itzal-lerro kopuru maximoa</translation>
       <location filename="../../DlgPrefsTechDrawDimensions.ui" line="489"/>
       <source>Extension Gap Factor - ISO</source>
       <translation>Hedadura-tartearen faktorea - ISO</translation>
-    </message>
-    <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="496"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Leave blank for automatic dimension format.  Use %f, %g or %w specifiers to override.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Utzi hutsik kota-formatu automatikoa erabiltzeko.  Erabili %f, %g edo %w zehaztaileak gainidazteko.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../DlgPrefsTechDrawDimensions.ui" line="180"/>
@@ -4892,6 +4937,11 @@ Multiplier of &apos;Font Size&apos;</source>
       <translation>Geziburuaren tamaina</translation>
     </message>
     <message>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="496"/>
+      <source>Leave blank for automatic dimension format. Use %f, %g or %w specifiers to override.</source>
+      <translation>Utzi hutsik koten formatu automatikoa erabiltzeko. Erabili %f, %g edo %w adierazleak hau indargabetzeko.</translation>
+    </message>
+    <message>
       <location filename="../../DlgPrefsTechDrawDimensions.ui" line="517"/>
       <source>Controls the size of gap between dimension point and start of extension line for ASME dimensions.</source>
       <translation>Kota-puntuaren eta luzapen-lerroaren hasieraren arteko tartearen tamaina kontrolatzen du ASME kotetarako.</translation>
@@ -4902,7 +4952,31 @@ Multiplier of &apos;Font Size&apos;</source>
       <translation>Hedadura-tartearen faktorea - ASME</translation>
     </message>
     <message>
-      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="610"/>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="527"/>
+      <source>Controls the size of gap between dimension point and start of extension line for ISO dimensions. 
+Value * linewidth is the gap. 
+Normally, no gap is used. If using a gap, the recommended value 8.</source>
+      <translation>Dimentsio-puntuaren eta luzapen-lerroaren hasieraren arteko tartearen tamaina kontrolatzen du ISO kotetarako. 
+Tartea da balioa * lerro-zabalera. 
+Normalean ez da tarterik erabiltzen. Erabiltzen bada, gomendatutako balioa 8 da.</translation>
+    </message>
+    <message>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="548"/>
+      <source>Controls the size of gap between dimension point and start of extension line for ASME dimensions. Value * linewidth is the gap. 
+Normally, no gap is used. If a gap is used, the recommended value is 6.</source>
+      <translation>Dimentsio-puntuaren eta luzapen-lerroaren hasieraren arteko tartearen tamaina kontrolatzen du ASME kotetarako. 
+Tartea da balioa * lerro-zabalera. 
+Normalean ez da tarterik erabiltzen. Erabiltzen bada, gomendatutako balioa 6 da.</translation>
+    </message>
+    <message>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="583"/>
+      <source>Controls the size of spacing between dimension line and dimension text.
+ Value * linewidth is the line spacing.</source>
+      <translation>Dimentsio-lerroaren eta dimentsio-testuaren arteko tartearen tamaina kontrolatzen du.
+Tartea da balioa * lerro-zabalera.</translation>
+    </message>
+    <message>
+      <location filename="../../DlgPrefsTechDrawDimensions.ui" line="614"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Note:&lt;/span&gt; Items in &lt;span style=&quot; font-style:italic;&quot;&gt;italics&lt;/span&gt; are default values for new objects. They have no effect on existing objects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
       <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Oharra:&lt;/span&gt; &lt;span style=&quot; font-style:italic;&quot;&gt;Etzanean&lt;/span&gt; dauden elementuak objektu berrien balio lehenetsiak dira. Ez dute eraginik lehendik dauden objektuetan.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -7833,33 +7907,48 @@ emandako X/Y espazioa erabilita</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="34"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Material removal prohibited, whole part&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Materiala kentzea debekatuta, pieza osoa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Material removal prohibited, whole part</source>
+      <translation>Materiala kentzea debekatuta dago, zati osoa</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="44"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Any method allowed, whole part&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Edozein metodo onartzen da, pieza osoa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Any method allowed, whole part</source>
+      <translation>Edozein metodo onartuta dago, zati osoa</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="54"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Material removal required, whole part&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Materiala kendu behar da, pieza osoa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Material removal required, whole part</source>
+      <translation>Materiala kendu behar da, zati osoa</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="64"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Material removal required&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Derrigorrezkoa da materiala kentzead&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Material removal required</source>
+      <translation>Materiala kendu behar da</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="74"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Material removal prohibited&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Debekatuta dago materiala kentzead&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Material removal prohibited</source>
+      <translation>Materiala kentzea debekatuta dago</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="84"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Any method allowed&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Edozein metodo onartzen da&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <source>Any method allowed</source>
+      <translation>Onartutako edozein metodo</translation>
+    </message>
+    <message>
+      <location filename="../../TaskSurfaceFinishSymbols.ui" line="105"/>
+      <source>Rotation angle</source>
+      <translation>Biraketa-angelua</translation>
+    </message>
+    <message>
+      <location filename="../../TaskSurfaceFinishSymbols.ui" line="115"/>
+      <source>Use ISO standard</source>
+      <translation>Erabili ISO estandarra</translation>
+    </message>
+    <message>
+      <location filename="../../TaskSurfaceFinishSymbols.ui" line="128"/>
+      <source>Use ASME standard</source>
+      <translation>Erabili ASME estandarra</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="98"/>
@@ -7867,24 +7956,9 @@ emandako X/Y espazioa erabilita</translation>
       <translation>Ikurraren angelua:</translation>
     </message>
     <message>
-      <location filename="../../TaskSurfaceFinishSymbols.ui" line="105"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rotation angle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Biraketa-angelua&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-      <location filename="../../TaskSurfaceFinishSymbols.ui" line="115"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use ISO standard&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Erabili ISO estandarra&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="118"/>
       <source>ISO</source>
       <translation>ISO</translation>
-    </message>
-    <message>
-      <location filename="../../TaskSurfaceFinishSymbols.ui" line="128"/>
-      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use ASME standard&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Erabili ASME estandarra&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../TaskSurfaceFinishSymbols.ui" line="131"/>
@@ -8152,7 +8226,7 @@ emandako X/Y espazioa erabilita</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="40"/>
-      <location filename="../../Workbench.cpp" line="60"/>
+      <location filename="../../Workbench.cpp" line="61"/>
       <source>Extensions: Centerlines/Threading</source>
       <translation>Hedapenak: erdiko lerroak/harilkatzea</translation>
     </message>
@@ -8168,81 +8242,86 @@ emandako X/Y espazioa erabilita</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="43"/>
+      <source>Stacking</source>
+      <translation>Pilaketa</translation>
+    </message>
+    <message>
+      <location filename="../../Workbench.cpp" line="44"/>
       <source>Add Lines</source>
       <translation>Gehitu lerroak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="44"/>
+      <location filename="../../Workbench.cpp" line="45"/>
       <source>Add Vertices</source>
       <translation>Gehitu erpinak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="45"/>
+      <location filename="../../Workbench.cpp" line="46"/>
       <source>TechDraw</source>
       <translation>TechDraw</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="48"/>
+      <location filename="../../Workbench.cpp" line="49"/>
       <source>TechDraw Attributes</source>
       <translation>TechDraw atributuak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="49"/>
+      <location filename="../../Workbench.cpp" line="50"/>
       <source>TechDraw Centerlines</source>
       <translation>TechDraw erdiko lerroak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="53"/>
+      <location filename="../../Workbench.cpp" line="54"/>
       <source>TechDraw Extend Dimensions</source>
       <translation>TechDraw luzatu kotak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="55"/>
+      <location filename="../../Workbench.cpp" line="56"/>
       <source>TechDraw Pages</source>
       <translation>TechDraw orriak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="56"/>
+      <location filename="../../Workbench.cpp" line="57"/>
       <source>TechDraw Stacking</source>
       <translation>TechDraw pilaketa</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="58"/>
+      <location filename="../../Workbench.cpp" line="59"/>
       <source>TechDraw Views</source>
       <translation>TechDraw bistak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="50"/>
+      <location filename="../../Workbench.cpp" line="51"/>
       <source>TechDraw Clips</source>
       <translation>TechDraw klipak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="52"/>
+      <location filename="../../Workbench.cpp" line="53"/>
       <source>TechDraw Dimensions</source>
       <translation>TechDraw kotak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="57"/>
+      <location filename="../../Workbench.cpp" line="58"/>
       <source>TechDraw Tool Attributes</source>
       <translation>TechDraw tresna-atributuak</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="54"/>
+      <location filename="../../Workbench.cpp" line="55"/>
       <source>TechDraw File Access</source>
       <translation>TechDraw fitxategi-atzitzea</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="51"/>
+      <location filename="../../Workbench.cpp" line="52"/>
       <source>TechDraw Decoration</source>
       <translation>TechDraw apaingarria</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="47"/>
+      <location filename="../../Workbench.cpp" line="48"/>
       <source>TechDraw Annotation</source>
       <translation>TechDraw oharpena</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="59"/>
+      <location filename="../../Workbench.cpp" line="60"/>
       <source>Views</source>
       <translation>Bistak</translation>
     </message>
@@ -8606,13 +8685,13 @@ emandako X/Y espazioa erabilita</translation>
       <location filename="../../ViewProviderBalloon.cpp" line="181"/>
       <source>You cannot delete this balloon now because
 there is an open task dialog.</source>
-      <translation type="unfinished">You cannot delete this balloon now because
-there is an open task dialog.</translation>
+      <translation>Ezin da bunbuilo hau ezabatu orain zeregin baten
+elkarrizketa-koadroa irekita dagoelako.</translation>
     </message>
     <message>
       <location filename="../../ViewProviderBalloon.cpp" line="184"/>
       <source>Can Not Delete</source>
-      <translation type="unfinished">Can Not Delete</translation>
+      <translation>Ezin da ezabatu</translation>
     </message>
   </context>
 </TS>

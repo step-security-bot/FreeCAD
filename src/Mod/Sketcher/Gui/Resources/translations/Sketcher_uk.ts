@@ -70,13 +70,13 @@
     <name>CmdSketcherCarbonCopy</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1658"/>
-      <source>Create a carbon copy</source>
-      <translation type="unfinished">Create a carbon copy</translation>
+      <source>Create carbon copy</source>
+      <translation>Створити копію</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1659"/>
       <source>Copy the geometry of another sketch</source>
-      <translation type="unfinished">Copy the geometry of another sketch</translation>
+      <translation>Копіює геометрію іншого ескізу</translation>
     </message>
   </context>
   <context>
@@ -193,7 +193,7 @@
     <name>CmdSketcherCompCreateBSpline</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1047"/>
-      <source>Create a B-spline</source>
+      <source>Create B-spline</source>
       <translation>Створити B-сплайн</translation>
     </message>
     <message>
@@ -229,7 +229,7 @@
     <name>CmdSketcherCompCreateConic</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="742"/>
-      <source>Create a conic</source>
+      <source>Create conic</source>
       <translation>Створити конус</translation>
     </message>
     <message>
@@ -267,8 +267,8 @@
     <name>CmdSketcherCompCreateFillets</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1431"/>
-      <source>Fillets</source>
-      <translation>Заокруглення</translation>
+      <source>Create fillet</source>
+      <translation>Створити заокруглення</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1432"/>
@@ -290,7 +290,7 @@
     <name>CmdSketcherCompCreateRectangles</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="236"/>
-      <source>Create rectangles</source>
+      <source>Create rectangle</source>
       <translation>Створити прямокутник</translation>
     </message>
     <message>
@@ -408,7 +408,7 @@
     <message>
       <location filename="../../CommandConstraints.cpp" line="1854"/>
       <source>Block the selected edge from moving</source>
-      <translation type="unfinished">Block the selected edge from moving</translation>
+      <translation>Блокує переміщення вибраного ребра</translation>
     </message>
   </context>
   <context>
@@ -447,7 +447,7 @@
     <message>
       <location filename="../../CommandConstraints.cpp" line="2469"/>
       <source>Fix a length of a line or the distance between a line and a vertex or between two circles</source>
-      <translation type="unfinished">Fix a length of a line or the distance between a line and a vertex or between two circles</translation>
+      <translation>Фіксує довжину лінії або відстань між лінією і вершиною або між двома колами</translation>
     </message>
   </context>
   <context>
@@ -455,7 +455,7 @@
     <message>
       <location filename="../../CommandConstraints.cpp" line="3303"/>
       <source>Constrain horizontal distance</source>
-      <translation type="unfinished">Constrain horizontal distance</translation>
+      <translation>Обмеження відстані по горизонталі</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="3304"/>
@@ -513,8 +513,7 @@
       <location filename="../../CommandConstraints.cpp" line="1587"/>
       <source>Create both a horizontal and a vertical distance constraint
 on the selected vertex</source>
-      <translation type="unfinished">Create both a horizontal and a vertical distance constraint
-on the selected vertex</translation>
+      <translation>Створює обмеження на горизонтальну і вертикальну відстань для обраної вершини</translation>
     </message>
   </context>
   <context>
@@ -587,14 +586,14 @@ on the selected vertex</translation>
     <message>
       <location filename="../../CommandConstraints.cpp" line="8152"/>
       <source>Constrain refraction (Snell's law)</source>
-      <translation type="unfinished">Constrain refraction (Snell's law)</translation>
+      <translation>Обмеження за законом заломлення (закон Снеліуса)</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="8153"/>
       <source>Create a refraction law (Snell's law)constraint between two endpoints of rays
 and an edge as an interface.</source>
-      <translation type="unfinished">Create a refraction law (Snell's law)constraint between two endpoints of rays
-and an edge as an interface.</translation>
+      <translation>Створює обмеження за законом заломлення (закон Снеліуса) між 
+двома кінцевими точками променя та ребром як границею розділу середовищ.</translation>
     </message>
   </context>
   <context>
@@ -608,7 +607,7 @@ and an edge as an interface.</translation>
       <location filename="../../CommandConstraints.cpp" line="7791"/>
       <source>Create a symmetry constraint between two points
 with respect to a line or a third point</source>
-      <translation>Створює обмеження симетричності між двома
+      <translation>Створює обмеження симетричності між двома 
 точками відносно лінії або третьої точки</translation>
     </message>
   </context>
@@ -707,7 +706,7 @@ with respect to a line or a third point</source>
     <name>CmdSketcherCreateArcOfEllipse</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="652"/>
-      <source>Create an arc of ellipse</source>
+      <source>Create arc of ellipse</source>
       <translation>Створити дугу еліпса</translation>
     </message>
     <message>
@@ -720,7 +719,7 @@ with respect to a line or a third point</source>
     <name>CmdSketcherCreateArcOfHyperbola</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="681"/>
-      <source>Create an arc of hyperbola</source>
+      <source>Create arc of hyperbola</source>
       <translation>Створити дугу гіперболи</translation>
     </message>
     <message>
@@ -733,7 +732,7 @@ with respect to a line or a third point</source>
     <name>CmdSketcherCreateArcOfParabola</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="709"/>
-      <source>Create an arc of parabola</source>
+      <source>Create arc of parabola</source>
       <translation>Створити дугу параболи</translation>
     </message>
     <message>
@@ -751,8 +750,8 @@ with respect to a line or a third point</source>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="916"/>
-      <source>Create a B-spline via control points in the sketch.</source>
-      <translation>Створює B-сплайн на ескізі за допомогою контрольних точок.</translation>
+      <source>Create a B-spline by control points in the sketch.</source>
+      <translation>Створити B-сплайн за контрольними точками креслення.</translation>
     </message>
   </context>
   <context>
@@ -894,8 +893,8 @@ with respect to a line or a third point</source>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="949"/>
-      <source>Create a periodic B-spline via control points in the sketch.</source>
-      <translation>Створює періодичний B-сплайн на ескізі за допомогою контрольних точок.</translation>
+      <source>Create a periodic B-spline by control points in the sketch.</source>
+      <translation>Створити періодичний B-сплайн за контрольними точками креслення.</translation>
     </message>
   </context>
   <context>
@@ -1097,8 +1096,8 @@ with respect to a line or a third point</source>
     <name>CmdSketcherExternal</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1629"/>
-      <source>Create an external geometry</source>
-      <translation type="unfinished">Create an external geometry</translation>
+      <source>Create external geometry</source>
+      <translation>Створити зовнішню геометрію</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1630"/>
@@ -1150,12 +1149,12 @@ with respect to a line or a third point</source>
     <message>
       <location filename="../../CommandSketcherBSpline.cpp" line="1252"/>
       <source>Join curves</source>
-      <translation type="unfinished">Join curves</translation>
+      <translation>Об'єднати криві</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherBSpline.cpp" line="1253"/>
       <source>Join two curves at selected end points</source>
-      <translation type="unfinished">Join two curves at selected end points</translation>
+      <translation>Обєднує дві криві за обраними кінцевими точками</translation>
     </message>
   </context>
   <context>
@@ -1184,7 +1183,7 @@ with respect to a line or a third point</source>
 First select the supporting geometry, for example, a face or an edge of a solid object,
 then call this command, then choose the desired sketch.</source>
       <translation>Встановлює «Базу» для ескізу.
-Спочатку виділіть допоміжну геометрію, наприклад, грань або ребро
+Спочатку виділіть допоміжну геометрію, наприклад, грань або ребро 
 суцільного об’єкта, потім викличте цю команду, а потім виберіть потрібний ескіз.</translation>
     </message>
     <message>
@@ -1228,7 +1227,7 @@ then call this command, then choose the desired sketch.</source>
       <source>Create a new mirrored sketch for each selected sketch
 by using the X or Y axes, or the origin point,
 as mirroring reference.</source>
-      <translation>Створює новий ескіз дзеркальним зображенням кожного з
+      <translation>Створює новий ескіз дзеркальним зображенням кожного з 
 вибраних ескізів відносно осі X, Y або початку координат.</translation>
     </message>
     <message>
@@ -1305,7 +1304,7 @@ as mirroring reference.</source>
       <location filename="../../Command.cpp" line="415"/>
       <source>Place the selected sketch on one of the global coordinate planes.
 This will clear the 'Support' property, if any.</source>
-      <translation>Розміщує виділений ескіз на одній із глобальних координатних площин.
+      <translation>Розміщує виділений ескіз на одній із глобальних координатних площин. 
 Це очищує наявну властивість 'База'.</translation>
     </message>
   </context>
@@ -1678,12 +1677,12 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../CommandConstraints.cpp" line="2667"/>
       <location filename="../../CommandConstraints.cpp" line="2974"/>
       <source>Add circle to circle distance constraint</source>
-      <translation type="unfinished">Add circle to circle distance constraint</translation>
+      <translation>Додати обмеження відстані між двома колами</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="2712"/>
       <source>Add circle to line distance constraint</source>
-      <translation type="unfinished">Add circle to line distance constraint</translation>
+      <translation>Додати обмеження відстані між колом та лінією</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="2750"/>
@@ -2025,7 +2024,7 @@ invalid constraints, degenerated geometry, etc.</source>
     <message>
       <location filename="../../CommandSketcherBSpline.cpp" line="1349"/>
       <source>Join Curves</source>
-      <translation type="unfinished">Join Curves</translation>
+      <translation>Об'єднати Криві</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="822"/>
@@ -2113,20 +2112,20 @@ invalid constraints, degenerated geometry, etc.</source>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="111"/>
       <source>Add Knot Point</source>
-      <translation type="unfinished">Add Knot Point</translation>
+      <translation>Додати вузлову точку</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerCarbonCopy.h" line="151"/>
       <source>Create a carbon copy</source>
-      <translation type="unfinished">Create a carbon copy</translation>
+      <translation>Створити копію</translation>
     </message>
   </context>
   <context>
     <name>CommandGroup</name>
     <message>
-      <location filename="../../Workbench.cpp" line="34"/>
+      <location filename="../../Workbench.cpp" line="36"/>
       <source>Sketcher</source>
-      <translation>Створювач ескізів</translation>
+      <translation>Редактор Ескізів</translation>
     </message>
   </context>
   <context>
@@ -2240,7 +2239,7 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../AppSketcherGui.cpp" line="142"/>
       <location filename="../../AppSketcherGui.cpp" line="144"/>
       <source>Sketcher</source>
-      <translation>Створювач ескізів</translation>
+      <translation>Редактор Ескізів</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="121"/>
@@ -2285,8 +2284,20 @@ invalid constraints, degenerated geometry, etc.</source>
       <translation>Не приєднувати</translation>
     </message>
     <message>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="119"/>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="128"/>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="154"/>
       <location filename="../../CommandAlterGeometry.cpp" line="145"/>
       <location filename="../../CommandAlterGeometry.cpp" line="154"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="482"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="555"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="637"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="690"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="748"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="834"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="882"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1232"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1342"/>
       <location filename="../../CommandConstraints.cpp" line="162"/>
       <location filename="../../CommandConstraints.cpp" line="169"/>
       <location filename="../../CommandConstraints.cpp" line="1047"/>
@@ -2412,15 +2423,6 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../CommandConstraints.cpp" line="8443"/>
       <location filename="../../CommandConstraints.cpp" line="8519"/>
       <location filename="../../CommandConstraints.cpp" line="8531"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="482"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="555"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="637"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="690"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="748"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="834"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="882"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1232"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1342"/>
       <location filename="../../CommandSketcherTools.cpp" line="93"/>
       <location filename="../../CommandSketcherTools.cpp" line="769"/>
       <location filename="../../CommandSketcherTools.cpp" line="885"/>
@@ -2436,9 +2438,6 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../CommandSketcherTools.cpp" line="2164"/>
       <location filename="../../CommandSketcherTools.cpp" line="2174"/>
       <location filename="../../CommandSketcherTools.cpp" line="2221"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="119"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="128"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="154"/>
       <source>Wrong selection</source>
       <translation>Невірний вибір</translation>
     </message>
@@ -2616,19 +2615,19 @@ invalid constraints, degenerated geometry, etc.</source>
     <message>
       <location filename="../../CommandConstraints.cpp" line="8200"/>
       <source>Number of selected objects is not 3</source>
-      <translation type="unfinished">Number of selected objects is not 3</translation>
+      <translation>Кількість виділених об'єктів не 3</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="583"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="872"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="1365"/>
+      <location filename="../../CommandConstraints.cpp" line="583"/>
       <source>Error</source>
       <translation>Помилка</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="584"/>
       <source>Unexpected error. More information may be available in the Report View.</source>
-      <translation type="unfinished">Unexpected error. More information may be available in the Report View.</translation>
+      <translation>Неочікувана помилка. Більш детальна інформація доступна у Виді Звіт.</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="2229"/>
@@ -2669,7 +2668,7 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../CommandConstraints.cpp" line="2774"/>
       <location filename="../../CommandConstraints.cpp" line="2998"/>
       <source>Select exactly one line or one point and one line or two points or two circles from the sketch.</source>
-      <translation type="unfinished">Select exactly one line or one point and one line or two points or two circles from the sketch.</translation>
+      <translation>Виділіть на ескізі рівно одну лінію або одну точку і одну лінію або дві точки, або два кола.</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="2892"/>
@@ -2852,17 +2851,17 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <location filename="../../CommandConstraints.cpp" line="5070"/>
       <location filename="../../CommandConstraints.cpp" line="5109"/>
       <source>Tangent constraint at B-spline knot is only supported with lines!</source>
-      <translation type="unfinished">Tangent constraint at B-spline knot is only supported with lines!</translation>
+      <translation>Дотичне обмеження на вузлі B-сплайна підтримується лише лініями!</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="2249"/>
       <source>B-spline knot to endpoint tangency was applied instead.</source>
-      <translation type="unfinished">B-spline knot to endpoint tangency was applied instead.</translation>
+      <translation>Замість цього застосовано дотичну вузла B-сплайна до кінцевої точки.</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="3199"/>
       <source>Select either one point and several curves, or one curve and several points.</source>
-      <translation type="unfinished">Select either one point and several curves, or one curve and several points.</translation>
+      <translation>Виберіть або одну точку і кілька кривих, або одну криву і кілька точок.</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="4114"/>
@@ -3020,19 +3019,19 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <translation>Виділіть обмеження на ескізі.</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="245"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="246"/>
       <source>B-Spline Degree</source>
       <translation>Ступінь B-сплайну</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="246"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="247"/>
       <source>Define B-Spline Degree, between 1 and %1:</source>
       <translation>Визначте ступінь B-сплайну між 1 та %1:</translation>
     </message>
     <message>
+      <location filename="../../DrawSketchHandlerFillet.h" line="277"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="731"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="1096"/>
-      <location filename="../../DrawSketchHandlerFillet.h" line="277"/>
       <source>CAD Kernel Error</source>
       <translation>Помилка ядра CAD</translation>
     </message>
@@ -3084,28 +3083,28 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../CommandSketcherBSpline.cpp" line="1288"/>
       <source>Nothing is selected. Please select end points of curves.</source>
-      <translation type="unfinished">Nothing is selected. Please select end points of curves.</translation>
+      <translation>Нічого не вибрано. Виберіть кінцеві точки кривих.</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherBSpline.cpp" line="1315"/>
       <source>Too many curves on point</source>
-      <translation type="unfinished">Too many curves on point</translation>
+      <translation>Занадто багато кривих в одній точці</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherBSpline.cpp" line="1316"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="1326"/>
       <source>Exactly two curves should end at the selected point to be able to join them.</source>
-      <translation type="unfinished">Exactly two curves should end at the selected point to be able to join them.</translation>
+      <translation>Рівно дві криві повинні закінчуватися у вибраній точці, щоб їх можна було з'єднати.</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherBSpline.cpp" line="1325"/>
       <source>Too few curves on point</source>
-      <translation type="unfinished">Too few curves on point</translation>
+      <translation>Занадто мало кривих у точці</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherBSpline.cpp" line="1343"/>
       <source>Two end points, or coincident point should be selected.</source>
-      <translation type="unfinished">Two end points, or coincident point should be selected.</translation>
+      <translation>Необхідно вибрати дві кінцеві точки або точки, що збігаються.</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="94"/>
@@ -3175,27 +3174,27 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="533"/>
       <source>Unsupported visual layer operation</source>
-      <translation type="unfinished">Unsupported visual layer operation</translation>
+      <translation>Непідтримувана операція із візуальним шаром</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="534"/>
       <source>It is currently unsupported to move external geometry to another visual layer. External geometry will be omitted</source>
-      <translation type="unfinished">It is currently unsupported to move external geometry to another visual layer. External geometry will be omitted</translation>
+      <translation>Переміщення зовнішньої геометрії на інший візуальний шар наразі не підтримується. Зовнішню геометрію буде пропущена</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="240"/>
       <source>Set knot multiplicity</source>
-      <translation type="unfinished">Set knot multiplicity</translation>
+      <translation>Встановити кратність вузлів</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="241"/>
       <source>Set knot multiplicity at the last point provided, between 1 and %1:Note that multiplicity may be ignored under certain circumstances.Please refer to documentation for details</source>
-      <translation type="unfinished">Set knot multiplicity at the last point provided, between 1 and %1:Note that multiplicity may be ignored under certain circumstances.Please refer to documentation for details</translation>
+      <translation>Встановіть кратність вузла в останній точці від 1 до %1:Зверніть увагу, що кратність може бути проігнорована за певних обставин.Будь ласка, зверніться до документації для отримання детальної інформації</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerFillet.h" line="286"/>
       <source>Value Error</source>
-      <translation type="unfinished">Value Error</translation>
+      <translation>Помилка в значенні</translation>
     </message>
   </context>
   <context>
@@ -3301,7 +3300,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherConstraints.h" line="120"/>
       <source>Block</source>
-      <translation>Блок</translation>
+      <translation>Обмеження переміщення</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherConstraints.h" line="121"/>
@@ -3379,7 +3378,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="65"/>
       <source>Select Elements</source>
-      <translation type="unfinished">Select Elements</translation>
+      <translation>Виберіть елементи</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="564"/>
@@ -3595,7 +3594,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="61"/>
       <source>Point Coincidence</source>
-      <translation type="unfinished">Point Coincidence</translation>
+      <translation>Обмеження Точки</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="62"/>
@@ -3605,32 +3604,32 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="63"/>
       <source>Vertical Constraint</source>
-      <translation type="unfinished">Vertical Constraint</translation>
+      <translation>Вертикальне Обмеження</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="64"/>
       <source>Horizontal Constraint</source>
-      <translation type="unfinished">Horizontal Constraint</translation>
+      <translation>Горизонтальне Обмеження</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="65"/>
       <source>Parallel Constraint</source>
-      <translation type="unfinished">Parallel Constraint</translation>
+      <translation>Паралельне Обмеження</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="66"/>
       <source>Perpendicular Constraint</source>
-      <translation type="unfinished">Perpendicular Constraint</translation>
+      <translation>Перпендикулярне Обмеження</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="67"/>
       <source>Tangent Constraint</source>
-      <translation type="unfinished">Tangent Constraint</translation>
+      <translation>Обмеження Дотичності</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="68"/>
       <source>Equal Length</source>
-      <translation type="unfinished">Equal Length</translation>
+      <translation>Еквівалентна Довжина</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="69"/>
@@ -3640,12 +3639,12 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="70"/>
       <source>Block Constraint</source>
-      <translation type="unfinished">Block Constraint</translation>
+      <translation>Обмеження Блокування</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="71"/>
       <source>Lock Constraint</source>
-      <translation type="unfinished">Lock Constraint</translation>
+      <translation>Обмеження Фіксації</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="72"/>
@@ -3660,27 +3659,27 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="74"/>
       <source>Length Constraint</source>
-      <translation type="unfinished">Length Constraint</translation>
+      <translation>Обмеження Довжини</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="75"/>
       <source>Radius Constraint</source>
-      <translation type="unfinished">Radius Constraint</translation>
+      <translation>Обмеження Радіусу</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="76"/>
       <source>Diameter Constraint</source>
-      <translation type="unfinished">Diameter Constraint</translation>
+      <translation>Обмеження діаметру</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="77"/>
       <source>Radiam Constraint</source>
-      <translation type="unfinished">Radiam Constraint</translation>
+      <translation>Обмеження радіусу/діаметру</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="78"/>
       <source>Angle Constraint</source>
-      <translation type="unfinished">Angle Constraint</translation>
+      <translation>Обмеження Кута</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="79"/>
@@ -3690,22 +3689,22 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="80"/>
       <source>Select Constraints</source>
-      <translation type="unfinished">Select Constraints</translation>
+      <translation>Виберіть обмеження</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="81"/>
       <source>Select Origin</source>
-      <translation type="unfinished">Select Origin</translation>
+      <translation>Виберіть початок координат</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="82"/>
       <source>Select Horizontal Axis</source>
-      <translation type="unfinished">Select Horizontal Axis</translation>
+      <translation>Виберіть горизонтальну вісь</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="83"/>
       <source>Select Vertical Axis</source>
-      <translation type="unfinished">Select Vertical Axis</translation>
+      <translation>Виберіть вертикальну вісь</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="672"/>
@@ -3715,12 +3714,12 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="682"/>
       <source>Layer 0</source>
-      <translation type="unfinished">Layer 0</translation>
+      <translation>Шар 0</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="683"/>
       <source>Layer 1</source>
-      <translation type="unfinished">Layer 1</translation>
+      <translation>Шар 1</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="684"/>
@@ -3901,7 +3900,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <location filename="../../SketchRectangularArrayDialog.ui" line="93"/>
       <source>If selected, each element in the array is constrained
 with respect to the others using construction lines</source>
-      <translation>Якщо виділено, кожен елемент в масиві буде обмежений
+      <translation>Якщо виділено, кожен елемент в масиві буде обмежений 
 відносно інших за допомогою допоміжних ліній</translation>
     </message>
     <message>
@@ -3914,8 +3913,8 @@ with respect to the others using construction lines</source>
       <source>If selected, it substitutes dimensional constraints by geometric constraints
 in the copies, so that a change in the original element is directly
 reflected on copies</source>
-      <translation>Якщо виділено, розмірні обмеження будуть замінені
-геометричними обмеженнями в копіях, тому зміна базового елемента
+      <translation>Якщо виділено, розмірні обмеження будуть замінені 
+геометричними обмеженнями в копіях, тому зміна базового елемента 
 безпосередньо позначиться на копіях</translation>
     </message>
     <message>
@@ -3954,7 +3953,7 @@ reflected on copies</source>
       <location filename="../../SketcherSettings.ui" line="26"/>
       <source>Sketcher dialog will have additional section
 'Advanced solver control' to adjust solver settings</source>
-      <translation>Діалогове вікно Редактора Ескізів матиме додатковий розділ
+      <translation>Діалогове вікно Редактора Ескізів матиме додатковий розділ 
 «Розширене керування вирішувачем», щоб налаштувати параметри вирішувача</translation>
     </message>
     <message>
@@ -4466,7 +4465,7 @@ Then objects are only visible behind the sketch plane.</source>
     <message>
       <location filename="../../SketcherSettings.cpp" line="299"/>
       <source>Sketcher</source>
-      <translation>Створювач ескізів</translation>
+      <translation>Редактор Ескізів</translation>
     </message>
   </context>
   <context>
@@ -4654,17 +4653,17 @@ However, no constraints linking to the endpoints were found.</source>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="852"/>
       <source>Show only filtered Constraints</source>
-      <translation type="unfinished">Show only filtered Constraints</translation>
+      <translation>Показати лише відфільтровані обмеження</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="853"/>
       <source>Extended information (in widget)</source>
-      <translation type="unfinished">Extended information (in widget)</translation>
+      <translation>Додаткова інформація (у віджеті)</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="854"/>
       <source>Hide internal alignment (in widget)</source>
-      <translation type="unfinished">Hide internal alignment (in widget)</translation>
+      <translation>Приховати внутрішнє вирівнювання (у віджеті)</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="1153"/>
@@ -4675,12 +4674,12 @@ However, no constraints linking to the endpoints were found.</source>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="1153"/>
       <source>Impossible to update visibility tracking</source>
-      <translation type="unfinished">Impossible to update visibility tracking</translation>
+      <translation>Неможливо оновити відстеження видимості</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="1546"/>
       <source>Impossible to update visibility tracking: </source>
-      <translation type="unfinished">Impossible to update visibility tracking: </translation>
+      <translation>Неможливо оновити відстеження видимості: </translation>
     </message>
   </context>
   <context>
@@ -4849,27 +4848,27 @@ However, no constraints linking to the endpoints were found.</source>
     <message>
       <location filename="../../TaskSketcherMessages.cpp" line="139"/>
       <source>Click to select the conflicting constraints.</source>
-      <translation type="unfinished">Click to select the conflicting constraints.</translation>
+      <translation>Клацніть, щоб вибрати конфліктуючі обмеження.</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherMessages.cpp" line="141"/>
       <source>Click to select the redundant constraints.</source>
-      <translation type="unfinished">Click to select the redundant constraints.</translation>
+      <translation>Клацніть, щоб вибрати надлишкові обмеження.</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherMessages.cpp" line="144"/>
       <source>The sketch has unconstrained elements giving rise to those Degrees Of Freedom. Click to select the unconstrained elements.</source>
-      <translation type="unfinished">The sketch has unconstrained elements giving rise to those Degrees Of Freedom. Click to select the unconstrained elements.</translation>
+      <translation>Ескіз має необмежені елементи, які створюють ці ступені свободи. Клацніть, щоб вибрати необмежені елементи.</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherMessages.cpp" line="147"/>
       <source>Click to select the malformed constraints.</source>
-      <translation type="unfinished">Click to select the malformed constraints.</translation>
+      <translation>Клацніть, щоб вибрати спотворені обмеження.</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherMessages.cpp" line="150"/>
       <source>Some constraints in combination are partially redundant. Click to select the partially redundant constraints.</source>
-      <translation type="unfinished">Some constraints in combination are partially redundant. Click to select the partially redundant constraints.</translation>
+      <translation>Деякі обмеження в комбінації є частково надлишковими. Клацніть, щоб вибрати їх.</translation>
     </message>
   </context>
   <context>
@@ -5009,7 +5008,7 @@ This is done by analyzing the sketch geometries and constraints.</source>
     <message>
       <location filename="../../TaskSketcherValidation.ui" line="193"/>
       <source>Fixes found reversed external geometries by swapping their endpoints</source>
-      <translation>Виправляє знайдену перевернуту зовнішню
+      <translation>Виправляє знайдену перевернуту зовнішню 
 геометрію шляхом зміни кінцевих точок</translation>
     </message>
     <message>
@@ -5924,44 +5923,54 @@ Eigen Dense QR — щільна матриця QR з повним поворот
   <context>
     <name>Workbench</name>
     <message>
-      <location filename="../../Workbench.cpp" line="35"/>
+      <location filename="../../Workbench.cpp" line="37"/>
       <source>P&amp;rofiles</source>
       <translation>П&amp;рофілі</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="36"/>
+      <location filename="../../Workbench.cpp" line="38"/>
       <source>S&amp;ketch</source>
       <translation>Ес&amp;кіз</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="37"/>
+      <location filename="../../Workbench.cpp" line="39"/>
       <source>Sketcher</source>
-      <translation>Створювач ескізів</translation>
+      <translation>Редактор Ескізів</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="38"/>
+      <location filename="../../Workbench.cpp" line="40"/>
+      <source>Sketcher edit mode</source>
+      <translation>Режим Редагування Ескізу</translation>
+    </message>
+    <message>
+      <location filename="../../Workbench.cpp" line="41"/>
       <source>Sketcher geometries</source>
       <translation>Геометрії ескізу</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="39"/>
+      <location filename="../../Workbench.cpp" line="42"/>
       <source>Sketcher constraints</source>
       <translation>Обмеження ескізу</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="40"/>
+      <location filename="../../Workbench.cpp" line="43"/>
       <source>Sketcher tools</source>
       <translation>Інструменти ескізу</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="41"/>
+      <location filename="../../Workbench.cpp" line="44"/>
       <source>Sketcher B-spline tools</source>
       <translation>Інструменти B-сплайна ескізу</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="42"/>
+      <location filename="../../Workbench.cpp" line="45"/>
       <source>Sketcher virtual space</source>
       <translation>Віртуальний простір ескізу</translation>
+    </message>
+    <message>
+      <location filename="../../Workbench.cpp" line="46"/>
+      <source>Sketcher edit tools</source>
+      <translation>Інструменти редагування ескізу</translation>
     </message>
   </context>
   <context>
@@ -5969,12 +5978,12 @@ Eigen Dense QR — щільна матриця QR з повним поворот
     <message>
       <location filename="../../../Profiles.py" line="59"/>
       <source>Creates a hexagonal profile</source>
-      <translation type="unfinished">Creates a hexagonal profile</translation>
+      <translation>Створює шестикутний профіль</translation>
     </message>
     <message>
       <location filename="../../../Profiles.py" line="64"/>
       <source>Creates a hexagonal profile in the sketch</source>
-      <translation type="unfinished">Creates a hexagonal profile in the sketch</translation>
+      <translation>Створює шестикутний профіль на ескізі</translation>
     </message>
   </context>
   <context>
@@ -5988,7 +5997,7 @@ Eigen Dense QR — щільна матриця QR з повним поворот
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="20"/>
       <source>Grid settings</source>
-      <translation type="unfinished">Grid settings</translation>
+      <translation>Налаштування сітки</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="35"/>
@@ -5998,12 +6007,12 @@ Eigen Dense QR — щільна матриця QR з повним поворот
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="57"/>
       <source>Automatically adapt grid spacing based on the viewer dimensions.</source>
-      <translation type="unfinished">Automatically adapt grid spacing based on the viewer dimensions.</translation>
+      <translation>Автоматично адаптує крок сітки відповідно до параметрів перегляду.</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="60"/>
       <source>Grid Auto Spacing</source>
-      <translation type="unfinished">Grid Auto Spacing</translation>
+      <translation>Авто-крок сітки</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="73"/>
@@ -6014,45 +6023,45 @@ Eigen Dense QR — щільна матриця QR з повним поворот
       <location filename="../../SketcherSettingsGrid.ui" line="83"/>
       <source>Distance between two subsequent grid lines.
 If 'Grid Auto Spacing' is enabled, will be used as base value.</source>
-      <translation type="unfinished">Distance between two subsequent grid lines.
-If 'Grid Auto Spacing' is enabled, will be used as base value.</translation>
+      <translation>Відстань між двома наступними лініями сітки.
+Якщо увімкнено "Авто-крок сітки", буде використано як базове значення.</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="115"/>
       <source>Pixel size threshold</source>
-      <translation type="unfinished">Pixel size threshold</translation>
+      <translation>Поріг пікселів</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="125"/>
       <source>While using 'Grid Auto Spacing' this sets a threshold in pixel to the grid spacing.
 The grid spacing change if it becomes smaller than this number of pixel.</source>
-      <translation type="unfinished">While using 'Grid Auto Spacing' this sets a threshold in pixel to the grid spacing.
-The grid spacing change if it becomes smaller than this number of pixel.</translation>
+      <translation>При використанні параметра "Авто-крок сітки" встановлюється поріг у пікселях для кроку сітки.
+Крок сітки зміниться, якщо він стане меншою за цю кількість пікселів.</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="151"/>
       <source>Grid display</source>
-      <translation type="unfinished">Grid display</translation>
+      <translation>Показати сітку</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="163"/>
       <source>Minor grid lines</source>
-      <translation type="unfinished">Minor grid lines</translation>
+      <translation>Другорядні лінії сітки</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="269"/>
       <source>Major grid lines</source>
-      <translation type="unfinished">Major grid lines</translation>
+      <translation>Основні лінії сітки</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="281"/>
       <source>Major grid line every:</source>
-      <translation type="unfinished">Major grid line every:</translation>
+      <translation>Основні лінії сітки кожні:</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="291"/>
       <source>Every N lines there will be a major line. Set to 1 to disable major lines.</source>
-      <translation type="unfinished">Every N lines there will be a major line. Set to 1 to disable major lines.</translation>
+      <translation>Через кожні N рядків буде основна лінія. Задайте 1, щоб вимкнути основні лінії.</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="175"/>
@@ -6085,35 +6094,35 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="323"/>
       <source>Line pattern used for grid division.</source>
-      <translation type="unfinished">Line pattern used for grid division.</translation>
+      <translation>Встановлює шаблон ліній для зображення поділу сітки.</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="343"/>
       <source>Distance between two subsequent division lines</source>
-      <translation type="unfinished">Distance between two subsequent division lines</translation>
+      <translation>Встановлює відстань між двома наступними лініями поділу</translation>
     </message>
   </context>
   <context>
     <name>GridSpaceAction</name>
     <message>
       <location filename="../../Command.cpp" line="1118"/>
-      <source>Grid Auto Spacing</source>
-      <translation type="unfinished">Grid Auto Spacing</translation>
+      <source>Grid auto spacing</source>
+      <translation>Авто-крок сітки</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1119"/>
       <source>Resize grid automatically depending on zoom.</source>
-      <translation type="unfinished">Resize grid automatically depending on zoom.</translation>
+      <translation>Автоматично змінювати розмір сітки залежно від масштабу.</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1122"/>
       <source>Spacing</source>
-      <translation type="unfinished">Spacing</translation>
+      <translation>Інтервал</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1123"/>
-      <source>Distance between two subsequent grid lines</source>
-      <translation>Відстань між двома сусідніми лініями сітки</translation>
+      <source>Distance between two subsequent grid lines.</source>
+      <translation>Встановлює відстань між двома наступними лініями сітки.</translation>
     </message>
   </context>
   <context>
@@ -6121,73 +6130,75 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
     <message>
       <location filename="../../../App/SketchObject.cpp" line="327"/>
       <source>The Sketch has malformed constraints!</source>
-      <translation type="unfinished">The Sketch has malformed constraints!</translation>
+      <translation>Скетч має помилкові обмеження!</translation>
     </message>
     <message>
       <location filename="../../../App/SketchObject.cpp" line="333"/>
       <source>The Sketch has partially redundant constraints!</source>
-      <translation type="unfinished">The Sketch has partially redundant constraints!</translation>
+      <translation>Скетч має частково надлишкові обмеження!</translation>
     </message>
     <message>
       <location filename="../../../App/SketchObject.cpp" line="8962"/>
       <source>Parabolas were migrated. Migrated files won't open in previous versions of FreeCAD!!
 </source>
-      <translation type="unfinished">Parabolas were migrated. Migrated files won't open in previous versions of FreeCAD!!
-</translation>
+      <translation>Перенесено параболи. Перенесені файли не відкриватимуться у попередніх версіях FreeCAD!!!</translation>
     </message>
     <message>
-      <location filename="../../CommandSketcherTools.cpp" line="1221"/>
-      <location filename="../../CommandSketcherTools.cpp" line="1798"/>
-      <location filename="../../CommandSketcherTools.cpp" line="2243"/>
-      <location filename="../../DrawSketchHandlerArc.h" line="198"/>
-      <location filename="../../DrawSketchHandlerArc.h" line="470"/>
+      <location filename="../../DrawSketchHandlerLine.h" line="121"/>
+      <location filename="../../DrawSketchHandlerRectangle.h" line="291"/>
+      <location filename="../../DrawSketchHandlerRectangle.h" line="699"/>
+      <location filename="../../DrawSketchHandlerTrimming.h" line="149"/>
       <location filename="../../DrawSketchHandlerArcOfEllipse.h" line="321"/>
-      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="253"/>
-      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="329"/>
+      <location filename="../../DrawSketchHandlerExtend.h" line="324"/>
+      <location filename="../../DrawSketchHandlerSlot.h" line="306"/>
+      <location filename="../../DrawSketchHandlerCarbonCopy.h" line="171"/>
       <location filename="../../DrawSketchHandlerArcOfParabola.h" line="259"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="128"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="204"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="304"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="516"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="123"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="194"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="303"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="613"/>
-      <location filename="../../DrawSketchHandlerCarbonCopy.h" line="171"/>
+      <location filename="../../DrawSketchHandlerArc.h" line="198"/>
+      <location filename="../../DrawSketchHandlerArc.h" line="470"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="127"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="317"/>
-      <location filename="../../DrawSketchHandlerEllipse.h" line="799"/>
-      <location filename="../../DrawSketchHandlerExtend.h" line="324"/>
+      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="253"/>
+      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="329"/>
+      <location filename="../../DrawSketchHandlerSplitting.h" line="148"/>
       <location filename="../../DrawSketchHandlerExternal.h" line="172"/>
-      <location filename="../../DrawSketchHandlerLine.h" line="121"/>
+      <location filename="../../DrawSketchHandlerPolygon.h" line="157"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="431"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="461"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="128"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="205"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="305"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="517"/>
+      <location filename="../../DrawSketchHandlerEllipse.h" line="799"/>
+      <location filename="../../CommandSketcherTools.cpp" line="1221"/>
+      <location filename="../../CommandSketcherTools.cpp" line="1798"/>
+      <location filename="../../CommandSketcherTools.cpp" line="2243"/>
       <location filename="../../DrawSketchHandlerPoint.h" line="80"/>
-      <location filename="../../DrawSketchHandlerPolygon.h" line="157"/>
-      <location filename="../../DrawSketchHandlerRectangle.h" line="291"/>
-      <location filename="../../DrawSketchHandlerRectangle.h" line="699"/>
-      <location filename="../../DrawSketchHandlerSlot.h" line="306"/>
-      <location filename="../../DrawSketchHandlerSplitting.h" line="148"/>
-      <location filename="../../DrawSketchHandlerTrimming.h" line="149"/>
       <source>Error</source>
       <translation>Помилка</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="2040"/>
       <source>Failed to delete all geometry</source>
-      <translation type="unfinished">Failed to delete all geometry</translation>
+      <translation>Не вдалося видалити всю геометрію</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="2109"/>
       <source>Failed to delete all constraints</source>
-      <translation type="unfinished">Failed to delete all constraints</translation>
+      <translation>Не вдалося видалити всі обмеження</translation>
     </message>
     <message>
-      <location filename="../../../App/SketchObjectPyImp.cpp" line="382"/>
+      <location filename="../../../App/SketchObjectPyImp.cpp" line="384"/>
       <source>The constraint has invalid index information and is malformed.</source>
-      <translation type="unfinished">The constraint has invalid index information and is malformed.</translation>
+      <translation>Обмеження має невірну індексну інформацію та є помилковим.</translation>
     </message>
     <message>
+      <location filename="../../CommandSketcherBSpline.cpp" line="775"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="909"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1130"/>
       <location filename="../../CommandConstraints.cpp" line="253"/>
       <location filename="../../CommandConstraints.cpp" line="328"/>
       <location filename="../../CommandConstraints.cpp" line="419"/>
@@ -6195,102 +6206,99 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
       <location filename="../../CommandConstraints.cpp" line="573"/>
       <location filename="../../CommandConstraints.cpp" line="4461"/>
       <location filename="../../CommandConstraints.cpp" line="4676"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="775"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="909"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1130"/>
       <location filename="../../CommandSketcherTools.cpp" line="833"/>
       <location filename="../../CommandSketcherTools.cpp" line="1053"/>
       <source>Invalid Constraint</source>
-      <translation type="unfinished">Invalid Constraint</translation>
+      <translation>Неприпустиме обмеження</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArc.h" line="199"/>
       <location filename="../../DrawSketchHandlerArc.h" line="471"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="462"/>
       <source>Failed to add arc</source>
-      <translation type="unfinished">Failed to add arc</translation>
+      <translation>Не вдалося додати дугу</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfEllipse.h" line="322"/>
       <source>Failed to add arc of ellipse</source>
-      <translation type="unfinished">Failed to add arc of ellipse</translation>
+      <translation>Не вдалося додати дугу еліпса</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="254"/>
       <source>Cannot create arc of hyperbola from invalid angles, try again!</source>
-      <translation type="unfinished">Cannot create arc of hyperbola from invalid angles, try again!</translation>
+      <translation>Не вдається створити дугу гіперболи з невірних кутів, спробуйте ще раз!</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="330"/>
       <source>Cannot create arc of hyperbola</source>
-      <translation type="unfinished">Cannot create arc of hyperbola</translation>
+      <translation>Не вдається створити дугу гіперболи</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfParabola.h" line="260"/>
       <source>Cannot create arc of parabola</source>
-      <translation type="unfinished">Cannot create arc of parabola</translation>
+      <translation>Не вдається створити дугу параболи</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSpline.h" line="129"/>
       <source>Error adding B-Spline pole</source>
-      <translation type="unfinished">Error adding B-Spline pole</translation>
+      <translation>Помилка додавання полюса B-сплайна</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="205"/>
-      <source>Error creating BSpline pole</source>
-      <translation type="unfinished">Error creating BSpline pole</translation>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="206"/>
+      <source>Error creating B-spline pole</source>
+      <translation>Помилка створення полюса B-сплайна</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="305"/>
-      <source>Error deleting last pole</source>
-      <translation type="unfinished">Error deleting last pole</translation>
-    </message>
-    <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="517"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="614"/>
-      <source>Error creating B-Spline</source>
-      <translation type="unfinished">Error creating B-Spline</translation>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="518"/>
+      <source>Error creating B-spline</source>
+      <translation>Помилка при створенні B-сплайна</translation>
+    </message>
+    <message>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="306"/>
+      <source>Error deleting last pole</source>
+      <translation>Помилка видалення останнього полюса</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="124"/>
       <source>Cannot add knot point</source>
-      <translation type="unfinished">Cannot add knot point</translation>
+      <translation>Не вдається додати точку вузла</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="195"/>
       <source>Cannot add internal alignment points</source>
-      <translation type="unfinished">Cannot add internal alignment points</translation>
+      <translation>Не вдається додати внутрішні точки вирівнювання</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="304"/>
       <source>Error removing knot</source>
-      <translation type="unfinished">Error removing knot</translation>
+      <translation>Помилка видалення вузла</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerCarbonCopy.h" line="172"/>
       <source>Failed to add carbon copy</source>
-      <translation type="unfinished">Failed to add carbon copy</translation>
+      <translation>Не вдалося додати копію</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerCircle.h" line="128"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="318"/>
       <source>Failed to add circle</source>
-      <translation type="unfinished">Failed to add circle</translation>
+      <translation>Не вдалося додати коло</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerEllipse.h" line="800"/>
       <source>Failed to add an ellipse</source>
-      <translation type="unfinished">Failed to add an ellipse</translation>
+      <translation>Не вдалося додати еліпс</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerExtend.h" line="325"/>
       <source>Failed to extend edge</source>
-      <translation type="unfinished">Failed to extend edge</translation>
+      <translation>Не вдалося подовжити ребро</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerExternal.h" line="173"/>
       <source>Failed to add external geometry</source>
-      <translation type="unfinished">Failed to add external geometry</translation>
+      <translation>Не вдалося додати зовнішню геометрію</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerFillet.h" line="184"/>
@@ -6301,75 +6309,49 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
       <location filename="../../DrawSketchHandlerLine.h" line="122"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="432"/>
       <source>Failed to add line</source>
-      <translation type="unfinished">Failed to add line</translation>
+      <translation>Не вдалося додати лінію</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerPoint.h" line="81"/>
       <source>Failed to add point</source>
-      <translation type="unfinished">Failed to add point</translation>
+      <translation>Не вдалося додати точку</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerPolygon.h" line="158"/>
       <source>Failed to add polygon</source>
-      <translation type="unfinished">Failed to add polygon</translation>
+      <translation>Не вдалося додати полігон</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerRectangle.h" line="292"/>
       <source>Failed to add box</source>
-      <translation type="unfinished">Failed to add box</translation>
+      <translation>Не вдалося додати коробку</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerRectangle.h" line="700"/>
       <source>Failed to add rounded rectangle</source>
-      <translation type="unfinished">Failed to add rounded rectangle</translation>
+      <translation>Не вдалося додати заокруглений прямокутник</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerSlot.h" line="307"/>
       <source>Failed to add slot</source>
-      <translation type="unfinished">Failed to add slot</translation>
+      <translation>Не вдалося додати гніздо</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerSplitting.h" line="149"/>
       <source>Failed to add edge</source>
-      <translation type="unfinished">Failed to add edge</translation>
+      <translation>Не вдалося додати ребро</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerTrimming.h" line="150"/>
       <source>Failed to trim edge</source>
-      <translation type="unfinished">Failed to trim edge</translation>
+      <translation>Не вдалося обрізати ребро</translation>
     </message>
     <message>
-      <location filename="../../EditDatumDialog.cpp" line="239"/>
       <location filename="../../TaskSketcherConstraints.cpp" line="1240"/>
       <location filename="../../TaskSketcherConstraints.cpp" line="1258"/>
+      <location filename="../../EditDatumDialog.cpp" line="239"/>
       <source>Value Error</source>
-      <translation type="unfinished">Value Error</translation>
-    </message>
-  </context>
-  <context>
-    <name>CmdSketcherCreateBSplineByInterpolation</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="979"/>
-      <source>Interpolate B-spline</source>
-      <translation type="unfinished">Interpolate B-spline</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="980"/>
-      <source>Create a B-spline by interpolation, i.e. via knots in the sketch.</source>
-      <translation type="unfinished">Create a B-spline by interpolation, i.e. via knots in the sketch.</translation>
-    </message>
-  </context>
-  <context>
-    <name>CmdSketcherCreatePeriodicBSplineByInterpolation</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1011"/>
-      <source>Interpolate periodic B-spline</source>
-      <translation type="unfinished">Interpolate periodic B-spline</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1013"/>
-      <source>Create a periodic B-spline by interpolation, i.e. via knots in the sketch.</source>
-      <translation type="unfinished">Create a periodic B-spline by interpolation, i.e. via knots in the sketch.</translation>
+      <translation>Помилка в значенні</translation>
     </message>
   </context>
   <context>
@@ -6377,13 +6359,13 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1173"/>
       <source>B-spline by knots</source>
-      <translation type="unfinished">B-spline by knots</translation>
+      <translation>Створити B-сплайн за вузлами</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1174"/>
       <location filename="../../CommandCreateGeo.cpp" line="1176"/>
       <source>Create a B-spline by knots</source>
-      <translation type="unfinished">Create a B-spline by knots</translation>
+      <translation>Створює B-сплайн за вузлами</translation>
     </message>
   </context>
   <context>
@@ -6391,13 +6373,13 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1179"/>
       <source>Periodic B-spline by knots</source>
-      <translation type="unfinished">Periodic B-spline by knots</translation>
+      <translation>Створити періодичний B-сплайн за вузлами</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1181"/>
       <location filename="../../CommandCreateGeo.cpp" line="1183"/>
       <source>Create a periodic B-spline by knots</source>
-      <translation type="unfinished">Create a periodic B-spline by knots</translation>
+      <translation>Створює періодичний B-сплайн за вузлами</translation>
     </message>
   </context>
   <context>
@@ -6405,34 +6387,34 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
     <message>
       <location filename="../../Command.cpp" line="1360"/>
       <source>Snap to objects</source>
-      <translation type="unfinished">Snap to objects</translation>
+      <translation>Прив'язати до об'єктів</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1361"/>
       <source>New points will snap to the currently preselected object. It will also snap to the middle of lines and arcs.</source>
-      <translation type="unfinished">New points will snap to the currently preselected object. It will also snap to the middle of lines and arcs.</translation>
+      <translation>Нові точки прив'язуватимуться до поточного попередньо виділеного об'єкта. Вони також прив'язуватимуться до середини ліній і дуг.</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1365"/>
       <source>Snap to grid</source>
-      <translation type="unfinished">Snap to grid</translation>
+      <translation>Прив'язати до сітки</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1367"/>
       <source>New points will snap to the nearest grid line.
 Points must be set closer than a fifth of the grid spacing to a grid line to snap.</source>
-      <translation type="unfinished">New points will snap to the nearest grid line.
-Points must be set closer than a fifth of the grid spacing to a grid line to snap.</translation>
+      <translation>Нові точки будуть прив'язані до найближчої лінії сітки.
+Точки мають бути розташовані ближче, ніж на п'яту частину відстані між лініями сітки, щоб відбулася прив'язка.</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1371"/>
       <source>Snap angle</source>
-      <translation type="unfinished">Snap angle</translation>
+      <translation>Кут захоплення прив'язки</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1373"/>
-      <source>Angular step for tools that use 'Snap at Angle' (line for instance). Hold CTRL to enable 'Snap at Angle'. The angle start from the East axis (horizontal right)</source>
-      <translation type="unfinished">Angular step for tools that use 'Snap at Angle' (line for instance). Hold CTRL to enable 'Snap at Angle'. The angle start from the East axis (horizontal right)</translation>
+      <source>Angular step for tools that use 'Snap at Angle' (line for instance). Hold CTRL to enable 'Snap at Angle'. The angle starts from the positive X axis of the sketch.</source>
+      <translation>Встановлює крок кута для інструментів, які використовують "Прив'язка під кутом" (наприклад, лінія). Утримуйте клавішу CTRL, щоб увімкнути функцію "Прив'язка під кутом". Кут починається з позитивного напрямку осі Х ескізу.</translation>
     </message>
   </context>
   <context>
@@ -6442,7 +6424,7 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
       <location filename="../../Command.cpp" line="1615"/>
       <location filename="../../Command.cpp" line="1622"/>
       <source>Normal Geometry</source>
-      <translation type="unfinished">Normal Geometry</translation>
+      <translation>Основна геометрія</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1609"/>
@@ -6456,7 +6438,7 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
       <location filename="../../Command.cpp" line="1617"/>
       <location filename="../../Command.cpp" line="1624"/>
       <source>External Geometry</source>
-      <translation type="unfinished">External Geometry</translation>
+      <translation>Зовнішня геометрія</translation>
     </message>
   </context>
   <context>
@@ -6464,12 +6446,12 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     <message>
       <location filename="../../Command.cpp" line="1734"/>
       <source>Configure rendering order</source>
-      <translation type="unfinished">Configure rendering order</translation>
+      <translation>Налаштувати порядок рендерингу</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1735"/>
       <source>Reorder the items in the list to configure rendering order.</source>
-      <translation type="unfinished">Reorder the items in the list to configure rendering order.</translation>
+      <translation>Впорядкуйте елементи у списку, щоб налаштувати порядок рендерингу.</translation>
     </message>
   </context>
   <context>
@@ -6481,8 +6463,8 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     </message>
     <message>
       <location filename="../../Command.cpp" line="1220"/>
-      <source>Toggle the grid in the sketch. In the menu you can change grid settings</source>
-      <translation type="unfinished">Toggle the grid in the sketch. In the menu you can change grid settings</translation>
+      <source>Toggle the grid in the sketch. In the menu you can change grid settings.</source>
+      <translation>Перемикання сітки в ескізі. В меню можна змінити налаштування сітки.</translation>
     </message>
   </context>
   <context>
@@ -6490,12 +6472,38 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     <message>
       <location filename="../../Command.cpp" line="1474"/>
       <source>Toggle snap</source>
-      <translation type="unfinished">Toggle snap</translation>
+      <translation>Перемикання прив'язки</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1476"/>
-      <source>Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings</source>
-      <translation type="unfinished">Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings</translation>
+      <source>Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings.</source>
+      <translation>Перемикає всі функцій прив'язки. У меню ви можете перемикати "Прив'язати до сітки" та "Прив'язати до об'єктів" окремо, а також змінювати інші параметри прив'язки.</translation>
+    </message>
+  </context>
+  <context>
+    <name>CmdSketcherCreateBSplineByInterpolation</name>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="979"/>
+      <source>Create B-spline by knots</source>
+      <translation>Створює B-сплайн за вузлами</translation>
+    </message>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="980"/>
+      <source>Create a B-spline by knots, i.e. by interpolation, in the sketch.</source>
+      <translation>Створює на ескізі B-сплайн за вузлами, тобто шляхом інтерполяції.</translation>
+    </message>
+  </context>
+  <context>
+    <name>CmdSketcherCreatePeriodicBSplineByInterpolation</name>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="1011"/>
+      <source>Create periodic B-spline by knots</source>
+      <translation>Створює періодичний B-сплайн за вузлами</translation>
+    </message>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="1013"/>
+      <source>Create a periodic B-spline by knots, i.e. by interpolation, in the sketch.</source>
+      <translation>Створює на ескізі періодичний B-сплайн за вузлами, тобто шляхом інтерполяції.</translation>
     </message>
   </context>
 </TS>

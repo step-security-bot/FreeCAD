@@ -70,7 +70,7 @@
     <name>CmdSketcherCarbonCopy</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1658"/>
-      <source>Create a carbon copy</source>
+      <source>Create carbon copy</source>
       <translation>ზუსტი ასლის შექმნა</translation>
     </message>
     <message>
@@ -193,7 +193,7 @@
     <name>CmdSketcherCompCreateBSpline</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1047"/>
-      <source>Create a B-spline</source>
+      <source>Create B-spline</source>
       <translation>B-სპლაინის შექმნა</translation>
     </message>
     <message>
@@ -229,7 +229,7 @@
     <name>CmdSketcherCompCreateConic</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="742"/>
-      <source>Create a conic</source>
+      <source>Create conic</source>
       <translation>კონუსის ტიპის ფიგურის შექმნა</translation>
     </message>
     <message>
@@ -267,8 +267,8 @@
     <name>CmdSketcherCompCreateFillets</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1431"/>
-      <source>Fillets</source>
-      <translation>მომრგვალება</translation>
+      <source>Create fillet</source>
+      <translation>მომრგვალების შექმნა</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1432"/>
@@ -290,8 +290,8 @@
     <name>CmdSketcherCompCreateRectangles</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="236"/>
-      <source>Create rectangles</source>
-      <translation>მართკუთხედების შექმნა</translation>
+      <source>Create rectangle</source>
+      <translation>მართკუთხედის შექმნა</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="237"/>
@@ -421,7 +421,7 @@
     <message>
       <location filename="../../CommandConstraints.cpp" line="2182"/>
       <source>Create a coincident constraint between points, or a concentric constraint between circles, arcs, and ellipses</source>
-      <translation type="unfinished">Create a coincident constraint between points, or a concentric constraint between circles, arcs, and ellipses</translation>
+      <translation>წერტილებს შორის დამთხვევის ან წრეწირებს, რკალებსა და ოვალებს შორის კონცენტრულობის შეზღუდვის შექმნა</translation>
     </message>
   </context>
   <context>
@@ -587,7 +587,7 @@ on the selected vertex</source>
     <message>
       <location filename="../../CommandConstraints.cpp" line="8152"/>
       <source>Constrain refraction (Snell's law)</source>
-      <translation type="unfinished">Constrain refraction (Snell's law)</translation>
+      <translation>არეკვლის შეზღუდვა (სნელის კანონი)</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="8153"/>
@@ -607,8 +607,8 @@ and an edge as an interface.</source>
       <location filename="../../CommandConstraints.cpp" line="7791"/>
       <source>Create a symmetry constraint between two points
 with respect to a line or a third point</source>
-      <translation type="unfinished">Create a symmetry constraint between two points
-with respect to a line or a third point</translation>
+      <translation>სიმეტრიის შეზღუდვის შექმნა ორ წერტილს შორის
+ხაზის ან მესამე წერტილის გათვალისწინებით</translation>
     </message>
   </context>
   <context>
@@ -706,7 +706,7 @@ with respect to a line or a third point</translation>
     <name>CmdSketcherCreateArcOfEllipse</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="652"/>
-      <source>Create an arc of ellipse</source>
+      <source>Create arc of ellipse</source>
       <translation>ოვალის რკალის შექმნა</translation>
     </message>
     <message>
@@ -719,8 +719,8 @@ with respect to a line or a third point</translation>
     <name>CmdSketcherCreateArcOfHyperbola</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="681"/>
-      <source>Create an arc of hyperbola</source>
-      <translation>რკალის ან ჰიპერბოლის შექმნა</translation>
+      <source>Create arc of hyperbola</source>
+      <translation>ჰიპერბოლის რკალის შექმნა</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="682"/>
@@ -732,7 +732,7 @@ with respect to a line or a third point</translation>
     <name>CmdSketcherCreateArcOfParabola</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="709"/>
-      <source>Create an arc of parabola</source>
+      <source>Create arc of parabola</source>
       <translation>რკალის ან პარაბოლის შექმნა</translation>
     </message>
     <message>
@@ -750,7 +750,7 @@ with respect to a line or a third point</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="916"/>
-      <source>Create a B-spline via control points in the sketch.</source>
+      <source>Create a B-spline by control points in the sketch.</source>
       <translation>ესკიზში B-სპლაინის საკონტროლო წერტილებით შექმნა.</translation>
     </message>
   </context>
@@ -893,7 +893,7 @@ with respect to a line or a third point</translation>
     </message>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="949"/>
-      <source>Create a periodic B-spline via control points in the sketch.</source>
+      <source>Create a periodic B-spline by control points in the sketch.</source>
       <translation>ესკიზში პერიოდული B-სპლაინის საკონტროლო წერტილებით შექმნა.</translation>
     </message>
   </context>
@@ -1096,7 +1096,7 @@ with respect to a line or a third point</translation>
     <name>CmdSketcherExternal</name>
     <message>
       <location filename="../../CommandCreateGeo.cpp" line="1629"/>
-      <source>Create an external geometry</source>
+      <source>Create external geometry</source>
       <translation>გარე გეომეტრიის შექმნა</translation>
     </message>
     <message>
@@ -1226,8 +1226,8 @@ then call this command, then choose the desired sketch.</source>
       <source>Create a new mirrored sketch for each selected sketch
 by using the X or Y axes, or the origin point,
 as mirroring reference.</source>
-      <translation>თითოეული მონიშნული ესკიზისთვის
-X და Y ღერძებით და საწყისი წერტილით
+      <translation>თითოეული მონიშნული ესკიზისთვის 
+X და Y ღერძებით და საწყისი წერტილით 
 ახალი სარკისებური ესკიზის შექმნა.</translation>
     </message>
     <message>
@@ -1277,7 +1277,7 @@ X და Y ღერძებით და საწყისი წერტი
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="1853"/>
       <source>Creates a rectangular array pattern of the geometry taking as reference the last selected point</source>
-      <translation type="unfinished">Creates a rectangular array pattern of the geometry taking as reference the last selected point</translation>
+      <translation>ქმნის გეომეტრიის მართკუთხა მასივის შაბლონს, მიმართვად ბოლო არჩეული წერტილის გამოყენებით</translation>
     </message>
   </context>
   <context>
@@ -1552,7 +1552,7 @@ into driving or reference mode</translation>
       <location filename="../../Command.cpp" line="786"/>
       <source>Validate a sketch by looking at missing coincidences,
 invalid constraints, degenerated geometry, etc.</source>
-      <translation>ესკიზის შემოწმება ნაკლული დამთხვევების, არასწორი შეზღუდვების,
+      <translation>ესკიზის შემოწმება ნაკლული დამთხვევების, არასწორი შეზღუდვების, 
 დეგენერირებული გეომეტრიის და ა. შ. შემოწმებით.</translation>
     </message>
     <message>
@@ -2124,7 +2124,7 @@ invalid constraints, degenerated geometry, etc.</source>
   <context>
     <name>CommandGroup</name>
     <message>
-      <location filename="../../Workbench.cpp" line="34"/>
+      <location filename="../../Workbench.cpp" line="36"/>
       <source>Sketcher</source>
       <translation>ესკიზმქმნელი</translation>
     </message>
@@ -2285,8 +2285,20 @@ invalid constraints, degenerated geometry, etc.</source>
       <translation>არ მიამაგრო</translation>
     </message>
     <message>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="119"/>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="128"/>
+      <location filename="../../CommandSketcherVirtualSpace.cpp" line="154"/>
       <location filename="../../CommandAlterGeometry.cpp" line="145"/>
       <location filename="../../CommandAlterGeometry.cpp" line="154"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="482"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="555"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="637"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="690"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="748"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="834"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="882"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1232"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1342"/>
       <location filename="../../CommandConstraints.cpp" line="162"/>
       <location filename="../../CommandConstraints.cpp" line="169"/>
       <location filename="../../CommandConstraints.cpp" line="1047"/>
@@ -2412,15 +2424,6 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../CommandConstraints.cpp" line="8443"/>
       <location filename="../../CommandConstraints.cpp" line="8519"/>
       <location filename="../../CommandConstraints.cpp" line="8531"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="482"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="555"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="637"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="690"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="748"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="834"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="882"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1232"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1342"/>
       <location filename="../../CommandSketcherTools.cpp" line="93"/>
       <location filename="../../CommandSketcherTools.cpp" line="769"/>
       <location filename="../../CommandSketcherTools.cpp" line="885"/>
@@ -2436,9 +2439,6 @@ invalid constraints, degenerated geometry, etc.</source>
       <location filename="../../CommandSketcherTools.cpp" line="2164"/>
       <location filename="../../CommandSketcherTools.cpp" line="2174"/>
       <location filename="../../CommandSketcherTools.cpp" line="2221"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="119"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="128"/>
-      <location filename="../../CommandSketcherVirtualSpace.cpp" line="154"/>
       <source>Wrong selection</source>
       <translation>არასწორი არჩევანი</translation>
     </message>
@@ -2619,16 +2619,16 @@ invalid constraints, degenerated geometry, etc.</source>
       <translation>მონიშნული ობიექტების რიცხვი არ უდრის სამს</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="583"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="872"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="1365"/>
+      <location filename="../../CommandConstraints.cpp" line="583"/>
       <source>Error</source>
       <translation>შეცდომა</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="584"/>
       <source>Unexpected error. More information may be available in the Report View.</source>
-      <translation type="unfinished">Unexpected error. More information may be available in the Report View.</translation>
+      <translation>მოულოდნელი შეცდომა. მეტ ინფორმციას შეიძლება ანგარიშის ხედში მიაგნოთ.</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="2229"/>
@@ -3020,19 +3020,19 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <translation>მონიშნეთ შეზღუდვ(ებ)-ი ესკიზიდან.</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="245"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="246"/>
       <source>B-Spline Degree</source>
       <translation>B-სპლაინის დონე</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="246"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="247"/>
       <source>Define B-Spline Degree, between 1 and %1:</source>
       <translation>აღწერეთ B-სპლაინის კუთხე, 1-დან %1-მდე:</translation>
     </message>
     <message>
+      <location filename="../../DrawSketchHandlerFillet.h" line="277"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="731"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="1096"/>
-      <location filename="../../DrawSketchHandlerFillet.h" line="277"/>
       <source>CAD Kernel Error</source>
       <translation>CAD-ის ბირთვის შეცდომა</translation>
     </message>
@@ -3139,7 +3139,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="1013"/>
       <source>The last element must be a point or a line serving as reference for the symmetry construction.</source>
-      <translation type="unfinished">The last element must be a point or a line serving as reference for the symmetry construction.</translation>
+      <translation>ბოლო ელემენტი უნდა იყოს წერტილი ან ხაზი, რომელიც სიმეტრიის აგების მიმართვად გამოიყენება.</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="1344"/>
@@ -3170,7 +3170,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="2222"/>
       <source>Removal of axes alignment requires at least one selected non-external geometric element</source>
-      <translation type="unfinished">Removal of axes alignment requires at least one selected non-external geometric element</translation>
+      <translation>სწორების ღერძის წაშლას სულ ერთი მონიშნული არა-გარე გეომეტრიული ელემენტი სჭირდება</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherElements.cpp" line="533"/>
@@ -3195,7 +3195,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
     <message>
       <location filename="../../DrawSketchHandlerFillet.h" line="286"/>
       <source>Value Error</source>
-      <translation type="unfinished">Value Error</translation>
+      <translation>მნიშვნელობის შეცდომა</translation>
     </message>
   </context>
   <context>
@@ -3901,7 +3901,7 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <location filename="../../SketchRectangularArrayDialog.ui" line="93"/>
       <source>If selected, each element in the array is constrained
 with respect to the others using construction lines</source>
-      <translation>თუ ჩარტულია, მასივის თითოეული ელემენტი შეიზღუდება სხვა
+      <translation>თუ ჩარტულია, მასივის თითოეული ელემენტი შეიზღუდება სხვა 
 ელემენტებთან შედარებით, მშენებლობის ხაზების გამოეყენებით</translation>
     </message>
     <message>
@@ -3952,7 +3952,7 @@ reflected on copies</source>
       <location filename="../../SketcherSettings.ui" line="26"/>
       <source>Sketcher dialog will have additional section
 'Advanced solver control' to adjust solver settings</source>
-      <translation>ესკიზის ფანჯარას ამომხსნელის მოსარგებად ექნება
+      <translation>ესკიზის ფანჯარას ამომხსნელის მოსარგებად ექნება 
 დამატებითი სექცია 'ამომხსნელის დამატებითი პარამეტრები'</translation>
     </message>
     <message>
@@ -4673,12 +4673,12 @@ However, no constraints linking to the endpoints were found.</source>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="1153"/>
       <source>Impossible to update visibility tracking</source>
-      <translation type="unfinished">Impossible to update visibility tracking</translation>
+      <translation>ხილვადობის ტრეკინგის განახლება შეუძლებელია</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherConstraints.cpp" line="1546"/>
       <source>Impossible to update visibility tracking: </source>
-      <translation type="unfinished">Impossible to update visibility tracking: </translation>
+      <translation>ხილვადობის ტრეკინგის განახლება შეუძლებელია: </translation>
     </message>
   </context>
   <context>
@@ -5845,7 +5845,7 @@ Eigen Sparse QR ალგორითმი ოპტიმიზებული
     <message>
       <location filename="../../TaskSketcherSolverAdvanced.ui" line="484"/>
       <source>Error threshold under which convergence is reached for the solving of redundant constraints</source>
-      <translation type="unfinished">Error threshold under which convergence is reached for the solving of redundant constraints</translation>
+      <translation>შეცდომის ზღვარი, რომლის ქვეშაც მიიღწევა კონვერგენცია დამატებითი შეზღუდვების ამოხსნისთვის</translation>
     </message>
     <message>
       <location filename="../../TaskSketcherSolverAdvanced.ui" line="487"/>
@@ -5919,44 +5919,54 @@ Eigen Sparse QR ალგორითმი ოპტიმიზებული
   <context>
     <name>Workbench</name>
     <message>
-      <location filename="../../Workbench.cpp" line="35"/>
+      <location filename="../../Workbench.cpp" line="37"/>
       <source>P&amp;rofiles</source>
       <translation>&amp;პროფილები</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="36"/>
+      <location filename="../../Workbench.cpp" line="38"/>
       <source>S&amp;ketch</source>
       <translation>მო&amp;ნახაზი</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="37"/>
+      <location filename="../../Workbench.cpp" line="39"/>
       <source>Sketcher</source>
       <translation>ესკიზმქმნელი</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="38"/>
+      <location filename="../../Workbench.cpp" line="40"/>
+      <source>Sketcher edit mode</source>
+      <translation>ესკიზის ჩასწორების რეჟიმი</translation>
+    </message>
+    <message>
+      <location filename="../../Workbench.cpp" line="41"/>
       <source>Sketcher geometries</source>
       <translation>ესკიზის გეომეტრია</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="39"/>
+      <location filename="../../Workbench.cpp" line="42"/>
       <source>Sketcher constraints</source>
       <translation>ესკიზის შეზღუდვები</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="40"/>
+      <location filename="../../Workbench.cpp" line="43"/>
       <source>Sketcher tools</source>
       <translation>ესკიზის ხელსაწყოები</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="41"/>
+      <location filename="../../Workbench.cpp" line="44"/>
       <source>Sketcher B-spline tools</source>
       <translation>ესკიზის B-სპლაინის ხელსაწყოები</translation>
     </message>
     <message>
-      <location filename="../../Workbench.cpp" line="42"/>
+      <location filename="../../Workbench.cpp" line="45"/>
       <source>Sketcher virtual space</source>
       <translation>ესკიზის ვირტუალური სივრცე</translation>
+    </message>
+    <message>
+      <location filename="../../Workbench.cpp" line="46"/>
+      <source>Sketcher edit tools</source>
+      <translation>ესკიზის ჩასწორების ხელსაწყოები</translation>
     </message>
   </context>
   <context>
@@ -6009,8 +6019,8 @@ Eigen Sparse QR ალგორითმი ოპტიმიზებული
       <location filename="../../SketcherSettingsGrid.ui" line="83"/>
       <source>Distance between two subsequent grid lines.
 If 'Grid Auto Spacing' is enabled, will be used as base value.</source>
-      <translation type="unfinished">Distance between two subsequent grid lines.
-If 'Grid Auto Spacing' is enabled, will be used as base value.</translation>
+      <translation>ორ მეზობელ ბადის ხაზს შორის დაშორება.
+თუ 'ბადის ავტომატური დაშორება' ჩართულია, საბაზისო მნიშვნელობად ის იქნება გამოყენებული.</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="115"/>
@@ -6021,8 +6031,8 @@ If 'Grid Auto Spacing' is enabled, will be used as base value.</translation>
       <location filename="../../SketcherSettingsGrid.ui" line="125"/>
       <source>While using 'Grid Auto Spacing' this sets a threshold in pixel to the grid spacing.
 The grid spacing change if it becomes smaller than this number of pixel.</source>
-      <translation type="unfinished">While using 'Grid Auto Spacing' this sets a threshold in pixel to the grid spacing.
-The grid spacing change if it becomes smaller than this number of pixel.</translation>
+      <translation>'ბადის ავტომატური დაშორების' გამოყენებისას ეს აყენებს ბადის დაშორების საზღვარს, პიქსელებში.
+ბადის დაშორება ავტომატურად შეიცვლება, თუ ის მითითებული რაოდენობის პიქსელებზე ნაკლები გახდება.</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsGrid.ui" line="151"/>
@@ -6092,7 +6102,7 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
     <name>GridSpaceAction</name>
     <message>
       <location filename="../../Command.cpp" line="1118"/>
-      <source>Grid Auto Spacing</source>
+      <source>Grid auto spacing</source>
       <translation>ბადის ავტომატური ბიჯი</translation>
     </message>
     <message>
@@ -6107,8 +6117,8 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
     </message>
     <message>
       <location filename="../../Command.cpp" line="1123"/>
-      <source>Distance between two subsequent grid lines</source>
-      <translation>ბადის ორ მეზობელ ხაზს შორს მანძილი</translation>
+      <source>Distance between two subsequent grid lines.</source>
+      <translation>ბადის ორ მეზობელ ხაზს შორს მანძილი.</translation>
     </message>
   </context>
   <context>
@@ -6131,58 +6141,61 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
 </translation>
     </message>
     <message>
-      <location filename="../../CommandSketcherTools.cpp" line="1221"/>
-      <location filename="../../CommandSketcherTools.cpp" line="1798"/>
-      <location filename="../../CommandSketcherTools.cpp" line="2243"/>
-      <location filename="../../DrawSketchHandlerArc.h" line="198"/>
-      <location filename="../../DrawSketchHandlerArc.h" line="470"/>
+      <location filename="../../DrawSketchHandlerLine.h" line="121"/>
+      <location filename="../../DrawSketchHandlerRectangle.h" line="291"/>
+      <location filename="../../DrawSketchHandlerRectangle.h" line="699"/>
+      <location filename="../../DrawSketchHandlerTrimming.h" line="149"/>
       <location filename="../../DrawSketchHandlerArcOfEllipse.h" line="321"/>
-      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="253"/>
-      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="329"/>
+      <location filename="../../DrawSketchHandlerExtend.h" line="324"/>
+      <location filename="../../DrawSketchHandlerSlot.h" line="306"/>
+      <location filename="../../DrawSketchHandlerCarbonCopy.h" line="171"/>
       <location filename="../../DrawSketchHandlerArcOfParabola.h" line="259"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="128"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="204"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="304"/>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="516"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="123"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="194"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="303"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="613"/>
-      <location filename="../../DrawSketchHandlerCarbonCopy.h" line="171"/>
+      <location filename="../../DrawSketchHandlerArc.h" line="198"/>
+      <location filename="../../DrawSketchHandlerArc.h" line="470"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="127"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="317"/>
-      <location filename="../../DrawSketchHandlerEllipse.h" line="799"/>
-      <location filename="../../DrawSketchHandlerExtend.h" line="324"/>
+      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="253"/>
+      <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="329"/>
+      <location filename="../../DrawSketchHandlerSplitting.h" line="148"/>
       <location filename="../../DrawSketchHandlerExternal.h" line="172"/>
-      <location filename="../../DrawSketchHandlerLine.h" line="121"/>
+      <location filename="../../DrawSketchHandlerPolygon.h" line="157"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="431"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="461"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="128"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="205"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="305"/>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="517"/>
+      <location filename="../../DrawSketchHandlerEllipse.h" line="799"/>
+      <location filename="../../CommandSketcherTools.cpp" line="1221"/>
+      <location filename="../../CommandSketcherTools.cpp" line="1798"/>
+      <location filename="../../CommandSketcherTools.cpp" line="2243"/>
       <location filename="../../DrawSketchHandlerPoint.h" line="80"/>
-      <location filename="../../DrawSketchHandlerPolygon.h" line="157"/>
-      <location filename="../../DrawSketchHandlerRectangle.h" line="291"/>
-      <location filename="../../DrawSketchHandlerRectangle.h" line="699"/>
-      <location filename="../../DrawSketchHandlerSlot.h" line="306"/>
-      <location filename="../../DrawSketchHandlerSplitting.h" line="148"/>
-      <location filename="../../DrawSketchHandlerTrimming.h" line="149"/>
       <source>Error</source>
       <translation>შეცდომა</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="2040"/>
       <source>Failed to delete all geometry</source>
-      <translation type="unfinished">Failed to delete all geometry</translation>
+      <translation>ყველა გეომეტრიის წაშლის შეცდომა</translation>
     </message>
     <message>
       <location filename="../../CommandSketcherTools.cpp" line="2109"/>
       <source>Failed to delete all constraints</source>
-      <translation type="unfinished">Failed to delete all constraints</translation>
+      <translation>ყველა შეზღუდვის წაშლის შეცდომა</translation>
     </message>
     <message>
-      <location filename="../../../App/SketchObjectPyImp.cpp" line="382"/>
+      <location filename="../../../App/SketchObjectPyImp.cpp" line="384"/>
       <source>The constraint has invalid index information and is malformed.</source>
-      <translation type="unfinished">The constraint has invalid index information and is malformed.</translation>
+      <translation>შეზღუდვას ინდექსის ინფორმაცია არასწორია და ის მიუღებელია.</translation>
     </message>
     <message>
+      <location filename="../../CommandSketcherBSpline.cpp" line="775"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="909"/>
+      <location filename="../../CommandSketcherBSpline.cpp" line="1130"/>
       <location filename="../../CommandConstraints.cpp" line="253"/>
       <location filename="../../CommandConstraints.cpp" line="328"/>
       <location filename="../../CommandConstraints.cpp" line="419"/>
@@ -6190,102 +6203,99 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
       <location filename="../../CommandConstraints.cpp" line="573"/>
       <location filename="../../CommandConstraints.cpp" line="4461"/>
       <location filename="../../CommandConstraints.cpp" line="4676"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="775"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="909"/>
-      <location filename="../../CommandSketcherBSpline.cpp" line="1130"/>
       <location filename="../../CommandSketcherTools.cpp" line="833"/>
       <location filename="../../CommandSketcherTools.cpp" line="1053"/>
       <source>Invalid Constraint</source>
-      <translation type="unfinished">Invalid Constraint</translation>
+      <translation>არასწორი შეზღუდვა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArc.h" line="199"/>
       <location filename="../../DrawSketchHandlerArc.h" line="471"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="462"/>
       <source>Failed to add arc</source>
-      <translation type="unfinished">Failed to add arc</translation>
+      <translation>რკალის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfEllipse.h" line="322"/>
       <source>Failed to add arc of ellipse</source>
-      <translation type="unfinished">Failed to add arc of ellipse</translation>
+      <translation>ოვალის რკალის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="254"/>
       <source>Cannot create arc of hyperbola from invalid angles, try again!</source>
-      <translation type="unfinished">Cannot create arc of hyperbola from invalid angles, try again!</translation>
+      <translation>არასწორი კუთხეებიდან ჰიპერბოლის რკალის შექმნა შეუძლებელია. თავიდან სცადეთ!</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfHyperbola.h" line="330"/>
       <source>Cannot create arc of hyperbola</source>
-      <translation type="unfinished">Cannot create arc of hyperbola</translation>
+      <translation>ჰიპერბოლის რკალის შექმნის შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerArcOfParabola.h" line="260"/>
       <source>Cannot create arc of parabola</source>
-      <translation type="unfinished">Cannot create arc of parabola</translation>
+      <translation>პარაბოლის რკალის შექმნის შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSpline.h" line="129"/>
       <source>Error adding B-Spline pole</source>
-      <translation type="unfinished">Error adding B-Spline pole</translation>
+      <translation>B-სპლაინის პოლუსის დამატების შეცდომა</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="205"/>
-      <source>Error creating BSpline pole</source>
-      <translation type="unfinished">Error creating BSpline pole</translation>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="206"/>
+      <source>Error creating B-spline pole</source>
+      <translation>B-სპლაინის პოლუსის შექმნის შეცდომა</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="305"/>
-      <source>Error deleting last pole</source>
-      <translation type="unfinished">Error deleting last pole</translation>
-    </message>
-    <message>
-      <location filename="../../DrawSketchHandlerBSpline.h" line="517"/>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="614"/>
-      <source>Error creating B-Spline</source>
-      <translation type="unfinished">Error creating B-Spline</translation>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="518"/>
+      <source>Error creating B-spline</source>
+      <translation>B-სპლაინის შექმნის შეცდომა</translation>
+    </message>
+    <message>
+      <location filename="../../DrawSketchHandlerBSpline.h" line="306"/>
+      <source>Error deleting last pole</source>
+      <translation>ბოლო პოლუსის წაშლის შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="124"/>
       <source>Cannot add knot point</source>
-      <translation type="unfinished">Cannot add knot point</translation>
+      <translation>კვანძის წერტილის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="195"/>
       <source>Cannot add internal alignment points</source>
-      <translation type="unfinished">Cannot add internal alignment points</translation>
+      <translation>შიდა სწორების წერტილების დამატება შეუძლებელია</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerBSplineByInterpolation.h" line="304"/>
       <source>Error removing knot</source>
-      <translation type="unfinished">Error removing knot</translation>
+      <translation>კვანძის წაშლის შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerCarbonCopy.h" line="172"/>
       <source>Failed to add carbon copy</source>
-      <translation type="unfinished">Failed to add carbon copy</translation>
+      <translation>ზუსტი ასლის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerCircle.h" line="128"/>
       <location filename="../../DrawSketchHandlerCircle.h" line="318"/>
       <source>Failed to add circle</source>
-      <translation type="unfinished">Failed to add circle</translation>
+      <translation>წრეწირის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerEllipse.h" line="800"/>
       <source>Failed to add an ellipse</source>
-      <translation type="unfinished">Failed to add an ellipse</translation>
+      <translation>ოვალის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerExtend.h" line="325"/>
       <source>Failed to extend edge</source>
-      <translation type="unfinished">Failed to extend edge</translation>
+      <translation>წიბოს გაფართოების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerExternal.h" line="173"/>
       <source>Failed to add external geometry</source>
-      <translation type="unfinished">Failed to add external geometry</translation>
+      <translation>გარე გეომეტრის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerFillet.h" line="184"/>
@@ -6296,75 +6306,49 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
       <location filename="../../DrawSketchHandlerLine.h" line="122"/>
       <location filename="../../DrawSketchHandlerLineSet.h" line="432"/>
       <source>Failed to add line</source>
-      <translation type="unfinished">Failed to add line</translation>
+      <translation>ხაზის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerPoint.h" line="81"/>
       <source>Failed to add point</source>
-      <translation type="unfinished">Failed to add point</translation>
+      <translation>წერტილის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerPolygon.h" line="158"/>
       <source>Failed to add polygon</source>
-      <translation type="unfinished">Failed to add polygon</translation>
+      <translation>მრავალკუთხედის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerRectangle.h" line="292"/>
       <source>Failed to add box</source>
-      <translation type="unfinished">Failed to add box</translation>
+      <translation>ჩარჩოს დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerRectangle.h" line="700"/>
       <source>Failed to add rounded rectangle</source>
-      <translation type="unfinished">Failed to add rounded rectangle</translation>
+      <translation>მომრგვალებული ოთხკუთხედის შექმნის შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerSlot.h" line="307"/>
       <source>Failed to add slot</source>
-      <translation type="unfinished">Failed to add slot</translation>
+      <translation>სლოტის დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerSplitting.h" line="149"/>
       <source>Failed to add edge</source>
-      <translation type="unfinished">Failed to add edge</translation>
+      <translation>წიბოს დამატების შეცდომა</translation>
     </message>
     <message>
       <location filename="../../DrawSketchHandlerTrimming.h" line="150"/>
       <source>Failed to trim edge</source>
-      <translation type="unfinished">Failed to trim edge</translation>
+      <translation>წიბოს წაკვეთის შეცდომა</translation>
     </message>
     <message>
-      <location filename="../../EditDatumDialog.cpp" line="239"/>
       <location filename="../../TaskSketcherConstraints.cpp" line="1240"/>
       <location filename="../../TaskSketcherConstraints.cpp" line="1258"/>
+      <location filename="../../EditDatumDialog.cpp" line="239"/>
       <source>Value Error</source>
-      <translation type="unfinished">Value Error</translation>
-    </message>
-  </context>
-  <context>
-    <name>CmdSketcherCreateBSplineByInterpolation</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="979"/>
-      <source>Interpolate B-spline</source>
-      <translation>B-სპლაინის ინტერპოლაცია</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="980"/>
-      <source>Create a B-spline by interpolation, i.e. via knots in the sketch.</source>
-      <translation>B-სპლაინების შექმნა ინტერპოლაციით, ანუ, ესკიზში არსებული კვანძებით.</translation>
-    </message>
-  </context>
-  <context>
-    <name>CmdSketcherCreatePeriodicBSplineByInterpolation</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1011"/>
-      <source>Interpolate periodic B-spline</source>
-      <translation>პერიოდული B-სპლაინის ინტერპოლაცია</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1013"/>
-      <source>Create a periodic B-spline by interpolation, i.e. via knots in the sketch.</source>
-      <translation>პერიოდული B-სპლაინების შექმნა ინტერპოლაციით, ანუ, ესკიზში არსებული კვანძებით.</translation>
+      <translation>მნიშვნელობის შეცდომა</translation>
     </message>
   </context>
   <context>
@@ -6410,7 +6394,7 @@ The grid spacing change if it becomes smaller than this number of pixel.</transl
     <message>
       <location filename="../../Command.cpp" line="1365"/>
       <source>Snap to grid</source>
-      <translation type="unfinished">Snap to grid</translation>
+      <translation>ბადეზე მიმაგრება</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1367"/>
@@ -6426,8 +6410,8 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     </message>
     <message>
       <location filename="../../Command.cpp" line="1373"/>
-      <source>Angular step for tools that use 'Snap at Angle' (line for instance). Hold CTRL to enable 'Snap at Angle'. The angle start from the East axis (horizontal right)</source>
-      <translation>კუთხური ბიჯი ხელსაწყოებისთვის, როლებიც 'კუთხით მიმაგრებას' იყენებენ (მაგალითად, ხაზი). 'კუთხურად მიმაგრებისთვის' CTRL ღილაკი გეჭიროთ. კუთხე აღმოსავლეთი ღერძიდან (ჰორიზონტალური მარჯვენა) იწყება</translation>
+      <source>Angular step for tools that use 'Snap at Angle' (line for instance). Hold CTRL to enable 'Snap at Angle'. The angle starts from the positive X axis of the sketch.</source>
+      <translation>კუთხური ბიჯი ხელსაწყოებისთვის, როლებიც 'კუთხით მიმაგრებას' იყენებენ (მაგალითად, ხაზი). კუთხზე ესკიზის დადებითი X ღერძიდან იწყება.</translation>
     </message>
   </context>
   <context>
@@ -6476,8 +6460,8 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     </message>
     <message>
       <location filename="../../Command.cpp" line="1220"/>
-      <source>Toggle the grid in the sketch. In the menu you can change grid settings</source>
-      <translation type="unfinished">Toggle the grid in the sketch. In the menu you can change grid settings</translation>
+      <source>Toggle the grid in the sketch. In the menu you can change grid settings.</source>
+      <translation>ესკიზში ბადის გადართვა. ბადის პარამეტრების მენიუში შეგიძლიათ, შეცვალოთ.</translation>
     </message>
   </context>
   <context>
@@ -6485,12 +6469,38 @@ Points must be set closer than a fifth of the grid spacing to a grid line to sna
     <message>
       <location filename="../../Command.cpp" line="1474"/>
       <source>Toggle snap</source>
-      <translation type="unfinished">Toggle snap</translation>
+      <translation>მიბმის გადართვა</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1476"/>
-      <source>Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings</source>
-      <translation type="unfinished">Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings</translation>
+      <source>Toggle all snap functionality. In the menu you can toggle 'Snap to grid' and 'Snap to objects' individually, and change further snap settings.</source>
+      <translation>მიბმის ყველა ფუნქციის გადართვა. 'ბადეზე მიბმის' და 'ობიექტებზე მიბმის' ინდივიდუალურად გადართვა და მიბმის სხვა პარამეტრების შეცვლა მენიუში შეგიძლიათ.</translation>
+    </message>
+  </context>
+  <context>
+    <name>CmdSketcherCreateBSplineByInterpolation</name>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="979"/>
+      <source>Create B-spline by knots</source>
+      <translation>B-სპლაინის კვანძებით შექმნა</translation>
+    </message>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="980"/>
+      <source>Create a B-spline by knots, i.e. by interpolation, in the sketch.</source>
+      <translation>ესკიზში B-სპლაინის კვანძებით (მაგ: ინტერპოლაციით) შექმნა.</translation>
+    </message>
+  </context>
+  <context>
+    <name>CmdSketcherCreatePeriodicBSplineByInterpolation</name>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="1011"/>
+      <source>Create periodic B-spline by knots</source>
+      <translation>კვანძებით პერიოდული B-სპლაინის შექმნა</translation>
+    </message>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="1013"/>
+      <source>Create a periodic B-spline by knots, i.e. by interpolation, in the sketch.</source>
+      <translation>ესკიზში პერიოდული B-სპლაინის კვანძებით (მაგ: ინტერპოლაციით) შექმნა.</translation>
     </message>
   </context>
 </TS>

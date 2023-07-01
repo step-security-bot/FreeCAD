@@ -1654,7 +1654,7 @@ X-, Y- und Z-Komponenten zerlegt wird.</translation>
     <message>
       <location filename="../../CommandSimple.cpp" line="324"/>
       <source>Part</source>
-      <translation>Formteil</translation>
+      <translation>Part</translation>
     </message>
     <message>
       <location filename="../../CommandSimple.cpp" line="325"/>
@@ -1672,7 +1672,7 @@ X-, Y- und Z-Komponenten zerlegt wird.</translation>
     <message>
       <location filename="../../Command.cpp" line="1077"/>
       <source>Part</source>
-      <translation>Part</translation>
+      <translation>Formteil</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1078"/>
@@ -3090,12 +3090,12 @@ Wenn beide Längen Null sind, wird die Länge der Richtung verwendet.</translati
     <message>
       <location filename="../../DlgFilletEdges.cpp" line="268"/>
       <source>Equal distance</source>
-      <translation>Gleiche Distanz</translation>
+      <translation>Gleicher Abstand</translation>
     </message>
     <message>
       <location filename="../../DlgFilletEdges.cpp" line="269"/>
       <source>Two distances</source>
-      <translation>Zwei Distanzen</translation>
+      <translation>Zwei Abstände</translation>
     </message>
     <message>
       <location filename="../../DlgFilletEdges.cpp" line="272"/>
@@ -4389,7 +4389,7 @@ oder Schwarz verwendet werden.</translation>
     <message>
       <location filename="../../DlgSettingsObjectColor.ui" line="368"/>
       <source>Default Annotation color</source>
-      <translation>Standardfarbe für Anmerkungen</translation>
+      <translation>Standardfarbe für Beschriftungen</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsObjectColor.ui" line="382"/>
@@ -4399,7 +4399,7 @@ oder Schwarz verwendet werden.</translation>
     <message>
       <location filename="../../DlgSettingsObjectColor.ui" line="389"/>
       <source>Text color for document annotations</source>
-      <translation>Textfarbe für Dokumentanmerkungen</translation>
+      <translation>Textfarbe für Dokumentbeschriftungen</translation>
     </message>
   </context>
   <context>
@@ -5439,7 +5439,7 @@ indem Sie ein Auswahlrechteck in der 3D-Ansicht aufziehen</translation>
       <location filename="../../TaskOffset.ui" line="14"/>
       <location filename="../../TaskOffset.ui" line="20"/>
       <source>Offset</source>
-      <translation>Versatz</translation>
+      <translation>Versetzen</translation>
     </message>
     <message>
       <location filename="../../TaskOffset.ui" line="34"/>
@@ -5697,8 +5697,8 @@ in the 3D view for the sweep path.</source>
     <message>
       <location filename="../../../BasicShapes/ViewProviderShapes.py" line="47"/>
       <location filename="../../../BasicShapes/ViewProviderShapes.py" line="54"/>
-      <location filename="../../ViewProvider.cpp" line="53"/>
       <location filename="../../ViewProviderPrimitive.cpp" line="56"/>
+      <location filename="../../ViewProvider.cpp" line="53"/>
       <source>Edit %1</source>
       <translation>%1 bearbeiten</translation>
     </message>
@@ -5789,20 +5789,20 @@ Do you want to continue?</source>
       <translation>Keine ausgewählten Referenzen</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="75"/>
       <location filename="../../TaskCheckGeometry.cpp" line="81"/>
+      <location filename="../../TaskAttacher.cpp" line="75"/>
       <source>Face</source>
       <translation>Fläche</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="78"/>
       <location filename="../../TaskCheckGeometry.cpp" line="83"/>
+      <location filename="../../TaskAttacher.cpp" line="78"/>
       <source>Edge</source>
       <translation>Kante</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="81"/>
       <location filename="../../TaskCheckGeometry.cpp" line="84"/>
+      <location filename="../../TaskAttacher.cpp" line="81"/>
       <source>Vertex</source>
       <translation>Knoten</translation>
     </message>

@@ -3210,7 +3210,7 @@ Por favor seleccione primero una o más aristas.</translation>
     <message>
       <location filename="../../DlgImportExportIges.ui" line="71"/>
       <source>Solids and shells will be exported as trimmed surface</source>
-      <translation>Los sólidos y las fundas se exportarán como superficie recortada</translation>
+      <translation>Los sólidos y cascarones se exportarán como superficie recortada</translation>
     </message>
     <message>
       <location filename="../../DlgImportExportIges.ui" line="74"/>
@@ -3220,7 +3220,7 @@ Por favor seleccione primero una o más aristas.</translation>
     <message>
       <location filename="../../DlgImportExportIges.ui" line="84"/>
       <source>Solids will be exported as manifold solid B-Rep object, shells as shell</source>
-      <translation>Los sólidos serán exportados como múltiples objetos sólidos B-Rep, fundas como funda</translation>
+      <translation>Los sólidos serán exportados como objetos B-Rep sólidos manifold, cascarones como cascarón</translation>
     </message>
     <message>
       <location filename="../../DlgImportExportIges.ui" line="87"/>
@@ -5706,8 +5706,8 @@ in the 3D view for the sweep path.</source>
     <message>
       <location filename="../../../BasicShapes/ViewProviderShapes.py" line="47"/>
       <location filename="../../../BasicShapes/ViewProviderShapes.py" line="54"/>
-      <location filename="../../ViewProvider.cpp" line="53"/>
       <location filename="../../ViewProviderPrimitive.cpp" line="56"/>
+      <location filename="../../ViewProvider.cpp" line="53"/>
       <source>Edit %1</source>
       <translation>Editar %1</translation>
     </message>
@@ -5799,20 +5799,20 @@ Do you want to continue?</source>
       <translation>Ninguna referencia seleccionada</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="75"/>
       <location filename="../../TaskCheckGeometry.cpp" line="81"/>
+      <location filename="../../TaskAttacher.cpp" line="75"/>
       <source>Face</source>
       <translation>Cara</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="78"/>
       <location filename="../../TaskCheckGeometry.cpp" line="83"/>
+      <location filename="../../TaskAttacher.cpp" line="78"/>
       <source>Edge</source>
       <translation>Arista</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="81"/>
       <location filename="../../TaskCheckGeometry.cpp" line="84"/>
+      <location filename="../../TaskAttacher.cpp" line="81"/>
       <source>Vertex</source>
       <translation>Vértice</translation>
     </message>

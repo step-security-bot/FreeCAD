@@ -194,8 +194,8 @@
     </message>
     <message>
       <location filename="../Transform.cpp" line="105"/>
-      <location filename="../ViewProviderAnnotation.cpp" line="416"/>
       <location filename="../ViewProviderDragger.cpp" line="222"/>
+      <location filename="../ViewProviderAnnotation.cpp" line="416"/>
       <source>Transform</source>
       <translation>Trasforma</translation>
     </message>
@@ -4654,7 +4654,7 @@ Si può anche utilizzare il modulo: John Doe &lt;john@doe.com&gt;</translation>
     <name>Gui::Dialog::DlgSettingsNavigation</name>
     <message>
       <location filename="../DlgSettingsNavigation.ui" line="14"/>
-      <location filename="../DlgSettingsNavigation.ui" line="234"/>
+      <location filename="../DlgSettingsNavigation.ui" line="238"/>
       <source>Navigation</source>
       <translation>Navigazione</translation>
     </message>
@@ -4724,56 +4724,59 @@ Si può anche utilizzare il modulo: John Doe &lt;john@doe.com&gt;</translation>
       <translation>Carattere del cubo di navigazione</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="165"/>
+      <location filename="../DlgSettingsNavigation.ui" line="162"/>
+      <source>Default</source>
+      <translation>Predefinito</translation>
+    </message>
+    <message>
+      <location filename="../DlgSettingsNavigation.ui" line="170"/>
       <source>Cube size</source>
       <translation>Dimensione cubo</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="172"/>
+      <location filename="../DlgSettingsNavigation.ui" line="177"/>
       <source>Size of the navigation cube</source>
       <translation>Dimensione del cubo di navigazione</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="200"/>
+      <location filename="../DlgSettingsNavigation.ui" line="205"/>
       <source>Color</source>
       <translation>Colore</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="207"/>
-      <source>color for all elements
-around the cube</source>
-      <translation>colore per tutti gli elementi
-intorno al cubo</translation>
+      <location filename="../DlgSettingsNavigation.ui" line="212"/>
+      <source>Base color for all elements</source>
+      <translation type="unfinished">Base color for all elements</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="240"/>
+      <location filename="../DlgSettingsNavigation.ui" line="244"/>
       <source>3D Navigation</source>
       <translation>Navigazione 3D</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="277"/>
+      <location filename="../DlgSettingsNavigation.ui" line="281"/>
       <source>List the mouse button configs for each chosen navigation setting.
 Select a set and then press the button to view said configurations.</source>
       <translation>Elenca le configurazioni dei pulsanti del mouse per ogni impostazione di navigazione selezionata.
 Seleziona un set e poi premi il pulsante per visualizzare le configurazioni indicate.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="281"/>
+      <location filename="../DlgSettingsNavigation.ui" line="285"/>
       <source>Mouse...</source>
       <translation>Mouse...</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="302"/>
+      <location filename="../DlgSettingsNavigation.ui" line="306"/>
       <source>Navigation settings set</source>
       <translation>Impostazioni di navigazione</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="312"/>
+      <location filename="../DlgSettingsNavigation.ui" line="316"/>
       <source>Orbit style</source>
       <translation>Stile orbita</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="331"/>
+      <location filename="../DlgSettingsNavigation.ui" line="335"/>
       <source>Rotation orbit style.
 Trackball: moving the mouse horizontally will rotate the part around the y-axis
 Turntable: the part will be rotated around the z-axis (with constrained axes).
@@ -4784,116 +4787,116 @@ Giradischi: la parte sarà ruotata attorno all'asse z (con assi vincolati).
 Giradischi Libero: la parte sarà ruotata attorno all'asse z.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="341"/>
+      <location filename="../DlgSettingsNavigation.ui" line="345"/>
       <source>Turntable</source>
       <translation>Piatto</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="346"/>
+      <location filename="../DlgSettingsNavigation.ui" line="350"/>
       <source>Trackball</source>
       <translation>Trackball</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="351"/>
+      <location filename="../DlgSettingsNavigation.ui" line="355"/>
       <source>Free Turntable</source>
       <translation>Piatto Libero</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="359"/>
+      <location filename="../DlgSettingsNavigation.ui" line="363"/>
       <source>Rotation mode</source>
       <translation>Modalità rotazione</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="378"/>
+      <location filename="../DlgSettingsNavigation.ui" line="382"/>
       <source>Rotations in 3D will use current cursor position as center for rotation</source>
       <translation>Le rotazioni in 3D utilizzeranno la posizione corrente del cursore come centro per la rotazione</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="385"/>
+      <location filename="../DlgSettingsNavigation.ui" line="389"/>
       <source>Window center</source>
       <translation>Centro finestra</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="390"/>
+      <location filename="../DlgSettingsNavigation.ui" line="394"/>
       <source>Drag at cursor</source>
       <translation>Trascina al cursore</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="395"/>
+      <location filename="../DlgSettingsNavigation.ui" line="399"/>
       <source>Object center</source>
       <translation>Centro oggetto</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="403"/>
+      <location filename="../DlgSettingsNavigation.ui" line="407"/>
       <source>Default camera orientation</source>
       <translation>Orientamento predefinito della camera</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="422"/>
+      <location filename="../DlgSettingsNavigation.ui" line="426"/>
       <source>Default camera orientation when creating a new document or selecting the home view</source>
       <translation>Orientamento predefinito della fotocamera quando si crea un nuovo documento o si seleziona la vista iniziale</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="429"/>
+      <location filename="../DlgSettingsNavigation.ui" line="433"/>
       <source>Camera zoom</source>
       <translation>Zoom fotocamera</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="448"/>
+      <location filename="../DlgSettingsNavigation.ui" line="452"/>
       <source>Sets camera zoom for new documents.
 The value is the diameter of the sphere to fit on the screen.</source>
       <translation>Imposta lo zoom della fotocamera per i nuovi documenti.
 Il valore è il diametro della sfera da adattare allo schermo.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="452"/>
+      <location filename="../DlgSettingsNavigation.ui" line="456"/>
       <source>mm</source>
       <translation>mm</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="477"/>
+      <location filename="../DlgSettingsNavigation.ui" line="481"/>
       <source>Enable animated rotations</source>
       <translation>Abilita le rotazioni animate</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="480"/>
+      <location filename="../DlgSettingsNavigation.ui" line="484"/>
       <source>Enable animation</source>
       <translation>Abilita animazione</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="496"/>
+      <location filename="../DlgSettingsNavigation.ui" line="500"/>
       <source>Zoom operations will be performed at position of mouse pointer</source>
       <translation>Le operazioni di zoom verranno eseguite sulla posizione del puntatore del mouse</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="499"/>
+      <location filename="../DlgSettingsNavigation.ui" line="503"/>
       <source>Zoom at cursor</source>
       <translation>Ingrandimento al cursore</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="515"/>
+      <location filename="../DlgSettingsNavigation.ui" line="519"/>
       <source> Zoom step</source>
       <translation> Fattore di zoom</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="533"/>
+      <location filename="../DlgSettingsNavigation.ui" line="537"/>
       <source>How much will be zoomed.
 Zoom step of '1' means a factor of 7.5 for every zoom step.</source>
       <translation>Quanto verrà ingrandito.
 Il passo di zoom di '1' significa un fattore di 7.5 per ogni fase di zoom.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="577"/>
+      <location filename="../DlgSettingsNavigation.ui" line="581"/>
       <source>Direction of zoom operations will be inverted</source>
       <translation>La direzione delle operazioni di zoom verrà invertita</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="580"/>
+      <location filename="../DlgSettingsNavigation.ui" line="584"/>
       <source>Invert zoom</source>
       <translation>Inverti lo zoom</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="596"/>
+      <location filename="../DlgSettingsNavigation.ui" line="600"/>
       <source>Prevents view tilting when pinch-zooming.
 Affects only gesture navigation style.
 Mouse tilting is not disabled by this setting.</source>
@@ -4902,57 +4905,57 @@ Interessa solo lo stile gesture.
 Questa impostazione non disabilitata l'inclinazione tramite mouse.</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.ui" line="601"/>
+      <location filename="../DlgSettingsNavigation.ui" line="605"/>
       <source>Disable touchscreen tilt gesture</source>
       <translation>Disattiva l'inclinazione dai gesti del touch screen</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="147"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="150"/>
       <source>Isometric</source>
       <translation>Isometrica</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="148"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="151"/>
       <source>Dimetric</source>
       <translation>Dimetrica</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="149"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="152"/>
       <source>Trimetric</source>
       <translation>Trimetrica</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="150"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="153"/>
       <source>Top</source>
       <translation>Dall'alto</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="151"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="154"/>
       <source>Front</source>
       <translation>Di fronte</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="152"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="155"/>
       <source>Left</source>
       <translation>Da sinistra</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="153"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="156"/>
       <source>Right</source>
       <translation>Da destra</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="154"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="157"/>
       <source>Rear</source>
       <translation>Da dietro</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="155"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="158"/>
       <source>Bottom</source>
       <translation>Dal basso</translation>
     </message>
     <message>
-      <location filename="../DlgSettingsNavigation.cpp" line="156"/>
+      <location filename="../DlgSettingsNavigation.cpp" line="159"/>
       <source>Custom</source>
       <translation>Personalizza</translation>
     </message>
@@ -6815,62 +6818,62 @@ Si desidera salvare le modifiche?</translation>
     <name>Gui::MainWindow</name>
     <message>
       <location filename="../MainWindow.cpp" line="166"/>
-      <location filename="../MainWindow.cpp" line="2065"/>
+      <location filename="../MainWindow.cpp" line="2055"/>
       <source>Dimension</source>
       <translation>Dimensione</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="459"/>
+      <location filename="../MainWindow.cpp" line="449"/>
       <source>Ready</source>
       <translation>Pronto</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="871"/>
+      <location filename="../MainWindow.cpp" line="861"/>
       <source>Help addon needed!</source>
       <translation>Aiuto aggiuntivo necessario!</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="872"/>
+      <location filename="../MainWindow.cpp" line="862"/>
       <source>The Help system of %1 is now handled by the "Help" addon. It can easily be installed via the Addons Manager</source>
       <translation>Il sistema di aiuto di %1 è ora gestito dall'addon "Help". Può essere facilmente installato tramite Addons Manager</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="874"/>
+      <location filename="../MainWindow.cpp" line="864"/>
       <source>Open Addon Manager</source>
       <translation>Apri Addon Manager</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1069"/>
+      <location filename="../MainWindow.cpp" line="1059"/>
       <source>Close All</source>
       <translation>Chiudi tutto</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1273"/>
-      <location filename="../MainWindow.cpp" line="1274"/>
-      <location filename="../MainWindow.cpp" line="1275"/>
+      <location filename="../MainWindow.cpp" line="1263"/>
+      <location filename="../MainWindow.cpp" line="1264"/>
+      <location filename="../MainWindow.cpp" line="1265"/>
       <source>Toggles this toolbar</source>
       <translation>Nascondi questa barra degli strumenti</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1288"/>
-      <location filename="../MainWindow.cpp" line="1289"/>
-      <location filename="../MainWindow.cpp" line="1290"/>
+      <location filename="../MainWindow.cpp" line="1278"/>
+      <location filename="../MainWindow.cpp" line="1279"/>
+      <location filename="../MainWindow.cpp" line="1280"/>
       <source>Toggles this dockable window</source>
       <translation>Nascondi questa finestra</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1856"/>
-      <location filename="../MainWindow.cpp" line="1948"/>
+      <location filename="../MainWindow.cpp" line="1846"/>
+      <location filename="../MainWindow.cpp" line="1938"/>
       <source>Unsaved document</source>
       <translation>Documento non salvato</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1857"/>
+      <location filename="../MainWindow.cpp" line="1847"/>
       <source>The exported object contains external link. Please save the documentat least once before exporting.</source>
       <translation>L'oggetto esportato contiene un link esterno. Salvare il documento almeno una volta prima di esportarlo.</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="1949"/>
+      <location filename="../MainWindow.cpp" line="1939"/>
       <source>To link to external objects, the document must be saved at least once.
 Do you want to save the document now?</source>
       <translation>Per collegare oggetti esterni, il documento deve essere salvato almeno una volta.
@@ -8000,7 +8003,7 @@ Vuoi specificare un'altra cartella?</translation>
   <context>
     <name>Gui::TreeDockWidget</name>
     <message>
-      <location filename="../Tree.cpp" line="3140"/>
+      <location filename="../Tree.cpp" line="3159"/>
       <source>Tree view</source>
       <translation>Struttura</translation>
     </message>
@@ -8008,7 +8011,7 @@ Vuoi specificare un'altra cartella?</translation>
   <context>
     <name>Gui::TreePanel</name>
     <message>
-      <location filename="../Tree.cpp" line="3066"/>
+      <location filename="../Tree.cpp" line="3085"/>
       <source>Search</source>
       <translation>Trova</translation>
     </message>
@@ -8016,173 +8019,183 @@ Vuoi specificare un'altra cartella?</translation>
   <context>
     <name>Gui::TreeWidget</name>
     <message>
-      <location filename="../Tree.cpp" line="461"/>
+      <location filename="../Tree.cpp" line="460"/>
       <source>Search...</source>
       <translation>Cerca...</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="462"/>
+      <location filename="../Tree.cpp" line="461"/>
       <source>Search for objects</source>
       <translation>Cerca oggetti</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="888"/>
+      <location filename="../Tree.cpp" line="887"/>
       <source>Activate document</source>
       <translation>Attiva documento</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="895"/>
+      <location filename="../Tree.cpp" line="894"/>
       <source>Activate document %1</source>
       <translation>Attiva il documento %1</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="932"/>
+      <location filename="../Tree.cpp" line="906"/>
+      <source>Tree settings</source>
+      <translation>Impostazioni albero</translation>
+    </message>
+    <message>
+      <location filename="../Tree.cpp" line="910"/>
+      <source>Show description column</source>
+      <translation>Mostra colonna descrizione</translation>
+    </message>
+    <message>
+      <location filename="../Tree.cpp" line="911"/>
+      <source>Show an extra tree view column for item description. The item's description can be set by pressing F2 (or your OS's edit button) or by editing the 'label2' property.</source>
+      <translation>Mostra una colonna extra nella vista ad albero per la descrizione degli elementi. La descrizione dell'elemento può essere impostata premendo F2 (o il pulsante di modifica del sistema operativo) o modificando la proprietà 'label2'.</translation>
+    </message>
+    <message>
+      <location filename="../Tree.cpp" line="952"/>
       <source>Group</source>
       <translation>Gruppo</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2770"/>
+      <location filename="../Tree.cpp" line="2790"/>
       <source>Labels &amp; Attributes</source>
       <translation>Etichette &amp; Attributi</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2771"/>
+      <location filename="../Tree.cpp" line="2791"/>
       <source>Description</source>
       <translation>Descrizione</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2772"/>
-      <source>Application</source>
-      <translation>Applicazione</translation>
-    </message>
-    <message>
-      <location filename="../Tree.cpp" line="2774"/>
+      <location filename="../Tree.cpp" line="2793"/>
       <source>Show items hidden in tree view</source>
       <translation>Mostra gli elementi nascosti nella vista ad albero</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2775"/>
+      <location filename="../Tree.cpp" line="2794"/>
       <source>Show items that are marked as 'hidden' in the tree view</source>
       <translation>Mostra gli elementi contrassegnati come 'nascosti' nella vista ad albero</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2777"/>
+      <location filename="../Tree.cpp" line="2796"/>
       <source>Toggle visibility in tree view</source>
       <translation>Commuta la visibilità nella vista ad albero</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2778"/>
+      <location filename="../Tree.cpp" line="2797"/>
       <source>Toggles the visibility of selected items in the tree view</source>
       <translation>Commuta la visibilità degli elementi selezionati nella vista ad albero</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2780"/>
+      <location filename="../Tree.cpp" line="2799"/>
       <source>Create group...</source>
       <translation>Crea gruppo...</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2781"/>
+      <location filename="../Tree.cpp" line="2800"/>
       <source>Create a group</source>
       <translation>Crea un gruppo</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2783"/>
-      <location filename="../Tree.cpp" line="4921"/>
+      <location filename="../Tree.cpp" line="2802"/>
+      <location filename="../Tree.cpp" line="4940"/>
       <source>Rename</source>
       <translation>Rinomina</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2784"/>
+      <location filename="../Tree.cpp" line="2803"/>
       <source>Rename object</source>
       <translation>Rinomina oggetto</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2786"/>
+      <location filename="../Tree.cpp" line="2805"/>
       <source>Finish editing</source>
       <translation>Completa la modifica</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2787"/>
+      <location filename="../Tree.cpp" line="2806"/>
       <source>Finish editing object</source>
       <translation>Completa la modifica dell'oggetto</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2789"/>
+      <location filename="../Tree.cpp" line="2808"/>
       <source>Add dependent objects to selection</source>
       <translation>Aggiungi oggetti dipendenti alla selezione</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2790"/>
+      <location filename="../Tree.cpp" line="2809"/>
       <source>Adds all dependent objects to the selection</source>
       <translation>Aggiunge tutti gli oggetti dipendenti alla selezione</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2792"/>
+      <location filename="../Tree.cpp" line="2811"/>
       <source>Close document</source>
       <translation>Chiudi il documento</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2793"/>
+      <location filename="../Tree.cpp" line="2812"/>
       <source>Close the document</source>
       <translation>Chiude il documento</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2795"/>
+      <location filename="../Tree.cpp" line="2814"/>
       <source>Reload document</source>
       <translation>Ricarica il documento</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2796"/>
+      <location filename="../Tree.cpp" line="2815"/>
       <source>Reload a partially loaded document</source>
       <translation>Ricarica un documento caricato parzialmente</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2798"/>
+      <location filename="../Tree.cpp" line="2817"/>
       <source>Skip recomputes</source>
       <translation>Salta il ricalcolo</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2799"/>
+      <location filename="../Tree.cpp" line="2818"/>
       <source>Enable or disable recomputations of document</source>
       <translation>Abilita o disabilita il ricalcolo del documento</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2801"/>
+      <location filename="../Tree.cpp" line="2820"/>
       <source>Allow partial recomputes</source>
       <translation>Consenti i ricalcoli parziali</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2803"/>
+      <location filename="../Tree.cpp" line="2822"/>
       <source>Enable or disable recomputating editing object when 'skip recomputation' is enabled</source>
       <translation>Abilita o disabilita il ricalcolo dell'oggetto in modifica quando 'salta il ricalcolo' è abilitato</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2805"/>
+      <location filename="../Tree.cpp" line="2824"/>
       <source>Mark to recompute</source>
       <translation>Segna da ricalcolare</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2806"/>
+      <location filename="../Tree.cpp" line="2825"/>
       <source>Mark this object to be recomputed</source>
       <translation>Contrassegna questo oggetto come oggetto da ricalcolare</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2809"/>
+      <location filename="../Tree.cpp" line="2828"/>
       <source>Recompute object</source>
       <translation>Ricalcola l'oggetto</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2810"/>
+      <location filename="../Tree.cpp" line="2829"/>
       <source>Recompute the selected object</source>
       <translation>Ricalcola l'oggetto selezionato</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="4892"/>
+      <location filename="../Tree.cpp" line="4911"/>
       <source> (but must be executed)</source>
       <translation> (ma deve essere eseguito)</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="4894"/>
+      <location filename="../Tree.cpp" line="4913"/>
       <source>%1, Internal name: %2</source>
       <translation>%1, nome interno: %2</translation>
     </message>
@@ -8399,37 +8412,37 @@ Vuoi specificare un'altra cartella?</translation>
   <context>
     <name>QDockWidget</name>
     <message>
-      <location filename="../MainWindow.cpp" line="509"/>
+      <location filename="../MainWindow.cpp" line="499"/>
       <source>Tree view</source>
       <translation>Struttura</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="537"/>
+      <location filename="../MainWindow.cpp" line="527"/>
       <source>Property view</source>
       <translation>Proprietà</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="555"/>
+      <location filename="../MainWindow.cpp" line="545"/>
       <source>Selection view</source>
       <translation>Selezione</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="577"/>
+      <location filename="../MainWindow.cpp" line="567"/>
       <source>Combo View</source>
       <translation>Vista combinata</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="611"/>
+      <location filename="../MainWindow.cpp" line="601"/>
       <source>DAG View</source>
       <translation>Vista DAG</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="629"/>
+      <location filename="../MainWindow.cpp" line="619"/>
       <source>Report view</source>
       <translation>Report</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="649"/>
+      <location filename="../MainWindow.cpp" line="639"/>
       <source>Python console</source>
       <translation>Console Python</translation>
     </message>
@@ -8550,8 +8563,8 @@ Vuoi specificare un'altra cartella?</translation>
       <translation>Esportazione PDF...</translation>
     </message>
     <message>
+      <location filename="../MainWindow.cpp" line="692"/>
       <location filename="../CommandDoc.cpp" line="1189"/>
-      <location filename="../MainWindow.cpp" line="702"/>
       <source>Unsaved document</source>
       <translation>Documento non salvato</translation>
     </message>
@@ -9116,7 +9129,7 @@ Aprire una finestra browser e scrivere http://localhost:%1.</translation>
       <translation>Impossibile trovare il file %1 nè in %2 nè in %3</translation>
     </message>
     <message>
-      <location filename="../NavigationStyle.cpp" line="1729"/>
+      <location filename="../NavigationStyle.cpp" line="1732"/>
       <source>Navigation styles</source>
       <translation>Stile di navigazione</translation>
     </message>
@@ -9137,32 +9150,32 @@ Aprire una finestra browser e scrivere http://localhost:%1.</translation>
       <translation>Vuoi chiudere questa finestra di dialogo?</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="704"/>
+      <location filename="../MainWindow.cpp" line="694"/>
       <source>Do you want to save your changes to document '%1' before closing?</source>
       <translation>Si desidera salvare le modifiche apportate al documento '%1' prima di chiuderlo?</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="707"/>
+      <location filename="../MainWindow.cpp" line="697"/>
       <source>Do you want to save your changes to document before closing?</source>
       <translation>Salvare le modifiche apportate al documento prima di chiuderlo?</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="709"/>
+      <location filename="../MainWindow.cpp" line="699"/>
       <source>If you don't save, your changes will be lost.</source>
       <translation>Se non vengono salvate, le modifiche andranno perse.</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="714"/>
+      <location filename="../MainWindow.cpp" line="704"/>
       <source>Apply answer to all</source>
       <translation>Applica la risposta a tutti</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="804"/>
+      <location filename="../MainWindow.cpp" line="794"/>
       <source>%1 Document(s) not saved</source>
       <translation>%1 Documento(i) non salvato</translation>
     </message>
     <message>
-      <location filename="../MainWindow.cpp" line="805"/>
+      <location filename="../MainWindow.cpp" line="795"/>
       <source>Some documents could not be saved. Do you want to cancel closing?</source>
       <translation>Alcuni documenti non possono essere salvati. Vuoi annullare la chiusura?</translation>
     </message>
@@ -9293,8 +9306,8 @@ e sottolineato e non deve iniziare con un numero.</translation>
       <translation>Impossibile aggiungere la proprietà a '%1': %2</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="2059"/>
-      <location filename="../Tree.cpp" line="2255"/>
+      <location filename="../Tree.cpp" line="2079"/>
+      <location filename="../Tree.cpp" line="2275"/>
       <source>Drag &amp; drop failed</source>
       <translation>Trascinamento della selezione non riuscito</translation>
     </message>
@@ -10344,8 +10357,8 @@ la copia corrente andranno perse.
       <translation>Crea un documento vuoto</translation>
     </message>
     <message>
+      <location filename="../MainWindow.cpp" line="2043"/>
       <location filename="../DocumentRecovery.cpp" line="393"/>
-      <location filename="../MainWindow.cpp" line="2053"/>
       <source>Unnamed</source>
       <translation>Senza nome</translation>
     </message>
@@ -12248,27 +12261,27 @@ Si desidera ancora procedere?</translation>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="67"/>
       <source>Additional data sources</source>
-      <translation type="unfinished">Additional data sources</translation>
+      <translation>Fonti dati aggiuntive</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="73"/>
       <source>Errors intended for developers will appear in the notification area</source>
-      <translation type="unfinished">Errors intended for developers will appear in the notification area</translation>
+      <translation>Gli errori destinati agli sviluppatori appariranno nell'area di notifica</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="76"/>
       <source>Debug errors</source>
-      <translation type="unfinished">Debug errors</translation>
+      <translation>Errori di debug</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="92"/>
       <source>Warnings intended for developers will appear in the notification area</source>
-      <translation type="unfinished">Warnings intended for developers will appear in the notification area</translation>
+      <translation>Gli avvisi destinati agli sviluppatori appariranno nell'area di notifica</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="95"/>
       <source>Debug warnings</source>
-      <translation type="unfinished">Debug warnings</translation>
+      <translation>Avvertimenti di debug</translation>
     </message>
     <message>
       <location filename="../DlgSettingsNotificationArea.ui" line="114"/>
@@ -12718,12 +12731,12 @@ dopo l'avvio di FreeCAD</translation>
   <context>
     <name>NaviCubeDraggableCmd</name>
     <message>
-      <location filename="../NaviCube.cpp" line="1093"/>
+      <location filename="../NaviCube.cpp" line="1092"/>
       <source>Movable navigation cube</source>
       <translation>Cubo di navigazione mobile</translation>
     </message>
     <message>
-      <location filename="../NaviCube.cpp" line="1094"/>
+      <location filename="../NaviCube.cpp" line="1093"/>
       <source>Drag and place NaviCube</source>
       <translation>Trascina e posiziona il Cubo di navigazione</translation>
     </message>
@@ -12731,32 +12744,32 @@ dopo l'avvio di FreeCAD</translation>
   <context>
     <name>NaviCubeSettings</name>
     <message>
-      <location filename="../View3DSettings.cpp" line="545"/>
+      <location filename="../View3DSettings.cpp" line="533"/>
       <source>FRONT</source>
       <translation>AVANTI</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="547"/>
+      <location filename="../View3DSettings.cpp" line="535"/>
       <source>TOP</source>
       <translation>SOPRA</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="549"/>
+      <location filename="../View3DSettings.cpp" line="537"/>
       <source>RIGHT</source>
       <translation>DESTRA</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="551"/>
+      <location filename="../View3DSettings.cpp" line="539"/>
       <source>REAR</source>
       <translation>DIETRO</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="553"/>
+      <location filename="../View3DSettings.cpp" line="541"/>
       <source>BOTTOM</source>
       <translation>SOTTO</translation>
     </message>
     <message>
-      <location filename="../View3DSettings.cpp" line="555"/>
+      <location filename="../View3DSettings.cpp" line="543"/>
       <source>LEFT</source>
       <translation>SINISTRA</translation>
     </message>
@@ -12767,7 +12780,7 @@ dopo l'avvio di FreeCAD</translation>
       <location filename="../Widgets.cpp" line="1600"/>
       <location filename="../Widgets.cpp" line="1667"/>
       <source>An error occurred -- see Report View for information</source>
-      <translation type="unfinished">An error occurred -- see Report View for information</translation>
+      <translation>Si è verificato un errore -- vedere Report View per informazioni</translation>
     </message>
   </context>
 </TS>

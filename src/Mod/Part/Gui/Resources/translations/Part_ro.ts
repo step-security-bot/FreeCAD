@@ -5707,8 +5707,8 @@ in vizualizarea 3D pentru calea maturarii.</translation>
     <message>
       <location filename="../../../BasicShapes/ViewProviderShapes.py" line="47"/>
       <location filename="../../../BasicShapes/ViewProviderShapes.py" line="54"/>
-      <location filename="../../ViewProvider.cpp" line="53"/>
       <location filename="../../ViewProviderPrimitive.cpp" line="56"/>
+      <location filename="../../ViewProvider.cpp" line="53"/>
       <source>Edit %1</source>
       <translation>Editare %1</translation>
     </message>
@@ -5799,20 +5799,20 @@ Do you want to continue?</source>
       <translation>Nicio referință selecționată</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="75"/>
       <location filename="../../TaskCheckGeometry.cpp" line="81"/>
+      <location filename="../../TaskAttacher.cpp" line="75"/>
       <source>Face</source>
       <translation>Faţă</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="78"/>
       <location filename="../../TaskCheckGeometry.cpp" line="83"/>
+      <location filename="../../TaskAttacher.cpp" line="78"/>
       <source>Edge</source>
       <translation>Margine</translation>
     </message>
     <message>
-      <location filename="../../TaskAttacher.cpp" line="81"/>
       <location filename="../../TaskCheckGeometry.cpp" line="84"/>
+      <location filename="../../TaskAttacher.cpp" line="81"/>
       <source>Vertex</source>
       <translation type="unfinished">Vertex</translation>
     </message>
@@ -6029,62 +6029,62 @@ Do you want to continue?</source>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="159"/>
       <source>Boolean operation: Unknown check</source>
-      <translation type="unfinished">Boolean operation: Unknown check</translation>
+      <translation>Operație booleană: Verificare necunoscută</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="160"/>
       <source>Boolean operation: Bad type</source>
-      <translation type="unfinished">Boolean operation: Bad type</translation>
+      <translation>Operație booleană: Tip incorect</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="161"/>
       <source>Boolean operation: Self-intersection found</source>
-      <translation type="unfinished">Boolean operation: Self-intersection found</translation>
+      <translation>Operație booleană: S-a găsit o auto-intersecție</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="162"/>
       <source>Boolean operation: Edge too small</source>
-      <translation type="unfinished">Boolean operation: Edge too small</translation>
+      <translation>Operație booleană: Margine prea mică</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="163"/>
       <source>Boolean operation: Non-recoverable face</source>
-      <translation type="unfinished">Boolean operation: Non-recoverable face</translation>
+      <translation>Operație booleană: Față irecuperabilă</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="164"/>
       <source>Boolean operation: Incompatibility of vertex</source>
-      <translation type="unfinished">Boolean operation: Incompatibility of vertex</translation>
+      <translation>Operație booleană: Incompatibilitate a vârfului</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="165"/>
       <source>Boolean operation: Incompatibility of edge</source>
-      <translation type="unfinished">Boolean operation: Incompatibility of edge</translation>
+      <translation>Operație booleană: Incompatibilitate a muchiei</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="166"/>
       <source>Boolean operation: Incompatibility of face</source>
-      <translation type="unfinished">Boolean operation: Incompatibility of face</translation>
+      <translation>Operație booleană: Incompatibilitate a feței</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="167"/>
       <source>Boolean operation: Aborted</source>
-      <translation type="unfinished">Boolean operation: Aborted</translation>
+      <translation>Operație booleană: Anulată</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="168"/>
       <source>Boolean operation: GeomAbs_C0</source>
-      <translation type="unfinished">Boolean operation: GeomAbs_C0</translation>
+      <translation>Operație booleană: GeomAbs_C0</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="169"/>
       <source>Boolean operation: Invalid curve on surface</source>
-      <translation type="unfinished">Boolean operation: Invalid curve on surface</translation>
+      <translation>Operație booleană: Curbă invalidă pe suprafață</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="170"/>
       <source>Boolean operation: Not valid</source>
-      <translation type="unfinished">Boolean operation: Not valid</translation>
+      <translation>Operație booleană: Nevalidă</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="699"/>
