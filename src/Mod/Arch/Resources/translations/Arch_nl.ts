@@ -269,7 +269,7 @@ Laat deze leeg om alle objecten uit het document te gebruiken</translation>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="118"/>
       <source>If this is enabled, additional lines will be filled with each object considered. If not, only the totals.</source>
-      <translation type="unfinished">If this is enabled, additional lines will be filled with each object considered. If not, only the totals.</translation>
+      <translation>Als dit is ingeschakeld worden er extra regels gevuld met elk overwogen object. Zo niet, dan alleen het totaal.</translation>
     </message>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="121"/>
@@ -279,7 +279,7 @@ Laat deze leeg om alle objecten uit het document te gebruiken</translation>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="128"/>
       <source>If this is enabled, the schedule and the associated spreadsheet are updated whenever the document is recomputed.</source>
-      <translation type="unfinished">If this is enabled, the schedule and the associated spreadsheet are updated whenever the document is recomputed.</translation>
+      <translation>Als dit is ingeschakeld worden het schema en het bijbehorende rekenblad bijgewerkt wanneer het document wordt herberekend.</translation>
     </message>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="131"/>
@@ -319,12 +319,12 @@ Laat deze leeg om alle objecten uit het document te gebruiken</translation>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="184"/>
       <source>Put selected objects into the 'Objects' column of the selected row</source>
-      <translation type="unfinished">Put selected objects into the 'Objects' column of the selected row</translation>
+      <translation>Plaats de geselecteerde objecten in de kolom 'Objecten' van de geselecteerde rij</translation>
     </message>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="208"/>
       <source>This exports the results to a CSV or Markdown file. Note for CSV export: In Libreoffice, you can keep this CSV file linked by right-clicking the Sheets tab bar, New sheet, From file, Link (Note: as of LibreOffice v6.x the correct path now is: Sheet, Insert Sheet..., From file, Browse...)</source>
-      <translation type="unfinished">This exports the results to a CSV or Markdown file. Note for CSV export: In Libreoffice, you can keep this CSV file linked by right-clicking the Sheets tab bar, New sheet, From file, Link (Note: as of LibreOffice v6.x the correct path now is: Sheet, Insert Sheet..., From file, Browse...)</translation>
+      <translation>Dit exporteert de resultaten naar een CSV- of Markdown-bestand. Opmerking voor de CSV-export: In Libreoffice kunt u dit CSV-bestand gekoppeld houden door met de rechtermuisknop te klikken op de tabbalk Bladen - Nieuw werkblad - Vanuit bestand - Link (Opmerking: vanaf LibreOffice v6.x is het juiste pad: Bladen - Werkblad invoegen... - Vanuit bestand - Bladeren...)</translation>
     </message>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="187"/>
@@ -1748,7 +1748,7 @@ Echter, sommige BIM programma's zullen deze conversie factor gebruiken bij het k
       <location filename="../../ArchStructure.py" line="128"/>
       <location filename="../../ArchStructure.py" line="434"/>
       <source>Column</source>
-      <translation type="unfinished">Column</translation>
+      <translation>Kolom</translation>
     </message>
     <message>
       <location filename="../../ArchStructure.py" line="150"/>
@@ -1779,7 +1779,7 @@ Echter, sommige BIM programma's zullen deze conversie factor gebruiken bij het k
       <location filename="../../ArchStructure.py" line="301"/>
       <location filename="../../ArchStructure.py" line="345"/>
       <source>Create Structure</source>
-      <translation type="unfinished">Create Structure</translation>
+      <translation>Structuur aanmaken</translation>
     </message>
     <message>
       <location filename="../../ArchStructure.py" line="326"/>
@@ -1795,17 +1795,17 @@ Echter, sommige BIM programma's zullen deze conversie factor gebruiken bij het k
       <location filename="../../ArchStructure.py" line="341"/>
       <location filename="../../ArchWall.py" line="385"/>
       <source>Next point</source>
-      <translation type="unfinished">Next point</translation>
+      <translation>Volgend punt</translation>
     </message>
     <message>
       <location filename="../../ArchStructure.py" line="428"/>
       <source>Structure options</source>
-      <translation type="unfinished">Structure options</translation>
+      <translation>Structuuropties</translation>
     </message>
     <message>
       <location filename="../../ArchStructure.py" line="432"/>
       <source>Drawing mode</source>
-      <translation type="unfinished">Drawing mode</translation>
+      <translation>Tekenmodus</translation>
     </message>
     <message>
       <location filename="../../ArchStructure.py" line="444"/>
@@ -2099,17 +2099,17 @@ Echter, sommige BIM programma's zullen deze conversie factor gebruiken bij het k
     <message>
       <location filename="../../ArchProfile.py" line="140"/>
       <source>Create profile</source>
-      <translation type="unfinished">Create profile</translation>
+      <translation>Profiel aanmaken</translation>
     </message>
     <message>
       <location filename="../../ArchProfile.py" line="148"/>
       <source>Profile settings</source>
-      <translation type="unfinished">Profile settings</translation>
+      <translation>Profielinstellingen</translation>
     </message>
     <message>
       <location filename="../../ArchProfile.py" line="194"/>
       <source>Create Profile</source>
-      <translation type="unfinished">Create Profile</translation>
+      <translation>Profiel aanmaken</translation>
     </message>
     <message>
       <location filename="../../ArchProfile.py" line="610"/>
@@ -2210,7 +2210,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchRoof.py" line="1013"/>
       <source>Angle (deg)</source>
-      <translation type="unfinished">Angle (deg)</translation>
+      <translation>Hoek (graden)</translation>
     </message>
     <message>
       <location filename="../../ArchRoof.py" line="1014"/>
@@ -2225,7 +2225,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchRoof.py" line="1016"/>
       <source>Thickness (mm)</source>
-      <translation type="unfinished">Thickness (mm)</translation>
+      <translation>Dikte (mm)</translation>
     </message>
     <message>
       <location filename="../../ArchRoof.py" line="1017"/>
@@ -2235,10 +2235,10 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchRoof.py" line="1018"/>
       <source>Height (mm)</source>
-      <translation type="unfinished">Height (mm)</translation>
+      <translation>Hoogte (mm)</translation>
     </message>
     <message>
-      <location filename="../../ArchWindowPresets.py" line="505"/>
+      <location filename="../../ArchWindowPresets.py" line="510"/>
       <source>Door</source>
       <translation type="unfinished">Door</translation>
     </message>
@@ -2265,7 +2265,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchCutPlane.py" line="190"/>
       <source>Behind</source>
-      <translation type="unfinished">Behind</translation>
+      <translation>Achter</translation>
     </message>
     <message>
       <location filename="../../ArchCutPlane.py" line="191"/>
@@ -2320,7 +2320,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../importSHP.py" line="109"/>
       <source>No shape found in this file</source>
-      <translation type="unfinished">No shape found in this file</translation>
+      <translation>Geen vorm gevonden in dit bestand</translation>
     </message>
     <message>
       <location filename="../../importSHP.py" line="134"/>
@@ -2490,7 +2490,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
       <location filename="../../ArchWindow.py" line="1794"/>
       <location filename="../../ArchWindow.py" line="1799"/>
       <source>Wires</source>
-      <translation type="unfinished">Wires</translation>
+      <translation>Draden</translation>
     </message>
     <message>
       <location filename="../../ArchWindow.py" line="1795"/>
@@ -2834,7 +2834,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchGrid.py" line="432"/>
       <source>Columns</source>
-      <translation type="unfinished">Columns</translation>
+      <translation>Kolommen</translation>
     </message>
     <message>
       <location filename="../../ArchPrecast.py" line="1004"/>
@@ -2874,7 +2874,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchPrecast.py" line="1011"/>
       <source>Number of holes</source>
-      <translation type="unfinished">Number of holes</translation>
+      <translation>Aantal gaten</translation>
     </message>
     <message>
       <location filename="../../ArchPrecast.py" line="1012"/>
@@ -2959,7 +2959,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchPrecast.py" line="1415"/>
       <source>Level</source>
-      <translation type="unfinished">Level</translation>
+      <translation>Niveau</translation>
     </message>
     <message>
       <location filename="../../ArchPrecast.py" line="1416"/>
@@ -3107,7 +3107,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchPipe.py" line="315"/>
       <source>The profile is not closed</source>
-      <translation type="unfinished">The profile is not closed</translation>
+      <translation>Het profiel is niet gesloten</translation>
     </message>
     <message>
       <location filename="../../ArchPipe.py" line="386"/>
@@ -3153,7 +3153,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchSchedule.py" line="462"/>
       <source>Attach spreadsheet</source>
-      <translation type="unfinished">Attach spreadsheet</translation>
+      <translation>Rekenblad bijvoegen</translation>
     </message>
     <message>
       <location filename="../../ArchSchedule.py" line="588"/>
@@ -3196,7 +3196,7 @@ If Run = 0 then the run is calculated so that the height is the same as the rela
     <message>
       <location filename="../../ArchSchedule.py" line="744"/>
       <source>Schedule</source>
-      <translation type="unfinished">Schedule</translation>
+      <translation>Planning</translation>
     </message>
     <message>
       <location filename="../../ArchFloor.py" line="154"/>
@@ -3311,17 +3311,17 @@ Floor creation aborted.</translation>
       <location filename="../../ArchComponent.py" line="1944"/>
       <location filename="../../ArchCommands.py" line="216"/>
       <source>Component</source>
-      <translation type="unfinished">Component</translation>
+      <translation>Onderdeel</translation>
     </message>
     <message>
       <location filename="../../ArchComponent.py" line="1947"/>
       <source>Components of this object</source>
-      <translation type="unfinished">Components of this object</translation>
+      <translation>Onderdelen van dit object</translation>
     </message>
     <message>
       <location filename="../../ArchComponent.py" line="1948"/>
       <source>Base component</source>
-      <translation type="unfinished">Base component</translation>
+      <translation>Basiscomponent</translation>
     </message>
     <message>
       <location filename="../../ArchComponent.py" line="1949"/>
@@ -3371,12 +3371,12 @@ Floor creation aborted.</translation>
     <message>
       <location filename="../../ArchComponent.py" line="2012"/>
       <source>Add property...</source>
-      <translation type="unfinished">Add property...</translation>
+      <translation>Voeg eigenschap toe...</translation>
     </message>
     <message>
       <location filename="../../ArchComponent.py" line="2013"/>
       <source>Add property set...</source>
-      <translation type="unfinished">Add property set...</translation>
+      <translation>Voeg eigenschapset toe...</translation>
     </message>
     <message>
       <location filename="../../ArchComponent.py" line="2014"/>
@@ -3386,12 +3386,12 @@ Floor creation aborted.</translation>
     <message>
       <location filename="../../ArchComponent.py" line="2152"/>
       <source>New property</source>
-      <translation type="unfinished">New property</translation>
+      <translation>Nieuwe eigenschap</translation>
     </message>
     <message>
       <location filename="../../ArchComponent.py" line="2187"/>
       <source>New property set</source>
-      <translation type="unfinished">New property set</translation>
+      <translation>Nieuwe eigenschapset</translation>
     </message>
     <message>
       <location filename="../../ArchRebar.py" line="64"/>
@@ -3457,7 +3457,7 @@ Floor creation aborted.</translation>
     <message>
       <location filename="../../ArchSectionPlane.py" line="1376"/>
       <source>Rotate X</source>
-      <translation type="unfinished">Rotate X</translation>
+      <translation>Rotatie X</translation>
     </message>
     <message>
       <location filename="../../ArchSectionPlane.py" line="1377"/>
@@ -3467,7 +3467,7 @@ Floor creation aborted.</translation>
     <message>
       <location filename="../../ArchSectionPlane.py" line="1378"/>
       <source>Rotate Y</source>
-      <translation type="unfinished">Rotate Y</translation>
+      <translation>Rotatie Y</translation>
     </message>
     <message>
       <location filename="../../ArchSectionPlane.py" line="1379"/>
@@ -3477,7 +3477,7 @@ Floor creation aborted.</translation>
     <message>
       <location filename="../../ArchSectionPlane.py" line="1380"/>
       <source>Rotate Z</source>
-      <translation type="unfinished">Rotate Z</translation>
+      <translation>Rotatie Z</translation>
     </message>
     <message>
       <location filename="../../ArchSectionPlane.py" line="1381"/>
@@ -3487,7 +3487,7 @@ Floor creation aborted.</translation>
     <message>
       <location filename="../../ArchSectionPlane.py" line="1382"/>
       <source>Resize</source>
-      <translation type="unfinished">Resize</translation>
+      <translation>Formaat wijzigen</translation>
     </message>
     <message>
       <location filename="../../ArchSectionPlane.py" line="1383"/>
@@ -3663,12 +3663,12 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="696"/>
       <source>is not closed</source>
-      <translation type="unfinished">is not closed</translation>
+      <translation>is niet gesloten</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="698"/>
       <source>is not valid</source>
-      <translation type="unfinished">is not valid</translation>
+      <translation>is niet geldig</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="700"/>
@@ -3693,7 +3693,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1010"/>
       <source>Set description</source>
-      <translation type="unfinished">Set description</translation>
+      <translation>Beschrijving instellen</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="1011"/>
@@ -3703,7 +3703,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1012"/>
       <source>Copy Length</source>
-      <translation type="unfinished">Copy Length</translation>
+      <translation>Lengte kopiëren</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="1013"/>
@@ -3785,7 +3785,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1635"/>
       <source>Key</source>
-      <translation type="unfinished">Key</translation>
+      <translation>Sleutel</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="1645"/>
@@ -4084,7 +4084,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchBuildingPart.py" line="558"/>
       <source>If true, show the level</source>
-      <translation type="unfinished">If true, show the level</translation>
+      <translation>Wanneer waar, toon het niveau</translation>
     </message>
     <message>
       <location filename="../../ArchBuildingPart.py" line="561"/>
@@ -4376,7 +4376,7 @@ Building creation aborted.</translation>
       <location filename="../../ArchSite.py" line="645"/>
       <location filename="../../ArchIFC.py" line="70"/>
       <source>The type of this object</source>
-      <translation type="unfinished">The type of this object</translation>
+      <translation>Het type van dit object</translation>
     </message>
     <message>
       <location filename="../../ArchSite.py" line="649"/>
@@ -5154,7 +5154,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchPanel.py" line="824"/>
       <source>The linked object</source>
-      <translation type="unfinished">The linked object</translation>
+      <translation>Het gekoppelde object</translation>
     </message>
     <message>
       <location filename="../../ArchPanel.py" line="829"/>
@@ -5431,22 +5431,22 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchSchedule.py" line="126"/>
       <source>The values column</source>
-      <translation type="unfinished">The values column</translation>
+      <translation>De waardenkolom</translation>
     </message>
     <message>
       <location filename="../../ArchSchedule.py" line="128"/>
       <source>The units column</source>
-      <translation type="unfinished">The units column</translation>
+      <translation>De eenhedenkolom</translation>
     </message>
     <message>
       <location filename="../../ArchSchedule.py" line="130"/>
       <source>The objects column</source>
-      <translation type="unfinished">The objects column</translation>
+      <translation>De objectenkolom</translation>
     </message>
     <message>
       <location filename="../../ArchSchedule.py" line="132"/>
       <source>The filter column</source>
-      <translation type="unfinished">The filter column</translation>
+      <translation>De filterkolom</translation>
     </message>
     <message>
       <location filename="../../ArchSchedule.py" line="134"/>
@@ -5512,7 +5512,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchAxis.py" line="233"/>
       <source>The numbering style</source>
-      <translation type="unfinished">The numbering style</translation>
+      <translation>De nummeringsstijl</translation>
     </message>
     <message>
       <location filename="../../ArchAxis.py" line="237"/>
@@ -5547,12 +5547,12 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchAxis.py" line="256"/>
       <source>The font size</source>
-      <translation type="unfinished">The font size</translation>
+      <translation>De groote van het lettertype</translation>
     </message>
     <message>
       <location filename="../../ArchAxis.py" line="259"/>
       <source>If true, show the labels</source>
-      <translation type="unfinished">If true, show the labels</translation>
+      <translation>Indien waar, toon de labels</translation>
     </message>
     <message>
       <location filename="../../ArchAxis.py" line="261"/>
@@ -5743,7 +5743,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchSectionPlane.py" line="954"/>
       <source>The color of this object</source>
-      <translation type="unfinished">The color of this object</translation>
+      <translation>De kleur van dit object</translation>
     </message>
     <message>
       <location filename="../../ArchSectionPlane.py" line="959"/>
@@ -5759,13 +5759,13 @@ Building creation aborted.</translation>
       <location filename="../../ArchSectionPlane.py" line="964"/>
       <location filename="../../ArchSpace.py" line="515"/>
       <source>The name of the font</source>
-      <translation type="unfinished">The name of the font</translation>
+      <translation>De naam van het lettertype</translation>
     </message>
     <message>
       <location filename="../../ArchSectionPlane.py" line="967"/>
       <location filename="../../ArchSpace.py" line="521"/>
       <source>The size of the text font</source>
-      <translation type="unfinished">The size of the text font</translation>
+      <translation>De grootte van het lettertype</translation>
     </message>
     <message>
       <location filename="../../ArchSpace.py" line="275"/>
@@ -6022,105 +6022,105 @@ Building creation aborted.</translation>
   <context>
     <name>Workbench</name>
     <message>
-      <location filename="../../InitGui.py" line="71"/>
+      <location filename="../../InitGui.py" line="78"/>
       <source>Structure tools</source>
       <translation type="unfinished">Structure tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="85"/>
+      <location filename="../../InitGui.py" line="92"/>
       <source>Axis tools</source>
       <translation type="unfinished">Axis tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="91"/>
+      <location filename="../../InitGui.py" line="98"/>
       <source>Panel tools</source>
       <translation type="unfinished">Panel tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="99"/>
+      <location filename="../../InitGui.py" line="106"/>
       <source>Material tools</source>
       <translation type="unfinished">Material tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="103"/>
+      <location filename="../../InitGui.py" line="110"/>
       <source>Pipe tools</source>
       <translation type="unfinished">Pipe tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="145"/>
+      <location filename="../../InitGui.py" line="152"/>
       <source>Rebar tools</source>
       <translation type="unfinished">Rebar tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="160"/>
+      <location filename="../../InitGui.py" line="167"/>
       <source>Arch tools</source>
       <translation type="unfinished">Arch tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="163"/>
+      <location filename="../../InitGui.py" line="170"/>
       <source>Draft creation tools</source>
       <translation type="unfinished">Draft creation tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="166"/>
+      <location filename="../../InitGui.py" line="173"/>
       <source>Draft annotation tools</source>
       <translation type="unfinished">Draft annotation tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="169"/>
+      <location filename="../../InitGui.py" line="176"/>
       <source>Draft modification tools</source>
       <translation type="unfinished">Draft modification tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="172"/>
+      <location filename="../../InitGui.py" line="179"/>
       <source>Draft snap</source>
       <translation type="unfinished">Draft snap</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="177"/>
-      <location filename="../../InitGui.py" line="181"/>
+      <location filename="../../InitGui.py" line="184"/>
+      <location filename="../../InitGui.py" line="188"/>
       <source>&amp;Arch</source>
       <translation type="unfinished">&amp;Arch</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="178"/>
-      <location filename="../../InitGui.py" line="197"/>
+      <location filename="../../InitGui.py" line="185"/>
+      <location filename="../../InitGui.py" line="204"/>
       <source>Utilities</source>
       <translation>Hulpmiddelen</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="184"/>
-      <location filename="../../InitGui.py" line="188"/>
-      <location filename="../../InitGui.py" line="192"/>
-      <location filename="../../InitGui.py" line="196"/>
+      <location filename="../../InitGui.py" line="191"/>
+      <location filename="../../InitGui.py" line="195"/>
+      <location filename="../../InitGui.py" line="199"/>
+      <location filename="../../InitGui.py" line="203"/>
       <source>&amp;Draft</source>
       <translation type="unfinished">&amp;Draft</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="185"/>
+      <location filename="../../InitGui.py" line="192"/>
       <source>Creation</source>
-      <translation type="unfinished">Creation</translation>
+      <translation>Creatie</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="189"/>
+      <location filename="../../InitGui.py" line="196"/>
       <source>Annotation</source>
       <translation>Aantekening</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="193"/>
+      <location filename="../../InitGui.py" line="200"/>
       <source>Modification</source>
-      <translation type="unfinished">Modification</translation>
+      <translation>Wijziging</translation>
     </message>
   </context>
   <context>
     <name>Arch_RebarTools</name>
     <message>
-      <location filename="../../InitGui.py" line="137"/>
+      <location filename="../../InitGui.py" line="144"/>
       <source>Rebar tools</source>
       <translation type="unfinished">Rebar tools</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="142"/>
+      <location filename="../../InitGui.py" line="149"/>
       <source>Create various types of rebars, including U-shaped, L-shaped, and stirrup</source>
       <translation type="unfinished">Create various types of rebars, including U-shaped, L-shaped, and stirrup</translation>
     </message>
@@ -6135,7 +6135,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchProfile.py" line="128"/>
       <source>Creates a profile</source>
-      <translation type="unfinished">Creates a profile</translation>
+      <translation>Maakt een profiel aan</translation>
     </message>
   </context>
   <context>
@@ -6529,7 +6529,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchSchedule.py" line="60"/>
       <source>Schedule</source>
-      <translation type="unfinished">Schedule</translation>
+      <translation>Planning</translation>
     </message>
     <message>
       <location filename="../../ArchSchedule.py" line="63"/>
@@ -6542,7 +6542,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchFloor.py" line="116"/>
       <source>Level</source>
-      <translation type="unfinished">Level</translation>
+      <translation>Niveau</translation>
     </message>
     <message>
       <location filename="../../ArchFloor.py" line="120"/>
@@ -6642,7 +6642,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1340"/>
       <source>Add component</source>
-      <translation type="unfinished">Add component</translation>
+      <translation>Onderdeel toevoegen</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="1343"/>
@@ -6720,7 +6720,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1511"/>
       <source>Close holes</source>
-      <translation type="unfinished">Close holes</translation>
+      <translation>Sluit gaten</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="1514"/>
@@ -6733,7 +6733,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1528"/>
       <source>Check</source>
-      <translation type="unfinished">Check</translation>
+      <translation>Controleer</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="1531"/>
@@ -6772,7 +6772,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1579"/>
       <source>Component</source>
-      <translation type="unfinished">Component</translation>
+      <translation>Onderdeel</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="1583"/>
@@ -6832,23 +6832,23 @@ Building creation aborted.</translation>
   <context>
     <name>QObject</name>
     <message>
-      <location filename="../../InitGui.py" line="206"/>
-      <location filename="../../InitGui.py" line="207"/>
+      <location filename="../../InitGui.py" line="213"/>
+      <location filename="../../InitGui.py" line="214"/>
       <source>Arch</source>
       <translation>Boog</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="210"/>
-      <location filename="../../InitGui.py" line="211"/>
-      <location filename="../../InitGui.py" line="212"/>
-      <location filename="../../InitGui.py" line="213"/>
+      <location filename="../../InitGui.py" line="217"/>
+      <location filename="../../InitGui.py" line="218"/>
+      <location filename="../../InitGui.py" line="219"/>
+      <location filename="../../InitGui.py" line="220"/>
       <source>Draft</source>
       <translation>Schets</translation>
     </message>
     <message>
-      <location filename="../../InitGui.py" line="249"/>
-      <location filename="../../InitGui.py" line="250"/>
-      <location filename="../../InitGui.py" line="251"/>
+      <location filename="../../InitGui.py" line="256"/>
+      <location filename="../../InitGui.py" line="257"/>
+      <location filename="../../InitGui.py" line="258"/>
       <source>Import-Export</source>
       <translation>Importeren-Exporteren</translation>
     </message>
