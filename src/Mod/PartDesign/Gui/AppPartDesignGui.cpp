@@ -64,9 +64,9 @@
 
 
 // use a different name to CreateCommand()
-void CreatePartDesignCommands(void);
-void CreatePartDesignBodyCommands(void);
-void CreatePartDesignPrimitiveCommands(void);
+void CreatePartDesignCommands();
+void CreatePartDesignBodyCommands();
+void CreatePartDesignPrimitiveCommands();
 
 void loadPartDesignResource()
 {
@@ -84,8 +84,6 @@ public:
     {
         initialize("This module is the PartDesignGui module."); // register with Python
     }
-
-    ~Module() override {}
 
 private:
 };

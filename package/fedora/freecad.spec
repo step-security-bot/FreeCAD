@@ -33,7 +33,7 @@
 
 Name:           %{name}
 Epoch:          1
-Version:        0.21
+Version:        0.22
 Release:        pre_{{{git_commit_no}}}%{?dist}
 Summary:        A general purpose 3D CAD modeler
 Group:          Applications/Engineering
@@ -315,7 +315,7 @@ done
 
 %check
 desktop-file-validate \
-    %{buildroot}%{_datadir}/applications/org.freecadweb.FreeCAD.desktop
+    %{buildroot}%{_datadir}/applications/org.freecad.FreeCAD.desktop
 %{?fedora:appstream-util validate-relax --nonet \
     %{buildroot}%{_metainfodir}/*.appdata.xml}
 

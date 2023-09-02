@@ -63,7 +63,7 @@ DocumentObjectExecReturn *DocumentObject::StdReturn = nullptr;
 //===========================================================================
 
 DocumentObject::DocumentObject()
-    : ExpressionEngine(),_pDoc(nullptr),pcNameInDocument(nullptr),_Id(0)
+    : ExpressionEngine()
 {
     // define Label of type 'Output' to avoid being marked as touched after relabeling
     ADD_PROPERTY_TYPE(Label,("Unnamed"),"Base",Prop_Output,"User name of the object (UTF8)");
@@ -312,7 +312,7 @@ int DocumentObject::isExporting() const {
 
 std::string DocumentObject::getExportName(bool forced) const {
     if(!pcNameInDocument)
-        return std::string();
+        return {};
 
     if(!forced && !isExporting())
         return *pcNameInDocument;
@@ -1130,7 +1130,7 @@ DocumentObject *DocumentObject::resolve(const char *subname,
             auto sobj = getSubObject(std::string(subname,dot-subname+1).c_str());
             if(sobj!=obj) {
                 if(parent) {
-                    // Link/LinkGroup has special visiblility handling of plain
+                    // Link/LinkGroup has special visibility handling of plain
                     // group, so keep ascending
                     if(!sobj->hasExtension(GroupExtension::getExtensionClassTypeId(),false)) {
                         *parent = sobj;

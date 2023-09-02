@@ -47,7 +47,7 @@ FC_LOG_LEVEL_INIT("App::Link", true,true)
 
 using namespace App;
 using namespace Base;
-namespace bp = boost::placeholders;
+namespace sp = std::placeholders;
 
 using CharRange = boost::iterator_range<const char*>;
 
@@ -81,8 +81,7 @@ public:
     }
 
     // Auto generated code. See class document of LinkParams.
-    ~LinkParamsP() override {
-    }
+    ~LinkParamsP() override = default;
 
     // Auto generated code. See class document of LinkParams.
     void OnChange(Base::Subject<const char*> &, const char* sReason) override {
@@ -149,7 +148,6 @@ void LinkParams::removeCopyOnChangeApplyToAll() {
 EXTENSION_PROPERTY_SOURCE(App::LinkBaseExtension, App::DocumentObjectExtension)
 
 LinkBaseExtension::LinkBaseExtension()
-    :enableLabelCache(false),hasOldSubElement(false),hasCopyOnChange(true)
 {
     initExtensionType(LinkBaseExtension::getExtensionClassTypeId());
     EXTENSION_ADD_PROPERTY_TYPE(_LinkTouched, (false), " Link",
@@ -160,10 +158,6 @@ LinkBaseExtension::LinkBaseExtension()
     EXTENSION_ADD_PROPERTY_TYPE(_LinkOwner, (0), " Link",
             PropertyType(Prop_Hidden|Prop_Output),0);
     props.resize(PropMax,nullptr);
-}
-
-LinkBaseExtension::~LinkBaseExtension()
-{
 }
 
 PyObject* LinkBaseExtension::getExtensionPyObject() {
@@ -583,8 +577,8 @@ void LinkBaseExtension::syncCopyOnChange()
     // the mutated object. The reason for doing so is that we are copying from
     // the original linked object and its dependency, not the mutated objects
     // which are old copies. There could be arbitrary changes in the originals
-    // which may add or remove or change dependending orders, while the
-    // replacement happen between the new and old copies.
+    // which may add or remove or change depending orders, while the
+    // replacement happens between the new and old copies.
 
     std::map<Base::Uuid, App::DocumentObjectT> newObjs;
     for (auto obj : copiedObjs) {
@@ -1539,8 +1533,10 @@ void LinkBaseExtension::updateGroup() {
             if(!conn.connected()) {
                 FC_LOG("new group connection " << getExtendedObject()->getFullName()
                         << " -> " << group->getFullName());
+                //NOLINTBEGIN
                 conn = group->signalChanged.connect(
-                        boost::bind(&LinkBaseExtension::slotChangedPlainGroup,this,bp::_1,bp::_2));
+                        std::bind(&LinkBaseExtension::slotChangedPlainGroup,this,sp::_1,sp::_2));
+                //NOLINTEND
             }
             std::size_t count = children.size();
             ext->getAllChildren(children,childSet);
@@ -1553,8 +1549,10 @@ void LinkBaseExtension::updateGroup() {
                 if(!conn.connected()) {
                     FC_LOG("new group connection " << getExtendedObject()->getFullName()
                             << " -> " << child->getFullName());
+                    //NOLINTBEGIN
                     conn = child->signalChanged.connect(
-                            boost::bind(&LinkBaseExtension::slotChangedPlainGroup,this,bp::_1,bp::_2));
+                            std::bind(&LinkBaseExtension::slotChangedPlainGroup,this,sp::_1,sp::_2));
+                    //NOLINTEND
                 }
             }
         }
@@ -1611,8 +1609,8 @@ void LinkBaseExtension::update(App::DocumentObject *parent, const Property *prop
             placements.reserve(objs.size());
             std::vector<Base::Vector3d> scales;
             scales.reserve(objs.size());
-            for(size_t i=0;i<objs.size();++i) {
-                auto element = freecad_dynamic_cast<LinkElement>(objs[i]);
+            for(auto obj : objs) {
+                auto element = freecad_dynamic_cast<LinkElement>(obj);
                 if(element) {
                     placements.push_back(element->Placement.getValue());
                     scales.push_back(element->getScaleVector());
@@ -1883,8 +1881,8 @@ void LinkBaseExtension::syncElementList() {
     auto owner = getContainer();
     auto ownerID = owner?owner->getID():0;
     auto elements = getElementListValue();
-    for (size_t i = 0; i < elements.size(); ++i) {
-        auto element = freecad_dynamic_cast<LinkElement>(elements[i]);
+    for (auto i : elements) {
+        auto element = freecad_dynamic_cast<LinkElement>(i);
         if (!element
             || (element->_LinkOwner.getValue()
                 && element->_LinkOwner.getValue() != ownerID))
@@ -2229,10 +2227,6 @@ LinkExtension::LinkExtension()
     initExtensionType(LinkExtension::getExtensionClassTypeId());
 
     LINK_PROPS_ADD_EXTENSION(LINK_PARAMS_EXT);
-}
-
-LinkExtension::~LinkExtension()
-{
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////

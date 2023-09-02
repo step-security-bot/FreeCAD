@@ -45,8 +45,8 @@ using namespace zipios;
 // It does not check if the character is valid utf8 or not.
 struct cdata_filter {
 
-    typedef char char_type;
-    typedef boost::iostreams::output_filter_tag category;
+    using char_type = char;
+    using category = boost::iostreams::output_filter_tag;
 
     template<typename Device>
     inline bool put(Device& dev, char c) {
@@ -77,10 +77,6 @@ struct cdata_filter {
 // ---------------------------------------------------------------------------
 
 Writer::Writer()
-  : indent(0)
-  , indBuf{}
-  , forceXML(false)
-  , fileVersion(1)
 {
     indBuf[0] = '\0';
 }
@@ -133,7 +129,7 @@ void Writer::insertAsciiFile(const char* FileName)
         throw Base::FileException("Writer::insertAsciiFile() Could not open file!");
 
     Stream() << "<![CDATA[";
-    char ch;
+    char ch{};
     while (from.get(ch))
         Stream().put(ch);
     Stream() << "]]>" << endl;
@@ -150,6 +146,7 @@ void Writer::insertBinFile(const char* FileName)
     std::ifstream::pos_type fileSize = from.tellg();
     from.seekg(0, std::ios::beg);
     std::vector<unsigned char> bytes(static_cast<size_t>(fileSize));
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     from.read(reinterpret_cast<char*>(&bytes[0]), fileSize);
     Stream() << Base::base64_encode(&bytes[0], static_cast<unsigned int>(fileSize));
     Stream() << "]]>" << endl;

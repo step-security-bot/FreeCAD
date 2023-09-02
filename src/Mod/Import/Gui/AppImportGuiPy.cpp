@@ -98,6 +98,7 @@
 #include <App/Document.h>
 #include <App/DocumentObjectPy.h>
 #include <Base/Console.h>
+#include <Base/PyWrapParseTupleAndKeywords.h>
 #include <Gui/Application.h>
 #include <Gui/Command.h>
 #include <Gui/Document.h>
@@ -372,8 +373,6 @@ public:
         initialize("This module is the ImportGui module."); // register with Python
     }
 
-    ~Module() override {}
-
 private:
     Py::Object insert(const Py::Tuple& args, const Py::Dict &kwds)
     {
@@ -383,11 +382,14 @@ private:
         PyObject *merge = Py_None;
         PyObject *useLinkGroup = Py_None;
         int mode = -1;
-        static char* kwd_list[] = {"name","docName","importHidden","merge","useLinkGroup","mode",nullptr};
-        if (!PyArg_ParseTupleAndKeywords(args.ptr(), kwds.ptr(), "et|sO!O!O!i",
-                    kwd_list,"utf-8",&Name,&DocName,&PyBool_Type,&importHidden,&PyBool_Type,&merge,
-                    &PyBool_Type,&useLinkGroup,&mode))
+        static const std::array<const char *, 7> kwd_list{"name", "docName", "importHidden", "merge", "useLinkGroup",
+                                                          "mode", nullptr};
+        if (!Base::Wrapped_ParseTupleAndKeywords(args.ptr(), kwds.ptr(), "et|sO!O!O!i",
+                                                 kwd_list, "utf-8", &Name, &DocName, &PyBool_Type, &importHidden,
+                                                 &PyBool_Type, &merge,
+                                                 &PyBool_Type, &useLinkGroup, &mode)) {
             throw Py::Exception();
+        }
 
         std::string Utf8Name = std::string(Name);
         PyMem_Free(Name);
@@ -412,7 +414,7 @@ private:
             FC_TIME_INIT(t);
             FC_DURATION_DECL_INIT2(d1,d2);
 
-            if (file.hasExtension("stp") || file.hasExtension("step")) {
+            if (file.hasExtension({"stp", "step"})) {
 
                 if(mode<0)
                     mode = ocaf.getMode();
@@ -451,7 +453,7 @@ private:
                     pcDoc->recompute();
                 }
             }
-            else if (file.hasExtension("igs") || file.hasExtension("iges")) {
+            else if (file.hasExtension({"igs", "iges"})) {
                 Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter()
                     .GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("Mod/Part")->GetGroup("IGES");
 
@@ -534,7 +536,7 @@ private:
         auto vp = Gui::Application::Instance->getViewProvider(obj);
         if(vp)
             return vp->getElementColors(subname);
-        return std::map<std::string,App::Color>();
+        return {};
     }
 
     Py::Object exportOptions(const Py::Tuple& args)
@@ -550,7 +552,7 @@ private:
         Py::Dict options;
         Base::FileInfo file(name8bit.c_str());
 
-        if (file.hasExtension("stp") || file.hasExtension("step")) {
+        if (file.hasExtension({"stp", "step"})) {
             PartGui::TaskExportStep dlg(Gui::getMainWindow());
             if (!dlg.showDialog() || dlg.exec()) {
                 auto stepSettings = dlg.getSettings();
@@ -571,15 +573,17 @@ private:
         PyObject *pyexportHidden = Py_None;
         PyObject *pylegacy = Py_None;
         PyObject *pykeepPlacement = Py_None;
-        static char* kwd_list[] = {"obj", "name", "options", "exportHidden", "legacy", "keepPlacement", nullptr};
-        if (!PyArg_ParseTupleAndKeywords(args.ptr(), kwds.ptr(), "Oet|O!O!O!O!",
-                                         kwd_list, &object,
-                                         "utf-8", &Name,
-                                         &PyDict_Type, &pyoptions,
-                                         &PyBool_Type, &pyexportHidden,
-                                         &PyBool_Type, &pylegacy,
-                                         &PyBool_Type, &pykeepPlacement))
+        static const std::array<const char *, 7> kwd_list{"obj", "name", "options", "exportHidden", "legacy",
+                                                          "keepPlacement", nullptr};
+        if (!Base::Wrapped_ParseTupleAndKeywords(args.ptr(), kwds.ptr(), "Oet|O!O!O!O!",
+                                                 kwd_list, &object,
+                                                 "utf-8", &Name,
+                                                 &PyDict_Type, &pyoptions,
+                                                 &PyBool_Type, &pyexportHidden,
+                                                 &PyBool_Type, &pylegacy,
+                                                 &PyBool_Type, &pykeepPlacement)) {
             throw Py::Exception();
+        }
 
         std::string Utf8Name = std::string(Name);
         PyMem_Free(Name);
@@ -652,7 +656,7 @@ private:
             }
 
             Base::FileInfo file(Utf8Name.c_str());
-            if (file.hasExtension("stp") || file.hasExtension("step")) {
+            if (file.hasExtension({"stp", "step"})) {
                 ParameterGrp::handle hGrp_stp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Mod/Part/STEP");
                 std::string scheme = hGrp_stp->GetASCII("Scheme", Part::Interface::writeStepScheme());
                 std::list<std::string> supported = Part::supportedSTEPSchemes();
@@ -681,7 +685,7 @@ private:
                     throw Py::Exception();
                 }
             }
-            else if (file.hasExtension("igs") || file.hasExtension("iges")) {
+            else if (file.hasExtension({"igs", "iges"})) {
                 IGESControl_Controller::Init();
                 IGESCAFControl_Writer writer;
                 IGESData_GlobalSection header = writer.Model()->GlobalSection();
@@ -696,7 +700,7 @@ private:
                     throw Py::Exception();
                 }
             }
-            else if (file.hasExtension("glb") || file.hasExtension("gltf")) {
+            else if (file.hasExtension({"glb", "gltf"})) {
 #if OCC_VERSION_HEX >= 0x070500
                 TColStd_IndexedDataMapOfStringString aMetadata;
                 RWGltf_CafWriter aWriter (name8bit.c_str(), file.hasExtension("glb"));
@@ -742,7 +746,7 @@ private:
             Handle(TDocStd_Document) hDoc;
             hApp->NewDocument(TCollection_ExtendedString("MDTV-CAF"), hDoc);
 
-            if (file.hasExtension("stp") || file.hasExtension("step")) {
+            if (file.hasExtension({"stp", "step"})) {
                 STEPCAFControl_Reader aReader;
                 aReader.SetColorMode(true);
                 aReader.SetNameMode(true);
@@ -763,7 +767,7 @@ private:
                 pi->EndScope();
 #endif
             }
-            else if (file.hasExtension("igs") || file.hasExtension("iges")) {
+            else if (file.hasExtension({"igs", "iges"})) {
                 Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter()
                     .GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("Mod/Part")->GetGroup("IGES");
                 IGESControl_Controller::Init();

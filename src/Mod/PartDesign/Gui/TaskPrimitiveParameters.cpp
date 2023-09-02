@@ -936,10 +936,7 @@ TaskPrimitiveParameters::TaskPrimitiveParameters(ViewProviderPrimitive* Primitiv
     Content.push_back(parameter);
 }
 
-TaskPrimitiveParameters::~TaskPrimitiveParameters()
-{
-
-}
+TaskPrimitiveParameters::~TaskPrimitiveParameters() = default;
 
 bool TaskPrimitiveParameters::accept()
 {
@@ -961,7 +958,7 @@ bool TaskPrimitiveParameters::reject()
     return true;
 }
 
-QDialogButtonBox::StandardButtons TaskPrimitiveParameters::getStandardButtons(void) const {
+QDialogButtonBox::StandardButtons TaskPrimitiveParameters::getStandardButtons() const {
     return Gui::TaskView::TaskDialog::getStandardButtons();
 }
 

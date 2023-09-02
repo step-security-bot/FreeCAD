@@ -42,7 +42,7 @@
 #include "Workbench.h"
 
  // use a different name to CreateCommand()
-void CreateSpreadsheetCommands(void);
+void CreateSpreadsheetCommands();
 
 void loadSpreadsheetResource()
 {
@@ -62,8 +62,6 @@ namespace SpreadsheetGui {
             );
             initialize("This module is the SpreadsheetGui module."); // register with Python
         }
-
-        ~Module() override {}
 
     private:
         Py::Object open(const Py::Tuple& args)

@@ -72,11 +72,12 @@
 #include "Workbench.h"
 
 
+// clang-format off
 FC_LOG_LEVEL_INIT("Sketch", true, true)
 
 using namespace SketcherGui;
 using namespace Sketcher;
-namespace bp = boost::placeholders;
+namespace sp = std::placeholders;
 
 /************** ViewProviderSketch::ParameterObserver *********************/
 
@@ -1639,6 +1640,12 @@ void ViewProviderSketch::moveConstraint(int constNum, const Base::Vector2d& toPo
                     const Part::GeomCircle* circleSeg1 = static_cast<const Part::GeomCircle*>(geo1);
                     const Part::GeomCircle* circleSeg2 = static_cast<const Part::GeomCircle*>(geo);
                     GetCirclesMinimalDistance(circleSeg1, circleSeg2, p1, p2);
+                } else if (Constr->FirstPos != Sketcher::PointPos::none) { //point to circle distance
+                    auto circleSeg2 = static_cast<const Part::GeomCircle*>(geo);
+                    p1 = getSolvedSketch().getPoint(Constr->First, Constr->FirstPos);
+                    Base::Vector3d v = p1 - circleSeg2->getCenter();
+                    v = v.Normalize();
+                    p2 = circleSeg2->getCenter() + circleSeg2->getRadius() * v;
                 }
             }
             else
@@ -3231,10 +3238,12 @@ bool ViewProviderSketch::setEdit(int ModNum)
     // a draw(true) via ViewProvider::UpdateData.
     getSketchObject()->solve(true);
 
+    //NOLINTBEGIN
     connectUndoDocument = getDocument()->signalUndoDocument.connect(
-        boost::bind(&ViewProviderSketch::slotUndoDocument, this, bp::_1));
+        std::bind(&ViewProviderSketch::slotUndoDocument, this, sp::_1));
     connectRedoDocument = getDocument()->signalRedoDocument.connect(
-        boost::bind(&ViewProviderSketch::slotRedoDocument, this, bp::_1));
+        std::bind(&ViewProviderSketch::slotRedoDocument, this, sp::_1));
+    //NOLINTEND
 
     // Enable solver initial solution update while dragging.
     getSketchObject()->setRecalculateInitialSolutionWhileMovingPoint(
@@ -4137,3 +4146,4 @@ bool ViewProviderSketch::isInEditMode() const
 {
     return editCoinManager != nullptr;
 }
+// clang-format on

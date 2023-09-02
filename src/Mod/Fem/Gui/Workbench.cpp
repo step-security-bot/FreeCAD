@@ -83,13 +83,9 @@ using namespace FemGui;
 /// @namespace FemGui @class Workbench
 TYPESYSTEM_SOURCE(FemGui::Workbench, Gui::StdWorkbench)
 
-Workbench::Workbench()
-{
-}
+Workbench::Workbench() = default;
 
-Workbench::~Workbench()
-{
-}
+Workbench::~Workbench() = default;
 
 void Workbench::setupContextMenu(const char* recipient, Gui::MenuItem* item) const
 {
@@ -301,14 +297,14 @@ Gui::MenuItem* Workbench::setupMenuBar() const
         << "FEM_ConstraintTemperature"
         << "FEM_ConstraintBodyHeatSource";
 
-    Gui::MenuItem* nosolver = new Gui::MenuItem;
-    nosolver->setCommand("&Constraints without solver");
-    *nosolver
-        << "FEM_ConstraintFluidBoundary"
-        << "Separator"
-        << "FEM_ConstraintBearing"
-        << "FEM_ConstraintGear"
-        << "FEM_ConstraintPulley";
+//    Gui::MenuItem* nosolver = new Gui::MenuItem;
+//    nosolver->setCommand("&Constraints without solver");
+//    *nosolver
+//        << "FEM_ConstraintFluidBoundary"
+//        << "Separator"
+//        << "FEM_ConstraintBearing"
+//        << "FEM_ConstraintGear"
+//        << "FEM_ConstraintPulley";
 
     Gui::MenuItem* constants = new Gui::MenuItem;
     constants->setCommand("&Overwrite Constants");
@@ -329,8 +325,8 @@ Gui::MenuItem* Workbench::setupMenuBar() const
         << mech
         << thermal
         << "Separator"
-        << nosolver
-        << "Separator"
+//        << nosolver
+//        << "Separator"
         << constants;
 
     Gui::MenuItem* mesh = new Gui::MenuItem;
