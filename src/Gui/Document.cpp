@@ -105,6 +105,9 @@ struct DocumentP
     std::map<SoSeparator *,ViewProviderDocumentObject*> _CoinMap;
     std::map<std::string,ViewProvider*> _ViewProviderMapAnnotation;
     std::list<ViewProviderDocumentObject*> _redoViewProviders;
+    
+    int projectUnitSystem = -1;
+    bool projectUnitSystemIgnore = false;
 
     using Connection = boost::signals2::connection;
     Connection connectNewObject;
@@ -624,7 +627,7 @@ void Document::setShow(const char* name)
 {
     ViewProvider* pcProv = getViewProviderByName(name);
 
-    if (pcProv && pcProv->getTypeId().isDerivedFrom(ViewProviderDocumentObject::getClassTypeId())) {
+    if (pcProv && pcProv->isDerivedFrom<ViewProviderDocumentObject>()) {
         static_cast<ViewProviderDocumentObject*>(pcProv)->Visibility.setValue(true);
     }
 }
@@ -634,7 +637,7 @@ void Document::setHide(const char* name)
 {
     ViewProvider* pcProv = getViewProviderByName(name);
 
-    if (pcProv && pcProv->getTypeId().isDerivedFrom(ViewProviderDocumentObject::getClassTypeId())) {
+    if (pcProv && pcProv->isDerivedFrom<ViewProviderDocumentObject>()) {
         static_cast<ViewProviderDocumentObject*>(pcProv)->Visibility.setValue(false);
     }
 }
@@ -648,6 +651,30 @@ void Document::setPos(const char* name, const Base::Matrix4D& rclMtrx)
 
 }
 
+void Document::setProjectUnitSystem(int pUS)
+{
+    if (pUS != d->projectUnitSystem && pUS >= 0) {
+        d->projectUnitSystem = pUS;
+        setModified(true);
+    }
+}
+
+int Document::getProjectUnitSystem() const
+{
+    return d->projectUnitSystem;
+}
+
+void Document::setProjectUnitSystemIgnore(bool ignore)
+{
+    d->projectUnitSystemIgnore = ignore;
+    setModified(true);
+}
+
+bool Document::getProjectUnitSystemIgnore() const
+{
+    return d->projectUnitSystemIgnore;
+}
+
 //*****************************************************************************************************
 // Document
 //*****************************************************************************************************
@@ -655,7 +682,6 @@ void Document::slotNewObject(const App::DocumentObject& Obj)
 {
     auto pcProvider = static_cast<ViewProviderDocumentObject*>(getViewProvider(&Obj));
     if (!pcProvider) {
-        //Base::Console().Log("Document::slotNewObject() called\n");
         std::string cName = Obj.getViewProviderNameStored();
         for(;;) {
             if (cName.empty()) {
@@ -738,7 +764,6 @@ void Document::slotDeletedObject(const App::DocumentObject& Obj)
 {
     std::list<Gui::BaseView*>::iterator vIt;
     setModified(true);
-    //Base::Console().Log("Document::slotDeleteObject() called\n");
 
     // cycling to all views of the document
     ViewProvider* viewProvider = getViewProvider(&Obj);
@@ -1358,7 +1383,7 @@ void Document::Save (Base::Writer &writer) const
             size = Base::clamp<int>(size, 64, 512);
             std::list<MDIView*> mdi = getMDIViews();
             for (const auto & it : mdi) {
-                if (it->getTypeId().isDerivedFrom(View3DInventor::getClassTypeId())) {
+                if (it->isDerivedFrom<View3DInventor>()) {
                     View3DInventorViewer* view = static_cast<View3DInventor*>(it)->getViewer();
                     d->thumb.setFileName(d->_pcDocument->FileName.getValue());
                     d->thumb.setSize(size);
@@ -1377,6 +1402,7 @@ void Document::Save (Base::Writer &writer) const
 void Document::Restore(Base::XMLReader &reader)
 {
     reader.addFile("GuiDocument.xml",this);
+
     // hide all elements to avoid to update the 3d view when loading data files
     // RestoreDocFile then restores the visibility status again
     std::map<const App::DocumentObject*,ViewProviderDocumentObject*>::iterator it;
@@ -1428,8 +1454,11 @@ void Document::RestoreDocFile(Base::Reader &reader)
                 }
             }
             ViewProvider* pObj = getViewProviderByName(name.c_str());
-            if (pObj) // check if this feature has been registered
+            // check if this feature has been registered
+            if (pObj){
                 pObj->Restore(*localreader);
+            }
+
             if (pObj && expanded) {
                 auto vp = static_cast<Gui::ViewProviderDocumentObject*>(pObj);
                 this->signalExpandObject(*vp, TreeItemMode::ExpandItem,0,0);
@@ -1456,12 +1485,19 @@ void Document::RestoreDocFile(Base::Reader &reader)
                 Base::Console().Error("%s\n", e.what());
             }
         }
+
+        if (localreader->readNextElement()) {
+            if (strcmp(localreader->localName(), "ProjectUnitSystem") == 0) {
+                d->projectUnitSystem = localreader->getAttributeAsInteger("US");
+                d->projectUnitSystemIgnore = localreader->getAttributeAsInteger("ignore");
+                localreader->readEndElement("Document");
+            }
+        }
     }
 
-    localreader->readEndElement("Document");
+    reader.initLocalReader(localreader);
 
     // reset modified flag
-    reader.initLocalReader(localreader);
     setModified(false);
 }
 
@@ -1515,7 +1551,7 @@ void Document::SaveDocFile (Base::Writer &writer) const
 {
     writer.Stream() << "<?xml version='1.0' encoding='utf-8'?>" << std::endl
                     << "<!--" << std::endl
-                    << " FreeCAD Document, see http://www.freecad.org for more information..."
+                    << " FreeCAD Document, see https://www.freecad.org for more information..."
                     << std::endl << "-->" << std::endl;
 
     writer.Stream() << "<Document SchemaVersion=\"1\"";
@@ -1578,6 +1614,15 @@ void Document::SaveDocFile (Base::Writer &writer) const
     writer.Stream() << writer.ind() << "<Camera settings=\""
         << encodeAttribute(getCameraSettings()) << "\"/>\n";
     writer.decInd(); // indentation for camera settings
+
+    if (d->projectUnitSystem >= 0) {
+        writer.incInd();
+        writer.Stream() << writer.ind() << "<ProjectUnitSystem US=\""
+                        << d->projectUnitSystem << "\" ignore=\""
+                        << d->projectUnitSystemIgnore << "\"/>\n";
+        writer.decInd();
+    }
+
     writer.Stream() << "</Document>" << std::endl;
 }
 
@@ -1776,7 +1821,6 @@ MDIView *Document::createView(const Base::Type& typeId)
 
         view3D->setWindowTitle(title);
         view3D->setWindowModified(this->isModified());
-        view3D->setWindowIcon(QApplication::windowIcon());
         view3D->resize(400, 300);
 
         if (!cameraSettings.empty()) {
@@ -1796,7 +1840,7 @@ Gui::MDIView* Document::cloneView(Gui::MDIView* oldview)
     if (!oldview)
         return nullptr;
 
-    if (oldview->getTypeId() == View3DInventor::getClassTypeId()) {
+    if (oldview->is<View3DInventor>()) {
         auto view3D = new View3DInventor(this, getMainWindow());
 
         auto firstView = static_cast<View3DInventor*>(oldview);

@@ -4,6 +4,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 files: |
     (?x)^(
+        src/Base|
         src/Tools|
         tests/src|
         src/Mod/AddonManager|
@@ -12,6 +13,7 @@ files: |
         src/Mod/Drawing|
         src/Mod/Fem/App|
         src/Mod/Fem/Gui|
+        src/Mod/Help|
         src/Mod/Import|
         src/Mod/Inspection|
         src/Mod/JtReader|

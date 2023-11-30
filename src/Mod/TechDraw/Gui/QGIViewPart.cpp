@@ -75,7 +75,7 @@ using DU = DrawUtil;
 
 const float lineScaleFactor = Rez::guiX(1.);// temp fiddle for devel
 
-QGIViewPart::QGIViewPart() : m_isExporting(false)
+QGIViewPart::QGIViewPart()
 {
     setCacheMode(QGraphicsItem::NoCache);
     setHandlesChildEvents(false);
@@ -192,14 +192,23 @@ void QGIViewPart::drawAllFaces(void)
     // dvp already validated
     auto dvp(static_cast<TechDraw::DrawViewPart*>(getViewObject()));
 
+    QColor faceColor;
+    auto vpp = dynamic_cast<ViewProviderViewPart *>(getViewProvider(getViewObject()));
+    if (vpp) {
+        faceColor = vpp->FaceColor.getValue().asValue<QColor>();
+        faceColor.setAlpha((100 - vpp->FaceTransparency.getValue())*255/100);
+    }
+
     std::vector<TechDraw::DrawHatch*> regularHatches = dvp->getHatches();
     std::vector<TechDraw::DrawGeomHatch*> geomHatches = dvp->getGeomHatches();
     const std::vector<TechDraw::FacePtr>& faceGeoms = dvp->getFaceGeometry();
     int iFace(0);
     for (auto& face : faceGeoms) {
         QGIFace* newFace = drawFace(face, iFace);
-        newFace->isHatched(false);
-        newFace->setFillMode(QGIFace::PlainFill);
+        if (faceColor.isValid()) {
+            newFace->setFillColor(faceColor);
+            newFace->setFillMode(faceColor.alpha() ? QGIFace::PlainFill : QGIFace::NoFill);
+        }
 
         TechDraw::DrawHatch* fHatch = faceIsHatched(iFace, regularHatches);
         TechDraw::DrawGeomHatch* fGeom = faceIsGeomHatched(iFace, geomHatches);
@@ -237,13 +246,7 @@ void QGIViewPart::drawAllFaces(void)
             if (fHatch->isSvgHatch()) {
                 // svg tile hatch
                 newFace->setFillMode(QGIFace::SvgFill);
-                if (getExporting()) {
-                    // SVG hatches don't work correctly when exported to PDF, so we need
-                    // to tell the face to use a bitmap substitution for the SVG
-                    newFace->hideSvg(true);
-                } else {
-                    newFace->hideSvg(false);
-                }
+                newFace->hideSvg(false);
             } else {
                 //bitmap hatch
                 newFace->setFillMode(QGIFace::BitmapFill);
@@ -355,23 +358,6 @@ void QGIViewPart::drawAllVertexes()
     auto dvp(static_cast<TechDraw::DrawViewPart*>(getViewObject()));
     auto vp(static_cast<ViewProviderViewPart*>(getViewProvider(getViewObject())));
 
-    bool showVertices = true;
-    bool showCenterMarks = true;
-    if (getFrameState()) {
-        //frames are on
-        if (dvp->CoarseView.getValue()) {
-            // don't show vertexes in CoarseView as there are too many
-            showVertices = false;
-        }
-    } else {
-        //frames are off
-        showVertices = false;
-    }
-
-    if (!vp->ArcCenterMarks.getValue()) {
-        showCenterMarks = false;
-    }
-
     float lineWidth = vp->LineWidth.getValue() * lineScaleFactor;     //thick
     double vertexScaleFactor = Preferences::getPreferenceGroup("General")->GetFloat("VertexScale", 3.0);
     QColor vertexColor = PreferencesGui::getAccessibleQColor(PreferencesGui::vertexQColor());
@@ -380,7 +366,7 @@ void QGIViewPart::drawAllVertexes()
     std::vector<TechDraw::VertexPtr>::const_iterator vert = verts.begin();
     for (int i = 0; vert != verts.end(); ++vert, i++) {
         if ((*vert)->isCenter()) {
-            if (showCenterMarks) {
+            if (showCenterMarks()) {
                 QGICMark* cmItem = new QGICMark(i);
                 addToGroup(cmItem);
                 cmItem->setPos(Rez::guiX((*vert)->x()), Rez::guiX((*vert)->y()));
@@ -391,7 +377,7 @@ void QGIViewPart::drawAllVertexes()
             }
         } else {
             //regular Vertex
-            if (showVertices) {
+            if (showVertices()) {
                 QGIVertex* item = new QGIVertex(i);
                 addToGroup(item);
                 item->setPos(Rez::guiX((*vert)->x()), Rez::guiX((*vert)->y()));
@@ -429,6 +415,51 @@ bool QGIViewPart::showThisEdge(BaseGeomPtr geom)
 
     return false;
 }
+
+// returns true if vertex dots should be shown
+bool QGIViewPart::showVertices()
+{
+    // dvp and vp already validated
+    auto dvp(static_cast<TechDraw::DrawViewPart*>(getViewObject()));
+
+    if (dvp->CoarseView.getValue()) {
+        // never show vertices in CoarseView
+        return false;
+    }
+    if (!getFrameState()) {
+        // frames are off, don't show vertices
+        return false;
+    }
+
+    return true;
+}
+
+
+// returns true if arc center marks should be shown
+bool QGIViewPart::showCenterMarks()
+{
+    // dvp and vp already validated
+    auto dvp(static_cast<TechDraw::DrawViewPart*>(getViewObject()));
+    auto vp(static_cast<ViewProviderViewPart*>(getViewProvider(dvp)));
+
+    if (!vp->ArcCenterMarks.getValue()) {
+        // no center marks if view property is false
+        return false;
+    }
+
+    if (getFrameState()) {
+        // frames are on and view property is true
+        return true;
+    }
+
+    if (prefPrintCenters()) {
+        // frames are off, view property is true and Print Center Marks is true
+        return true;
+    }
+
+    return false;
+}
+
 
 bool QGIViewPart::formatGeomFromCosmetic(std::string cTag, QGIEdge* item)
 {
@@ -839,8 +870,8 @@ void QGIViewPart::highlightMoved(QGIHighlight* highlight, QPointF newPos)
     App::Document* doc = getViewObject()->getDocument();
     App::DocumentObject* docObj = doc->getObject(highlightName.c_str());
     auto detail = dynamic_cast<DrawViewDetail*>(docObj);
-    auto oldAnchor = detail->AnchorPoint.getValue();
     if (detail) {
+        auto oldAnchor = detail->AnchorPoint.getValue();
         Base::Vector3d delta = Rez::appX(DrawUtil::toVector3d(newPos)) / getViewObject()->getScale();
         delta = DrawUtil::invertY(delta);
         detail->AnchorPoint.setValue(oldAnchor + delta);
@@ -940,7 +971,7 @@ void QGIViewPart::dumpPath(const char* text, QPainterPath path)
 {
     QPainterPath::Element elem;
     Base::Console().Message(">>>%s has %d elements\n", text, path.elementCount());
-    char* typeName;
+    const char* typeName;
     for (int iElem = 0; iElem < path.elementCount(); iElem++) {
         elem = path.elementAt(iElem);
         if (elem.isMoveTo()) {
@@ -976,6 +1007,8 @@ void QGIViewPart::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
 
     QGIView::paint(painter, &myOption, widget);
 }
+
+
 
 //QGIViewPart derived classes do not need a rotate view method as rotation is handled on App side.
 void QGIViewPart::rotateView() {}

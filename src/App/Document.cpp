@@ -833,10 +833,14 @@ Document::Document(const char* documentName)
     auto paramGrp {App::GetApplication().GetParameterGroupByPath(
         "User parameter:BaseApp/Preferences/Document")};
     auto index = static_cast<int>(paramGrp->GetInt("prefLicenseType", 0));
-    const char* name = App::licenseItems.at(index).at(App::posnOfFullName);
-    const char* url = App::licenseItems.at(index).at(App::posnOfUrl);
-    std::string licenseUrl = (paramGrp->GetASCII("prefLicenseUrl", url));
-
+    const char* name = "";
+    const char* url = "";
+    std::string licenseUrl = "";
+    if (index >= 0 && index < App::countOfLicenses) {
+        name = App::licenseItems.at(index).at(App::posnOfFullName);
+        url = App::licenseItems.at(index).at(App::posnOfUrl);
+        licenseUrl = (paramGrp->GetASCII("prefLicenseUrl", url));
+    }
     ADD_PROPERTY_TYPE(License, (name), 0, Prop_None, "License string of the Item");
     ADD_PROPERTY_TYPE(
         LicenseURL, (licenseUrl.c_str()), 0, Prop_None, "URL to the license text/contract");
@@ -1700,7 +1704,7 @@ private:
         Base::FileInfo tmp(sourcename);
         if (!tmp.renameFile(targetname.c_str())) {
             throw Base::FileException(
-                "Cannot rename tmp save file to project file", targetname);
+                "Cannot rename tmp save file to project file", Base::FileInfo(targetname));
         }
     }
     void applyTimeStamp(const std::string& sourcename, const std::string& targetname) {

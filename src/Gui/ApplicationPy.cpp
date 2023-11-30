@@ -66,6 +66,7 @@
 #include "WidgetFactory.h"
 #include "Workbench.h"
 #include "WorkbenchManager.h"
+#include "WorkbenchManipulatorPython.h"
 #include "Inventor/MarkerBitmaps.h"
 #include "Language/Translator.h"
 
@@ -355,6 +356,18 @@ PyMethodDef Application::Methods[] = {
    "removeDocumentObserver(obj) -> None\n"
    "\n"
    "Remove an added document observer.\n"
+   "\n"
+   "obj : object"},
+  {"addWorkbenchManipulator",  (PyCFunction) Application::sAddWbManipulator, METH_VARARGS,
+   "addWorkbenchManipulator(obj) -> None\n"
+   "\n"
+   "Add a workbench manipulator to modify a workbench when it is activated.\n"
+   "\n"
+   "obj : object"},
+  {"removeWorkbenchManipulator",  (PyCFunction) Application::sRemoveWbManipulator, METH_VARARGS,
+   "removeWorkbenchManipulator(obj) -> None\n"
+   "\n"
+   "Remove an added workbench manipulator.\n"
    "\n"
    "obj : object"},
   {"listUserEditModes", (PyCFunction) Application::sListUserEditModes, METH_VARARGS,
@@ -1428,6 +1441,7 @@ PyObject* Application::sGetMarkerIndex(PyObject * /*self*/, PyObject *args)
         std::list<std::pair<std::string, std::string> > markerList = {
             {"square", "DIAMOND_FILLED"},
             {"cross", "CROSS"},
+            {"hourglass", "HOURGLASS_FILLED"},
             {"plus", "PLUS"},
             {"empty", "SQUARE_LINE"},
             {"quad", "SQUARE_FILLED"},
@@ -1449,7 +1463,7 @@ PyObject* Application::sGetMarkerIndex(PyObject * /*self*/, PyObject *args)
             marker_arg = (*markerStyle).second;
 
         //get the marker size
-        int sizeList[]={5, 7, 9};
+        auto sizeList = Gui::Inventor::MarkerBitmaps::getSupportedSizes(marker_arg);
 
         if (std::find(std::begin(sizeList), std::end(sizeList), defSize) == std::end(sizeList))
             defSize = 9;
@@ -1476,7 +1490,8 @@ PyObject* Application::sReload(PyObject * /*self*/, PyObject *args)
 
 PyObject* Application::sLoadFile(PyObject * /*self*/, PyObject *args)
 {
-    const char *path, *mod = "";
+    const char *path = "";
+    const char *mod = "";
     if (!PyArg_ParseTuple(args, "s|s", &path, &mod))
         return nullptr;
 
@@ -1533,6 +1548,32 @@ PyObject* Application::sRemoveDocObserver(PyObject * /*self*/, PyObject *args)
     PY_CATCH;
 }
 
+PyObject* Application::sAddWbManipulator(PyObject * /*self*/, PyObject *args)
+{
+    PyObject* o;
+    if (!PyArg_ParseTuple(args, "O",&o))
+        return nullptr;
+
+    PY_TRY {
+        WorkbenchManipulatorPython::installManipulator(Py::Object(o));
+        Py_Return;
+    }
+    PY_CATCH;
+}
+
+PyObject* Application::sRemoveWbManipulator(PyObject * /*self*/, PyObject *args)
+{
+    PyObject* o;
+    if (!PyArg_ParseTuple(args, "O",&o))
+        return nullptr;
+
+    PY_TRY {
+        WorkbenchManipulatorPython::removeManipulator(Py::Object(o));
+        Py_Return;
+    }
+    PY_CATCH;
+}
+
 PyObject* Application::sCoinRemoveAllChildren(PyObject * /*self*/, PyObject *args)
 {
     PyObject *pynode;
@@ -1571,7 +1612,7 @@ PyObject* Application::sGetUserEditMode(PyObject * /*self*/, PyObject *args)
 
 PyObject* Application::sSetUserEditMode(PyObject * /*self*/, PyObject *args)
 {
-    char *mode = "";
+    const char *mode = "";
     if (!PyArg_ParseTuple(args, "s", &mode))
         return nullptr;
 

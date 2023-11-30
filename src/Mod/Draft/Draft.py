@@ -61,8 +61,7 @@ from draftutils.utils import (type_check,
                               set_param,
                               setParam,
                               precision,
-                              tolerance,
-                              epsilon)
+                              tolerance)
 
 from draftutils.utils import (get_real_name,
                               getRealName,
@@ -93,7 +92,8 @@ from draftutils.utils import (string_encode_coin,
                               get_rgb,
                               getrgb,
                               argb_to_rgba,
-                              rgba_to_argb)
+                              rgba_to_argb,
+                              get_rgba_tuple)
 
 from draftfunctions.svg import (get_svg,
                                 getSVG)
