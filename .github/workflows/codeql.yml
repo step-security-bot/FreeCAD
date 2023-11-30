@@ -46,6 +46,7 @@ jobs:
     - name: Install FreeCAD dependencies
       if: ${{ matrix.language == 'cpp' }}
       run: |
+        git submodule update --init
         sudo apt-get update -qq
         sudo apt-get install -y --no-install-recommends               \
                           doxygen                                     \
