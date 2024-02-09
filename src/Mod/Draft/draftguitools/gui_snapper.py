@@ -41,6 +41,7 @@ import math
 import pivy.coin as coin
 import PySide.QtCore as QtCore
 import PySide.QtGui as QtGui
+import PySide.QtWidgets as QtWidgets
 
 import FreeCAD as App
 import FreeCADGui as Gui
@@ -1139,7 +1140,7 @@ class Snapper:
 
     def get_quarter_widget(self, mw):
         views = []
-        for w in mw.findChild(QtGui.QMdiArea).findChildren(QtGui.QWidget):
+        for w in mw.findChild(QtWidgets.QMdiArea).findChildren(QtWidgets.QWidget):
             if w.inherits("SIM::Coin3D::Quarter::QuarterWidget"):
                 views.append(w)
         return views
@@ -1473,7 +1474,7 @@ class Snapper:
         """Get the snap toolbar."""
         if not (hasattr(self, "toolbar") and self.toolbar):
             mw = Gui.getMainWindow()
-            self.toolbar = mw.findChild(QtGui.QToolBar, "Draft snap")
+            self.toolbar = mw.findChild(QtWidgets.QToolBar, "Draft snap")
         if self.toolbar:
             return self.toolbar
 
@@ -1569,14 +1570,15 @@ class Snapper:
     def setGrid(self):
         """Set the grid, if visible."""
         self.setTrackers()
-        if self.grid.Visible:
-            self.grid.set()
 
 
     def setTrackers(self, update_grid=True):
         """Set the trackers."""
         v = Draft.get3DView()
-        if v and (v != self.activeview):
+        if v is None:
+            return
+
+        if v != self.activeview:
             if v in self.trackers[0]:
                 i = self.trackers[0].index(v)
                 self.grid = self.trackers[1][i]

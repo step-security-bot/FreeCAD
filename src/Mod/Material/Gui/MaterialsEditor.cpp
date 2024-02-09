@@ -31,9 +31,8 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QVariant>
-#endif
-
 #include <limits>
+#endif
 
 #include <App/Application.h>
 #include <App/License.h>
@@ -156,7 +155,7 @@ void MaterialsEditor::getFavorites()
     auto param = App::GetApplication().GetParameterGroupByPath(
         "User parameter:BaseApp/Preferences/Mod/Material/Favorites");
     int count = param->GetInt("Favorites", 0);
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; static_cast<long>(i) < count; i++) {
         QString key = QString::fromLatin1("FAV%1").arg(i);
         QString uuid = QString::fromStdString(param->GetASCII(key.toStdString().c_str(), ""));
         _favorites.push_back(uuid);
@@ -170,7 +169,7 @@ void MaterialsEditor::saveFavorites()
 
     // Clear out the existing favorites
     int count = param->GetInt("Favorites", 0);
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; static_cast<long>(i) < count; i++) {
         QString key = QString::fromLatin1("FAV%1").arg(i);
         param->RemoveASCII(key.toStdString().c_str());
     }
@@ -232,7 +231,7 @@ void MaterialsEditor::getRecents()
         "User parameter:BaseApp/Preferences/Mod/Material/Recent");
     _recentMax = param->GetInt("RecentMax", 5);
     int count = param->GetInt("Recent", 0);
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; static_cast<long>(i) < count; i++) {
         QString key = QString::fromLatin1("MRU%1").arg(i);
         QString uuid = QString::fromStdString(param->GetASCII(key.toStdString().c_str(), ""));
         _recents.push_back(uuid);
@@ -246,7 +245,7 @@ void MaterialsEditor::saveRecents()
 
     // Clear out the existing favorites
     int count = param->GetInt("Recent", 0);
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; static_cast<long>(i) < count; i++) {
         QString key = QString::fromLatin1("MRU%1").arg(i);
         param->RemoveASCII(key.toStdString().c_str());
     }
@@ -342,6 +341,7 @@ void MaterialsEditor::propertyChange(const QString& property, const QString valu
         _material->setAppearanceValue(property, value);
         updatePreview();
     }
+    update();
     _edited = true;
 }
 
@@ -514,6 +514,15 @@ void MaterialsEditor::onOk(bool checked)
 {
     Q_UNUSED(checked)
 
+    // Ensure data is saved (or discarded) before exiting
+    if (_material->getEditState() != Materials::Material::ModelEdit_None) {
+        // Prompt the user to save or discard changes
+        int res = confirmSave(this);
+        if (res == QMessageBox::Cancel) {
+            return;
+        }
+    }
+
     accept();
 }
 
@@ -606,7 +615,7 @@ void MaterialsEditor::saveMaterialTree(const Base::Reference<ParameterGrp>& para
     treeParam->Clear();
 
     auto tree = ui->treeMaterials;
-    auto model = static_cast<QStandardItemModel*>(tree->model());
+    auto model = dynamic_cast<QStandardItemModel*>(tree->model());
 
     auto root = model->invisibleRootItem();
     for (int i = 0; i < root->rowCount(); i++) {
@@ -796,7 +805,7 @@ void MaterialsEditor::fillMaterialTree()
         "User parameter:BaseApp/Preferences/Mod/Material/Editor/MaterialTree");
 
     auto tree = ui->treeMaterials;
-    auto model = static_cast<QStandardItemModel*>(tree->model());
+    auto model = dynamic_cast<QStandardItemModel*>(tree->model());
 
     auto lib = new QStandardItem(tr("Favorites"));
     lib->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
@@ -835,7 +844,7 @@ void MaterialsEditor::createMaterialTree()
 void MaterialsEditor::refreshMaterialTree()
 {
     auto tree = ui->treeMaterials;
-    auto model = static_cast<QStandardItemModel*>(tree->model());
+    auto model = dynamic_cast<QStandardItemModel*>(tree->model());
     model->clear();
 
     fillMaterialTree();
@@ -925,7 +934,7 @@ QString MaterialsEditor::getColorHash(const QString& colorString, int colorRange
 void MaterialsEditor::updateMaterialAppearance()
 {
     QTreeView* tree = ui->treeAppearance;
-    auto treeModel = static_cast<QStandardItemModel*>(tree->model());
+    auto treeModel = dynamic_cast<QStandardItemModel*>(tree->model());
     treeModel->clear();
 
     QStringList headers;
@@ -1099,7 +1108,7 @@ void MaterialsEditor::onSelectMaterial(const QItemSelection& selected,
 
     // Get the UUID before changing the underlying data model
     QString uuid;
-    auto model = static_cast<QStandardItemModel*>(ui->treeMaterials->model());
+    auto model = dynamic_cast<QStandardItemModel*>(ui->treeMaterials->model());
     QModelIndexList indexes = selected.indexes();
     for (auto it = indexes.begin(); it != indexes.end(); it++) {
         QStandardItem* item = model->itemFromIndex(*it);
@@ -1139,6 +1148,15 @@ void MaterialsEditor::onSelectMaterial(const QItemSelection& selected,
 void MaterialsEditor::onDoubleClick(const QModelIndex& index)
 {
     Q_UNUSED(index)
+
+    // Ensure data is saved (or discarded) before exiting
+    if (_material->getEditState() != Materials::Material::ModelEdit_None) {
+        // Prompt the user to save or discard changes
+        int res = confirmSave(this);
+        if (res == QMessageBox::Cancel) {
+            return;
+        }
+    }
 
     accept();
 }

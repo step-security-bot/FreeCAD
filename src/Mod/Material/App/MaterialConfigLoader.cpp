@@ -24,18 +24,17 @@
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QString>
-#endif
-
-#include <memory>
-
 #include <QFile>
 #include <QIODevice>
 #include <QTextStream>
 #include <QUuid>
+#include <memory>
+#include <fstream>
+#endif
+
 
 #include <App/Application.h>
 #include <Base/Interpreter.h>
-#include <fstream>
 
 
 #include "Exceptions.h"
@@ -82,8 +81,9 @@ bool MaterialConfigLoader::readFile(const QString& path, QMap<QString, QString>&
     QFile infile(path);
     if (infile.open(QIODevice::ReadOnly)) {
         QTextStream in(&infile);
+#if QT_VERSION < QT_VERSION_CHECK(6,0,0)
         in.setCodec("UTF-8");
-
+#endif
         QString line;
         QString prefix;
         while (!in.atEnd()) {

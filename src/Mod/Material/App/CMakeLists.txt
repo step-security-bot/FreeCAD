@@ -69,6 +69,8 @@ SET(Material_SRCS
     FolderTree.h
     MaterialConfigLoader.cpp
     MaterialConfigLoader.h
+    MaterialFilter.cpp
+    MaterialFilter.h
     MaterialLibrary.cpp
     MaterialLibrary.h
     MaterialLoader.cpp

@@ -40,6 +40,8 @@ namespace fs = boost::filesystem;
 namespace Materials
 {
 
+class MaterialFilter;
+
 class MaterialsExport MaterialManager: public Base::BaseClass
 {
     TYPESYSTEM_HEADER_WITH_OVERRIDE();
@@ -63,9 +65,10 @@ public:
     // Library management
     std::shared_ptr<std::list<std::shared_ptr<MaterialLibrary>>> getMaterialLibraries() const;
     std::shared_ptr<std::map<QString, std::shared_ptr<MaterialTreeNode>>>
-    getMaterialTree(const std::shared_ptr<MaterialLibrary>& library) const
+    getMaterialTree(const std::shared_ptr<MaterialLibrary>& library,
+                    const MaterialFilter* filter = nullptr) const
     {
-        return library->getMaterialTree();
+        return library->getMaterialTree(filter);
     }
     std::shared_ptr<std::list<QString>>
     getMaterialFolders(const std::shared_ptr<MaterialLibrary>& library) const;
@@ -82,6 +85,7 @@ public:
     void deleteRecursive(const std::shared_ptr<MaterialLibrary>& library, const QString& path) const
     {
         library->deleteRecursive(path);
+        dereference();
     }
     void remove(const QString& uuid) const
     {
@@ -103,6 +107,7 @@ public:
     std::shared_ptr<std::map<QString, std::shared_ptr<Material>>>
     materialsWithModelComplete(const QString& uuid) const;
     void dereference(std::shared_ptr<Material> material) const;
+    void dereference() const;
 
 private:
     static std::shared_ptr<std::list<std::shared_ptr<MaterialLibrary>>> _libraryList;

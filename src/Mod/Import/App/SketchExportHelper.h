@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (c) 2022 Werner Mayer <wmayer[at]users.sourceforge.net>     *
+ *   Copyright (c) 2024 WandererFan <wandererfan@gmail.com>                *
  *                                                                         *
  *   This file is part of the FreeCAD CAx development system.              *
  *                                                                         *
@@ -20,17 +20,27 @@
  *                                                                         *
  ***************************************************************************/
 
+//! a class to assist with exporting sketches to dxf
 
-#include "PreCompiled.h"
+#include <Mod/Import/ImportGlobal.h>
 
-#include "Mutex.h"
+#include <TopoDS_Shape.hxx>
+#include <gp_Ax2.hxx>
 
+namespace App
+{
+class DocumentObject;
+}
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-QRecursiveMutex::QRecursiveMutex()
-    : QMutex(QMutex::Recursive)
-{}
+namespace Import
+{
 
-QRecursiveMutex::~QRecursiveMutex()
-{}
-#endif
+class ImportExport SketchExportHelper
+{
+public:
+    static TopoDS_Shape projectShape(const TopoDS_Shape& inShape, const gp_Ax2& projectionCS);
+    static bool isSketch(App::DocumentObject* obj);
+    static TopoDS_Shape getFlatSketchXY(App::DocumentObject* obj);
+};
+
+}  // namespace Import

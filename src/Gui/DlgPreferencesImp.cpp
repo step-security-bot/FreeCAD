@@ -56,6 +56,28 @@
 
 using namespace Gui::Dialog;
 
+bool isParentOf(const QModelIndex& parent, const QModelIndex& child)
+{
+    for (auto it = child; it.isValid(); it = it.parent()) {
+        if (it == parent) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+QModelIndex findRootIndex(const QModelIndex& index)
+{
+    auto root = index;
+
+    while (root.parent().isValid()) {
+        root = root.parent();
+    }
+
+    return root;
+}
+
 QWidget* PreferencesPageItem::getWidget() const
 {
     return _widget;
@@ -178,7 +200,7 @@ void DlgPreferencesImp::setupPages()
         }
     }
 
-    updatePageDependentLabels();
+    updatePageDependentWidgets();
 }
 
 QPixmap DlgPreferencesImp::loadIconForGroup(const std::string &name) const
@@ -317,11 +339,16 @@ void DlgPreferencesImp::createPageInGroup(PreferencesPageItem *groupItem, const 
     }
 }
 
-void DlgPreferencesImp::updatePageDependentLabels()
+void DlgPreferencesImp::updatePageDependentWidgets()
 {
     auto currentPageItem = getCurrentPage();
 
+    // update header of the page
     ui->headerLabel->setText(currentPageItem->text());
+
+    // reset scroll area to start position
+    ui->scrollArea->horizontalScrollBar()->setValue(0);
+    ui->scrollArea->verticalScrollBar()->setValue(0);
 }
 
 /**
@@ -430,7 +457,7 @@ void DlgPreferencesImp::activateGroupPage(const QString& group, int index)
             ui->groupWidgetStack->setCurrentWidget(pageStackWidget);
             pageStackWidget->setCurrentIndex(index);
 
-            updatePageDependentLabels();
+            updatePageDependentWidgets();
             
             return;
         }
@@ -709,17 +736,6 @@ void DlgPreferencesImp::showEvent(QShowEvent* ev)
     }
 }
 
-QModelIndex findRootIndex(const QModelIndex& index)
-{
-    auto root = index;
-
-    while (root.parent().isValid()) {
-        root = root.parent();
-    }
-    
-    return root;
-}
-
 void DlgPreferencesImp::onPageSelected(const QModelIndex& index)
 {
     auto* currentItem = static_cast<PreferencesPageItem*>(_model.itemFromIndex(index));
@@ -745,7 +761,7 @@ void DlgPreferencesImp::onPageSelected(const QModelIndex& index)
         pagesStackWidget->setCurrentIndex(index.row());
     }
 
-    updatePageDependentLabels();
+    updatePageDependentWidgets();
 }
 
 void DlgPreferencesImp::onGroupExpanded(const QModelIndex& index)
@@ -785,14 +801,20 @@ void DlgPreferencesImp::onStackWidgetChange(int index)
         return;
     }
 
-    ui->groupsTreeView->selectionModel()->select(currentItem->index(), QItemSelectionModel::ClearAndSelect);
+    auto currentIndex = currentItem->index();
 
     auto root = _model.invisibleRootItem();
     for (int i = 0; i < root->rowCount(); i++) {
         auto currentGroup = static_cast<PreferencesPageItem*>(root->child(i));
+        auto currentGroupIndex = currentGroup->index();
+
+        // don't do anything to group of selected item
+        if (isParentOf(currentGroupIndex, currentIndex)) {
+            continue;
+        }
 
         if (!currentGroup->isExpanded()) {
-            ui->groupsTreeView->collapse(currentGroup->index());
+            ui->groupsTreeView->collapse(currentGroupIndex);
         }
     }
 
@@ -802,6 +824,8 @@ void DlgPreferencesImp::onStackWidgetChange(int index)
         ui->groupsTreeView->expand(parentItem->index());
         parentItem->setExpanded(wasExpanded);
     }
+    
+    ui->groupsTreeView->selectionModel()->select(currentIndex, QItemSelectionModel::ClearAndSelect);
 }
 
 void DlgPreferencesImp::changeEvent(QEvent *e)
@@ -824,7 +848,7 @@ void DlgPreferencesImp::changeEvent(QEvent *e)
             }
         }
 
-        updatePageDependentLabels();
+        updatePageDependentWidgets();
     } else {
         QWidget::changeEvent(e);
     }
@@ -861,6 +885,11 @@ void DlgPreferencesImp::restorePageDefaults(PreferencesPageItem* item)
         auto* page = qobject_cast<PreferencePage*>(item->getWidget());
 
         page->resetSettingsToDefaults();
+        /**
+         * Let's save the restart request before the page object is deleted and replaced with
+         * the newPage object (wich has restartRequired initialized to false)
+         */
+        restartRequired = restartRequired || page->isRestartRequired();
         
         std::string pageName = page->property(PageNameProperty).toString().toStdString();
         std::string groupName = page->property(GroupNameProperty).toString().toStdString();
