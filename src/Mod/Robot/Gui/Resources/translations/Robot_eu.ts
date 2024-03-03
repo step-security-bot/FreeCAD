@@ -474,7 +474,7 @@
       <translation>Hautatu jantzi nahi duzun ibilbidea.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Aldatu</translation>
     </message>

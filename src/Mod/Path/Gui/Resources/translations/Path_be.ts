@@ -4331,17 +4331,16 @@ For example:
     'Metric, Small Parts &amp; CNC'
     'US Customary'
     'Imperial Decimal'</source>
-      <translation type="unfinished">The currently selected unit schema: 
-     '{}' for this document
- Does not use 'minutes' for velocity values. 
- 
-CNC machines require feed rate to be expressed in 
-unit/minute. To ensure correct G-code: 
-Select a minute-based schema in preferences.
-For example:
-    'Metric, Small Parts &amp; CNC'
-    'US Customary'
-    'Imperial Decimal'</translation>
+      <translation>Абраная ў дадзены момант схема адзінкі вымярэння:
+ '{}' для дадзенага дакументу
+Не ўжывае 'хвіліны' для значэнняў хуткасці.
+
+Станкі з ЧПУ патрабуюць, каб хуткасць падачы выяўлялася ў адзінках вымярэння ў хвіліну. Каб забяспечыць правільны G-код:
+Абярыце схему, якая заснаваная на хвілінах, у перавагах.
+Напрыклад:
+ 'Метрыка, дробныя дэталі і CNC"
+ 'Традыцыйны ў ЗША'
+ "Імперскі дзесятковы дроб"</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Gui/JobDlg.py" line="71"/>
@@ -4380,34 +4379,34 @@ For example:
       <translation>Праект CAMotics (*.camotics)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="625"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="627"/>
       <source>H</source>
       <comment>H is horizontal feed rate. Must be as short as possible</comment>
       <translation>H</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="628"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="632"/>
       <source>V</source>
       <comment>V is vertical feed rate. Must be as short as possible</comment>
       <translation>V</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="633"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="637"/>
       <source>Tool number</source>
       <translation>Нумар інструмента</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="636"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="640"/>
       <source>Horizontal feedrate</source>
       <translation>Хуткасць гарызантальнай падачы</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="639"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="643"/>
       <source>Vertical feedrate</source>
       <translation>Хуткасць вертыкальнай падачы</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="642"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="646"/>
       <source>Spindle RPM</source>
       <translation>Частата кручэння шпіндаля</translation>
     </message>
@@ -5519,27 +5518,15 @@ For example:
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="186"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="265"/>
+      <location filename="../../../Path/Op/PocketBase.py" line="255"/>
       <source>Last Stepover Radius.  If 0, 50% of cutter is used. Tuning this can be used to improve stepover for some shapes</source>
       <translation>Радыус апошняга кроку. Калі ўжываюцца 0, 50% разца. Налада можна ўжываць для паляпшэння кропку для некаторых фігур</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="195"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="277"/>
+      <location filename="../../../Path/Op/PocketBase.py" line="267"/>
       <source>Skips machining regions that have already been cleared by previous operations.</source>
       <translation>Прапускаць вобласці апрацоўкі, якія ўжо былі ачышчаны папярэднімі аперацыямі.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/PocketBase.py" line="204"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="288"/>
-      <source>The areas cleared by this operation, one area per height, stored as a compound part. Used internally for rest machining.</source>
-      <translation>Вобласці, якія вычышчаныя з дапамогай аперацыі, па адной вобласці на вышыню, захоўваюцца як злучэнне дэталі.
-Ужываецца ўнутры для механічнай апрацоўкі дэталяў.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/PocketBase.py" line="299"/>
-      <source>Flag to indicate that the rest machining regions have never been computed, and must be recomputed before being used.</source>
-      <translation>Птушка, якая паказвае на тое, што вобласці механічнай апрацоўкі ніколі не вылічаліся і павінны быць пералічаныя перад ужываннем.</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Probe.py" line="55"/>
@@ -6445,57 +6432,57 @@ For example:
       <translation>Загатоўка не цыліндрычная!</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="920"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="943"/>
       <source>Select Output File</source>
       <translation>Абраць выходны файл</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="922"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="945"/>
       <source>All Files (*.*)</source>
       <translation>Усе файлы (*.*)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1303"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1326"/>
       <source>Unsupported stock object %s</source>
       <translation>Аб'ект загатоўкі %s не падтрымліваецца</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1319"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1342"/>
       <source>Unsupported stock type %s (%d)</source>
       <translation>Тып загатоўкі %s (%d) не падтрымліваецца</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1410"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1433"/>
       <source>Model Selection</source>
       <translation>Выбар мадэлі</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1598"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1621"/>
       <source>Warning</source>
       <translation>Папярэджанне</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1599"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1622"/>
       <source>Please add one.</source>
       <translation>Калі ласка, дадайце адзін.</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1600"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1623"/>
       <source>Ok</source>
       <translation>Ok</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1602"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1625"/>
       <source>Add</source>
       <translation>Дадаць</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1613"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1636"/>
       <source>This job has no base model.</source>
       <translation>У дадзенага задання няма асноўнай мадэлі.</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1620"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1643"/>
       <source>This job has no tool.</source>
       <translation>Для дадзенага задання няма інструменту.</translation>
     </message>
@@ -6990,12 +6977,6 @@ For example:
       <location filename="../../../Path/Op/Area.py" line="122"/>
       <source>no job for operation %s found.</source>
       <translation>заданне для аперацыі %s не знойдзена.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/Area.py" line="259"/>
-      <source>Previous operation %s is required for rest machining, but it has no stored rest machining metadata. Recomputing to generate this metadata...</source>
-      <translation>Папярэдняя аперацыя %s патрабуецца для механічнай апрацоўкі, але ў ёй няма захаваных метададзеных механічнай апрацоўкі.
-Вылічэнні для стварэння метададзеных...</translation>
     </message>
   </context>
   <context>
@@ -7816,12 +7797,12 @@ For example:
   <context>
     <name>Path_Vcarve</name>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="344"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="359"/>
       <source>VCarve requires an engraving cutter with a cutting edge angle</source>
       <translation>Для V-вобразнай выемкі патрабуецца гравіравальны разец з вострым нахілам рэжучага рабра</translation>
     </message>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="351"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="366"/>
       <source>Engraver cutting edge angle must be &lt; 180 degrees.</source>
       <translation>Вугал рэжучага рабра гравёра павінен быць менш чым 180 градусаў.</translation>
     </message>
@@ -7839,7 +7820,7 @@ For example:
   <context>
     <name>PathVcarve</name>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="381"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="396"/>
       <source>The Job Base Object has no engraveable element. Engraving operation will produce no output.</source>
       <translation>Асноўны аб'ект задання не мае элемента, які можна выгравіраваць. Аперацыя гравіроўкі не прывядзе да атрымання выніку.</translation>
     </message>

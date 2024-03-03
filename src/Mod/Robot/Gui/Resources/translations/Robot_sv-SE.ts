@@ -474,7 +474,7 @@
       <translation>Markera banan som du vill klä upp.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Modifiera</translation>
     </message>

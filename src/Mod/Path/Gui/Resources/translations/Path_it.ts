@@ -210,7 +210,7 @@ Qualsiasi valore della SetupSheet modificato, rispetto al valore di default, vie
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="107"/>
       <source>Enable to include the default rapid tool speeds in the template.</source>
-      <translation type="unfinished">Enable to include the default rapid tool speeds in the template.</translation>
+      <translation>Abilita per includere lo strumento rapido predefinito nel modello.</translation>
     </message>
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="120"/>
@@ -1269,7 +1269,7 @@ Reset deletes all current items from the list and fills the list with all circul
     <message>
       <location filename="../panels/PageOpHelixEdit.ui" line="111"/>
       <source>Step over percent</source>
-      <translation type="unfinished">Step over percent</translation>
+      <translation>Percentuale di sovrapposizione</translation>
     </message>
     <message>
       <location filename="../panels/PageOpHelixEdit.ui" line="137"/>
@@ -1365,7 +1365,7 @@ Reset deletes all current items from the list and fills the list with all circul
     <message>
       <location filename="../panels/PageOpPocketFullEdit.ui" line="112"/>
       <source>Pattern</source>
-      <translation type="unfinished">Pattern</translation>
+      <translation>Motivo</translation>
     </message>
     <message>
       <location filename="../panels/PageOpPocketFullEdit.ui" line="36"/>
@@ -1735,7 +1735,7 @@ The latter can be used to face of the entire stock area to ensure uniform height
       <location filename="../panels/PageOpSurfaceEdit.ui" line="91"/>
       <location filename="../panels/PageOpWaterlineEdit.ui" line="98"/>
       <source>Layer Mode</source>
-      <translation type="unfinished">Layer Mode</translation>
+      <translation>Modalità Livello</translation>
     </message>
     <message>
       <location filename="../panels/PageOpSlotEdit.ui" line="361"/>
@@ -1770,7 +1770,7 @@ The latter can be used to face of the entire stock area to ensure uniform height
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="77"/>
       <source>Scan Type</source>
-      <translation type="unfinished">Scan Type</translation>
+      <translation>Tipo di scansione</translation>
     </message>
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="105"/>
@@ -1781,7 +1781,7 @@ The latter can be used to face of the entire stock area to ensure uniform height
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="119"/>
       <source>Profile Edges</source>
-      <translation type="unfinished">Profile Edges</translation>
+      <translation>Bordi del profilo</translation>
     </message>
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="133"/>
@@ -1792,7 +1792,7 @@ The latter can be used to face of the entire stock area to ensure uniform height
       <location filename="../panels/PageOpSurfaceEdit.ui" line="63"/>
       <location filename="../panels/PageOpWaterlineEdit.ui" line="79"/>
       <source>Bounding Box</source>
-      <translation type="unfinished">Bounding Box</translation>
+      <translation>Riquadro di delimitazione</translation>
     </message>
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="70"/>
@@ -1820,7 +1820,7 @@ The latter can be used to face of the entire stock area to ensure uniform height
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="126"/>
       <source>Profile the edges of the selection.</source>
-      <translation type="unfinished">Profile the edges of the selection.</translation>
+      <translation>Profila i bordi della selezione.</translation>
     </message>
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="140"/>
@@ -4296,15 +4296,15 @@ For example:
     'Metric, Small Parts &amp; CNC'
     'US Customary'
     'Imperial Decimal'</source>
-      <translation type="unfinished">The currently selected unit schema: 
-     '{}' for this document
- Does not use 'minutes' for velocity values. 
+      <translation>Lo schema di unità attualmente selezionato: 
+     '{}' per questo documento
+ Non usa 'minuti' per i valori di velocità.
  
-CNC machines require feed rate to be expressed in 
-unit/minute. To ensure correct G-code: 
-Select a minute-based schema in preferences.
-For example:
-    'Metric, Small Parts &amp; CNC'
+Le macchine CNC richiedono che la velocità di spostamendo sia espressa in unità/minuto.
+Per garantire il corretto G-codice: 
+Selezionare uno schema basato su minuti nelle preferenze.
+Per esempio:
+    'Metrico, Piccoli Pezzi &amp; Cnc'
     'US Customary'
     'Imperial Decimal'</translation>
     </message>
@@ -4345,34 +4345,34 @@ For example:
       <translation type="unfinished">Camotics Project (*.camotics)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="625"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="627"/>
       <source>H</source>
       <comment>H is horizontal feed rate. Must be as short as possible</comment>
       <translation>H</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="628"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="632"/>
       <source>V</source>
       <comment>V is vertical feed rate. Must be as short as possible</comment>
       <translation>V</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="633"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="637"/>
       <source>Tool number</source>
       <translation>Numero utensile</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="636"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="640"/>
       <source>Horizontal feedrate</source>
       <translation type="unfinished">Horizontal feedrate</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="639"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="643"/>
       <source>Vertical feedrate</source>
       <translation type="unfinished">Vertical feedrate</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="642"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="646"/>
       <source>Spindle RPM</source>
       <translation type="unfinished">Spindle RPM</translation>
     </message>
@@ -5483,26 +5483,15 @@ For example:
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="186"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="265"/>
+      <location filename="../../../Path/Op/PocketBase.py" line="255"/>
       <source>Last Stepover Radius.  If 0, 50% of cutter is used. Tuning this can be used to improve stepover for some shapes</source>
       <translation type="unfinished">Last Stepover Radius.  If 0, 50% of cutter is used. Tuning this can be used to improve stepover for some shapes</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="195"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="277"/>
+      <location filename="../../../Path/Op/PocketBase.py" line="267"/>
       <source>Skips machining regions that have already been cleared by previous operations.</source>
       <translation type="unfinished">Skips machining regions that have already been cleared by previous operations.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/PocketBase.py" line="204"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="288"/>
-      <source>The areas cleared by this operation, one area per height, stored as a compound part. Used internally for rest machining.</source>
-      <translation type="unfinished">The areas cleared by this operation, one area per height, stored as a compound part. Used internally for rest machining.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/PocketBase.py" line="299"/>
-      <source>Flag to indicate that the rest machining regions have never been computed, and must be recomputed before being used.</source>
-      <translation type="unfinished">Flag to indicate that the rest machining regions have never been computed, and must be recomputed before being used.</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Probe.py" line="55"/>
@@ -6404,57 +6393,57 @@ For example:
       <translation type="unfinished">Stock not a cylinder!</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="920"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="943"/>
       <source>Select Output File</source>
       <translation type="unfinished">Select Output File</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="922"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="945"/>
       <source>All Files (*.*)</source>
       <translation>Tutti i File (*.*)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1303"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1326"/>
       <source>Unsupported stock object %s</source>
       <translation type="unfinished">Unsupported stock object %s</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1319"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1342"/>
       <source>Unsupported stock type %s (%d)</source>
       <translation type="unfinished">Unsupported stock type %s (%d)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1410"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1433"/>
       <source>Model Selection</source>
       <translation type="unfinished">Model Selection</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1598"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1621"/>
       <source>Warning</source>
       <translation>Attenzione</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1599"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1622"/>
       <source>Please add one.</source>
       <translation type="unfinished">Please add one.</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1600"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1623"/>
       <source>Ok</source>
       <translation>Ok</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1602"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1625"/>
       <source>Add</source>
       <translation>Aggiungi</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1613"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1636"/>
       <source>This job has no base model.</source>
       <translation type="unfinished">This job has no base model.</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1620"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1643"/>
       <source>This job has no tool.</source>
       <translation type="unfinished">This job has no tool.</translation>
     </message>
@@ -6950,11 +6939,6 @@ For example:
       <source>no job for operation %s found.</source>
       <translation type="unfinished">no job for operation %s found.</translation>
     </message>
-    <message>
-      <location filename="../../../Path/Op/Area.py" line="259"/>
-      <source>Previous operation %s is required for rest machining, but it has no stored rest machining metadata. Recomputing to generate this metadata...</source>
-      <translation type="unfinished">Previous operation %s is required for rest machining, but it has no stored rest machining metadata. Recomputing to generate this metadata...</translation>
-    </message>
   </context>
   <context>
     <name>Path_Operation</name>
@@ -6986,7 +6970,7 @@ For example:
     <message>
       <location filename="../../../Path/Op/Deburr.py" line="188"/>
       <source>Round</source>
-      <translation type="unfinished">Round</translation>
+      <translation>Arrotondato</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Deburr.py" line="189"/>
@@ -7092,7 +7076,7 @@ For example:
     <message>
       <location filename="../../../Path/Op/Profile.py" line="204"/>
       <source>Round</source>
-      <translation type="unfinished">Round</translation>
+      <translation>Arrotondato</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Profile.py" line="205"/>
@@ -7774,12 +7758,12 @@ For example:
   <context>
     <name>Path_Vcarve</name>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="344"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="359"/>
       <source>VCarve requires an engraving cutter with a cutting edge angle</source>
       <translation type="unfinished">VCarve requires an engraving cutter with a cutting edge angle</translation>
     </message>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="351"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="366"/>
       <source>Engraver cutting edge angle must be &lt; 180 degrees.</source>
       <translation type="unfinished">Engraver cutting edge angle must be &lt; 180 degrees.</translation>
     </message>
@@ -7797,7 +7781,7 @@ For example:
   <context>
     <name>PathVcarve</name>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="381"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="396"/>
       <source>The Job Base Object has no engraveable element. Engraving operation will produce no output.</source>
       <translation type="unfinished">The Job Base Object has no engraveable element. Engraving operation will produce no output.</translation>
     </message>

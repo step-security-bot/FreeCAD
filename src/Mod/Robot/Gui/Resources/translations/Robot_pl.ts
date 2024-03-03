@@ -474,7 +474,7 @@
       <translation>Wybierz trasę pracy, którą chcesz wykonać.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Zmodyfikuj</translation>
     </message>

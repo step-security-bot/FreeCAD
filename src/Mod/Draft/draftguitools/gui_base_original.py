@@ -33,6 +33,9 @@ of the DraftToolBar, the Snapper, and the working plane.
 
 ## \addtogroup draftguitools
 # @{
+
+from PySide import QtCore
+
 import FreeCAD as App
 import FreeCADGui as Gui
 import DraftVecUtils
@@ -138,6 +141,15 @@ class DraftTool:
         _toolmsg("{}".format(16*"-"))
         _toolmsg("GuiCommand: {}".format(self.featureName))
 
+    def end_callbacks(self, call):
+        try:
+            self.view.removeEventCallback("SoEvent", call)
+            gui_utils.end_all_events()
+        except RuntimeError:
+            # the view has been deleted already
+            pass
+        call = None
+
     def finish(self, cont=False):
         """Finish the current command.
 
@@ -162,18 +174,11 @@ class DraftTool:
         if self.ui:
             self.ui.offUi()
             self.ui.sourceCmd = None
+        if hasattr(Gui, "Snapper"):
+            Gui.Snapper.off()
         if self.planetrack:
             self.planetrack.finalize()
         self.wp._restore()
-        if hasattr(Gui, "Snapper"):
-            Gui.Snapper.off()
-        if self.call:
-            try:
-                self.view.removeEventCallback("SoEvent", self.call)
-            except RuntimeError:
-                # the view has been deleted already
-                pass
-            self.call = None
         if self.commitList:
             last_cmd = self.commitList[-1][1][-1]
             if last_cmd.find("recompute") >= 0:

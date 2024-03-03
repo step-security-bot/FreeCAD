@@ -204,7 +204,7 @@ Wszystkie wartości Arkusza Ustawień, które zostały zmienione w stosunku do w
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="87"/>
       <source>Operation Heights</source>
-      <translation>Wysokość operacji</translation>
+      <translation>Wysokości operacji</translation>
     </message>
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="97"/>
@@ -228,26 +228,26 @@ Wszystkie wartości Arkusza Ustawień, które zostały zmienione w stosunku do w
 This option is most useful if stock is a box or cylinder, or if the machine has a standard placement for machining.
 
 Note that this option is disabled if a stock object from an existing solid is used in the job - they cannot be stored in a template.</source>
-      <translation>Jeżeli opcja jest włączona, to tworzenie naddatku jest uwzględnione w szablonie. Jeśli szablon nie zawiera definicji naddatku, zostanie użyty domyślny algorytm tworzenia naddatku (tworzenie z ramki otaczającej obiektu Bazowego). 
+      <translation>Jeżeli opcja jest włączona, to tworzenie półfabrykatu jest uwzględnione w szablonie. Jeśli szablon nie zawiera definicji półfabrykatu, zostanie użyty domyślny algorytm tworzenia półfabrykatu (tworzenie z ramki otaczającej obiektu Bazowego). 
 
-Ta opcja jest najbardziej przydatna, gdy materiał jest w kształcie prostopadłościanu lub walca, lub gdy maszyna ma standardowe położenie dla obróbki. 
+Ta opcja jest najbardziej przydatna, gdy półfabrykat jest w kształcie prostopadłościanu lub walca, lub gdy maszyna ma standardowe położenie dla obróbki. 
 
-Należy pamiętać, że opcja ta jest wyłączona, jeśli w zadaniu używany jest obiekt naddatku z istniejącej bryły - nie mogą one być przechowywane w szablonie.</translation>
+Należy pamiętać, że opcja ta jest wyłączona, jeśli w zadaniu używany jest obiekt półfabrykatu z istniejącej bryły - nie mogą one być przechowywane w szablonie.</translation>
     </message>
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="184"/>
       <source>Hint about the current stock extent setting.</source>
-      <translation>Wskazówka dotycząca bieżącego ustawienia zakresu naddatku.</translation>
+      <translation>Wskazówka dotycząca bieżącego ustawienia zakresu półfabrykatu.</translation>
     </message>
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="191"/>
       <source>If enabled the current placement of the stock solid is stored in the template.</source>
-      <translation>Jeśli opcja ta jest włączona, bieżące położenie bryły naddatku jest zapisywane w szablonie.</translation>
+      <translation>Jeśli opcja ta jest włączona, bieżące położenie bryły półfabrykatu jest zapisywane w szablonie.</translation>
     </message>
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="210"/>
       <source>Hint about the current stock placement.</source>
-      <translation>Wskazówka dotycząca obecnego umiejscowienia naddatku.</translation>
+      <translation>Wskazówka dotycząca obecnego umiejscowienia półfabrykatu.</translation>
     </message>
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="110"/>
@@ -271,7 +271,7 @@ Należy pamiętać, że na liście znajdują się tylko operacje, dla których a
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="152"/>
       <source>Stock</source>
-      <translation>Półprodukt</translation>
+      <translation>Półfabrykat</translation>
     </message>
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="161"/>
@@ -280,11 +280,11 @@ Należy pamiętać, że na liście znajdują się tylko operacje, dla których a
 For Box and Cylinder stocks this means the actual size of the stock solid being created.
 
 For stock from the Base object's bounding box it means the extra material in all directions. A stock object created from such a template will get its basic size from the new job's Base object and apply the stored extra settings.</source>
-      <translation>Jeśli opcja ta jest włączona, bieżące ustawienia rozmiaru obiektu naddatku są uwzględniane w szablonie.
+      <translation>Jeśli opcja ta jest włączona, bieżące ustawienia rozmiaru obiektu półfabrykatu są uwzględniane w szablonie.
 
-W przypadku naddatku dla prostopadłościanu i walca oznacza to rzeczywisty rozmiar nadmiaru tworzonej bryły.
+W przypadku półfabrykatu dla prostopadłościanu i walca oznacza to rzeczywisty rozmiar półfabrykatu tworzonej bryły.
 
-Dla nadmiaru materiału podstawowego z ramki otaczającej oznacza to naddatek materiału we wszystkich kierunkach. Obiekt naddatku utworzony na podstawie takiego szablonu pobierze swój podstawowy rozmiar z obiektu Bazowego nowego zadania i zastosuje zapisane ustawienia dodatkowe.</translation>
+Dla półfabrykatu materiału podstawowego z ramki otaczającej oznacza to półfabrykat materiału we wszystkich kierunkach. Obiekt półfabrykatu utworzony na podstawie takiego szablonu pobierze swój podstawowy rozmiar z obiektu Bazowego nowego zadania i zastosuje zapisane ustawienia dodatkowe.</translation>
     </message>
     <message>
       <location filename="../panels/DlgJobTemplateExport.ui" line="168"/>
@@ -907,12 +907,12 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
     <message>
       <location filename="../panels/PageHeightsEdit.ui" line="54"/>
       <source>The height where lateral movement of the toolbit is not obstructed by any fixtures or the part / stock material itself.</source>
-      <translation>Wysokość, w której ruch poprzeczny narzędzia nie jest utrudniony przez żadne oprawki lub samą część / nadmiar materiału.</translation>
+      <translation>Wysokość, w której ruch poprzeczny narzędzia nie jest utrudniony przez żadne oprawki lub samą część / półfabrykat.</translation>
     </message>
     <message>
       <location filename="../panels/PageHeightsEdit.ui" line="47"/>
       <source>Clearance Height</source>
-      <translation>Wysokość wycofania</translation>
+      <translation>Odstęp bezpieczeństwa</translation>
     </message>
     <message>
       <location filename="../panels/PageOpCustomEdit.ui" line="42"/>
@@ -996,7 +996,7 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="90"/>
       <location filename="../panels/PageOpPocketFullEdit.ui" line="178"/>
       <source>Step Over Percent</source>
-      <translation>Zachodzenie przejść</translation>
+      <translation>Procent szerokości skrawania</translation>
     </message>
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="148"/>
@@ -1006,7 +1006,7 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="125"/>
       <source>Helix Ramp Angle</source>
-      <translation>Kąt nachylenia helisy</translation>
+      <translation>Kąt nachylenia helisy zejścia po rampie</translation>
     </message>
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="190"/>
@@ -1031,7 +1031,7 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="111"/>
       <source>Stock to Leave</source>
-      <translation>Ilość do zakończenia</translation>
+      <translation>Nadmiar do zakończenia</translation>
     </message>
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="97"/>
@@ -1062,17 +1062,17 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="197"/>
       <source>If greater than zero it limits the helix ramp diameter, otherwise 75 percent of tool diameter is used</source>
-      <translation>Jeśli wartość jest większa od zera, ogranicza średnicę helisy, w przeciwnym razie używane jest 75% średnicy narzędzia</translation>
+      <translation>Jeśli wartość jest większa od zera, ogranicza średnicę helisy zejścia po rampie, w przeciwnym razie używane jest 75% średnicy narzędzia</translation>
     </message>
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="207"/>
       <source>How much to lift the tool up during the rapid linking moves over cleared regions. If linking path is not clear tool is raised to clearance height.</source>
-      <translation>Jak wysoko należy unieść narzędzie podczas szybkich ruchów łączących nad oczyszczonymi obszarami. Jeśli ścieżka łączenia nie jest dostępna, narzędzie jest podnoszone do wysokości prześwitu.</translation>
+      <translation>Jak wysoko należy unieść narzędzie podczas szybkich ruchów łączących nad oczyszczonymi obszarami. Jeśli ścieżka łączenia nie jest dostępna, narzędzie jest podnoszone do odstępu bezpieczeństwa.</translation>
     </message>
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="217"/>
       <source>Max length of keep-tool-down linking path compared to direct distance between points. If exceeded link will be done by raising the tool to clearance height.</source>
-      <translation>Maksymalna długość ścieżki łączącej " trzymaj narzędzie w dół" w porównaniu do bezpośredniej odległości między punktami. Jeśli zostanie przekroczona, połączenie zostanie wykonane przez podniesienie narzędzia do wysokości prześwitu.</translation>
+      <translation>Maksymalna długość ścieżki łączącej "trzymaj narzędzie w dół" w porównaniu do bezpośredniej odległości między punktami. Jeśli zostanie przekroczona, połączenie zostanie wykonane przez podniesienie narzędzia do odstępu bezpieczeństwa.</translation>
     </message>
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="227"/>
@@ -1082,12 +1082,12 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="237"/>
       <source>The amount by which the tool is laterally displaced on each cycle of the pattern, specified in percent of the tool diameter. A step over of 100% results in no overlap between two different cycles.</source>
-      <translation>Wielkość, o jaką narzędzie jest przesuwane na boki w każdym cyklu wzorca, określona w procentach średnicy narzędzia. Przesunięcie o 100% powoduje, że dwa różne cykle nie nakładają się na siebie.</translation>
+      <translation>Wielkość, o jaką narzędzie jest przesuwane na boki w każdym cyklu wzorca, określona w procentach średnicy narzędzia. Szerokość skrawania 100% powoduje, że dwa różne cykle nie nakładają się na siebie.</translation>
     </message>
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="256"/>
       <source>Angle of the helix ramp entry</source>
-      <translation>Kąt wejścia na helisę</translation>
+      <translation>Kąt helisy zejścia po rampie</translation>
     </message>
     <message>
       <location filename="../panels/PageOpAdaptiveEdit.ui" line="266"/>
@@ -1173,7 +1173,7 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
     <message>
       <location filename="../panels/PageOpDrillingEdit.ui" line="78"/>
       <source>Peck</source>
-      <translation>Przerywanie</translation>
+      <translation>Zagłębienie</translation>
     </message>
     <message>
       <location filename="../panels/PageOpDrillingEdit.ui" line="145"/>
@@ -1268,12 +1268,12 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
     <message>
       <location filename="../panels/PageOpHelixEdit.ui" line="118"/>
       <source>Specify the percent of the tool diameter each helix will be offset to the previous one. A step over of 100% means no overlap of the individual cuts.</source>
-      <translation>Określa procent średnicy narzędzia, o jaki każda spirala będzie przesunięta względem poprzedniej. Przesunięcie o 100% oznacza brak nakładania się poszczególnych operacji frezowania.</translation>
+      <translation>Określa procent średnicy narzędzia, o jaki każda spirala będzie przesunięta względem poprzedniej. Szerokość skrawania 100% oznacza brak nakładania się poszczególnych operacji frezowania.</translation>
     </message>
     <message>
       <location filename="../panels/PageOpHelixEdit.ui" line="111"/>
       <source>Step over percent</source>
-      <translation>Zachodzenie przejść</translation>
+      <translation>Procent szerokości skrawania</translation>
     </message>
     <message>
       <location filename="../panels/PageOpHelixEdit.ui" line="137"/>
@@ -1387,9 +1387,9 @@ Zresetuje wszystkie bieżące elementy z listy i wypełnia listę wszystkimi okr
       <source>Specify if the facing should be restricted by the actual shape of the selected face (or the part if no face is selected), or if the bounding box should be faced off.
 
 The latter can be used to face of the entire stock area to ensure uniform heights for the following operations</source>
-      <translation>Określa, czy licowanie powinno być ograniczone przez rzeczywisty kształt wybranej powierzchni (lub części, jeśli nie wybrano żadnej powierzchni), czy też obwiednia powinna być licowana.
+      <translation>Określa, czy planowanie powinno być ograniczone przez rzeczywisty kształt wybranej powierzchni (lub części, jeśli nie wybrano żadnej powierzchni), czy też obwiednia powinna być planowana.
 
-Ta druga opcja może być użyta do ściany całego obszaru naddatku, aby zapewnić jednolitą wysokość dla następnych operacji</translation>
+Ta druga opcja może być użyta do planowania całego obszaru półfabrykatu, aby zapewnić jednolitą wysokość dla następnych operacji</translation>
     </message>
     <message>
       <location filename="../panels/PageOpPocketFullEdit.ui" line="95"/>
@@ -1444,7 +1444,7 @@ Ta druga opcja może być użyta do ściany całego obszaru naddatku, aby zapewn
     <message>
       <location filename="../panels/PageOpPocketFullEdit.ui" line="185"/>
       <source>The amount by which the tool is laterally displaced on each cycle of the pattern, specified in percent of the tool diameter. A step over of 100% results in no overlap between two different cycles</source>
-      <translation>Wartość, o jaką narzędzie jest przesuwane na boki w każdym cyklu wzoru, określona w procentach średnicy narzędzia. Przesunięcie o 100% powoduje, że dwa różne cykle nie nakładają się na siebie</translation>
+      <translation>Wartość, o jaką narzędzie jest przesuwane na boki w każdym cyklu wzoru, określona w procentach średnicy narzędzia. Szerokość skrawania 100% powoduje, że dwa różne cykle nie nakładają się na siebie</translation>
     </message>
     <message>
       <location filename="../panels/PageOpPocketFullEdit.ui" line="211"/>
@@ -1899,7 +1899,7 @@ Obrotowy: Skanowanie obrotowe w 4 osiach.</translation>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="215"/>
       <location filename="../panels/PageOpWaterlineEdit.ui" line="159"/>
       <source>Step over</source>
-      <translation>Krok dalej</translation>
+      <translation>Szerokość skrawania</translation>
     </message>
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="222"/>
@@ -1909,7 +1909,7 @@ Obrotowy: Skanowanie obrotowe w 4 osiach.</translation>
 A step over of 100% results in no overlap between two different cycles.</source>
       <translation>Wartość, o jaką narzędzie jest przesuwane bocznie w każdym cyklu wzorca, podana w procentach średnicy narzędzia.
 
-Przekroczenie wartości 100% powoduje, że dwa różne cykle nie nakładają się na siebie.</translation>
+Szerokość skrawania 100% powoduje, że dwa różne cykle nie nakładają się na siebie.</translation>
     </message>
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="237"/>
@@ -1931,7 +1931,7 @@ Przekroczenie wartości 100% powoduje, że dwa różne cykle nie nakładają si�
     <message>
       <location filename="../panels/PageOpSurfaceEdit.ui" line="290"/>
       <source>Optimize StepOver Transitions</source>
-      <translation>Optymalizacja przejścia krok dalej</translation>
+      <translation>Optymalizacja przejść szerokości skrawania</translation>
     </message>
     <message>
       <location filename="../panels/SetupGlobal.ui" line="14"/>
@@ -1988,14 +1988,14 @@ Domyślnie: OpToolDiameter</translation>
     <message>
       <location filename="../panels/SetupGlobal.ui" line="113"/>
       <source>Clearance</source>
-      <translation>Prześwit</translation>
+      <translation>Odstęp bezpieczeństwa</translation>
     </message>
     <message>
       <location filename="../panels/SetupGlobal.ui" line="120"/>
       <source>Expression set as ClearanceHeight for new operations.
 
 Default: "OpStockZMax+SetupSheet.ClearanceHeightOffset"</source>
-      <translation>Wyrażenie ustawione jako Wysokość wycofania dla nowych operacji.
+      <translation>Wyrażenie ustawione jako odstęp bezpieczeństwa dla nowych operacji.
 
 Domyślnie: "OpStockZMax+SetupSheet.ClearanceHeightOffset"</translation>
     </message>
@@ -2037,7 +2037,7 @@ Domyślnie:  5mm</translation>
       <source>ClearanceHeightOffset - can be used by expressions to set the default ClearanceHeight for new operations.
 
 Default: 3 mm</source>
-      <translation>Odsunięcie wysokości prześwitu - może być wykorzystywane przez wyrażenia do ustawienia domyślnej wysokości prześwitu dla nowych operacji.
+      <translation>Odsunięcie odstępu bezpieczeństwa — może być wykorzystywane przez wyrażenia do ustawienia domyślnego odstępu bezpieczeństwa dla nowych operacji.
 
 Domyślnie: 3 mm</translation>
     </message>
@@ -2111,7 +2111,7 @@ Domyślnie: 3 mm</translation>
     <message>
       <location filename="../panels/PageOpThreadMillingEdit.ui" line="177"/>
       <source>Lead In/Out</source>
-      <translation>Wprowadzenie do/z</translation>
+      <translation>Podejście / odejście od materiału</translation>
     </message>
     <message>
       <location filename="../panels/PageOpVcarveEdit.ui" line="66"/>
@@ -2235,7 +2235,7 @@ OCL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../panels/ToolEditor.ui" line="124"/>
       <source>Cutting Edge Height</source>
-      <translation>Wysokość krawędzi skawającej</translation>
+      <translation>Wysokość krawędzi skrawającej</translation>
     </message>
     <message>
       <location filename="../panels/ToolEditor.ui" line="196"/>
@@ -2288,12 +2288,12 @@ Jeśli szerokość jest ustawiona na wartość 0, kreator będzie próbował ust
 If the specified height is 0 the dressup will use half the height of the part. Should the height be bigger than the height of the part the dressup will reduce the height to the height of the part.</source>
       <translation>Domyślna wysokość pól mocujących.
 
-Jeśli podana wysokość jest równa 0, to kreator użyje połowy wysokości części. Jeśli wysokość będzie większa niż wysokość części, to zostanie ona zmniejszona do wysokości części.</translation>
+Jeśli podana wysokość jest równa 0, to operacja wykańczająca użyje połowy wysokości części. Jeśli wysokość będzie większa niż wysokość części, to zostanie ona zmniejszona do wysokości części.</translation>
     </message>
     <message>
       <location filename="../preferences/PathDressupHoldingTags.ui" line="65"/>
       <source>Plunge angle for ascent and descent of holding tag.</source>
-      <translation>Kąt zanurzenia przy wznoszeniu i opuszczaniu pola mocującego.</translation>
+      <translation>Kąt zagłębienia przy wznoszeniu i opuszczaniu pola mocującego.</translation>
     </message>
     <message>
       <location filename="../preferences/PathDressupHoldingTags.ui" line="91"/>
@@ -2307,7 +2307,7 @@ Jeśli promień jest większy niż ten, który utrzymuje sam kształt podpory, w
     <message>
       <location filename="../preferences/PathDressupHoldingTags.ui" line="116"/>
       <source>Specify the number of tags generated when a new dressup is created.</source>
-      <translation>Określ liczbę wygenerowanych pól mocujących po utworzeniu nowego ulepszenia.</translation>
+      <translation>Określ liczbę wygenerowanych pól mocujących po utworzeniu nowej operacji wykańczającej.</translation>
     </message>
     <message>
       <location filename="../preferences/PathDressupHoldingTags.ui" line="42"/>
@@ -2553,7 +2553,7 @@ Jeśli pole pozostanie puste, żaden szablon nie zostanie wstępnie wybrany.</tr
     <message>
       <location filename="../preferences/PathJob.ui" line="376"/>
       <source>Stock</source>
-      <translation>Przygotówka</translation>
+      <translation>Półfabrykat</translation>
     </message>
     <message>
       <location filename="../preferences/PathJob.ui" line="395"/>
@@ -2870,12 +2870,12 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="28"/>
       <source>Enable Lead-in move</source>
-      <translation>Włącz ruch podejścia</translation>
+      <translation>Włącz ruch podejścia do materiału</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="31"/>
       <source>Enable Lead In</source>
-      <translation>Włącz podejście</translation>
+      <translation>Włącz podejście do materiału</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="38"/>
@@ -2892,7 +2892,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="68"/>
       <source>length or radius of the Lead-in</source>
-      <translation>długość lub promień podejścia</translation>
+      <translation>długość lub promień podejścia do materiału</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="81"/>
@@ -2903,37 +2903,37 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="88"/>
       <source>extends the leadin distance</source>
-      <translation>zwiększa dystans podejścia</translation>
+      <translation>zwiększa dystans podejścia do materiału</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="102"/>
       <source>Enable Lead-out move</source>
-      <translation>Włącz ruch wyjścia</translation>
+      <translation>Włącz ruch odejścia od materiału</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="105"/>
       <source>Enable Lead Out</source>
-      <translation>Włącz wyjście</translation>
+      <translation>Włącz podejście do materiału</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="142"/>
       <source>length or radius of the Lead-out</source>
-      <translation>długość lub promień wyjścia</translation>
+      <translation>długość lub promień odejścia od materiału</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="162"/>
       <source>Extends the leadout distance</source>
-      <translation>Zwiększa dystans wyjścia</translation>
+      <translation>Zwiększa dystans odejścia od materiału</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="182"/>
       <source>Plunge at rapid speed</source>
-      <translation>Zanurzenie z posuwem szybkim</translation>
+      <translation>Zagłębienie z posuwem szybkim</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="192"/>
       <source>Apply Lead In/Out on all layers</source>
-      <translation>Zastosuj wejście / wyjście na wszystkich warstwach</translation>
+      <translation>Zastosuj podejście / odejście od materiału na wszystkich warstwach</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="202"/>
@@ -2948,7 +2948,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="185"/>
       <source>Rapid Plunge</source>
-      <translation>Szybkie zanurzenie</translation>
+      <translation>Szybkie zagłębienie</translation>
     </message>
     <message>
       <location filename="../panels/DressUpLeadInOutEdit.ui" line="195"/>
@@ -2979,7 +2979,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../../../Path/Dressup/Gui/LeadInOut.py" line="464"/>
       <source>LeadInOut</source>
-      <translation>Wprowadzenie / wyprowadzenie</translation>
+      <translation>Podejście / odejście od materiału</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/LeadInOut.py" line="468"/>
@@ -3020,7 +3020,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/AxisMapEdit.ui" line="14"/>
       <source>AxisMap Dressup</source>
-      <translation>Wykończenie odwzorowanie osi</translation>
+      <translation>Wykończenie odwzorowania osi</translation>
     </message>
     <message>
       <location filename="../panels/AxisMapEdit.ui" line="20"/>
@@ -3076,13 +3076,13 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DogboneEdit.ui" line="14"/>
       <source>Dogbones</source>
-      <translation>Nadcięcie w narożnikach</translation>
+      <translation>Zacięcia po skosie</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="35"/>
       <location filename="../panels/ZCorrectEdit.ui" line="35"/>
       <source>Dressup</source>
-      <translation>Ulepszenie</translation>
+      <translation>Operacja wykańczająca</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="41"/>
@@ -3092,7 +3092,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DogboneEdit.ui" line="48"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select desired style of the bone dressup:&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;Dogbone&lt;/span&gt; ... take the shortest path to cover the corner,&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;T-bone&lt;/span&gt; ... extend a certain direction until corner is covered&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wybierz styl wykończenia typu nadcięcie w narożnikach:&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;Kształt kości&lt;/span&gt; ... obierz najkrótszą ścieżkę do pokrycia narożnika,&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;T-bone&lt;/span&gt; ... wydłuż wybrany kierunek aż narożnik będzie pokryty&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wybierz styl wykończenia typu zacięcie:&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;zacięcie po skosie&lt;/span&gt; ... obierz najkrótszą ścieżkę do pokrycia narożnika,&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;zacięcie w układzie T&lt;/span&gt; ... wydłuż wybrany kierunek aż narożnik będzie pokryty&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="52"/>
@@ -3102,22 +3102,22 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DogboneEdit.ui" line="57"/>
       <source>T-bone horizontal</source>
-      <translation>T-bone poziome</translation>
+      <translation>Zacięcie w układzie T poziome</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="62"/>
       <source>T-bone vertical</source>
-      <translation>T-bone pionowe</translation>
+      <translation>Zacięcie w układzie T pionowe</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="67"/>
       <source>T-bone long edge</source>
-      <translation>Długa krawędź T-bone</translation>
+      <translation>Długa krawędź zacięcia w układzie T</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="72"/>
       <source>T-bone short edge</source>
-      <translation>Krótka krawędź T-bone</translation>
+      <translation>Krótka krawędź zacięcia w układzie T</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="80"/>
@@ -3127,7 +3127,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DogboneEdit.ui" line="87"/>
       <source>On which side of the profile bones are inserted - this also determines which corners are dressed up. The default value is determined based on the profile being dressed up.</source>
-      <translation>Po której stronie profilu wstawiane są nadcięcia w narożnikach - decyduje to również o tym, które narożniki zostaną wykończone. Wartość domyślna jest ustalana na podstawie profilu, który ma być poddany wykończeniu.</translation>
+      <translation>Po której stronie profilu wstawiane są zacięcia - decyduje to również o tym, które narożniki zostaną wykończone. Wartość domyślna jest ustalana na podstawie profilu, który ma być poddany wykończeniu.</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="94"/>
@@ -3147,7 +3147,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DogboneEdit.ui" line="114"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Determines the incision length of the bone to be inserted into the profile.&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;adaptive&lt;/span&gt; ... the length is adapted to cover the corner based on the angle of its edges, taking the current tool radius into account (default)&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;fixed&lt;/span&gt; ... is the same as adaptive for straight angles. For T-bones it's the radius of the tool (R) and for dogbones it's R * (2/√2 - 1).&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;custom&lt;/span&gt; ... let's you specify a custom (fixed) length below&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Określa długość nadcięcia w narożnikach do umieszczenia w profilu.&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;adaptacyjny&lt;/span&gt; ... długość jest dostosowywana by przykryć narożnik bazując na kącie jego krawędzi, biorąc pod uwagę promień bieżącego narzędzia (domyślnie)&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;zablokowane&lt;/span&gt; ... to samo co adaptacyjny dla kątów prostych. Dla kształtów typu T-bone jest to promień narzędzia (R) zaś dla nadcięci w narożnikach jest to R * (2/√2 - 1).&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;niestandardowe&lt;/span&gt; ... pozwala ustawić niestandardową (zablokowaną) długość poniżej&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Określa długość zacięcia do umieszczenia w profilu.&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;adaptacyjny&lt;/span&gt; ... długość jest dostosowywana by przykryć narożnik bazując na kącie jego krawędzi, biorąc pod uwagę promień bieżącego narzędzia (domyślnie)&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;zablokowane&lt;/span&gt; ... to samo co adaptacyjny dla kątów prostych. Dla zacięć w układzie T jest to promień narzędzia (R) zaś dla zacięć po skosie jest to R * (2/√2 - 1).&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600; font-style:italic;"&gt;niestandardowe&lt;/span&gt; ... pozwala ustawić niestandardową (zablokowaną) długość poniżej&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="121"/>
@@ -3167,12 +3167,12 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/DogboneEdit.ui" line="142"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter length for each bone if &lt;span style=" font-weight:600;"&gt;Incision&lt;/span&gt; is set to &lt;span style=" font-weight:600;"&gt;custom&lt;/span&gt;, ignored otherwise.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Podaj długość każdego nadcięcia w narożnikach jeśli &lt;span style=" font-weight:600;"&gt;Nacięcie&lt;/span&gt; jest ustawione na wartość &lt;span style=" font-weight:600;"&gt;użytkownika&lt;/span&gt;, w innym wypadku zignoruj.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Podaj długość każdego zacięcia jeśli &lt;span style=" font-weight:600;"&gt;Zacięcie&lt;/span&gt; jest ustawione na wartość &lt;span style=" font-weight:600;"&gt;użytkownika&lt;/span&gt;, w innym wypadku zignoruj.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="155"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;List of bone locations (with all bones at that location) that are part of this dressup. The list is determined by the corners in the profile and the selected &lt;span style=" font-weight:600;"&gt;Side&lt;/span&gt; for the bones. &lt;/p&gt;&lt;p&gt;You can &lt;span style=" font-weight:600;"&gt;un-check&lt;/span&gt; the bones you don't want to be dressed up.&lt;/p&gt;&lt;p&gt;If a bone is &lt;span style=" font-weight:600;"&gt;grayed out&lt;/span&gt; it means that it is already dressed up by a previous dressup. Or put another way, if you dress up this dogobone dressup again you will only be able to select the bones that are un-checked here.&lt;/p&gt;&lt;p&gt;If this list is empty it probably means you're trying to create bones on the wrong side of the profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lista lokalizacji nadcięć narożników (wraz z wszystkimi nadcięciami w tej lokalizacji), które są częścią tego wykończenia. Lista ta jest określana na podstawie narożników w profilu i wybranej&lt;span style=" font-weight:600;"&gt;Strony&lt;/span&gt; dla nadcięć. &lt;/p&gt;&lt;p&gt;Możesz &lt;span style=" font-weight:600;"&gt;odznaczyć&lt;/span&gt; nadcięcia, których nie chcesz wykańczać.&lt;/p&gt;&lt;p&gt;Jeśli nadcięcie jest &lt;span style=" font-weight:600;"&gt;wyszarzona&lt;/span&gt; to znaczy, że została już wykończona. Innymi słowy, jeśli wykończysz to nadcięcie narożnika ponownie, będziesz mógł tylko wybrać nadcięcia, które są tu odznaczone.&lt;/p&gt;&lt;p&gt;Jeśli ta lista jest pusta, prawdopodobnie próbujesz utworzyć nadcięcia po złej stronie profilu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lista lokalizacji zacięć (wraz z wszystkimi zacięciami w tej lokalizacji), które są częścią tego wykończenia. Lista ta jest określana na podstawie narożników w profilu i wybranej&lt;span style=" font-weight:600;"&gt;Strony&lt;/span&gt; dla zacięć. &lt;/p&gt;&lt;p&gt;Możesz &lt;span style=" font-weight:600;"&gt;odznaczyć&lt;/span&gt; zacięć, których nie chcesz wykańczać.&lt;/p&gt;&lt;p&gt;Jeśli zacięcie jest &lt;span style=" font-weight:600;"&gt;wyszarzone&lt;/span&gt; to znaczy, że zostało już wykończone. Innymi słowy, jeśli wykończysz to zacięcie ponownie, będziesz mógł wybrać tylko zacięcia, które są tu odznaczone.&lt;/p&gt;&lt;p&gt;Jeśli ta lista jest pusta, prawdopodobnie próbujesz utworzyć zacięcia po złej stronie profilu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../panels/DogboneEdit.ui" line="165"/>
@@ -3247,7 +3247,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/HoldingTagsEdit.ui" line="61"/>
       <source>Plunge angle for ascent and descent of holding tag.</source>
-      <translation>Kąt zanurzenia przy wznoszeniu i opuszczaniu pola mocującego.</translation>
+      <translation>Kąt zagłębienia przy wznoszeniu i opuszczaniu pola mocującego.</translation>
     </message>
     <message>
       <location filename="../panels/HoldingTagsEdit.ui" line="87"/>
@@ -3378,7 +3378,7 @@ Should multiple tools or tool shapes with the same name exist in different direc
     <message>
       <location filename="../panels/SurfaceEdit.ui" line="228"/>
       <source>Clearance Height</source>
-      <translation>Wysokość wycofania</translation>
+      <translation>Odstęp bezpieczeństwa</translation>
     </message>
     <message>
       <location filename="../panels/SurfaceEdit.ui" line="248"/>
@@ -3776,7 +3776,7 @@ FreeCAD has no knowledge of where a particular coordinate system exists within t
     <message>
       <location filename="../panels/PathEdit.ui" line="457"/>
       <source>Stock</source>
-      <translation>Przygotówka</translation>
+      <translation>Półfabrykat</translation>
     </message>
     <message>
       <location filename="../panels/PathEdit.ui" line="478"/>
@@ -3857,12 +3857,12 @@ FreeCAD has no knowledge of where a particular coordinate system exists within t
     <message>
       <location filename="../panels/PathEdit.ui" line="669"/>
       <source>Center in Stock</source>
-      <translation>Środek naddatku</translation>
+      <translation>Środek w półfabrykacie</translation>
     </message>
     <message>
       <location filename="../panels/PathEdit.ui" line="676"/>
       <source>XY in Stock</source>
-      <translation>XY w naddatku</translation>
+      <translation>XY w półfabrykacie</translation>
     </message>
     <message>
       <location filename="../panels/PathEdit.ui" line="686"/>
@@ -3902,7 +3902,7 @@ FreeCAD has no knowledge of where a particular coordinate system exists within t
     <message>
       <location filename="../panels/PathEdit.ui" line="734"/>
       <source>Link Stock and Model</source>
-      <translation>Połącz półwyrób z modelem</translation>
+      <translation>Połącz półfabrykat z modelem</translation>
     </message>
     <message>
       <location filename="../panels/PathEdit.ui" line="744"/>
@@ -3940,7 +3940,7 @@ FreeCAD has no knowledge of where a particular coordinate system exists within t
       <source>Expression set as ClearanceHeight for new operations.
 
 Default: "OpStockZMax+SetupSheet.ClearanceHeightOffset"</source>
-      <translation>Wyrażenie ustawione jako Wysokość wycofania dla nowych operacji.
+      <translation>Wyrażenie ustawione jako odstęp bezpieczeństwa dla nowych operacji.
 
 Domyślnie: "OpStockZMax+SetupSheet.ClearanceHeightOffset"</translation>
     </message>
@@ -4106,14 +4106,14 @@ Domyślnie: OpToolDiameter</translation>
     <message>
       <location filename="../panels/PathEdit.ui" line="1107"/>
       <source>Clearance</source>
-      <translation>Prześwit</translation>
+      <translation>Odstęp bezpieczeństwa</translation>
     </message>
     <message>
       <location filename="../panels/PathEdit.ui" line="1123"/>
       <source>ClearanceHeightOffset - can be used by expressions to set the default ClearanceHeight for new operations.
 
 Default: 3 mm</source>
-      <translation>Odsunięcie wysokości prześwitu - może być wykorzystywane przez wyrażenia do ustawienia domyślnej wysokości prześwitu dla nowych operacji.
+      <translation>Odsunięcie odstępu bezpieczeństwa — może być wykorzystywane przez wyrażenia do ustawienia domyślnego odstępu bezpieczeństwa dla nowych operacji.
 
 Domyślnie: 3 mm</translation>
     </message>
@@ -4259,12 +4259,12 @@ Domyślnie: 3 mm</translation>
       <location filename="../../../InitGui.py" line="246"/>
       <location filename="../../../InitGui.py" line="249"/>
       <source>&amp;Path</source>
-      <translation>&amp;Ścieżka</translation>
+      <translation>Ś&amp;cieżka</translation>
     </message>
     <message>
       <location filename="../../../InitGui.py" line="217"/>
       <source>Path Dressup</source>
-      <translation>Ulepszenia dla ścieżki</translation>
+      <translation>Operacje wykańczające dla ścieżki</translation>
     </message>
     <message>
       <location filename="../../../InitGui.py" line="224"/>
@@ -4297,17 +4297,17 @@ For example:
     'Metric, Small Parts &amp; CNC'
     'US Customary'
     'Imperial Decimal'</source>
-      <translation type="unfinished">The currently selected unit schema: 
-     '{}' for this document
- Does not use 'minutes' for velocity values. 
+      <translation>Aktualnie wybrany układ jednostek: 
+     '{}' dla tego dokumentu
+ Nie używa "minut" dla wartości prędkości. 
  
-CNC machines require feed rate to be expressed in 
-unit/minute. To ensure correct G-code: 
-Select a minute-based schema in preferences.
-For example:
-    'Metric, Small Parts &amp; CNC'
-    'US Customary'
-    'Imperial Decimal'</translation>
+Maszyny CNC wymagają, aby prędkość posuwu była wyrażona w 
+jednostkach / minutę. Aby zapewnić prawidłowy G-code: 
+Wybierz w preferencjach schemat oparty na minutach.
+Na przykład:
+    Metryczny dla mniejszych części i CNC
+    Zwyczajowy USA
+    Dziesiętny brytyjski</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Gui/JobDlg.py" line="71"/>
@@ -4346,34 +4346,34 @@ For example:
       <translation>Projekt Camotics (*.camotics)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="625"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="627"/>
       <source>H</source>
       <comment>H is horizontal feed rate. Must be as short as possible</comment>
       <translation>H</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="628"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="632"/>
       <source>V</source>
       <comment>V is vertical feed rate. Must be as short as possible</comment>
       <translation>V</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="633"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="637"/>
       <source>Tool number</source>
       <translation>Numer narzędzia</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="636"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="640"/>
       <source>Horizontal feedrate</source>
       <translation>Prędkość posuwu w poziomie</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="639"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="643"/>
       <source>Vertical feedrate</source>
       <translation>Prędkość posuwu w pionie</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="642"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="646"/>
       <source>Spindle RPM</source>
       <translation>RPM wrzeciona</translation>
     </message>
@@ -4521,7 +4521,7 @@ For example:
     <message>
       <location filename="../../../PathCommands.py" line="59"/>
       <source>Finish Selecting Loop</source>
-      <translation>Zakończ zaznaczoną pętle</translation>
+      <translation>Zakończ zaznaczanie pętli</translation>
     </message>
     <message>
       <location filename="../../../PathCommands.py" line="63"/>
@@ -4623,7 +4623,7 @@ For example:
     <message>
       <location filename="../../../Path/Base/SetupSheet.py" line="146"/>
       <source>The usage of this field depends on SafeHeightExpression - by default its value is added to the start depth and used for the safe height of an operation.</source>
-      <translation>Użycie tego pola zależy od SafeHeightExpression - domyślnie jego wartość jest dodawana do głębokości początkowej i używana do bezpiecznej wysokości danej operacji.</translation>
+      <translation>Użycie tego pola zależy od SafeHeightExpression — domyślnie jego wartość jest dodawana do głębokości początkowej i używana do bezpiecznej wysokości danej operacji.</translation>
     </message>
     <message>
       <location filename="../../../Path/Base/SetupSheet.py" line="154"/>
@@ -4633,12 +4633,12 @@ For example:
     <message>
       <location filename="../../../Path/Base/SetupSheet.py" line="163"/>
       <source>The usage of this field depends on ClearanceHeightExpression - by default is value is added to the start depth and used for the clearance height of an operation.</source>
-      <translation>Użycie tego pola zależy od ClearanceHeightExpression - domyślnie jego wartość jest dodawana do głębokości początkowej i używana do wysokości prześwitu danej operacji.</translation>
+      <translation>Użycie tego pola zależy od ClearanceHeightExpression — domyślnie jego wartość jest dodawana do głębokości początkowej i używana do odstępu bezpieczeństwa danej operacji.</translation>
     </message>
     <message>
       <location filename="../../../Path/Base/SetupSheet.py" line="172"/>
       <source>Expression for the clearance height of new operations.</source>
-      <translation>Wyrażenie dla wysokości prześwitu dla nowych operacji.</translation>
+      <translation>Wyrażenie dla odstępu bezpieczeństwa dla nowych operacji.</translation>
     </message>
     <message>
       <location filename="../../../Path/Base/SetupSheet.py" line="180"/>
@@ -4680,37 +4680,37 @@ For example:
     <message>
       <location filename="../../../Path/Dressup/DogboneII.py" line="203"/>
       <source>The base path to dress up</source>
-      <translation>Ścieżka podstawowa do ulepszenia</translation>
+      <translation>Ścieżka podstawowa do wykańczania</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/DogboneII.py" line="211"/>
       <location filename="../../../Path/Dressup/Gui/Dogbone.py" line="429"/>
       <source>The side of path to insert bones</source>
-      <translation>Strona ścieżki do zamieszczenia nadcięcia w narożniku</translation>
+      <translation>Strona ścieżki do umieszczenia zacięcia</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/DogboneII.py" line="228"/>
       <location filename="../../../Path/Dressup/Gui/Dogbone.py" line="437"/>
       <source>The style of bones</source>
-      <translation>Styl nadcięcie w narożnikach</translation>
+      <translation>Styl zacięć</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/DogboneII.py" line="239"/>
       <location filename="../../../Path/Dressup/Gui/Dogbone.py" line="455"/>
       <source>The algorithm to determine the bone length</source>
-      <translation>Algorytm do ustalenia długości nadcięcia</translation>
+      <translation>Algorytm do ustalenia długości zacięcia</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/DogboneII.py" line="250"/>
       <location filename="../../../Path/Dressup/Gui/Dogbone.py" line="463"/>
       <source>Dressup length if incision is set to 'custom'</source>
-      <translation>Długość ulepszenia, jeśli nacięcie jest ustawione na "niestandardowe"</translation>
+      <translation>Długość operacji wykańczającej, jeśli nacięcie jest ustawione na "niestandardowe"</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/DogboneII.py" line="258"/>
       <location filename="../../../Path/Dressup/Gui/Dogbone.py" line="445"/>
       <source>Bones that aren't dressed up</source>
-      <translation>Nieskonfigurowane nadcięcie w narożnikach</translation>
+      <translation>Niewykończone zacięcia</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Tags.py" line="946"/>
@@ -4725,7 +4725,7 @@ For example:
     <message>
       <location filename="../../../Path/Dressup/Tags.py" line="958"/>
       <source>Angle of tag plunge and ascent.</source>
-      <translation>Kąt zanurzenia i wzniesienia pola mocującego.</translation>
+      <translation>Kąt zagłębienia i wzniesienia pola mocującego.</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Tags.py" line="964"/>
@@ -4810,37 +4810,37 @@ For example:
     <message>
       <location filename="../../../Path/Dressup/Gui/LeadInOut.py" line="111"/>
       <source>Extends LeadIn distance</source>
-      <translation>Zwiększa dystans podejścia</translation>
+      <translation>Zwiększa dystans podejścia do materiału</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/LeadInOut.py" line="117"/>
       <source>Extends LeadOut distance</source>
-      <translation>Zwiększa dystans odejścia</translation>
+      <translation>Zwiększa dystans odejścia od materiału</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/LeadInOut.py" line="123"/>
       <source>Perform plunges with G0</source>
-      <translation>Wykonuj zanurzenia za pomocą G0</translation>
+      <translation>Wykonuj zagłębienia za pomocą G0</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/LeadInOut.py" line="131"/>
       <source>Apply LeadInOut to layers within an operation</source>
-      <translation>Zastosuj warstwy wejścia-wyjścia w jednej operacji</translation>
+      <translation>Zastosuj podejście — odejście od materiału do warstw w obrębie operacji</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="63"/>
       <source>Angle of ramp.</source>
-      <translation>Kąt parkowania</translation>
+      <translation>Kąt zejścia po rampie</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="69"/>
       <source>Ramping Method</source>
-      <translation>Metoda parkowania</translation>
+      <translation>Metoda zejścia po rampie</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="75"/>
       <source>Which feed rate to use for ramping</source>
-      <translation>Prędkość posuwu szybkiego, z jaką odbędzie się parkowanie</translation>
+      <translation>Prędkość posuwu szybkiego, z jaką odbędzie się zejście po rampie</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="81"/>
@@ -4850,12 +4850,12 @@ For example:
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="90"/>
       <source>Should the dressup ignore motion commands above DressupStartDepth</source>
-      <translation>Czy funkcja ulepszenia powinna ignorować polecenia ruchu powyżej głębokości rozpoczęcia ulepszania</translation>
+      <translation>Czy operacja wykańczająca powinna ignorować polecenia ruchu powyżej głębokości rozpoczęcia wykańczania</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="99"/>
       <source>The depth where the ramp dressup is enabled. Above this ramps are not generated, but motion commands are passed through as is.</source>
-      <translation>Głębokość, na której włączona jest funkcja ulepszenia dla parkowania. Powyżej niej parkowanie nie jest generowane, ale polecenia ruchu są przekazywane bez zmian.</translation>
+      <translation>Głębokość, na której włączona jest obróbka wykańczająca dla zejścia po rampie. Powyżej niej zejścia po rampie nie jest generowane, ale polecenia ruchu są przekazywane bez zmian.</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/ZCorrect.py" line="70"/>
@@ -4911,7 +4911,7 @@ For example:
     <message>
       <location filename="../../../Path/Main/Job.py" line="174"/>
       <source>Solid object to be used as stock.</source>
-      <translation>Bryła obiektu do wykorzystania jako naddatek.</translation>
+      <translation>Obiekt bryłowy do wykorzystania jako półfabrykat.</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Job.py" line="183"/>
@@ -4971,7 +4971,7 @@ For example:
     <message>
       <location filename="../../../Path/Main/Stock.py" line="110"/>
       <source>The base object this stock is derived from</source>
-      <translation>Obiekt bazowy, z którego pochodzi ten zasób</translation>
+      <translation>Obiekt bazowy, z którego pochodzi ten półfabrykat</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Stock.py" line="119"/>
@@ -5011,32 +5011,32 @@ For example:
     <message>
       <location filename="../../../Path/Main/Stock.py" line="242"/>
       <source>Length of this stock box</source>
-      <translation>Długość prostopadłościanu nadmiarowego</translation>
+      <translation>Długość prostopadłościanu półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Stock.py" line="248"/>
       <source>Width of this stock box</source>
-      <translation>Szerokość tego pola zapisu</translation>
+      <translation>Szerokość prostopadłościanu półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Stock.py" line="254"/>
       <source>Height of this stock box</source>
-      <translation>Wysokość tego pola zapisu</translation>
+      <translation>Wysokość prostopadłościanu półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Stock.py" line="294"/>
       <source>Radius of this stock cylinder</source>
-      <translation>Promień tego cylindra nadmiarowego</translation>
+      <translation>Promień tego walca półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Stock.py" line="300"/>
       <source>Height of this stock cylinder</source>
-      <translation>Wysokość tego cylindra nadmiarowego</translation>
+      <translation>Wysokość tego walca półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Stock.py" line="336"/>
       <source>Internal representation of stock type</source>
-      <translation>Wewnętrzna reprezentacja typu naddatku</translation>
+      <translation>Wewnętrzna reprezentacja typu półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Gui/Fixture.py" line="38"/>
@@ -5069,7 +5069,7 @@ For example:
       <location filename="../../../Path/Op/Helix.py" line="127"/>
       <location filename="../../../Path/Op/PocketBase.py" line="151"/>
       <source>Percent of cutter diameter to step over on each pass</source>
-      <translation>Procent średnicy freza do przesunięcia przy każdym przejściu</translation>
+      <translation>Procent średnicy freza do szerokości skrawania przy każdym przejściu</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Adaptive.py" line="992"/>
@@ -5105,7 +5105,7 @@ For example:
     <message>
       <location filename="../../../Path/Op/Adaptive.py" line="1056"/>
       <source>Use Arcs (G2) for helix ramp</source>
-      <translation>Użyj Łuków (G2) dla pochylenia helisy</translation>
+      <translation>Użyj Łuków (G2) dla helisy zejścia po rampie</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Adaptive.py" line="1066"/>
@@ -5120,7 +5120,7 @@ For example:
     <message>
       <location filename="../../../Path/Op/Adaptive.py" line="1086"/>
       <source>Helix ramp entry angle (degrees)</source>
-      <translation>Kąt wejścia na pochylenie helisy (w stopniach)</translation>
+      <translation>Kąt wejścia na helisę zejścia po rampie (w stopniach)</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Adaptive.py" line="1095"/>
@@ -5167,12 +5167,12 @@ For example:
     <message>
       <location filename="../../../Path/Op/Base.py" line="152"/>
       <source>Holds the max Z value of Stock</source>
-      <translation>Przechowuje maksymalną wartość Z naddatku</translation>
+      <translation>Przechowuje maksymalną wartość Z półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Base.py" line="159"/>
       <source>Holds the min Z value of Stock</source>
-      <translation>Utrzymuje minimalną wartość Z naddatku</translation>
+      <translation>Utrzymuje minimalną wartość Z półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Base.py" line="180"/>
@@ -5318,12 +5318,12 @@ For example:
     <message>
       <location filename="../../../Path/Op/Drilling.py" line="123"/>
       <source>Enable pecking</source>
-      <translation>Włącz przerywanie wióra</translation>
+      <translation>Włącz zagłębianie</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Drilling.py" line="135"/>
       <source>The time to dwell between peck cycles</source>
-      <translation>Czas postoju między cyklami przerywania wióra</translation>
+      <translation>Czas postoju między cyklami zagłębiania</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Drilling.py" line="141"/>
@@ -5344,7 +5344,7 @@ For example:
     <message>
       <location filename="../../../Path/Op/Drilling.py" line="167"/>
       <source>The height where cutting feed rate starts and retract height for peck operation</source>
-      <translation>Wysokość, na której zaczyna się prędkość posuwu skrawania i wysokość wycofania dla operacji głębokiego zagłębiania</translation>
+      <translation>Wysokość, na której zaczyna się prędkość posuwu skrawania i wysokość wycofania dla operacji zagłębiania</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Drilling.py" line="173"/>
@@ -5444,7 +5444,7 @@ For example:
     <message>
       <location filename="../../../Path/Op/Pocket.py" line="97"/>
       <source>Process the model and stock in an operation with no Base Geometry selected.</source>
-      <translation>Przetwarzaj model i materiał w elemencie bez wybranej geometrii bazowej.</translation>
+      <translation>Przetwarzaj model i półfabrykat w elemencie bez wybranej geometrii bazowej.</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="128"/>
@@ -5484,26 +5484,15 @@ For example:
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="186"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="265"/>
+      <location filename="../../../Path/Op/PocketBase.py" line="255"/>
       <source>Last Stepover Radius.  If 0, 50% of cutter is used. Tuning this can be used to improve stepover for some shapes</source>
-      <translation>Ostatni promień przejścia. Jeśli 0, 50% noża jest używane. Dostrajanie może być użyte do poprawy przejścia dla niektórych kształtów</translation>
+      <translation>Ostatni promień szerokości skrawania. Jeśli 0, 50% noża jest używane. Dostrajanie może być użyte do poprawy przejścia dla niektórych kształtów</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="195"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="277"/>
+      <location filename="../../../Path/Op/PocketBase.py" line="267"/>
       <source>Skips machining regions that have already been cleared by previous operations.</source>
       <translation>Pomija obszary obróbki, które zostały już oczyszczone przez poprzednie operacje.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/PocketBase.py" line="204"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="288"/>
-      <source>The areas cleared by this operation, one area per height, stored as a compound part. Used internally for rest machining.</source>
-      <translation>Obszary oczyszczone w wyniku tej operacji, po jednym obszarze na wysokość, przechowywane jako część złożona. Używany wewnętrznie do obróbki spoczynkowej.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/PocketBase.py" line="299"/>
-      <source>Flag to indicate that the rest machining regions have never been computed, and must be recomputed before being used.</source>
-      <translation>Flaga wskazująca, że regiony obróbki spoczynkowej nigdy nie zostały obliczone i muszą zostać ponownie obliczone przed użyciem.</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Probe.py" line="55"/>
@@ -5739,7 +5728,7 @@ Climb (zgodnie z ruchem wskazówek zegara) lub Conventional (odwrotnie do ruchu 
       <location filename="../../../Path/Op/Surface.py" line="308"/>
       <location filename="../../../Path/Op/Waterline.py" line="346"/>
       <source>Reverse the cut order of the stepover paths. For circular cut patterns, begin at the outside and work toward the center.</source>
-      <translation>Odwróć kolejność obróbki ścieżek przejścia. W przypadku wykrojów okrągłych zacznij od zewnętrznej strony i pracuj w kierunku środka.</translation>
+      <translation>Odwróć kolejność obróbki ścieżek szerokości skrawania. W przypadku wykrojów okrągłych zacznij od zewnętrznej strony i pracuj w kierunku środka.</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Surface.py" line="317"/>
@@ -5774,7 +5763,7 @@ Climb (zgodnie z ruchem wskazówek zegara) lub Conventional (odwrotnie do ruchu 
       <location filename="../../../Path/Op/Surface.py" line="369"/>
       <location filename="../../../Path/Op/Waterline.py" line="407"/>
       <source>Set the stepover percentage, based on the tool's diameter.</source>
-      <translation>Ustaw wartość procentową skoku na podstawie średnicy narzędzia.</translation>
+      <translation>Ustaw wartość procentową szerokości skrawania na podstawie średnicy narzędzia.</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Surface.py" line="378"/>
@@ -5858,7 +5847,7 @@ Climb (zgodnie z ruchem wskazówek zegara) lub Conventional (odwrotnie do ruchu 
     <message>
       <location filename="../../../Path/Op/ThreadMilling.py" line="404"/>
       <source>Set to True to get lead in and lead out arcs at the start and end of the thread cut</source>
-      <translation>Należy ustawić wartość True, aby uzyskać łuki na początku i na końcu nacinania gwintu</translation>
+      <translation>Należy ustawić wartość Prawda, aby uzyskać łuki podejścia i odejścia z materiału na początku i na końcu nacinania gwintu</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/ThreadMilling.py" line="412"/>
@@ -5967,7 +5956,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
       <location filename="../../../Path/Op/Gui/Array.py" line="125"/>
       <location filename="../../../Path/Op/Gui/Array.py" line="175"/>
       <source>Seed value for jitter randomness</source>
-      <translation>Wartość początkowa losowości jittera</translation>
+      <translation>Wartość początkowa losowości drgań</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Gui/Comment.py" line="41"/>
@@ -6089,7 +6078,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Dressup/Gui/Boundary.py" line="267"/>
       <source>Creates a Path Boundary Dress-up from a selected path</source>
-      <translation>Tworzy obiekt ulepszenia brzegu ścieżki z wybranej ścieżki</translation>
+      <translation>Tworzy obiekt wykańczania brzegu ścieżki z wybranej ścieżki</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/Boundary.py" line="283"/>
@@ -6127,7 +6116,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Dressup/Gui/Tags.py" line="569"/>
       <source>Creates a Tag Dress-up object from a selected path</source>
-      <translation>Tworzy obiekt ulepszenia pól mocujących z wybranej ścieżki</translation>
+      <translation>Tworzy obiekt wykańczania pól mocujących z wybranej ścieżki</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/Tags.py" line="584"/>
@@ -6178,12 +6167,12 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Dressup/Gui/Boundary.py" line="167"/>
       <source>Unsupported stock object %s</source>
-      <translation>Nieobsługiwany obiekt naddatku %s</translation>
+      <translation>Nieobsługiwany obiekt półfabrykatu %s</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/Boundary.py" line="183"/>
       <source>Unsupported stock type %s (%d)</source>
-      <translation>Nieobsługiwany typ naddatku %s (%d)</translation>
+      <translation>Nieobsługiwany typ półfabrykatu %s (%d)</translation>
     </message>
   </context>
   <context>
@@ -6192,13 +6181,13 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
       <location filename="../../../Path/Dressup/Gui/Dogbone.py" line="1361"/>
       <location filename="../../../Path/Dressup/Gui/DogboneII.py" line="329"/>
       <source>Dogbone</source>
-      <translation>Nadcięcie w narożnikach</translation>
+      <translation>Zacięcie po skosie</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/Dogbone.py" line="1365"/>
       <location filename="../../../Path/Dressup/Gui/DogboneII.py" line="333"/>
       <source>Creates a Dogbone Dress-up object from a selected path</source>
-      <translation>Tworzy obiekt ulepszenia pól mocujących z wybranej ścieżki</translation>
+      <translation>Tworzy obiekt wykończenia zacięcia po skosie z wybranej ścieżki</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/Dogbone.py" line="1381"/>
@@ -6218,12 +6207,12 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Dressup/Gui/Dragknife.py" line="601"/>
       <source>DragKnife</source>
-      <translation>Rylec</translation>
+      <translation>Nóż wleczony</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/Dragknife.py" line="605"/>
       <source>Modifies a path to add dragknife corner actions</source>
-      <translation>Modyfikuje ścieżkę, żeby dodać akcję rylca narożnika</translation>
+      <translation>Modyfikuje ścieżkę, żeby dodać akcje noża wleczonego do narożnika</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/Dragknife.py" line="622"/>
@@ -6246,7 +6235,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Dressup/Gui/Preferences.py" line="39"/>
       <source>Dressups</source>
-      <translation>Ulepszenia</translation>
+      <translation>Operacje wykańczające</translation>
     </message>
   </context>
   <context>
@@ -6254,17 +6243,17 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="131"/>
       <source>RampMethod1</source>
-      <translation>Metoda parkowania 1</translation>
+      <translation>Metoda zejścia po rampie 1</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="132"/>
       <source>RampMethod2</source>
-      <translation>Metoda parkowania 2</translation>
+      <translation>Metoda zejścia po rampie 2</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="133"/>
       <source>RampMethod3</source>
-      <translation>Metoda parkowania 3</translation>
+      <translation>Metoda zejścia po rampie 3</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="134"/>
@@ -6284,7 +6273,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="146"/>
       <source>Ramp Feed Rate</source>
-      <translation>Szybkość posuwu parkowania</translation>
+      <translation>Szybkość posuwu zejścia po rampie</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="149"/>
@@ -6294,12 +6283,12 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="898"/>
       <source>RampEntry</source>
-      <translation>Parkowanie</translation>
+      <translation>Zejście po rampie</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="902"/>
       <source>Creates a Ramp Entry Dress-up object from a selected path</source>
-      <translation>Tworzy obiekt ulepszenia z parkowaniem, używając wybranej ścieżki</translation>
+      <translation>Tworzy obiekt obróbki wykańczającej z zejściem po rampie, używając wybranej ścieżki</translation>
     </message>
     <message>
       <location filename="../../../Path/Dressup/Gui/RampEntry.py" line="918"/>
@@ -6343,7 +6332,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Op/Gui/Probe.py" line="108"/>
       <source>Create a Probing Grid from a job stock</source>
-      <translation>Utwórz siatkę do pobierania próbek dla zadania naddatku</translation>
+      <translation>Utwórz siatkę do pobierania próbek dla zadania półfabrykatu</translation>
     </message>
   </context>
   <context>
@@ -6405,60 +6394,60 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Main/Gui/Job.py" line="526"/>
       <source>Stock not a cylinder!</source>
-      <translation>Naddatek nie jest walcem!</translation>
+      <translation>Półfabrykat nie jest walcem!</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="920"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="943"/>
       <source>Select Output File</source>
       <translation>Wybierz plik wyjściowy</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="922"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="945"/>
       <source>All Files (*.*)</source>
       <translation>Wszystkie pliki (*.*)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1303"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1326"/>
       <source>Unsupported stock object %s</source>
-      <translation>Nieobsługiwany obiekt półproduktu %s</translation>
+      <translation>Nieobsługiwany obiekt półfabrykatu %s</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1319"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1342"/>
       <source>Unsupported stock type %s (%d)</source>
-      <translation>Nieobsługiwany typ półproduktu %s (%d)</translation>
+      <translation>Nieobsługiwany typ półfabrykatu %s (%d)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1410"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1433"/>
       <source>Model Selection</source>
       <translation>Wybór modelu</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1598"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1621"/>
       <source>Warning</source>
       <translation>Ostrzeżenie</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1599"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1622"/>
       <source>Please add one.</source>
       <translation>Proszę dodać jeden.</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1600"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1623"/>
       <source>Ok</source>
       <translation>OK</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1602"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1625"/>
       <source>Add</source>
       <translation>Dodaj</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1613"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1636"/>
       <source>This job has no base model.</source>
       <translation>To zadanie nie ma modelu bazowego.</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1620"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1643"/>
       <source>This job has no tool.</source>
       <translation>Zadanie bez przydzielonego narzędzia.</translation>
     </message>
@@ -6495,7 +6484,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Main/Gui/JobDlg.py" line="383"/>
       <source>Unsupported stock type</source>
-      <translation>Nieobsługiwany typ naddatku</translation>
+      <translation>Nieobsługiwany typ półfabrykatu</translation>
     </message>
   </context>
   <context>
@@ -6508,12 +6497,12 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Main/Stock.py" line="603"/>
       <source>Unsupported stock type named {}</source>
-      <translation>Nieobsługiwany typ naddatku o nazwie {}</translation>
+      <translation>Nieobsługiwany typ półfabrykatu o nazwie {}</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Stock.py" line="611"/>
       <source>Unsupported PathStock template version {}</source>
-      <translation>Nieobsługiwana wersja szablonu naddatku ścieżki {}</translation>
+      <translation>Nieobsługiwana wersja szablonu półfabrykatu {}</translation>
     </message>
   </context>
   <context>
@@ -6620,7 +6609,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Main/Gui/Sanity.py" line="219"/>
       <source>Rough Stock</source>
-      <translation>Surowa przygotówka</translation>
+      <translation>Zgrubny półfabrykat</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Gui/Sanity.py" line="220"/>
@@ -6640,7 +6629,7 @@ OL Dropcutter* lub Eksperymentalny (nieoparty na OCL).</translation>
     <message>
       <location filename="../../../Path/Main/Gui/Sanity.py" line="224"/>
       <source>Squawks</source>
-      <translation>Kawałki</translation>
+      <translation>Komunikaty</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Gui/Sanity.py" line="225"/>
@@ -6888,7 +6877,7 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
     <message>
       <location filename="../../../Path/Main/Gui/Sanity.py" line="1494"/>
       <source>Consider Specifying the Stock Material</source>
-      <translation>Rozważ określenie materiału przygotówki</translation>
+      <translation>Rozważ określenie materiału półfabrykatu</translation>
     </message>
     <message>
       <location filename="../../../Path/Main/Gui/Sanity.py" line="1585"/>
@@ -6906,7 +6895,7 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
     <message>
       <location filename="../../../Path/Main/Gui/Simulator.py" line="635"/>
       <source>Simulate G-code on stock</source>
-      <translation>Symulacja ścieżki G-code na naddatku</translation>
+      <translation>Symulacja ścieżki G-code na półfabrykacie</translation>
     </message>
   </context>
   <context>
@@ -6953,11 +6942,6 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
       <location filename="../../../Path/Op/Area.py" line="122"/>
       <source>no job for operation %s found.</source>
       <translation>nie znaleziono zadań dla operacji %s.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/Area.py" line="259"/>
-      <source>Previous operation %s is required for rest machining, but it has no stored rest machining metadata. Recomputing to generate this metadata...</source>
-      <translation>Poprzednia operacja %s jest wymagana do obróbki spoczynkowej, ale nie ma zapisanych metadanych obróbki spoczynkowej. Należy ponownie wykonać obliczenia, aby wygenerować te metadane ...</translation>
     </message>
   </context>
   <context>
@@ -7144,7 +7128,7 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
     <message>
       <location filename="../../../Path/Op/MillFace.py" line="71"/>
       <source>Stock</source>
-      <translation>Półprodukt</translation>
+      <translation>Półfabrykat</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Pocket.py" line="117"/>
@@ -7232,7 +7216,7 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
     <message>
       <location filename="../../../Path/Op/Gui/PocketBase.py" line="88"/>
       <source>The distance the facing operation will extend beyond the boundary shape.</source>
-      <translation>Odległość, na jaką skierowana jest operacja, przekroczy granicę kształtu.</translation>
+      <translation>Odległość, na jaką operacja planowania przekroczy granicę kształtu.</translation>
     </message>
   </context>
   <context>
@@ -7519,7 +7503,7 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
     <message>
       <location filename="../../../Path/Op/Surface.py" line="450"/>
       <source>Stock</source>
-      <translation>Przygotówka</translation>
+      <translation>Półfabrykat</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Surface.py" line="453"/>
@@ -7778,12 +7762,12 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
   <context>
     <name>Path_Vcarve</name>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="344"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="359"/>
       <source>VCarve requires an engraving cutter with a cutting edge angle</source>
       <translation>Wycięcie V wymaga frezu do grawerowania o kącie nacięcia krawędzi</translation>
     </message>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="351"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="366"/>
       <source>Engraver cutting edge angle must be &lt; 180 degrees.</source>
       <translation>Kąt krawędzi tnącej grawera musi być &lt;180 stopni.</translation>
     </message>
@@ -7801,7 +7785,7 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
   <context>
     <name>PathVcarve</name>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="381"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="396"/>
       <source>The Job Base Object has no engraveable element. Engraving operation will produce no output.</source>
       <translation>Obiekt zadania nie posiada elementu, który można wygrawerować. Operacja grawerowania nie spowoduje wygenerowania danych wyjściowych.</translation>
     </message>
@@ -7831,7 +7815,7 @@ Starsze narzędzia nie są obsługiwane przez funkcję Bezpieczeństwo CAM</tran
     <message>
       <location filename="../../../Path/Op/Waterline.py" line="103"/>
       <source>Stock</source>
-      <translation>Półprodukt</translation>
+      <translation>Półfabrykat</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Waterline.py" line="106"/>
@@ -8222,7 +8206,7 @@ Przerwanie procesu tworzenia</translation>
     <message>
       <location filename="../../../Path/Op/Gui/MillFace.py" line="79"/>
       <source>Create a Facing Operation from a model or face</source>
-      <translation>Utwórz operację związaną z obróbką czołową z modelu lub powierzchni</translation>
+      <translation>Utwórz operację planowania z modelu lub powierzchni</translation>
     </message>
   </context>
   <context>

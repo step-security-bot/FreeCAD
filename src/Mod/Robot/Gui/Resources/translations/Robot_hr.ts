@@ -474,7 +474,7 @@
       <translation>Odaberite putanju koju želite doraditi.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Izmjene</translation>
     </message>

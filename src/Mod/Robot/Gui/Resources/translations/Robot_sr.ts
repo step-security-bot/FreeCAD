@@ -474,7 +474,7 @@
       <translation>Изабери Путању коју желиш да опремиш.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Измени</translation>
     </message>

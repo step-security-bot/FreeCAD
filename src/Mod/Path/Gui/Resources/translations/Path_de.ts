@@ -4293,15 +4293,15 @@ For example:
     'Metric, Small Parts &amp; CNC'
     'US Customary'
     'Imperial Decimal'</source>
-      <translation type="unfinished">The currently selected unit schema: 
-     '{}' for this document
- Does not use 'minutes' for velocity values. 
+      <translation>Das aktuell ausgewählte Einheitenschema: 
+     '{}' für dieses Dokument
+ verwendet keine 'Minuten' für Geschwindigkeitswerte. 
  
-CNC machines require feed rate to be expressed in 
-unit/minute. To ensure correct G-code: 
-Select a minute-based schema in preferences.
-For example:
-    'Metric, Small Parts &amp; CNC'
+CNC-Maschinen benötigen die Vorschubrate in 
+Einheit/Minute. Um einen korrekten G-Code sicherzustellen: 
+Wählen Sie in den Einstellungen ein Minuten basiertes Schema aus.
+Zum Beispiel:
+    'Metrisch, Kleine Teile &amp; CNC'
     'US Customary'
     'Imperial Decimal'</translation>
     </message>
@@ -4342,34 +4342,34 @@ For example:
       <translation>Camotics Projekt (*.camotics)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="625"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="627"/>
       <source>H</source>
       <comment>H is horizontal feed rate. Must be as short as possible</comment>
       <translation>H</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="628"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="632"/>
       <source>V</source>
       <comment>V is vertical feed rate. Must be as short as possible</comment>
       <translation>V</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="633"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="637"/>
       <source>Tool number</source>
       <translation>Werkzeugnummer</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="636"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="640"/>
       <source>Horizontal feedrate</source>
       <translation>Horizontale Vorschubgeschwindigkeit</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="639"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="643"/>
       <source>Vertical feedrate</source>
       <translation>Vertikale Vorschubgeschwindigkeit</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="642"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="646"/>
       <source>Spindle RPM</source>
       <translation>Spindel-Drehzahl</translation>
     </message>
@@ -5480,26 +5480,15 @@ For example:
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="186"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="265"/>
+      <location filename="../../../Path/Op/PocketBase.py" line="255"/>
       <source>Last Stepover Radius.  If 0, 50% of cutter is used. Tuning this can be used to improve stepover for some shapes</source>
       <translation>Letzter Überlappungsradius. Wenn 0, werden 50 % des Fräsers verwendet. Das Tuning dieses Wertes kann die Überlappung für einige Formen zu verbessern</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/PocketBase.py" line="195"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="277"/>
+      <location filename="../../../Path/Op/PocketBase.py" line="267"/>
       <source>Skips machining regions that have already been cleared by previous operations.</source>
       <translation>Überspringt Bearbeitungsbereiche, die bereits durch frühere Operationen entfernt wurden.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/PocketBase.py" line="204"/>
-      <location filename="../../../Path/Op/PocketBase.py" line="288"/>
-      <source>The areas cleared by this operation, one area per height, stored as a compound part. Used internally for rest machining.</source>
-      <translation>Die von dieser Operation entfernten Bereiche, ein Bereich pro Höhe, wird als Verbundteil gespeichert. Intern zur Restbearbeitung verwendet.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/PocketBase.py" line="299"/>
-      <source>Flag to indicate that the rest machining regions have never been computed, and must be recomputed before being used.</source>
-      <translation>Markieren, um anzugeben, dass die restlichen Bearbeitungsbereiche noch nie berechnet wurden und vor der Verwendung neu berechnet werden müssen.</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Probe.py" line="55"/>
@@ -6400,57 +6389,57 @@ For example:
       <translation>Rohmaterialkörper ist kein Zylinder!</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="920"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="943"/>
       <source>Select Output File</source>
       <translation>Ausgabedatei auswählen</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="922"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="945"/>
       <source>All Files (*.*)</source>
       <translation>Alle Dateien (*.*)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1303"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1326"/>
       <source>Unsupported stock object %s</source>
       <translation>Nicht unterstütztes Rohmaterial-Objekt %s</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1319"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1342"/>
       <source>Unsupported stock type %s (%d)</source>
       <translation>Nicht unterstützter Rohmaterial Typ %s (%d)</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1410"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1433"/>
       <source>Model Selection</source>
       <translation>Modellauswahl</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1598"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1621"/>
       <source>Warning</source>
       <translation>Warnung</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1599"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1622"/>
       <source>Please add one.</source>
       <translation>Bitte einen hinzufügen.</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1600"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1623"/>
       <source>Ok</source>
       <translation>Ok</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1602"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1625"/>
       <source>Add</source>
       <translation>Hinzufügen</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1613"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1636"/>
       <source>This job has no base model.</source>
       <translation>Dieser Auftrag hat kein Basismodell.</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/Job.py" line="1620"/>
+      <location filename="../../../Path/Main/Gui/Job.py" line="1643"/>
       <source>This job has no tool.</source>
       <translation>Dieser Auftrag hat kein Werkzeug.</translation>
     </message>
@@ -6945,11 +6934,6 @@ For example:
       <location filename="../../../Path/Op/Area.py" line="122"/>
       <source>no job for operation %s found.</source>
       <translation>Kein Auftrag zur Operation %s gefunden.</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Op/Area.py" line="259"/>
-      <source>Previous operation %s is required for rest machining, but it has no stored rest machining metadata. Recomputing to generate this metadata...</source>
-      <translation>Vorherige Operation %s ist für die Restbearbeitung erforderlich, aber es gibt keine gespeicherten Restbearbeitung Metadaten. Neuberechnen, um diese Metadaten zu generieren...</translation>
     </message>
   </context>
   <context>
@@ -7618,7 +7602,7 @@ For example:
     <message>
       <location filename="../../../Path/Op/Surface.py" line="485"/>
       <source>First</source>
-      <translation>First Angle / Europäisch</translation>
+      <translation>Erste</translation>
     </message>
     <message>
       <location filename="../../../Path/Op/Surface.py" line="486"/>
@@ -7770,12 +7754,12 @@ For example:
   <context>
     <name>Path_Vcarve</name>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="344"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="359"/>
       <source>VCarve requires an engraving cutter with a cutting edge angle</source>
       <translation>V-Ausschnitt benötigt einen Gravierfräser mit einem Schneidenwinkel</translation>
     </message>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="351"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="366"/>
       <source>Engraver cutting edge angle must be &lt; 180 degrees.</source>
       <translation>Der Schneidenwinkel des Gravierfräser muss &lt; 180 Grad sein.</translation>
     </message>
@@ -7793,7 +7777,7 @@ For example:
   <context>
     <name>PathVcarve</name>
     <message>
-      <location filename="../../../Path/Op/Vcarve.py" line="381"/>
+      <location filename="../../../Path/Op/Vcarve.py" line="396"/>
       <source>The Job Base Object has no engraveable element. Engraving operation will produce no output.</source>
       <translation>Das Basisobjekt für diesen Job hat kein gravierbares Element. Die Gravier-Operation wird kein Ergebnis liefern.</translation>
     </message>

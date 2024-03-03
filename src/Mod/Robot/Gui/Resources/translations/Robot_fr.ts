@@ -475,7 +475,7 @@ pour utiliser cette commande. Consultez la documentation pour plus de détails.<
       <translation>Sélectionnez la trajectoire que vous voulez habiller.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Modifier</translation>
     </message>

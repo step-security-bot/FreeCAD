@@ -474,7 +474,7 @@
       <translation>Selezionare la traiettoria da vestire.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Modifica</translation>
     </message>

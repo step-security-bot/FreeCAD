@@ -36,7 +36,7 @@
     <message>
       <location filename="../ui/openscadprefs-base.ui" line="99"/>
       <source>If this is checked, Features will claim their children in the tree view</source>
-      <translation>Si cette case est cochée, les objets afficheront leurs enfants dans la vue en arborescence</translation>
+      <translation>Si cette option est cochée, les objets afficheront leurs enfants dans la vue en arborescence.</translation>
     </message>
     <message>
       <location filename="../ui/openscadprefs-base.ui" line="102"/>
@@ -46,7 +46,7 @@
     <message>
       <location filename="../ui/openscadprefs-base.ui" line="119"/>
       <source>If this is checked, Multmatrix Object will be Parametric</source>
-      <translation>Si cette case est cochée, les objets Multimatrix seront paramétriques</translation>
+      <translation>Si cette option est cochée, les objets Multimatrix seront paramétriques.</translation>
     </message>
     <message>
       <location filename="../ui/openscadprefs-base.ui" line="122"/>
@@ -87,7 +87,7 @@
     <message>
       <location filename="../ui/openscadprefs-base.ui" line="215"/>
       <source>stdout pipe (requires OpenSCAD &gt;= 2021.1)</source>
-      <translation>stdout pipe (nécessite OpenSCAD &gt;= 2021.1)</translation>
+      <translation>stdout pipe (les tubes sur la sortie standard nécessitent OpenSCAD ≥ 2021.1)</translation>
     </message>
     <message>
       <location filename="../ui/openscadprefs-base.ui" line="227"/>
@@ -221,7 +221,7 @@
       <location filename="../../OpenSCADCommands.py" line="335"/>
       <location filename="../../OpenSCADCommands.py" line="368"/>
       <source>Refresh</source>
-      <translation>Actualiser</translation>
+      <translation>Rafraîchir</translation>
     </message>
     <message>
       <location filename="../../OpenSCADCommands.py" line="336"/>

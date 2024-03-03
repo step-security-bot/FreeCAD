@@ -474,7 +474,7 @@
       <translation>Оберіть траєкторію, за якою буде відбуватися побудова зовнішнього покрову.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Змінити</translation>
     </message>

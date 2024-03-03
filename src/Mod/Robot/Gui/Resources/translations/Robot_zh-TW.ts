@@ -474,7 +474,7 @@
       <translation>選取您想要修改的軌跡</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>修改</translation>
     </message>

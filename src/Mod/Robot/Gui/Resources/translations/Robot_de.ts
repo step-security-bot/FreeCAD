@@ -475,7 +475,7 @@ Siehe Dokumentation für Details.</translation>
       <translation>Wählen Sie die Bewegungsbahn die Sie verwenden wollen.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Bearbeiten</translation>
     </message>

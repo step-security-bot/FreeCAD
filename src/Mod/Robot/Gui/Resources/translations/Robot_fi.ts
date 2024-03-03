@@ -474,7 +474,7 @@
       <translation>Valitse liikerata, jonka haluat luoda.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Muokkaa</translation>
     </message>

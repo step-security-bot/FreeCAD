@@ -474,7 +474,7 @@
       <translation>Selecteer het traject dat u wilt aankleden.</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderTrajectory.cpp" line="148"/>
+      <location filename="../../ViewProviderTrajectory.cpp" line="145"/>
       <source>Modify</source>
       <translation>Modificeer</translation>
     </message>
