@@ -745,7 +745,7 @@ Deaktivieren um alle Objekte des Dokuments zu verwenden</translation>
     <message>
       <location filename="../ui/preferences-arch.ui" line="270"/>
       <source>If this is checked, flat groups of faces will be force-flattened, resulting in possible gaps and non-solid results</source>
-      <translation>Wenn diese Option aktiviert ist wird die Planheit von Flächen erzwungen, was zu Lücken und ungültigen Ergebnissen führen kann</translation>
+      <translation>Wenn dies angehakt ist, werden ebene Flächengruppen erzwungen verflacht, was zu möglichen Lücken und instabilen/unzuverlässigen Ergebnissen führen kann</translation>
     </message>
     <message>
       <location filename="../ui/preferences-arch.ui" line="45"/>

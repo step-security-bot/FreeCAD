@@ -137,22 +137,22 @@
       <translation>ბმების ჯგუფის შექმნა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="243"/>
+      <location filename="../CommandLink.cpp" line="240"/>
       <source>Make link</source>
       <translation>ბმის შექმნა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="296"/>
+      <location filename="../CommandLink.cpp" line="293"/>
       <source>Make sub-link</source>
       <translation>ქვებმის შექმნა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="584"/>
+      <location filename="../CommandLink.cpp" line="581"/>
       <source>Import links</source>
       <translation>ბმების შემოტანა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="625"/>
+      <location filename="../CommandLink.cpp" line="622"/>
       <source>Import all links</source>
       <translation>ყველა ბმის შემოტანა</translation>
     </message>
@@ -167,12 +167,12 @@
       <translation>ტექსტური დოკუმენტის ჩასმა</translation>
     </message>
     <message>
-      <location filename="../CommandStructure.cpp" line="68"/>
+      <location filename="../CommandStructure.cpp" line="64"/>
       <source>Add a part</source>
       <translation>სტანდარტული ნაწილის ჩასმა</translation>
     </message>
     <message>
-      <location filename="../CommandStructure.cpp" line="115"/>
+      <location filename="../CommandStructure.cpp" line="107"/>
       <source>Add a group</source>
       <translation>ჯგუფის დამატება</translation>
     </message>
@@ -234,6 +234,11 @@
       <location filename="../CommandFeat.cpp" line="92"/>
       <source>Set Random Color</source>
       <translation>შემთხვევითი ფერის დაყენება</translation>
+    </message>
+    <message>
+      <location filename="../CommandFeat.cpp" line="147"/>
+      <source>Toggle freeze</source>
+      <translation>გაყინვის გადართვა</translation>
     </message>
   </context>
   <context>
@@ -470,8 +475,8 @@
     </message>
     <message>
       <location filename="../QuantitySpinBox_p.h" line="54"/>
-      <source>Expression: </source>
-      <translation>გამოხატულება: </translation>
+      <source>Expression:</source>
+      <translation>გამოსახულება:</translation>
     </message>
   </context>
   <context>
@@ -559,7 +564,7 @@
   <context>
     <name>Gui::AutoSaver</name>
     <message>
-      <location filename="../AutoSaver.cpp" line="171"/>
+      <location filename="../AutoSaver.cpp" line="172"/>
       <source>Please wait until the AutoRecovery file has been saved...</source>
       <translation>მიმდინარეობს აღდგენის ფაილის ჩაწერა. გთხოვთ მოითმინოთ...</translation>
     </message>
@@ -1272,14 +1277,14 @@ If this is not ticked, then the property must be uniquely named, and it is acces
     </message>
     <message>
       <location filename="../DlgKeyboard.ui" line="137"/>
-      <source>Multi-key sequence delay: </source>
-      <translation>მრავალღილაკიანი მიმდევრობის დაყოვნება: </translation>
+      <source>Multi-key sequence delay:</source>
+      <translation>მრავალღილაკიანი მიმდევრობის დაყოვნება:</translation>
     </message>
     <message>
       <location filename="../DlgKeyboard.ui" line="156"/>
-      <source>Time in milliseconds to wait for the next key stroke of the current key sequence.
+      <source>Time in milliseconds to wait for the next keystroke of the current key sequence.
 For example, pressing 'F' twice in less than the time delay setting here will be
-be treated as shorctcut key sequence 'F, F'.</source>
+treated as shortcut key sequence 'F, F'.</source>
       <translation>დრო მილიწამებში, როცა მიმდინარე ღილაკების მიმდევრობაში შემდეგ ღილაკს უნდა დაველოდოთ.
 მაგალითად, 'F'-ზე ორჯერ დაწოლა მითითებულ დაყოვნებაზე ნაკლებ დროში აღქმული იქნება, როგორც
 მალსახმობი ღილაკების მიმდევრობისთვის 'F', 'F'.</translation>
@@ -2849,11 +2854,6 @@ lower right corner within opened files</source>
       <translation>კუთხეში კოორდინატების სისტემის ჩვენება</translation>
     </message>
     <message>
-      <location filename="../PreferencePages/DlgSettings3DView.ui" line="63"/>
-      <source>Relative size :   </source>
-      <translation>შედარებითი ზომა :   </translation>
-    </message>
-    <message>
       <location filename="../PreferencePages/DlgSettings3DView.ui" line="73"/>
       <source>Size of main coordinate system representation
 in the corner -- in % of height/width of viewport</source>
@@ -2929,6 +2929,11 @@ VBO-ს გააჩნია წარმადობის მნიშვნ�
 
 შენიშვნა: ზოგჯერ ამ თვისებამ შეიძლება გამოიწვიოს მრავალი განსხვავებული
 პრობლემები დაწყებული გრაფიკული ანომალიებით დამთავრებული GPU-ის ავარიული შეცდომებით. დაიმახსოვრეთ, რომ ამ პარამეტრის ჩართულობის მოხსენიება FreeCAD-ის ფორუმზე დახმარების ძებნისას აუცილებელია</translation>
+    </message>
+    <message>
+      <location filename="../PreferencePages/DlgSettings3DView.ui" line="63"/>
+      <source>Relative size:</source>
+      <translation>შედარებითი ზომა:</translation>
     </message>
     <message>
       <location filename="../PreferencePages/DlgSettings3DView.ui" line="99"/>
@@ -4451,8 +4456,8 @@ horizontal space in Python console</source>
     </message>
     <message>
       <location filename="../PreferencePages/DlgSettingsPythonConsole.ui" line="84"/>
-      <source>Python profiler interval (milliseconds): </source>
-      <translation>Python-ის პროფაილერის ინტერვალი (მწმ): </translation>
+      <source>Python profiler interval (milliseconds):</source>
+      <translation>Python-ის პროფაილერის ინტერვალი (მწმ):</translation>
     </message>
     <message>
       <location filename="../PreferencePages/DlgSettingsPythonConsole.ui" line="91"/>
@@ -5333,7 +5338,7 @@ The 'Status' column shows whether the document could be recovered.</source>
     <message>
       <location filename="../Placement.ui" line="204"/>
       <source>Rotation:</source>
-      <translation>ბრუნვა:</translation>
+      <translation>შემობრუნება:</translation>
     </message>
     <message>
       <location filename="../Placement.ui" line="226"/>
@@ -5949,7 +5954,7 @@ Do you want to save your changes?</source>
   <context>
     <name>Gui::ExpressionLineEdit</name>
     <message>
-      <location filename="../ExpressionCompleter.cpp" line="963"/>
+      <location filename="../ExpressionCompleter.cpp" line="965"/>
       <source>Exact match</source>
       <translation>სრული დამთხვევა</translation>
     </message>
@@ -5957,7 +5962,7 @@ Do you want to save your changes?</source>
   <context>
     <name>Gui::ExpressionTextEdit</name>
     <message>
-      <location filename="../ExpressionCompleter.cpp" line="1068"/>
+      <location filename="../ExpressionCompleter.cpp" line="1061"/>
       <source>Exact match</source>
       <translation>სრული დამთხვევა</translation>
     </message>
@@ -7485,7 +7490,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="../Tree.cpp" line="3535"/>
       <source>Tree view</source>
-      <translation>ელემენტების ხე</translation>
+      <translation>ხის ხედი</translation>
     </message>
   </context>
   <context>
@@ -7580,7 +7585,7 @@ Do you want to specify another directory?</source>
     </message>
     <message>
       <location filename="../Tree.cpp" line="3170"/>
-      <location filename="../Tree.cpp" line="5399"/>
+      <location filename="../Tree.cpp" line="5430"/>
       <source>Rename</source>
       <translation>სახელის გადარქმევა</translation>
     </message>
@@ -7670,12 +7675,12 @@ Do you want to specify another directory?</source>
       <translation>მონიშნული ობიექტის თავიდან გამოთვლა</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="5370"/>
+      <location filename="../Tree.cpp" line="5401"/>
       <source> (but must be executed)</source>
       <translation> (მაგრამ უნდა შესრულდეს)</translation>
     </message>
     <message>
-      <location filename="../Tree.cpp" line="5372"/>
+      <location filename="../Tree.cpp" line="5403"/>
       <source>%1, Internal name: %2</source>
       <translation>%1, შიდა სახელი: %2</translation>
     </message>
@@ -7864,8 +7869,8 @@ Do you want to specify another directory?</source>
     </message>
     <message>
       <location filename="../DlgLocationPos.ui" line="162"/>
-      <source>5 m </source>
-      <translation>5 მ </translation>
+      <source>5 m</source>
+      <translation>5 მ</translation>
     </message>
   </context>
   <context>
@@ -7888,7 +7893,7 @@ Do you want to specify another directory?</source>
     <message>
       <location filename="../MainWindow.cpp" line="674"/>
       <source>Tree view</source>
-      <translation>ხის ხედი</translation>
+      <translation>ელემენტების ხე</translation>
     </message>
     <message>
       <location filename="../MainWindow.cpp" line="596"/>
@@ -8354,8 +8359,8 @@ Do you want to continue?</source>
     </message>
     <message>
       <location filename="../NotificationArea.cpp" line="1087"/>
-      <source>Notifier: </source>
-      <translation>გამფრთხილებელი: </translation>
+      <source>Notifier:</source>
+      <translation>გამფრთხილებელი:</translation>
     </message>
     <message>
       <location filename="../NotificationArea.cpp" line="1089"/>
@@ -8714,7 +8719,7 @@ Please open a browser window and type in: http://localhost:%1.</source>
     <message>
       <location filename="../SoFCCSysDragger.cpp" line="941"/>
       <source>Rotation:</source>
-      <translation>შემობრუნება:</translation>
+      <translation>ბრუნვა:</translation>
     </message>
     <message>
       <location filename="../ViewProviderTextDocument.cpp" line="76"/>
@@ -8745,32 +8750,32 @@ Please open a browser window and type in: http://localhost:%1.</source>
       <translation>ბმულების ჯგუფის შექმნის შეცდომა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="264"/>
+      <location filename="../CommandLink.cpp" line="261"/>
       <source>Create link failed</source>
       <translation>ბმის შექმნის შეცდომა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="339"/>
+      <location filename="../CommandLink.cpp" line="336"/>
       <source>Failed to create relative link</source>
       <translation>შედარებითი ბმულის შექმნის შეცდომა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="467"/>
+      <location filename="../CommandLink.cpp" line="464"/>
       <source>Unlink failed</source>
       <translation>განცალკევების შეცდომა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="467"/>
+      <location filename="../CommandLink.cpp" line="464"/>
       <source>Replace link failed</source>
       <translation>ბმულის ჩანაცვლების შეცდომა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="597"/>
+      <location filename="../CommandLink.cpp" line="594"/>
       <source>Failed to import links</source>
       <translation>ბმულების შემოტანის შეცდომა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="636"/>
+      <location filename="../CommandLink.cpp" line="633"/>
       <source>Failed to import all links</source>
       <translation>ყველა ბმულის შემოტანის შეცდომა</translation>
     </message>
@@ -8926,18 +8931,18 @@ the current copy will be lost.
       <translation>ფერის ლეგენდა</translation>
     </message>
     <message>
-      <location filename="../OverlayManager.cpp" line="1035"/>
+      <location filename="../OverlayManager.cpp" line="1047"/>
       <source>Toggle overlay</source>
       <translation>განლაგების გადართვა</translation>
     </message>
     <message>
-      <location filename="../OverlayManager.cpp" line="1036"/>
+      <location filename="../OverlayManager.cpp" line="1048"/>
       <location filename="../OverlayWidgets.cpp" line="2180"/>
       <source>Toggle floating window</source>
       <translation>მცურავი ფანჯრის გადართვა</translation>
     </message>
     <message>
-      <location filename="../OverlayManager.cpp" line="1037"/>
+      <location filename="../OverlayManager.cpp" line="1049"/>
       <source>Close dock window</source>
       <translation>მიმაგრებული ფანჯრის დახურვა</translation>
     </message>
@@ -8975,7 +8980,7 @@ the current copy will be lost.
     <message>
       <location filename="../PreferencePages/DlgSettingsUI.cpp" line="541"/>
       <source>Show visibility icon</source>
-      <translation type="unfinished">Show visibility icon</translation>
+      <translation>ხილვადობის ხატულის ჩვენება</translation>
     </message>
     <message>
       <location filename="../PreferencePages/DlgSettingsUI.cpp" line="543"/>
@@ -9145,12 +9150,12 @@ the current copy will be lost.
     <message>
       <location filename="../ViewProviderSuppressibleExtension.cpp" line="114"/>
       <source>UnSuppress</source>
-      <translation type="unfinished">UnSuppress</translation>
+      <translation>მოცილების გაუქმება</translation>
     </message>
     <message>
       <location filename="../ViewProviderSuppressibleExtension.cpp" line="116"/>
       <source>Suppress</source>
-      <translation type="unfinished">Suppress</translation>
+      <translation>მოცილება</translation>
     </message>
   </context>
   <context>
@@ -9718,12 +9723,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdGroup</name>
     <message>
-      <location filename="../CommandStructure.cpp" line="98"/>
+      <location filename="../CommandStructure.cpp" line="94"/>
       <source>Create group</source>
       <translation>ჯგუფის შექმნა</translation>
     </message>
     <message>
-      <location filename="../CommandStructure.cpp" line="100"/>
+      <location filename="../CommandStructure.cpp" line="95"/>
       <source>A Group is a general purpose container to group objects in the Tree view, regardless of their data type. It is a simple folder to organize the objects in a model.</source>
       <translation>ჯგუფი ზოგადი დანიშნულების კონტეინერია ხის ხედში ობიექტების დასაჯგუფებლად, მათი მონაცემების ტიპის მიუხედავად. ეს მარტივი საქაღალდეა მოდელში ობიექტების დასალაგებლად.</translation>
     </message>
@@ -9783,13 +9788,13 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkActions</name>
     <message>
-      <location filename="../CommandLink.cpp" line="881"/>
+      <location filename="../CommandLink.cpp" line="878"/>
       <source>Link actions</source>
       <translation>ბმული</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="882"/>
-      <location filename="../CommandLink.cpp" line="884"/>
+      <location filename="../CommandLink.cpp" line="879"/>
+      <location filename="../CommandLink.cpp" line="881"/>
       <source>Actions that apply to link objects</source>
       <translation>მიბმულ ობიექტებზე გადატარებადი ქმედებები</translation>
     </message>
@@ -9797,12 +9802,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkImport</name>
     <message>
-      <location filename="../CommandLink.cpp" line="547"/>
+      <location filename="../CommandLink.cpp" line="544"/>
       <source>Import links</source>
       <translation>ბმების შემოტანა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="548"/>
+      <location filename="../CommandLink.cpp" line="545"/>
       <source>Import selected external link(s)</source>
       <translation>მონიშნული გარე ბმულ(ებ)-ის შემოტანა</translation>
     </message>
@@ -9810,12 +9815,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkImportAll</name>
     <message>
-      <location filename="../CommandLink.cpp" line="611"/>
+      <location filename="../CommandLink.cpp" line="608"/>
       <source>Import all links</source>
       <translation>ყველა ბმის შემოტანა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="612"/>
+      <location filename="../CommandLink.cpp" line="609"/>
       <source>Import all links of the active document</source>
       <translation>აქტიური დოკუმენტის ყველა ბმულის შემოტანა</translation>
     </message>
@@ -9828,8 +9833,8 @@ the current copy will be lost.
       <translation>ბმის შექმნა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="212"/>
-      <source>A Link is an object that references or links to another object in the same document, or in another document.Unlike Clones, Links reference the original Shape directly,  making them more memory efficient which helps with the creation of complex assemblies.</source>
+      <location filename="../CommandLink.cpp" line="211"/>
+      <source>A Link is an object that references or links to another object in the same document, or in another document. Unlike Clones, Links reference the original Shape directly, making them more memory-efficient, which helps with the creation of complex assemblies.</source>
       <translation>ბმული ობიექტია, რომელიც მიმართავს ან მიაბამს სხვა ობიექტს იგივე, ან სხვა დოკუმენტში. კლონებისგან განსხვავებით, ბმული საწყის მოხაზულობას პირდაპირ მიმართავს, რითიც ეს უფრო ნაკლებ მეხსიერებას დახარჯავს, რაც უფრო რთული ანაწყობების შექმნის საშუალებას მოგცემთ.</translation>
     </message>
   </context>
@@ -9849,12 +9854,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkMakeRelative</name>
     <message>
-      <location filename="../CommandLink.cpp" line="278"/>
+      <location filename="../CommandLink.cpp" line="275"/>
       <source>Make sub-link</source>
       <translation>ქვებმის შექმნა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="279"/>
+      <location filename="../CommandLink.cpp" line="276"/>
       <source>Create a sub-object or sub-element link</source>
       <translation>ქვეობიექტის ან ქვეელემენტის ბმულის შექმნა</translation>
     </message>
@@ -9862,12 +9867,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkReplace</name>
     <message>
-      <location filename="../CommandLink.cpp" line="499"/>
+      <location filename="../CommandLink.cpp" line="496"/>
       <source>Replace with link</source>
       <translation>ბმულით ჩანაცვლება</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="500"/>
+      <location filename="../CommandLink.cpp" line="497"/>
       <source>Replace the selected object(s) with link</source>
       <translation>მონიშნული ობიექტ(ებ)-ის ბმულით ჩანაცვლება</translation>
     </message>
@@ -9875,13 +9880,13 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkSelectActions</name>
     <message>
-      <location filename="../CommandLink.cpp" line="855"/>
+      <location filename="../CommandLink.cpp" line="852"/>
       <source>Link navigation</source>
       <translation>ბმულით ნავიგაცია</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="856"/>
-      <location filename="../CommandLink.cpp" line="858"/>
+      <location filename="../CommandLink.cpp" line="853"/>
+      <location filename="../CommandLink.cpp" line="855"/>
       <source>Link navigation actions</source>
       <translation>მოქმედებები ბმულზე გადასვლისას</translation>
     </message>
@@ -9889,12 +9894,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkSelectAllLinks</name>
     <message>
-      <location filename="../CommandLink.cpp" line="815"/>
+      <location filename="../CommandLink.cpp" line="812"/>
       <source>Select all links</source>
       <translation>ყველა ბმის მონიშვნა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="816"/>
+      <location filename="../CommandLink.cpp" line="813"/>
       <source>Select all links to the current selected object</source>
       <translation>მონიშნული ობიექტის ყველა ბმულის მონიშვნა</translation>
     </message>
@@ -9902,12 +9907,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkSelectLinked</name>
     <message>
-      <location filename="../CommandLink.cpp" line="652"/>
+      <location filename="../CommandLink.cpp" line="649"/>
       <source>Go to linked object</source>
       <translation>მიბმულ ობიექტზე გადასვლა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="653"/>
+      <location filename="../CommandLink.cpp" line="650"/>
       <source>Select the linked object and switch to its owner document</source>
       <translation>აირჩიეთ მიბმული ობიექტი და გადაერთეთ მისი მფლობელ დოკუმენტზე</translation>
     </message>
@@ -9915,12 +9920,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkSelectLinkedFinal</name>
     <message>
-      <location filename="../CommandLink.cpp" line="780"/>
+      <location filename="../CommandLink.cpp" line="777"/>
       <source>Go to the deepest linked object</source>
       <translation>უღრმეს მიბმულ ობიექტზე გადასვლა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="781"/>
+      <location filename="../CommandLink.cpp" line="778"/>
       <source>Select the deepest linked object and switch to its owner document</source>
       <translation>აირჩიეთ უღრმესი მიბმული ობიექტი და გადაერთეთ მისი მფლობელ დოკუმენტზე</translation>
     </message>
@@ -9928,12 +9933,12 @@ the current copy will be lost.
   <context>
     <name>StdCmdLinkUnlink</name>
     <message>
-      <location filename="../CommandLink.cpp" line="523"/>
+      <location filename="../CommandLink.cpp" line="520"/>
       <source>Unlink</source>
       <translation>ბმის მოხსნა</translation>
     </message>
     <message>
-      <location filename="../CommandLink.cpp" line="524"/>
+      <location filename="../CommandLink.cpp" line="521"/>
       <source>Strip on level of link</source>
       <translation>ბმულის დონეზესეგმენტაცია</translation>
     </message>
@@ -10152,9 +10157,8 @@ the current copy will be lost.
       <translation>ნაწილის შექმნა</translation>
     </message>
     <message>
-      <location filename="../CommandStructure.cpp" line="53"/>
-      <source>A Part is is a general purpose container to keep together a group of objects so that they act as a unit in the 3D view.
-It is meant to arrange objects that have a Part TopoShape, like Part Primitives, PartDesign Bodies, and other Parts.</source>
+      <location filename="../CommandStructure.cpp" line="52"/>
+      <source>A Part is a general purpose container to keep together a group of objects so that they act as a unit in the 3D view. It is meant to arrange objects that have a Part TopoShape, like Part Primitives, PartDesign Bodies, and other Parts.</source>
       <translation>ნაწილი ზოგადი დანიშნულების კონტეინერია ობიექტების ჯგუფების ერთად საქონლად ისე, რომ 3D ხედში ისინი ერთ ერთეულად იქცევიან. ეს განკუთვნილია, რომ დაალაგოთ ისეთი ობიექტები, რომლებსაც აქვთ ნაწილი TopoShape, ნაწილის პრიმიტივების მსგავსი, ნაწილის დიზაინის სხეულები და სხვა ნაწილები.</translation>
     </message>
   </context>
@@ -10473,13 +10477,13 @@ It is meant to arrange objects that have a Part TopoShape, like Part Primitives,
   <context>
     <name>StdCmdSendToPythonConsole</name>
     <message>
-      <location filename="../CommandFeat.cpp" line="135"/>
+      <location filename="../CommandFeat.cpp" line="184"/>
       <source>&amp;Send to Python Console</source>
       <translation>&amp;Python-ის კონსოლზე გაგზავნა</translation>
     </message>
     <message>
-      <location filename="../CommandFeat.cpp" line="136"/>
-      <location filename="../CommandFeat.cpp" line="138"/>
+      <location filename="../CommandFeat.cpp" line="185"/>
+      <location filename="../CommandFeat.cpp" line="187"/>
       <source>Sends the selected object to the Python console</source>
       <translation>მონიშნული ობიექტის Python-ის ობიექტზე გაგზავნა</translation>
     </message>
@@ -11175,7 +11179,7 @@ It is meant to arrange objects that have a Part TopoShape, like Part Primitives,
     <message>
       <location filename="../CommandView.cpp" line="1512"/>
       <source>Trimetric</source>
-      <translation>ტრიმეტრიული</translation>
+      <translation>ტრიმეტრული</translation>
     </message>
     <message>
       <location filename="../CommandView.cpp" line="1513"/>
@@ -11688,7 +11692,7 @@ Do you want to save the document now?</source>
   <context>
     <name>Std_Group</name>
     <message>
-      <location filename="../CommandStructure.cpp" line="119"/>
+      <location filename="../CommandStructure.cpp" line="111"/>
       <source>Group</source>
       <translation>ჯგუფი</translation>
     </message>
@@ -11760,7 +11764,7 @@ Do you still want to proceed?</source>
     <message>
       <location filename="../TreeParams.cpp" line="1399"/>
       <source>If enabled, show an eye icon before the tree view items, showing the items visibility status. When clicked the visibility is toggled</source>
-      <translation type="unfinished">If enabled, show an eye icon before the tree view items, showing the items visibility status. When clicked the visibility is toggled</translation>
+      <translation>თუ ჩართულია, აჩვენე თვალის ხატულა ხის ხედის ელემენტებამდე, რომელიც ელემენტის ხილვადობის სტატუსს აჩვენებს. დაწკაპუნებისას ხილვადობა გადაირთვება</translation>
     </message>
   </context>
   <context>
@@ -12236,7 +12240,7 @@ FreeCAD-ის გაშვების შემდეგ</translation>
     <message>
       <location filename="../TaskView/TaskImage.ui" line="263"/>
       <source>Apply</source>
-      <translation>დადება</translation>
+      <translation>გადატარება</translation>
     </message>
     <message>
       <location filename="../TaskView/TaskImage.ui" line="270"/>
@@ -12936,7 +12940,7 @@ display the splash screen</source>
     <message>
       <location filename="../PreferencePages/DlgSettingsGeneral.cpp" line="562"/>
       <source>Apply</source>
-      <translation>გადატარება</translation>
+      <translation>დადება</translation>
     </message>
     <message>
       <location filename="../PreferencePages/DlgSettingsGeneral.cpp" line="563"/>
@@ -13672,6 +13676,19 @@ the region are non-opaque.</source>
       <location filename="../CommandDoc.cpp" line="1729"/>
       <source>Show the property view, which displays the properties of the selected object.</source>
       <translation>თვისების ხედის ჩვენება, რომელიც მონიშნული ობიექტის თვისებებს აჩვენებს.</translation>
+    </message>
+  </context>
+  <context>
+    <name>StdCmdToggleFreeze</name>
+    <message>
+      <location filename="../CommandFeat.cpp" line="132"/>
+      <source>Toggle freeze</source>
+      <translation>გაყინვის გადართვა</translation>
+    </message>
+    <message>
+      <location filename="../CommandFeat.cpp" line="134"/>
+      <source>Toggles freeze sate of the selected objects. A freezed object is not recomputed when its parents change.</source>
+      <translation>გადართავს მონიშნული ობიექტების გაყინვის მდგომარეობას. გაყინული ობიექტი არ გადაითვლება, როცა მისი მშობლები იცვლება.</translation>
     </message>
   </context>
 </TS>

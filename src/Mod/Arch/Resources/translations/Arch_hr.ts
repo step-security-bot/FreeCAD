@@ -295,7 +295,7 @@ Ostavite prazno da biste koristili sve predmete iz dokumenta</translation>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="145"/>
       <source>Add row</source>
-      <translation>Dodaj red</translation>
+      <translation>Dodaj redak</translation>
     </message>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="156"/>
@@ -305,7 +305,7 @@ Ostavite prazno da biste koristili sve predmete iz dokumenta</translation>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="159"/>
       <source>Del row</source>
-      <translation>Ukloni red</translation>
+      <translation>Ukloni redak</translation>
     </message>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="170"/>
@@ -755,17 +755,17 @@ Opcionalni popis filtera svojstva:vrijednost odvojenih zarezom (;). Preporučite
     <message>
       <location filename="../ui/preferences-arch.ui" line="45"/>
       <source>Join base sketches of walls if possible</source>
-      <translation type="unfinished">Join base sketches of walls if possible</translation>
+      <translation>Spoji osnove skice zidova ako je moguće</translation>
     </message>
     <message>
       <location filename="../ui/preferences-arch.ui" line="61"/>
       <source>Remove external geometry of base sketches if needed</source>
-      <translation type="unfinished">Remove external geometry of base sketches if needed</translation>
+      <translation>Po potrebi uklonite vanjsku geometriju osnovnih skica</translation>
     </message>
     <message>
       <location filename="../ui/preferences-arch.ui" line="144"/>
       <source>Do not compute areas for objects with more than</source>
-      <translation type="unfinished">Do not compute areas for objects with more than</translation>
+      <translation>Nemojte praviti izračun područja za objekte sa više od</translation>
     </message>
     <message>
       <location filename="../ui/preferences-arch.ui" line="273"/>
@@ -909,22 +909,22 @@ umjesto Web radne površine FreeCAD-a
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="26"/>
       <source>Wall color</source>
-      <translation type="unfinished">Wall color</translation>
+      <translation>Boja zida</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="57"/>
       <source>Structure color</source>
-      <translation type="unfinished">Structure color</translation>
+      <translation>Boja strukture</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="81"/>
       <source>Rebar color</source>
-      <translation type="unfinished">Rebar color</translation>
+      <translation>Boja građevinskog željeza</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="105"/>
       <source>Window glass transparency</source>
-      <translation type="unfinished">Window glass transparency</translation>
+      <translation>Prozirnost stakla prozora</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="118"/>
@@ -935,27 +935,27 @@ umjesto Web radne površine FreeCAD-a
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="137"/>
       <source>Window glass color</source>
-      <translation type="unfinished">Window glass color</translation>
+      <translation>Boja stakla prozora</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="161"/>
       <source>Panel color</source>
-      <translation type="unfinished">Panel color</translation>
+      <translation>Boja ploče</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="185"/>
       <source>Helper color (grids, axes, etc.)</source>
-      <translation type="unfinished">Helper color (grids, axes, etc.)</translation>
+      <translation>Boja pomagača (rešetki, osi, itd.)</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="209"/>
       <source>Space transparency</source>
-      <translation type="unfinished">Space transparency</translation>
+      <translation>Prozirnost prostora</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="235"/>
       <source>Space line style</source>
-      <translation type="unfinished">Space line style</translation>
+      <translation>Stil linije prostora</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="252"/>
@@ -980,7 +980,7 @@ umjesto Web radne površine FreeCAD-a
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="275"/>
       <source>Space line color</source>
-      <translation type="unfinished">Space line color</translation>
+      <translation>Boja linije prostora</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="302"/>
@@ -990,42 +990,42 @@ umjesto Web radne površine FreeCAD-a
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="308"/>
       <source>Use sketches for walls</source>
-      <translation type="unfinished">Use sketches for walls</translation>
+      <translation>Koristi skice za zidove</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="324"/>
       <source>Pipe diameter</source>
-      <translation type="unfinished">Pipe diameter</translation>
+      <translation>Promjer cijevi</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="357"/>
       <source>Rebar diameter</source>
-      <translation type="unfinished">Rebar diameter</translation>
+      <translation>Promjer Građevinskog željeza</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="389"/>
       <source>Rebar offset</source>
-      <translation type="unfinished">Rebar offset</translation>
+      <translation>Pomak Građevinskog željeza</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="415"/>
       <source>Stair length</source>
-      <translation type="unfinished">Stair length</translation>
+      <translation>Dužina stube</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="441"/>
       <source>Stair width</source>
-      <translation type="unfinished">Stair width</translation>
+      <translation>Širina stube</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="467"/>
       <source>Stair height</source>
-      <translation type="unfinished">Stair height</translation>
+      <translation>Visina stube</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="493"/>
       <source>Number of stair steps</source>
-      <translation type="unfinished">Number of stair steps</translation>
+      <translation>Broj koraka stubišta</translation>
     </message>
     <message>
       <location filename="../ui/preferences-ifc.ui" line="14"/>
@@ -1691,7 +1691,7 @@ jedinice s kojom treba raditi prilikom otvaranja datoteke.
       <location filename="../../ArchStructure.py" line="128"/>
       <location filename="../../ArchStructure.py" line="434"/>
       <source>Column</source>
-      <translation>Stupci</translation>
+      <translation>Stupac</translation>
     </message>
     <message>
       <location filename="../../ArchStructure.py" line="150"/>
@@ -2190,28 +2190,25 @@ Ako je Run = 0, tada se proračun izračunava tako da je visina jednaka relativn
     <message>
       <location filename="../../ArchWindowPresets.py" line="522"/>
       <source>Opening</source>
-      <translation type="unfinished">Opening</translation>
+      <translation>Otvaranje</translation>
     </message>
     <message>
       <location filename="../../ArchCutPlane.py" line="176"/>
       <source>Select two objects, an object to be cut and an object defining a cutting plane, in that order
 </source>
-      <translation type="unfinished">Select two objects, an object to be cut and an object defining a cutting plane, in that order
-</translation>
+      <translation>Odaberite dva objekta, redom: prvo objekt koji želite rezati, a zatim onaj koji definira ravninu reza</translation>
     </message>
     <message>
       <location filename="../../ArchCutPlane.py" line="179"/>
       <source>The first object does not have a shape
 </source>
-      <translation type="unfinished">The first object does not have a shape
-</translation>
+      <translation>Prvi objekt nema oblik</translation>
     </message>
     <message>
       <location filename="../../ArchCutPlane.py" line="182"/>
       <source>The second object does not define a plane
 </source>
-      <translation type="unfinished">The second object does not define a plane
-</translation>
+      <translation>Drugi objekt ne definira ravninu</translation>
     </message>
     <message>
       <location filename="../../ArchCutPlane.py" line="216"/>
@@ -2816,7 +2813,7 @@ Ako je Run = 0, tada se proračun izračunava tako da je visina jednaka relativn
     <message>
       <location filename="../../ArchGrid.py" line="432"/>
       <source>Rows</source>
-      <translation>Redovi</translation>
+      <translation>Retci</translation>
     </message>
     <message>
       <location filename="../../ArchGrid.py" line="432"/>
@@ -2836,7 +2833,7 @@ Ako je Run = 0, tada se proračun izračunava tako da je visina jednaka relativn
     <message>
       <location filename="../../ArchPrecast.py" line="1007"/>
       <source>Chamfer</source>
-      <translation>Žlijeb</translation>
+      <translation>Faseta</translation>
     </message>
     <message>
       <location filename="../../ArchPrecast.py" line="1008"/>
@@ -4091,7 +4088,7 @@ Stvaranje zgrade prekinuto.</translation>
     <message>
       <location filename="../../ArchBuildingPart.py" line="566"/>
       <source>If true, display offset will affect the origin mark too</source>
-      <translation>Ako je istina,  pomak prikaza će utjecati i na oznaku podrijetla</translation>
+      <translation>Ako je istina,  pomak prikaza će utjecati i na oznaku ishodišta</translation>
     </message>
     <message>
       <location filename="../../ArchBuildingPart.py" line="568"/>
@@ -4369,7 +4366,7 @@ Stvaranje zgrade prekinuto.</translation>
     <message>
       <location filename="../../ArchSite.py" line="639"/>
       <source>An optional offset between the model (0,0,0) origin and the point indicated by the geocoordinates</source>
-      <translation>Opcionalni pomak između porijekla modela (0,0,0) i mjesta označenog na geokoordinatama</translation>
+      <translation>Opcionalni pomak između ishodišta modela (0,0,0) i mjesta označenog na geo-koordinatama</translation>
     </message>
     <message>
       <location filename="../../ArchIFC.py" line="70"/>
@@ -4504,7 +4501,7 @@ Stvaranje zgrade prekinuto.</translation>
     <message>
       <location filename="../../ArchRoof.py" line="315"/>
       <source>An optional object that defines a volume to be subtracted from walls. If field is set - it has a priority over auto-generated subvolume</source>
-      <translation type="unfinished">An optional object that defines a volume to be subtracted from walls. If field is set - it has a priority over auto-generated subvolume</translation>
+      <translation>Neobavezni objekt koji definira volumen koji treba oduzeti od zidova. Ako je ovo polje postavljeno, ima prioritet nad automatski generiranim podvolumenom</translation>
     </message>
     <message>
       <location filename="../../ArchReference.py" line="95"/>
@@ -5019,7 +5016,7 @@ Stvaranje zgrade prekinuto.</translation>
       <location filename="../../ArchPrecast.py" line="286"/>
       <location filename="../../ArchPrecast.py" line="427"/>
       <source>The size of the chamfer of this element</source>
-      <translation>Veličina skošenja ovog elementa</translation>
+      <translation>Veličina fasete ovog elementa</translation>
     </message>
     <message>
       <location filename="../../ArchPrecast.py" line="100"/>
@@ -5041,7 +5038,7 @@ Stvaranje zgrade prekinuto.</translation>
     <message>
       <location filename="../../ArchPrecast.py" line="220"/>
       <source>The chamfer length of this element</source>
-      <translation>Dužina žlijeba ulupljenja ovog elementa</translation>
+      <translation>Dužina fasete ovog elementa</translation>
     </message>
     <message>
       <location filename="../../ArchPrecast.py" line="222"/>
@@ -6379,7 +6376,7 @@ Stvaranje zgrade prekinuto.</translation>
     <message>
       <location filename="../../ArchGrid.py" line="105"/>
       <source>The sizes for rows</source>
-      <translation>Veličine redova</translation>
+      <translation>Veličine redaka</translation>
     </message>
     <message>
       <location filename="../../ArchGrid.py" line="107"/>
@@ -6414,7 +6411,7 @@ Stvaranje zgrade prekinuto.</translation>
     <message>
       <location filename="../../ArchGrid.py" line="120"/>
       <source>Creates automatic row divisions (set to 0 to disable)</source>
-      <translation>Stvara automatsku podjelu redova (postavite na 0 za onemogućiti)</translation>
+      <translation>Stvara automatsku podjelu redaka (postavite na 0 za onemogućiti)</translation>
     </message>
     <message>
       <location filename="../../ArchGrid.py" line="122"/>

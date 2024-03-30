@@ -2361,7 +2361,7 @@ obiekt do wycięcia i obiekt definiujący płaszczyznę cięcia.</translation>
     <message>
       <location filename="../../ArchWindow.py" line="373"/>
       <source>Auto include in host object</source>
-      <translation>Włącz automatycznie do obiektu gospodarza</translation>
+      <translation>Przyłącz automatycznie do obiektu bazowego</translation>
     </message>
     <message>
       <location filename="../../ArchWindow.py" line="379"/>
@@ -3762,7 +3762,7 @@ Tworzenie budynku zostało przerwane.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1657"/>
       <source>Create IFC properties spreadsheet</source>
-      <translation>Stwórz arkusz właściwości IFC</translation>
+      <translation>Utwórz arkusz właściwości IFC</translation>
     </message>
   </context>
   <context>
@@ -3775,7 +3775,7 @@ Tworzenie budynku zostało przerwane.</translation>
     <message>
       <location filename="../../ArchStructure.py" line="198"/>
       <source>Create multiple Arch Structures from a selected base, using each selected edge as an extrusion path</source>
-      <translation>Stwórz wiele obiektów Konstrukcyjnych z wybranej podstawy, używając każdej wybranej krawędzi jako ścieżki wyciągnięcia</translation>
+      <translation>Utwórz wiele obiektów Konstrukcyjnych z wybranej podstawy, używając każdej wybranej krawędzi jako ścieżki wyciągnięcia</translation>
     </message>
   </context>
   <context>
@@ -6753,7 +6753,7 @@ ma pierwszeństwo przed automatycznie generowaną pod objętością.</translatio
     <message>
       <location filename="../../ArchCommands.py" line="1648"/>
       <source>Create IFC spreadsheet...</source>
-      <translation>Stwórz arkusz IFC...</translation>
+      <translation>Utwórz arkusz IFC...</translation>
     </message>
     <message>
       <location filename="../../ArchCommands.py" line="1652"/>

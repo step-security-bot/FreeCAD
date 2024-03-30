@@ -3538,7 +3538,7 @@ Building creation aborted.</translation>
     <message>
       <location filename="../../ArchWall.py" line="354"/>
       <source>First point of wall</source>
-      <translation type="unfinished">First point of wall</translation>
+      <translation>První bod zdi</translation>
     </message>
     <message>
       <location filename="../../ArchWall.py" line="492"/>

@@ -923,7 +923,7 @@ instead of the FreeCAD web workbench</source>
       <location filename="../ui/preferences-archdefaults.ui" line="118"/>
       <location filename="../ui/preferences-archdefaults.ui" line="216"/>
       <source> %</source>
-      <translation type="unfinished"> %</translation>
+      <translation> %</translation>
     </message>
     <message>
       <location filename="../ui/preferences-archdefaults.ui" line="137"/>

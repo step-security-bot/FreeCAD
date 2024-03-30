@@ -121,7 +121,7 @@
       <location filename="../../AttacherTexts.cpp" line="336"/>
       <source>Wire</source>
       <comment>Attacher reference type</comment>
-      <translation>Draad</translation>
+      <translation>Polygonale lijn</translation>
     </message>
   </context>
   <context>
@@ -184,7 +184,7 @@
       <location filename="../../AttacherTexts.cpp" line="284"/>
       <source>Point is put on edge, MapPathParameter controls where. Additionally, vertex can be linked in for making a projection.</source>
       <comment>AttachmentPoint mode tooltip</comment>
-      <translation>Punt op rand geplaatst volgens MapPathParameter. Eindpunt kan daarbij aangekoppeld worden om projectie te maken.</translation>
+      <translation>Punt is op de rand geplaatst volgens MapPathParameter. Een hoekpunt kan daarbij aangekoppeld worden om een projectie te maken.</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="286"/>
@@ -196,7 +196,7 @@
       <location filename="../../AttacherTexts.cpp" line="287"/>
       <source>Center of osculating circle of an edge. Optional vertex link defines where.</source>
       <comment>AttachmentPoint mode tooltip</comment>
-      <translation>Midden van raakcirkel aan een rand. Optionele eindpuntsverbinding bepaalt plaats.</translation>
+      <translation>Midden van de krommingscirkel van een rand. Optionele hoekpuntsverbinding bepaalt de positie.</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="289"/>
@@ -232,7 +232,7 @@
       <location filename="../../AttacherTexts.cpp" line="296"/>
       <source>Put Datum point coincident with another vertex.</source>
       <comment>AttachmentPoint mode tooltip</comment>
-      <translation>Laat referentiepunt met ander eindpunt samenvallen.</translation>
+      <translation>Laat referentiepunt met ander hoekpunt samenvallen.</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="298"/>
@@ -314,7 +314,7 @@
       <location filename="../../AttacherTexts.cpp" line="215"/>
       <source>Line that is an axis of osculating circle of curved edge. Optional vertex defines where.</source>
       <comment>AttachmentLine mode tooltip</comment>
-      <translation>Lijn die een as is van een raakcirkel aan een gebogen rand. Een optioneel eindpunt definieert waar.</translation>
+      <translation>Lijn die een as is van een raakcirkel aan een gebogen rand. Een optioneel hoekpunt definieert waar.</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="217"/>
@@ -374,7 +374,7 @@
       <location filename="../../AttacherTexts.cpp" line="230"/>
       <source>Line tangent to an edge. Optional vertex link defines where.</source>
       <comment>AttachmentLine mode tooltip</comment>
-      <translation>Lijn raakt aan een rand. Optionele eindpuntsverbinding definieert de plaats.</translation>
+      <translation>Lijn raakt aan een rand. Optionele hoekpuntsverbinding definieert de plaats.</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="232"/>
@@ -441,7 +441,7 @@
       <location filename="../../AttacherTexts.cpp" line="248"/>
       <source>Intersection of two faces.</source>
       <comment>AttachmentLine mode tooltip</comment>
-      <translation type="unfinished">Intersection of two faces.</translation>
+      <translation>Snijlijn van twee vlakken.</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="250"/>
@@ -1195,7 +1195,7 @@
     <message>
       <location filename="../../Command.cpp" line="2099"/>
       <source>Set the color of each individual face of the selected object.</source>
-      <translation type="unfinished">Set the color of each individual face of the selected object.</translation>
+      <translation>Stel de kleur in van elk afzonderlijk vlak van het geselecteerde object.</translation>
     </message>
   </context>
   <context>
@@ -1804,12 +1804,12 @@ into its X, Y, and Z components.</translation>
     <message>
       <location filename="../../Command.cpp" line="1336"/>
       <source>Make face from wires</source>
-      <translation>Maak vlak vanuit draden</translation>
+      <translation>Maak vlak vanuit polygonale lijnen</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1337"/>
       <source>Make face from set of wires (e.g. from a sketch)</source>
-      <translation>Maak een vlak vanuit een draadset (bijv. vanuit een schets)</translation>
+      <translation>Maak een vlak vanuit een set polygonale lijnen (bijv. vanuit een schets)</translation>
     </message>
   </context>
   <context>
@@ -1956,10 +1956,8 @@ into its X, Y, and Z components.</translation>
 onto a face of another object.
 The camera view determines the direction
 of projection.</source>
-      <translation type="unfinished">Project edges, wires, or faces of one object
-onto a face of another object.
-The camera view determines the direction
-of projection.</translation>
+      <translation>Projecteer randen, polygonale lijnen, of vlakken van één object op een vlak van een ander object.
+Het camerabeeld bepaalt de richting van de projectie.</translation>
     </message>
   </context>
   <context>
@@ -2026,12 +2024,12 @@ of projection.</translation>
     <message>
       <location filename="../../Command.cpp" line="1960"/>
       <source>Create ruled surface</source>
-      <translation>Maak een geregeerd oppervlak aan</translation>
+      <translation>Maak een regeloppervlak aan</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1961"/>
       <source>Create a ruled surface from either two Edges or two wires</source>
-      <translation>Maak een geregeerd oppervlak vanuit twee randen of twee draden</translation>
+      <translation>Maak een regeloppervlak vanuit twee randen of twee polygonale lijnen</translation>
     </message>
   </context>
   <context>
@@ -2294,7 +2292,7 @@ of projection.</translation>
     <message>
       <location filename="../../Command.cpp" line="2039"/>
       <source>Create ruled surface</source>
-      <translation>Maak een geregeerd oppervlak aan</translation>
+      <translation>Maak een regeloppervlak aan</translation>
     </message>
     <message>
       <location filename="../../CommandSimple.cpp" line="69"/>
@@ -2344,7 +2342,7 @@ of projection.</translation>
     <message>
       <location filename="../../TaskShapeBuilder.cpp" line="304"/>
       <source>Wire</source>
-      <translation>Draad</translation>
+      <translation>Polygonale lijn</translation>
     </message>
     <message>
       <location filename="../../TaskShapeBuilder.cpp" line="356"/>
@@ -2901,7 +2899,7 @@ If both lengths are zero, magnitude of direction is used.</translation>
     <message>
       <location filename="../../DlgExtrusion.ui" line="337"/>
       <source>If checked, extruding closed wires will give solids, not shells.</source>
-      <translation>Indien aangevinkt, zullen de geëxtrudeerde gesloten draden volumemodellen geven, niet schillen.</translation>
+      <translation>Indien aangevinkt, zullen de geëxtrudeerde gesloten polygonale lijnen volumemodellen geven, niet schillen.</translation>
     </message>
     <message>
       <location filename="../../DlgExtrusion.ui" line="340"/>
@@ -3872,7 +3870,7 @@ during file reading (slower but higher details).</translation>
     <message>
       <location filename="../../DlgPrimitives.cpp" line="1732"/>
       <source>Vertex</source>
-      <translation type="unfinished">Vertex</translation>
+      <translation>Hoekpunt</translation>
     </message>
     <message>
       <location filename="../../DlgPrimitives.cpp" line="1910"/>
@@ -3913,7 +3911,7 @@ during file reading (slower but higher details).</translation>
     <message>
       <location filename="../../DlgProjectionOnSurface.ui" line="38"/>
       <source>Add wire</source>
-      <translation>Voeg draad toe</translation>
+      <translation>Voeg polygonale lijn toe</translation>
     </message>
     <message>
       <location filename="../../DlgProjectionOnSurface.ui" line="45"/>
@@ -4063,7 +4061,7 @@ during file reading (slower but higher details).</translation>
     <message>
       <location filename="../../DlgRevolution.ui" line="325"/>
       <source>If checked, revolving wires will produce solids. If not, revolving a wire yields a shell.</source>
-      <translation>Indien aangevinkt, zullen de wentelende draden volumemodellen produceren. Zo niet, levert de wentelende draad een schil op.</translation>
+      <translation>Indien aangevinkt, zullen de wentelende polygonale lijnen volumemodellen produceren. Zo niet, levert de wentelende polygonale lijn een schil op.</translation>
     </message>
     <message>
       <location filename="../../DlgRevolution.ui" line="328"/>
@@ -4332,7 +4330,7 @@ during file reading (slower but higher details).</translation>
     <message>
       <location filename="../../DlgSettingsObjectColor.ui" line="186"/>
       <source>Vertex color</source>
-      <translation type="unfinished">Vertex color</translation>
+      <translation>Hoekpuntkleur</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsObjectColor.ui" line="193"/>
@@ -4342,7 +4340,7 @@ during file reading (slower but higher details).</translation>
     <message>
       <location filename="../../DlgSettingsObjectColor.ui" line="219"/>
       <source>Vertex size</source>
-      <translation type="unfinished">Vertex size</translation>
+      <translation>Hoekpunt grootte</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsObjectColor.ui" line="226"/>
@@ -4501,7 +4499,7 @@ the sketch plane's normal vector will be used</translation>
     <message>
       <location filename="../../TaskLoft.cpp" line="177"/>
       <source>At least two vertices, edges, wires or faces are required.</source>
-      <translation>Minstens twee eindpunten, randen, draden of vlakken zijn vereist.</translation>
+      <translation>Ten minste twee hoekpunten, randen, polygonale lijnen of vlakken zijn vereist.</translation>
     </message>
     <message>
       <location filename="../../TaskLoft.cpp" line="211"/>
@@ -4511,7 +4509,7 @@ the sketch plane's normal vector will be used</translation>
     <message>
       <location filename="../../TaskLoft.cpp" line="240"/>
       <source>Vertex/Edge/Wire/Face</source>
-      <translation>Eindpunt/Rand/Draad/Vlak</translation>
+      <translation>Eindpunt/Rand/Polygonale lijn/Vlak</translation>
     </message>
     <message>
       <location filename="../../TaskLoft.cpp" line="241"/>
@@ -4878,7 +4876,7 @@ only created cuts will be visible</translation>
     <message>
       <location filename="../../TaskSweep.cpp" line="328"/>
       <source>At least one edge or wire is required.</source>
-      <translation>Minstens één rand of draad is vereist.</translation>
+      <translation>Minstens één rand of polygonale lijn is vereist.</translation>
     </message>
     <message>
       <location filename="../../TaskSweep.cpp" line="332"/>
@@ -5095,7 +5093,7 @@ of object being attached.</translation>
     <message>
       <location filename="../../TaskAttacher.cpp" line="648"/>
       <source>Vertex</source>
-      <translation type="unfinished">Vertex</translation>
+      <translation>Hoekpunt</translation>
     </message>
     <message>
       <location filename="../../TaskAttacher.cpp" line="713"/>
@@ -5379,6 +5377,11 @@ Individual boolean operation checks:</translation>
   <context>
     <name>PartGui::TaskDlgAttacher</name>
     <message>
+      <location filename="../../TaskAttacher.cpp" line="1062"/>
+      <source>Attachment</source>
+      <translation>Bijlage</translation>
+    </message>
+    <message>
       <location filename="../../TaskAttacher.cpp" line="1117"/>
       <source>Datum dialog: Input error</source>
       <translation>Dimensiedialoogvenster: invoerfout</translation>
@@ -5541,7 +5544,7 @@ by dragging a selection rectangle in the 3D view</translation>
     <message>
       <location filename="../../TaskShapeBuilder.ui" line="33"/>
       <source>Wire from edges</source>
-      <translation>Draad vanuit randen</translation>
+      <translation>Polygonale lijn van randen</translation>
     </message>
     <message>
       <location filename="../../TaskShapeBuilder.ui" line="40"/>
@@ -5615,8 +5618,7 @@ by dragging a selection rectangle in the 3D view</translation>
       <location filename="../../TaskSweep.cpp" line="484"/>
       <source>Select one or more profiles and select an edge or wire
 in the 3D view for the sweep path.</source>
-      <translation>Selecteer een of meer profielen en selecteer een rand of draad
-in de 3D-weergave voor het veegpad.</translation>
+      <translation>Selecteer een of meer profielen en selecteer een rand of poygonale lijn in de 3D-weergave voor het veegpad.</translation>
     </message>
   </context>
   <context>
@@ -5685,7 +5687,7 @@ in de 3D-weergave voor het veegpad.</translation>
     <message>
       <location filename="../../AppPartGui.cpp" line="234"/>
       <source>Part and Part Design workbench</source>
-      <translation type="unfinished">Part and Part Design workbench</translation>
+      <translation>Part en PartDesign werkbank</translation>
     </message>
     <message>
       <location filename="../../AppPartGui.cpp" line="235"/>
@@ -5761,7 +5763,7 @@ Wilt u doorgaan?</translation>
     <message>
       <location filename="../../Command.cpp" line="2035"/>
       <source>You have to select either two edges or two wires.</source>
-      <translation>Je moet of twee randen of twee draden selecteren.</translation>
+      <translation>Je moet of twee randen of twee polygonale lijnen selecteren.</translation>
     </message>
     <message>
       <location filename="../../TaskAttacher.cpp" line="66"/>
@@ -5785,7 +5787,7 @@ Wilt u doorgaan?</translation>
       <location filename="../../TaskAttacher.cpp" line="81"/>
       <location filename="../../TaskCheckGeometry.cpp" line="84"/>
       <source>Vertex</source>
-      <translation type="unfinished">Vertex</translation>
+      <translation>Hoekpunt</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="77"/>
@@ -5810,7 +5812,7 @@ Wilt u doorgaan?</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="82"/>
       <source>Wire</source>
-      <translation>Draad</translation>
+      <translation>Polygonale lijn</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="85"/>
@@ -5900,7 +5902,7 @@ Wilt u doorgaan?</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="116"/>
       <source>Empty Wire</source>
-      <translation>Lege Draad</translation>
+      <translation>Lege Polygonale lijn</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="117"/>
@@ -5910,7 +5912,7 @@ Wilt u doorgaan?</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="118"/>
       <source>Self Intersecting Wire</source>
-      <translation>Zelf kruisende draad</translation>
+      <translation>Zelf kruisende polygonale lijn</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="119"/>
@@ -5930,12 +5932,12 @@ Wilt u doorgaan?</translation>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="122"/>
       <source>Intersecting Wires</source>
-      <translation>Kruisende draden</translation>
+      <translation>Kruisende Polygonale lijnen</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="123"/>
       <source>Invalid Imbrication Of Wires</source>
-      <translation>Ongeldige imbricatie van de draden</translation>
+      <translation>Ongeldige nesting van de polygonale lijnen</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="124"/>
@@ -6076,8 +6078,8 @@ Wilt u doorgaan?</translation>
     </message>
     <message>
       <location filename="../../TaskDimension.cpp" line="1419"/>
-      <source>Selection </source>
-      <translation>Selectie </translation>
+      <source>Selection</source>
+      <translation>Selectie</translation>
     </message>
     <message>
       <location filename="../../TaskDimension.cpp" line="1503"/>
@@ -6391,12 +6393,12 @@ for collision or distance filtering.</translation>
     <message>
       <location filename="../../../CompoundTools/_CommandCompoundFilter.py" line="110"/>
       <source>Computing the result failed with an error:</source>
-      <translation type="unfinished">Computing the result failed with an error:</translation>
+      <translation>Het berekenen van het resultaat is mislukt met een fout:</translation>
     </message>
     <message>
       <location filename="../../../CompoundTools/_CommandCompoundFilter.py" line="111"/>
       <source>Click 'Continue' to create the feature anyway, or 'Abort' to cancel.</source>
-      <translation type="unfinished">Click 'Continue' to create the feature anyway, or 'Abort' to cancel.</translation>
+      <translation>Klik op 'Doorgaan' om de functie toch te maken, of 'Afbreken' om te annuleren.</translation>
     </message>
   </context>
   <context>
@@ -6562,7 +6564,7 @@ It will create a 'Compound Filter' for each shape.</translation>
     <message>
       <location filename="../../../BasicShapes/ShapeContent.py" line="47"/>
       <source>Wires</source>
-      <translation>Draden</translation>
+      <translation>Polygonale lijnen</translation>
     </message>
     <message>
       <location filename="../../../BasicShapes/ShapeContent.py" line="53"/>
@@ -6845,7 +6847,7 @@ A 'Compound Filter' can be used to extract the remaining pieces.</translation>
     <message>
       <location filename="../../CommandFilter.cpp" line="173"/>
       <source>Vertex selection</source>
-      <translation type="unfinished">Vertex selection</translation>
+      <translation>Hoekpunt selectie</translation>
     </message>
     <message>
       <location filename="../../CommandFilter.cpp" line="174"/>
@@ -6897,7 +6899,7 @@ A 'Compound Filter' can be used to extract the remaining pieces.</translation>
     <message>
       <location filename="../../../App/FaceMaker.cpp" line="72"/>
       <source>Shape must be a wire, edge or compound. Something else was supplied.</source>
-      <translation type="unfinished">Shape must be a wire, edge or compound. Something else was supplied.</translation>
+      <translation>Vorm moet een polygonale lijn, rand of samenstelling zijn. Iets anders was ingevoerd.</translation>
     </message>
   </context>
   <context>
@@ -6910,7 +6912,7 @@ A 'Compound Filter' can be used to extract the remaining pieces.</translation>
     <message>
       <location filename="../../../App/FaceMaker.cpp" line="267"/>
       <source>Makes separate plane face from every wire independently. No support for holes; wires can be on different planes.</source>
-      <translation>Maakt een afzonderlijk planair vlak vanuit elke draad. Geen ondersteuning voor gaten; de draden kunnen zich op verschillende vlakken bevinden.</translation>
+      <translation>Maakt een afzonderlijk plenair vlak vanuit elke polygonale lijn. Geen ondersteuning voor gaten; de polygonale lijnen kunnen zich op verschillende vlakken bevinden.</translation>
     </message>
   </context>
   <context>
@@ -6950,6 +6952,14 @@ A 'Compound Filter' can be used to extract the remaining pieces.</translation>
       <location filename="../../../App/FeatureExtrusion.cpp" line="342"/>
       <source>Supports making faces with holes, does not support nesting.</source>
       <translation>Ondersteunt het maken van vlakken met gaten, ondersteunt nestingen niet.</translation>
+    </message>
+  </context>
+  <context>
+    <name>Exception</name>
+    <message>
+      <location filename="../../../App/FaceMakerBullseye.cpp" line="74"/>
+      <source>Wire is not closed.</source>
+      <translation type="unfinished">Wire is not closed.</translation>
     </message>
   </context>
 </TS>

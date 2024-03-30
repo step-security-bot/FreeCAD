@@ -6772,7 +6772,7 @@ Building creation aborted.</translation>
       <location filename="../../InitGui.py" line="212"/>
       <location filename="../../InitGui.py" line="213"/>
       <source>Arch</source>
-      <translation>Boog</translation>
+      <translation>Arch</translation>
     </message>
     <message>
       <location filename="../../InitGui.py" line="218"/>
@@ -6781,7 +6781,7 @@ Building creation aborted.</translation>
       <location filename="../../InitGui.py" line="221"/>
       <location filename="../../InitGui.py" line="222"/>
       <source>Draft</source>
-      <translation>Schets</translation>
+      <translation>Draft</translation>
     </message>
     <message>
       <location filename="../../InitGui.py" line="262"/>

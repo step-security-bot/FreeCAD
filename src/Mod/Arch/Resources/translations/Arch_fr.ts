@@ -540,7 +540,7 @@ Double-cliquez pour modifier. Glissez et déposez pour réorganiser.</translatio
     <message>
       <location filename="../ui/ArchNest.ui" line="14"/>
       <source>Nesting</source>
-      <translation>Imbrication</translation>
+      <translation>Calepiner</translation>
     </message>
     <message>
       <location filename="../ui/ArchNest.ui" line="20"/>
@@ -550,7 +550,7 @@ Double-cliquez pour modifier. Glissez et déposez pour réorganiser.</translatio
     <message>
       <location filename="../ui/ArchNest.ui" line="36"/>
       <source>Pick selected</source>
-      <translation>Choix sélectionné</translation>
+      <translation>Choisir la sélection</translation>
     </message>
     <message>
       <location filename="../ui/ArchNest.ui" line="46"/>
@@ -570,7 +570,7 @@ Double-cliquez pour modifier. Glissez et déposez pour réorganiser.</translatio
     <message>
       <location filename="../ui/ArchNest.ui" line="76"/>
       <source>Nesting parameters</source>
-      <translation>Paramètres d'imbrication</translation>
+      <translation>Paramètres de calepinage</translation>
     </message>
     <message>
       <location filename="../ui/ArchNest.ui" line="82"/>
@@ -580,17 +580,17 @@ Double-cliquez pour modifier. Glissez et déposez pour réorganiser.</translatio
     <message>
       <location filename="../ui/ArchNest.ui" line="89"/>
       <source>Closer than this, two points are considered equal</source>
-      <translation>Seuil à partir duquel deux points sont considérés comme égaux</translation>
+      <translation>Distance en dessous de laquelle deux points sont considérés comme identiques.</translation>
     </message>
     <message>
       <location filename="../ui/ArchNest.ui" line="102"/>
       <source>Arcs subdivisions</source>
-      <translation>Subdivisions d’arcs</translation>
+      <translation>Subdivisions des arcs</translation>
     </message>
     <message>
       <location filename="../ui/ArchNest.ui" line="109"/>
       <source>The number of segments to divide non-linear edges into, for calculations. If curved shapes overlap, try raising this value</source>
-      <translation>Le nombre de segments pour diviser les bords non linéaires en, pour les calculs. Si les formes courbes se chevauchent, essayez d'augmenter cette valeur</translation>
+      <translation>Nombre de segments à diviser en arêtes non linéaires pour les calculs. Si des formes courbes se chevauchent, essayez d'augmenter cette valeur.</translation>
     </message>
     <message>
       <location filename="../ui/ArchNest.ui" line="125"/>
@@ -600,7 +600,7 @@ Double-cliquez pour modifier. Glissez et déposez pour réorganiser.</translatio
     <message>
       <location filename="../ui/ArchNest.ui" line="132"/>
       <source>A comma-separated list of angles to try and rotate the shapes</source>
-      <translation>Une liste d'angles séparés par des virgules (;) pour essayer de faire pivoter les formes</translation>
+      <translation>Une liste d'angles séparés par des virgules pour essayer de faire pivoter les formes.</translation>
     </message>
     <message>
       <location filename="../ui/ArchNest.ui" line="145"/>
@@ -1261,7 +1261,7 @@ Cela ralentira l'importation, mais il sera possible d'observer l'importation.</t
       <source>Creates a full parametric model on import using stored
 FreeCAD object properties</source>
       <translation>Créer un modèle paramétrique complet lors de l'importation
-en utilisant les propriétés enregistrées des objets FreeCAD.</translation>
+en utilisant les propriétés enregistrées des objets FreeCAD</translation>
     </message>
     <message>
       <location filename="../ui/preferences-ifc.ui" line="450"/>
@@ -1538,7 +1538,7 @@ Note: The serializer is still an experimental feature!</source>
       <location filename="../ui/preferences-ifc-export.ui" line="221"/>
       <source>All FreeCAD object properties will be stored inside the exported objects,
 allowing to recreate a full parametric model on reimport.</source>
-      <translation>Toutes les propriétés des objets FreeCAD seront enregistrées dans les objets exportés,
+      <translation>Toutes les propriétés des objets de FreeCAD seront enregistrées dans les objets exportés,
 permettant de recréer un modèle paramétrique complet lors de la réimportation.</translation>
     </message>
     <message>
@@ -2949,7 +2949,7 @@ Si Course = 0 alors la course est calculée de façon à ce que la hauteur du pr
     <message>
       <location filename="../../ArchPanel.py" line="334"/>
       <source>Create Panel Cut</source>
-      <translation>Créer un panneau pour découpe</translation>
+      <translation>Créer une découpe de panneau</translation>
     </message>
     <message>
       <location filename="../../ArchPanel.py" line="360"/>
@@ -2969,7 +2969,7 @@ Si Course = 0 alors la course est calculée de façon à ce que la hauteur du pr
     <message>
       <location filename="../../ArchPanel.py" line="1388"/>
       <source>Edit views positions</source>
-      <translation>Modifier les positions de vues</translation>
+      <translation>Modifier les positions des vues</translation>
     </message>
     <message>
       <location filename="../../ArchPanel.py" line="1478"/>
@@ -3180,7 +3180,7 @@ La création du niveau est annulée.</translation>
     <message>
       <location filename="../../ArchFloor.py" line="166"/>
       <source>Create Floor</source>
-      <translation>Créer le niveau</translation>
+      <translation>Créer un niveau</translation>
     </message>
     <message>
       <location filename="../../ArchAxis.py" line="101"/>
@@ -3786,7 +3786,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchStructure.py" line="273"/>
       <source>Creates a structure from scratch or from a selected object (sketch, wire, face or solid)</source>
-      <translation>Crée une structure à partir de zéro ou à partir d'un objet sélectionné (esquisse, polyligne, face ou solide)</translation>
+      <translation>Créer une structure à partir de zéro ou à partir d'un objet sélectionné : esquisse, polyligne, face ou solide</translation>
     </message>
   </context>
   <context>
@@ -3881,13 +3881,13 @@ La création du bâtiment est annulée.</translation>
       <location filename="../../ArchPanel.py" line="418"/>
       <location filename="../../ArchStructure.py" line="706"/>
       <source>The facemaker type to use to build the profile of this object</source>
-      <translation>Le type de facemaker à utiliser pour créer le profilé de cet objet</translation>
+      <translation>Le type de générateur de surface à utiliser pour créer le profilé de cet objet</translation>
     </message>
     <message>
       <location filename="../../ArchStructure.py" line="709"/>
       <location filename="../../ArchStructure.py" line="717"/>
       <source>Selected edges (or group of edges) of the base ArchSketch, to use in creating the shape of this Arch Structure (instead of using all the Base shape's edges by default).  Input are index numbers of edges or groups.</source>
-      <translation>Arêtes sélectionnées (ou groupe d'arêtes) de l'esquisse de base pour créer la forme de cette structure (au lieu d'utiliser toutes les arêtes de la forme de base par défaut).  Les données d'entrée sont des numéros d'index d'arêtes ou de groupes.</translation>
+      <translation>Utiliser des arêtes sélectionnées (ou un groupe d'arêtes) de l'esquisse de base pour créer la forme de cette structure (au lieu d'utiliser par défaut toutes les arêtes de la forme de base).  Pour ce faire, rentrer les numéros d'index des arêtes ou des groupes.</translation>
     </message>
     <message>
       <location filename="../../ArchStructure.py" line="1042"/>
@@ -5935,7 +5935,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchEquipment.py" line="177"/>
       <source>Creates an equipment from a selected object (Part or Mesh)</source>
-      <translation>Créer un équipement à partir d'un objet sélectionné (Part ou Mesh)</translation>
+      <translation>Créer un équipement à partir d'un objet sélectionné : Part ou Mesh</translation>
     </message>
   </context>
   <context>
@@ -5948,7 +5948,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchEquipment.py" line="232"/>
       <source>Creates 3 views (top, front, side) from a mesh-based object</source>
-      <translation>Crée 3 vues (haut, avant, côté) à partir d'un objet de maillage</translation>
+      <translation>Créer 3 vues (vue de haut, face avant, côté) à partir d'un objet de maillage</translation>
     </message>
   </context>
   <context>
@@ -5961,7 +5961,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchBuildingPart.py" line="293"/>
       <source>Creates a BuildingPart including selected objects</source>
-      <translation>Créer une partie de bâtiment incluant les objets sélectionnés</translation>
+      <translation>Créer une partie de bâtiment comprenant les objets sélectionnés</translation>
     </message>
   </context>
   <context>
@@ -6153,7 +6153,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchFrame.py" line="84"/>
       <source>Creates a frame object from a planar 2D object (the extrusion path(s)) and a profile. Make sure objects are selected in that order.</source>
-      <translation>Créer une forme à partir d’un objet plan 2D (le(s) trajectoire(s) de l’extrusion) et un profilé. Assurez-vous que les objets sont sélectionnés dans cet ordre.</translation>
+      <translation>Créer une forme à partir d’un plan 2D (le(s) trajectoire(s) de l’extrusion) et un profilé. Assurez-vous que les objets sont sélectionnés dans cet ordre.</translation>
     </message>
   </context>
   <context>
@@ -6166,7 +6166,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchWindow.py" line="167"/>
       <source>Creates a window object from a selected object (wire, rectangle or sketch)</source>
-      <translation>Créer une fenêtre a partir d'un objet sélectionné : polyligne, rectangle ou esquisse.</translation>
+      <translation>Créer une fenêtre à partir d'un objet sélectionné : polyligne, rectangle ou esquisse.</translation>
     </message>
   </context>
   <context>
@@ -6386,7 +6386,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchPanel.py" line="350"/>
       <source>Panel Sheet</source>
-      <translation>Plaque de panneau</translation>
+      <translation>Feuille de panneaux</translation>
     </message>
     <message>
       <location filename="../../ArchPanel.py" line="354"/>
@@ -6399,12 +6399,12 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchPanel.py" line="1407"/>
       <source>Nest</source>
-      <translation>Calepinage</translation>
+      <translation>Calepiner</translation>
     </message>
     <message>
       <location filename="../../ArchPanel.py" line="1411"/>
       <source>Nests a series of selected shapes in a container</source>
-      <translation>Effectue le calepinage des formes séléctionnées dans un conteneur</translation>
+      <translation>Calepiner des formes sélectionnées dans un conteneur</translation>
     </message>
   </context>
   <context>
@@ -6439,7 +6439,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchPipe.py" line="113"/>
       <source>Creates a pipe object from a given Wire or Line</source>
-      <translation>Créer une conduite à partir d’une polyligne ou une ligne donnée</translation>
+      <translation>Créer une conduite à partir d’une polyligne ou d'une ligne donnée</translation>
     </message>
   </context>
   <context>
@@ -6487,7 +6487,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchFloor.py" line="122"/>
       <source>Creates a Building Part object that represents a level, including selected objects</source>
-      <translation>Créer une partie de bâtiment qui représente un niveau, y compris les objets sélectionnés</translation>
+      <translation>Créer une partie de bâtiment qui représente un niveau, comprenant les objets sélectionnés</translation>
     </message>
   </context>
   <context>
@@ -6535,7 +6535,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchSectionPlane.py" line="833"/>
       <source>Creates a section plane object, including the selected objects</source>
-      <translation>Créer un plan de coupe incluant les objets sélectionnés</translation>
+      <translation>Créer un plan de coupe comprenant les objets sélectionnés</translation>
     </message>
   </context>
   <context>
@@ -6548,7 +6548,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchBuilding.py" line="225"/>
       <source>Creates a building object including selected objects.</source>
-      <translation>Créer un bâtiment à partir des objets sélectionnés.</translation>
+      <translation>Créer un bâtiment comprenant les objets sélectionnés</translation>
     </message>
   </context>
   <context>
@@ -6561,7 +6561,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchWall.py" line="290"/>
       <source>Creates a wall object from scratch or from a selected object (wire, face or solid)</source>
-      <translation>Créer un mur partir de zéro ou d'un objet sélectionné : une polyligne, un face ou un solide.</translation>
+      <translation>Créer un mur partir de zéro ou d'un objet sélectionné : une polyligne, une face ou un solide.</translation>
     </message>
   </context>
   <context>
@@ -6743,7 +6743,7 @@ La création du bâtiment est annulée.</translation>
     <message>
       <location filename="../../ArchCommands.py" line="1652"/>
       <source>Creates a spreadsheet to store IFC properties of an object.</source>
-      <translation>Créer une feuille de calcul pour enregistrer les propriétés IFC d'un objet.</translation>
+      <translation>Créer une feuille de calcul pour enregistrer les propriétés IFC d'un objet</translation>
     </message>
   </context>
   <context>

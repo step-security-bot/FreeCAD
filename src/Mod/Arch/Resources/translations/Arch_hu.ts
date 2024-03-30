@@ -324,7 +324,7 @@ Hagyja üresen a dokumentum összes objektumának használatát</translation>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="208"/>
       <source>This exports the results to a CSV or Markdown file. Note for CSV export: In Libreoffice, you can keep this CSV file linked by right-clicking the Sheets tab bar, New sheet, From file, Link (Note: as of LibreOffice v6.x the correct path now is: Sheet, Insert Sheet..., From file, Browse...)</source>
-      <translation>Az eredményeket CSV- vagy Markdown-fájlba exportálja. Megjegyzés CSV-exportáláshoz: a Libreoffice-ben ezt a CSV-fájlt összekapcsolva hagyja a jobb gombbal a Lapok fülre kattintva - Új lap - Fájlból - Link (Megjegyzés: a LibreOffice v6.x-es verzióhoz a helyes elérési út: Lapok - Lap beszúrása - Fájlból - Keresés...)</translation>
+      <translation>Az eredményeket CSV- vagy Markdown-fájlba exportálja. Megjegyzés CSV-exportáláshoz: a Libreoffice-ben ezt a CSV-fájlt összekötve hagyja a jobb gombbal a Lapok fülre kattintva - Új lap - Fájlból - Link (Megjegyzés: a LibreOffice v6.x-es verzióhoz a helyes elérési út: Lapok - Lap beszúrása - Fájlból - Keresés...)</translation>
     </message>
     <message>
       <location filename="../ui/ArchSchedule.ui" line="187"/>
@@ -4473,12 +4473,12 @@ Building creation aborted.</source>
     <message>
       <location filename="../../ArchReference.py" line="392"/>
       <source>The latest time stamp of the linked file</source>
-      <translation>A linkelt fájl legutóbbi időbélyege</translation>
+      <translation>Az összekötött fájl legutóbbi időbélyege</translation>
     </message>
     <message>
       <location filename="../../ArchReference.py" line="395"/>
       <source>If true, the colors from the linked file will be kept updated</source>
-      <translation>Ha igaz, a csatolt fájlból felhasznált szín folyamatosan frissül</translation>
+      <translation>Ha igaz, az összekötött fájlból felhasznált szín folyamatosan frissül</translation>
     </message>
     <message>
       <location filename="../../ArchFrame.py" line="114"/>
@@ -5116,7 +5116,7 @@ Building creation aborted.</source>
     <message>
       <location filename="../../ArchPanel.py" line="823"/>
       <source>The linked object</source>
-      <translation>A kapcsolt tárgy</translation>
+      <translation>Az összekötött tárgy</translation>
     </message>
     <message>
       <location filename="../../ArchPanel.py" line="828"/>
@@ -5178,7 +5178,7 @@ Building creation aborted.</source>
     <message>
       <location filename="../../ArchPanel.py" line="1104"/>
       <source>The linked Panel cuts</source>
-      <translation>A csatolt panel kivágások</translation>
+      <translation>Az összekötött panel kivágások</translation>
     </message>
     <message>
       <location filename="../../ArchPanel.py" line="1106"/>
@@ -5373,7 +5373,7 @@ Building creation aborted.</source>
     <message>
       <location filename="../../ArchPipe.py" line="363"/>
       <source>The pipes linked by this connector</source>
-      <translation>Ehhez a csatlakozóhoz csatlakozó csövek</translation>
+      <translation>Ehhez az összekötött csatlakozó csövek</translation>
     </message>
     <message>
       <location filename="../../ArchPipe.py" line="365"/>
