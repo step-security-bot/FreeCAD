@@ -98,7 +98,7 @@ void WorkbenchComboBox::refreshList(QList<QAction*> actionList)
 }
 
 
-WorkbenchTabWidget::WorkbenchTabWidget(WorkbenchGroup* aGroup, QWidget* parent) 
+WorkbenchTabWidget::WorkbenchTabWidget(WorkbenchGroup* aGroup, QWidget* parent)
     : QTabBar(parent)
     , wbActionGroup(aGroup)
 {
@@ -124,7 +124,7 @@ WorkbenchTabWidget::WorkbenchTabWidget(WorkbenchGroup* aGroup, QWidget* parent)
     });
 
     if (parent->inherits("QToolBar")) {
-        // set the initial orientation. We cannot do updateLayoutAndTabOrientation(false); 
+        // set the initial orientation. We cannot do updateLayoutAndTabOrientation(false);
         // because on init the toolbar area is always TopToolBarArea.
         ParameterGrp::handle hGrp;
         hGrp = App::GetApplication().GetParameterGroupByPath("User parameter:BaseApp/Preferences/Workbenches");
@@ -145,7 +145,7 @@ WorkbenchTabWidget::WorkbenchTabWidget(WorkbenchGroup* aGroup, QWidget* parent)
     refreshList(aGroup->getEnabledWbActions());
     connect(aGroup, &WorkbenchGroup::workbenchListRefreshed, this, &WorkbenchTabWidget::refreshList);
     connect(aGroup->groupAction(), &QActionGroup::triggered, this, [this, aGroup](QAction* action) {
-        int index = std::min(aGroup->actions().indexOf(action), this->count() - 1);
+        int index = std::min<int>(aGroup->actions().indexOf(action), this->count() - 1);
         setCurrentIndex(index);
     });
     connect(this, qOverload<int>(&QTabBar::tabBarClicked), aGroup, [aGroup, moreAction](int index) {
@@ -202,7 +202,7 @@ void WorkbenchTabWidget::refreshList(QList<QAction*> actionList)
     else {
         addTab(icon, tr("More"));
     }
-    
+
     buildPrefMenu();
 }
 
@@ -238,7 +238,7 @@ void WorkbenchTabWidget::buildPrefMenu()
     menu->addSeparator();
 
     QAction* preferencesAction = menu->addAction(tr("Preferences"));
-    connect(preferencesAction, &QAction::triggered, this, [this]() {
+    connect(preferencesAction, &QAction::triggered, this, []() {
         Gui::Dialog::DlgPreferencesImp cDlg(getMainWindow());
         cDlg.activateGroupPage(QString::fromUtf8("Workbenches"), 0);
         cDlg.exec();
