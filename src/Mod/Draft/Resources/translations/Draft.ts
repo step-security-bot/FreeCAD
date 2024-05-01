@@ -818,12 +818,17 @@ of the buttons above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="264"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="159"/>
+        <source>Grid color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/TaskSelectPlane.ui" line="274"/>
         <source>Resets the working plane to its next position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="267"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="277"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
@@ -840,67 +845,67 @@ will be moved to the center of the view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="159"/>
         <location filename="../ui/TaskSelectPlane.ui" line="169"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="179"/>
         <source>The spacing between the smaller grid lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="162"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="172"/>
         <source>Grid spacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="179"/>
         <location filename="../ui/TaskSelectPlane.ui" line="189"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="199"/>
         <source>The number of squares between each main line of the grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="182"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="192"/>
         <source>Main line every</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="196"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="206"/>
         <source>Grid extension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="203"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="213"/>
         <source> lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="216"/>
-        <location filename="../ui/TaskSelectPlane.ui" line="228"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="226"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="238"/>
         <source>The distance at which a point can be snapped to
 when approaching the mouse. You can also change this
 value by using the [ and ] keys while drawing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="221"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="231"/>
         <source>Snapping radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="239"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="249"/>
         <source>Centers the view on the current working plane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="242"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="252"/>
         <source>Center view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="251"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="261"/>
         <source>Resets the working plane to its previous position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/TaskSelectPlane.ui" line="254"/>
+        <location filename="../ui/TaskSelectPlane.ui" line="264"/>
         <source>Previous</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1353,42 +1358,51 @@ Only for the splitFaces and makeShell options.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="256"/>
+        <location filename="../ui/preferences-draft.ui" line="263"/>
+        <source>This is a delay during which the mouse is inactive, after entering numbers
+manually in any of the coordinate fields. Setting this to 0 disables the delay.
+If a delay of 1 is set, after entering a numeric value, the mouse will not
+update the field anymore during one second, to avoid moving the mouse
+accidentally and modifying the entered value.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/preferences-draft.ui" line="296"/>
         <source>Max. number of editable objects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="295"/>
+        <location filename="../ui/preferences-draft.ui" line="328"/>
         <source>Edit node pick radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="302"/>
+        <location filename="../ui/preferences-draft.ui" line="335"/>
         <source>The pick radius of edit nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="324"/>
+        <location filename="../ui/preferences-draft.ui" line="357"/>
         <source>Label prefix for clones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="337"/>
+        <location filename="../ui/preferences-draft.ui" line="370"/>
         <source>The default prefix added to the label of new clones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="353"/>
+        <location filename="../ui/preferences-draft.ui" line="386"/>
         <source>Construction group label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="366"/>
+        <location filename="../ui/preferences-draft.ui" line="399"/>
         <source>The default label for the construction geometry group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="389"/>
+        <location filename="../ui/preferences-draft.ui" line="422"/>
         <source>The default color for Draft objects in construction mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1408,22 +1422,22 @@ Only for the splitFaces and makeShell options.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="369"/>
+        <location filename="../ui/preferences-draft.ui" line="402"/>
         <source>Construction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="382"/>
+        <location filename="../ui/preferences-draft.ui" line="415"/>
         <source>Construction geometry color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="423"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="316"/>
         <source>Draft classic style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="428"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="321"/>
         <source>Bitsnpieces style</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1606,7 +1620,7 @@ in the Annotation scale widget. If the scale is 1:100 the multiplier is 100.</so
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="305"/>
+        <location filename="../ui/preferences-draft.ui" line="338"/>
         <location filename="../ui/preferences-drafttexts.ui" line="220"/>
         <source> px</source>
         <translation type="unfinished"></translation>
@@ -2161,58 +2175,58 @@ This might fail for post DXF R12 templates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="331"/>
-        <location filename="../ui/preferences-draftsnap.ui" line="465"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="420"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="455"/>
         <location filename="../ui/preferences-draftsnap.ui" line="493"/>
         <source>Shift</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="302"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="372"/>
         <source>Always snap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="385"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="391"/>
         <source>Snap modifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="452"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="407"/>
         <source>The Snap modifier key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="336"/>
-        <location filename="../ui/preferences-draftsnap.ui" line="470"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="425"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="460"/>
         <location filename="../ui/preferences-draftsnap.ui" line="498"/>
         <source>Ctrl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="341"/>
-        <location filename="../ui/preferences-draftsnap.ui" line="475"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="430"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="465"/>
         <location filename="../ui/preferences-draftsnap.ui" line="503"/>
         <source>Alt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="392"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="438"/>
         <source>Constrain modifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="483"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="445"/>
         <source>The Constrain modifier key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="399"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="473"/>
         <source>Alt modifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="318"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="480"/>
         <source>The Alt modifier key. The function of this key depends on the command.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2228,7 +2242,7 @@ Use Draft ToggleGrid to change this for the active view.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draft.ui" line="263"/>
+        <location filename="../ui/preferences-draft.ui" line="303"/>
         <source>The maximum number of objects Draft Edit is allowed to process at the same time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2344,48 +2358,37 @@ These lines are thicker than normal grid lines.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="436"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="299"/>
         <source>Snap symbol style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="511"/>
+        <location filename="../ui/preferences-draft.ui" line="256"/>
         <source>Mouse delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="518"/>
-        <source>This is a delay during which the mouse is inactive, after entering
-numbers manually in any of the coordinate fields. Setting this
-to 0 disables the delay. If a delay of 1 is set, after entering a numeric
-value, the mouse will not update the field anymore during one
-second, to avoid moving the mouse accidentally and modifying the
-entered value. If you use a very large value, e.g. 3600, the mouse
-movement will be disabled until the command finishes.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="527"/>
+        <location filename="../ui/preferences-draft.ui" line="270"/>
         <source> seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="413"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="306"/>
         <source>The style for snap symbols</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="406"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="342"/>
         <source>Snap symbol color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="362"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="349"/>
         <source>The color for snap symbols</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/preferences-draftsnap.ui" line="299"/>
+        <location filename="../ui/preferences-draftsnap.ui" line="369"/>
         <source>If checked, snapping is activated without the need to press the Snap modifier key</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2870,8 +2873,8 @@ movement will be disabled until the command finishes.</source>
     <message>
         <location filename="../../DraftGui.py" line="492"/>
         <location filename="../../DraftGui.py" line="520"/>
-        <location filename="../../DraftGui.py" line="1461"/>
-        <location filename="../../DraftGui.py" line="1476"/>
+        <location filename="../../DraftGui.py" line="1464"/>
+        <location filename="../../DraftGui.py" line="1479"/>
         <location filename="../../draftguitools/gui_groups.py" line="239"/>
         <location filename="../../draftguitools/gui_groups.py" line="244"/>
         <source>None</source>
@@ -3095,8 +3098,8 @@ Not available if Draft preference option &apos;Use Part Primitives&apos; is enab
     </message>
     <message>
         <location filename="../../DraftGui.py" line="612"/>
-        <location filename="../../DraftGui.py" line="1464"/>
-        <location filename="../../DraftGui.py" line="1479"/>
+        <location filename="../../DraftGui.py" line="1467"/>
+        <location filename="../../DraftGui.py" line="1482"/>
         <source>Autogroup off</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3190,32 +3193,32 @@ Not available if Draft preference option &apos;Use Part Primitives&apos; is enab
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../DraftGui.py" line="1472"/>
+        <location filename="../../DraftGui.py" line="1475"/>
         <source>Autogroup:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../DraftGui.py" line="1611"/>
+        <location filename="../../DraftGui.py" line="1614"/>
         <source>Modify objects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../DraftGui.py" line="1760"/>
+        <location filename="../../DraftGui.py" line="1763"/>
         <source>Faces</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../DraftGui.py" line="1761"/>
+        <location filename="../../DraftGui.py" line="1764"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../DraftGui.py" line="1762"/>
+        <location filename="../../DraftGui.py" line="1765"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../DraftGui.py" line="1763"/>
+        <location filename="../../DraftGui.py" line="1766"/>
         <source>Facebinder elements</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4701,58 +4704,67 @@ The final angle will be the base angle plus this amount.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="311"/>
+        <location filename="../../draftobjects/patharray.py" line="322"/>
         <source>, path object doesn&apos;t have &apos;Edges&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="418"/>
-        <location filename="../../draftobjects/patharray.py" line="424"/>
-        <location filename="../../draftobjects/patharray.py" line="430"/>
-        <source>&apos;PathObj&apos; property will be migrated to &apos;PathObject&apos;</source>
+        <location filename="../../draftobjects/patharray.py" line="420"/>
+        <source>migrated &apos;PathObj&apos; property to &apos;PathObject&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="465"/>
+        <location filename="../../draftobjects/patharray.py" line="424"/>
+        <source>migrated &apos;PathSubs&apos; property to &apos;PathSubelements&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../draftobjects/patharray.py" line="428"/>
+        <source>migrated &apos;Xlate&apos; property to &apos;ExtraTranslation&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../draftobjects/patharray.py" line="431"/>
+        <location filename="../../draftobjects/pathtwistedarray.py" line="141"/>
+        <location filename="../../draftobjects/pointarray.py" line="145"/>
+        <source>added &apos;Fuse&apos; property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../draftobjects/patharray.py" line="466"/>
         <source>Start Offset too large for path length. Using zero instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="471"/>
+        <location filename="../../draftobjects/patharray.py" line="472"/>
         <source>End Offset too large for path length minus Start Offset. Using zero instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="533"/>
+        <location filename="../../draftobjects/patharray.py" line="534"/>
         <source>Length of tangent vector is zero. Copy not aligned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="547"/>
-        <location filename="../../draftobjects/patharray.py" line="569"/>
+        <location filename="../../draftobjects/patharray.py" line="548"/>
+        <location filename="../../draftobjects/patharray.py" line="570"/>
         <source>Length of normal vector is zero. Using a default axis instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="553"/>
-        <location filename="../../draftobjects/patharray.py" line="575"/>
+        <location filename="../../draftobjects/patharray.py" line="554"/>
+        <location filename="../../draftobjects/patharray.py" line="576"/>
         <source>Tangent and normal vectors are parallel. Normal replaced by a default axis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="565"/>
+        <location filename="../../draftobjects/patharray.py" line="566"/>
         <source>Cannot calculate normal vector. Using the default normal instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="581"/>
+        <location filename="../../draftobjects/patharray.py" line="582"/>
         <source>AlignMode {} is not implemented</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../draftobjects/pointarray.py" line="140"/>
-        <location filename="../../draftobjects/pointarray.py" line="156"/>
-        <source>added property &apos;ExtraPlacement&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5386,7 +5398,7 @@ The final angle will be the base angle plus this amount.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftguitools/gui_selectplane.py" line="148"/>
+        <location filename="../../draftguitools/gui_selectplane.py" line="154"/>
         <source>Select 3 vertices, one or more shapes or an object to define a working plane</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5394,6 +5406,16 @@ The final angle will be the base angle plus this amount.</source>
         <location filename="../../draftutils/params.py" line="182"/>
         <source>Do you want to update the SVG pattern options
 of existing objects in all opened documents?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../draftobjects/pointarray.py" line="139"/>
+        <source>added &apos;ExtraPlacement&apos; property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../draftobjects/pointarray.py" line="142"/>
+        <source>migrated &apos;PointList&apos; property to &apos;PointObject&apos;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5600,7 +5622,7 @@ from menu Tools -&gt; Addon Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/pointarray.py" line="219"/>
+        <location filename="../../draftobjects/pointarray.py" line="208"/>
         <source>Point object doesn&apos;t have a discrete point, it cannot be used for an array.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5768,12 +5790,12 @@ from menu Tools -&gt; Addon Manager</source>
 <context>
     <name>Draft_SelectPlane</name>
     <message>
-        <location filename="../../draftguitools/gui_selectplane.py" line="57"/>
+        <location filename="../../draftguitools/gui_selectplane.py" line="58"/>
         <source>Select plane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftguitools/gui_selectplane.py" line="60"/>
+        <location filename="../../draftguitools/gui_selectplane.py" line="61"/>
         <source>Select 3 vertices, one or more shapes or an object to define a working plane.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7087,31 +7109,31 @@ set True for fusion or False for compound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/pathtwistedarray.py" line="86"/>
+        <location filename="../../draftobjects/pathtwistedarray.py" line="87"/>
         <source>The base object that will be duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../draftobjects/patharray.py" line="185"/>
-        <location filename="../../draftobjects/pathtwistedarray.py" line="93"/>
+        <location filename="../../draftobjects/pathtwistedarray.py" line="94"/>
         <source>The object along which the copies will be distributed. It must contain &apos;Edges&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/pathtwistedarray.py" line="100"/>
+        <location filename="../../draftobjects/pathtwistedarray.py" line="112"/>
         <source>Number of copies to create.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/pathtwistedarray.py" line="107"/>
+        <location filename="../../draftobjects/pathtwistedarray.py" line="119"/>
         <source>Rotation factor of the twisted array.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../draftobjects/array.py" line="335"/>
-        <location filename="../../draftobjects/patharray.py" line="216"/>
-        <location filename="../../draftobjects/pathtwistedarray.py" line="114"/>
-        <location filename="../../draftobjects/pointarray.py" line="100"/>
+        <location filename="../../draftobjects/patharray.py" line="227"/>
+        <location filename="../../draftobjects/pathtwistedarray.py" line="126"/>
+        <location filename="../../draftobjects/pointarray.py" line="111"/>
         <source>Show the individual array elements (only for Link arrays)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7218,33 +7240,33 @@ Leave this property empty to create copies along the entire &apos;Path Object&ap
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="208"/>
+        <location filename="../../draftobjects/patharray.py" line="219"/>
         <source>Number of copies to create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="227"/>
+        <location filename="../../draftobjects/patharray.py" line="238"/>
         <source>Additional translation that will be applied to each copy.
 This is useful to adjust for the difference between shape centre and shape reference point.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="235"/>
+        <location filename="../../draftobjects/patharray.py" line="246"/>
         <source>Alignment vector for &apos;Tangent&apos; mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="243"/>
+        <location filename="../../draftobjects/patharray.py" line="254"/>
         <source>Force use of &apos;Vertical Vector&apos; as local Z direction when using &apos;Original&apos; or &apos;Tangent&apos; alignment mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="251"/>
+        <location filename="../../draftobjects/patharray.py" line="262"/>
         <source>Direction of the local Z axis when &apos;Force Vertical&apos; is true</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="259"/>
+        <location filename="../../draftobjects/patharray.py" line="270"/>
         <source>Method to orient the copies along the path.
 - Original: X is curve tangent, Y is normal, and Z is the cross product.
 - Frenet: aligns the object following the local coordinate system along the path.
@@ -7254,17 +7276,17 @@ To get better results with &apos;Original&apos; or &apos;Tangent&apos; you may h
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="268"/>
+        <location filename="../../draftobjects/patharray.py" line="279"/>
         <source>Length from the start of the path to the first copy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="276"/>
+        <location filename="../../draftobjects/patharray.py" line="287"/>
         <source>Length from the end of the path to the last copy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/patharray.py" line="286"/>
+        <location filename="../../draftobjects/patharray.py" line="297"/>
         <source>Orient the copies along the path depending on the &apos;Align Mode&apos;.
 Otherwise the copies will have the same orientation as the original Base object.</source>
         <translation type="unfinished"></translation>
@@ -7279,6 +7301,9 @@ Otherwise the copies will have the same orientation as the original Base object.
     </message>
     <message>
         <location filename="../../draftobjects/array.py" line="124"/>
+        <location filename="../../draftobjects/patharray.py" line="211"/>
+        <location filename="../../draftobjects/pathtwistedarray.py" line="102"/>
+        <location filename="../../draftobjects/pointarray.py" line="86"/>
         <source>Specifies if the copies should be fused together if they touch each other (slower)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7382,14 +7407,13 @@ This property is read-only, as the number depends on the parameters of the array
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/pointarray.py" line="83"/>
+        <location filename="../../draftobjects/pointarray.py" line="94"/>
         <source>Number of copies in the array.
 This property is read-only, as the number depends on the points in &apos;Point Object&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../draftobjects/pointarray.py" line="92"/>
-        <location filename="../../draftobjects/pointarray.py" line="135"/>
+        <location filename="../../draftobjects/pointarray.py" line="103"/>
         <source>Additional placement, shift and rotation, that will be applied to each copy</source>
         <translation type="unfinished"></translation>
     </message>

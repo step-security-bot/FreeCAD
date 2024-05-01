@@ -309,7 +309,7 @@
     <message>
       <location filename="../../Command.cpp" line="1086"/>
       <source>Node set by poly</source>
-      <translation>Zestaw węzłów przez poly</translation>
+      <translation>Węzeł ustawiony przez wielokąt</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1087"/>
@@ -513,7 +513,7 @@
       <location filename="../../Command.cpp" line="2043"/>
       <location filename="../../Command.cpp" line="2052"/>
       <source>Wrong selection</source>
-      <translation>Nieprawidłowy wybór</translation>
+      <translation>Niewłaściwy wybór</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="2044"/>
@@ -954,84 +954,96 @@
       <translation>Użyj domyślnych ustawień innych niż Calculix</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="454"/>
       <source>Time Initial Step</source>
       <translation>Początkowy krok czasu</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="470"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="502"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="541"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="596"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="651"/>
       <source>s</source>
       <translation>s</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="477"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
       <source>Time End</source>
       <translation>Koniec czasu</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="516"/>
-      <source>Beam, shell element 3D output format</source>
-      <translation>Format 3D wyników dla belek i powłok</translation>
-    </message>
-    <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="523"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="665"/>
       <source>3D Output, unchecked for 2D</source>
       <translation>Wyniki 3D, odznaczone dla 2D</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="544"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="686"/>
       <source>Thermo mechanical defaults</source>
       <translation>Domyślne ustawienia termomechaniczne</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="552"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="694"/>
       <source>Analysis type (transient or steady state)</source>
       <translation>Typ analizy (stan nieustalony lub ustalony)</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="559"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="701"/>
       <source>Use steady state</source>
       <translation>Użyj stanu ustalonego</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="575"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
       <source>Maximum number of iterations</source>
       <translation>Maksymalna liczba iteracji</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="609"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="548"/>
+      <source>Time Minimum Step</source>
+      <translation>Minimalny krok czasu</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="603"/>
+      <source>Time Maximum Step</source>
+      <translation>Maksymalny krok czasu</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="658"/>
+      <source>Beam, shell element 3D output format</source>
+      <translation>Format 3D wyników dla belek i powłok</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="722"/>
       <source>Frequency defaults</source>
       <translation>Ustawienia domyślne analizy częstotliwości</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="617"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="730"/>
       <source>Eigenmode number</source>
       <translation>Numer postaci własnej</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="662"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="775"/>
       <source>High frequency limit</source>
       <translation>Górna granica częstotliwości</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="700"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="748"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="813"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="861"/>
       <source>Hz</source>
       <translation>Hz</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="707"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="820"/>
       <source>Low frequency limit</source>
       <translation>Dolna granica częstotliwości</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="145"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="149"/>
       <source>File does not exist</source>
       <translation>Plik nie istnieje</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="146"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="150"/>
       <source>The specified executable
 '%1'
  does not exist!
@@ -1653,7 +1665,7 @@ Proszę, wybierz inny.</translation>
     <message>
       <location filename="../../TaskAnalysisInfo.cpp" line="35"/>
       <source>Nodes set</source>
-      <translation>Zbiór węzłów</translation>
+      <translation>Zestaw węzłów</translation>
     </message>
   </context>
   <context>
@@ -1809,7 +1821,7 @@ Proszę, wybierz inny.</translation>
     <message>
       <location filename="../../TaskDriver.cpp" line="35"/>
       <source>Nodes set</source>
-      <translation>Zestaw węzłów</translation>
+      <translation>Zbiór węzłów</translation>
     </message>
   </context>
   <context>
@@ -1934,7 +1946,7 @@ Proszę, wybierz inny.</translation>
       <location filename="../../TaskFemConstraintContact.cpp" line="232"/>
       <location filename="../../TaskFemConstraintContact.cpp" line="363"/>
       <source>Only faces can be picked</source>
-      <translation>Można wybrać tylko powierzchnie</translation>
+      <translation>Można wybrać tylko ściany</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintContact.cpp" line="337"/>
@@ -1956,7 +1968,7 @@ Proszę, wybierz inny.</translation>
       <location filename="../../TaskFemConstraintDisplacement.cpp" line="388"/>
       <location filename="../../TaskFemConstraintDisplacement.cpp" line="398"/>
       <source>Selection error</source>
-      <translation>Błąd zaznaczenia</translation>
+      <translation>Błąd wyboru</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.cpp" line="317"/>
@@ -2166,7 +2178,7 @@ Proszę, wybierz inny.</translation>
       <location filename="../../TaskFemConstraintForce.cpp" line="316"/>
       <location filename="../../TaskFemConstraintForce.cpp" line="332"/>
       <source>Wrong selection</source>
-      <translation>Niewłaściwy wybór</translation>
+      <translation>Nieprawidłowy wybór</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintForce.cpp" line="316"/>
@@ -2181,12 +2193,12 @@ Proszę, wybierz inny.</translation>
       <location filename="../../TaskFemConstraintGear.cpp" line="159"/>
       <location filename="../../TaskFemConstraintGear.cpp" line="166"/>
       <source>Selection error</source>
-      <translation>Błąd wyboru</translation>
+      <translation>Błąd w zaznaczeniu</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintGear.cpp" line="152"/>
       <source>Only planar faces can be picked</source>
-      <translation>Mogą być użyte tylko powierzchnie płaskie</translation>
+      <translation>Wybrać można tylko płaskie ściany</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintGear.cpp" line="160"/>
@@ -2209,7 +2221,7 @@ Proszę, wybierz inny.</translation>
       <location filename="../../TaskFemConstraintHeatflux.cpp" line="293"/>
       <location filename="../../TaskFemConstraintHeatflux.cpp" line="303"/>
       <source>Selection error</source>
-      <translation>Błąd w zaznaczeniu</translation>
+      <translation>Błąd wyboru</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintHeatflux.cpp" line="217"/>
@@ -2270,7 +2282,7 @@ Proszę, wybierz inny.</translation>
     <message>
       <location filename="../../TaskFemConstraintPlaneRotation.cpp" line="170"/>
       <source>Only planar faces can be picked</source>
-      <translation>Wybrać można tylko płaskie ściany</translation>
+      <translation>Mogą być użyte tylko powierzchnie płaskie</translation>
     </message>
   </context>
   <context>
@@ -2391,7 +2403,7 @@ Proszę, wybierz inny.</translation>
       <location filename="../../TaskFemConstraintTransform.cpp" line="431"/>
       <location filename="../../TaskFemConstraintTransform.cpp" line="441"/>
       <source>Selection error</source>
-      <translation>Błąd wyboru</translation>
+      <translation>Błąd zaznaczenia</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintTransform.cpp" line="284"/>
@@ -2424,7 +2436,7 @@ Proszę, wybierz inny.</translation>
     <message>
       <location filename="../../TaskFemConstraintTransform.cpp" line="328"/>
       <source>Only faces can be picked</source>
-      <translation>Można wybrać tylko ściany</translation>
+      <translation>Można wybrać tylko powierzchnie</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintTransform.cpp" line="339"/>
@@ -2802,7 +2814,7 @@ Proszę, wybierz inny.</translation>
       <location filename="../ui/ElementFluid1D.ui" line="235"/>
       <location filename="../ui/ElementFluid1D.ui" line="308"/>
       <source>Pressure</source>
-      <translation>Nacisk</translation>
+      <translation>Ciśnienie</translation>
     </message>
     <message>
       <location filename="../ui/ElementFluid1D.ui" line="245"/>
@@ -2925,7 +2937,7 @@ Proszę, wybierz inny.</translation>
     <message>
       <location filename="../ui/ConstraintTie.ui" line="63"/>
       <source>Enable Adjust</source>
-      <translation>Włącz regulację</translation>
+      <translation>Włącz dociąganie węzłów</translation>
     </message>
     <message>
       <location filename="../ui/ElementFluid1D.ui" line="92"/>
@@ -2959,7 +2971,7 @@ Proszę, wybierz inny.</translation>
     <message>
       <location filename="../ui/ConstraintCentrif.ui" line="43"/>
       <source>Rotation frequency f&lt;sub&gt;rot&lt;/sub&gt; [rps]</source>
-      <translation>Częstotliwość obrotu f&lt;sub&gt;obrót&lt;/sub&gt; [rps]</translation>
+      <translation>Częstotliwość obrotu f&lt;sub&gt;obrót&lt;/sub&gt; [obr./s]</translation>
     </message>
     <message>
       <location filename="../ui/ConstraintCentrif.ui" line="74"/>
@@ -3191,7 +3203,7 @@ Uwaga: bez efektu, jeśli wybrano bryłę</translation>
     <message>
       <location filename="../ui/ElementGeometry1D.ui" line="14"/>
       <source>Beam section parameter</source>
-      <translation>Parametr sekcji belki</translation>
+      <translation>Parametr przekroju belki</translation>
     </message>
     <message>
       <location filename="../ui/ElementGeometry1D.ui" line="20"/>
@@ -3531,7 +3543,7 @@ Uwaga: w 2D tylko ustawienie dla x jest możliwe,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="72"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="69"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="337"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="862"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="944"/>
       <source>A dialog is already open in the task panel</source>
       <translation>Okienko dialogowe jest już otwarte w panelu zadań</translation>
     </message>
@@ -3543,7 +3555,7 @@ Uwaga: w 2D tylko ustawienie dla x jest możliwe,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="73"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="70"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="338"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="863"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="945"/>
       <source>Do you want to close this dialog?</source>
       <translation>Czy chcesz zamknąć to okno?</translation>
     </message>
@@ -3679,7 +3691,7 @@ Uwaga: w 2D tylko ustawienie dla x jest możliwe,
       <translation>Lokalny układ współrzędnych</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderFemConstraint.cpp" line="141"/>
+      <location filename="../../ViewProviderFemConstraint.cpp" line="142"/>
       <source>Edit analysis feature</source>
       <translation>Edytuj cechę analizy</translation>
     </message>
@@ -4264,7 +4276,7 @@ Aby uzyskać możliwe zmienne, zobacz pole opisu poniżej.</translation>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="35"/>
       <source>Prescribed Displacement</source>
-      <translation>Odkształcenie określone</translation>
+      <translation>Przemieszczenie określone</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="41"/>
@@ -4284,7 +4296,7 @@ Aby uzyskać możliwe zmienne, zobacz pole opisu poniżej.</translation>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="107"/>
       <source>Displacement x</source>
-      <translation>Odkształcenie x</translation>
+      <translation>Przemieszczenie X</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="119"/>
@@ -4315,12 +4327,12 @@ przez solver Elmer</translation>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="147"/>
       <source>Displacement y</source>
-      <translation>Odkształcenie y</translation>
+      <translation>Przemieszczenie Y</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="187"/>
       <source>Displacement z</source>
-      <translation>Odkształcenie z</translation>
+      <translation>Przemieszczenie Z</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="217"/>
@@ -4655,7 +4667,7 @@ normal vector of the face is used as direction</source>
     <message>
       <location filename="../../TaskFemConstraintPressure.ui" line="68"/>
       <source>Pressure</source>
-      <translation>Nacisk</translation>
+      <translation>Ciśnienie</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintPressure.ui" line="87"/>
@@ -4688,7 +4700,7 @@ normal vector of the face is used as direction</source>
     <message>
       <location filename="../../TaskFemConstraintSpring.ui" line="109"/>
       <source>Stiffness for Elmer</source>
-      <translation>Sztywność W Elmerze</translation>
+      <translation>Sztywność w Elmerze</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintSpring.ui" line="116"/>
@@ -5073,77 +5085,82 @@ użyta przez solver Elmer</translation>
       <translation>Rozmiar maksymalny:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="44"/>
+      <location filename="../../TaskTetParameter.ui" line="46"/>
+      <source>Min. Size:</source>
+      <translation type="unfinished">Min. Size:</translation>
+    </message>
+    <message>
+      <location filename="../../TaskTetParameter.ui" line="62"/>
       <source>Second order</source>
       <translation>Elementy drugiego rzędu</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="53"/>
+      <location filename="../../TaskTetParameter.ui" line="71"/>
       <source>Fineness:</source>
       <translation>Stopień rozdrobnienia:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="64"/>
+      <location filename="../../TaskTetParameter.ui" line="82"/>
       <source>VeryCoarse</source>
       <translation>Bardzo zgrubnie</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="69"/>
+      <location filename="../../TaskTetParameter.ui" line="87"/>
       <source>Coarse</source>
       <translation>Zgrubnie</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="74"/>
+      <location filename="../../TaskTetParameter.ui" line="92"/>
       <source>Moderate</source>
       <translation>Umiarkowanie</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="79"/>
+      <location filename="../../TaskTetParameter.ui" line="97"/>
       <source>Fine</source>
       <translation>Drobno</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="84"/>
+      <location filename="../../TaskTetParameter.ui" line="102"/>
       <source>VeryFine</source>
       <translation>Bardzo drobno</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="89"/>
+      <location filename="../../TaskTetParameter.ui" line="107"/>
       <source>UserDefined</source>
       <translation>Zdefiniowane przez użytkownika</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="97"/>
+      <location filename="../../TaskTetParameter.ui" line="115"/>
       <source>Growth Rate:</source>
       <translation>Współczynnik wzrostu:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="111"/>
+      <location filename="../../TaskTetParameter.ui" line="129"/>
       <source>Nbr. Segs per Edge:</source>
       <translation>Liczba segmentów na krawędź:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="128"/>
+      <location filename="../../TaskTetParameter.ui" line="146"/>
       <source>Nbr. Segs per Radius:</source>
       <translation>Liczba segmentów na promień:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="144"/>
+      <location filename="../../TaskTetParameter.ui" line="162"/>
       <source>Optimize</source>
       <translation>Optymalizacja</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="166"/>
+      <location filename="../../TaskTetParameter.ui" line="184"/>
       <source>Node count:</source>
       <translation>Liczba węzłów:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="180"/>
+      <location filename="../../TaskTetParameter.ui" line="198"/>
       <source>Triangle count:</source>
       <translation>Liczba trójkątów:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="194"/>
+      <location filename="../../TaskTetParameter.ui" line="212"/>
       <source>Tetrahedron count:</source>
       <translation>Liczba czworościanów:</translation>
     </message>
@@ -5718,7 +5735,7 @@ sprężystość (naprężenia)</translation>
     </message>
   </context>
   <context>
-    <name>FEM_SolverCalculixCxxtools</name>
+    <name>FEM_SolverCalculiXCcxTools</name>
     <message>
       <location filename="../../../femcommands/commands.py" line="1058"/>
       <source>Solver CalculiX Standard</source>
@@ -5819,7 +5836,7 @@ sprężystość (naprężenia)</translation>
       <location filename="../../../femsolver/solver_taskpanel.py" line="311"/>
       <location filename="../../../femsolver/solver_taskpanel.py" line="315"/>
       <source>Edit</source>
-      <translation>Edytuj</translation>
+      <translation>Edycja</translation>
     </message>
     <message>
       <location filename="../../../femsolver/solver_taskpanel.py" line="248"/>

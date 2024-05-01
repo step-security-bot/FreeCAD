@@ -24,7 +24,7 @@
     <message>
       <location filename="../../Command.cpp" line="230"/>
       <source>Fem</source>
-      <translation>МКЭ (метод конечных элементов)</translation>
+      <translation>Мкэ (метод конечных элементов)</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="231"/>
@@ -42,7 +42,7 @@
     <message>
       <location filename="../../Command.cpp" line="296"/>
       <source>Fem</source>
-      <translation>Мкэ (метод конечных элементов)</translation>
+      <translation>МКЭ (метод конечных элементов)</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="297"/>
@@ -497,7 +497,7 @@
     <message>
       <location filename="../../Command.cpp" line="2004"/>
       <source>Fem</source>
-      <translation>МКЭ (метод конечных элементов)</translation>
+      <translation>Мкэ (метод конечных элементов)</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="2005"/>
@@ -513,7 +513,7 @@
       <location filename="../../Command.cpp" line="2043"/>
       <location filename="../../Command.cpp" line="2052"/>
       <source>Wrong selection</source>
-      <translation>Неправильный выбор</translation>
+      <translation>Неправильное выделение</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="2044"/>
@@ -954,84 +954,96 @@
       <translation>Использовать значения по умолчанию, отличные от CalculiX</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="454"/>
       <source>Time Initial Step</source>
       <translation>Начальный временной интервал</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="470"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="502"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="541"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="596"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="651"/>
       <source>s</source>
       <translation>с</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="477"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
       <source>Time End</source>
       <translation>Время завершения</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="516"/>
-      <source>Beam, shell element 3D output format</source>
-      <translation>Формат вывода 3D-элементов типа балки и оболочки</translation>
-    </message>
-    <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="523"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="665"/>
       <source>3D Output, unchecked for 2D</source>
       <translation>3D-вывод, снят флажок для 2D</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="544"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="686"/>
       <source>Thermo mechanical defaults</source>
       <translation>Значения по умолчанию для термомеханики</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="552"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="694"/>
       <source>Analysis type (transient or steady state)</source>
       <translation>Тип анализа (переходное или устойчивое состояние)</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="559"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="701"/>
       <source>Use steady state</source>
       <translation>Использовать стабильное состояние</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="575"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
       <source>Maximum number of iterations</source>
       <translation>Максимальное количество итераций</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="609"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="548"/>
+      <source>Time Minimum Step</source>
+      <translation>Минимальное время шага</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="603"/>
+      <source>Time Maximum Step</source>
+      <translation>Максимальное время шага</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="658"/>
+      <source>Beam, shell element 3D output format</source>
+      <translation>Формат вывода 3D-элементов типа балки и оболочки</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="722"/>
       <source>Frequency defaults</source>
       <translation>Частота по умолчанию</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="617"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="730"/>
       <source>Eigenmode number</source>
       <translation>Номер Обертона</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="662"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="775"/>
       <source>High frequency limit</source>
       <translation>Граничное условие высокой частоты</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="700"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="748"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="813"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="861"/>
       <source>Hz</source>
       <translation>Гц</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="707"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="820"/>
       <source>Low frequency limit</source>
       <translation>Граничное условие низкой частоты</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="145"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="149"/>
       <source>File does not exist</source>
       <translation>Файл не существует</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="146"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="150"/>
       <source>The specified executable
 '%1'
  does not exist!
@@ -2077,7 +2089,7 @@ Specify another file please.</source>
       <location filename="../../TaskFemConstraintFluidBoundary.cpp" line="677"/>
       <location filename="../../TaskFemConstraintFluidBoundary.cpp" line="684"/>
       <source>Wrong selection</source>
-      <translation>Неправильное выделение</translation>
+      <translation>Неправильный выбор</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintFluidBoundary.cpp" line="645"/>
@@ -2163,7 +2175,7 @@ Specify another file please.</source>
       <location filename="../../TaskFemConstraintForce.cpp" line="316"/>
       <location filename="../../TaskFemConstraintForce.cpp" line="332"/>
       <source>Wrong selection</source>
-      <translation>Неправильный выбор</translation>
+      <translation>Неправильное выделение</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintForce.cpp" line="316"/>
@@ -3473,7 +3485,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../PlaneWidget.ui" line="26"/>
       <location filename="../../PlaneWidget.ui" line="86"/>
       <source>x</source>
-      <translation>⨯</translation>
+      <translation>x</translation>
     </message>
     <message>
       <location filename="../../PlaneWidget.ui" line="43"/>
@@ -3528,7 +3540,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="72"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="69"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="337"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="862"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="944"/>
       <source>A dialog is already open in the task panel</source>
       <translation>Диалог уже открыт на панели задач</translation>
     </message>
@@ -3540,7 +3552,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="73"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="70"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="338"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="863"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="945"/>
       <source>Do you want to close this dialog?</source>
       <translation>Вы хотите закрыть этот диалог?</translation>
     </message>
@@ -3557,7 +3569,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../AppFemGui.cpp" line="178"/>
       <location filename="../../AppFemGui.cpp" line="179"/>
       <source>FEM</source>
-      <translation>МКЭ</translation>
+      <translation>Метод конечных элементов</translation>
     </message>
     <message>
       <location filename="../../AppFemGui.cpp" line="182"/>
@@ -3676,7 +3688,7 @@ Note: for 2D only setting for x is possible,
       <translation>Локальная система координат</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderFemConstraint.cpp" line="141"/>
+      <location filename="../../ViewProviderFemConstraint.cpp" line="142"/>
       <source>Edit analysis feature</source>
       <translation>Редактировать функцию анализа</translation>
     </message>
@@ -4057,7 +4069,7 @@ For possible variables, see the description box below.</source>
     <message>
       <location filename="../../TaskCreateNodeSet.ui" line="70"/>
       <source>Box</source>
-      <translation>Куб</translation>
+      <translation>Коробка</translation>
     </message>
     <message>
       <location filename="../../TaskCreateNodeSet.ui" line="80"/>
@@ -4276,7 +4288,7 @@ For possible variables, see the description box below.</source>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="74"/>
       <source>Remove</source>
-      <translation>Удалить</translation>
+      <translation>Убрать</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.ui" line="107"/>
@@ -4564,7 +4576,7 @@ normal vector of the face is used as direction</source>
     <message>
       <location filename="../../TaskFemConstraintHeatflux.ui" line="51"/>
       <source>Remove</source>
-      <translation>Убрать</translation>
+      <translation>Удалить</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintHeatflux.ui" line="68"/>
@@ -4820,7 +4832,7 @@ used for the Elmer solver</source>
     <message>
       <location filename="../../TaskPostDataAlongLine.ui" line="64"/>
       <source>x</source>
-      <translation>x</translation>
+      <translation>⨯</translation>
     </message>
     <message>
       <location filename="../../TaskPostDataAlongLine.ui" line="103"/>
@@ -5072,77 +5084,82 @@ used for the Elmer solver</source>
       <translation>Макс. размер:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="44"/>
+      <location filename="../../TaskTetParameter.ui" line="46"/>
+      <source>Min. Size:</source>
+      <translation type="unfinished">Min. Size:</translation>
+    </message>
+    <message>
+      <location filename="../../TaskTetParameter.ui" line="62"/>
       <source>Second order</source>
       <translation>Второй порядок</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="53"/>
+      <location filename="../../TaskTetParameter.ui" line="71"/>
       <source>Fineness:</source>
       <translation>Точность:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="64"/>
+      <location filename="../../TaskTetParameter.ui" line="82"/>
       <source>VeryCoarse</source>
       <translation>Приблизительно</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="69"/>
+      <location filename="../../TaskTetParameter.ui" line="87"/>
       <source>Coarse</source>
       <translation>Грубо</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="74"/>
+      <location filename="../../TaskTetParameter.ui" line="92"/>
       <source>Moderate</source>
       <translation>Приемлемо</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="79"/>
+      <location filename="../../TaskTetParameter.ui" line="97"/>
       <source>Fine</source>
       <translation>Точно</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="84"/>
+      <location filename="../../TaskTetParameter.ui" line="102"/>
       <source>VeryFine</source>
       <translation>Высокоточно</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="89"/>
+      <location filename="../../TaskTetParameter.ui" line="107"/>
       <source>UserDefined</source>
       <translation>Заданная пользователем</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="97"/>
+      <location filename="../../TaskTetParameter.ui" line="115"/>
       <source>Growth Rate:</source>
       <translation>Темп роста:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="111"/>
+      <location filename="../../TaskTetParameter.ui" line="129"/>
       <source>Nbr. Segs per Edge:</source>
       <translation>Количество сегментов на грань:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="128"/>
+      <location filename="../../TaskTetParameter.ui" line="146"/>
       <source>Nbr. Segs per Radius:</source>
       <translation>Количество сегментов на радиус:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="144"/>
+      <location filename="../../TaskTetParameter.ui" line="162"/>
       <source>Optimize</source>
       <translation>Оптимизировать</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="166"/>
+      <location filename="../../TaskTetParameter.ui" line="184"/>
       <source>Node count:</source>
       <translation>Счетчик узлов:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="180"/>
+      <location filename="../../TaskTetParameter.ui" line="198"/>
       <source>Triangle count:</source>
       <translation>Количество треугольников:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="194"/>
+      <location filename="../../TaskTetParameter.ui" line="212"/>
       <source>Tetrahedron count:</source>
       <translation>Количество тетраэдров:</translation>
     </message>
@@ -5152,7 +5169,7 @@ used for the Elmer solver</source>
     <message>
       <location filename="../../Workbench.cpp" line="40"/>
       <source>FEM</source>
-      <translation>Метод конечных элементов</translation>
+      <translation>МКЭ</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="41"/>
@@ -5272,7 +5289,7 @@ used for the Elmer solver</source>
     <message>
       <location filename="../../Workbench.cpp" line="66"/>
       <source>Mesh</source>
-      <translation>Полигональная сетка</translation>
+      <translation>Сеть</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="67"/>
@@ -5715,7 +5732,7 @@ used for the Elmer solver</source>
     </message>
   </context>
   <context>
-    <name>FEM_SolverCalculixCxxtools</name>
+    <name>FEM_SolverCalculiXCcxTools</name>
     <message>
       <location filename="../../../femcommands/commands.py" line="1058"/>
       <source>Solver CalculiX Standard</source>
@@ -6034,7 +6051,7 @@ Please select a result type first.</source>
     <message>
       <location filename="../../Command.cpp" line="1203"/>
       <source>Fem</source>
-      <translation>Мкэ (метод конечных элементов)</translation>
+      <translation>МКЭ (метод конечных элементов)</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1204"/>

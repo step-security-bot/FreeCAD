@@ -74,6 +74,7 @@
 #include "GeometryMatcher.h"
 #include "Preferences.h"
 #include "DimensionAutoCorrect.h"
+#include "DrawBrokenView.h"
 
 using namespace TechDraw;
 using namespace Part;
@@ -649,6 +650,22 @@ double DrawViewDimension::getDimValue()
         }
         if (Type.isValue("Distance") || Type.isValue("DistanceX") || Type.isValue("DistanceY")) {
             pointPair pts = getLinearPoints();
+            auto dbv = dynamic_cast<DrawBrokenView*>(getViewPart());
+            if (dbv)  {
+                // raw pts from view are inverted Y, so we need to un-invert them before mapping
+                // raw pts are scaled, so we need to unscale them for mapPoint2dFromView
+                // then rescale them for the distance calculation below
+                // centers are right side up
+                // if both points are on the expanded side  of the last (rightmost/upmost) break
+                // then we should not move the points.
+                //
+                pts.invertY();
+                pts.scale(1.0 / getViewPart()->getScale());
+                pts.first(dbv->mapPoint2dFromView(pts.first()));
+                pts.second(dbv->mapPoint2dFromView(pts.second()));
+                pts.invertY();
+                pts.scale(getViewPart()->getScale());
+            }
             Base::Vector3d dimVec = pts.first() - pts.second();
             if (Type.isValue("Distance")) {
                 result = dimVec.Length() / getViewPart()->getScale();

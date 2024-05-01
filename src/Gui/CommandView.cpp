@@ -62,7 +62,6 @@
 #include "Control.h"
 #include "Clipping.h"
 #include "DemoMode.h"
-#include "DlgDisplayPropertiesImp.h"
 #include "DlgSettingsImageImp.h"
 #include "Document.h"
 #include "FileDialog.h"
@@ -77,6 +76,7 @@
 #include "SelectionObject.h"
 #include "SoAxisCrossKit.h"
 #include "SoFCOffscreenRenderer.h"
+#include "TaskMeasure.h"
 #include "TextureMapping.h"
 #include "Tools.h"
 #include "Tree.h"
@@ -1260,36 +1260,6 @@ void StdCmdHideObjects::activated(int iMsg)
 bool StdCmdHideObjects::isActive()
 {
     return App::GetApplication().getActiveDocument();
-}
-
-//===========================================================================
-// Std_SetAppearance
-//===========================================================================
-DEF_STD_CMD_A(StdCmdSetAppearance)
-
-StdCmdSetAppearance::StdCmdSetAppearance()
-  : Command("Std_SetAppearance")
-{
-    sGroup        = "Standard-View";
-    sMenuText     = QT_TR_NOOP("Appearance...");
-    sToolTipText  = QT_TR_NOOP("Sets the display properties of the selected object");
-    sWhatsThis    = "Std_SetAppearance";
-    sStatusTip    = QT_TR_NOOP("Sets the display properties of the selected object");
-    sPixmap       = "Std_SetAppearance";
-    sAccel        = "Ctrl+D";
-    eType         = Alter3DView;
-}
-
-void StdCmdSetAppearance::activated(int iMsg)
-{
-    Q_UNUSED(iMsg);
-    Gui::Control().showDialog(new Gui::Dialog::TaskDisplayProperties());
-}
-
-bool StdCmdSetAppearance::isActive()
-{
-    return (Gui::Control().activeDialog() == nullptr) &&
-           (Gui::Selection().size() != 0);
 }
 
 //===========================================================================
@@ -3221,6 +3191,38 @@ bool StdCmdMeasureDistance::isActive()
 }
 
 //===========================================================================
+// Std_Measure
+// this is the Unified Measurement Facility Measure command
+//===========================================================================
+
+
+DEF_STD_CMD_A(StdCmdMeasure)
+
+StdCmdMeasure::StdCmdMeasure()
+  :Command("Std_Measure")
+{
+    sGroup        = "Measure";
+    sMenuText     = QT_TR_NOOP("&Measure");
+    sToolTipText  = QT_TR_NOOP("Measure a feature");
+    sWhatsThis    = "Std_Measure";
+    sStatusTip    = QT_TR_NOOP("Measure a feature");
+    sPixmap       = "umf-measurement";
+}
+
+void StdCmdMeasure::activated(int iMsg)
+{
+    Q_UNUSED(iMsg);
+
+    TaskMeasure *task = new TaskMeasure();
+    Gui::Control().showDialog(task);
+}
+
+
+bool StdCmdMeasure::isActive(){
+    return true;
+}
+
+//===========================================================================
 // Std_SceneInspector
 //===========================================================================
 
@@ -4123,7 +4125,6 @@ void CreateViewStdCommands()
     rcCmdMgr.addCommand(new StdViewLoadImage());
     rcCmdMgr.addCommand(new StdMainFullscreen());
     rcCmdMgr.addCommand(new StdViewDockUndockFullscreen());
-    rcCmdMgr.addCommand(new StdCmdSetAppearance());
     rcCmdMgr.addCommand(new StdCmdToggleVisibility());
     rcCmdMgr.addCommand(new StdCmdToggleTransparency());
     rcCmdMgr.addCommand(new StdCmdToggleSelectability());
@@ -4149,6 +4150,7 @@ void CreateViewStdCommands()
     rcCmdMgr.addCommand(new StdCmdTreeCollapse());
     rcCmdMgr.addCommand(new StdCmdTreeSelectAllInstances());
     rcCmdMgr.addCommand(new StdCmdMeasureDistance());
+    rcCmdMgr.addCommand(new StdCmdMeasure());
     rcCmdMgr.addCommand(new StdCmdSceneInspector());
     rcCmdMgr.addCommand(new StdCmdTextureMapping());
     rcCmdMgr.addCommand(new StdCmdDemoMode());

@@ -226,7 +226,7 @@
       <location filename="../../AttacherTexts.cpp" line="295"/>
       <source>Vertex</source>
       <comment>AttachmentPoint mode caption</comment>
-      <translation type="unfinished">Vertex</translation>
+      <translation>Vârf</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="296"/>
@@ -441,7 +441,7 @@
       <location filename="../../AttacherTexts.cpp" line="248"/>
       <source>Intersection of two faces.</source>
       <comment>AttachmentLine mode tooltip</comment>
-      <translation type="unfinished">Intersection of two faces.</translation>
+      <translation>Intersecţia a două feţe.</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="250"/>
@@ -1231,7 +1231,7 @@
     <message>
       <location filename="../../Command.cpp" line="2228"/>
       <source>Clear all dimensions from the active 3D view.</source>
-      <translation type="unfinished">Clear all dimensions from the active 3D view.</translation>
+      <translation>Șterge toate dimensiunile din vizualizarea 3D activă.</translation>
     </message>
   </context>
   <context>
@@ -1512,7 +1512,7 @@ into its X, Y, and Z components.</source>
     <message>
       <location filename="../../Command.cpp" line="1738"/>
       <source>Offset:</source>
-      <translation type="unfinished">Offset:</translation>
+      <translation>Compensare:</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1739"/>
@@ -1635,17 +1635,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartDefeaturing</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="411"/>
+      <location filename="../../CommandSimple.cpp" line="412"/>
       <source>Part</source>
       <translation>Componentă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="412"/>
+      <location filename="../../CommandSimple.cpp" line="413"/>
       <source>Defeaturing</source>
       <translation>Suprimare funcții</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="413"/>
+      <location filename="../../CommandSimple.cpp" line="414"/>
       <source>Remove feature from a shape</source>
       <translation>Eliminați caracteristica/funcția dintr-o formă</translation>
     </message>
@@ -1653,17 +1653,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartElementCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="323"/>
+      <location filename="../../CommandSimple.cpp" line="324"/>
       <source>Part</source>
       <translation>Componentă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="324"/>
+      <location filename="../../CommandSimple.cpp" line="325"/>
       <source>Create shape element copy</source>
       <translation>Crează copie element de formă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="325"/>
+      <location filename="../../CommandSimple.cpp" line="326"/>
       <source>Create a non-parametric copy of the selected shape element</source>
       <translation>Creați o copie non-parametrică a elementului de formă selectat</translation>
     </message>
@@ -1906,17 +1906,17 @@ Inchideti utilizarea 3D</translation>
   <context>
     <name>CmdPartPointsFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="133"/>
+      <location filename="../../CommandSimple.cpp" line="134"/>
       <source>Part</source>
       <translation>Componentă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="134"/>
+      <location filename="../../CommandSimple.cpp" line="135"/>
       <source>Create points object from geometry</source>
       <translation>Crează obiectul de puncte din geometrie</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="135"/>
+      <location filename="../../CommandSimple.cpp" line="136"/>
       <source>Create selectable points object from selected geometric object</source>
       <translation>Creaţi puncte selectabile din obiectul geometric selectat</translation>
     </message>
@@ -1966,17 +1966,17 @@ de proiecție.</translation>
   <context>
     <name>CmdPartRefineShape</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="351"/>
+      <location filename="../../CommandSimple.cpp" line="352"/>
       <source>Part</source>
       <translation>Componentă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="352"/>
+      <location filename="../../CommandSimple.cpp" line="353"/>
       <source>Refine shape</source>
       <translation>Rafineaza forma</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="353"/>
+      <location filename="../../CommandSimple.cpp" line="354"/>
       <source>Refine the copy of a shape</source>
       <translation>Rafineaza copia formei</translation>
     </message>
@@ -2069,17 +2069,17 @@ de proiecție.</translation>
   <context>
     <name>CmdPartShapeFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="104"/>
+      <location filename="../../CommandSimple.cpp" line="105"/>
       <source>Part</source>
       <translation>Componentă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="105"/>
+      <location filename="../../CommandSimple.cpp" line="106"/>
       <source>Create shape from mesh...</source>
       <translation>Creaza forma din retea...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="106"/>
+      <location filename="../../CommandSimple.cpp" line="107"/>
       <source>Create shape from selected mesh object</source>
       <translation>Creaza forma din reteaua selectata</translation>
     </message>
@@ -2087,17 +2087,17 @@ de proiecție.</translation>
   <context>
     <name>CmdPartSimpleCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="220"/>
+      <location filename="../../CommandSimple.cpp" line="221"/>
       <source>Part</source>
       <translation>Componentă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="221"/>
+      <location filename="../../CommandSimple.cpp" line="222"/>
       <source>Create simple copy</source>
       <translation>Creaza copie simpla</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="222"/>
+      <location filename="../../CommandSimple.cpp" line="223"/>
       <source>Create a simple non-parametric copy</source>
       <translation>Creaza o copie neparametrica</translation>
     </message>
@@ -2105,17 +2105,17 @@ de proiecție.</translation>
   <context>
     <name>CmdPartSimpleCylinder</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="54"/>
+      <location filename="../../CommandSimple.cpp" line="55"/>
       <source>Part</source>
       <translation>Componentă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="55"/>
+      <location filename="../../CommandSimple.cpp" line="56"/>
       <source>Create Cylinder...</source>
       <translation>Creaţi cilindru...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="56"/>
+      <location filename="../../CommandSimple.cpp" line="57"/>
       <source>Create a Cylinder</source>
       <translation>Creaţi un Cilindru</translation>
     </message>
@@ -2209,17 +2209,17 @@ de proiecție.</translation>
   <context>
     <name>CmdPartTransformedCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="295"/>
+      <location filename="../../CommandSimple.cpp" line="296"/>
       <source>Part</source>
       <translation>Componentă</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="296"/>
+      <location filename="../../CommandSimple.cpp" line="297"/>
       <source>Create transformed copy</source>
       <translation>Crează copie transformată</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="297"/>
+      <location filename="../../CommandSimple.cpp" line="298"/>
       <source>Create a non-parametric copy with transformed placement</source>
       <translation>Crează o copie non-parametrică cu plasament transformat</translation>
     </message>
@@ -2298,22 +2298,22 @@ de proiecție.</translation>
       <translation>Creaza suprafata dreapta</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="69"/>
+      <location filename="../../CommandSimple.cpp" line="70"/>
       <source>Create Part Cylinder</source>
       <translation>Creează un cilindru parte</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="180"/>
+      <location filename="../../CommandSimple.cpp" line="181"/>
       <source>Points from geometry</source>
       <translation>Puncte din geometrie</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="368"/>
+      <location filename="../../CommandSimple.cpp" line="369"/>
       <source>Refine shape</source>
       <translation>Rafineaza forma</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="425"/>
+      <location filename="../../CommandSimple.cpp" line="426"/>
       <source>Defeaturing</source>
       <translation>Suprimare funcții</translation>
     </message>
@@ -2372,6 +2372,11 @@ de proiecție.</translation>
       <location filename="../../ViewProviderMirror.cpp" line="210"/>
       <source>Edit Mirror</source>
       <translation>Editare oglindă</translation>
+    </message>
+    <message>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="1557"/>
+      <source>Project on surface</source>
+      <translation type="unfinished">Project on surface</translation>
     </message>
   </context>
   <context>
@@ -2643,7 +2648,7 @@ Notă: Plasamentul este exprimat în spaţiul local al obiectului ataşat.</tran
   <context>
     <name>PartGui::DlgChamferEdges</name>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="1068"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1109"/>
       <source>Chamfer Edges</source>
       <translation>Teșirea muchiilor</translation>
     </message>
@@ -3006,7 +3011,7 @@ Dacă ambele lungimi sunt zero, magnitudinea direcției este folosită.</transla
     </message>
     <message>
       <location filename="../../DlgFilletEdges.ui" line="51"/>
-      <location filename="../../DlgFilletEdges.cpp" line="279"/>
+      <location filename="../../DlgFilletEdges.cpp" line="280"/>
       <source>Fillet Parameter</source>
       <translation>Parametru panglica</translation>
     </message>
@@ -3056,106 +3061,106 @@ Dacă ambele lungimi sunt zero, magnitudinea direcției este folosită.</transla
       <translation>Raza:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="268"/>
+      <location filename="../../DlgFilletEdges.cpp" line="269"/>
       <source>Chamfer Parameter</source>
       <translation>Parametru Camfer</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="269"/>
+      <location filename="../../DlgFilletEdges.cpp" line="270"/>
       <source>Chamfer type</source>
       <translation>Tip camp</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="270"/>
+      <location filename="../../DlgFilletEdges.cpp" line="271"/>
       <source>Length:</source>
       <translation>Lungime:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="274"/>
+      <location filename="../../DlgFilletEdges.cpp" line="275"/>
       <source>Edges to chamfer</source>
       <translation>Margini teșite</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="867"/>
+      <location filename="../../DlgFilletEdges.cpp" line="912"/>
       <source>Start length</source>
       <translation>Începe lungime</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="271"/>
+      <location filename="../../DlgFilletEdges.cpp" line="272"/>
       <source>Equal distance</source>
       <translation>Distanță egală</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="272"/>
+      <location filename="../../DlgFilletEdges.cpp" line="273"/>
       <source>Two distances</source>
       <translation>Două distanţe</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="275"/>
+      <location filename="../../DlgFilletEdges.cpp" line="276"/>
       <source>Size</source>
       <translation>Dimensiune</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="276"/>
+      <location filename="../../DlgFilletEdges.cpp" line="277"/>
       <source>Size2</source>
       <translation>Dimensiune2</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="280"/>
+      <location filename="../../DlgFilletEdges.cpp" line="281"/>
       <source>Fillet type</source>
       <translation>Tipul de umplere</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="281"/>
+      <location filename="../../DlgFilletEdges.cpp" line="282"/>
       <source>Edges to fillet</source>
       <translation>Margini in panglica</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="282"/>
-      <location filename="../../DlgFilletEdges.cpp" line="869"/>
+      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="914"/>
       <source>Start radius</source>
       <translation>Raza de inceput</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="284"/>
       <source>End radius</source>
       <translation>Raza finala</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="716"/>
-      <location filename="../../DlgFilletEdges.cpp" line="776"/>
+      <location filename="../../DlgFilletEdges.cpp" line="761"/>
+      <location filename="../../DlgFilletEdges.cpp" line="821"/>
       <source>Edge%1</source>
       <translation>Marginea %1</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="859"/>
+      <location filename="../../DlgFilletEdges.cpp" line="904"/>
       <source>Length</source>
       <translation>Lungime</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="861"/>
+      <location filename="../../DlgFilletEdges.cpp" line="906"/>
       <source>Radius</source>
       <translation>Raza</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="915"/>
+      <location filename="../../DlgFilletEdges.cpp" line="960"/>
       <source>No shape selected</source>
       <translation>Nici o forma selectata</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="916"/>
+      <location filename="../../DlgFilletEdges.cpp" line="961"/>
       <source>No valid shape is selected.
 Please select a valid shape in the drop-down box first.</source>
       <translation>Nici o forma valida nu este selectata.
 Selectati mai intai o forma valida in casuta de selectie.</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="967"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1012"/>
       <source>No edge selected</source>
       <translation>Nici o margine selectata</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="968"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1013"/>
       <source>No edge entity is checked to fillet.
 Please check one or more edge entities first.</source>
       <translation>Nici o margine nu e selectata.
@@ -3305,7 +3310,7 @@ during file reading (slower but higher details).</source>
     <message>
       <location filename="../../DlgImportStep.ui" line="59"/>
       <source>Select this to import invisible objects.</source>
-      <translation type="unfinished">Select this to import invisible objects.</translation>
+      <translation>Selectați acest lucru pentru a importa obiecte invizibile.</translation>
     </message>
     <message>
       <location filename="../../DlgImportStep.ui" line="62"/>
@@ -3870,7 +3875,7 @@ during file reading (slower but higher details).</source>
     <message>
       <location filename="../../DlgPrimitives.cpp" line="1732"/>
       <source>Vertex</source>
-      <translation type="unfinished">Vertex</translation>
+      <translation>Vârf</translation>
     </message>
     <message>
       <location filename="../../DlgPrimitives.cpp" line="1910"/>
@@ -3886,7 +3891,7 @@ during file reading (slower but higher details).</source>
       <translation>Nici un document activ</translation>
     </message>
     <message>
-      <location filename="../../DlgPrimitives.cpp" line="2209"/>
+      <location filename="../../DlgPrimitives.cpp" line="2204"/>
       <source>&amp;Create</source>
       <translation>&amp;Creeaza</translation>
     </message>
@@ -3974,12 +3979,12 @@ during file reading (slower but higher details).</source>
       <translation>Obiect de proiecție</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="165"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="164"/>
       <source>Have no active document!!!</source>
       <translation>Nu ai niciun document activ!!!</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="172"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="171"/>
       <source>Can not create a projection object!!!</source>
       <translation>Nu se poate crea un obiect de proiecție!!!</translation>
     </message>
@@ -4525,7 +4530,7 @@ vectorul normal al planului va fi folosit</translation>
     <message>
       <location filename="../../Mirroring.ui" line="121"/>
       <source>Use selected reference</source>
-      <translation type="unfinished">Use selected reference</translation>
+      <translation>Folosește referința selectată</translation>
     </message>
     <message>
       <location filename="../../Mirroring.ui" line="142"/>
@@ -4556,12 +4561,12 @@ vectorul normal al planului va fi folosit</translation>
       <location filename="../../Mirroring.ui" line="150"/>
       <location filename="../../Mirroring.cpp" line="215"/>
       <source>Selecting</source>
-      <translation type="unfinished">Selecting</translation>
+      <translation>Selectare</translation>
     </message>
     <message>
       <location filename="../../Mirroring.ui" line="166"/>
       <source>Mirror plane reference</source>
-      <translation type="unfinished">Mirror plane reference</translation>
+      <translation>Referință oglindă plan</translation>
     </message>
     <message>
       <location filename="../../Mirroring.ui" line="20"/>
@@ -5091,7 +5096,7 @@ obiectului ce este ataşat.</translation>
     <message>
       <location filename="../../TaskAttacher.cpp" line="648"/>
       <source>Vertex</source>
-      <translation type="unfinished">Vertex</translation>
+      <translation>Vârf</translation>
     </message>
     <message>
       <location filename="../../TaskAttacher.cpp" line="713"/>
@@ -5614,7 +5619,7 @@ prin glisarea unui dreptunghi de selecție în vizualizarea 3D</translation>
       <translation>Frenet</translation>
     </message>
     <message>
-      <location filename="../../TaskSweep.cpp" line="484"/>
+      <location filename="../../TaskSweep.cpp" line="480"/>
       <source>Select one or more profiles and select an edge or wire
 in the 3D view for the sweep path.</source>
       <translation>Selecteaza unul sau mai multe profile apoi 
@@ -5686,21 +5691,21 @@ in vizualizarea 3D pentru calea maturarii.</translation>
       <translation>Editare %1</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="234"/>
+      <location filename="../../AppPartGui.cpp" line="237"/>
       <source>Part and Part Design workbench</source>
       <translation>Masă de lucru pentru proiectarea pieselor și părților</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="235"/>
-      <location filename="../../AppPartGui.cpp" line="236"/>
-      <location filename="../../AppPartGui.cpp" line="237"/>
       <location filename="../../AppPartGui.cpp" line="238"/>
+      <location filename="../../AppPartGui.cpp" line="239"/>
+      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="241"/>
       <source>Part/Part Design</source>
       <translation>Design componentă/capitol</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="239"/>
-      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="242"/>
+      <location filename="../../AppPartGui.cpp" line="243"/>
       <source>Import-Export</source>
       <translation>Import/Export</translation>
     </message>
@@ -6102,7 +6107,7 @@ Do you want to continue?</source>
       <translation>Șterge toate dimensiunile</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderExt.cpp" line="854"/>
+      <location filename="../../ViewProviderExt.cpp" line="886"/>
       <source>Set colors...</source>
       <translation>Seteaza culorile...</translation>
     </message>
@@ -6137,7 +6142,7 @@ Do you want to continue?</source>
       <translation>Arată Punctele de control</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderAttachExtension.cpp" line="118"/>
+      <location filename="../../ViewProviderAttachExtension.cpp" line="105"/>
       <source>Attachment editor</source>
       <translation>Editor de ataşamente</translation>
     </message>
@@ -6147,14 +6152,19 @@ Do you want to continue?</source>
       <translation>Creare tub</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="172"/>
+      <location filename="../../CommandSimple.cpp" line="173"/>
       <source>Distance in parameter space</source>
       <translation>Distanța în spațiul parametrului</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="173"/>
+      <location filename="../../CommandSimple.cpp" line="174"/>
       <source>Enter distance:</source>
       <translation>Introduceţi distanţa:</translation>
+    </message>
+    <message>
+      <location filename="../../ViewProviderProjectOnSurface.cpp" line="54"/>
+      <source>Edit projection</source>
+      <translation type="unfinished">Edit projection</translation>
     </message>
   </context>
   <context>
@@ -6559,7 +6569,7 @@ Va crea un "Filtru compus" pentru fiecare formă.</translation>
     <message>
       <location filename="../../../BasicShapes/ShapeContent.py" line="41"/>
       <source>Edges</source>
-      <translation type="unfinished">Edges</translation>
+      <translation>Margini</translation>
     </message>
     <message>
       <location filename="../../../BasicShapes/ShapeContent.py" line="47"/>
@@ -6744,7 +6754,7 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../DlgScale.ui" line="22"/>
       <source>X Factor</source>
-      <translation type="unfinished">X Factor</translation>
+      <translation>X Factor</translation>
     </message>
     <message>
       <location filename="../../DlgScale.ui" line="29"/>
@@ -6754,37 +6764,37 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../DlgScale.ui" line="64"/>
       <source>Z Factor</source>
-      <translation type="unfinished">Z Factor</translation>
+      <translation>Z Factor </translation>
     </message>
     <message>
       <location filename="../../DlgScale.ui" line="71"/>
       <source>Scale the object by a single factor in all directions.</source>
-      <translation type="unfinished">Scale the object by a single factor in all directions.</translation>
+      <translation>Scalează obiectul cu un singur factor în toate direcțiile.</translation>
     </message>
     <message>
       <location filename="../../DlgScale.ui" line="74"/>
       <source>Uniform Scaling</source>
-      <translation type="unfinished">Uniform Scaling</translation>
+      <translation>Scalare uniformă</translation>
     </message>
     <message>
       <location filename="../../DlgScale.ui" line="112"/>
       <source>Y Factor</source>
-      <translation type="unfinished">Y Factor</translation>
+      <translation>Y Factor </translation>
     </message>
     <message>
       <location filename="../../DlgScale.ui" line="119"/>
       <source>Specify a different scale factor for each cardinal direction.</source>
-      <translation type="unfinished">Specify a different scale factor for each cardinal direction.</translation>
+      <translation>Specificați un factor de scară diferit pentru fiecare direcție cardinală.</translation>
     </message>
     <message>
       <location filename="../../DlgScale.ui" line="122"/>
       <source>Non-Uniform Scaling</source>
-      <translation type="unfinished">Non-Uniform Scaling</translation>
+      <translation>Scalare non-uniformă</translation>
     </message>
     <message>
       <location filename="../../DlgScale.ui" line="195"/>
       <source>Select shape(s) that should be scaled</source>
-      <translation type="unfinished">Select shape(s) that should be scaled</translation>
+      <translation>Selectați forma (formele) care ar trebui scalate</translation>
     </message>
     <message>
       <location filename="../../DlgScale.ui" line="199"/>
@@ -6794,7 +6804,7 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../DlgScale.cpp" line="198"/>
       <source>No scalable shapes selected</source>
-      <translation type="unfinished">No scalable shapes selected</translation>
+      <translation>Nici o formă scalabilă selectată</translation>
     </message>
     <message>
       <location filename="../../DlgScale.cpp" line="206"/>
@@ -6806,7 +6816,7 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
       <location filename="../../DlgScale.cpp" line="260"/>
       <source>Creating Scale failed.
 %1</source>
-      <translation type="unfinished">Creating Scale failed.
+      <translation>Crearea scalei a eșuat.
 %1</translation>
     </message>
   </context>
@@ -6825,7 +6835,7 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../Command.cpp" line="1308"/>
       <source>Scale a selected shape</source>
-      <translation type="unfinished">Scale a selected shape</translation>
+      <translation>Scalează o formă selectată</translation>
     </message>
   </context>
   <context>
@@ -6833,13 +6843,13 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../CommandFilter.cpp" line="46"/>
       <source>Selection filter</source>
-      <translation type="unfinished">Selection filter</translation>
+      <translation>Filtru selecţie</translation>
     </message>
     <message>
       <location filename="../../CommandFilter.cpp" line="47"/>
       <location filename="../../CommandFilter.cpp" line="48"/>
       <source>Change the selection filter</source>
-      <translation type="unfinished">Change the selection filter</translation>
+      <translation>Schimbă filtrul de selecţie</translation>
     </message>
   </context>
   <context>
@@ -6847,13 +6857,13 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../CommandFilter.cpp" line="173"/>
       <source>Vertex selection</source>
-      <translation type="unfinished">Vertex selection</translation>
+      <translation>Selecţie vârfuri</translation>
     </message>
     <message>
       <location filename="../../CommandFilter.cpp" line="174"/>
       <location filename="../../CommandFilter.cpp" line="176"/>
       <source>Only allow the selection of vertices</source>
-      <translation type="unfinished">Only allow the selection of vertices</translation>
+      <translation>Permite doar selectarea nodurilor</translation>
     </message>
   </context>
   <context>
@@ -6861,13 +6871,13 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../CommandFilter.cpp" line="198"/>
       <source>Edge selection</source>
-      <translation type="unfinished">Edge selection</translation>
+      <translation>Selecție margine</translation>
     </message>
     <message>
       <location filename="../../CommandFilter.cpp" line="199"/>
       <location filename="../../CommandFilter.cpp" line="201"/>
       <source>Only allow the selection of edges</source>
-      <translation type="unfinished">Only allow the selection of edges</translation>
+      <translation>Permite doar selectarea marginilor</translation>
     </message>
   </context>
   <context>
@@ -6875,13 +6885,13 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../CommandFilter.cpp" line="223"/>
       <source>Face selection</source>
-      <translation type="unfinished">Face selection</translation>
+      <translation>Selecție față</translation>
     </message>
     <message>
       <location filename="../../CommandFilter.cpp" line="224"/>
       <location filename="../../CommandFilter.cpp" line="226"/>
       <source>Only allow the selection of faces</source>
-      <translation type="unfinished">Only allow the selection of faces</translation>
+      <translation>Permite doar selectarea fețelor</translation>
     </message>
   </context>
   <context>
@@ -6891,26 +6901,26 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
       <location filename="../../CommandFilter.cpp" line="249"/>
       <location filename="../../CommandFilter.cpp" line="251"/>
       <source>All selection filters cleared</source>
-      <translation type="unfinished">All selection filters cleared</translation>
+      <translation>Toate filtrele de selecție șterse</translation>
     </message>
   </context>
   <context>
     <name>FaceMaker</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="72"/>
+      <location filename="../../../App/FaceMaker.cpp" line="75"/>
       <source>Shape must be a wire, edge or compound. Something else was supplied.</source>
-      <translation type="unfinished">Shape must be a wire, edge or compound. Something else was supplied.</translation>
+      <translation>Forma trebuie să fie un fir, o margine sau o compusă. A fost furnizat altceva.</translation>
     </message>
   </context>
   <context>
     <name>Part::FaceMakerSimple</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="262"/>
+      <location filename="../../../App/FaceMaker.cpp" line="281"/>
       <source>Simple</source>
       <translation>Simplu</translation>
     </message>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="267"/>
+      <location filename="../../../App/FaceMaker.cpp" line="286"/>
       <source>Makes separate plane face from every wire independently. No support for holes; wires can be on different planes.</source>
       <translation>Construiți planuri de fațete separate plecând de la fiecare linie independent. fpr suport pentru găuri; liniile pot fi în diferite planuri.</translation>
     </message>
@@ -6944,12 +6954,12 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
   <context>
     <name>Part::FaceMakerExtrusion</name>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="337"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="388"/>
       <source>Part Extrude facemaker</source>
       <translation>Generator de fațete extrudate</translation>
     </message>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="342"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="393"/>
       <source>Supports making faces with holes, does not support nesting.</source>
       <translation>Suportă crearea de fațete cu găuri dar nu suportă imbricare.</translation>
     </message>
@@ -6959,7 +6969,7 @@ Un "Filtru combinat" poate fi folosit pentru a extrage piesele rămase.</transla
     <message>
       <location filename="../../../App/FaceMakerBullseye.cpp" line="74"/>
       <source>Wire is not closed.</source>
-      <translation type="unfinished">Wire is not closed.</translation>
+      <translation>Wire nu este închis.</translation>
     </message>
   </context>
 </TS>

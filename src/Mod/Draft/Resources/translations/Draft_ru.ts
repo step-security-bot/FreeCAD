@@ -553,8 +553,8 @@ Negative values will result in copies produced in the negative direction.</sourc
       <location filename="../ui/TaskPanel_OrthoArray.ui" line="403"/>
       <source>If checked, the resulting objects in the array will be fused if they touch each other.
 This only works if "Link array" is off.</source>
-      <translation>Если флажок установлен, результирующие объекты в массиве будут сливаться, если они соприкасаются друг с другом.
-Это работает только в том случае, если «массив ссылок» отключен.</translation>
+      <translation>Если отмечено, то результирующие объекты в массиве будут слиты, если касаются друг друга.
+Это работает только в том случае, если "Связь массивов" отключена.</translation>
     </message>
     <message>
       <location filename="../ui/TaskPanel_OrthoArray.ui" line="407"/>
@@ -565,13 +565,13 @@ This only works if "Link array" is off.</source>
       <location filename="../ui/TaskPanel_OrthoArray.ui" line="414"/>
       <source>If checked, the resulting object will be a "Link array" instead of a regular array.
 A Link array is more efficient when creating multiple copies, but it cannot be fused together.</source>
-      <translation>Если флажок установлен, результирующий объект будет «массивом ссылок» вместо обычного массива.
-Массив Link более эффективен при создании нескольких копий, но его нельзя объединить вместе.</translation>
+      <translation>Если отмечено, результирующим объектом будет "Массив ссылок" вместо обычного массива.
+Массив ссылок более эффективен при создании нескольких копий, но к нему нельзя применить операцию слияния.</translation>
     </message>
     <message>
       <location filename="../ui/TaskPanel_OrthoArray.ui" line="418"/>
       <source>Link array</source>
-      <translation>Массив ссылок</translation>
+      <translation>Массив из связанных объектов</translation>
     </message>
   </context>
   <context>
@@ -650,25 +650,25 @@ Change the direction of the axis itself in the property editor.</source>
       <location filename="../ui/TaskPanel_PolarArray.ui" line="205"/>
       <source>If checked, the resulting objects in the array will be fused if they touch each other.
 This only works if "Link array" is off.</source>
-      <translation>Если отмечено, то результирующие объекты в массиве будут слиты, если касаются друг друга.
-Это работает только в том случае, если "Связь массивов" отключена.</translation>
+      <translation>Если флажок установлен, результирующие объекты в массиве будут сливаться, если они соприкасаются друг с другом.
+Это работает только в том случае, если «массив ссылок» отключен.</translation>
     </message>
     <message>
       <location filename="../ui/TaskPanel_PolarArray.ui" line="209"/>
       <source>Fuse</source>
-      <translation>Объединение</translation>
+      <translation>Слияние</translation>
     </message>
     <message>
       <location filename="../ui/TaskPanel_PolarArray.ui" line="216"/>
       <source>If checked, the resulting object will be a "Link array" instead of a regular array.
 A Link array is more efficient when creating multiple copies, but it cannot be fused together.</source>
-      <translation>Если отмечено, результирующим объектом будет "Массив ссылок" вместо обычного массива.
-Массив ссылок более эффективен при создании нескольких копий, но к нему нельзя применить операцию слияния.</translation>
+      <translation>Если флажок установлен, результирующий объект будет «массивом ссылок» вместо обычного массива.
+Массив Link более эффективен при создании нескольких копий, но его нельзя объединить вместе.</translation>
     </message>
     <message>
       <location filename="../ui/TaskPanel_PolarArray.ui" line="220"/>
       <source>Link array</source>
-      <translation>Массив из связанных объектов</translation>
+      <translation>Массив ссылок</translation>
     </message>
   </context>
   <context>
@@ -842,12 +842,17 @@ of the buttons above</source>
       <translation>Или выберите одну вершину, чтобы переместить текущую рабочую плоскость, не меняя ее ориентации. Затем нажмите кнопку ниже.</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="264"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="159"/>
+      <source>Grid color</source>
+      <translation>Цвет сетки</translation>
+    </message>
+    <message>
+      <location filename="../ui/TaskSelectPlane.ui" line="274"/>
       <source>Resets the working plane to its next position</source>
       <translation>Сбрасывает рабочую плоскость в следующее положение</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="267"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="277"/>
       <source>Next</source>
       <translation>Следующий</translation>
     </message>
@@ -864,40 +869,40 @@ will be moved to the center of the view</source>
       <translation>Переместить рабочую плоскость</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="159"/>
       <location filename="../ui/TaskSelectPlane.ui" line="169"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="179"/>
       <source>The spacing between the smaller grid lines</source>
       <translation>Расстояние между меньшими линиями сетки</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="162"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="172"/>
       <source>Grid spacing</source>
       <translation>Шаг сетки</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="179"/>
       <location filename="../ui/TaskSelectPlane.ui" line="189"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="199"/>
       <source>The number of squares between each main line of the grid</source>
       <translation>Количество квадратов между каждой основной линией сетки</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="182"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="192"/>
       <source>Main line every</source>
       <translation>Основные линии каждые</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="196"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="206"/>
       <source>Grid extension</source>
       <translation>Расширение сетки</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="203"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="213"/>
       <source> lines</source>
       <translation> линии</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="216"/>
-      <location filename="../ui/TaskSelectPlane.ui" line="228"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="226"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="238"/>
       <source>The distance at which a point can be snapped to
 when approaching the mouse. You can also change this
 value by using the [ and ] keys while drawing</source>
@@ -905,27 +910,27 @@ value by using the [ and ] keys while drawing</source>
 с помощью клавиш [ и ] при рисовании</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="221"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="231"/>
       <source>Snapping radius</source>
       <translation>Радиус привязки</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="239"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="249"/>
       <source>Centers the view on the current working plane</source>
       <translation>Центрировать вид на текущей рабочей плоскости</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="242"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="252"/>
       <source>Center view</source>
       <translation>Центрировать вид</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="251"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="261"/>
       <source>Resets the working plane to its previous position</source>
       <translation>Сбросить рабочую плоскость к предыдущему положению</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="254"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="264"/>
       <source>Previous</source>
       <translation>Предыдущий</translation>
     </message>
@@ -1091,7 +1096,7 @@ value by using the [ and ] keys while drawing</source>
     <message>
       <location filename="../ui/TaskPanel_SetStyle.ui" line="356"/>
       <source>Tick-2</source>
-      <translation>Зацепление-2</translation>
+      <translation>Засечка-2</translation>
     </message>
     <message>
       <location filename="../ui/TaskPanel_SetStyle.ui" line="385"/>
@@ -1392,42 +1397,55 @@ Only for the splitFaces and makeShell options.</source>
       <translation>Сохранять имена лиц во время понижения/улучшения</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="256"/>
+      <location filename="../ui/preferences-draft.ui" line="263"/>
+      <source>This is a delay during which the mouse is inactive, after entering numbers
+manually in any of the coordinate fields. Setting this to 0 disables the delay.
+If a delay of 1 is set, after entering a numeric value, the mouse will not
+update the field anymore during one second, to avoid moving the mouse
+accidentally and modifying the entered value.</source>
+      <translation type="unfinished">This is a delay during which the mouse is inactive, after entering numbers
+manually in any of the coordinate fields. Setting this to 0 disables the delay.
+If a delay of 1 is set, after entering a numeric value, the mouse will not
+update the field anymore during one second, to avoid moving the mouse
+accidentally and modifying the entered value.</translation>
+    </message>
+    <message>
+      <location filename="../ui/preferences-draft.ui" line="296"/>
       <source>Max. number of editable objects</source>
       <translation>Макс. количество редактируемых объектов</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="295"/>
+      <location filename="../ui/preferences-draft.ui" line="328"/>
       <source>Edit node pick radius</source>
       <translation>Изменить радиус выбора узла</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="302"/>
+      <location filename="../ui/preferences-draft.ui" line="335"/>
       <source>The pick radius of edit nodes</source>
       <translation>Радиус выбора редактируемых узлов</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="324"/>
+      <location filename="../ui/preferences-draft.ui" line="357"/>
       <source>Label prefix for clones</source>
       <translation>Префикс метки для клонов</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="337"/>
+      <location filename="../ui/preferences-draft.ui" line="370"/>
       <source>The default prefix added to the label of new clones</source>
       <translation>Префикс по умолчанию добавляется к метке новых клонов</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="353"/>
+      <location filename="../ui/preferences-draft.ui" line="386"/>
       <source>Construction group label</source>
       <translation>Метка группы конструкции</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="366"/>
+      <location filename="../ui/preferences-draft.ui" line="399"/>
       <source>The default label for the construction geometry group</source>
       <translation>Метка по умолчанию для группы вспомогательной геометрии</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="389"/>
+      <location filename="../ui/preferences-draft.ui" line="422"/>
       <source>The default color for Draft objects in construction mode</source>
       <translation>Цвет по умолчанию для объектов чертежа в режиме строительства</translation>
     </message>
@@ -1447,22 +1465,22 @@ Only for the splitFaces and makeShell options.</source>
       <translation>Выбор базовых объектов после копирования</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="369"/>
+      <location filename="../ui/preferences-draft.ui" line="402"/>
       <source>Construction</source>
       <translation>Конструктор</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="382"/>
+      <location filename="../ui/preferences-draft.ui" line="415"/>
       <source>Construction geometry color</source>
       <translation>Цвет вспомогательной геометрии</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="423"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="316"/>
       <source>Draft classic style</source>
       <translation>Классический стиль эскиза</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="428"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="321"/>
       <source>Bitsnpieces style</source>
       <translation>Стиль мелочовка (Bitsnpieces)</translation>
     </message>
@@ -1649,7 +1667,7 @@ in the Annotation scale widget. If the scale is 1:100 the multiplier is 100.</so
       <translation>Ширина линии по умолчанию</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="305"/>
+      <location filename="../ui/preferences-draft.ui" line="338"/>
       <location filename="../ui/preferences-drafttexts.ui" line="220"/>
       <source> px</source>
       <translation> пикс.</translation>
@@ -1687,7 +1705,7 @@ in the Annotation scale widget. If the scale is 1:100 the multiplier is 100.</so
     <message>
       <location filename="../ui/preferences-drafttexts.ui" line="289"/>
       <source>Tick-2</source>
-      <translation>Засечка-2</translation>
+      <translation>Зацепление-2</translation>
     </message>
     <message>
       <location filename="../ui/preferences-drafttexts.ui" line="297"/>
@@ -2220,58 +2238,58 @@ This might fail for post DXF R12 templates.</source>
       <translation>Сетка и привязка</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="331"/>
-      <location filename="../ui/preferences-draftsnap.ui" line="465"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="420"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="455"/>
       <location filename="../ui/preferences-draftsnap.ui" line="493"/>
       <source>Shift</source>
       <translation>Shift</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="302"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="372"/>
       <source>Always snap</source>
       <translation>Всегда привязка</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="385"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="391"/>
       <source>Snap modifier</source>
       <translation>Модификатор привязки</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="452"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="407"/>
       <source>The Snap modifier key</source>
       <translation>Клавиша модификатор привязки</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="336"/>
-      <location filename="../ui/preferences-draftsnap.ui" line="470"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="425"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="460"/>
       <location filename="../ui/preferences-draftsnap.ui" line="498"/>
       <source>Ctrl</source>
       <translation>Ctrl</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="341"/>
-      <location filename="../ui/preferences-draftsnap.ui" line="475"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="430"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="465"/>
       <location filename="../ui/preferences-draftsnap.ui" line="503"/>
       <source>Alt</source>
       <translation>Alt</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="392"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="438"/>
       <source>Constrain modifier</source>
       <translation>Модификатор ограничения</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="483"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="445"/>
       <source>The Constrain modifier key</source>
       <translation>Клавиша-модификатор ограничения</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="399"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="473"/>
       <source>Alt modifier</source>
       <translation>Альтернативный модификатор</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="318"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="480"/>
       <source>The Alt modifier key. The function of this key depends on the command.</source>
       <translation>Ключ модификатора Alt. Функция ключа зависит от команды.</translation>
     </message>
@@ -2288,7 +2306,7 @@ Use Draft ToggleGrid to change this for the active view.</source>
       <translation>Расстояние между линиями сетки</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="263"/>
+      <location filename="../ui/preferences-draft.ui" line="303"/>
       <source>The maximum number of objects Draft Edit is allowed to process at the same time</source>
       <translation>Максимальное количество объектов, которые Draft Edit может обрабатываться одновременно</translation>
     </message>
@@ -2410,54 +2428,37 @@ These lines are thicker than normal grid lines.</source>
       <translation>Клавиши привязки и модификации</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="436"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="299"/>
       <source>Snap symbol style</source>
       <translation>Стиль символа привязки</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="511"/>
+      <location filename="../ui/preferences-draft.ui" line="256"/>
       <source>Mouse delay</source>
       <translation>Задержка мыши</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="518"/>
-      <source>This is a delay during which the mouse is inactive, after entering
-numbers manually in any of the coordinate fields. Setting this
-to 0 disables the delay. If a delay of 1 is set, after enterting a numeric
-value, the mouse will not update the field anymore during one
-second, to avoid moving the mouse accidentally and modify the
-entered value. If you use a very large value, for ex. 3600, mouse
-movement will be disabled until the command finishes.</source>
-      <translation>Это задержка, в течение которой мышь неактивна, после ввода
-числа вручную в любом из полей координат. Установка этого
-значение 0 отключает задержку. Если установлена задержка 1, после ввода числового
-значение, мышь больше не будет обновлять поле в течение одного
-во-вторых, чтобы избежать случайного перемещения мыши и изменить
-введенное значение. Если вы используете очень большое значение, например. 3600, мышь
-движение будет отключено до завершения команды.</translation>
-    </message>
-    <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="527"/>
+      <location filename="../ui/preferences-draft.ui" line="270"/>
       <source> seconds</source>
       <translation> секунд</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="413"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="306"/>
       <source>The style for snap symbols</source>
       <translation>Стиль символов привязки</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="406"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="342"/>
       <source>Snap symbol color</source>
       <translation>Цвет символа привязки</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="362"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="349"/>
       <source>The color for snap symbols</source>
       <translation>Цвет символов привязки</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="299"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="369"/>
       <source>If checked, snapping is activated without the need to press the Snap modifier key</source>
       <translation>Если этот флажок установлен, привязка активируется без необходимости нажимать клавишу-модификатор привязки</translation>
     </message>
@@ -2942,8 +2943,8 @@ movement will be disabled until the command finishes.</source>
     <message>
       <location filename="../../DraftGui.py" line="492"/>
       <location filename="../../DraftGui.py" line="520"/>
-      <location filename="../../DraftGui.py" line="1461"/>
-      <location filename="../../DraftGui.py" line="1476"/>
+      <location filename="../../DraftGui.py" line="1464"/>
+      <location filename="../../DraftGui.py" line="1479"/>
       <location filename="../../draftguitools/gui_groups.py" line="239"/>
       <location filename="../../draftguitools/gui_groups.py" line="244"/>
       <source>None</source>
@@ -3169,8 +3170,8 @@ Not available if Draft preference option 'Use Part Primitives' is enabled</sourc
     </message>
     <message>
       <location filename="../../DraftGui.py" line="612"/>
-      <location filename="../../DraftGui.py" line="1464"/>
-      <location filename="../../DraftGui.py" line="1479"/>
+      <location filename="../../DraftGui.py" line="1467"/>
+      <location filename="../../DraftGui.py" line="1482"/>
       <source>Autogroup off</source>
       <translation>Автогруппирование выключено</translation>
     </message>
@@ -3264,32 +3265,32 @@ Not available if Draft preference option 'Use Part Primitives' is enabled</sourc
       <translation>Глобальный {}</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1472"/>
+      <location filename="../../DraftGui.py" line="1475"/>
       <source>Autogroup:</source>
       <translation>Автогруппировка:</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1611"/>
+      <location filename="../../DraftGui.py" line="1614"/>
       <source>Modify objects</source>
       <translation>Изменить объекты</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1760"/>
+      <location filename="../../DraftGui.py" line="1763"/>
       <source>Faces</source>
       <translation>Грани</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1761"/>
+      <location filename="../../DraftGui.py" line="1764"/>
       <source>Remove</source>
       <translation>Удалить</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1762"/>
+      <location filename="../../DraftGui.py" line="1765"/>
       <source>Add</source>
       <translation>Добавить</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1763"/>
+      <location filename="../../DraftGui.py" line="1766"/>
       <source>Facebinder elements</source>
       <translation>Элементы связывания фасок (граней)</translation>
     </message>
@@ -3431,7 +3432,7 @@ https://github.com/yorikvanhavre/Draft-dxf-importer
       <location filename="../../draftmake/make_text.py" line="178"/>
       <location filename="../../draftutils/groups.py" line="95"/>
       <location filename="../../draftutils/gui_utils.py" line="827"/>
-      <location filename="../../draftutils/utils.py" line="1069"/>
+      <location filename="../../draftutils/utils.py" line="1071"/>
       <source>No active document. Aborting.</source>
       <translation>Нет активного документа. Прерывание.</translation>
     </message>
@@ -3472,83 +3473,83 @@ https://github.com/yorikvanhavre/Draft-dxf-importer
       <translation>Не имеет 'ViewObject.RootNode'.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="650"/>
+      <location filename="../../draftutils/utils.py" line="652"/>
       <source>Solids:</source>
       <translation>Твердотельные объекты:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="651"/>
+      <location filename="../../draftutils/utils.py" line="653"/>
       <source>Faces:</source>
       <translation>Грани:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="652"/>
+      <location filename="../../draftutils/utils.py" line="654"/>
       <source>Wires:</source>
       <translation>Каркас:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="653"/>
+      <location filename="../../draftutils/utils.py" line="655"/>
       <source>Edges:</source>
       <translation>Ребра:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="654"/>
+      <location filename="../../draftutils/utils.py" line="656"/>
       <source>Vertices:</source>
       <translation>Вершины:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="658"/>
+      <location filename="../../draftutils/utils.py" line="660"/>
       <source>Face</source>
       <translation>Грань</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="663"/>
+      <location filename="../../draftutils/utils.py" line="665"/>
       <source>Wire</source>
       <translation>Ломаная</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="695"/>
-      <location filename="../../draftutils/utils.py" line="699"/>
+      <location filename="../../draftutils/utils.py" line="697"/>
+      <location filename="../../draftutils/utils.py" line="701"/>
       <source>different types</source>
       <translation>различные типы</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="709"/>
+      <location filename="../../draftutils/utils.py" line="711"/>
       <source>Objects have different placements. Distance between the two base points:</source>
       <translation>Объекты имеют разные позиции. Расстояние между двумя базовыми точками:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="1109"/>
+      <location filename="../../draftutils/utils.py" line="1111"/>
       <source>This function will be deprecated in {}. Please use '{}'.</source>
       <translation>Эта функция будет устарела в {}. Пожалуйста, используйте '{}'.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="1111"/>
+      <location filename="../../draftutils/utils.py" line="1113"/>
       <source>This function will be deprecated. Please use '{}'.</source>
       <translation>Эта функция будет устарела. Пожалуйста, используйте '{}'.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="712"/>
+      <location filename="../../draftutils/utils.py" line="714"/>
       <source>has a different value</source>
       <translation>имеет другое значение</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="715"/>
+      <location filename="../../draftutils/utils.py" line="717"/>
       <source>doesn't exist in one of the objects</source>
       <translation>не существует ни в одном из объектов</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="883"/>
+      <location filename="../../draftutils/utils.py" line="885"/>
       <source>%s shares a base with %d other objects. Please check if you want to modify this.</source>
       <translation>%s разделяет одну базу с %d другими объектами. Пожалуйста, проверьте, хотите ли вы изменить это.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="889"/>
+      <location filename="../../draftutils/utils.py" line="891"/>
       <source>%s cannot be modified because its placement is readonly.</source>
       <translation>%s не может быть изменено, потому что это размещение только для чтения.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="1032"/>
+      <location filename="../../draftutils/utils.py" line="1034"/>
       <source>Wrong input: unknown document {}</source>
       <translation>"Неправильный ввод: неизвестный документ"</translation>
     </message>
@@ -4785,59 +4786,68 @@ The final angle will be the base angle plus this amount.</source>
       <translation>добавлено свойство 'AnnotationStyle'</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="311"/>
+      <location filename="../../draftobjects/patharray.py" line="322"/>
       <source>, path object doesn't have 'Edges'.</source>
       <translation>, объект пути не имеет «Edges».</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="418"/>
-      <location filename="../../draftobjects/patharray.py" line="424"/>
-      <location filename="../../draftobjects/patharray.py" line="430"/>
-      <source>'PathObj' property will be migrated to 'PathObject'</source>
-      <translation>Свойство 'PathObj' будет перенесено в 'PathObject'</translation>
+      <location filename="../../draftobjects/patharray.py" line="420"/>
+      <source>migrated 'PathObj' property to 'PathObject'</source>
+      <translation>перенесено свойство 'PathObj' в 'PathObject'</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="465"/>
+      <location filename="../../draftobjects/patharray.py" line="424"/>
+      <source>migrated 'PathSubs' property to 'PathSubelements'</source>
+      <translation>свойство PathSubs перенесено в PathSubelements</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/patharray.py" line="428"/>
+      <source>migrated 'Xlate' property to 'ExtraTranslation'</source>
+      <translation>перенесено свойство 'Xlate' в режим 'ExtraTranslation'</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/patharray.py" line="431"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="141"/>
+      <location filename="../../draftobjects/pointarray.py" line="145"/>
+      <source>added 'Fuse' property</source>
+      <translation>добавлено свойство «Предохранитель»</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/patharray.py" line="466"/>
       <source>Start Offset too large for path length. Using zero instead.</source>
       <translation>Начальное смещение слишком велико для длины пути. Вместо этого используется ноль.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="471"/>
+      <location filename="../../draftobjects/patharray.py" line="472"/>
       <source>End Offset too large for path length minus Start Offset. Using zero instead.</source>
       <translation>Конечное смещение слишком велико для длины пути минус начало. Вместо этого используется ноль.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="533"/>
+      <location filename="../../draftobjects/patharray.py" line="534"/>
       <source>Length of tangent vector is zero. Copy not aligned.</source>
       <translation>Длина касательного вектора равна нулю. Копия не выровнена.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="547"/>
-      <location filename="../../draftobjects/patharray.py" line="569"/>
+      <location filename="../../draftobjects/patharray.py" line="548"/>
+      <location filename="../../draftobjects/patharray.py" line="570"/>
       <source>Length of normal vector is zero. Using a default axis instead.</source>
       <translation>Длина вектора нормали равна нулю. Вместо этого используйте ось по умолчанию.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="553"/>
-      <location filename="../../draftobjects/patharray.py" line="575"/>
+      <location filename="../../draftobjects/patharray.py" line="554"/>
+      <location filename="../../draftobjects/patharray.py" line="576"/>
       <source>Tangent and normal vectors are parallel. Normal replaced by a default axis.</source>
       <translation>Векторы касательной и нормали параллельны. Нормальная заменена осью по умолчанию.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="565"/>
+      <location filename="../../draftobjects/patharray.py" line="566"/>
       <source>Cannot calculate normal vector. Using the default normal instead.</source>
       <translation>Невозможно вычислить вектор нормали. Вместо этого используйте стандартную нормаль.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="581"/>
+      <location filename="../../draftobjects/patharray.py" line="582"/>
       <source>AlignMode {} is not implemented</source>
       <translation>AlignMode {} -выравнивание - не реализован</translation>
-    </message>
-    <message>
-      <location filename="../../draftobjects/pointarray.py" line="140"/>
-      <location filename="../../draftobjects/pointarray.py" line="156"/>
-      <source>added property 'ExtraPlacement'</source>
-      <translation>добавлено свойство 'ExtraPlacement'</translation>
     </message>
     <message>
       <location filename="../../draftmake/make_sketch.py" line="103"/>
@@ -5395,6 +5405,46 @@ The final angle will be the base angle plus this amount.</source>
       <translation>свойство 'TextSize' переименовано в 'FontSize'</translation>
     </message>
     <message>
+      <location filename="../../draftobjects/label.py" line="321"/>
+      <source>No Target</source>
+      <translation>Нет цели</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="402"/>
+      <source>Invalid label type</source>
+      <translation>Недопустимый тип метки</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="417"/>
+      <source>Tag not available for object</source>
+      <translation>Метка недоступна для объекта</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="424"/>
+      <source>Material not available for object</source>
+      <translation>Материал не доступен для объекта</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="433"/>
+      <source>Position not available for (sub)object</source>
+      <translation>Позиция недоступна для (под)объекта</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="449"/>
+      <source>Length not available for (sub)object</source>
+      <translation>Длина недоступна для (sub)объекта</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="463"/>
+      <source>Area not available for (sub)object</source>
+      <translation>Область недоступна для (под)объекта</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="476"/>
+      <source>Volume not available for (sub)object</source>
+      <translation>Том недоступен для (под)объекта</translation>
+    </message>
+    <message>
       <location filename="../../draftobjects/layer.py" line="81"/>
       <source>added missing view properties</source>
       <translation>добавлены недостающие свойства вида</translation>
@@ -5430,7 +5480,7 @@ The final angle will be the base angle plus this amount.</source>
       <translation>Открытие гиперссылки</translation>
     </message>
     <message>
-      <location filename="../../draftguitools/gui_selectplane.py" line="148"/>
+      <location filename="../../draftguitools/gui_selectplane.py" line="154"/>
       <source>Select 3 vertices, one or more shapes or an object to define a working plane</source>
       <translation>Выберите 3 вершины, одну или несколько фигур или объект, чтобы определить рабочую плоскость</translation>
     </message>
@@ -5440,6 +5490,16 @@ The final angle will be the base angle plus this amount.</source>
 of existing objects in all opened documents?</source>
       <translation>Хотите обновить параметры шаблона SVG?
 существующих объектов во всех открытых документах?</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/pointarray.py" line="139"/>
+      <source>added 'ExtraPlacement' property</source>
+      <translation>добавлено свойство «Дополнительное размещение»</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/pointarray.py" line="142"/>
+      <source>migrated 'PointList' property to 'PointObject'</source>
+      <translation>свойство PointList перенесено в PointObject</translation>
     </message>
   </context>
   <context>
@@ -5645,7 +5705,7 @@ from menu Tools -&gt; Addon Manager</source>
       <translation>Создать клон</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pointarray.py" line="219"/>
+      <location filename="../../draftobjects/pointarray.py" line="208"/>
       <source>Point object doesn't have a discrete point, it cannot be used for an array.</source>
       <translation>Выбранный объект не имеет дискретной точки, он не может быть использован для массива.</translation>
     </message>
@@ -5671,7 +5731,7 @@ from menu Tools -&gt; Addon Manager</source>
     </message>
     <message>
       <location filename="../../draftguitools/gui_layers.py" line="278"/>
-      <location filename="../../draftobjects/label.py" line="328"/>
+      <location filename="../../draftobjects/label.py" line="326"/>
       <source>Name</source>
       <translation>Название</translation>
     </message>
@@ -5683,7 +5743,7 @@ from menu Tools -&gt; Addon Manager</source>
     <message>
       <location filename="../../draftguitools/gui_layers.py" line="280"/>
       <source>Draw style</source>
-      <translation>Стиль рисования</translation>
+      <translation>Стиль представления</translation>
     </message>
     <message>
       <location filename="../../draftguitools/gui_layers.py" line="281"/>
@@ -5711,67 +5771,67 @@ from menu Tools -&gt; Addon Manager</source>
       <translation>Новый слой</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="327"/>
+      <location filename="../../draftobjects/label.py" line="325"/>
       <source>Custom</source>
       <translation>Дополнительно</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="329"/>
+      <location filename="../../draftobjects/label.py" line="327"/>
       <source>Label</source>
       <translation>Метка</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="330"/>
+      <location filename="../../draftobjects/label.py" line="328"/>
       <source>Position</source>
       <translation>Положение</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="331"/>
+      <location filename="../../draftobjects/label.py" line="329"/>
       <source>Length</source>
       <translation>Длина</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="332"/>
+      <location filename="../../draftobjects/label.py" line="330"/>
       <source>Area</source>
       <translation>Площадь</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="333"/>
+      <location filename="../../draftobjects/label.py" line="331"/>
       <source>Volume</source>
       <translation>Объём</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="334"/>
+      <location filename="../../draftobjects/label.py" line="332"/>
       <source>Tag</source>
       <translation>Метка</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="335"/>
+      <location filename="../../draftobjects/label.py" line="333"/>
       <source>Material</source>
       <translation>Материал</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="336"/>
+      <location filename="../../draftobjects/label.py" line="334"/>
       <source>Label + Position</source>
       <translation>Метка + Положение</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="337"/>
+      <location filename="../../draftobjects/label.py" line="335"/>
       <source>Label + Length</source>
       <translation>Метка + Длина</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="338"/>
+      <location filename="../../draftobjects/label.py" line="336"/>
       <source>Label + Area</source>
       <translation>Метка + Площадь</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="339"/>
+      <location filename="../../draftobjects/label.py" line="337"/>
       <source>Label + Volume</source>
       <translation>Метка + Объём</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="343"/>
+      <location filename="../../draftobjects/label.py" line="341"/>
       <source>Label + Material</source>
       <translation>Метка + Материал</translation>
     </message>
@@ -5813,12 +5873,12 @@ from menu Tools -&gt; Addon Manager</source>
   <context>
     <name>Draft_SelectPlane</name>
     <message>
-      <location filename="../../draftguitools/gui_selectplane.py" line="57"/>
+      <location filename="../../draftguitools/gui_selectplane.py" line="58"/>
       <source>Select plane</source>
       <translation>Выбрать плоскость</translation>
     </message>
     <message>
-      <location filename="../../draftguitools/gui_selectplane.py" line="60"/>
+      <location filename="../../draftguitools/gui_selectplane.py" line="61"/>
       <source>Select 3 vertices, one or more shapes or an object to define a working plane.</source>
       <translation>Выберите 3 вершины, одну или несколько фигур или объект, чтобы определить рабочую плоскость.</translation>
     </message>
@@ -6266,7 +6326,7 @@ CTRL для привязки, SHIFT для ограничения.</translation>
     <message>
       <location filename="../../draftguitools/gui_edit.py" line="258"/>
       <source>Edit</source>
-      <translation>Редактировать</translation>
+      <translation>Правка</translation>
     </message>
     <message>
       <location filename="../../draftguitools/gui_edit.py" line="267"/>
@@ -7216,31 +7276,31 @@ set True for fusion or False for compound</source>
       <translation>Размер фаски углов</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="86"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="87"/>
       <source>The base object that will be duplicated.</source>
       <translation>Базовый объект, который будет продублирован.</translation>
     </message>
     <message>
       <location filename="../../draftobjects/patharray.py" line="185"/>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="93"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="94"/>
       <source>The object along which the copies will be distributed. It must contain 'Edges'.</source>
       <translation>Объект вдоль которого будут распространяться копии. Он должен содержать 'Рёбра'.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="100"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="112"/>
       <source>Number of copies to create.</source>
       <translation>Количество копий для создания.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="107"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="119"/>
       <source>Rotation factor of the twisted array.</source>
       <translation>Коэффициент поворота закрученного массива.</translation>
     </message>
     <message>
       <location filename="../../draftobjects/array.py" line="335"/>
-      <location filename="../../draftobjects/patharray.py" line="216"/>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="114"/>
-      <location filename="../../draftobjects/pointarray.py" line="100"/>
+      <location filename="../../draftobjects/patharray.py" line="227"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="126"/>
+      <location filename="../../draftobjects/pointarray.py" line="111"/>
       <source>Show the individual array elements (only for Link arrays)</source>
       <translation>Показать элементы массива (только для массивов ссылок)</translation>
     </message>
@@ -7379,34 +7439,34 @@ Leave this property empty to create copies along the entire 'Path Object'.</sour
 Оставьте это свойство пустым для создания копий по всему "Объекту путь".</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="208"/>
+      <location filename="../../draftobjects/patharray.py" line="219"/>
       <source>Number of copies to create</source>
       <translation>Количество копий для создания</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="227"/>
+      <location filename="../../draftobjects/patharray.py" line="238"/>
       <source>Additional translation that will be applied to each copy.
 This is useful to adjust for the difference between shape centre and shape reference point.</source>
       <translation>Дополнительный перевод, который будет применяться к каждой копии.
 Это полезно для выравнивания разницы между центром фигуры и координатной точкой фигуры.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="235"/>
+      <location filename="../../draftobjects/patharray.py" line="246"/>
       <source>Alignment vector for 'Tangent' mode</source>
       <translation>Вектор выравнивания для режима 'Касательный'</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="243"/>
+      <location filename="../../draftobjects/patharray.py" line="254"/>
       <source>Force use of 'Vertical Vector' as local Z direction when using 'Original' or 'Tangent' alignment mode</source>
       <translation>Принудительно использовать 'Вертикальный вектор' в качестве локального направления Z при использовании 'Оригинального' или 'Касательного' режима выравнивания</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="251"/>
+      <location filename="../../draftobjects/patharray.py" line="262"/>
       <source>Direction of the local Z axis when 'Force Vertical' is true</source>
       <translation>Направление локальной оси Z, когда "сила вертикальная" истинна</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="259"/>
+      <location filename="../../draftobjects/patharray.py" line="270"/>
       <source>Method to orient the copies along the path.
 - Original: X is curve tangent, Y is normal, and Z is the cross product.
 - Frenet: aligns the object following the local coordinate system along the path.
@@ -7421,17 +7481,17 @@ To get better results with 'Original' or 'Tangent' you may have to set 'Force Ve
 Для получения лучшего результата с помощью 'Оригинала' или 'Касательной' вам может потребоваться установить 'Вертикаль' в истина.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="268"/>
+      <location filename="../../draftobjects/patharray.py" line="279"/>
       <source>Length from the start of the path to the first copy.</source>
       <translation>Длина от начала пути до первой копии.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="276"/>
+      <location filename="../../draftobjects/patharray.py" line="287"/>
       <source>Length from the end of the path to the last copy.</source>
       <translation>Длина от конца пути к последней копии.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="286"/>
+      <location filename="../../draftobjects/patharray.py" line="297"/>
       <source>Orient the copies along the path depending on the 'Align Mode'.
 Otherwise the copies will have the same orientation as the original Base object.</source>
       <translation>Копии располагаются по пути в зависимости от 'Режим выравнивания'.
@@ -7450,6 +7510,9 @@ Otherwise the copies will have the same orientation as the original Base object.
     </message>
     <message>
       <location filename="../../draftobjects/array.py" line="124"/>
+      <location filename="../../draftobjects/patharray.py" line="211"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="102"/>
+      <location filename="../../draftobjects/pointarray.py" line="86"/>
       <source>Specifies if the copies should be fused together if they touch each other (slower)</source>
       <translation>Указывает, должны ли копии быть слиты вместе, если они касаются друг друга (медленнее)</translation>
     </message>
@@ -7557,15 +7620,14 @@ This property is read-only, as the number depends on the parameters of the array
       <translation>Объект с точками, используемыми для распространения копий.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pointarray.py" line="83"/>
+      <location filename="../../draftobjects/pointarray.py" line="94"/>
       <source>Number of copies in the array.
 This property is read-only, as the number depends on the points in 'Point Object'.</source>
       <translation>Количество копий в массиве.
 Это свойство только для чтения, так как число зависит от точек в 'Point Object'.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pointarray.py" line="92"/>
-      <location filename="../../draftobjects/pointarray.py" line="135"/>
+      <location filename="../../draftobjects/pointarray.py" line="103"/>
       <source>Additional placement, shift and rotation, that will be applied to each copy</source>
       <translation>Дополнительные размещение, сдвиг и вращение, применяемые к каждой копии</translation>
     </message>
@@ -8236,7 +8298,7 @@ beyond the dimension line</source>
       <location filename="../../InitGui.py" line="140"/>
       <location filename="../../InitGui.py" line="141"/>
       <source>Draft</source>
-      <translation>Осадка</translation>
+      <translation>Притяжка</translation>
     </message>
     <message>
       <location filename="../../InitGui.py" line="201"/>

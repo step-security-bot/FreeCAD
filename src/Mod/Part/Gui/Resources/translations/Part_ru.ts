@@ -1634,17 +1634,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartDefeaturing</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="411"/>
+      <location filename="../../CommandSimple.cpp" line="412"/>
       <source>Part</source>
       <translation>Деталь</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="412"/>
+      <location filename="../../CommandSimple.cpp" line="413"/>
       <source>Defeaturing</source>
       <translation>Удаление элемента</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="413"/>
+      <location filename="../../CommandSimple.cpp" line="414"/>
       <source>Remove feature from a shape</source>
       <translation>Удалить элемент из фигуры</translation>
     </message>
@@ -1652,17 +1652,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartElementCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="323"/>
+      <location filename="../../CommandSimple.cpp" line="324"/>
       <source>Part</source>
       <translation>Деталь</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="324"/>
+      <location filename="../../CommandSimple.cpp" line="325"/>
       <source>Create shape element copy</source>
       <translation>Создать копию элемента формы</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="325"/>
+      <location filename="../../CommandSimple.cpp" line="326"/>
       <source>Create a non-parametric copy of the selected shape element</source>
       <translation>Создать копию подэлемента объекта, то есть вершины, ребра или грани.</translation>
     </message>
@@ -1904,17 +1904,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartPointsFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="133"/>
+      <location filename="../../CommandSimple.cpp" line="134"/>
       <source>Part</source>
       <translation>Деталь</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="134"/>
+      <location filename="../../CommandSimple.cpp" line="135"/>
       <source>Create points object from geometry</source>
       <translation>Создать объект точек из геометрии</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="135"/>
+      <location filename="../../CommandSimple.cpp" line="136"/>
       <source>Create selectable points object from selected geometric object</source>
       <translation>Создать объект выделенных точек из выбранного геометрического объекта</translation>
     </message>
@@ -1964,17 +1964,17 @@ of projection.</source>
   <context>
     <name>CmdPartRefineShape</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="351"/>
+      <location filename="../../CommandSimple.cpp" line="352"/>
       <source>Part</source>
       <translation>Деталь</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="352"/>
+      <location filename="../../CommandSimple.cpp" line="353"/>
       <source>Refine shape</source>
       <translation>Улучшить форму</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="353"/>
+      <location filename="../../CommandSimple.cpp" line="354"/>
       <source>Refine the copy of a shape</source>
       <translation>Создает копию формы отчищенную от ненужных линии, которые появляются в результате построения.</translation>
     </message>
@@ -2067,17 +2067,17 @@ of projection.</source>
   <context>
     <name>CmdPartShapeFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="104"/>
+      <location filename="../../CommandSimple.cpp" line="105"/>
       <source>Part</source>
       <translation>Деталь</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="105"/>
+      <location filename="../../CommandSimple.cpp" line="106"/>
       <source>Create shape from mesh...</source>
       <translation>Создание фигуры из полигональной сетки...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="106"/>
+      <location filename="../../CommandSimple.cpp" line="107"/>
       <source>Create shape from selected mesh object</source>
       <translation>Создание фигуры из выбранного объекта полигональной сетки</translation>
     </message>
@@ -2085,17 +2085,17 @@ of projection.</source>
   <context>
     <name>CmdPartSimpleCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="220"/>
+      <location filename="../../CommandSimple.cpp" line="221"/>
       <source>Part</source>
       <translation>Деталь</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="221"/>
+      <location filename="../../CommandSimple.cpp" line="222"/>
       <source>Create simple copy</source>
       <translation>Создать простую копию</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="222"/>
+      <location filename="../../CommandSimple.cpp" line="223"/>
       <source>Create a simple non-parametric copy</source>
       <translation>Создать простую непараметрическую копию</translation>
     </message>
@@ -2103,17 +2103,17 @@ of projection.</source>
   <context>
     <name>CmdPartSimpleCylinder</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="54"/>
+      <location filename="../../CommandSimple.cpp" line="55"/>
       <source>Part</source>
       <translation>Деталь</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="55"/>
+      <location filename="../../CommandSimple.cpp" line="56"/>
       <source>Create Cylinder...</source>
       <translation>Создайте цилиндр ...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="56"/>
+      <location filename="../../CommandSimple.cpp" line="57"/>
       <source>Create a Cylinder</source>
       <translation>Создать цилиндр</translation>
     </message>
@@ -2207,17 +2207,17 @@ of projection.</source>
   <context>
     <name>CmdPartTransformedCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="295"/>
+      <location filename="../../CommandSimple.cpp" line="296"/>
       <source>Part</source>
       <translation>Деталь</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="296"/>
+      <location filename="../../CommandSimple.cpp" line="297"/>
       <source>Create transformed copy</source>
       <translation>Создать преобразованную копию</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="297"/>
+      <location filename="../../CommandSimple.cpp" line="298"/>
       <source>Create a non-parametric copy with transformed placement</source>
       <translation>Создать непараметрическую копию с преобразованным размещением</translation>
     </message>
@@ -2254,7 +2254,7 @@ of projection.</source>
     <message>
       <location filename="../../Command.cpp" line="922"/>
       <source>Section</source>
-      <translation>Разрез (Сечение)</translation>
+      <translation>Разделить</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="974"/>
@@ -2297,22 +2297,22 @@ of projection.</source>
       <translation>Создать линейчатую ​​поверхность</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="69"/>
+      <location filename="../../CommandSimple.cpp" line="70"/>
       <source>Create Part Cylinder</source>
       <translation>Создать цилиндр детали</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="180"/>
+      <location filename="../../CommandSimple.cpp" line="181"/>
       <source>Points from geometry</source>
       <translation>Точки от геометрии</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="368"/>
+      <location filename="../../CommandSimple.cpp" line="369"/>
       <source>Refine shape</source>
       <translation>Улучшить форму</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="425"/>
+      <location filename="../../CommandSimple.cpp" line="426"/>
       <source>Defeaturing</source>
       <translation>Удаление элемента</translation>
     </message>
@@ -2360,7 +2360,7 @@ of projection.</source>
     <message>
       <location filename="../../TaskShapeBuilder.cpp" line="521"/>
       <source>Solid</source>
-      <translation>Твердое тело</translation>
+      <translation>Твердотельный объект</translation>
     </message>
     <message>
       <location filename="../../TaskSweep.cpp" line="365"/>
@@ -2371,6 +2371,11 @@ of projection.</source>
       <location filename="../../ViewProviderMirror.cpp" line="210"/>
       <source>Edit Mirror</source>
       <translation>Изменить зеркалирование</translation>
+    </message>
+    <message>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="1557"/>
+      <source>Project on surface</source>
+      <translation>Проецировать на поверхность</translation>
     </message>
   </context>
   <context>
@@ -2557,7 +2562,7 @@ Note: The placement is expressed in local space of object being attached.</sourc
     <message>
       <location filename="../../DlgBooleanOperation.ui" line="56"/>
       <source>Section</source>
-      <translation>Разделить</translation>
+      <translation>Разрез (Сечение)</translation>
     </message>
     <message>
       <location filename="../../DlgBooleanOperation.ui" line="76"/>
@@ -2642,7 +2647,7 @@ Note: The placement is expressed in local space of object being attached.</sourc
   <context>
     <name>PartGui::DlgChamferEdges</name>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="1068"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1109"/>
       <source>Chamfer Edges</source>
       <translation>Притупить ребра фаской</translation>
     </message>
@@ -3008,7 +3013,7 @@ If both lengths are zero, magnitude of direction is used.</source>
     </message>
     <message>
       <location filename="../../DlgFilletEdges.ui" line="51"/>
-      <location filename="../../DlgFilletEdges.cpp" line="279"/>
+      <location filename="../../DlgFilletEdges.cpp" line="280"/>
       <source>Fillet Parameter</source>
       <translation>Параметр скругления</translation>
     </message>
@@ -3058,105 +3063,105 @@ If both lengths are zero, magnitude of direction is used.</source>
       <translation>Радиус:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="268"/>
+      <location filename="../../DlgFilletEdges.cpp" line="269"/>
       <source>Chamfer Parameter</source>
       <translation>Параметр фаски</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="269"/>
+      <location filename="../../DlgFilletEdges.cpp" line="270"/>
       <source>Chamfer type</source>
       <translation>Тип фаски</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="270"/>
+      <location filename="../../DlgFilletEdges.cpp" line="271"/>
       <source>Length:</source>
       <translation>Длина:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="274"/>
+      <location filename="../../DlgFilletEdges.cpp" line="275"/>
       <source>Edges to chamfer</source>
       <translation>Ребра для выполнения фаски</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="867"/>
+      <location filename="../../DlgFilletEdges.cpp" line="912"/>
       <source>Start length</source>
       <translation>Начальная длина</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="271"/>
+      <location filename="../../DlgFilletEdges.cpp" line="272"/>
       <source>Equal distance</source>
       <translation>Равное расстояние</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="272"/>
+      <location filename="../../DlgFilletEdges.cpp" line="273"/>
       <source>Two distances</source>
       <translation>Два расстояния</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="275"/>
+      <location filename="../../DlgFilletEdges.cpp" line="276"/>
       <source>Size</source>
       <translation>Размер</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="276"/>
+      <location filename="../../DlgFilletEdges.cpp" line="277"/>
       <source>Size2</source>
       <translation>Размер2</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="280"/>
+      <location filename="../../DlgFilletEdges.cpp" line="281"/>
       <source>Fillet type</source>
       <translation>Тип Скругления</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="281"/>
+      <location filename="../../DlgFilletEdges.cpp" line="282"/>
       <source>Edges to fillet</source>
       <translation>Рёбра для скругления</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="282"/>
-      <location filename="../../DlgFilletEdges.cpp" line="869"/>
+      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="914"/>
       <source>Start radius</source>
       <translation>Начальный радиус</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="284"/>
       <source>End radius</source>
       <translation>Конечный радиус</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="716"/>
-      <location filename="../../DlgFilletEdges.cpp" line="776"/>
+      <location filename="../../DlgFilletEdges.cpp" line="761"/>
+      <location filename="../../DlgFilletEdges.cpp" line="821"/>
       <source>Edge%1</source>
       <translation>Грань%1</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="859"/>
+      <location filename="../../DlgFilletEdges.cpp" line="904"/>
       <source>Length</source>
       <translation>Длина</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="861"/>
+      <location filename="../../DlgFilletEdges.cpp" line="906"/>
       <source>Radius</source>
       <translation>Радиус</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="915"/>
+      <location filename="../../DlgFilletEdges.cpp" line="960"/>
       <source>No shape selected</source>
       <translation>Профиль не выбран</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="916"/>
+      <location filename="../../DlgFilletEdges.cpp" line="961"/>
       <source>No valid shape is selected.
 Please select a valid shape in the drop-down box first.</source>
       <translation>Допустимый профиль не выбран. Пожалуйста сначала выберите допустимый профиль в выпадающем списке.</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="967"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1012"/>
       <source>No edge selected</source>
       <translation>Нет выбранных ребер</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="968"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1013"/>
       <source>No edge entity is checked to fillet.
 Please check one or more edge entities first.</source>
       <translation>Не выбрано ни одного ребра. Выберите хотя бы одно ребро для скругления.</translation>
@@ -3886,7 +3891,7 @@ during file reading (slower but higher details).</source>
       <translation>Нет активного документа</translation>
     </message>
     <message>
-      <location filename="../../DlgPrimitives.cpp" line="2209"/>
+      <location filename="../../DlgPrimitives.cpp" line="2204"/>
       <source>&amp;Create</source>
       <translation>&amp;Создать</translation>
     </message>
@@ -3974,12 +3979,12 @@ during file reading (slower but higher details).</source>
       <translation>Объект проекции</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="165"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="164"/>
       <source>Have no active document!!!</source>
       <translation>Нет активного документа!!!</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="172"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="171"/>
       <source>Can not create a projection object!!!</source>
       <translation>Невозможно создать объект проекции!!!</translation>
     </message>
@@ -4514,7 +4519,7 @@ the sketch plane's normal vector will be used</source>
     <message>
       <location filename="../../TaskLoft.cpp" line="241"/>
       <source>Loft</source>
-      <translation>Чердак (под крышей)</translation>
+      <translation>Профиль</translation>
     </message>
   </context>
   <context>
@@ -4778,7 +4783,7 @@ only created cuts will be visible</source>
       <location filename="../../TaskShapeBuilder.cpp" line="423"/>
       <location filename="../../TaskShapeBuilder.cpp" line="484"/>
       <source>Wrong selection</source>
-      <translation>Неправильное выделение</translation>
+      <translation>Неправильный выбор</translation>
     </message>
     <message>
       <location filename="../../TaskShapeBuilder.cpp" line="231"/>
@@ -4891,7 +4896,7 @@ only created cuts will be visible</source>
     <message>
       <location filename="../../TaskSweep.cpp" line="339"/>
       <source>Wrong selection</source>
-      <translation>Неправильный выбор</translation>
+      <translation>Неправильное выделение</translation>
     </message>
     <message>
       <location filename="../../TaskSweep.cpp" line="339"/>
@@ -5439,7 +5444,7 @@ by dragging a selection rectangle in the 3D view</source>
     <message>
       <location filename="../../TaskLoft.ui" line="14"/>
       <source>Loft</source>
-      <translation>Профиль</translation>
+      <translation>Чердак (под крышей)</translation>
     </message>
     <message>
       <location filename="../../TaskLoft.ui" line="23"/>
@@ -5614,7 +5619,7 @@ by dragging a selection rectangle in the 3D view</source>
       <translation>Френе</translation>
     </message>
     <message>
-      <location filename="../../TaskSweep.cpp" line="484"/>
+      <location filename="../../TaskSweep.cpp" line="480"/>
       <source>Select one or more profiles and select an edge or wire
 in the 3D view for the sweep path.</source>
       <translation>Выберите один или более профилей, а также выберите грань или последовательность граней в трёхмерном виде для пути заметания.</translation>
@@ -5684,21 +5689,21 @@ in the 3D view for the sweep path.</source>
       <translation>Редактировать %1</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="234"/>
+      <location filename="../../AppPartGui.cpp" line="237"/>
       <source>Part and Part Design workbench</source>
       <translation>Верстак Part и Part Design</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="235"/>
-      <location filename="../../AppPartGui.cpp" line="236"/>
-      <location filename="../../AppPartGui.cpp" line="237"/>
       <location filename="../../AppPartGui.cpp" line="238"/>
+      <location filename="../../AppPartGui.cpp" line="239"/>
+      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="241"/>
       <source>Part/Part Design</source>
       <translation>Part/Part Design</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="239"/>
-      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="242"/>
+      <location filename="../../AppPartGui.cpp" line="243"/>
       <source>Import-Export</source>
       <translation>Импорт/экспорт</translation>
     </message>
@@ -5790,7 +5795,8 @@ Do you want to continue?</source>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="77"/>
       <source>Compound</source>
-      <translation>Объединение</translation>
+      <translation>Соединить
+Группировка</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="78"/>
@@ -5800,7 +5806,7 @@ Do you want to continue?</source>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="79"/>
       <source>Solid</source>
-      <translation>Твердотельный объект</translation>
+      <translation>Твердое тело</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="80"/>
@@ -6100,7 +6106,7 @@ Do you want to continue?</source>
       <translation>Очистить все размеры</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderExt.cpp" line="854"/>
+      <location filename="../../ViewProviderExt.cpp" line="886"/>
       <source>Set colors...</source>
       <translation>Установите цвета ...</translation>
     </message>
@@ -6135,7 +6141,7 @@ Do you want to continue?</source>
       <translation>Показать контрольные точки</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderAttachExtension.cpp" line="118"/>
+      <location filename="../../ViewProviderAttachExtension.cpp" line="105"/>
       <source>Attachment editor</source>
       <translation>Редактор присоединений</translation>
     </message>
@@ -6145,14 +6151,19 @@ Do you want to continue?</source>
       <translation>Создать трубу</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="172"/>
+      <location filename="../../CommandSimple.cpp" line="173"/>
       <source>Distance in parameter space</source>
       <translation>Расстояние в пространстве параметров</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="173"/>
+      <location filename="../../CommandSimple.cpp" line="174"/>
       <source>Enter distance:</source>
       <translation>Введите расстояние:</translation>
+    </message>
+    <message>
+      <location filename="../../ViewProviderProjectOnSurface.cpp" line="54"/>
+      <source>Edit projection</source>
+      <translation>Изменить проекцию</translation>
     </message>
   </context>
   <context>
@@ -6205,8 +6216,7 @@ Do you want to continue?</source>
     <message>
       <location filename="../../Workbench.cpp" line="42"/>
       <source>Compound</source>
-      <translation>Соединить
-Группировка</translation>
+      <translation>Объединение</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="43"/>
@@ -6451,7 +6461,7 @@ It will create a 'Compound Filter' for each shape.</source>
       <location filename="../../../AttachmentEditor/TaskAttachmentEditor.py" line="215"/>
       <location filename="../../../AttachmentEditor/TaskAttachmentEditor.py" line="228"/>
       <source>Attachment</source>
-      <translation>Присоединение</translation>
+      <translation>Вложение</translation>
     </message>
     <message>
       <location filename="../../../AttachmentEditor/TaskAttachmentEditor.py" line="217"/>
@@ -6901,7 +6911,7 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>FaceMaker</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="72"/>
+      <location filename="../../../App/FaceMaker.cpp" line="75"/>
       <source>Shape must be a wire, edge or compound. Something else was supplied.</source>
       <translation>Форма должна представлять собой проволоку, кромку или соединение. Что-то еще было поставлено.</translation>
     </message>
@@ -6909,12 +6919,12 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>Part::FaceMakerSimple</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="262"/>
+      <location filename="../../../App/FaceMaker.cpp" line="281"/>
       <source>Simple</source>
       <translation>Простой</translation>
     </message>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="267"/>
+      <location filename="../../../App/FaceMaker.cpp" line="286"/>
       <source>Makes separate plane face from every wire independently. No support for holes; wires can be on different planes.</source>
       <translation>Делает отдельную плоскую грань из каждой ломаной независимо. Нет поддержки отверстий; ломаные могут быть на разных плоскостях.</translation>
     </message>
@@ -6948,12 +6958,12 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>Part::FaceMakerExtrusion</name>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="337"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="388"/>
       <source>Part Extrude facemaker</source>
       <translation>Выдавливающий деталь гранедел</translation>
     </message>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="342"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="393"/>
       <source>Supports making faces with holes, does not support nesting.</source>
       <translation>Поддерживает создание граней с отверстиями, вложения не поддерживаются.</translation>
     </message>

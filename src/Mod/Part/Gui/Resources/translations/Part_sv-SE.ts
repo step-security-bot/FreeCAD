@@ -1635,17 +1635,17 @@ into its X, Y, and Z components.</translation>
   <context>
     <name>CmdPartDefeaturing</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="411"/>
+      <location filename="../../CommandSimple.cpp" line="412"/>
       <source>Part</source>
       <translation>Detalj</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="412"/>
+      <location filename="../../CommandSimple.cpp" line="413"/>
       <source>Defeaturing</source>
       <translation>Avfunktionering</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="413"/>
+      <location filename="../../CommandSimple.cpp" line="414"/>
       <source>Remove feature from a shape</source>
       <translation>Ta bort funktion från en form</translation>
     </message>
@@ -1653,17 +1653,17 @@ into its X, Y, and Z components.</translation>
   <context>
     <name>CmdPartElementCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="323"/>
+      <location filename="../../CommandSimple.cpp" line="324"/>
       <source>Part</source>
       <translation>Detalj</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="324"/>
+      <location filename="../../CommandSimple.cpp" line="325"/>
       <source>Create shape element copy</source>
       <translation type="unfinished">Create shape element copy</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="325"/>
+      <location filename="../../CommandSimple.cpp" line="326"/>
       <source>Create a non-parametric copy of the selected shape element</source>
       <translation type="unfinished">Create a non-parametric copy of the selected shape element</translation>
     </message>
@@ -1905,17 +1905,17 @@ into its X, Y, and Z components.</translation>
   <context>
     <name>CmdPartPointsFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="133"/>
+      <location filename="../../CommandSimple.cpp" line="134"/>
       <source>Part</source>
       <translation>Detalj</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="134"/>
+      <location filename="../../CommandSimple.cpp" line="135"/>
       <source>Create points object from geometry</source>
       <translation type="unfinished">Create points object from geometry</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="135"/>
+      <location filename="../../CommandSimple.cpp" line="136"/>
       <source>Create selectable points object from selected geometric object</source>
       <translation type="unfinished">Create selectable points object from selected geometric object</translation>
     </message>
@@ -1965,17 +1965,17 @@ of projection.</translation>
   <context>
     <name>CmdPartRefineShape</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="351"/>
+      <location filename="../../CommandSimple.cpp" line="352"/>
       <source>Part</source>
       <translation>Detalj</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="352"/>
+      <location filename="../../CommandSimple.cpp" line="353"/>
       <source>Refine shape</source>
       <translation>Förfina form</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="353"/>
+      <location filename="../../CommandSimple.cpp" line="354"/>
       <source>Refine the copy of a shape</source>
       <translation>Förfina en formkopia</translation>
     </message>
@@ -2068,17 +2068,17 @@ of projection.</translation>
   <context>
     <name>CmdPartShapeFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="104"/>
+      <location filename="../../CommandSimple.cpp" line="105"/>
       <source>Part</source>
       <translation>Detalj</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="105"/>
+      <location filename="../../CommandSimple.cpp" line="106"/>
       <source>Create shape from mesh...</source>
       <translation>Skapa form från nät ...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="106"/>
+      <location filename="../../CommandSimple.cpp" line="107"/>
       <source>Create shape from selected mesh object</source>
       <translation>Skapa form från valt nätobjekt</translation>
     </message>
@@ -2086,17 +2086,17 @@ of projection.</translation>
   <context>
     <name>CmdPartSimpleCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="220"/>
+      <location filename="../../CommandSimple.cpp" line="221"/>
       <source>Part</source>
       <translation>Detalj</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="221"/>
+      <location filename="../../CommandSimple.cpp" line="222"/>
       <source>Create simple copy</source>
       <translation>Skapa en enkel kopia</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="222"/>
+      <location filename="../../CommandSimple.cpp" line="223"/>
       <source>Create a simple non-parametric copy</source>
       <translation>Skapa en enkel icke-parametrisk kopia</translation>
     </message>
@@ -2104,17 +2104,17 @@ of projection.</translation>
   <context>
     <name>CmdPartSimpleCylinder</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="54"/>
+      <location filename="../../CommandSimple.cpp" line="55"/>
       <source>Part</source>
       <translation>Detalj</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="55"/>
+      <location filename="../../CommandSimple.cpp" line="56"/>
       <source>Create Cylinder...</source>
       <translation>Skapa Cylinder...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="56"/>
+      <location filename="../../CommandSimple.cpp" line="57"/>
       <source>Create a Cylinder</source>
       <translation>Skapa en Cylinder</translation>
     </message>
@@ -2208,17 +2208,17 @@ of projection.</translation>
   <context>
     <name>CmdPartTransformedCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="295"/>
+      <location filename="../../CommandSimple.cpp" line="296"/>
       <source>Part</source>
       <translation>Detalj</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="296"/>
+      <location filename="../../CommandSimple.cpp" line="297"/>
       <source>Create transformed copy</source>
       <translation>Skapa transformerad kopia</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="297"/>
+      <location filename="../../CommandSimple.cpp" line="298"/>
       <source>Create a non-parametric copy with transformed placement</source>
       <translation type="unfinished">Create a non-parametric copy with transformed placement</translation>
     </message>
@@ -2297,22 +2297,22 @@ of projection.</translation>
       <translation>Skapa styrd yta</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="69"/>
+      <location filename="../../CommandSimple.cpp" line="70"/>
       <source>Create Part Cylinder</source>
       <translation type="unfinished">Create Part Cylinder</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="180"/>
+      <location filename="../../CommandSimple.cpp" line="181"/>
       <source>Points from geometry</source>
       <translation type="unfinished">Points from geometry</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="368"/>
+      <location filename="../../CommandSimple.cpp" line="369"/>
       <source>Refine shape</source>
       <translation>Förfina form</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="425"/>
+      <location filename="../../CommandSimple.cpp" line="426"/>
       <source>Defeaturing</source>
       <translation>Avfunktionering</translation>
     </message>
@@ -2371,6 +2371,11 @@ of projection.</translation>
       <location filename="../../ViewProviderMirror.cpp" line="210"/>
       <source>Edit Mirror</source>
       <translation>Redigera spegel</translation>
+    </message>
+    <message>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="1557"/>
+      <source>Project on surface</source>
+      <translation type="unfinished">Project on surface</translation>
     </message>
   </context>
   <context>
@@ -2642,7 +2647,7 @@ Note: The placement is expressed in local space of object being attached.</trans
   <context>
     <name>PartGui::DlgChamferEdges</name>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="1068"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1109"/>
       <source>Chamfer Edges</source>
       <translation>Fasa Kanter</translation>
     </message>
@@ -3009,7 +3014,7 @@ If both lengths are zero, magnitude of direction is used.</translation>
     </message>
     <message>
       <location filename="../../DlgFilletEdges.ui" line="51"/>
-      <location filename="../../DlgFilletEdges.cpp" line="279"/>
+      <location filename="../../DlgFilletEdges.cpp" line="280"/>
       <source>Fillet Parameter</source>
       <translation>Avrundningsparameter</translation>
     </message>
@@ -3059,105 +3064,105 @@ If both lengths are zero, magnitude of direction is used.</translation>
       <translation>Radie:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="268"/>
+      <location filename="../../DlgFilletEdges.cpp" line="269"/>
       <source>Chamfer Parameter</source>
       <translation type="unfinished">Chamfer Parameter</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="269"/>
+      <location filename="../../DlgFilletEdges.cpp" line="270"/>
       <source>Chamfer type</source>
       <translation type="unfinished">Chamfer type</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="270"/>
+      <location filename="../../DlgFilletEdges.cpp" line="271"/>
       <source>Length:</source>
       <translation>Längd:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="274"/>
+      <location filename="../../DlgFilletEdges.cpp" line="275"/>
       <source>Edges to chamfer</source>
       <translation>Kanter att fasa</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="867"/>
+      <location filename="../../DlgFilletEdges.cpp" line="912"/>
       <source>Start length</source>
       <translation>Startlängd</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="271"/>
+      <location filename="../../DlgFilletEdges.cpp" line="272"/>
       <source>Equal distance</source>
       <translation type="unfinished">Equal distance</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="272"/>
+      <location filename="../../DlgFilletEdges.cpp" line="273"/>
       <source>Two distances</source>
       <translation>Två avstånd</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="275"/>
+      <location filename="../../DlgFilletEdges.cpp" line="276"/>
       <source>Size</source>
       <translation>Storlek</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="276"/>
+      <location filename="../../DlgFilletEdges.cpp" line="277"/>
       <source>Size2</source>
       <translation type="unfinished">Size2</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="280"/>
+      <location filename="../../DlgFilletEdges.cpp" line="281"/>
       <source>Fillet type</source>
       <translation type="unfinished">Fillet type</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="281"/>
+      <location filename="../../DlgFilletEdges.cpp" line="282"/>
       <source>Edges to fillet</source>
       <translation>Kanter att avrunda</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="282"/>
-      <location filename="../../DlgFilletEdges.cpp" line="869"/>
+      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="914"/>
       <source>Start radius</source>
       <translation>Start radie</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="284"/>
       <source>End radius</source>
       <translation>Slut radie</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="716"/>
-      <location filename="../../DlgFilletEdges.cpp" line="776"/>
+      <location filename="../../DlgFilletEdges.cpp" line="761"/>
+      <location filename="../../DlgFilletEdges.cpp" line="821"/>
       <source>Edge%1</source>
       <translation>Kant%1</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="859"/>
+      <location filename="../../DlgFilletEdges.cpp" line="904"/>
       <source>Length</source>
       <translation>Längd</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="861"/>
+      <location filename="../../DlgFilletEdges.cpp" line="906"/>
       <source>Radius</source>
       <translation>Radie</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="915"/>
+      <location filename="../../DlgFilletEdges.cpp" line="960"/>
       <source>No shape selected</source>
       <translation>Ingen form har valts</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="916"/>
+      <location filename="../../DlgFilletEdges.cpp" line="961"/>
       <source>No valid shape is selected.
 Please select a valid shape in the drop-down box first.</source>
       <translation>Ingen giltig form är markerad. Välj en giltig form i listrutan först.</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="967"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1012"/>
       <source>No edge selected</source>
       <translation>Ingen kant vald</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="968"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1013"/>
       <source>No edge entity is checked to fillet.
 Please check one or more edge entities first.</source>
       <translation>Ingen kant är vald för avrundning.
@@ -3888,7 +3893,7 @@ during file reading (slower but higher details).</translation>
       <translation>Inget aktivt dokument</translation>
     </message>
     <message>
-      <location filename="../../DlgPrimitives.cpp" line="2209"/>
+      <location filename="../../DlgPrimitives.cpp" line="2204"/>
       <source>&amp;Create</source>
       <translation>&amp;Skapa</translation>
     </message>
@@ -3976,12 +3981,12 @@ during file reading (slower but higher details).</translation>
       <translation type="unfinished">Projection Object</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="165"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="164"/>
       <source>Have no active document!!!</source>
       <translation type="unfinished">Have no active document!!!</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="172"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="171"/>
       <source>Can not create a projection object!!!</source>
       <translation type="unfinished">Can not create a projection object!!!</translation>
     </message>
@@ -5617,7 +5622,7 @@ by dragging a selection rectangle in the 3D view</translation>
       <translation>Frenet</translation>
     </message>
     <message>
-      <location filename="../../TaskSweep.cpp" line="484"/>
+      <location filename="../../TaskSweep.cpp" line="480"/>
       <source>Select one or more profiles and select an edge or wire
 in the 3D view for the sweep path.</source>
       <translation>Markera en eller flera profiler och välj en kant eller tråd i 3D-vyn för svep banan.</translation>
@@ -5687,21 +5692,21 @@ in the 3D view for the sweep path.</source>
       <translation>Redigera %1</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="234"/>
+      <location filename="../../AppPartGui.cpp" line="237"/>
       <source>Part and Part Design workbench</source>
       <translation type="unfinished">Part and Part Design workbench</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="235"/>
-      <location filename="../../AppPartGui.cpp" line="236"/>
-      <location filename="../../AppPartGui.cpp" line="237"/>
       <location filename="../../AppPartGui.cpp" line="238"/>
+      <location filename="../../AppPartGui.cpp" line="239"/>
+      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="241"/>
       <source>Part/Part Design</source>
       <translation type="unfinished">Part/Part Design</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="239"/>
-      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="242"/>
+      <location filename="../../AppPartGui.cpp" line="243"/>
       <source>Import-Export</source>
       <translation>Importera/Exportera</translation>
     </message>
@@ -6104,7 +6109,7 @@ Vill du fortsätta?</translation>
       <translation type="unfinished">Clear all dimensions</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderExt.cpp" line="854"/>
+      <location filename="../../ViewProviderExt.cpp" line="886"/>
       <source>Set colors...</source>
       <translation>Ställ in färgerna ...</translation>
     </message>
@@ -6139,7 +6144,7 @@ Vill du fortsätta?</translation>
       <translation>Visa kontrollpunkter</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderAttachExtension.cpp" line="118"/>
+      <location filename="../../ViewProviderAttachExtension.cpp" line="105"/>
       <source>Attachment editor</source>
       <translation type="unfinished">Attachment editor</translation>
     </message>
@@ -6149,14 +6154,19 @@ Vill du fortsätta?</translation>
       <translation>Skapa rör</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="172"/>
+      <location filename="../../CommandSimple.cpp" line="173"/>
       <source>Distance in parameter space</source>
       <translation type="unfinished">Distance in parameter space</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="173"/>
+      <location filename="../../CommandSimple.cpp" line="174"/>
       <source>Enter distance:</source>
       <translation>Ange avstånd:</translation>
+    </message>
+    <message>
+      <location filename="../../ViewProviderProjectOnSurface.cpp" line="54"/>
+      <source>Edit projection</source>
+      <translation type="unfinished">Edit projection</translation>
     </message>
   </context>
   <context>
@@ -6899,7 +6909,7 @@ A 'Compound Filter' can be used to extract the remaining pieces.</translation>
   <context>
     <name>FaceMaker</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="72"/>
+      <location filename="../../../App/FaceMaker.cpp" line="75"/>
       <source>Shape must be a wire, edge or compound. Something else was supplied.</source>
       <translation type="unfinished">Shape must be a wire, edge or compound. Something else was supplied.</translation>
     </message>
@@ -6907,12 +6917,12 @@ A 'Compound Filter' can be used to extract the remaining pieces.</translation>
   <context>
     <name>Part::FaceMakerSimple</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="262"/>
+      <location filename="../../../App/FaceMaker.cpp" line="281"/>
       <source>Simple</source>
       <translation>Enkel</translation>
     </message>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="267"/>
+      <location filename="../../../App/FaceMaker.cpp" line="286"/>
       <source>Makes separate plane face from every wire independently. No support for holes; wires can be on different planes.</source>
       <translation>Skapar plana ytor från varje tråd separat. Inget stöd för hål; trådar kan vara i olika plan.</translation>
     </message>
@@ -6946,12 +6956,12 @@ A 'Compound Filter' can be used to extract the remaining pieces.</translation>
   <context>
     <name>Part::FaceMakerExtrusion</name>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="337"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="388"/>
       <source>Part Extrude facemaker</source>
       <translation>Ytskapare för komponentextrudering</translation>
     </message>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="342"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="393"/>
       <source>Supports making faces with holes, does not support nesting.</source>
       <translation>Stöder skapande av ytor med hål, stöder inte packning.</translation>
     </message>

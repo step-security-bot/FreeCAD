@@ -34,6 +34,7 @@ SET(Material_Icon_Files
 
 # collect all the material cards:
 SET(MaterialLib_Files
+    Resources/Materials/Standard/Default.FCMat
     Resources/Materials/Standard/Aggregate/Concrete-EN-C35_45.FCMat
     Resources/Materials/Standard/Aggregate/Concrete-Generic.FCMat
     Resources/Materials/Standard/Aggregate/Reinforcement-FIB-B500.FCMat
@@ -285,11 +286,11 @@ set(MaterialTest_Files
     materialtests/TestMaterials.py
 )
 
-ADD_CUSTOM_TARGET(MateriaTestLib ALL
+ADD_CUSTOM_TARGET(MaterialTest ALL
     SOURCES ${MaterialTest_Files}
 )
 
-fc_target_copy_resource(MateriaTestLib
+fc_target_copy_resource(MaterialTest
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}/Mod/Material
     ${MaterialTest_Files})

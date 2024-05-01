@@ -226,7 +226,7 @@
       <location filename="../../AttacherTexts.cpp" line="295"/>
       <source>Vertex</source>
       <comment>AttachmentPoint mode caption</comment>
-      <translation type="unfinished">Vertex</translation>
+      <translation>Теме</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="296"/>
@@ -1633,17 +1633,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartDefeaturing</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="411"/>
+      <location filename="../../CommandSimple.cpp" line="412"/>
       <source>Part</source>
       <translation>Part</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="412"/>
+      <location filename="../../CommandSimple.cpp" line="413"/>
       <source>Defeaturing</source>
       <translation>Одстрани типске облике</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="413"/>
+      <location filename="../../CommandSimple.cpp" line="414"/>
       <source>Remove feature from a shape</source>
       <translation>Уклони изабране типске облике</translation>
     </message>
@@ -1651,17 +1651,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartElementCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="323"/>
+      <location filename="../../CommandSimple.cpp" line="324"/>
       <source>Part</source>
       <translation>Part</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="324"/>
+      <location filename="../../CommandSimple.cpp" line="325"/>
       <source>Create shape element copy</source>
       <translation>Направи копију елемената облика</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="325"/>
+      <location filename="../../CommandSimple.cpp" line="326"/>
       <source>Create a non-parametric copy of the selected shape element</source>
       <translation>Направи непараметарску копију поделемената облика као што су тачка, ивица или страница</translation>
     </message>
@@ -1903,17 +1903,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartPointsFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="133"/>
+      <location filename="../../CommandSimple.cpp" line="134"/>
       <source>Part</source>
       <translation>Part</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="134"/>
+      <location filename="../../CommandSimple.cpp" line="135"/>
       <source>Create points object from geometry</source>
       <translation>Направи тачкасти објекат на основу геометрије</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="135"/>
+      <location filename="../../CommandSimple.cpp" line="136"/>
       <source>Create selectable points object from selected geometric object</source>
       <translation>Направи објекат тачака (које се могу бирати) од изабраног геометријског објекта</translation>
     </message>
@@ -1963,17 +1963,17 @@ of projection.</source>
   <context>
     <name>CmdPartRefineShape</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="351"/>
+      <location filename="../../CommandSimple.cpp" line="352"/>
       <source>Part</source>
       <translation>Part</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="352"/>
+      <location filename="../../CommandSimple.cpp" line="353"/>
       <source>Refine shape</source>
       <translation>Пречисти облик</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="353"/>
+      <location filename="../../CommandSimple.cpp" line="354"/>
       <source>Refine the copy of a shape</source>
       <translation>Пречисти копију облика</translation>
     </message>
@@ -2066,17 +2066,17 @@ of projection.</source>
   <context>
     <name>CmdPartShapeFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="104"/>
+      <location filename="../../CommandSimple.cpp" line="105"/>
       <source>Part</source>
       <translation>Part</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="105"/>
+      <location filename="../../CommandSimple.cpp" line="106"/>
       <source>Create shape from mesh...</source>
       <translation>Направи облик од мреже...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="106"/>
+      <location filename="../../CommandSimple.cpp" line="107"/>
       <source>Create shape from selected mesh object</source>
       <translation>Направи облик од изабраног мрежног објекта</translation>
     </message>
@@ -2084,17 +2084,17 @@ of projection.</source>
   <context>
     <name>CmdPartSimpleCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="220"/>
+      <location filename="../../CommandSimple.cpp" line="221"/>
       <source>Part</source>
       <translation>Part</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="221"/>
+      <location filename="../../CommandSimple.cpp" line="222"/>
       <source>Create simple copy</source>
       <translation>Направи једноcтавну копију</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="222"/>
+      <location filename="../../CommandSimple.cpp" line="223"/>
       <source>Create a simple non-parametric copy</source>
       <translation>Направи једноcтавну непараметарcку копију</translation>
     </message>
@@ -2102,17 +2102,17 @@ of projection.</source>
   <context>
     <name>CmdPartSimpleCylinder</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="54"/>
+      <location filename="../../CommandSimple.cpp" line="55"/>
       <source>Part</source>
       <translation>Part</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="55"/>
+      <location filename="../../CommandSimple.cpp" line="56"/>
       <source>Create Cylinder...</source>
       <translation>Направи ваљак...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="56"/>
+      <location filename="../../CommandSimple.cpp" line="57"/>
       <source>Create a Cylinder</source>
       <translation>Направи ваљак</translation>
     </message>
@@ -2206,17 +2206,17 @@ of projection.</source>
   <context>
     <name>CmdPartTransformedCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="295"/>
+      <location filename="../../CommandSimple.cpp" line="296"/>
       <source>Part</source>
       <translation>Part</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="296"/>
+      <location filename="../../CommandSimple.cpp" line="297"/>
       <source>Create transformed copy</source>
       <translation>Направи померену копију</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="297"/>
+      <location filename="../../CommandSimple.cpp" line="298"/>
       <source>Create a non-parametric copy with transformed placement</source>
       <translation>Направи непараметарску копију са промењеним положајем</translation>
     </message>
@@ -2295,22 +2295,22 @@ of projection.</source>
       <translation>Равна површина</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="69"/>
+      <location filename="../../CommandSimple.cpp" line="70"/>
       <source>Create Part Cylinder</source>
       <translation>Направи ваљак</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="180"/>
+      <location filename="../../CommandSimple.cpp" line="181"/>
       <source>Points from geometry</source>
       <translation>Тачке на основу геометрије</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="368"/>
+      <location filename="../../CommandSimple.cpp" line="369"/>
       <source>Refine shape</source>
       <translation>Пречисти облик</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="425"/>
+      <location filename="../../CommandSimple.cpp" line="426"/>
       <source>Defeaturing</source>
       <translation>Одстрани типске облике</translation>
     </message>
@@ -2369,6 +2369,11 @@ of projection.</source>
       <location filename="../../ViewProviderMirror.cpp" line="210"/>
       <source>Edit Mirror</source>
       <translation>Уреди симетрију</translation>
+    </message>
+    <message>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="1557"/>
+      <source>Project on surface</source>
+      <translation type="unfinished">Project on surface</translation>
     </message>
   </context>
   <context>
@@ -2640,7 +2645,7 @@ Note: The placement is expressed in local space of object being attached.</sourc
   <context>
     <name>PartGui::DlgChamferEdges</name>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="1068"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1109"/>
       <source>Chamfer Edges</source>
       <translation>Обори ивице</translation>
     </message>
@@ -3006,7 +3011,7 @@ If both lengths are zero, magnitude of direction is used.</source>
     </message>
     <message>
       <location filename="../../DlgFilletEdges.ui" line="51"/>
-      <location filename="../../DlgFilletEdges.cpp" line="279"/>
+      <location filename="../../DlgFilletEdges.cpp" line="280"/>
       <source>Fillet Parameter</source>
       <translation>Параметар заобљења</translation>
     </message>
@@ -3056,105 +3061,105 @@ If both lengths are zero, magnitude of direction is used.</source>
       <translation>Полупречник:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="268"/>
+      <location filename="../../DlgFilletEdges.cpp" line="269"/>
       <source>Chamfer Parameter</source>
       <translation>Параметри обарања ивица</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="269"/>
+      <location filename="../../DlgFilletEdges.cpp" line="270"/>
       <source>Chamfer type</source>
       <translation>Врста обарања ивице</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="270"/>
+      <location filename="../../DlgFilletEdges.cpp" line="271"/>
       <source>Length:</source>
       <translation>Дужина:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="274"/>
+      <location filename="../../DlgFilletEdges.cpp" line="275"/>
       <source>Edges to chamfer</source>
       <translation>Ивице за обарање</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="867"/>
+      <location filename="../../DlgFilletEdges.cpp" line="912"/>
       <source>Start length</source>
       <translation>Почетна дужина</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="271"/>
+      <location filename="../../DlgFilletEdges.cpp" line="272"/>
       <source>Equal distance</source>
       <translation>Једнако растојање</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="272"/>
+      <location filename="../../DlgFilletEdges.cpp" line="273"/>
       <source>Two distances</source>
       <translation>Два растојања</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="275"/>
+      <location filename="../../DlgFilletEdges.cpp" line="276"/>
       <source>Size</source>
       <translation>Величина</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="276"/>
+      <location filename="../../DlgFilletEdges.cpp" line="277"/>
       <source>Size2</source>
       <translation>Величина2</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="280"/>
+      <location filename="../../DlgFilletEdges.cpp" line="281"/>
       <source>Fillet type</source>
       <translation>Врста заобљења</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="281"/>
+      <location filename="../../DlgFilletEdges.cpp" line="282"/>
       <source>Edges to fillet</source>
       <translation>Ивице за заобљење</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="282"/>
-      <location filename="../../DlgFilletEdges.cpp" line="869"/>
+      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="914"/>
       <source>Start radius</source>
       <translation>Почетни полупречник</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="284"/>
       <source>End radius</source>
       <translation>Крајњи полупречник</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="716"/>
-      <location filename="../../DlgFilletEdges.cpp" line="776"/>
+      <location filename="../../DlgFilletEdges.cpp" line="761"/>
+      <location filename="../../DlgFilletEdges.cpp" line="821"/>
       <source>Edge%1</source>
       <translation>Ивица%1</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="859"/>
+      <location filename="../../DlgFilletEdges.cpp" line="904"/>
       <source>Length</source>
       <translation>Дужина</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="861"/>
+      <location filename="../../DlgFilletEdges.cpp" line="906"/>
       <source>Radius</source>
       <translation>Полупречник</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="915"/>
+      <location filename="../../DlgFilletEdges.cpp" line="960"/>
       <source>No shape selected</source>
       <translation>Нема одабраних облика</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="916"/>
+      <location filename="../../DlgFilletEdges.cpp" line="961"/>
       <source>No valid shape is selected.
 Please select a valid shape in the drop-down box first.</source>
       <translation>Ниједан важећи облик није изабран. Прво изабери важећи облик у оквиру падајуће листе.</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="967"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1012"/>
       <source>No edge selected</source>
       <translation>Нема одабраних ивица</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="968"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1013"/>
       <source>No edge entity is checked to fillet.
 Please check one or more edge entities first.</source>
       <translation>Нема ивица обележених за заобљење. Обележи једну, или више ивица.</translation>
@@ -3884,7 +3889,7 @@ during file reading (slower but higher details).</translation>
       <translation>Нема активног документа</translation>
     </message>
     <message>
-      <location filename="../../DlgPrimitives.cpp" line="2209"/>
+      <location filename="../../DlgPrimitives.cpp" line="2204"/>
       <source>&amp;Create</source>
       <translation>&amp;Направи</translation>
     </message>
@@ -3972,12 +3977,12 @@ during file reading (slower but higher details).</translation>
       <translation>Објекат који се пројицира</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="165"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="164"/>
       <source>Have no active document!!!</source>
       <translation>Нема активног документа!!!</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="172"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="171"/>
       <source>Can not create a projection object!!!</source>
       <translation>Не могу направити пројицирани објекат!!!</translation>
     </message>
@@ -5613,7 +5618,7 @@ by dragging a selection rectangle in the 3D view</source>
       <translation>Френет</translation>
     </message>
     <message>
-      <location filename="../../TaskSweep.cpp" line="484"/>
+      <location filename="../../TaskSweep.cpp" line="480"/>
       <source>Select one or more profiles and select an edge or wire
 in the 3D view for the sweep path.</source>
       <translation>Изабери један или више профила и изабери ивицу или жицу у 3Д погледу која ће бити путања водиља профила.</translation>
@@ -5683,21 +5688,21 @@ in the 3D view for the sweep path.</source>
       <translation>Уреди %1</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="234"/>
+      <location filename="../../AppPartGui.cpp" line="237"/>
       <source>Part and Part Design workbench</source>
       <translation>Part и Part Design радно окружење</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="235"/>
-      <location filename="../../AppPartGui.cpp" line="236"/>
-      <location filename="../../AppPartGui.cpp" line="237"/>
       <location filename="../../AppPartGui.cpp" line="238"/>
+      <location filename="../../AppPartGui.cpp" line="239"/>
+      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="241"/>
       <source>Part/Part Design</source>
       <translation>Part/Part Design</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="239"/>
-      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="242"/>
+      <location filename="../../AppPartGui.cpp" line="243"/>
       <source>Import-Export</source>
       <translation>Увоз/извоз</translation>
     </message>
@@ -5785,7 +5790,7 @@ Do you want to continue?</source>
       <location filename="../../TaskAttacher.cpp" line="81"/>
       <location filename="../../TaskCheckGeometry.cpp" line="84"/>
       <source>Vertex</source>
-      <translation>Теме</translation>
+      <translation type="unfinished">Vertex</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="77"/>
@@ -6100,7 +6105,7 @@ Do you want to continue?</source>
       <translation>Обриши све коте</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderExt.cpp" line="854"/>
+      <location filename="../../ViewProviderExt.cpp" line="886"/>
       <source>Set colors...</source>
       <translation>Офарбај странице</translation>
     </message>
@@ -6135,7 +6140,7 @@ Do you want to continue?</source>
       <translation>Прикажи контролне тачке</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderAttachExtension.cpp" line="118"/>
+      <location filename="../../ViewProviderAttachExtension.cpp" line="105"/>
       <source>Attachment editor</source>
       <translation>Уређивач придруживања</translation>
     </message>
@@ -6145,14 +6150,19 @@ Do you want to continue?</source>
       <translation>Направи цев</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="172"/>
+      <location filename="../../CommandSimple.cpp" line="173"/>
       <source>Distance in parameter space</source>
       <translation>Растојање у параметарском простору</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="173"/>
+      <location filename="../../CommandSimple.cpp" line="174"/>
       <source>Enter distance:</source>
       <translation>Унеси растојање:</translation>
+    </message>
+    <message>
+      <location filename="../../ViewProviderProjectOnSurface.cpp" line="54"/>
+      <source>Edit projection</source>
+      <translation type="unfinished">Edit projection</translation>
     </message>
   </context>
   <context>
@@ -6895,7 +6905,7 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>FaceMaker</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="72"/>
+      <location filename="../../../App/FaceMaker.cpp" line="75"/>
       <source>Shape must be a wire, edge or compound. Something else was supplied.</source>
       <translation>Облик мора да буде жица, ивица или састављени објекат. Нешто друго је обезбеђено.</translation>
     </message>
@@ -6903,12 +6913,12 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>Part::FaceMakerSimple</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="262"/>
+      <location filename="../../../App/FaceMaker.cpp" line="281"/>
       <source>Simple</source>
       <translation>Једноставно</translation>
     </message>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="267"/>
+      <location filename="../../../App/FaceMaker.cpp" line="286"/>
       <source>Makes separate plane face from every wire independently. No support for holes; wires can be on different planes.</source>
       <translation>Прави посебну равну страницу од сваке жице независно. Не подржава рупе; жице могу бити на различитим равнима.</translation>
     </message>
@@ -6942,12 +6952,12 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>Part::FaceMakerExtrusion</name>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="337"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="388"/>
       <source>Part Extrude facemaker</source>
       <translation>Part извлачење творац страница</translation>
     </message>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="342"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="393"/>
       <source>Supports making faces with holes, does not support nesting.</source>
       <translation>Подршка прављењу страница са рупама, искључује могућност слагања.</translation>
     </message>

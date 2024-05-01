@@ -24,7 +24,7 @@
     <message>
       <location filename="../../Command.cpp" line="230"/>
       <source>Fem</source>
-      <translation type="unfinished">Fem</translation>
+      <translation>სემ</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="231"/>
@@ -955,84 +955,96 @@
       <translation>არ გამოიყენო ccx-ს ნაგულისხმევი მნიშვნელობები</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="454"/>
       <source>Time Initial Step</source>
       <translation>დროის საწყისი ბიჯი</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="470"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="502"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="541"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="596"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="651"/>
       <source>s</source>
       <translation>s</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="477"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
       <source>Time End</source>
       <translation>დასასრულის დრო</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="516"/>
-      <source>Beam, shell element 3D output format</source>
-      <translation>კოჭის და გარსის 3D გამოტანის ფორმატი</translation>
-    </message>
-    <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="523"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="665"/>
       <source>3D Output, unchecked for 2D</source>
       <translation>3D გამოტანა. გამორთულია 2D-სთვის</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="544"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="686"/>
       <source>Thermo mechanical defaults</source>
       <translation>თერმომექანიკური მახასიათებლები</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="552"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="694"/>
       <source>Analysis type (transient or steady state)</source>
       <translation>ანალიზის ტიპი (გარდამავალი ან სტაბილური მდგომარეობა)</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="559"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="701"/>
       <source>Use steady state</source>
       <translation>სტაბილური მდგომარეობის გამოყენება</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="575"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
       <source>Maximum number of iterations</source>
       <translation>იტერაციების მაქსიმალური რაოდენობა</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="609"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="548"/>
+      <source>Time Minimum Step</source>
+      <translation>დროის მინიმალური ბიჯი</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="603"/>
+      <source>Time Maximum Step</source>
+      <translation>დროის მაქსიმალური ბიჯი</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="658"/>
+      <source>Beam, shell element 3D output format</source>
+      <translation>კოჭის და გარსის 3D გამოტანის ფორმატი</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="722"/>
       <source>Frequency defaults</source>
       <translation>სიხშირის ნაგულისხმევი მნიშვნელობები</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="617"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="730"/>
       <source>Eigenmode number</source>
       <translation>აიგენმოდის ნომერი</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="662"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="775"/>
       <source>High frequency limit</source>
       <translation>მაღალი სიხშირის ლიმიტი</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="700"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="748"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="813"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="861"/>
       <source>Hz</source>
       <translation>ჰც</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="707"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="820"/>
       <source>Low frequency limit</source>
       <translation>დაბალი სიხშირის ლიმიტი</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="145"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="149"/>
       <source>File does not exist</source>
       <translation>ფაილი არ არსებობს</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="146"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="150"/>
       <source>The specified executable
 '%1'
  does not exist!
@@ -1064,7 +1076,7 @@ Specify another file please.</source>
       <location filename="../../DlgSettingsFemElmer.ui" line="85"/>
       <location filename="../../DlgSettingsFemElmer.ui" line="148"/>
       <source>Search in known binary directories</source>
-      <translation>გამშვები ფაილების ცნობილ საქაღალდეებში ძებნა</translation>
+      <translation>ცნობილ ბინარულ საქაღალდეებში ძებნა</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsFemElmer.ui" line="173"/>
@@ -1535,7 +1547,7 @@ Specify another file please.</source>
     <message>
       <location filename="../../DlgSettingsFemZ88.ui" line="46"/>
       <source>Search in known binary directories</source>
-      <translation>ცნობილ ბინარულ საქაღალდეებში ძებნა</translation>
+      <translation>გამშვები ფაილების ცნობილ საქაღალდეებში ძებნა</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsFemZ88.ui" line="77"/>
@@ -1801,7 +1813,7 @@ Specify another file please.</source>
     <message>
       <location filename="../../TaskPostBoxes.cpp" line="333"/>
       <source>Input error</source>
-      <translation>შეყვანის შეცდომა</translation>
+      <translation type="unfinished">Input error</translation>
     </message>
   </context>
   <context>
@@ -1895,7 +1907,7 @@ Specify another file please.</source>
       <location filename="../../TaskFemConstraintContact.cpp" line="399"/>
       <location filename="../../TaskFemConstraintContact.cpp" line="409"/>
       <source>Selection error</source>
-      <translation>მონიშვნის შეცდომა</translation>
+      <translation>მონიშნულის შეცდომა</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintContact.cpp" line="133"/>
@@ -2166,7 +2178,7 @@ Specify another file please.</source>
       <location filename="../../TaskFemConstraintForce.cpp" line="316"/>
       <location filename="../../TaskFemConstraintForce.cpp" line="332"/>
       <source>Wrong selection</source>
-      <translation>არასწორი არჩევანი</translation>
+      <translation>არასწორი მონიშნული</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintForce.cpp" line="316"/>
@@ -2391,7 +2403,7 @@ Specify another file please.</source>
       <location filename="../../TaskFemConstraintTransform.cpp" line="431"/>
       <location filename="../../TaskFemConstraintTransform.cpp" line="441"/>
       <source>Selection error</source>
-      <translation>მონიშნულის შეცდომა</translation>
+      <translation>მონიშვნის შეცდომა</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintTransform.cpp" line="284"/>
@@ -3531,7 +3543,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="72"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="69"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="337"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="862"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="944"/>
       <source>A dialog is already open in the task panel</source>
       <translation>ფანჯარა უკვე ღიაა ამოცანების პანელზე</translation>
     </message>
@@ -3543,7 +3555,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="73"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="70"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="338"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="863"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="945"/>
       <source>Do you want to close this dialog?</source>
       <translation>ნამდვილად გსურთ ამ ფანჯრის დახურვა?</translation>
     </message>
@@ -3679,7 +3691,7 @@ Note: for 2D only setting for x is possible,
       <translation>ლოკალური კოორდინატების სისტემა</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderFemConstraint.cpp" line="141"/>
+      <location filename="../../ViewProviderFemConstraint.cpp" line="142"/>
       <source>Edit analysis feature</source>
       <translation>ანალიზის თვისების ჩასწორება</translation>
     </message>
@@ -5073,77 +5085,82 @@ used for the Elmer solver</source>
       <translation>მაქს. ზომა:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="44"/>
+      <location filename="../../TaskTetParameter.ui" line="46"/>
+      <source>Min. Size:</source>
+      <translation type="unfinished">Min. Size:</translation>
+    </message>
+    <message>
+      <location filename="../../TaskTetParameter.ui" line="62"/>
       <source>Second order</source>
       <translation>მეორე რიგი</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="53"/>
+      <location filename="../../TaskTetParameter.ui" line="71"/>
       <source>Fineness:</source>
       <translation>სიზუსტე:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="64"/>
+      <location filename="../../TaskTetParameter.ui" line="82"/>
       <source>VeryCoarse</source>
       <translation>ძალიან უხეში</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="69"/>
+      <location filename="../../TaskTetParameter.ui" line="87"/>
       <source>Coarse</source>
       <translation>უხეში</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="74"/>
+      <location filename="../../TaskTetParameter.ui" line="92"/>
       <source>Moderate</source>
       <translation>მისაღები</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="79"/>
+      <location filename="../../TaskTetParameter.ui" line="97"/>
       <source>Fine</source>
       <translation>ზუსტად</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="84"/>
+      <location filename="../../TaskTetParameter.ui" line="102"/>
       <source>VeryFine</source>
       <translation>დიდი სიზუსტით</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="89"/>
+      <location filename="../../TaskTetParameter.ui" line="107"/>
       <source>UserDefined</source>
       <translation>მომხმარებლის მითითებული</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="97"/>
+      <location filename="../../TaskTetParameter.ui" line="115"/>
       <source>Growth Rate:</source>
       <translation>ზრდის ტემპი:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="111"/>
+      <location filename="../../TaskTetParameter.ui" line="129"/>
       <source>Nbr. Segs per Edge:</source>
       <translation>სეგ-ების რ-ნობა წიბოებზე:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="128"/>
+      <location filename="../../TaskTetParameter.ui" line="146"/>
       <source>Nbr. Segs per Radius:</source>
       <translation>სეგ-ების რ-ნობა რადიუსზე:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="144"/>
+      <location filename="../../TaskTetParameter.ui" line="162"/>
       <source>Optimize</source>
       <translation>ოპტიმიზაცია</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="166"/>
+      <location filename="../../TaskTetParameter.ui" line="184"/>
       <source>Node count:</source>
       <translation>კვანძების რიცხვი:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="180"/>
+      <location filename="../../TaskTetParameter.ui" line="198"/>
       <source>Triangle count:</source>
       <translation>სამკუთხედების რაოდენობა:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="194"/>
+      <location filename="../../TaskTetParameter.ui" line="212"/>
       <source>Tetrahedron count:</source>
       <translation>ტეტრაჰედრონების რიცხვი:</translation>
     </message>
@@ -5273,7 +5290,7 @@ used for the Elmer solver</source>
     <message>
       <location filename="../../Workbench.cpp" line="66"/>
       <source>Mesh</source>
-      <translation>ბადე</translation>
+      <translation type="unfinished">Mesh</translation>
     </message>
     <message>
       <location filename="../../Workbench.cpp" line="67"/>
@@ -5717,7 +5734,7 @@ used for the Elmer solver</source>
     </message>
   </context>
   <context>
-    <name>FEM_SolverCalculixCxxtools</name>
+    <name>FEM_SolverCalculiXCcxTools</name>
     <message>
       <location filename="../../../femcommands/commands.py" line="1058"/>
       <source>Solver CalculiX Standard</source>
@@ -5858,7 +5875,7 @@ used for the Elmer solver</source>
     <message>
       <location filename="../../../femguiutils/selection_widgets.py" line="51"/>
       <source>Remove</source>
-      <translation>წაშლა</translation>
+      <translation>მოცილება</translation>
     </message>
   </context>
   <context>
@@ -6221,7 +6238,7 @@ Please select a result type first.</source>
     <message>
       <location filename="../../Command.cpp" line="1479"/>
       <source>Fem</source>
-      <translation>სემ</translation>
+      <translation type="unfinished">Fem</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1480"/>

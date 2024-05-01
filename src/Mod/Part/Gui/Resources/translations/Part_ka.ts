@@ -226,7 +226,7 @@
       <location filename="../../AttacherTexts.cpp" line="295"/>
       <source>Vertex</source>
       <comment>AttachmentPoint mode caption</comment>
-      <translation type="unfinished">Vertex</translation>
+      <translation>წვერო</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="296"/>
@@ -265,7 +265,7 @@
       <location filename="../../AttacherTexts.cpp" line="202"/>
       <source>Deactivated</source>
       <comment>AttachmentLine mode caption</comment>
-      <translation>გამორთული</translation>
+      <translation>დეაქტივირებულია</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="203"/>
@@ -707,7 +707,7 @@
       <location filename="../../AttacherTexts.cpp" line="52"/>
       <source>Deactivated</source>
       <comment>Attachment3D mode caption</comment>
-      <translation>დეაქტივირებულია</translation>
+      <translation>გამორთული</translation>
     </message>
     <message>
       <location filename="../../AttacherTexts.cpp" line="53"/>
@@ -1635,17 +1635,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartDefeaturing</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="411"/>
+      <location filename="../../CommandSimple.cpp" line="412"/>
       <source>Part</source>
       <translation>ნაწილი</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="412"/>
+      <location filename="../../CommandSimple.cpp" line="413"/>
       <source>Defeaturing</source>
       <translation>თვისების მოცილება</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="413"/>
+      <location filename="../../CommandSimple.cpp" line="414"/>
       <source>Remove feature from a shape</source>
       <translation>მონახაზიდან თვისების წაშლა</translation>
     </message>
@@ -1653,17 +1653,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartElementCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="323"/>
+      <location filename="../../CommandSimple.cpp" line="324"/>
       <source>Part</source>
       <translation>ნაწილი</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="324"/>
+      <location filename="../../CommandSimple.cpp" line="325"/>
       <source>Create shape element copy</source>
       <translation>მონახაზის ელემენტის ასლის შექმნა</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="325"/>
+      <location filename="../../CommandSimple.cpp" line="326"/>
       <source>Create a non-parametric copy of the selected shape element</source>
       <translation>მონიშნული ესკიზის ელემენტის არაპარამეტრული ასლის შექმნა</translation>
     </message>
@@ -1905,17 +1905,17 @@ into its X, Y, and Z components.</source>
   <context>
     <name>CmdPartPointsFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="133"/>
+      <location filename="../../CommandSimple.cpp" line="134"/>
       <source>Part</source>
       <translation>ნაწილი</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="134"/>
+      <location filename="../../CommandSimple.cpp" line="135"/>
       <source>Create points object from geometry</source>
       <translation>წერტილოვანი ობიექტის გეომეტრიიდან შექმნა</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="135"/>
+      <location filename="../../CommandSimple.cpp" line="136"/>
       <source>Create selectable points object from selected geometric object</source>
       <translation>მონიშნული გეომეტრიის ობიექტიდან მონიშვნადი წერტილების ობიექტის შექმნა</translation>
     </message>
@@ -1964,17 +1964,17 @@ of projection.</source>
   <context>
     <name>CmdPartRefineShape</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="351"/>
+      <location filename="../../CommandSimple.cpp" line="352"/>
       <source>Part</source>
       <translation>ნაწილი</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="352"/>
+      <location filename="../../CommandSimple.cpp" line="353"/>
       <source>Refine shape</source>
       <translation>მოხაზულობის დაზუსტება</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="353"/>
+      <location filename="../../CommandSimple.cpp" line="354"/>
       <source>Refine the copy of a shape</source>
       <translation>მონახაზის ასლის დაზუსტება</translation>
     </message>
@@ -2067,17 +2067,17 @@ of projection.</source>
   <context>
     <name>CmdPartShapeFromMesh</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="104"/>
+      <location filename="../../CommandSimple.cpp" line="105"/>
       <source>Part</source>
       <translation>ნაწილი</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="105"/>
+      <location filename="../../CommandSimple.cpp" line="106"/>
       <source>Create shape from mesh...</source>
       <translation>ფიგურის ბადიდან შექმნა...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="106"/>
+      <location filename="../../CommandSimple.cpp" line="107"/>
       <source>Create shape from selected mesh object</source>
       <translation>ფიგურის მონიშნული ბადიდან შექმნა</translation>
     </message>
@@ -2085,17 +2085,17 @@ of projection.</source>
   <context>
     <name>CmdPartSimpleCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="220"/>
+      <location filename="../../CommandSimple.cpp" line="221"/>
       <source>Part</source>
       <translation>ნაწილი</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="221"/>
+      <location filename="../../CommandSimple.cpp" line="222"/>
       <source>Create simple copy</source>
       <translation>უბრალო ასლის შექმნა</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="222"/>
+      <location filename="../../CommandSimple.cpp" line="223"/>
       <source>Create a simple non-parametric copy</source>
       <translation>მარტივი არაპარამეტრული ასლის შექმნა</translation>
     </message>
@@ -2103,17 +2103,17 @@ of projection.</source>
   <context>
     <name>CmdPartSimpleCylinder</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="54"/>
+      <location filename="../../CommandSimple.cpp" line="55"/>
       <source>Part</source>
       <translation>ნაწილი</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="55"/>
+      <location filename="../../CommandSimple.cpp" line="56"/>
       <source>Create Cylinder...</source>
       <translation>ცილინდრის შექმნა...</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="56"/>
+      <location filename="../../CommandSimple.cpp" line="57"/>
       <source>Create a Cylinder</source>
       <translation>ცილინდრის შექმნა</translation>
     </message>
@@ -2196,7 +2196,7 @@ of projection.</source>
       <location filename="../../CommandParametric.cpp" line="244"/>
       <location filename="../../CommandParametric.cpp" line="249"/>
       <source>Torus</source>
-      <translation>ტორი</translation>
+      <translation>ტორუსი</translation>
     </message>
     <message>
       <location filename="../../CommandParametric.cpp" line="234"/>
@@ -2207,17 +2207,17 @@ of projection.</source>
   <context>
     <name>CmdPartTransformedCopy</name>
     <message>
-      <location filename="../../CommandSimple.cpp" line="295"/>
+      <location filename="../../CommandSimple.cpp" line="296"/>
       <source>Part</source>
       <translation>ნაწილი</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="296"/>
+      <location filename="../../CommandSimple.cpp" line="297"/>
       <source>Create transformed copy</source>
       <translation>გარდაქმნილი ასლის შექმნა</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="297"/>
+      <location filename="../../CommandSimple.cpp" line="298"/>
       <source>Create a non-parametric copy with transformed placement</source>
       <translation>არაპარამეტრული ასლის შექმნა გარდაქმნილი მდებარეობით</translation>
     </message>
@@ -2296,22 +2296,22 @@ of projection.</source>
       <translation>დახაზული ზედაპირის შექმნა</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="69"/>
+      <location filename="../../CommandSimple.cpp" line="70"/>
       <source>Create Part Cylinder</source>
       <translation>ნაწილის ცილინდრის შექმნა</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="180"/>
+      <location filename="../../CommandSimple.cpp" line="181"/>
       <source>Points from geometry</source>
       <translation>წერტილები გეომეტრიიდან</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="368"/>
+      <location filename="../../CommandSimple.cpp" line="369"/>
       <source>Refine shape</source>
       <translation>მოხაზულობის გამკვეთრება</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="425"/>
+      <location filename="../../CommandSimple.cpp" line="426"/>
       <source>Defeaturing</source>
       <translation>თვისების მოცილება</translation>
     </message>
@@ -2359,7 +2359,7 @@ of projection.</source>
     <message>
       <location filename="../../TaskShapeBuilder.cpp" line="521"/>
       <source>Solid</source>
-      <translation>მყარი სხეული</translation>
+      <translation>მყარი</translation>
     </message>
     <message>
       <location filename="../../TaskSweep.cpp" line="365"/>
@@ -2370,6 +2370,11 @@ of projection.</source>
       <location filename="../../ViewProviderMirror.cpp" line="210"/>
       <source>Edit Mirror</source>
       <translation>სარკის ჩასწორება</translation>
+    </message>
+    <message>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="1557"/>
+      <source>Project on surface</source>
+      <translation>პროექცია ზედაპირზე</translation>
     </message>
   </context>
   <context>
@@ -2641,7 +2646,7 @@ Note: The placement is expressed in local space of object being attached.</sourc
   <context>
     <name>PartGui::DlgChamferEdges</name>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="1068"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1109"/>
       <source>Chamfer Edges</source>
       <translation>კუთხის ნაზოლიის წიბოები</translation>
     </message>
@@ -3006,7 +3011,7 @@ If both lengths are zero, magnitude of direction is used.</source>
     </message>
     <message>
       <location filename="../../DlgFilletEdges.ui" line="51"/>
-      <location filename="../../DlgFilletEdges.cpp" line="279"/>
+      <location filename="../../DlgFilletEdges.cpp" line="280"/>
       <source>Fillet Parameter</source>
       <translation>მომრგვალების პარამეტრები</translation>
     </message>
@@ -3056,106 +3061,106 @@ If both lengths are zero, magnitude of direction is used.</source>
       <translation>რადიუსი:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="268"/>
+      <location filename="../../DlgFilletEdges.cpp" line="269"/>
       <source>Chamfer Parameter</source>
       <translation>კუთხის ნაზოლის მორგება</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="269"/>
+      <location filename="../../DlgFilletEdges.cpp" line="270"/>
       <source>Chamfer type</source>
       <translation>კუთხის ნაზოლის ტიპი</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="270"/>
+      <location filename="../../DlgFilletEdges.cpp" line="271"/>
       <source>Length:</source>
-      <translation type="unfinished">Length:</translation>
+      <translation>სიგრძე:</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="274"/>
+      <location filename="../../DlgFilletEdges.cpp" line="275"/>
       <source>Edges to chamfer</source>
       <translation>წიბოებიდან ნაზოლამდე</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="867"/>
+      <location filename="../../DlgFilletEdges.cpp" line="912"/>
       <source>Start length</source>
       <translation>საწყისი სიგრძე</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="271"/>
+      <location filename="../../DlgFilletEdges.cpp" line="272"/>
       <source>Equal distance</source>
       <translation>ტოლი დაშორება</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="272"/>
+      <location filename="../../DlgFilletEdges.cpp" line="273"/>
       <source>Two distances</source>
       <translation>ორი დაშორება</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="275"/>
+      <location filename="../../DlgFilletEdges.cpp" line="276"/>
       <source>Size</source>
       <translation>ზომა</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="276"/>
+      <location filename="../../DlgFilletEdges.cpp" line="277"/>
       <source>Size2</source>
       <translation>ზომა2</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="280"/>
+      <location filename="../../DlgFilletEdges.cpp" line="281"/>
       <source>Fillet type</source>
       <translation>მომრგვალების ტიპი</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="281"/>
+      <location filename="../../DlgFilletEdges.cpp" line="282"/>
       <source>Edges to fillet</source>
       <translation>მოსამრგვალებელი წიბოები</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="282"/>
-      <location filename="../../DlgFilletEdges.cpp" line="869"/>
+      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="914"/>
       <source>Start radius</source>
       <translation>საწყისი რადიუსი</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="283"/>
+      <location filename="../../DlgFilletEdges.cpp" line="284"/>
       <source>End radius</source>
       <translation>საბოლოო რადიუსი</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="716"/>
-      <location filename="../../DlgFilletEdges.cpp" line="776"/>
+      <location filename="../../DlgFilletEdges.cpp" line="761"/>
+      <location filename="../../DlgFilletEdges.cpp" line="821"/>
       <source>Edge%1</source>
       <translation>წიბო%1</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="859"/>
+      <location filename="../../DlgFilletEdges.cpp" line="904"/>
       <source>Length</source>
       <translation>სიგრძე</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="861"/>
+      <location filename="../../DlgFilletEdges.cpp" line="906"/>
       <source>Radius</source>
       <translation>რადიუსი</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="915"/>
+      <location filename="../../DlgFilletEdges.cpp" line="960"/>
       <source>No shape selected</source>
       <translation>მოხაზულობა მონიშნული არაა</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="916"/>
+      <location filename="../../DlgFilletEdges.cpp" line="961"/>
       <source>No valid shape is selected.
 Please select a valid shape in the drop-down box first.</source>
       <translation>მონიშნულია არასწორი მოხაზულობა.
 ჯერ ჩამოსაშლელი სიიდან აირჩიეთ სწორი მოხაზულობა.</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="967"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1012"/>
       <source>No edge selected</source>
       <translation>წიბო მონიშნული არაა</translation>
     </message>
     <message>
-      <location filename="../../DlgFilletEdges.cpp" line="968"/>
+      <location filename="../../DlgFilletEdges.cpp" line="1013"/>
       <source>No edge entity is checked to fillet.
 Please check one or more edge entities first.</source>
       <translation>მოსამრგვალებელი წიბო არჩეული არაა.
@@ -3579,7 +3584,7 @@ during file reading (slower but higher details).</source>
       <location filename="../../DlgPrimitives.ui" line="87"/>
       <location filename="../../DlgPrimitives.cpp" line="837"/>
       <source>Torus</source>
-      <translation>ტორუსი</translation>
+      <translation>ტორი</translation>
     </message>
     <message>
       <location filename="../../DlgPrimitives.ui" line="96"/>
@@ -3643,7 +3648,7 @@ during file reading (slower but higher details).</source>
       <location filename="../../DlgPrimitives.ui" line="240"/>
       <location filename="../../DlgPrimitives.ui" line="331"/>
       <source>Length:</source>
-      <translation>სიგრძე:</translation>
+      <translation type="unfinished">Length:</translation>
     </message>
     <message>
       <location filename="../../DlgPrimitives.ui" line="260"/>
@@ -3886,7 +3891,7 @@ during file reading (slower but higher details).</source>
       <translation>აქტიური დოკუმენტის გარეშე</translation>
     </message>
     <message>
-      <location filename="../../DlgPrimitives.cpp" line="2209"/>
+      <location filename="../../DlgPrimitives.cpp" line="2204"/>
       <source>&amp;Create</source>
       <translation>&amp;შექმნა</translation>
     </message>
@@ -3974,12 +3979,12 @@ during file reading (slower but higher details).</source>
       <translation>პროექციის ობიექტი</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="165"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="164"/>
       <source>Have no active document!!!</source>
       <translation>აქტიური დოკუმენტის გარეშე!!!</translation>
     </message>
     <message>
-      <location filename="../../DlgProjectionOnSurface.cpp" line="172"/>
+      <location filename="../../DlgProjectionOnSurface.cpp" line="171"/>
       <source>Can not create a projection object!!!</source>
       <translation>პროექციის ობიექტის შექმნა შეუძლებელია!!!</translation>
     </message>
@@ -4777,7 +4782,7 @@ only created cuts will be visible</source>
       <location filename="../../TaskShapeBuilder.cpp" line="423"/>
       <location filename="../../TaskShapeBuilder.cpp" line="484"/>
       <source>Wrong selection</source>
-      <translation>არასწორი მონიშნული</translation>
+      <translation>არასწორი არჩევანი</translation>
     </message>
     <message>
       <location filename="../../TaskShapeBuilder.cpp" line="231"/>
@@ -4890,7 +4895,7 @@ only created cuts will be visible</source>
     <message>
       <location filename="../../TaskSweep.cpp" line="339"/>
       <source>Wrong selection</source>
-      <translation>არასწორი არჩევანი</translation>
+      <translation>არასწორი მონიშნული</translation>
     </message>
     <message>
       <location filename="../../TaskSweep.cpp" line="339"/>
@@ -5426,7 +5431,7 @@ by dragging a selection rectangle in the 3D view</source>
     <message>
       <location filename="../../TaskFaceColors.ui" line="101"/>
       <source>Box selection</source>
-      <translation>არეალის მონიშვნა</translation>
+      <translation>ყუთის არჩევანი</translation>
     </message>
   </context>
   <context>
@@ -5609,7 +5614,7 @@ by dragging a selection rectangle in the 3D view</source>
       <translation>ფრენე</translation>
     </message>
     <message>
-      <location filename="../../TaskSweep.cpp" line="484"/>
+      <location filename="../../TaskSweep.cpp" line="480"/>
       <source>Select one or more profiles and select an edge or wire
 in the 3D view for the sweep path.</source>
       <translation>3D ხედში შლილის ტრეაქტორიისთვის აირჩიეთ 
@@ -5680,21 +5685,21 @@ in the 3D view for the sweep path.</source>
       <translation>%1-ის ჩასწორება</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="234"/>
+      <location filename="../../AppPartGui.cpp" line="237"/>
       <source>Part and Part Design workbench</source>
       <translation>ნაწილისა და ნაწილის დიზაინის სამუშაო მაგიდა</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="235"/>
-      <location filename="../../AppPartGui.cpp" line="236"/>
-      <location filename="../../AppPartGui.cpp" line="237"/>
       <location filename="../../AppPartGui.cpp" line="238"/>
+      <location filename="../../AppPartGui.cpp" line="239"/>
+      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="241"/>
       <source>Part/Part Design</source>
       <translation>ნაწილი/ნაწილის დიზაინი</translation>
     </message>
     <message>
-      <location filename="../../AppPartGui.cpp" line="239"/>
-      <location filename="../../AppPartGui.cpp" line="240"/>
+      <location filename="../../AppPartGui.cpp" line="242"/>
+      <location filename="../../AppPartGui.cpp" line="243"/>
       <source>Import-Export</source>
       <translation>შეტანა-გატანა</translation>
     </message>
@@ -5770,7 +5775,7 @@ Do you want to continue?</source>
       <location filename="../../TaskAttacher.cpp" line="75"/>
       <location filename="../../TaskCheckGeometry.cpp" line="81"/>
       <source>Face</source>
-      <translation>ზედაპირი</translation>
+      <translation>სიბრტყე</translation>
     </message>
     <message>
       <location filename="../../TaskAttacher.cpp" line="78"/>
@@ -5782,7 +5787,7 @@ Do you want to continue?</source>
       <location filename="../../TaskAttacher.cpp" line="81"/>
       <location filename="../../TaskCheckGeometry.cpp" line="84"/>
       <source>Vertex</source>
-      <translation>წვერო</translation>
+      <translation type="unfinished">Vertex</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="77"/>
@@ -5797,7 +5802,7 @@ Do you want to continue?</source>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="79"/>
       <source>Solid</source>
-      <translation>მყარი</translation>
+      <translation>მყარი სხეული</translation>
     </message>
     <message>
       <location filename="../../TaskCheckGeometry.cpp" line="80"/>
@@ -6097,7 +6102,7 @@ Do you want to continue?</source>
       <translation>ყველა ზომის გასუფთავება</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderExt.cpp" line="854"/>
+      <location filename="../../ViewProviderExt.cpp" line="886"/>
       <source>Set colors...</source>
       <translation>ფერების დაყენება...</translation>
     </message>
@@ -6132,7 +6137,7 @@ Do you want to continue?</source>
       <translation>საკონტროლო წერტილების ჩვენება</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderAttachExtension.cpp" line="118"/>
+      <location filename="../../ViewProviderAttachExtension.cpp" line="105"/>
       <source>Attachment editor</source>
       <translation>მიბმულის რედაქტორი</translation>
     </message>
@@ -6142,14 +6147,19 @@ Do you want to continue?</source>
       <translation>მილის შექმნა</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="172"/>
+      <location filename="../../CommandSimple.cpp" line="173"/>
       <source>Distance in parameter space</source>
       <translation>დაშორება პარამეტრის სივრცეში</translation>
     </message>
     <message>
-      <location filename="../../CommandSimple.cpp" line="173"/>
+      <location filename="../../CommandSimple.cpp" line="174"/>
       <source>Enter distance:</source>
       <translation>შეიყვანეთ მანძილი:</translation>
+    </message>
+    <message>
+      <location filename="../../ViewProviderProjectOnSurface.cpp" line="54"/>
+      <source>Edit projection</source>
+      <translation>პროექციის ჩასწორება</translation>
     </message>
   </context>
   <context>
@@ -6322,7 +6332,7 @@ Do you want to continue?</source>
       <location filename="../../../BOPTools/SplitFeatures.py" line="299"/>
       <location filename="../../../BOPTools/SplitFeatures.py" line="493"/>
       <source>Click 'Continue' to create the feature anyway, or 'Abort' to cancel.</source>
-      <translation>დააწექით "გაგრძელებას" თვისების მაინც შესაქმნელად, ან "შეწყვეტას", გაუქმებისთვის.</translation>
+      <translation>დააწექით "გაგრძელება"-ს თვისების მაინც შესაქმნელად, ან "შეწყვეტა"-ს, გაუქმებისთვის.</translation>
     </message>
     <message>
       <location filename="../../../BOPTools/SplitFeatures.py" line="157"/>
@@ -6393,7 +6403,7 @@ for collision or distance filtering.</source>
     <message>
       <location filename="../../../CompoundTools/_CommandCompoundFilter.py" line="111"/>
       <source>Click 'Continue' to create the feature anyway, or 'Abort' to cancel.</source>
-      <translation>დააწექით "გაგრძელება"-ს თვისების მაინც შესაქმნელად, ან "შეწყვეტა"-ს, გაუქმებისთვის.</translation>
+      <translation>დააწექით "გაგრძელებას" თვისების მაინც შესაქმნელად, ან "შეწყვეტას", გაუქმებისთვის.</translation>
     </message>
   </context>
   <context>
@@ -6447,7 +6457,7 @@ It will create a 'Compound Filter' for each shape.</source>
       <location filename="../../../AttachmentEditor/TaskAttachmentEditor.py" line="215"/>
       <location filename="../../../AttachmentEditor/TaskAttachmentEditor.py" line="228"/>
       <source>Attachment</source>
-      <translation>მიმაგრება</translation>
+      <translation>დანართი</translation>
     </message>
     <message>
       <location filename="../../../AttachmentEditor/TaskAttachmentEditor.py" line="217"/>
@@ -6624,7 +6634,7 @@ It will create a 'Compound Filter' for each shape.</source>
     <message>
       <location filename="../../../BasicShapes/ShapeContent.py" line="156"/>
       <source>Continuity</source>
-      <translation>გაგრძელება</translation>
+      <translation>უწყვეტობა</translation>
     </message>
     <message>
       <location filename="../../../BasicShapes/ShapeContent.py" line="163"/>
@@ -6892,7 +6902,7 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>FaceMaker</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="72"/>
+      <location filename="../../../App/FaceMaker.cpp" line="75"/>
       <source>Shape must be a wire, edge or compound. Something else was supplied.</source>
       <translation>მოხაზულობა უნდა იყოს პოლიხაზი, წიბო ან გადაბმა. მოწოდებულია რაღაც სხვა.</translation>
     </message>
@@ -6900,12 +6910,12 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>Part::FaceMakerSimple</name>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="262"/>
+      <location filename="../../../App/FaceMaker.cpp" line="281"/>
       <source>Simple</source>
       <translation>მარტივი</translation>
     </message>
     <message>
-      <location filename="../../../App/FaceMaker.cpp" line="267"/>
+      <location filename="../../../App/FaceMaker.cpp" line="286"/>
       <source>Makes separate plane face from every wire independently. No support for holes; wires can be on different planes.</source>
       <translation>თითოეული პოლიხაზისგან სიბრტყის ზედაპირის ცალცალკე შექმნა. არ გააჩნია ხვრელების მხარდაჭერა. პოლიხაზები შეიძლება სხვადასხვა სიბრტყეებზე იყოს.</translation>
     </message>
@@ -6939,12 +6949,12 @@ A 'Compound Filter' can be used to extract the remaining pieces.</source>
   <context>
     <name>Part::FaceMakerExtrusion</name>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="337"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="388"/>
       <source>Part Extrude facemaker</source>
       <translation>ნაწილის გამოწნეხვის ზედაპირი</translation>
     </message>
     <message>
-      <location filename="../../../App/FeatureExtrusion.cpp" line="342"/>
+      <location filename="../../../App/FeatureExtrusion.cpp" line="393"/>
       <source>Supports making faces with holes, does not support nesting.</source>
       <translation>შეუძლია ნახვრეტებიანი სიბრტყეების შექმნა. არ გააჩნია ნესტინგის მხარდაჭერა.</translation>
     </message>

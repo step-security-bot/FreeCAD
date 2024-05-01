@@ -2721,7 +2721,7 @@ public:
     {
         sAppModule = "Sketcher";
         sGroup = "Sketcher";
-        sMenuText = QT_TR_NOOP("Horizontal/Vertical");
+        sMenuText = QT_TR_NOOP("Constrain horizontal/vertical");
         sToolTipText = QT_TR_NOOP("Constrains a single line to either horizontal or vertical.");
         sWhatsThis = "Sketcher_CompHorVer";
         sStatusTip = sToolTipText;
@@ -3031,7 +3031,7 @@ CmdSketcherConstrainHorVer::CmdSketcherConstrainHorVer()
 {
     sAppModule = "Sketcher";
     sGroup = "Sketcher";
-    sMenuText = QT_TR_NOOP("Horizontal/Vertical");
+    sMenuText = QT_TR_NOOP("Constrain horizontal/vertical");
     sToolTipText = QT_TR_NOOP("Constrains a single line to either horizontal or vertical, whichever is closer to current alignment.");
     sWhatsThis = "Sketcher_ConstrainHorVer";
     sStatusTip = sToolTipText;
@@ -3077,7 +3077,7 @@ CmdSketcherConstrainHorizontal::CmdSketcherConstrainHorizontal()
 {
     sAppModule = "Sketcher";
     sGroup = "Sketcher";
-    sMenuText = QT_TR_NOOP("Constrain horizontally");
+    sMenuText = QT_TR_NOOP("Constrain horizontal");
     sToolTipText = QT_TR_NOOP("Create a horizontal constraint on the selected item");
     sWhatsThis = "Sketcher_ConstrainHorizontal";
     sStatusTip = sToolTipText;
@@ -3122,7 +3122,7 @@ CmdSketcherConstrainVertical::CmdSketcherConstrainVertical()
 {
     sAppModule = "Sketcher";
     sGroup = "Sketcher";
-    sMenuText = QT_TR_NOOP("Constrain vertically");
+    sMenuText = QT_TR_NOOP("Constrain vertical");
     sToolTipText = QT_TR_NOOP("Create a vertical constraint on the selected item");
     sWhatsThis = "Sketcher_ConstrainVertical";
     sStatusTip = sToolTipText;
@@ -4220,7 +4220,7 @@ CmdSketcherConstrainPointOnObject::CmdSketcherConstrainPointOnObject()
 {
     sAppModule = "Sketcher";
     sGroup = "Sketcher";
-    sMenuText = QT_TR_NOOP("Constrain point onto object");
+    sMenuText = QT_TR_NOOP("Constrain point on object");
     sToolTipText = QT_TR_NOOP("Fix a point onto an object");
     sWhatsThis = "Sketcher_ConstrainPointOnObject";
     sStatusTip = sToolTipText;
@@ -9230,7 +9230,7 @@ CmdSketcherConstrainSymmetric::CmdSketcherConstrainSymmetric()
 {
     sAppModule = "Sketcher";
     sGroup = "Sketcher";
-    sMenuText = QT_TR_NOOP("Constrain symmetrical");
+    sMenuText = QT_TR_NOOP("Constrain symmetric");
     sToolTipText = QT_TR_NOOP("Create a symmetry constraint "
                               "between two points\n"
                               "with respect to a line or a third point");
@@ -9779,6 +9779,59 @@ bool CmdSketcherConstrainSnellsLaw::isActive()
 }
 
 // ======================================================================================
+DEF_STD_CMD_A(CmdSketcherChangeDimensionConstraint)
+
+CmdSketcherChangeDimensionConstraint::CmdSketcherChangeDimensionConstraint()
+    : Command("Sketcher_ChangeDimensionConstraint")
+{
+    sAppModule = "Sketcher";
+    sGroup = "Sketcher";
+    sMenuText = QT_TR_NOOP("Change value");
+    sToolTipText = QT_TR_NOOP("Change the value of a dimensional constraint");
+    sWhatsThis = "Sketcher_ChangeDimensionConstraint";
+    sStatusTip = sToolTipText;
+    eType = ForEdit;
+}
+
+void CmdSketcherChangeDimensionConstraint::activated(int iMsg)
+{
+    Q_UNUSED(iMsg);
+
+    auto getDimConstraint = []() {
+        std::vector<Gui::SelectionObject> selection{getSelection().getSelectionEx()};
+        if (selection.size() != 1 || selection[0].getSubNames().size() != 1) {
+            throw Base::RuntimeError();
+        }
+
+        if (auto sketch = dynamic_cast<Sketcher::SketchObject*>(selection[0].getObject())) {
+            std::string subName = selection[0].getSubNames().at(0);
+            if (subName.size() > 10 && subName.substr(0, 10) == "Constraint") {
+                int ConstrId = Sketcher::PropertyConstraintList::getIndexFromConstraintName(subName);
+                return std::make_tuple(sketch, ConstrId);
+            }
+        }
+
+        throw Base::RuntimeError();
+    };
+
+    try {
+        auto value = getDimConstraint();
+        EditDatumDialog editDatumDialog(std::get<0>(value), std::get<1>(value));
+        editDatumDialog.exec(false);
+    }
+    catch (const Base::RuntimeError&) {
+        Gui::TranslatedUserWarning(getActiveGuiDocument()->getDocument(),
+                                   QObject::tr("Wrong selection"),
+                                   QObject::tr("Select one dimensional constraint from the sketch."));
+    }
+}
+
+bool CmdSketcherChangeDimensionConstraint::isActive()
+{
+    return isCommandActive(getActiveGuiDocument());
+}
+
+// ======================================================================================
 /*** Creation Mode / Toggle to or from Reference ***/
 DEF_STD_CMD_AU(CmdSketcherToggleDrivingConstraint)
 
@@ -10053,6 +10106,7 @@ void CreateSketcherCommandsConstraints()
     rcCmdMgr.addCommand(new CmdSketcherConstrainPointOnObject());
     rcCmdMgr.addCommand(new CmdSketcherConstrainSymmetric());
     rcCmdMgr.addCommand(new CmdSketcherConstrainSnellsLaw());
+    rcCmdMgr.addCommand(new CmdSketcherChangeDimensionConstraint());
     rcCmdMgr.addCommand(new CmdSketcherToggleDrivingConstraint());
     rcCmdMgr.addCommand(new CmdSketcherToggleActiveConstraint());
     rcCmdMgr.addCommand(new CmdSketcherCompDimensionTools());

@@ -954,84 +954,96 @@
       <translation type="unfinished">Use non ccx defaults</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="454"/>
       <source>Time Initial Step</source>
       <translation type="unfinished">Time Initial Step</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="470"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="502"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="541"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="596"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="651"/>
       <source>s</source>
       <translation>с</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="477"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
       <source>Time End</source>
       <translation type="unfinished">Time End</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="516"/>
-      <source>Beam, shell element 3D output format</source>
-      <translation type="unfinished">Beam, shell element 3D output format</translation>
-    </message>
-    <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="523"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="665"/>
       <source>3D Output, unchecked for 2D</source>
       <translation type="unfinished">3D Output, unchecked for 2D</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="544"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="686"/>
       <source>Thermo mechanical defaults</source>
       <translation type="unfinished">Thermo mechanical defaults</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="552"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="694"/>
       <source>Analysis type (transient or steady state)</source>
       <translation type="unfinished">Analysis type (transient or steady state)</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="559"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="701"/>
       <source>Use steady state</source>
       <translation type="unfinished">Use steady state</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="575"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
       <source>Maximum number of iterations</source>
       <translation type="unfinished">Maximum number of iterations</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="609"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="548"/>
+      <source>Time Minimum Step</source>
+      <translation type="unfinished">Time Minimum Step</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="603"/>
+      <source>Time Maximum Step</source>
+      <translation type="unfinished">Time Maximum Step</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="658"/>
+      <source>Beam, shell element 3D output format</source>
+      <translation type="unfinished">Beam, shell element 3D output format</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="722"/>
       <source>Frequency defaults</source>
       <translation type="unfinished">Frequency defaults</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="617"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="730"/>
       <source>Eigenmode number</source>
       <translation type="unfinished">Eigenmode number</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="662"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="775"/>
       <source>High frequency limit</source>
       <translation>Верхня межа частоти</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="700"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="748"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="813"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="861"/>
       <source>Hz</source>
       <translation>Гц</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="707"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="820"/>
       <source>Low frequency limit</source>
       <translation>Нижня межа частоти</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="145"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="149"/>
       <source>File does not exist</source>
       <translation type="unfinished">File does not exist</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="146"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="150"/>
       <source>The specified executable
 '%1'
  does not exist!
@@ -1105,7 +1117,7 @@ will be merged to make the volume boundaries invisible.</translation>
     <message>
       <location filename="../../DlgSettingsFemElmer.ui" line="72"/>
       <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Leave blank to use default Elmer elmer binary file&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600;"&gt;Note:&lt;/span&gt; To use multithreading you must specify here&lt;br&gt; the executable variant with the suffix &amp;quot;_mpi&amp;quot;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-      <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Leave blank to use default Elmer elmer binary file&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600;"&gt;Note:&lt;/span&gt; To use multithreading you must specify here&lt;br&gt; the executable variant with the suffix &amp;quot;_mpi&amp;quot;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Залишіть порожнім, щоб використовувати стандартний бінарний файл Elmer&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600;"&gt;Примітка:&lt;/span&gt; Для використання багато поточності необхідно вказати тут&lt;br&gt; варіант виконуваного файлу з суфіксом &amp;quot;_mpi&amp;quot;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsFemElmer.ui" line="199"/>
@@ -1190,13 +1202,12 @@ for means volumes for a volume mesh and faces for a shell mesh.
 
 FEM: Only FEM elements will be exported. This means only edges
 not belonging to faces and faces not belonging to volumes.</source>
-      <translation type="unfinished">All: All elements will be exported.
+      <translation>Всі: Всі елементи будуть експортовані.
 
-Highest: Only the highest elements will be exported. This means
-for means volumes for a volume mesh and faces for a shell mesh.
+Найвищий: Буде експортовано лише найвищі елементи. Це означає об'єми для об'ємної сітки та грані для сітки оболонок.
 
-FEM: Only FEM elements will be exported. This means only edges
-not belonging to faces and faces not belonging to volumes.</translation>
+МСЕ: Експортуватимуться лише елементи МСЕ. Це означає лише ребра
+що не належать до граней та граней, що не належать до об'ємів.</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsFemExportAbaqus.ui" line="47"/>
@@ -3538,7 +3549,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="72"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="69"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="337"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="862"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="944"/>
       <source>A dialog is already open in the task panel</source>
       <translation>Діалогове вікно вже відкрито в панелі задач</translation>
     </message>
@@ -3550,7 +3561,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="73"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="70"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="338"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="863"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="945"/>
       <source>Do you want to close this dialog?</source>
       <translation>Ви бажаєте закрити це діалогове вікно?</translation>
     </message>
@@ -3686,7 +3697,7 @@ Note: for 2D only setting for x is possible,
       <translation type="unfinished">Local coordinate system</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderFemConstraint.cpp" line="141"/>
+      <location filename="../../ViewProviderFemConstraint.cpp" line="142"/>
       <source>Edit analysis feature</source>
       <translation type="unfinished">Edit analysis feature</translation>
     </message>
@@ -5082,77 +5093,82 @@ used for the Elmer solver</translation>
       <translation>Макс. розмір:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="44"/>
+      <location filename="../../TaskTetParameter.ui" line="46"/>
+      <source>Min. Size:</source>
+      <translation type="unfinished">Min. Size:</translation>
+    </message>
+    <message>
+      <location filename="../../TaskTetParameter.ui" line="62"/>
       <source>Second order</source>
       <translation>Другий порядок</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="53"/>
+      <location filename="../../TaskTetParameter.ui" line="71"/>
       <source>Fineness:</source>
       <translation>Чистота:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="64"/>
+      <location filename="../../TaskTetParameter.ui" line="82"/>
       <source>VeryCoarse</source>
       <translation>Дуже шорсткий</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="69"/>
+      <location filename="../../TaskTetParameter.ui" line="87"/>
       <source>Coarse</source>
       <translation>Шорсткий</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="74"/>
+      <location filename="../../TaskTetParameter.ui" line="92"/>
       <source>Moderate</source>
       <translation>Помірний</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="79"/>
+      <location filename="../../TaskTetParameter.ui" line="97"/>
       <source>Fine</source>
       <translation>Добре</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="84"/>
+      <location filename="../../TaskTetParameter.ui" line="102"/>
       <source>VeryFine</source>
       <translation>Дуже добре</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="89"/>
+      <location filename="../../TaskTetParameter.ui" line="107"/>
       <source>UserDefined</source>
       <translation>Визначений користувачем</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="97"/>
+      <location filename="../../TaskTetParameter.ui" line="115"/>
       <source>Growth Rate:</source>
       <translation>Темп зростання:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="111"/>
+      <location filename="../../TaskTetParameter.ui" line="129"/>
       <source>Nbr. Segs per Edge:</source>
       <translation>Кількість відрізків на ребро:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="128"/>
+      <location filename="../../TaskTetParameter.ui" line="146"/>
       <source>Nbr. Segs per Radius:</source>
       <translation>Кількість відрізків на радіус:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="144"/>
+      <location filename="../../TaskTetParameter.ui" line="162"/>
       <source>Optimize</source>
       <translation>Оптимізувати</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="166"/>
+      <location filename="../../TaskTetParameter.ui" line="184"/>
       <source>Node count:</source>
       <translation type="unfinished">Node count:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="180"/>
+      <location filename="../../TaskTetParameter.ui" line="198"/>
       <source>Triangle count:</source>
       <translation>Кількість трикутників:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="194"/>
+      <location filename="../../TaskTetParameter.ui" line="212"/>
       <source>Tetrahedron count:</source>
       <translation type="unfinished">Tetrahedron count:</translation>
     </message>
@@ -5726,7 +5742,7 @@ used for the Elmer solver</translation>
     </message>
   </context>
   <context>
-    <name>FEM_SolverCalculixCxxtools</name>
+    <name>FEM_SolverCalculiXCcxTools</name>
     <message>
       <location filename="../../../femcommands/commands.py" line="1058"/>
       <source>Solver CalculiX Standard</source>

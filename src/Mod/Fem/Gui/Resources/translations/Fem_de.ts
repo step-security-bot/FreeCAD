@@ -954,84 +954,96 @@
       <translation>Nicht-ccx-Standardwerte verwenden</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="454"/>
       <source>Time Initial Step</source>
       <translation>initialer Zeitschritt</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="470"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="502"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="541"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="596"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="651"/>
       <source>s</source>
       <translation>s</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="477"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
       <source>Time End</source>
       <translation>Zeit Ende</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="516"/>
-      <source>Beam, shell element 3D output format</source>
-      <translation>Träger, Hüll-Element 3D Ausgabeformat</translation>
-    </message>
-    <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="523"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="665"/>
       <source>3D Output, unchecked for 2D</source>
       <translation>3D-Ausgabe, deaktiviert für 2D</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="544"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="686"/>
       <source>Thermo mechanical defaults</source>
       <translation>Thermo-mechanische Standardwerte</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="552"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="694"/>
       <source>Analysis type (transient or steady state)</source>
       <translation>Art der Analyse (transient oder stationärer Zustand)</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="559"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="701"/>
       <source>Use steady state</source>
       <translation>Stationären Zustand verwenden</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="575"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
       <source>Maximum number of iterations</source>
       <translation>Maximale Anzahl an Iterationen</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="609"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="548"/>
+      <source>Time Minimum Step</source>
+      <translation>Minimaler Zeitschritt</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="603"/>
+      <source>Time Maximum Step</source>
+      <translation>Maximaler Zeitschritt</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="658"/>
+      <source>Beam, shell element 3D output format</source>
+      <translation>Träger, Hüll-Element 3D Ausgabeformat</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="722"/>
       <source>Frequency defaults</source>
       <translation>Frequenz-Vorgabewerte</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="617"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="730"/>
       <source>Eigenmode number</source>
       <translation>Anzahl Eigenformen</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="662"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="775"/>
       <source>High frequency limit</source>
       <translation>Höchste Frequenz</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="700"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="748"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="813"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="861"/>
       <source>Hz</source>
       <translation>Hz</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="707"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="820"/>
       <source>Low frequency limit</source>
       <translation>Niedrigste Frequenz</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="145"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="149"/>
       <source>File does not exist</source>
       <translation>Datei existiert nicht</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="146"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="150"/>
       <source>The specified executable
 '%1'
  does not exist!
@@ -1394,7 +1406,7 @@ ein Analysebehälter angelegt wird</translation>
     <message>
       <location filename="../../DlgSettingsFemGmshImp.cpp" line="79"/>
       <source>File does not exist</source>
-      <translation>Datei existiert nicht</translation>
+      <translation>Datei nicht gefunden</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsFemGmshImp.cpp" line="80"/>
@@ -1614,7 +1626,7 @@ iterativen Löser eingesetzt wird und die Fehlermeldung
     <message>
       <location filename="../../DlgSettingsFemZ88Imp.cpp" line="107"/>
       <source>File does not exist</source>
-      <translation>Datei nicht gefunden</translation>
+      <translation>Datei existiert nicht</translation>
     </message>
     <message>
       <location filename="../../DlgSettingsFemZ88Imp.cpp" line="108"/>
@@ -1964,7 +1976,7 @@ Geben Sie bitte eine andere Datei an.</translation>
       <location filename="../../TaskFemConstraintDisplacement.cpp" line="327"/>
       <location filename="../../TaskFemConstraintDisplacement.cpp" line="398"/>
       <source>Selected object is not a part!</source>
-      <translation>Ausgewähltes Objekt ist kein Teil!</translation>
+      <translation>Ausgewähltes Objekt ist kein Part!</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintDisplacement.cpp" line="363"/>
@@ -1993,7 +2005,7 @@ Geben Sie bitte eine andere Datei an.</translation>
       <location filename="../../TaskFemConstraintFixed.cpp" line="120"/>
       <location filename="../../TaskFemConstraintFixed.cpp" line="192"/>
       <source>Selected object is not a part!</source>
-      <translation>Ausgewähltes Objekt ist kein Part!</translation>
+      <translation>Ausgewähltes Objekt ist kein Teilobjekt!</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintFixed.cpp" line="157"/>
@@ -2122,7 +2134,7 @@ Geben Sie bitte eine andere Datei an.</translation>
       <location filename="../../TaskFemConstraintFluidBoundary.cpp" line="830"/>
       <location filename="../../TaskFemConstraintFluidBoundary.cpp" line="902"/>
       <source>Selected object is not a part!</source>
-      <translation>Ausgewähltes Objekt ist kein Teilobjekt!</translation>
+      <translation>Ausgewähltes Objekt ist kein Teil!</translation>
     </message>
     <message>
       <location filename="../../TaskFemConstraintFluidBoundary.cpp" line="867"/>
@@ -3472,7 +3484,7 @@ Hinweis: Für 2D ist nur für x möglich,
       <location filename="../../PlaneWidget.ui" line="26"/>
       <location filename="../../PlaneWidget.ui" line="86"/>
       <source>x</source>
-      <translation>х</translation>
+      <translation>x</translation>
     </message>
     <message>
       <location filename="../../PlaneWidget.ui" line="43"/>
@@ -3527,7 +3539,7 @@ Hinweis: Für 2D ist nur für x möglich,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="72"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="69"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="337"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="862"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="944"/>
       <source>A dialog is already open in the task panel</source>
       <translation>Im Aufgabenbereich ist bereits ein Dialog geöffnet</translation>
     </message>
@@ -3539,7 +3551,7 @@ Hinweis: Für 2D ist nur für x möglich,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="73"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="70"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="338"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="863"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="945"/>
       <source>Do you want to close this dialog?</source>
       <translation>Soll dieser Dialog geschlossen werden?</translation>
     </message>
@@ -3675,7 +3687,7 @@ Hinweis: Für 2D ist nur für x möglich,
       <translation>Lokales Koordinatensystem</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderFemConstraint.cpp" line="141"/>
+      <location filename="../../ViewProviderFemConstraint.cpp" line="142"/>
       <source>Edit analysis feature</source>
       <translation>Analyseelement bearbeiten</translation>
     </message>
@@ -3987,7 +3999,7 @@ Siehe das nachfolgende Beschreibungsfeld für mögliche Variablen.</translation>
     <message>
       <location filename="../../SphereWidget.ui" line="26"/>
       <source>x</source>
-      <translation>х</translation>
+      <translation>x</translation>
     </message>
     <message>
       <location filename="../../SphereWidget.ui" line="49"/>
@@ -4540,7 +4552,7 @@ Normalenvektors der Fläche wird als Richtung verwendet</translation>
     <message>
       <location filename="../../TaskFemConstraintForce.ui" line="137"/>
       <source>Reverse direction</source>
-      <translation>Umgekehrte Richtung</translation>
+      <translation>Richtung umkehren</translation>
     </message>
   </context>
   <context>
@@ -4819,7 +4831,7 @@ used for the Elmer solver</source>
     <message>
       <location filename="../../TaskPostDataAlongLine.ui" line="64"/>
       <source>x</source>
-      <translation>x</translation>
+      <translation>х</translation>
     </message>
     <message>
       <location filename="../../TaskPostDataAlongLine.ui" line="103"/>
@@ -5071,77 +5083,82 @@ used for the Elmer solver</source>
       <translation>Max. Größe:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="44"/>
+      <location filename="../../TaskTetParameter.ui" line="46"/>
+      <source>Min. Size:</source>
+      <translation type="unfinished">Min. Size:</translation>
+    </message>
+    <message>
+      <location filename="../../TaskTetParameter.ui" line="62"/>
       <source>Second order</source>
       <translation>Zweite Ordnung</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="53"/>
+      <location filename="../../TaskTetParameter.ui" line="71"/>
       <source>Fineness:</source>
       <translation>Feinheit:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="64"/>
+      <location filename="../../TaskTetParameter.ui" line="82"/>
       <source>VeryCoarse</source>
       <translation>Sehr grob</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="69"/>
+      <location filename="../../TaskTetParameter.ui" line="87"/>
       <source>Coarse</source>
       <translation>Grob</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="74"/>
+      <location filename="../../TaskTetParameter.ui" line="92"/>
       <source>Moderate</source>
       <translation>Mittel</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="79"/>
+      <location filename="../../TaskTetParameter.ui" line="97"/>
       <source>Fine</source>
       <translation>Fein</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="84"/>
+      <location filename="../../TaskTetParameter.ui" line="102"/>
       <source>VeryFine</source>
       <translation>Sehr fein</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="89"/>
+      <location filename="../../TaskTetParameter.ui" line="107"/>
       <source>UserDefined</source>
       <translation>Benutzerdefiniert</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="97"/>
+      <location filename="../../TaskTetParameter.ui" line="115"/>
       <source>Growth Rate:</source>
       <translation>Wachstumsrate:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="111"/>
+      <location filename="../../TaskTetParameter.ui" line="129"/>
       <source>Nbr. Segs per Edge:</source>
       <translation>Anz. Segmente pro Kante:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="128"/>
+      <location filename="../../TaskTetParameter.ui" line="146"/>
       <source>Nbr. Segs per Radius:</source>
       <translation>Anz. Segmente pro Radius:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="144"/>
+      <location filename="../../TaskTetParameter.ui" line="162"/>
       <source>Optimize</source>
       <translation>Optimieren</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="166"/>
+      <location filename="../../TaskTetParameter.ui" line="184"/>
       <source>Node count:</source>
       <translation>Knotenanzahl:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="180"/>
+      <location filename="../../TaskTetParameter.ui" line="198"/>
       <source>Triangle count:</source>
       <translation>Dreiecksanzahl:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="194"/>
+      <location filename="../../TaskTetParameter.ui" line="212"/>
       <source>Tetrahedron count:</source>
       <translation>Tetraederanzahl:</translation>
     </message>
@@ -5715,7 +5732,7 @@ used for the Elmer solver</source>
     </message>
   </context>
   <context>
-    <name>FEM_SolverCalculixCxxtools</name>
+    <name>FEM_SolverCalculiXCcxTools</name>
     <message>
       <location filename="../../../femcommands/commands.py" line="1058"/>
       <source>Solver CalculiX Standard</source>
@@ -5827,7 +5844,7 @@ used for the Elmer solver</source>
       <location filename="../../../femsolver/solver_taskpanel.py" line="308"/>
       <location filename="../../../femsolver/solver_taskpanel.py" line="312"/>
       <source>Run</source>
-      <translation>laufen</translation>
+      <translation>Ausführen</translation>
     </message>
     <message>
       <location filename="../../../femsolver/solver_taskpanel.py" line="310"/>
@@ -6184,7 +6201,7 @@ Bitte wählen Sie zuerst einen Ergebnistyp.</translation>
       <location filename="../../CylinderWidget.ui" line="26"/>
       <location filename="../../CylinderWidget.ui" line="110"/>
       <source>x</source>
-      <translation>x</translation>
+      <translation>х</translation>
     </message>
     <message>
       <location filename="../../CylinderWidget.ui" line="49"/>

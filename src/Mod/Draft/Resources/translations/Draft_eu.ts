@@ -615,7 +615,7 @@ Gutxienez 2 izan behar du.</translation>
       <source>The coordinates of the point through which the axis of rotation passes.
 Change the direction of the axis itself in the property editor.</source>
       <translation>Biraketa-ardatza igarotzen den puntuaren koordenatuak.
-Aldatu ardatza beraren norabidea propietateen editorean.</translation>
+Aldatu ardatzaren beraren norabidea propietateen editorean.</translation>
     </message>
     <message>
       <location filename="../ui/TaskPanel_PolarArray.ui" line="120"/>
@@ -839,12 +839,17 @@ of the buttons above</source>
       <translation type="unfinished">Or select a single vertex to move the current working plane without changing its orientation. Then press the button below.</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="264"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="159"/>
+      <source>Grid color</source>
+      <translation>Sareta-kolorea</translation>
+    </message>
+    <message>
+      <location filename="../ui/TaskSelectPlane.ui" line="274"/>
       <source>Resets the working plane to its next position</source>
       <translation>Laneko planoa hurrengo posizioan berrezartzen du</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="267"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="277"/>
       <source>Next</source>
       <translation>Hurrengoa</translation>
     </message>
@@ -861,40 +866,40 @@ will be moved to the center of the view</source>
       <translation>Mugitu laneko planoa</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="159"/>
       <location filename="../ui/TaskSelectPlane.ui" line="169"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="179"/>
       <source>The spacing between the smaller grid lines</source>
       <translation>Sareko lerro txikienen arteko tartea</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="162"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="172"/>
       <source>Grid spacing</source>
       <translation>Sareta-tarteak</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="179"/>
       <location filename="../ui/TaskSelectPlane.ui" line="189"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="199"/>
       <source>The number of squares between each main line of the grid</source>
       <translation>Sareko lerro nagusien arteko karratu kopurua</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="182"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="192"/>
       <source>Main line every</source>
       <translation>Lerro nagusiaren maiztasuna</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="196"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="206"/>
       <source>Grid extension</source>
       <translation>Saretaren hedadura</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="203"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="213"/>
       <source> lines</source>
       <translation> lerroak</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="216"/>
-      <location filename="../ui/TaskSelectPlane.ui" line="228"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="226"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="238"/>
       <source>The distance at which a point can be snapped to
 when approaching the mouse. You can also change this
 value by using the [ and ] keys while drawing</source>
@@ -902,27 +907,27 @@ value by using the [ and ] keys while drawing</source>
  [ eta ] teklak erabiltzen marrazten ari zarenean</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="221"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="231"/>
       <source>Snapping radius</source>
       <translation>Atxikitze-erradioa</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="239"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="249"/>
       <source>Centers the view on the current working plane</source>
       <translation>Bista uneko laneko planoan zentratzen du</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="242"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="252"/>
       <source>Center view</source>
       <translation>Zentratu bista</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="251"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="261"/>
       <source>Resets the working plane to its previous position</source>
       <translation>Laneko planoa aurreko posizioan berrezartzen du</translation>
     </message>
     <message>
-      <location filename="../ui/TaskSelectPlane.ui" line="254"/>
+      <location filename="../ui/TaskSelectPlane.ui" line="264"/>
       <source>Previous</source>
       <translation>Aurrekoa</translation>
     </message>
@@ -1128,7 +1133,7 @@ value by using the [ and ] keys while drawing</source>
     <message>
       <location filename="../ui/TaskPanel_SetStyle.ui" line="248"/>
       <source>Font size</source>
-      <translation>Letra-tipoaren tamaina</translation>
+      <translation>Letra-tamaina</translation>
     </message>
     <message>
       <location filename="../ui/TaskPanel_SetStyle.ui" line="255"/>
@@ -1390,42 +1395,55 @@ Only for the splitFaces and makeShell options.</translation>
       <translation type="unfinished">Keep face names during downgrade/upgrade</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="256"/>
+      <location filename="../ui/preferences-draft.ui" line="263"/>
+      <source>This is a delay during which the mouse is inactive, after entering numbers
+manually in any of the coordinate fields. Setting this to 0 disables the delay.
+If a delay of 1 is set, after entering a numeric value, the mouse will not
+update the field anymore during one second, to avoid moving the mouse
+accidentally and modifying the entered value.</source>
+      <translation type="unfinished">This is a delay during which the mouse is inactive, after entering numbers
+manually in any of the coordinate fields. Setting this to 0 disables the delay.
+If a delay of 1 is set, after entering a numeric value, the mouse will not
+update the field anymore during one second, to avoid moving the mouse
+accidentally and modifying the entered value.</translation>
+    </message>
+    <message>
+      <location filename="../ui/preferences-draft.ui" line="296"/>
       <source>Max. number of editable objects</source>
       <translation>Objektu editagarrien gehieneko kopurua</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="295"/>
+      <location filename="../ui/preferences-draft.ui" line="328"/>
       <source>Edit node pick radius</source>
       <translation type="unfinished">Edit node pick radius</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="302"/>
+      <location filename="../ui/preferences-draft.ui" line="335"/>
       <source>The pick radius of edit nodes</source>
       <translation type="unfinished">The pick radius of edit nodes</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="324"/>
+      <location filename="../ui/preferences-draft.ui" line="357"/>
       <source>Label prefix for clones</source>
       <translation type="unfinished">Label prefix for clones</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="337"/>
+      <location filename="../ui/preferences-draft.ui" line="370"/>
       <source>The default prefix added to the label of new clones</source>
       <translation type="unfinished">The default prefix added to the label of new clones</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="353"/>
+      <location filename="../ui/preferences-draft.ui" line="386"/>
       <source>Construction group label</source>
       <translation type="unfinished">Construction group label</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="366"/>
+      <location filename="../ui/preferences-draft.ui" line="399"/>
       <source>The default label for the construction geometry group</source>
       <translation type="unfinished">The default label for the construction geometry group</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="389"/>
+      <location filename="../ui/preferences-draft.ui" line="422"/>
       <source>The default color for Draft objects in construction mode</source>
       <translation type="unfinished">The default color for Draft objects in construction mode</translation>
     </message>
@@ -1445,22 +1463,22 @@ Only for the splitFaces and makeShell options.</translation>
       <translation>Hautatu oinarri-objektuak kopia egin ondoren</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="369"/>
+      <location filename="../ui/preferences-draft.ui" line="402"/>
       <source>Construction</source>
       <translation>Eraikuntza</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="382"/>
+      <location filename="../ui/preferences-draft.ui" line="415"/>
       <source>Construction geometry color</source>
       <translation>Eraikuntza-geometriaren kolorea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="423"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="316"/>
       <source>Draft classic style</source>
       <translation>Zirriborro-estilo klasikoa</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="428"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="321"/>
       <source>Bitsnpieces style</source>
       <translation>Bitsnpieces estiloa</translation>
     </message>
@@ -1647,7 +1665,7 @@ in the Annotation scale widget. If the scale is 1:100 the multiplier is 100.</tr
       <translation>Lerro-zabalera lehenetsia</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="305"/>
+      <location filename="../ui/preferences-draft.ui" line="338"/>
       <location filename="../ui/preferences-drafttexts.ui" line="220"/>
       <source> px</source>
       <translation> px</translation>
@@ -2221,58 +2239,58 @@ Horrek huts egin dezake DXF R12 ondoko txantiloiekin.</translation>
       <translation>Sareta eta atxikitzea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="331"/>
-      <location filename="../ui/preferences-draftsnap.ui" line="465"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="420"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="455"/>
       <location filename="../ui/preferences-draftsnap.ui" line="493"/>
       <source>Shift</source>
       <translation>Shift</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="302"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="372"/>
       <source>Always snap</source>
       <translation>Atxiki beti</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="385"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="391"/>
       <source>Snap modifier</source>
       <translation>Atxikitze-aldatzailea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="452"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="407"/>
       <source>The Snap modifier key</source>
       <translation>Atxikitzeko tekla aldatzailea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="336"/>
-      <location filename="../ui/preferences-draftsnap.ui" line="470"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="425"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="460"/>
       <location filename="../ui/preferences-draftsnap.ui" line="498"/>
       <source>Ctrl</source>
       <translation>Ctrl</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="341"/>
-      <location filename="../ui/preferences-draftsnap.ui" line="475"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="430"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="465"/>
       <location filename="../ui/preferences-draftsnap.ui" line="503"/>
       <source>Alt</source>
       <translation>Alt</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="392"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="438"/>
       <source>Constrain modifier</source>
       <translation>Murrizketa-aldatzailea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="483"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="445"/>
       <source>The Constrain modifier key</source>
       <translation>Murrizketen tekla aldatzailea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="399"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="473"/>
       <source>Alt modifier</source>
       <translation>Alt aldatzailea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="318"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="480"/>
       <source>The Alt modifier key. The function of this key depends on the command.</source>
       <translation>Alt tekla aldatzailea. Tekla horren funtzioa komandoaren araberakoa da.</translation>
     </message>
@@ -2289,7 +2307,7 @@ Use Draft ToggleGrid to change this for the active view.</translation>
       <translation>Sareta-lerroen arteko distantzia</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draft.ui" line="263"/>
+      <location filename="../ui/preferences-draft.ui" line="303"/>
       <source>The maximum number of objects Draft Edit is allowed to process at the same time</source>
       <translation type="unfinished">The maximum number of objects Draft Edit is allowed to process at the same time</translation>
     </message>
@@ -2411,54 +2429,37 @@ These lines are thicker than normal grid lines.</translation>
       <translation>Atxikitze- eta aldatzaile-teklak</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="436"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="299"/>
       <source>Snap symbol style</source>
       <translation>Atxikitze-ikurraren estiloa</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="511"/>
+      <location filename="../ui/preferences-draft.ui" line="256"/>
       <source>Mouse delay</source>
       <translation>Sagu atzerapena</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="518"/>
-      <source>This is a delay during which the mouse is inactive, after entering
-numbers manually in any of the coordinate fields. Setting this
-to 0 disables the delay. If a delay of 1 is set, after enterting a numeric
-value, the mouse will not update the field anymore during one
-second, to avoid moving the mouse accidentally and modify the
-entered value. If you use a very large value, for ex. 3600, mouse
-movement will be disabled until the command finishes.</source>
-      <translation type="unfinished">This is a delay during which the mouse is inactive, after entering
-numbers manually in any of the coordinate fields. Setting this
-to 0 disables the delay. If a delay of 1 is set, after enterting a numeric
-value, the mouse will not update the field anymore during one
-second, to avoid moving the mouse accidentally and modify the
-entered value. If you use a very large value, for ex. 3600, mouse
-movement will be disabled until the command finishes.</translation>
-    </message>
-    <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="527"/>
+      <location filename="../ui/preferences-draft.ui" line="270"/>
       <source> seconds</source>
       <translation> segundo</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="413"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="306"/>
       <source>The style for snap symbols</source>
       <translation>Atxikitze-ikurren estiloa</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="406"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="342"/>
       <source>Snap symbol color</source>
       <translation>Atxikitze-ikurraren kolorea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="362"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="349"/>
       <source>The color for snap symbols</source>
       <translation>Atxikitze-ikurren kolorea</translation>
     </message>
     <message>
-      <location filename="../ui/preferences-draftsnap.ui" line="299"/>
+      <location filename="../ui/preferences-draftsnap.ui" line="369"/>
       <source>If checked, snapping is activated without the need to press the Snap modifier key</source>
       <translation>Hau markatuta badago, atxikitzea aktibatuko da Snap aldatzaile-tekla sakatu behar izan gabe</translation>
     </message>
@@ -2943,8 +2944,8 @@ movement will be disabled until the command finishes.</translation>
     <message>
       <location filename="../../DraftGui.py" line="492"/>
       <location filename="../../DraftGui.py" line="520"/>
-      <location filename="../../DraftGui.py" line="1461"/>
-      <location filename="../../DraftGui.py" line="1476"/>
+      <location filename="../../DraftGui.py" line="1464"/>
+      <location filename="../../DraftGui.py" line="1479"/>
       <location filename="../../draftguitools/gui_groups.py" line="239"/>
       <location filename="../../draftguitools/gui_groups.py" line="244"/>
       <source>None</source>
@@ -3171,8 +3172,8 @@ Ez dago erabilgarri zirriborroen 'Erabili piezen jatorrizkoak' aukera gaituta ba
     </message>
     <message>
       <location filename="../../DraftGui.py" line="612"/>
-      <location filename="../../DraftGui.py" line="1464"/>
-      <location filename="../../DraftGui.py" line="1479"/>
+      <location filename="../../DraftGui.py" line="1467"/>
+      <location filename="../../DraftGui.py" line="1482"/>
       <source>Autogroup off</source>
       <translation>Talde automatikoa desgaituta</translation>
     </message>
@@ -3266,32 +3267,32 @@ Ez dago erabilgarri zirriborroen 'Erabili piezen jatorrizkoak' aukera gaituta ba
       <translation>Globala {}</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1472"/>
+      <location filename="../../DraftGui.py" line="1475"/>
       <source>Autogroup:</source>
       <translation>Talde automatikoa:</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1611"/>
+      <location filename="../../DraftGui.py" line="1614"/>
       <source>Modify objects</source>
       <translation type="unfinished">Modify objects</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1760"/>
+      <location filename="../../DraftGui.py" line="1763"/>
       <source>Faces</source>
       <translation>Aurpegiak</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1761"/>
+      <location filename="../../DraftGui.py" line="1764"/>
       <source>Remove</source>
       <translation>Kendu</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1762"/>
+      <location filename="../../DraftGui.py" line="1765"/>
       <source>Add</source>
       <translation>Gehitu</translation>
     </message>
     <message>
-      <location filename="../../DraftGui.py" line="1763"/>
+      <location filename="../../DraftGui.py" line="1766"/>
       <source>Facebinder elements</source>
       <translation>Aurpegi-zorro elementuak</translation>
     </message>
@@ -3436,7 +3437,7 @@ FreeCADek liburutegi horiek deskarga ditzan gaitzeko, erantzun 'Bai'.</translati
       <location filename="../../draftmake/make_text.py" line="178"/>
       <location filename="../../draftutils/groups.py" line="95"/>
       <location filename="../../draftutils/gui_utils.py" line="827"/>
-      <location filename="../../draftutils/utils.py" line="1069"/>
+      <location filename="../../draftutils/utils.py" line="1071"/>
       <source>No active document. Aborting.</source>
       <translation>Ez dago dokumentu aktiborik. Abortatzen.</translation>
     </message>
@@ -3477,83 +3478,83 @@ FreeCADek liburutegi horiek deskarga ditzan gaitzeko, erantzun 'Bai'.</translati
       <translation>Ez dauka 'ViewObject.RootNode'.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="650"/>
+      <location filename="../../draftutils/utils.py" line="652"/>
       <source>Solids:</source>
       <translation>Solidoak:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="651"/>
+      <location filename="../../draftutils/utils.py" line="653"/>
       <source>Faces:</source>
       <translation>Aurpegiak:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="652"/>
+      <location filename="../../draftutils/utils.py" line="654"/>
       <source>Wires:</source>
       <translation>Alanbreak:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="653"/>
+      <location filename="../../draftutils/utils.py" line="655"/>
       <source>Edges:</source>
       <translation>Ertzak:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="654"/>
+      <location filename="../../draftutils/utils.py" line="656"/>
       <source>Vertices:</source>
       <translation>Erpinak:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="658"/>
+      <location filename="../../draftutils/utils.py" line="660"/>
       <source>Face</source>
       <translation>Aurpegia</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="663"/>
+      <location filename="../../draftutils/utils.py" line="665"/>
       <source>Wire</source>
       <translation>Alanbrea</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="695"/>
-      <location filename="../../draftutils/utils.py" line="699"/>
+      <location filename="../../draftutils/utils.py" line="697"/>
+      <location filename="../../draftutils/utils.py" line="701"/>
       <source>different types</source>
       <translation>mota anitz</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="709"/>
+      <location filename="../../draftutils/utils.py" line="711"/>
       <source>Objects have different placements. Distance between the two base points:</source>
       <translation type="unfinished">Objects have different placements. Distance between the two base points:</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="1109"/>
+      <location filename="../../draftutils/utils.py" line="1111"/>
       <source>This function will be deprecated in {}. Please use '{}'.</source>
       <translation type="unfinished">This function will be deprecated in {}. Please use '{}'.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="1111"/>
+      <location filename="../../draftutils/utils.py" line="1113"/>
       <source>This function will be deprecated. Please use '{}'.</source>
       <translation type="unfinished">This function will be deprecated. Please use '{}'.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="712"/>
+      <location filename="../../draftutils/utils.py" line="714"/>
       <source>has a different value</source>
       <translation>beste balio bat du</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="715"/>
+      <location filename="../../draftutils/utils.py" line="717"/>
       <source>doesn't exist in one of the objects</source>
       <translation>ez da existitzen objektuetako batean</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="883"/>
+      <location filename="../../draftutils/utils.py" line="885"/>
       <source>%s shares a base with %d other objects. Please check if you want to modify this.</source>
       <translation>%s objektuak oinarri bat partekatzen du beste %d objekturekin. Egiaztatu hau aldatu nahi duzun.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="889"/>
+      <location filename="../../draftutils/utils.py" line="891"/>
       <source>%s cannot be modified because its placement is readonly.</source>
       <translation>%s ezin da aldatu bere kokapena irakurtzeko soilik delako.</translation>
     </message>
     <message>
-      <location filename="../../draftutils/utils.py" line="1032"/>
+      <location filename="../../draftutils/utils.py" line="1034"/>
       <source>Wrong input: unknown document {}</source>
       <translation type="unfinished">Wrong input: unknown document {}</translation>
     </message>
@@ -4790,59 +4791,68 @@ Amaierako angelua oinarriko angelua gehi kantitate hau izango da.</translation>
       <translation>bistaren 'AnnotationStyle' propietatea gehitu da</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="311"/>
+      <location filename="../../draftobjects/patharray.py" line="322"/>
       <source>, path object doesn't have 'Edges'.</source>
       <translation>, bide-objektuak ez du 'Ertzak' elementurik.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="418"/>
-      <location filename="../../draftobjects/patharray.py" line="424"/>
-      <location filename="../../draftobjects/patharray.py" line="430"/>
-      <source>'PathObj' property will be migrated to 'PathObject'</source>
-      <translation>'PathObj' propietatea 'PathObject' propietatera aldatuko da</translation>
+      <location filename="../../draftobjects/patharray.py" line="420"/>
+      <source>migrated 'PathObj' property to 'PathObject'</source>
+      <translation type="unfinished">migrated 'PathObj' property to 'PathObject'</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="465"/>
+      <location filename="../../draftobjects/patharray.py" line="424"/>
+      <source>migrated 'PathSubs' property to 'PathSubelements'</source>
+      <translation type="unfinished">migrated 'PathSubs' property to 'PathSubelements'</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/patharray.py" line="428"/>
+      <source>migrated 'Xlate' property to 'ExtraTranslation'</source>
+      <translation type="unfinished">migrated 'Xlate' property to 'ExtraTranslation'</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/patharray.py" line="431"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="141"/>
+      <location filename="../../draftobjects/pointarray.py" line="145"/>
+      <source>added 'Fuse' property</source>
+      <translation type="unfinished">added 'Fuse' property</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/patharray.py" line="466"/>
       <source>Start Offset too large for path length. Using zero instead.</source>
       <translation>Hasierako desplazamendua luzeegia da bidearen luzerarako. Zero erabiliko da horren ordez.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="471"/>
+      <location filename="../../draftobjects/patharray.py" line="472"/>
       <source>End Offset too large for path length minus Start Offset. Using zero instead.</source>
       <translation>Amaierako desplazamendua luzeegia da bidearen luzera ken hasierako desplazamendurako. Zero erabiliko da horren ordez.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="533"/>
+      <location filename="../../draftobjects/patharray.py" line="534"/>
       <source>Length of tangent vector is zero. Copy not aligned.</source>
       <translation>Bektore tangentzialaren luzera zero da. Kopia ez dago lerrokatuta.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="547"/>
-      <location filename="../../draftobjects/patharray.py" line="569"/>
+      <location filename="../../draftobjects/patharray.py" line="548"/>
+      <location filename="../../draftobjects/patharray.py" line="570"/>
       <source>Length of normal vector is zero. Using a default axis instead.</source>
       <translation>Bektore normalaren luzera zero da. Ardatz lehenetsia erabiliko da haren ordez.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="553"/>
-      <location filename="../../draftobjects/patharray.py" line="575"/>
+      <location filename="../../draftobjects/patharray.py" line="554"/>
+      <location filename="../../draftobjects/patharray.py" line="576"/>
       <source>Tangent and normal vectors are parallel. Normal replaced by a default axis.</source>
       <translation>Bektore tangentziala eta normala paraleloak dira. Normala ardatz lehenetsi batekin ordezkatu da.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="565"/>
+      <location filename="../../draftobjects/patharray.py" line="566"/>
       <source>Cannot calculate normal vector. Using the default normal instead.</source>
       <translation>Ezin da bektore normala kalkulatu. Normal lehenetsia erabiliko da haren ordez.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="581"/>
+      <location filename="../../draftobjects/patharray.py" line="582"/>
       <source>AlignMode {} is not implemented</source>
       <translation>AlignMode {} ez dago inplementatuta</translation>
-    </message>
-    <message>
-      <location filename="../../draftobjects/pointarray.py" line="140"/>
-      <location filename="../../draftobjects/pointarray.py" line="156"/>
-      <source>added property 'ExtraPlacement'</source>
-      <translation>'ExtraPlacement' propietatea gehitu da</translation>
     </message>
     <message>
       <location filename="../../draftmake/make_sketch.py" line="103"/>
@@ -5400,6 +5410,46 @@ Amaierako angelua oinarriko angelua gehi kantitate hau izango da.</translation>
       <translation>bistaren 'TexSize' propietatearen izena aldatu da 'FontSize' izenera</translation>
     </message>
     <message>
+      <location filename="../../draftobjects/label.py" line="321"/>
+      <source>No Target</source>
+      <translation type="unfinished">No Target</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="402"/>
+      <source>Invalid label type</source>
+      <translation type="unfinished">Invalid label type</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="417"/>
+      <source>Tag not available for object</source>
+      <translation type="unfinished">Tag not available for object</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="424"/>
+      <source>Material not available for object</source>
+      <translation type="unfinished">Material not available for object</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="433"/>
+      <source>Position not available for (sub)object</source>
+      <translation type="unfinished">Position not available for (sub)object</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="449"/>
+      <source>Length not available for (sub)object</source>
+      <translation type="unfinished">Length not available for (sub)object</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="463"/>
+      <source>Area not available for (sub)object</source>
+      <translation type="unfinished">Area not available for (sub)object</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/label.py" line="476"/>
+      <source>Volume not available for (sub)object</source>
+      <translation type="unfinished">Volume not available for (sub)object</translation>
+    </message>
+    <message>
       <location filename="../../draftobjects/layer.py" line="81"/>
       <source>added missing view properties</source>
       <translation>falta ziren bista-propietateak gehitu dira</translation>
@@ -5435,7 +5485,7 @@ Amaierako angelua oinarriko angelua gehi kantitate hau izango da.</translation>
       <translation>Hiperesteka irekitzen</translation>
     </message>
     <message>
-      <location filename="../../draftguitools/gui_selectplane.py" line="148"/>
+      <location filename="../../draftguitools/gui_selectplane.py" line="154"/>
       <source>Select 3 vertices, one or more shapes or an object to define a working plane</source>
       <translation type="unfinished">Select 3 vertices, one or more shapes or an object to define a working plane</translation>
     </message>
@@ -5445,6 +5495,16 @@ Amaierako angelua oinarriko angelua gehi kantitate hau izango da.</translation>
 of existing objects in all opened documents?</source>
       <translation type="unfinished">Do you want to update the SVG pattern options
 of existing objects in all opened documents?</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/pointarray.py" line="139"/>
+      <source>added 'ExtraPlacement' property</source>
+      <translation type="unfinished">added 'ExtraPlacement' property</translation>
+    </message>
+    <message>
+      <location filename="../../draftobjects/pointarray.py" line="142"/>
+      <source>migrated 'PointList' property to 'PointObject'</source>
+      <translation type="unfinished">migrated 'PointList' property to 'PointObject'</translation>
     </message>
   </context>
   <context>
@@ -5652,7 +5712,7 @@ Instalatu DXF liburutegiaren gehigarria eskuz
       <translation>Sortu klon bat</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pointarray.py" line="219"/>
+      <location filename="../../draftobjects/pointarray.py" line="208"/>
       <source>Point object doesn't have a discrete point, it cannot be used for an array.</source>
       <translation>Puntu-objektuak ez du puntu diskretu bat, ezin da matrize baterako erabili.</translation>
     </message>
@@ -5678,7 +5738,7 @@ Instalatu DXF liburutegiaren gehigarria eskuz
     </message>
     <message>
       <location filename="../../draftguitools/gui_layers.py" line="278"/>
-      <location filename="../../draftobjects/label.py" line="328"/>
+      <location filename="../../draftobjects/label.py" line="326"/>
       <source>Name</source>
       <translation>Izena</translation>
     </message>
@@ -5718,67 +5778,67 @@ Instalatu DXF liburutegiaren gehigarria eskuz
       <translation>Geruza berria</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="327"/>
+      <location filename="../../draftobjects/label.py" line="325"/>
       <source>Custom</source>
       <translation>Pertsonalizatua</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="329"/>
+      <location filename="../../draftobjects/label.py" line="327"/>
       <source>Label</source>
       <translation>Etiketa</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="330"/>
+      <location filename="../../draftobjects/label.py" line="328"/>
       <source>Position</source>
       <translation>Posizioa</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="331"/>
+      <location filename="../../draftobjects/label.py" line="329"/>
       <source>Length</source>
       <translation>Luzera</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="332"/>
+      <location filename="../../draftobjects/label.py" line="330"/>
       <source>Area</source>
       <translation>Area</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="333"/>
+      <location filename="../../draftobjects/label.py" line="331"/>
       <source>Volume</source>
       <translation>Bolumena</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="334"/>
+      <location filename="../../draftobjects/label.py" line="332"/>
       <source>Tag</source>
       <translation>Etiketa</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="335"/>
+      <location filename="../../draftobjects/label.py" line="333"/>
       <source>Material</source>
       <translation>Materiala</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="336"/>
+      <location filename="../../draftobjects/label.py" line="334"/>
       <source>Label + Position</source>
       <translation>Etiketa + Posizioa</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="337"/>
+      <location filename="../../draftobjects/label.py" line="335"/>
       <source>Label + Length</source>
       <translation>Etiketa + Luzera</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="338"/>
+      <location filename="../../draftobjects/label.py" line="336"/>
       <source>Label + Area</source>
       <translation>Etiketa + Area</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="339"/>
+      <location filename="../../draftobjects/label.py" line="337"/>
       <source>Label + Volume</source>
       <translation>Etiketa + Bolumena</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/label.py" line="343"/>
+      <location filename="../../draftobjects/label.py" line="341"/>
       <source>Label + Material</source>
       <translation>Etiketa + Materiala</translation>
     </message>
@@ -5820,12 +5880,12 @@ Instalatu DXF liburutegiaren gehigarria eskuz
   <context>
     <name>Draft_SelectPlane</name>
     <message>
-      <location filename="../../draftguitools/gui_selectplane.py" line="57"/>
+      <location filename="../../draftguitools/gui_selectplane.py" line="58"/>
       <source>Select plane</source>
       <translation>Hautatu planoa</translation>
     </message>
     <message>
-      <location filename="../../draftguitools/gui_selectplane.py" line="60"/>
+      <location filename="../../draftguitools/gui_selectplane.py" line="61"/>
       <source>Select 3 vertices, one or more shapes or an object to define a working plane.</source>
       <translation type="unfinished">Select 3 vertices, one or more shapes or an object to define a working plane.</translation>
     </message>
@@ -7229,31 +7289,31 @@ ezarri 'Egia' fusiorako edo 'Faltsua' konposaturako</translation>
       <translation>Izkinei emango zaien alakaren tamaina</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="86"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="87"/>
       <source>The base object that will be duplicated.</source>
       <translation>Bikoiztuko den oinarri-objektua.</translation>
     </message>
     <message>
       <location filename="../../draftobjects/patharray.py" line="185"/>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="93"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="94"/>
       <source>The object along which the copies will be distributed. It must contain 'Edges'.</source>
       <translation>Kopiak banatzeko erabiliko den objektua. 'Ertzak' eduki behar ditu.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="100"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="112"/>
       <source>Number of copies to create.</source>
       <translation>Sortuko den kopia kopurua.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="107"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="119"/>
       <source>Rotation factor of the twisted array.</source>
       <translation>Matrize kiribilduaren biraketa-faktorea.</translation>
     </message>
     <message>
       <location filename="../../draftobjects/array.py" line="335"/>
-      <location filename="../../draftobjects/patharray.py" line="216"/>
-      <location filename="../../draftobjects/pathtwistedarray.py" line="114"/>
-      <location filename="../../draftobjects/pointarray.py" line="100"/>
+      <location filename="../../draftobjects/patharray.py" line="227"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="126"/>
+      <location filename="../../draftobjects/pointarray.py" line="111"/>
       <source>Show the individual array elements (only for Link arrays)</source>
       <translation>Erakutsi banakako matrize-elementuak (esteka-matrizeetarako soilik)</translation>
     </message>
@@ -7396,34 +7456,34 @@ Presente badaude, kopiak azpielementu horien luzeran soilik sortuko dira.
 Utzi propietate hau hutsik kopiak 'bide-objektu' osoaren luzeran sortzeko.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="208"/>
+      <location filename="../../draftobjects/patharray.py" line="219"/>
       <source>Number of copies to create</source>
       <translation>Sortuko den kopia kopurua</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="227"/>
+      <location filename="../../draftobjects/patharray.py" line="238"/>
       <source>Additional translation that will be applied to each copy.
 This is useful to adjust for the difference between shape centre and shape reference point.</source>
       <translation>Kopia bakoitzari aplikatuko zaion translazio gehigarria.
 Hau erabilgarria da formaren zentroaren eta formaren erreferentzia-puntuaren arteko diferentzia doitzeko.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="235"/>
+      <location filename="../../draftobjects/patharray.py" line="246"/>
       <source>Alignment vector for 'Tangent' mode</source>
       <translation>Lerrokatze-bektorea 'Tangentea' modurako</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="243"/>
+      <location filename="../../draftobjects/patharray.py" line="254"/>
       <source>Force use of 'Vertical Vector' as local Z direction when using 'Original' or 'Tangent' alignment mode</source>
       <translation>Behartu 'Bektore bertikala' Z norabide lokal gisa erabiltzera, 'Jatorrizkoa' edo 'Tangentea' lerrokatze-modua erabiltzen denean</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="251"/>
+      <location filename="../../draftobjects/patharray.py" line="262"/>
       <source>Direction of the local Z axis when 'Force Vertical' is true</source>
       <translation>Z ardatz lokalaren norabidea 'Behartu bertikala' egia denean</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="259"/>
+      <location filename="../../draftobjects/patharray.py" line="270"/>
       <source>Method to orient the copies along the path.
 - Original: X is curve tangent, Y is normal, and Z is the cross product.
 - Frenet: aligns the object following the local coordinate system along the path.
@@ -7438,17 +7498,17 @@ To get better results with 'Original' or 'Tangent' you may have to set 'Force Ve
 'Jatorrizkoa' eta Tangentea' aukerekin emaitza hobeak lortzeko, 'Behartu bertikala' aukeran egia ezarri behar da.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="268"/>
+      <location filename="../../draftobjects/patharray.py" line="279"/>
       <source>Length from the start of the path to the first copy.</source>
       <translation>Bidearen hasieratik lehenengo kopiarainoko distantzia.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="276"/>
+      <location filename="../../draftobjects/patharray.py" line="287"/>
       <source>Length from the end of the path to the last copy.</source>
       <translation>Bidearen bukaeratik azkeneko kopiarainoko distantzia.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/patharray.py" line="286"/>
+      <location filename="../../draftobjects/patharray.py" line="297"/>
       <source>Orient the copies along the path depending on the 'Align Mode'.
 Otherwise the copies will have the same orientation as the original Base object.</source>
       <translation>Orientatu kopiak bidean zehar 'Lerrokatze moduaren' arabera.
@@ -7467,6 +7527,9 @@ Bestela, kopiek jatorrizko oinarri-objektuaren orientazio bera izango dute.</tra
     </message>
     <message>
       <location filename="../../draftobjects/array.py" line="124"/>
+      <location filename="../../draftobjects/patharray.py" line="211"/>
+      <location filename="../../draftobjects/pathtwistedarray.py" line="102"/>
+      <location filename="../../draftobjects/pointarray.py" line="86"/>
       <source>Specifies if the copies should be fused together if they touch each other (slower)</source>
       <translation>Kopiek elkar ukitzen badute elkarrekin fusionatuko diren ala ez zehazten du (motelagoa)</translation>
     </message>
@@ -7574,15 +7637,14 @@ Propietate hau irakurtzeko soilik da, kopuru hori matrizeko parametroen araberak
       <translation>Kopiak banatzeko erabiliko diren puntuak dituen objektua.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pointarray.py" line="83"/>
+      <location filename="../../draftobjects/pointarray.py" line="94"/>
       <source>Number of copies in the array.
 This property is read-only, as the number depends on the points in 'Point Object'.</source>
       <translation>Matrizeko kopia kopurua.
 Propietate hau irakurtzeko soilik da, kopuru hori 'Puntu-objektua' elementuaren puntuen araberakoa baita.</translation>
     </message>
     <message>
-      <location filename="../../draftobjects/pointarray.py" line="92"/>
-      <location filename="../../draftobjects/pointarray.py" line="135"/>
+      <location filename="../../draftobjects/pointarray.py" line="103"/>
       <source>Additional placement, shift and rotation, that will be applied to each copy</source>
       <translation>Kopia bakoitzari aplikatuko zaion kokapen, desplazamendu eta biraketa gehigarria</translation>
     </message>

@@ -312,7 +312,6 @@ class DraftToolBar:
         self.promptlabel = self._label("promptlabel", self.layout, hide=task)
         self.cmdlabel = self._label("cmdlabel", self.layout, hide=task)
         boldtxt = QtGui.QFont()
-        boldtxt.setWeight(75)
         boldtxt.setBold(True)
         self.cmdlabel.setFont(boldtxt)
 
@@ -1095,10 +1094,13 @@ class DraftToolBar:
         treated as shortcuts
         """
 
-        if txt == "" or txt[0] in "0123456789.,-":
+        if txt == "":
             self.updateSnapper()
-            if txt[0] in "0123456789.,-":
-                self.setMouseMode(False)
+            return
+
+        if txt[0] in "0123456789.,-":
+            self.updateSnapper()
+            self.setMouseMode(False)
             return
 
         txt = txt[0].upper()

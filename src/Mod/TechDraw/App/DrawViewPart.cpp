@@ -317,7 +317,7 @@ GeometryObjectPtr DrawViewPart::makeGeometryForShape(TopoDS_Shape& shape)
 }
 
 //! Modify a shape by centering, scaling and rotating and return the centered (but not rotated) shape
-TopoDS_Shape DrawViewPart::centerScaleRotate(DrawViewPart* dvp, TopoDS_Shape& inOutShape,
+TopoDS_Shape DrawViewPart::centerScaleRotate(const DrawViewPart *dvp, TopoDS_Shape& inOutShape,
                                              Base::Vector3d centroid)
 {
 //    Base::Console().Message("DVP::centerScaleRotate() - %s\n", dvp->getNameInDocument());
@@ -774,18 +774,10 @@ const std::vector<TechDraw::VertexPtr> DrawViewPart::getVertexGeometry() const
 //! TechDraw vertex names run from 0 to n-1
 TechDraw::VertexPtr DrawViewPart::getVertex(std::string vertexName) const
 {
-    const std::vector<TechDraw::VertexPtr> allVertex(DrawViewPart::getVertexGeometry());
-    size_t iTarget = DrawUtil::getIndexFromName(vertexName);
-    if (allVertex.empty()) {
-        //should not happen
-        throw Base::IndexError("DVP::getVertex - No vertices found.");
-    }
-    if (iTarget >= allVertex.size()) {
-        //should not happen
-        throw Base::IndexError("DVP::getVertex - Vertex not found.");
-    }
-
-    return allVertex.at(iTarget);
+    // Base::Console().Message("DVP::getVertex(%s)\n", vertexName.c_str());
+    auto vertexIndex = DrawUtil::getIndexFromName(vertexName);
+    auto vertex = getProjVertexByIndex(vertexIndex);
+    return vertex;
 }
 
 //! returns existing BaseGeom of 2D Edge
@@ -795,11 +787,11 @@ TechDraw::BaseGeomPtr DrawViewPart::getEdge(std::string edgeName) const
     const std::vector<TechDraw::BaseGeomPtr>& geoms = getEdgeGeometry();
     if (geoms.empty()) {
         //should not happen
-        throw Base::IndexError("DVP::getEdge - No edges found.");
+        return nullptr;
     }
     size_t iEdge = DrawUtil::getIndexFromName(edgeName);
     if ((unsigned)iEdge >= geoms.size()) {
-        throw Base::IndexError("DVP::getEdge - Edge not found.");
+        return nullptr;
     }
     return geoms.at(iEdge);
 }
@@ -812,11 +804,11 @@ TechDraw::FacePtr DrawViewPart::getFace(std::string faceName) const
     const std::vector<TechDraw::FacePtr>& faces = getFaceGeometry();
     if (faces.empty()) {
         //should not happen
-        throw Base::IndexError("DVP::getFace - No faces found.");
+        return nullptr;
     }
     size_t iFace = DrawUtil::getIndexFromName(faceName);
     if (iFace >= faces.size()) {
-        throw Base::IndexError("DVP::getFace - Face not found.");
+        return nullptr;
     }
     return faces.at(iFace);
 }
@@ -846,9 +838,7 @@ TechDraw::BaseGeomPtr DrawViewPart::getGeomByIndex(int idx) const
     if (geoms.empty()) {
         return nullptr;
     }
-    if ((unsigned)idx >= geoms.size()) {
-        Base::Console().Error("DVP::getGeomByIndex(%d) - invalid index - size: %d\n", idx,
-                              geoms.size());
+    if (idx >= (int)geoms.size()) {
         return nullptr;
     }
     return geoms.at(idx);
@@ -859,10 +849,9 @@ TechDraw::VertexPtr DrawViewPart::getProjVertexByIndex(int idx) const
 {
     const std::vector<TechDraw::VertexPtr>& geoms = getVertexGeometry();
     if (geoms.empty()) {
-        return nullptr;
+       return nullptr;
     }
     if ((unsigned)idx >= geoms.size()) {
-        Base::Console().Error("DVP::getProjVertexByIndex(%d) - invalid index - size: %d\n", idx);
         return nullptr;
     }
     return geoms.at(idx);
@@ -1272,6 +1261,129 @@ Base::Vector3d DrawViewPart::getXDirection() const
         result = getLegacyX(org, dir);
     }
     return result;
+}
+
+
+void DrawViewPart::rotate(const std::string& rotationdirection)
+{
+    std::pair<Base::Vector3d, Base::Vector3d> newDirs;
+    if (rotationdirection == "Right")
+        newDirs = getDirsFromFront("Left");// Front -> Right -> Rear -> Left -> Front
+    else if (rotationdirection == "Left")
+        newDirs = getDirsFromFront("Right");// Front -> Left -> Rear -> Right -> Front
+    else if (rotationdirection == "Up")
+        newDirs = getDirsFromFront("Bottom");// Front -> Top -> Rear -> Bottom -> Front
+    else if (rotationdirection == "Down")
+        newDirs = getDirsFromFront("Top");// Front -> Bottom -> Rear -> Top -> Front
+
+    Direction.setValue(newDirs.first);
+    XDirection.setValue(newDirs.second);
+    recompute();
+}
+
+void DrawViewPart::spin(const std::string& spindirection)
+{
+    double angle;
+    if (spindirection == "CW")
+        angle = M_PI / 2.0;// Top -> Right -> Bottom -> Left -> Top
+    if (spindirection == "CCW")
+        angle = -M_PI / 2.0;// Top -> Left -> Bottom -> Right -> Top
+
+    spin(angle);
+}
+
+void DrawViewPart::spin(double angle)
+{
+    Base::Vector3d org(0.0, 0.0, 0.0);
+    Base::Vector3d curRot = getXDirection();
+    Base::Vector3d curDir = Direction.getValue();
+    Base::Vector3d newRot = DrawUtil::vecRotate(curRot, angle, curDir, org);
+
+    XDirection.setValue(newRot);
+    recompute();
+}
+
+std::pair<Base::Vector3d, Base::Vector3d> DrawViewPart::getDirsFromFront(std::string viewType)
+{
+    //    Base::Console().Message("DVP::getDirsFromFront(%s)\n", viewType.c_str());
+    std::pair<Base::Vector3d, Base::Vector3d> result;
+
+    Base::Vector3d projDir, rotVec;
+
+    Base::Vector3d org(0.0, 0.0, 0.0);
+    gp_Ax2 anchorCS = getProjectionCS(org);
+    gp_Pnt gOrg(0.0, 0.0, 0.0);
+    gp_Dir gDir = anchorCS.Direction();
+    gp_Dir gXDir = anchorCS.XDirection();
+    gp_Dir gYDir = anchorCS.YDirection();
+    gp_Ax1 gUpAxis(gOrg, gYDir);
+    gp_Ax2 newCS;
+    gp_Dir gNewDir;
+    gp_Dir gNewXDir;
+
+    double angle = M_PI / 2.0;//90*
+
+    if (viewType == "Right") {
+        newCS = anchorCS.Rotated(gUpAxis, angle);
+        projDir = dir2vec(newCS.Direction());
+        rotVec = dir2vec(newCS.XDirection());
+    }
+    else if (viewType == "Left") {
+        newCS = anchorCS.Rotated(gUpAxis, -angle);
+        projDir = dir2vec(newCS.Direction());
+        rotVec = dir2vec(newCS.XDirection());
+    }
+    else if (viewType == "Top") {
+        projDir = dir2vec(gYDir);
+        rotVec = dir2vec(gXDir);
+    }
+    else if (viewType == "Bottom") {
+        projDir = dir2vec(gYDir.Reversed());
+        rotVec = dir2vec(gXDir);
+    }
+    else if (viewType == "Rear") {
+        projDir = dir2vec(gDir.Reversed());
+        rotVec = dir2vec(gXDir.Reversed());
+    }
+    else if (viewType == "FrontTopLeft") {
+        gp_Dir newDir = gp_Dir(gp_Vec(gDir) - gp_Vec(gXDir) + gp_Vec(gYDir));
+        projDir = dir2vec(newDir);
+        gp_Dir newXDir = gp_Dir(gp_Vec(gXDir) + gp_Vec(gDir));
+        rotVec = dir2vec(newXDir);
+    }
+    else if (viewType == "FrontTopRight") {
+        gp_Dir newDir = gp_Dir(gp_Vec(gDir) + gp_Vec(gXDir) + gp_Vec(gYDir));
+        projDir = dir2vec(newDir);
+        gp_Dir newXDir = gp_Dir(gp_Vec(gXDir) - gp_Vec(gDir));
+        rotVec = dir2vec(newXDir);
+    }
+    else if (viewType == "FrontBottomLeft") {
+        gp_Dir newDir = gp_Dir(gp_Vec(gDir) - gp_Vec(gXDir) - gp_Vec(gYDir));
+        projDir = dir2vec(newDir);
+        gp_Dir newXDir = gp_Dir(gp_Vec(gXDir) + gp_Vec(gDir));
+        rotVec = dir2vec(newXDir);
+    }
+    else if (viewType == "FrontBottomRight") {
+        gp_Dir newDir = gp_Dir(gp_Vec(gDir) + gp_Vec(gXDir) - gp_Vec(gYDir));
+        projDir = dir2vec(newDir);
+        gp_Dir newXDir = gp_Dir(gp_Vec(gXDir) - gp_Vec(gDir));
+        rotVec = dir2vec(newXDir);
+    }
+    else {
+        // not one of the standard view directions, so complain and use the values for "Front"
+        Base::Console().Error("DrawViewPart - %s unknown projection: %s\n", getNameInDocument(),
+            viewType.c_str());
+        Base::Vector3d dirAnch = Direction.getValue();
+        Base::Vector3d rotAnch = getXDirection();
+        return std::make_pair(dirAnch, rotAnch);
+    }
+
+    return std::make_pair(projDir, rotVec);
+}
+
+Base::Vector3d DrawViewPart::dir2vec(gp_Dir d)
+{
+    return Base::Vector3d(d.X(), d.Y(), d.Z());
 }
 
 Base::Vector3d DrawViewPart::getLegacyX(const Base::Vector3d& pt, const Base::Vector3d& axis,

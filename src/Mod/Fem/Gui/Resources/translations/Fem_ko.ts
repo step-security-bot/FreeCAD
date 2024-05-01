@@ -24,7 +24,7 @@
     <message>
       <location filename="../../Command.cpp" line="230"/>
       <source>Fem</source>
-      <translation type="unfinished">Fem</translation>
+      <translation>유한요소 방법</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="231"/>
@@ -42,7 +42,7 @@
     <message>
       <location filename="../../Command.cpp" line="296"/>
       <source>Fem</source>
-      <translation>유한요소 방법</translation>
+      <translation>유한 요소 방법</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="297"/>
@@ -78,7 +78,7 @@
     <message>
       <location filename="../../Command.cpp" line="396"/>
       <source>Fem</source>
-      <translation>유한 요소 방법</translation>
+      <translation>유한요소 방법</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="397"/>
@@ -96,7 +96,7 @@
     <message>
       <location filename="../../Command.cpp" line="448"/>
       <source>Fem</source>
-      <translation>유한요소 방법</translation>
+      <translation>유한 요소 방법</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="449"/>
@@ -132,7 +132,7 @@
     <message>
       <location filename="../../Command.cpp" line="553"/>
       <source>Fem</source>
-      <translation>유한 요소 방법</translation>
+      <translation>유한요소 방법</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="554"/>
@@ -150,7 +150,7 @@
     <message>
       <location filename="../../Command.cpp" line="610"/>
       <source>Fem</source>
-      <translation>유한요소 방법</translation>
+      <translation>유한요소법</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="611"/>
@@ -168,7 +168,7 @@
     <message>
       <location filename="../../Command.cpp" line="661"/>
       <source>Fem</source>
-      <translation>유한요소법</translation>
+      <translation type="unfinished">Fem</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="662"/>
@@ -186,7 +186,7 @@
     <message>
       <location filename="../../Command.cpp" line="712"/>
       <source>Fem</source>
-      <translation type="unfinished">Fem</translation>
+      <translation>유한요소법</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="713"/>
@@ -204,7 +204,7 @@
     <message>
       <location filename="../../Command.cpp" line="823"/>
       <source>Fem</source>
-      <translation>유한요소법</translation>
+      <translation type="unfinished">Fem</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="824"/>
@@ -341,7 +341,7 @@
     <message>
       <location filename="../../Command.cpp" line="1800"/>
       <source>Fem</source>
-      <translation type="unfinished">Fem</translation>
+      <translation>유한요소법</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="1801"/>
@@ -497,7 +497,7 @@
     <message>
       <location filename="../../Command.cpp" line="2004"/>
       <source>Fem</source>
-      <translation>유한요소법</translation>
+      <translation type="unfinished">Fem</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="2005"/>
@@ -955,84 +955,96 @@
       <translation type="unfinished">Use non ccx defaults</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="454"/>
       <source>Time Initial Step</source>
       <translation type="unfinished">Time Initial Step</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="470"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="502"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="541"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="596"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="651"/>
       <source>s</source>
       <translation type="unfinished">s</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="477"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="509"/>
       <source>Time End</source>
       <translation type="unfinished">Time End</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="516"/>
-      <source>Beam, shell element 3D output format</source>
-      <translation type="unfinished">Beam, shell element 3D output format</translation>
-    </message>
-    <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="523"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="665"/>
       <source>3D Output, unchecked for 2D</source>
       <translation type="unfinished">3D Output, unchecked for 2D</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="544"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="686"/>
       <source>Thermo mechanical defaults</source>
       <translation type="unfinished">Thermo mechanical defaults</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="552"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="694"/>
       <source>Analysis type (transient or steady state)</source>
       <translation type="unfinished">Analysis type (transient or steady state)</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="559"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="701"/>
       <source>Use steady state</source>
       <translation type="unfinished">Use steady state</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="575"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="422"/>
       <source>Maximum number of iterations</source>
       <translation type="unfinished">Maximum number of iterations</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="609"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="548"/>
+      <source>Time Minimum Step</source>
+      <translation type="unfinished">Time Minimum Step</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="603"/>
+      <source>Time Maximum Step</source>
+      <translation type="unfinished">Time Maximum Step</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="658"/>
+      <source>Beam, shell element 3D output format</source>
+      <translation type="unfinished">Beam, shell element 3D output format</translation>
+    </message>
+    <message>
+      <location filename="../../DlgSettingsFemCcx.ui" line="722"/>
       <source>Frequency defaults</source>
       <translation type="unfinished">Frequency defaults</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="617"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="730"/>
       <source>Eigenmode number</source>
       <translation type="unfinished">Eigenmode number</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="662"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="775"/>
       <source>High frequency limit</source>
       <translation type="unfinished">High frequency limit</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="700"/>
-      <location filename="../../DlgSettingsFemCcx.ui" line="748"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="813"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="861"/>
       <source>Hz</source>
       <translation>Hz</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcx.ui" line="707"/>
+      <location filename="../../DlgSettingsFemCcx.ui" line="820"/>
       <source>Low frequency limit</source>
       <translation type="unfinished">Low frequency limit</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="145"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="149"/>
       <source>File does not exist</source>
       <translation>파일이 존재하지 않습니다</translation>
     </message>
     <message>
-      <location filename="../../DlgSettingsFemCcxImp.cpp" line="146"/>
+      <location filename="../../DlgSettingsFemCcxImp.cpp" line="150"/>
       <source>The specified executable
 '%1'
  does not exist!
@@ -3537,7 +3549,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="72"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="69"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="337"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="862"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="944"/>
       <source>A dialog is already open in the task panel</source>
       <translation>테스크 패널에 이미 다이얼로그가 열려있습니다.</translation>
     </message>
@@ -3549,7 +3561,7 @@ Note: for 2D only setting for x is possible,
       <location filename="../../ViewProviderFemConstraintGear.cpp" line="73"/>
       <location filename="../../ViewProviderFemConstraintPulley.cpp" line="70"/>
       <location filename="../../ViewProviderFemPostFunction.cpp" line="338"/>
-      <location filename="../../ViewProviderFemPostObject.cpp" line="863"/>
+      <location filename="../../ViewProviderFemPostObject.cpp" line="945"/>
       <source>Do you want to close this dialog?</source>
       <translation>다이얼로그를 닫으시겠습니까?</translation>
     </message>
@@ -3685,7 +3697,7 @@ Note: for 2D only setting for x is possible,
       <translation type="unfinished">Local coordinate system</translation>
     </message>
     <message>
-      <location filename="../../ViewProviderFemConstraint.cpp" line="141"/>
+      <location filename="../../ViewProviderFemConstraint.cpp" line="142"/>
       <source>Edit analysis feature</source>
       <translation type="unfinished">Edit analysis feature</translation>
     </message>
@@ -5076,77 +5088,82 @@ used for the Elmer solver</translation>
       <translation>최대 크기:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="44"/>
+      <location filename="../../TaskTetParameter.ui" line="46"/>
+      <source>Min. Size:</source>
+      <translation type="unfinished">Min. Size:</translation>
+    </message>
+    <message>
+      <location filename="../../TaskTetParameter.ui" line="62"/>
       <source>Second order</source>
       <translation type="unfinished">Second order</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="53"/>
+      <location filename="../../TaskTetParameter.ui" line="71"/>
       <source>Fineness:</source>
       <translation>세밀도:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="64"/>
+      <location filename="../../TaskTetParameter.ui" line="82"/>
       <source>VeryCoarse</source>
       <translation>매우 거친</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="69"/>
+      <location filename="../../TaskTetParameter.ui" line="87"/>
       <source>Coarse</source>
       <translation>거친</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="74"/>
+      <location filename="../../TaskTetParameter.ui" line="92"/>
       <source>Moderate</source>
       <translation>보통</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="79"/>
+      <location filename="../../TaskTetParameter.ui" line="97"/>
       <source>Fine</source>
       <translation>세밀한</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="84"/>
+      <location filename="../../TaskTetParameter.ui" line="102"/>
       <source>VeryFine</source>
       <translation>매우 세밀한</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="89"/>
+      <location filename="../../TaskTetParameter.ui" line="107"/>
       <source>UserDefined</source>
       <translation>사용자 정의</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="97"/>
+      <location filename="../../TaskTetParameter.ui" line="115"/>
       <source>Growth Rate:</source>
       <translation type="unfinished">Growth Rate:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="111"/>
+      <location filename="../../TaskTetParameter.ui" line="129"/>
       <source>Nbr. Segs per Edge:</source>
       <translation type="unfinished">Nbr. Segs per Edge:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="128"/>
+      <location filename="../../TaskTetParameter.ui" line="146"/>
       <source>Nbr. Segs per Radius:</source>
       <translation type="unfinished">Nbr. Segs per Radius:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="144"/>
+      <location filename="../../TaskTetParameter.ui" line="162"/>
       <source>Optimize</source>
       <translation>최적화</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="166"/>
+      <location filename="../../TaskTetParameter.ui" line="184"/>
       <source>Node count:</source>
       <translation type="unfinished">Node count:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="180"/>
+      <location filename="../../TaskTetParameter.ui" line="198"/>
       <source>Triangle count:</source>
       <translation type="unfinished">Triangle count:</translation>
     </message>
     <message>
-      <location filename="../../TaskTetParameter.ui" line="194"/>
+      <location filename="../../TaskTetParameter.ui" line="212"/>
       <source>Tetrahedron count:</source>
       <translation>사면체 갯수:</translation>
     </message>
@@ -5720,7 +5737,7 @@ used for the Elmer solver</translation>
     </message>
   </context>
   <context>
-    <name>FEM_SolverCalculixCxxtools</name>
+    <name>FEM_SolverCalculiXCcxTools</name>
     <message>
       <location filename="../../../femcommands/commands.py" line="1058"/>
       <source>Solver CalculiX Standard</source>
