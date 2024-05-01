@@ -44,8 +44,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - language: c-cpp
-          build-mode: autobuild
+        # - language: c-cpp
+        #   build-mode: autobuild
         - language: python
           build-mode: none
         # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
@@ -108,7 +108,7 @@ jobs:
                           occt-draw                                   \
                           pyqt5-dev-tools                             \
                           pyside2-tools                               \
-                          python3.10-dev                              \
+                          python3-dev                                 \
                           python3-git                                 \
                           python3-markdown                            \
                           python3-matplotlib                          \
@@ -143,7 +143,7 @@ jobs:
         # Prefix the list here with "+" to use these queries and those in the config file.
 
         # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
-        # queries: security-extended,security-and-quality
+        queries: security-extended,security-and-quality
 
     # If the analyze step fails for one of the languages you are analyzing with
     # "We were unable to automatically build your code", modify the matrix above
