@@ -19,6 +19,9 @@ on:
   schedule:
     - cron: '28 12 * * 6'
 
+env:
+  CODEQL_EXTRACTOR_CPP_AUTOINSTALL_DEPENDENCIES: false
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
