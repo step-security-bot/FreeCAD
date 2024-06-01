@@ -41,7 +41,6 @@
 #include "Selection.h"
 #include "ToolBarManager.h"
 #include "ToolBoxManager.h"
-#include "UserSettings.h"
 #include "Window.h"
 
 #include <App/Application.h>
@@ -591,13 +590,8 @@ void StdWorkbench::setupContextMenu(const char* recipient, MenuItem* item) const
                   << "Std_ViewRear" << "Std_ViewBottom" << "Std_ViewLeft"
                   << "Separator" << "Std_ViewRotateLeft" << "Std_ViewRotateRight";
 
-        auto measure = new MenuItem();
-        measure->setCommand("Measure");
-        *measure << "View_Measure_Toggle_All" << "View_Measure_Clear_All";
-
-
         *item << "Std_ViewFitAll" << "Std_ViewFitSelection" << "Std_DrawStyle"
-              << StdViews << measure << "Separator"
+              << StdViews << "Separator"
               << "Std_ViewDockUndockFullscreen";
 
         if (Gui::Selection().countObjectsOfType(App::DocumentObject::getClassTypeId()) > 0) {
@@ -685,8 +679,7 @@ MenuItem* StdWorkbench::setupMenuBar() const
     *visu << "Std_ToggleVisibility" << "Std_ShowSelection" << "Std_HideSelection"
           << "Std_SelectVisibleObjects"
           << "Separator" << "Std_ToggleObjects" << "Std_ShowObjects" << "Std_HideObjects"
-          << "Separator" << "Std_ToggleSelectability"
-          << "Separator" << "View_Measure_Toggle_All" << "View_Measure_Clear_All";
+          << "Separator" << "Std_ToggleSelectability";
 
     // View
     auto view = new MenuItem( menuBar );
@@ -728,6 +721,7 @@ MenuItem* StdWorkbench::setupMenuBar() const
           << "Std_ProjectUtil"
           << "Separator"
           << "Std_MeasureDistance"
+          << "Std_Measure"
           << "Separator"
           << "Std_TextDocument"
           << "Separator"
@@ -797,11 +791,9 @@ ToolBarItem* StdWorkbench::setupToolBars() const
     *clipboard << "Std_Cut" << "Std_Copy" << "Std_Paste";
 
     // Workbench switcher
-    if (WorkbenchSwitcher::isToolbar(WorkbenchSwitcher::getValue())) {
-        auto wb = new ToolBarItem(root);
-        wb->setCommand("Workbench");
-        *wb << "Std_Workbench";
-    }
+    auto wb = new ToolBarItem(root);
+    wb->setCommand("Workbench");
+    *wb << "Std_Workbench";
 
     // Macro
     auto macro = new ToolBarItem( root, ToolBarItem::DefaultVisibility::Hidden);
@@ -812,7 +804,7 @@ ToolBarItem* StdWorkbench::setupToolBars() const
     // View
     auto view = new ToolBarItem( root );
     view->setCommand("View");
-    *view << "Std_ViewFitAll" << "Std_ViewFitSelection" << "Std_ViewGroup"
+    *view << "Std_ViewFitAll" << "Std_ViewFitSelection" << "Std_ViewGroup" << "Std_AlignToSelection"
           << "Separator" << "Std_DrawStyle" << "Std_TreeViewActions"
           << "Separator" << "Std_MeasureDistance" << "Std_Measure";
 

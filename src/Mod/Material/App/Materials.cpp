@@ -50,14 +50,15 @@ MaterialProperty::MaterialProperty()
     _valuePtr = std::make_shared<MaterialValue>(MaterialValue::None);
 }
 
-MaterialProperty::MaterialProperty(const ModelProperty& other)
+MaterialProperty::MaterialProperty(const ModelProperty& other, QString modelUUID)
     : ModelProperty(other)
+    , _modelUUID(modelUUID)
     , _valuePtr(nullptr)
 {
     setType(getPropertyType());
     auto columns = other.getColumns();
     for (auto& it : columns) {
-        MaterialProperty prop(it);
+        MaterialProperty prop(it, modelUUID);
         addColumn(prop);
     }
 }
@@ -448,7 +449,10 @@ Material::Material()
     : _dereferenced(false)
     , _oldFormat(false)
     , _editState(ModelEdit_None)
-{}
+{
+    // Create an initial UUID
+    newUuid();
+}
 
 Material::Material(const std::shared_ptr<MaterialLibrary>& library,
                    const QString& directory,
@@ -524,7 +528,7 @@ QString Material::getAuthorAndLicense() const
 
 void Material::addModel(const QString& uuid)
 {
-    for (const auto& modelUUID : qAsConst(_allUuids)) {
+    for (const auto& modelUUID : std::as_const(_allUuids)) {
         if (modelUUID == uuid) {
             return;
         }
@@ -654,7 +658,7 @@ void Material::addPhysical(const QString& uuid)
                 ModelProperty property = static_cast<ModelProperty>(it.second);
 
                 try {
-                    _physical[propertyName] = std::make_shared<MaterialProperty>(property);
+                    _physical[propertyName] = std::make_shared<MaterialProperty>(property, uuid);
                 }
                 catch (const UnknownValueType&) {
                     Base::Console().Error("Property '%s' has unknown type '%s'. Ignoring\n",
@@ -730,7 +734,7 @@ void Material::addAppearance(const QString& uuid)
             if (!hasAppearanceProperty(propertyName)) {
                 ModelProperty property = static_cast<ModelProperty>(it.second);
 
-                _appearance[propertyName] = std::make_shared<MaterialProperty>(property);
+                _appearance[propertyName] = std::make_shared<MaterialProperty>(property, uuid);
             }
         }
     }
@@ -1439,7 +1443,6 @@ void Material::save(QTextStream& stream, bool overwrite, bool saveAsCopy, bool s
         if (materialManager.exists(_uuid) && !overwrite) {
             // Make a new version based on the current
             setParentUUID(_uuid);
-            // newUuid();
         }
     }
 

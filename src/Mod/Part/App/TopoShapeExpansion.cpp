@@ -101,11 +101,13 @@
 #include "FaceMaker.h"
 #include "Geometry.h"
 #include "BRepOffsetAPI_MakeOffsetFix.h"
+#include "Base/Tools.h"
 
 #include <App/ElementMap.h>
 #include <App/ElementNamingUtils.h>
 #include <ShapeAnalysis_FreeBoundsProperties.hxx>
 #include <BRepBuilderAPI_MakeSolid.hxx>
+#include <BRepFeat_MakeRevol.hxx>
 
 FC_LOG_LEVEL_INIT("TopoShape", true, true)  // NOLINT
 
@@ -687,6 +689,7 @@ void TopoShape::copyElementMap(const TopoShape& topoShape, const char* op)
     setMappedChildElements(children);
 }
 
+#ifndef FC_USE_TNP_FIX
 namespace
 {
 void warnIfLogging()
@@ -720,7 +723,7 @@ void checkAndMatchHasher(TopoShape& topoShape1, const TopoShape& topoShape2)
     }
 }
 }  // namespace
-
+#endif
 
 // TODO: Refactor mapSubElementTypeForShape to reduce complexity
 void TopoShape::mapSubElementTypeForShape(const TopoShape& other,
@@ -1312,7 +1315,7 @@ void checkForParallelOrCoplanar(const TopoDS_Shape& newShape,
                                 const ShapeInfo& newInfo,
                                 std::vector<TopoDS_Shape>& newShapes,
                                 const gp_Pln& pln,
-                                int parallelFace,
+                                int& parallelFace,
                                 int& coplanarFace,
                                 int& checkParallel)
 {
@@ -2023,8 +2026,11 @@ TopoShape TopoShape::getSubTopoShape(const char* Type, bool silent) const
         }
         return TopoShape();
     }
-
+#ifdef FC_USE_TNP_FIX
+    auto res = shapeTypeAndIndex(mapped.index);
+#else
     auto res = shapeTypeAndIndex(Type);
+#endif
     if (res.second <= 0) {
         if (!silent) {
             FC_THROWM(Base::ValueError, "Invalid shape name " << (Type ? Type : ""));
@@ -4005,11 +4011,11 @@ TopoShape& TopoShape::makeElementFillet(const TopoShape& shape,
 
 TopoShape& TopoShape::makeElementChamfer(const TopoShape& shape,
                                          const std::vector<TopoShape>& edges,
+                                         ChamferType chamferType,
                                          double radius1,
                                          double radius2,
                                          const char* op,
-                                         Flip flipDirection,
-                                         AsAngle asAngle)
+                                         Flip flipDirection)
 {
     if (!op) {
         op = Part::OpCodes::Chamfer;
@@ -4037,11 +4043,19 @@ TopoShape& TopoShape::makeElementChamfer(const TopoShape& shape,
         else {
             face = shape.findAncestorShape(edge, TopAbs_FACE);
         }
-        if (asAngle == AsAngle::yes) {
-            mkChamfer.AddDA(radius1, radius2, TopoDS::Edge(edge), TopoDS::Face(face));
-        }
-        else {
-            mkChamfer.Add(radius1, radius2, TopoDS::Edge(edge), TopoDS::Face(face));
+        switch (chamferType) {
+            case ChamferType::equalDistance:  // Equal distance
+                mkChamfer.Add(radius1, radius1, TopoDS::Edge(edge), TopoDS::Face(face));
+                break;
+            case ChamferType::twoDistances:  // Two distances
+                mkChamfer.Add(radius1, radius2, TopoDS::Edge(edge), TopoDS::Face(face));
+                break;
+            case ChamferType::distanceAngle:  // Distance and angle
+                mkChamfer.AddDA(radius1,
+                                Base::toRadians(radius2),
+                                TopoDS::Edge(edge),
+                                TopoDS::Face(face));
+                break;
         }
     }
     return makeElementShape(mkChamfer, shape, op);
@@ -4436,6 +4450,51 @@ TopoShape& TopoShape::makeElementRevolve(const TopoShape& _base,
         base = base.makeElementFace(nullptr, face_maker, nullptr);
     }
     BRepPrimAPI_MakeRevol mkRevol(base.getShape(), axis, d);
+    return makeElementShape(mkRevol, base, op);
+}
+
+TopoShape& TopoShape::makeElementRevolution(const TopoShape& _base,
+                                            const gp_Ax1& axis,
+                                            [[maybe_unused]]double d,
+                                            const TopoDS_Face& supportface,
+                                            const TopoDS_Face& uptoface,
+                                            const char* face_maker,
+                                            RevolMode Mode,
+                                            Standard_Boolean Modify,
+                                            const char* op)
+{
+    if (!op) {
+        op = Part::OpCodes::Revolve;
+    }
+
+    TopoShape base(_base);
+    if (base.isNull()) {
+        FC_THROWM(NullShapeException, "Null shape");
+    }
+    if (face_maker && !base.hasSubShape(TopAbs_FACE)) {
+        if (!base.hasSubShape(TopAbs_WIRE)) {
+            base = base.makeElementWires();
+        }
+        base = base.makeElementFace(nullptr, face_maker, nullptr);
+    }
+
+    BRepFeat_MakeRevol mkRevol;
+    for (TopExp_Explorer xp(base.getShape(), TopAbs_FACE); xp.More(); xp.Next()) {
+        mkRevol.Init(_base.getShape(),
+                     xp.Current(),
+                     supportface,
+                     axis,
+                     static_cast<int>(Mode),
+                     Modify);
+        mkRevol.Perform(uptoface);
+        if (!mkRevol.IsDone()) {
+            throw Base::RuntimeError("Revolution: Up to face: Could not revolve the sketch!");
+        }
+        base = mkRevol.Shape();
+        if (Mode == RevolMode::None) {
+            Mode = RevolMode::FuseWithBase;
+        }
+    }
     return makeElementShape(mkRevol, base, op);
 }
 

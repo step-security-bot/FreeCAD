@@ -69,12 +69,12 @@
   <context>
     <name>CmdSketcherCarbonCopy</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1661"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1432"/>
       <source>Create carbon copy</source>
       <translation>Creează o copie de carbon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1662"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1433"/>
       <source>Copy the geometry of another sketch</source>
       <translation>Copiați geometria altei schițe</translation>
     </message>
@@ -128,27 +128,27 @@
   <context>
     <name>CmdSketcherCompConstrainRadDia</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8378"/>
+      <location filename="../../CommandConstraints.cpp" line="8433"/>
       <source>Constrain arc or circle</source>
       <translation>Constrânge un arc de cerc sau un cerc</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8379"/>
+      <location filename="../../CommandConstraints.cpp" line="8434"/>
       <source>Constrain an arc or a circle</source>
       <translation>Constrânge un arc de cerc sau un cerc</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8489"/>
+      <location filename="../../CommandConstraints.cpp" line="8544"/>
       <source>Constrain radius</source>
       <translation>Rază constrânsă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8495"/>
+      <location filename="../../CommandConstraints.cpp" line="8550"/>
       <source>Constrain diameter</source>
       <translation>Constrângere diametru</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8501"/>
+      <location filename="../../CommandConstraints.cpp" line="8556"/>
       <source>Constrain auto radius/diameter</source>
       <translation>Constrângere automată radius/diametru</translation>
     </message>
@@ -169,124 +169,66 @@
   <context>
     <name>CmdSketcherCompCreateArc</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="469"/>
+      <location filename="../../CommandCreateGeo.cpp" line="525"/>
       <source>Create arc</source>
       <translation>Creeaza un arc de cerc</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="470"/>
-      <source>Create an arc in the sketcher</source>
-      <translation>Crearea unui arc de cerc în schiţă</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="554"/>
-      <source>Center and endpoints</source>
-      <translation>Puncte de centru și de sfârșit</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="560"/>
-      <source>Endpoints and rim point</source>
-      <translation>Puncte de sfarșit și punct de margine</translation>
+      <location filename="../../CommandCreateGeo.cpp" line="526"/>
+      <source>Create an arc in the sketch</source>
+      <translation type="unfinished">Create an arc in the sketch</translation>
     </message>
   </context>
   <context>
     <name>CmdSketcherCompCreateBSpline</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1085"/>
+      <location filename="../../CommandCreateGeo.cpp" line="968"/>
       <source>Create B-spline</source>
       <translation>Creează o Bspline</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1086"/>
+      <location filename="../../CommandCreateGeo.cpp" line="969"/>
       <source>Create a B-spline in the sketch</source>
       <translation>Creaţi  B-spline în schiţă</translation>
     </message>
   </context>
   <context>
-    <name>CmdSketcherCompCreateCircle</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1279"/>
-      <source>Create circle</source>
-      <translation>Crează cerc</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1280"/>
-      <source>Create a circle in the sketcher</source>
-      <translation>Creați un cerc în schiță</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1364"/>
-      <source>Center and rim point</source>
-      <translation>Creați un cerc definit de centru și un punct pe margine</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1370"/>
-      <source>3 rim points</source>
-      <translation>Cerc definit prin 3 puncte</translation>
-    </message>
-  </context>
-  <context>
     <name>CmdSketcherCompCreateConic</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="773"/>
+      <location filename="../../CommandCreateGeo.cpp" line="775"/>
       <source>Create conic</source>
       <translation>Creează o conică</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="774"/>
+      <location filename="../../CommandCreateGeo.cpp" line="776"/>
       <source>Create a conic in the sketch</source>
       <translation>Crează o secțiune conică în schiţă</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="892"/>
-      <source>Ellipse by center, radius, rim point</source>
-      <translation>Crează o Elipsă prin definirea centrului, razei majore și a unui punct</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="901"/>
-      <source>Ellipse by axis endpoints, rim point</source>
-      <translation>Elipse de punctul final al axei, punctul marginii</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="910"/>
-      <source>Arc of ellipse by center, radius, endpoints</source>
-      <translation>Arc de elipsă cu centru, rază majoră, puncte de sfârșit</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="920"/>
-      <source>Arc of hyperbola by center, vertex, endpoints</source>
-      <translation>Arc de hiperbolă cu centru, vârf, puncte finale</translation>
-    </message>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="929"/>
-      <source>Arc of parabola by focus, vertex, endpoints</source>
-      <translation>Arc de parabolă cu axă, vârf, puncte de sfârșit</translation>
     </message>
   </context>
   <context>
     <name>CmdSketcherCompCreateRectangles</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="243"/>
+      <location filename="../../CommandCreateGeo.cpp" line="328"/>
       <source>Create rectangle</source>
       <translation>Crează dreptunghi</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="244"/>
+      <location filename="../../CommandCreateGeo.cpp" line="329"/>
       <source>Creates a rectangle in the sketch</source>
       <translation>Crează un dreptunghi în schiţă</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="341"/>
+      <location filename="../../CommandCreateGeo.cpp" line="426"/>
       <source>Rectangle</source>
       <translation>Dreptunghi</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="347"/>
+      <location filename="../../CommandCreateGeo.cpp" line="432"/>
       <source>Centered rectangle</source>
       <translation>Dreptunghi centrat</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="353"/>
+      <location filename="../../CommandCreateGeo.cpp" line="438"/>
       <source>Rounded rectangle</source>
       <translation>Dreptunghi rotunjit</translation>
     </message>
@@ -294,47 +236,47 @@
   <context>
     <name>CmdSketcherCompCreateRegularPolygon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2014"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1785"/>
       <source>Create regular polygon</source>
       <translation>Creează poligon regulat</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2015"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1786"/>
       <source>Create a regular polygon in the sketcher</source>
       <translation>Creaţi un poligon regulat în Desenator</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2139"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1910"/>
       <source>Triangle</source>
       <translation>Triunghi</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2147"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1918"/>
       <source>Square</source>
       <translation>Pătrat</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2154"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1925"/>
       <source>Pentagon</source>
       <translation>Pentagon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2162"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1933"/>
       <source>Hexagon</source>
       <translation>Hexagon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2170"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1941"/>
       <source>Heptagon</source>
       <translation>Heptagon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2178"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1949"/>
       <source>Octagon</source>
       <translation>Octogon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2187"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1958"/>
       <source>Regular polygon</source>
       <translation>Poligon regulat</translation>
     </message>
@@ -365,12 +307,12 @@
   <context>
     <name>CmdSketcherConstrainAngle</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8538"/>
+      <location filename="../../CommandConstraints.cpp" line="8593"/>
       <source>Constrain angle</source>
       <translation>Unghi constrans</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8539"/>
+      <location filename="../../CommandConstraints.cpp" line="8594"/>
       <source>Fix the angle of a line or the angle between two lines</source>
       <translation>Repară unghiul unei drepte sau unghiul dintre două linii</translation>
     </message>
@@ -378,12 +320,12 @@
   <context>
     <name>CmdSketcherConstrainBlock</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3458"/>
+      <location filename="../../CommandConstraints.cpp" line="3513"/>
       <source>Constrain block</source>
       <translation>Bloc: Constrângere</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3459"/>
+      <location filename="../../CommandConstraints.cpp" line="3514"/>
       <source>Block the selected edge from moving</source>
       <translation>Blochează muchia selectată să se miște</translation>
     </message>
@@ -391,12 +333,12 @@
   <context>
     <name>CmdSketcherConstrainCoincident</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4171"/>
+      <location filename="../../CommandConstraints.cpp" line="4226"/>
       <source>Constrain coincident</source>
       <translation>Constrângere coincidentă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4172"/>
+      <location filename="../../CommandConstraints.cpp" line="4227"/>
       <source>Create a coincident constraint between points, or a concentric constraint between circles, arcs, and ellipses</source>
       <translation>Creează o constrângere între puncte, sau o constrângere concentrată între cercuri, arcuri și elipse</translation>
     </message>
@@ -404,12 +346,12 @@
   <context>
     <name>CmdSketcherConstrainDiameter</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7691"/>
+      <location filename="../../CommandConstraints.cpp" line="7746"/>
       <source>Constrain diameter</source>
       <translation>Constrângere diametru</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7692"/>
+      <location filename="../../CommandConstraints.cpp" line="7747"/>
       <source>Fix the diameter of a circle or an arc</source>
       <translation>Fixează diametrul unui cerc sau arc de cerc</translation>
     </message>
@@ -417,12 +359,12 @@
   <context>
     <name>CmdSketcherConstrainDistance</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4275"/>
+      <location filename="../../CommandConstraints.cpp" line="4330"/>
       <source>Constrain distance</source>
       <translation>Distanţă constrânsă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4276"/>
+      <location filename="../../CommandConstraints.cpp" line="4331"/>
       <source>Fix a length of a line or the distance between a line and a vertex or between two circles</source>
       <translation>Repară lungimea unei linii sau distanța dintre o linie și un nod sau între două cercuri</translation>
     </message>
@@ -430,12 +372,12 @@
   <context>
     <name>CmdSketcherConstrainDistanceX</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4927"/>
+      <location filename="../../CommandConstraints.cpp" line="4982"/>
       <source>Constrain horizontal distance</source>
       <translation>Constrânge distanța orizontală</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4928"/>
+      <location filename="../../CommandConstraints.cpp" line="4983"/>
       <source>Fix the horizontal distance between two points or line ends</source>
       <translation>Bate în cuie distanţa orizontală dintre doua puncte sau capete de linii</translation>
     </message>
@@ -443,12 +385,12 @@
   <context>
     <name>CmdSketcherConstrainDistanceY</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5231"/>
+      <location filename="../../CommandConstraints.cpp" line="5286"/>
       <source>Constrain vertical distance</source>
       <translation>Constrângere distanţă verticală</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5232"/>
+      <location filename="../../CommandConstraints.cpp" line="5287"/>
       <source>Fix the vertical distance between two points or line ends</source>
       <translation>Bate în cuie distanţa verticală dintre două puncte sau capete de linie</translation>
     </message>
@@ -456,12 +398,12 @@
   <context>
     <name>CmdSketcherConstrainEqual</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8991"/>
+      <location filename="../../CommandConstraints.cpp" line="9046"/>
       <source>Constrain equal</source>
       <translation>Egalitate constransă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8993"/>
+      <location filename="../../CommandConstraints.cpp" line="9048"/>
       <source>Create an equality constraint between two lines or between circles and arcs</source>
       <translation>Crează o egalitate constrânsă între două linii, cercuri sau arce</translation>
     </message>
@@ -469,12 +411,12 @@
   <context>
     <name>CmdSketcherConstrainHorizontal</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3080"/>
-      <source>Constrain horizontally</source>
-      <translation>Constrângere orizontală</translation>
+      <location filename="../../CommandConstraints.cpp" line="3135"/>
+      <source>Constrain horizontal</source>
+      <translation type="unfinished">Constrain horizontal</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3081"/>
+      <location filename="../../CommandConstraints.cpp" line="3136"/>
       <source>Create a horizontal constraint on the selected item</source>
       <translation>Crează o constrângere orizontală pentru obiectul selectat</translation>
     </message>
@@ -482,12 +424,12 @@
   <context>
     <name>CmdSketcherConstrainLock</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3171"/>
+      <location filename="../../CommandConstraints.cpp" line="3226"/>
       <source>Constrain lock</source>
       <translation>Constrângere fixă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3172"/>
+      <location filename="../../CommandConstraints.cpp" line="3227"/>
       <source>Create both a horizontal and a vertical distance constraint
 on the selected vertex</source>
       <translation>Creați atât o constrângere de distanță orizontală, cât și una verticală
@@ -497,12 +439,12 @@ pe vârful selectat</translation>
   <context>
     <name>CmdSketcherConstrainParallel</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5529"/>
+      <location filename="../../CommandConstraints.cpp" line="5584"/>
       <source>Constrain parallel</source>
       <translation>Constrângere paralelă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5530"/>
+      <location filename="../../CommandConstraints.cpp" line="5585"/>
       <source>Create a parallel constraint between two lines</source>
       <translation>Crează o constrângere paralelă între două linii</translation>
     </message>
@@ -510,12 +452,12 @@ pe vârful selectat</translation>
   <context>
     <name>CmdSketcherConstrainPerpendicular</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5692"/>
+      <location filename="../../CommandConstraints.cpp" line="5747"/>
       <source>Constrain perpendicular</source>
       <translation>Constrângere perpendiculară</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5693"/>
+      <location filename="../../CommandConstraints.cpp" line="5748"/>
       <source>Create a perpendicular constraint between two lines</source>
       <translation>Crează o constrângere perpendiculară între două linii</translation>
     </message>
@@ -523,12 +465,12 @@ pe vârful selectat</translation>
   <context>
     <name>CmdSketcherConstrainPointOnObject</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4223"/>
-      <source>Constrain point onto object</source>
-      <translation>Constrânge punct pe obiect</translation>
+      <location filename="../../CommandConstraints.cpp" line="4278"/>
+      <source>Constrain point on object</source>
+      <translation type="unfinished">Constrain point on object</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4224"/>
+      <location filename="../../CommandConstraints.cpp" line="4279"/>
       <source>Fix a point onto an object</source>
       <translation>Fixează un punct de un obiect</translation>
     </message>
@@ -536,12 +478,12 @@ pe vârful selectat</translation>
   <context>
     <name>CmdSketcherConstrainRadiam</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8009"/>
+      <location filename="../../CommandConstraints.cpp" line="8064"/>
       <source>Constrain auto radius/diameter</source>
       <translation>Constrângere automată radius/diametru</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8010"/>
+      <location filename="../../CommandConstraints.cpp" line="8065"/>
       <source>Fix the diameter if a circle is chosen, or the radius if an arc/spline pole is chosen</source>
       <translation>Repară diametrul dacă este ales un cerc sau raza dacă este ales un stâlp ar/splină</translation>
     </message>
@@ -549,12 +491,12 @@ pe vârful selectat</translation>
   <context>
     <name>CmdSketcherConstrainSnellsLaw</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9590"/>
+      <location filename="../../CommandConstraints.cpp" line="9645"/>
       <source>Constrain refraction (Snell's law)</source>
       <translation>Constrângere de refracție (Legea lui Snell)</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9591"/>
+      <location filename="../../CommandConstraints.cpp" line="9646"/>
       <source>Create a refraction law (Snell's law)constraint between two endpoints of rays
 and an edge as an interface.</source>
       <translation>Creați o constrângere de lege de refracție (Legea lui Snell) între două puncte finale ale razelor
@@ -564,12 +506,12 @@ and an edge as an interface.</source>
   <context>
     <name>CmdSketcherConstrainSymmetric</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9233"/>
-      <source>Constrain symmetrical</source>
-      <translation>Constrângere simetrică</translation>
+      <location filename="../../CommandConstraints.cpp" line="9288"/>
+      <source>Constrain symmetric</source>
+      <translation type="unfinished">Constrain symmetric</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9234"/>
+      <location filename="../../CommandConstraints.cpp" line="9289"/>
       <source>Create a symmetry constraint between two points
 with respect to a line or a third point</source>
       <translation>Creați o constrângere de simetrie între două puncte
@@ -579,12 +521,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherConstrainVertical</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3125"/>
-      <source>Constrain vertically</source>
-      <translation>Constrângere verticală</translation>
+      <location filename="../../CommandConstraints.cpp" line="3180"/>
+      <source>Constrain vertical</source>
+      <translation type="unfinished">Constrain vertical</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3126"/>
+      <location filename="../../CommandConstraints.cpp" line="3181"/>
       <source>Create a vertical constraint on the selected item</source>
       <translation>Crează o constrângere verticală pe obiectul selectat</translation>
     </message>
@@ -618,12 +560,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreate3PointArc</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="437"/>
-      <source>Create arc by three points</source>
-      <translation>Creaţi arc de trei puncte</translation>
+      <location filename="../../CommandCreateGeo.cpp" line="490"/>
+      <source>Create arc by 3 points</source>
+      <translation type="unfinished">Create arc by 3 points</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="438"/>
+      <location filename="../../CommandCreateGeo.cpp" line="491"/>
       <source>Create an arc by its end points and a point along the arc</source>
       <translation>Creează un arc de la punctul său final și un punct de-a lungul arcului</translation>
     </message>
@@ -631,12 +573,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreate3PointCircle</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1247"/>
-      <source>Create circle by three points</source>
-      <translation>Creați cerc de trei puncte</translation>
+      <location filename="../../CommandCreateGeo.cpp" line="1130"/>
+      <source>Create circle by 3 points</source>
+      <translation type="unfinished">Create circle by 3 points</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1248"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1131"/>
       <source>Create a circle by 3 perimeter points</source>
       <translation>Creați un cerc cu 3 puncte pe circumferință</translation>
     </message>
@@ -644,12 +586,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateArc</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="405"/>
+      <location filename="../../CommandCreateGeo.cpp" line="458"/>
       <source>Create arc by center</source>
       <translation>Creați arc cu centrul</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="406"/>
+      <location filename="../../CommandCreateGeo.cpp" line="459"/>
       <source>Create an arc by its center and by its end points</source>
       <translation>Creează un arc cu propiul centru și cu propiile puncte finale</translation>
     </message>
@@ -657,12 +599,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateArcOfEllipse</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="683"/>
+      <location filename="../../CommandCreateGeo.cpp" line="687"/>
       <source>Create arc of ellipse</source>
       <translation>Creează un arc de elipsă</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="684"/>
+      <location filename="../../CommandCreateGeo.cpp" line="688"/>
       <source>Create an arc of ellipse in the sketch</source>
       <translation>Creaţi un arc de elipsă în schiţă</translation>
     </message>
@@ -670,12 +612,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateArcOfHyperbola</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="712"/>
+      <location filename="../../CommandCreateGeo.cpp" line="716"/>
       <source>Create arc of hyperbola</source>
       <translation>Crează arc de hiperbolă</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="713"/>
+      <location filename="../../CommandCreateGeo.cpp" line="717"/>
       <source>Create an arc of hyperbola in the sketch</source>
       <translation>Creaţi un arc de hiperbolă în schiţă</translation>
     </message>
@@ -683,12 +625,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateArcOfParabola</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="740"/>
+      <location filename="../../CommandCreateGeo.cpp" line="744"/>
       <source>Create arc of parabola</source>
       <translation>Crează arc de parabolă</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="741"/>
+      <location filename="../../CommandCreateGeo.cpp" line="745"/>
       <source>Create an arc of parabola in the sketch</source>
       <translation>Creaţi un arc de parabolă în schiţă</translation>
     </message>
@@ -696,12 +638,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateBSpline</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="953"/>
+      <location filename="../../CommandCreateGeo.cpp" line="836"/>
       <source>Create B-spline</source>
       <translation>Creează o Bspline</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="954"/>
+      <location filename="../../CommandCreateGeo.cpp" line="837"/>
       <source>Create a B-spline by control points in the sketch.</source>
       <translation>Creați o curbă B-spline definită prin punctele de control în schiță.</translation>
     </message>
@@ -709,12 +651,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateCircle</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="585"/>
-      <source>Create circle</source>
-      <translation>Crează cerc</translation>
+      <location filename="../../CommandCreateGeo.cpp" line="589"/>
+      <source>Create circle by center</source>
+      <translation type="unfinished">Create circle by center</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="586"/>
+      <location filename="../../CommandCreateGeo.cpp" line="590"/>
       <source>Create a circle in the sketch</source>
       <translation>Crează un cerc în schiţă</translation>
     </message>
@@ -722,12 +664,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateEllipseBy3Points</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="652"/>
+      <location filename="../../CommandCreateGeo.cpp" line="656"/>
       <source>Create ellipse by 3 points</source>
       <translation>Creați o elipsă din trei puncte</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="653"/>
+      <location filename="../../CommandCreateGeo.cpp" line="657"/>
       <source>Create an ellipse by 3 points in the sketch</source>
       <translation>Creaţi în schiță o elipsă definită prin 3 puncte</translation>
     </message>
@@ -735,12 +677,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateEllipseByCenter</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="619"/>
+      <location filename="../../CommandCreateGeo.cpp" line="623"/>
       <source>Create ellipse by center</source>
       <translation>Creați o elipsă cu centru</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="620"/>
+      <location filename="../../CommandCreateGeo.cpp" line="624"/>
       <source>Create an ellipse by center in the sketch</source>
       <translation>Creaţi în schiță o elipsa definită prin centru</translation>
     </message>
@@ -748,12 +690,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateFillet</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1422"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1193"/>
       <source>Create fillet</source>
       <translation>Crează panglică</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1423"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1194"/>
       <source>Create a fillet between two lines or at a coincident point</source>
       <translation type="unfinished">Create a fillet between two lines or at a coincident point</translation>
     </message>
@@ -761,12 +703,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateHeptagon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1922"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1693"/>
       <source>Create heptagon</source>
       <translation>Creează heptagon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1923"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1694"/>
       <source>Create a heptagon in the sketch</source>
       <translation>Creați un heptagon în schiță</translation>
     </message>
@@ -774,12 +716,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateHexagon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1893"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1664"/>
       <source>Create hexagon</source>
       <translation>Creează hexagon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1894"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1665"/>
       <source>Create a hexagon in the sketch</source>
       <translation>Creaţi un hexagon în schiţă</translation>
     </message>
@@ -787,12 +729,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateLine</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="112"/>
+      <location filename="../../CommandCreateGeo.cpp" line="166"/>
       <source>Create line</source>
       <translation>Crează linie</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="113"/>
+      <location filename="../../CommandCreateGeo.cpp" line="167"/>
       <source>Create a line in the sketch</source>
       <translation>Crează o linie în schiţă</translation>
     </message>
@@ -800,12 +742,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateOblong</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="209"/>
+      <location filename="../../CommandCreateGeo.cpp" line="294"/>
       <source>Create rounded rectangle</source>
       <translation>Crează dreptunghi rotunjit</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="210"/>
+      <location filename="../../CommandCreateGeo.cpp" line="295"/>
       <source>Create a rounded rectangle in the sketch</source>
       <translation>Creați un dreptunghi rotunjit în schiță</translation>
     </message>
@@ -813,12 +755,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateOctagon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1951"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1722"/>
       <source>Create octagon</source>
       <translation>Creează octogon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1952"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1723"/>
       <source>Create an octagon in the sketch</source>
       <translation>Creaţi un octogon în schiţă</translation>
     </message>
@@ -826,12 +768,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreatePentagon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1863"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1634"/>
       <source>Create pentagon</source>
       <translation>Creează pentagon</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1864"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1635"/>
       <source>Create a pentagon in the sketch</source>
       <translation>Creați un pentagon în schiță</translation>
     </message>
@@ -839,12 +781,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreatePeriodicBSpline</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="986"/>
+      <location filename="../../CommandCreateGeo.cpp" line="869"/>
       <source>Create periodic B-spline</source>
       <translation>Crează funcții B-spline periodice</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="987"/>
+      <location filename="../../CommandCreateGeo.cpp" line="870"/>
       <source>Create a periodic B-spline by control points in the sketch.</source>
       <translation>Creaţi în schiţă o curbă B-spline periodică prin punctele de control.</translation>
     </message>
@@ -852,12 +794,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreatePoint</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1393"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1164"/>
       <source>Create point</source>
       <translation>Crează punct</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1394"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1165"/>
       <source>Create a point in the sketch</source>
       <translation>Crează un punct în schiţă</translation>
     </message>
@@ -865,12 +807,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreatePolyline</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="373"/>
+      <location filename="../../CommandCreateGeo.cpp" line="197"/>
       <source>Create polyline</source>
       <translation>Crează polilinie</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="374"/>
+      <location filename="../../CommandCreateGeo.cpp" line="198"/>
       <source>Create a polyline in the sketch. 'M' Key cycles behaviour</source>
       <translation>Creaţi o polilinie în schiţă. Apăsarea repetată a tastei ”M” permite navigarea între componente</translation>
     </message>
@@ -878,12 +820,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateRectangle</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="144"/>
+      <location filename="../../CommandCreateGeo.cpp" line="229"/>
       <source>Create rectangle</source>
       <translation>Crează dreptunghi</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="145"/>
+      <location filename="../../CommandCreateGeo.cpp" line="230"/>
       <source>Create a rectangle in the sketch</source>
       <translation>Crează un dreptunghi în schiţă</translation>
     </message>
@@ -891,12 +833,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateRectangleCenter</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="175"/>
+      <location filename="../../CommandCreateGeo.cpp" line="260"/>
       <source>Create centered rectangle</source>
       <translation>Crează dreptunghi centrat</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="176"/>
+      <location filename="../../CommandCreateGeo.cpp" line="261"/>
       <source>Create a centered rectangle in the sketch</source>
       <translation>Creați un dreptunghi centrat în schiță</translation>
     </message>
@@ -904,12 +846,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateRegularPolygon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1980"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1751"/>
       <source>Create regular polygon</source>
       <translation>Creează poligon regulat</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1981"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1752"/>
       <source>Create a regular polygon in the sketch</source>
       <translation>Creați un poligon regulat în schiţă</translation>
     </message>
@@ -917,12 +859,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateSlot</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1743"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1514"/>
       <source>Create slot</source>
       <translation>Crează o canelură</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1744"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1515"/>
       <source>Create a slot in the sketch</source>
       <translation>Creați o canelură în schiță</translation>
     </message>
@@ -930,12 +872,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateSquare</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1834"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1605"/>
       <source>Create square</source>
       <translation>Creează pătrat</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1835"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1606"/>
       <source>Create a square in the sketch</source>
       <translation>Crea un pătrat în schiţă</translation>
     </message>
@@ -943,12 +885,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherCreateTriangle</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1805"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1576"/>
       <source>Create equilateral triangle</source>
       <translation>Creează triunghi echilateral</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1806"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1577"/>
       <source>Create an equilateral triangle in the sketch</source>
       <translation>Creați un triunghi echilater în schiță</translation>
     </message>
@@ -1021,12 +963,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherExtend</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1543"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1314"/>
       <source>Extend edge</source>
       <translation>Prelungirea muchiei</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1544"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1315"/>
       <source>Extend an edge with respect to the picked position</source>
       <translation>Prelungiți o muchie în raport cu poziția selctată</translation>
     </message>
@@ -1034,12 +976,12 @@ cu privire la o linie sau un al treilea punct</translation>
   <context>
     <name>CmdSketcherExternal</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1632"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1403"/>
       <source>Create external geometry</source>
       <translation>Creare geometrie externă</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1633"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1404"/>
       <source>Create an edge linked to an external geometry</source>
       <translation>Crează o muchie legată de o geometrie externă</translation>
     </message>
@@ -1114,7 +1056,7 @@ cu privire la o linie sau un al treilea punct</translation>
     <message>
       <location filename="../../Command.cpp" line="552"/>
       <source>Attach sketch...</source>
-      <translation type="unfinished">Attach sketch...</translation>
+      <translation>Atașare schiță...</translation>
     </message>
     <message>
       <location filename="../../Command.cpp" line="553"/>
@@ -1378,12 +1320,12 @@ Acest lucru va șterge proprietatea 'Atașare suport', dacă este cazul.</transl
   <context>
     <name>CmdSketcherSplit</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1574"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1345"/>
       <source>Split edge</source>
       <translation>Selectează marginea</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1575"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1346"/>
       <source>Splits an edge into two while preserving constraints</source>
       <translation>Împarte o margine în două, păstrând în același timp constrângerile</translation>
     </message>
@@ -1430,12 +1372,12 @@ Acest lucru va șterge proprietatea 'Atașare suport', dacă este cazul.</transl
   <context>
     <name>CmdSketcherToggleActiveConstraint</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="10000"/>
+      <location filename="../../CommandConstraints.cpp" line="10055"/>
       <source>Activate/deactivate constraint</source>
       <translation>Activează/Dezactivează constrângerea</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="10001"/>
+      <location filename="../../CommandConstraints.cpp" line="10056"/>
       <source>Activates or deactivates the selected constraints</source>
       <translation>Activează sau dezactivează constrângerile selectate</translation>
     </message>
@@ -1456,12 +1398,12 @@ Acest lucru va șterge proprietatea 'Atașare suport', dacă este cazul.</transl
   <context>
     <name>CmdSketcherToggleDrivingConstraint</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9843"/>
+      <location filename="../../CommandConstraints.cpp" line="9898"/>
       <source>Toggle driving/reference constraint</source>
       <translation>Comută constrângerea de condus/referință</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9844"/>
+      <location filename="../../CommandConstraints.cpp" line="9899"/>
       <source>Set the toolbar, or the selected constraints,
 into driving or reference mode</source>
       <translation>Setează bara de instrumente sau constrângerile selectate,
@@ -1471,12 +1413,12 @@ into driving or reference mode</source>
   <context>
     <name>CmdSketcherTrimming</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1512"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1283"/>
       <source>Trim edge</source>
       <translation>Taie marginea</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1513"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1284"/>
       <source>Trim an edge with respect to the picked position</source>
       <translation>Taie o margine relativ la pozitia aleasa</translation>
     </message>
@@ -1535,354 +1477,361 @@ constrângeri nevalide, geometrie degenerată, etc.</translation>
   <context>
     <name>Command</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3259"/>
+      <location filename="../../CommandConstraints.cpp" line="3314"/>
       <source>Add 'Lock' constraint</source>
       <translation>Adaugă constrângere 'Blocare'</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3313"/>
+      <location filename="../../CommandConstraints.cpp" line="3368"/>
       <source>Add relative 'Lock' constraint</source>
       <translation>Adaugă constrângere 'Blocare'</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3378"/>
+      <location filename="../../CommandConstraints.cpp" line="3433"/>
       <source>Add fixed constraint</source>
       <translation>Adaugă o constrângere fixă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3549"/>
+      <location filename="../../CommandConstraints.cpp" line="3604"/>
       <source>Add 'Block' constraint</source>
       <translation>Adaugă constrângere 'Blocare'</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3598"/>
+      <location filename="../../CommandConstraints.cpp" line="3653"/>
       <source>Add block constraint</source>
       <translation>Adaugă constrângere 'Blocare'</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3937"/>
-      <location filename="../../CommandConstraints.cpp" line="4126"/>
+      <location filename="../../CommandConstraints.cpp" line="3992"/>
+      <location filename="../../CommandConstraints.cpp" line="4181"/>
       <source>Add coincident constraint</source>
       <translation>Adaugă constrângere de coincident</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4358"/>
-      <location filename="../../CommandConstraints.cpp" line="4682"/>
+      <location filename="../../CommandConstraints.cpp" line="4413"/>
+      <location filename="../../CommandConstraints.cpp" line="4737"/>
       <source>Add distance from horizontal axis constraint</source>
       <translation>Adăugați distanța de la constrângerea axei orizontale</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4370"/>
-      <location filename="../../CommandConstraints.cpp" line="4696"/>
+      <location filename="../../CommandConstraints.cpp" line="4425"/>
+      <location filename="../../CommandConstraints.cpp" line="4751"/>
       <source>Add distance from vertical axis constraint</source>
       <translation>Adăugați distanța față de constrângerea axei verticale</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4382"/>
-      <location filename="../../CommandConstraints.cpp" line="4709"/>
+      <location filename="../../CommandConstraints.cpp" line="4437"/>
+      <location filename="../../CommandConstraints.cpp" line="4764"/>
       <source>Add point to point distance constraint</source>
       <translation>Adăugați o constrângere de distanță punct la punct</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1799"/>
-      <location filename="../../CommandConstraints.cpp" line="4425"/>
-      <location filename="../../CommandConstraints.cpp" line="4797"/>
+      <location filename="../../CommandConstraints.cpp" line="1828"/>
+      <location filename="../../CommandConstraints.cpp" line="4480"/>
+      <location filename="../../CommandConstraints.cpp" line="4852"/>
       <source>Add point to line Distance constraint</source>
       <translation>Adăugați punct la linie Constrângere de distanță</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4506"/>
-      <location filename="../../CommandConstraints.cpp" line="4852"/>
+      <location filename="../../CommandConstraints.cpp" line="4561"/>
+      <location filename="../../CommandConstraints.cpp" line="4907"/>
       <source>Add circle to circle distance constraint</source>
       <translation>Adăugați restricție de distanță cerc la cerc</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4549"/>
+      <location filename="../../CommandConstraints.cpp" line="4604"/>
       <source>Add circle to line distance constraint</source>
       <translation>Adăugați cerc la constrângere de distanță pe linie</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1897"/>
-      <location filename="../../CommandConstraints.cpp" line="1920"/>
-      <location filename="../../CommandConstraints.cpp" line="1988"/>
-      <location filename="../../CommandConstraints.cpp" line="2066"/>
-      <location filename="../../CommandConstraints.cpp" line="4597"/>
-      <location filename="../../CommandConstraints.cpp" line="4624"/>
-      <location filename="../../CommandConstraints.cpp" line="4746"/>
+      <location filename="../../CommandConstraints.cpp" line="1926"/>
+      <location filename="../../CommandConstraints.cpp" line="1949"/>
+      <location filename="../../CommandConstraints.cpp" line="2017"/>
+      <location filename="../../CommandConstraints.cpp" line="2101"/>
+      <location filename="../../CommandConstraints.cpp" line="4652"/>
+      <location filename="../../CommandConstraints.cpp" line="4679"/>
+      <location filename="../../CommandConstraints.cpp" line="4801"/>
       <source>Add length constraint</source>
       <translation>Adăugați o constrângere de lungime</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1378"/>
-      <location filename="../../CommandConstraints.cpp" line="1565"/>
-      <location filename="../../CommandConstraints.cpp" line="1659"/>
+      <location filename="../../CommandConstraints.cpp" line="1405"/>
+      <location filename="../../CommandConstraints.cpp" line="1592"/>
+      <location filename="../../CommandConstraints.cpp" line="1691"/>
       <source>Dimension</source>
       <translation>Dimensiune</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1768"/>
+      <location filename="../../CommandConstraints.cpp" line="1797"/>
       <source>Add lock constraint</source>
       <translation>Adaugă constrângere de blocare</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1763"/>
+      <location filename="../../CommandConstraints.cpp" line="1792"/>
       <source>Add 'Distance to origin' constraint</source>
       <translation>Adaugă constrângere „Distanță de origine”</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1780"/>
-      <location filename="../../CommandConstraints.cpp" line="2414"/>
-      <location filename="../../CommandConstraints.cpp" line="2612"/>
+      <location filename="../../CommandConstraints.cpp" line="1809"/>
+      <location filename="../../CommandConstraints.cpp" line="2449"/>
+      <location filename="../../CommandConstraints.cpp" line="2667"/>
       <source>Add Distance constraint</source>
       <translation>Adaugă constrângere la distanță</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1785"/>
       <location filename="../../CommandConstraints.cpp" line="1814"/>
-      <location filename="../../CommandConstraints.cpp" line="1848"/>
+      <location filename="../../CommandConstraints.cpp" line="1843"/>
+      <location filename="../../CommandConstraints.cpp" line="1877"/>
       <source>Add 'Horizontal' constraints</source>
       <translation>Adaugă constrângeri „orizontale”</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1789"/>
-      <location filename="../../CommandConstraints.cpp" line="1821"/>
-      <location filename="../../CommandConstraints.cpp" line="1855"/>
+      <location filename="../../CommandConstraints.cpp" line="1818"/>
+      <location filename="../../CommandConstraints.cpp" line="1850"/>
+      <location filename="../../CommandConstraints.cpp" line="1884"/>
       <source>Add 'Vertical' constraints</source>
       <translation>Adaugă constrângeri "verticale"</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1804"/>
-      <location filename="../../CommandConstraints.cpp" line="1867"/>
+      <location filename="../../CommandConstraints.cpp" line="1833"/>
+      <location filename="../../CommandConstraints.cpp" line="1896"/>
       <source>Add Symmetry constraint</source>
       <translation>Adaugă constrângere de simetrie</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1827"/>
-      <location filename="../../CommandConstraints.cpp" line="1999"/>
+      <location filename="../../CommandConstraints.cpp" line="1856"/>
+      <location filename="../../CommandConstraints.cpp" line="2028"/>
       <source>Add Symmetry constraints</source>
       <translation>Adaugă constrângeri de simetrie</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1872"/>
-      <location filename="../../CommandConstraints.cpp" line="1884"/>
+      <location filename="../../CommandConstraints.cpp" line="1901"/>
+      <location filename="../../CommandConstraints.cpp" line="1913"/>
       <source>Add Distance constraints</source>
       <translation>Adaugă constrângeri la distanță</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1930"/>
+      <location filename="../../CommandConstraints.cpp" line="1959"/>
       <source>Add Horizontal constraint</source>
       <translation>Adaugă constrângere orizontală</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1935"/>
+      <location filename="../../CommandConstraints.cpp" line="1964"/>
       <source>Add Vertical constraint</source>
       <translation>Adaugă constrângere verticală</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1939"/>
+      <location filename="../../CommandConstraints.cpp" line="1968"/>
       <source>Add Block constraint</source>
       <translation>Adaugă constrângere blocului</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1954"/>
+      <location filename="../../CommandConstraints.cpp" line="1983"/>
       <source>Add Angle constraint</source>
       <translation>Adaugă constrângere unghi</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1964"/>
-      <location filename="../../CommandConstraints.cpp" line="2081"/>
-      <location filename="../../CommandConstraints.cpp" line="2091"/>
-      <location filename="../../CommandConstraints.cpp" line="2129"/>
+      <location filename="../../CommandConstraints.cpp" line="1993"/>
+      <location filename="../../CommandConstraints.cpp" line="2116"/>
+      <location filename="../../CommandConstraints.cpp" line="2126"/>
+      <location filename="../../CommandConstraints.cpp" line="2164"/>
       <source>Add Equality constraint</source>
       <translation>Adaugă constrângere de egalitate</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="1975"/>
+      <location filename="../../CommandConstraints.cpp" line="2004"/>
       <source>Add Equality constraints</source>
       <translation>Constrângeri pentru egalitate</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2023"/>
-      <location filename="../../CommandConstraints.cpp" line="2033"/>
-      <location filename="../../CommandConstraints.cpp" line="2046"/>
+      <location filename="../../CommandConstraints.cpp" line="2061"/>
+      <location filename="../../CommandConstraints.cpp" line="2065"/>
+      <location filename="../../CommandConstraints.cpp" line="2072"/>
+      <location filename="../../CommandConstraints.cpp" line="2077"/>
       <source>Add Radius constraint</source>
       <translation>Adaugă restricție de rază</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2027"/>
-      <location filename="../../CommandConstraints.cpp" line="2042"/>
+      <location filename="../../CommandConstraints.cpp" line="2052"/>
+      <location filename="../../CommandConstraints.cpp" line="2085"/>
       <source>Add arc angle constraint</source>
       <translation>Adaugă o constrângere de unghi arc</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2071"/>
+      <location filename="../../CommandConstraints.cpp" line="2106"/>
       <source>Add concentric and length constraint</source>
       <translation>Adaugă constrângere concentrică și lungime</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2590"/>
+      <location filename="../../CommandConstraints.cpp" line="2645"/>
       <source>Add DistanceX constraint</source>
       <translation>Adaugă constrângere DistanceX</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2601"/>
+      <location filename="../../CommandConstraints.cpp" line="2656"/>
       <source>Add DistanceY constraint</source>
       <translation>Adaugă constrângere DistanțăY</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4455"/>
+      <location filename="../../CommandConstraints.cpp" line="4510"/>
       <source>Add point to circle Distance constraint</source>
       <translation>Adaugă punct la constrângerea de distanță cerc</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3850"/>
-      <location filename="../../CommandConstraints.cpp" line="4040"/>
+      <location filename="../../CommandConstraints.cpp" line="3905"/>
+      <location filename="../../CommandConstraints.cpp" line="4095"/>
       <source>Add point on object constraint</source>
       <translation>Adăugați punct asupra constrângerii obiectului</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5040"/>
-      <location filename="../../CommandConstraints.cpp" line="5167"/>
+      <location filename="../../CommandConstraints.cpp" line="2057"/>
+      <location filename="../../CommandConstraints.cpp" line="2089"/>
+      <source>Add arc length constraint</source>
+      <translation type="unfinished">Add arc length constraint</translation>
+    </message>
+    <message>
+      <location filename="../../CommandConstraints.cpp" line="5095"/>
+      <location filename="../../CommandConstraints.cpp" line="5222"/>
       <source>Add point to point horizontal distance constraint</source>
       <translation>Adăugați constrângere de distanță orizontală punct la punct</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5081"/>
+      <location filename="../../CommandConstraints.cpp" line="5136"/>
       <source>Add fixed x-coordinate constraint</source>
       <translation>Adaugă o constrângere fixă la coordonatele x</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5342"/>
-      <location filename="../../CommandConstraints.cpp" line="5466"/>
+      <location filename="../../CommandConstraints.cpp" line="5397"/>
+      <location filename="../../CommandConstraints.cpp" line="5521"/>
       <source>Add point to point vertical distance constraint</source>
       <translation>Adaugă punct la punctul de distanță verticală constrângere</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5380"/>
+      <location filename="../../CommandConstraints.cpp" line="5435"/>
       <source>Add fixed y-coordinate constraint</source>
       <translation>Adaugă o constrângere fixă la coordonatele y</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5614"/>
-      <location filename="../../CommandConstraints.cpp" line="5658"/>
+      <location filename="../../CommandConstraints.cpp" line="5669"/>
+      <location filename="../../CommandConstraints.cpp" line="5713"/>
       <source>Add parallel constraint</source>
       <translation>Adaugă o constrângere paralelă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5798"/>
-      <location filename="../../CommandConstraints.cpp" line="5897"/>
-      <location filename="../../CommandConstraints.cpp" line="6060"/>
-      <location filename="../../CommandConstraints.cpp" line="6110"/>
-      <location filename="../../CommandConstraints.cpp" line="6261"/>
-      <location filename="../../CommandConstraints.cpp" line="6310"/>
-      <location filename="../../CommandConstraints.cpp" line="6366"/>
+      <location filename="../../CommandConstraints.cpp" line="5853"/>
+      <location filename="../../CommandConstraints.cpp" line="5952"/>
+      <location filename="../../CommandConstraints.cpp" line="6115"/>
+      <location filename="../../CommandConstraints.cpp" line="6165"/>
+      <location filename="../../CommandConstraints.cpp" line="6316"/>
+      <location filename="../../CommandConstraints.cpp" line="6365"/>
+      <location filename="../../CommandConstraints.cpp" line="6421"/>
       <source>Add perpendicular constraint</source>
       <translation>Adaugă constrângere perpendiculară</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5936"/>
+      <location filename="../../CommandConstraints.cpp" line="5991"/>
       <source>Add perpendicularity constraint</source>
       <translation>Adaugă constrângere perpendiculară</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6500"/>
+      <location filename="../../CommandConstraints.cpp" line="6555"/>
       <source>Swap coincident+tangency with ptp tangency</source>
       <translation>Schimbă coincidentul+tangență cu tangență ptp</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6522"/>
+      <location filename="../../CommandConstraints.cpp" line="6577"/>
       <source>Swap PointOnObject+tangency with point to curve tangency</source>
       <translation>Schimbă PointOnObject+tangență cu tangență în curbă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6629"/>
-      <location filename="../../CommandConstraints.cpp" line="6731"/>
-      <location filename="../../CommandConstraints.cpp" line="6780"/>
-      <location filename="../../CommandConstraints.cpp" line="6967"/>
-      <location filename="../../CommandConstraints.cpp" line="7135"/>
-      <location filename="../../CommandConstraints.cpp" line="7205"/>
-      <location filename="../../CommandConstraints.cpp" line="7238"/>
+      <location filename="../../CommandConstraints.cpp" line="6684"/>
+      <location filename="../../CommandConstraints.cpp" line="6786"/>
+      <location filename="../../CommandConstraints.cpp" line="6835"/>
+      <location filename="../../CommandConstraints.cpp" line="7022"/>
+      <location filename="../../CommandConstraints.cpp" line="7190"/>
+      <location filename="../../CommandConstraints.cpp" line="7260"/>
+      <location filename="../../CommandConstraints.cpp" line="7293"/>
       <source>Add tangent constraint</source>
       <translation>Adaugă constrângere tangentă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6826"/>
-      <location filename="../../CommandConstraints.cpp" line="6837"/>
-      <location filename="../../CommandConstraints.cpp" line="6849"/>
-      <location filename="../../CommandConstraints.cpp" line="6873"/>
-      <location filename="../../CommandConstraints.cpp" line="6886"/>
-      <location filename="../../CommandConstraints.cpp" line="6910"/>
-      <location filename="../../CommandConstraints.cpp" line="6922"/>
-      <location filename="../../CommandConstraints.cpp" line="6947"/>
-      <location filename="../../CommandConstraints.cpp" line="7040"/>
-      <location filename="../../CommandConstraints.cpp" line="7051"/>
-      <location filename="../../CommandConstraints.cpp" line="7063"/>
-      <location filename="../../CommandConstraints.cpp" line="7087"/>
-      <location filename="../../CommandConstraints.cpp" line="7099"/>
-      <location filename="../../CommandConstraints.cpp" line="7123"/>
+      <location filename="../../CommandConstraints.cpp" line="6881"/>
+      <location filename="../../CommandConstraints.cpp" line="6892"/>
+      <location filename="../../CommandConstraints.cpp" line="6904"/>
+      <location filename="../../CommandConstraints.cpp" line="6928"/>
+      <location filename="../../CommandConstraints.cpp" line="6941"/>
+      <location filename="../../CommandConstraints.cpp" line="6965"/>
+      <location filename="../../CommandConstraints.cpp" line="6977"/>
+      <location filename="../../CommandConstraints.cpp" line="7002"/>
+      <location filename="../../CommandConstraints.cpp" line="7095"/>
+      <location filename="../../CommandConstraints.cpp" line="7106"/>
+      <location filename="../../CommandConstraints.cpp" line="7118"/>
+      <location filename="../../CommandConstraints.cpp" line="7142"/>
+      <location filename="../../CommandConstraints.cpp" line="7154"/>
+      <location filename="../../CommandConstraints.cpp" line="7178"/>
       <source>Add tangent constraint point</source>
       <translation>Adaugă punct tangent de constrângere</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7458"/>
-      <location filename="../../CommandConstraints.cpp" line="7502"/>
-      <location filename="../../CommandConstraints.cpp" line="7531"/>
-      <location filename="../../CommandConstraints.cpp" line="7608"/>
+      <location filename="../../CommandConstraints.cpp" line="7513"/>
+      <location filename="../../CommandConstraints.cpp" line="7557"/>
+      <location filename="../../CommandConstraints.cpp" line="7586"/>
+      <location filename="../../CommandConstraints.cpp" line="7663"/>
       <source>Add radius constraint</source>
       <translation>Adaugă constrângere rază</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7809"/>
-      <location filename="../../CommandConstraints.cpp" line="7841"/>
-      <location filename="../../CommandConstraints.cpp" line="7862"/>
-      <location filename="../../CommandConstraints.cpp" line="7938"/>
+      <location filename="../../CommandConstraints.cpp" line="7864"/>
+      <location filename="../../CommandConstraints.cpp" line="7896"/>
+      <location filename="../../CommandConstraints.cpp" line="7917"/>
+      <location filename="../../CommandConstraints.cpp" line="7993"/>
       <source>Add diameter constraint</source>
       <translation>Adaugă o constrângere pentru diametru</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8135"/>
-      <location filename="../../CommandConstraints.cpp" line="8183"/>
-      <location filename="../../CommandConstraints.cpp" line="8218"/>
-      <location filename="../../CommandConstraints.cpp" line="8307"/>
+      <location filename="../../CommandConstraints.cpp" line="8190"/>
+      <location filename="../../CommandConstraints.cpp" line="8238"/>
+      <location filename="../../CommandConstraints.cpp" line="8273"/>
+      <location filename="../../CommandConstraints.cpp" line="8362"/>
       <source>Add radiam constraint</source>
       <translation>Adaugă constrângere de rază</translation>
     </message>
     <message>
       <location filename="../../CommandConstraints.cpp" line="261"/>
-      <location filename="../../CommandConstraints.cpp" line="8640"/>
-      <location filename="../../CommandConstraints.cpp" line="8756"/>
-      <location filename="../../CommandConstraints.cpp" line="8782"/>
-      <location filename="../../CommandConstraints.cpp" line="8877"/>
+      <location filename="../../CommandConstraints.cpp" line="8695"/>
+      <location filename="../../CommandConstraints.cpp" line="8811"/>
+      <location filename="../../CommandConstraints.cpp" line="8837"/>
+      <location filename="../../CommandConstraints.cpp" line="8932"/>
       <source>Add angle constraint</source>
       <translation>Adaugă o constrângere de unghi</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9139"/>
       <location filename="../../CommandConstraints.cpp" line="9194"/>
+      <location filename="../../CommandConstraints.cpp" line="9249"/>
       <source>Add equality constraint</source>
       <translation>Adaugă constrângere pentru egalitate</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9328"/>
-      <location filename="../../CommandConstraints.cpp" line="9387"/>
-      <location filename="../../CommandConstraints.cpp" line="9408"/>
-      <location filename="../../CommandConstraints.cpp" line="9515"/>
-      <location filename="../../CommandConstraints.cpp" line="9561"/>
+      <location filename="../../CommandConstraints.cpp" line="9383"/>
+      <location filename="../../CommandConstraints.cpp" line="9442"/>
+      <location filename="../../CommandConstraints.cpp" line="9463"/>
+      <location filename="../../CommandConstraints.cpp" line="9570"/>
+      <location filename="../../CommandConstraints.cpp" line="9616"/>
       <source>Add symmetric constraint</source>
       <translation>Adaugă constrângere simetrică</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9725"/>
+      <location filename="../../CommandConstraints.cpp" line="9780"/>
       <source>Add Snell's law constraint</source>
       <translation>Adaugă constrângere legii lui Snell</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9956"/>
+      <location filename="../../CommandConstraints.cpp" line="10011"/>
       <source>Toggle constraint to driving/reference</source>
       <translation>Comută constrângerea pentru condus/referință</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="10044"/>
+      <location filename="../../CommandConstraints.cpp" line="10099"/>
       <source>Activate/Deactivate constraint</source>
       <translation>Activează/Dezactivează constrângerea</translation>
     </message>
@@ -2106,8 +2055,8 @@ constrângeri nevalide, geometrie degenerată, etc.</translation>
       <translation>Actualizează spațiul virtual al constrângerilor</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchDefaultHandler.h" line="858"/>
-      <location filename="../../DrawSketchHandler.cpp" line="968"/>
+      <location filename="../../DrawSketchDefaultHandler.h" line="867"/>
+      <location filename="../../DrawSketchHandler.cpp" line="751"/>
       <source>Add auto constraints</source>
       <translation>Adaugă Auto-Constrângeri</translation>
     </message>
@@ -2369,124 +2318,124 @@ constrângeri nevalide, geometrie degenerată, etc.</translation>
       <location filename="../../CommandAlterGeometry.cpp" line="176"/>
       <location filename="../../CommandConstraints.cpp" line="171"/>
       <location filename="../../CommandConstraints.cpp" line="178"/>
-      <location filename="../../CommandConstraints.cpp" line="2392"/>
-      <location filename="../../CommandConstraints.cpp" line="2521"/>
-      <location filename="../../CommandConstraints.cpp" line="2537"/>
-      <location filename="../../CommandConstraints.cpp" line="2795"/>
-      <location filename="../../CommandConstraints.cpp" line="3204"/>
-      <location filename="../../CommandConstraints.cpp" line="3231"/>
-      <location filename="../../CommandConstraints.cpp" line="3236"/>
-      <location filename="../../CommandConstraints.cpp" line="3489"/>
-      <location filename="../../CommandConstraints.cpp" line="3522"/>
-      <location filename="../../CommandConstraints.cpp" line="3527"/>
-      <location filename="../../CommandConstraints.cpp" line="3814"/>
-      <location filename="../../CommandConstraints.cpp" line="3844"/>
-      <location filename="../../CommandConstraints.cpp" line="3867"/>
-      <location filename="../../CommandConstraints.cpp" line="3898"/>
-      <location filename="../../CommandConstraints.cpp" line="3921"/>
-      <location filename="../../CommandConstraints.cpp" line="4055"/>
-      <location filename="../../CommandConstraints.cpp" line="4077"/>
-      <location filename="../../CommandConstraints.cpp" line="4108"/>
-      <location filename="../../CommandConstraints.cpp" line="4315"/>
-      <location filename="../../CommandConstraints.cpp" line="4327"/>
-      <location filename="../../CommandConstraints.cpp" line="4576"/>
-      <location filename="../../CommandConstraints.cpp" line="4584"/>
-      <location filename="../../CommandConstraints.cpp" line="4650"/>
-      <location filename="../../CommandConstraints.cpp" line="4770"/>
-      <location filename="../../CommandConstraints.cpp" line="4876"/>
-      <location filename="../../CommandConstraints.cpp" line="4963"/>
-      <location filename="../../CommandConstraints.cpp" line="4976"/>
-      <location filename="../../CommandConstraints.cpp" line="5009"/>
-      <location filename="../../CommandConstraints.cpp" line="5071"/>
-      <location filename="../../CommandConstraints.cpp" line="5107"/>
-      <location filename="../../CommandConstraints.cpp" line="5143"/>
-      <location filename="../../CommandConstraints.cpp" line="5266"/>
-      <location filename="../../CommandConstraints.cpp" line="5279"/>
-      <location filename="../../CommandConstraints.cpp" line="5310"/>
-      <location filename="../../CommandConstraints.cpp" line="5372"/>
-      <location filename="../../CommandConstraints.cpp" line="5406"/>
-      <location filename="../../CommandConstraints.cpp" line="5442"/>
-      <location filename="../../CommandConstraints.cpp" line="5564"/>
-      <location filename="../../CommandConstraints.cpp" line="5599"/>
-      <location filename="../../CommandConstraints.cpp" line="5608"/>
-      <location filename="../../CommandConstraints.cpp" line="5647"/>
-      <location filename="../../CommandConstraints.cpp" line="5746"/>
-      <location filename="../../CommandConstraints.cpp" line="5758"/>
-      <location filename="../../CommandConstraints.cpp" line="5793"/>
-      <location filename="../../CommandConstraints.cpp" line="5869"/>
-      <location filename="../../CommandConstraints.cpp" line="5879"/>
-      <location filename="../../CommandConstraints.cpp" line="5920"/>
-      <location filename="../../CommandConstraints.cpp" line="5931"/>
-      <location filename="../../CommandConstraints.cpp" line="5960"/>
-      <location filename="../../CommandConstraints.cpp" line="5981"/>
-      <location filename="../../CommandConstraints.cpp" line="6161"/>
-      <location filename="../../CommandConstraints.cpp" line="6182"/>
-      <location filename="../../CommandConstraints.cpp" line="6361"/>
-      <location filename="../../CommandConstraints.cpp" line="6578"/>
-      <location filename="../../CommandConstraints.cpp" line="6590"/>
-      <location filename="../../CommandConstraints.cpp" line="6624"/>
-      <location filename="../../CommandConstraints.cpp" line="6696"/>
-      <location filename="../../CommandConstraints.cpp" line="6716"/>
-      <location filename="../../CommandConstraints.cpp" line="6725"/>
-      <location filename="../../CommandConstraints.cpp" line="6754"/>
-      <location filename="../../CommandConstraints.cpp" line="6763"/>
-      <location filename="../../CommandConstraints.cpp" line="6774"/>
-      <location filename="../../CommandConstraints.cpp" line="6802"/>
-      <location filename="../../CommandConstraints.cpp" line="6961"/>
-      <location filename="../../CommandConstraints.cpp" line="7014"/>
-      <location filename="../../CommandConstraints.cpp" line="7188"/>
-      <location filename="../../CommandConstraints.cpp" line="7233"/>
-      <location filename="../../CommandConstraints.cpp" line="7359"/>
-      <location filename="../../CommandConstraints.cpp" line="7372"/>
-      <location filename="../../CommandConstraints.cpp" line="7438"/>
-      <location filename="../../CommandConstraints.cpp" line="7446"/>
-      <location filename="../../CommandConstraints.cpp" line="7602"/>
-      <location filename="../../CommandConstraints.cpp" line="7722"/>
-      <location filename="../../CommandConstraints.cpp" line="7735"/>
-      <location filename="../../CommandConstraints.cpp" line="7780"/>
-      <location filename="../../CommandConstraints.cpp" line="7798"/>
-      <location filename="../../CommandConstraints.cpp" line="7924"/>
-      <location filename="../../CommandConstraints.cpp" line="7932"/>
-      <location filename="../../CommandConstraints.cpp" line="8041"/>
-      <location filename="../../CommandConstraints.cpp" line="8054"/>
-      <location filename="../../CommandConstraints.cpp" line="8115"/>
-      <location filename="../../CommandConstraints.cpp" line="8123"/>
-      <location filename="../../CommandConstraints.cpp" line="8301"/>
-      <location filename="../../CommandConstraints.cpp" line="8584"/>
-      <location filename="../../CommandConstraints.cpp" line="8597"/>
-      <location filename="../../CommandConstraints.cpp" line="8633"/>
-      <location filename="../../CommandConstraints.cpp" line="8731"/>
-      <location filename="../../CommandConstraints.cpp" line="8744"/>
-      <location filename="../../CommandConstraints.cpp" line="8809"/>
-      <location filename="../../CommandConstraints.cpp" line="8870"/>
-      <location filename="../../CommandConstraints.cpp" line="9024"/>
-      <location filename="../../CommandConstraints.cpp" line="9038"/>
-      <location filename="../../CommandConstraints.cpp" line="9056"/>
-      <location filename="../../CommandConstraints.cpp" line="9063"/>
-      <location filename="../../CommandConstraints.cpp" line="9084"/>
-      <location filename="../../CommandConstraints.cpp" line="9117"/>
-      <location filename="../../CommandConstraints.cpp" line="9133"/>
+      <location filename="../../CommandConstraints.cpp" line="2427"/>
+      <location filename="../../CommandConstraints.cpp" line="2576"/>
+      <location filename="../../CommandConstraints.cpp" line="2592"/>
+      <location filename="../../CommandConstraints.cpp" line="2850"/>
+      <location filename="../../CommandConstraints.cpp" line="3259"/>
+      <location filename="../../CommandConstraints.cpp" line="3286"/>
+      <location filename="../../CommandConstraints.cpp" line="3291"/>
+      <location filename="../../CommandConstraints.cpp" line="3544"/>
+      <location filename="../../CommandConstraints.cpp" line="3577"/>
+      <location filename="../../CommandConstraints.cpp" line="3582"/>
+      <location filename="../../CommandConstraints.cpp" line="3869"/>
+      <location filename="../../CommandConstraints.cpp" line="3899"/>
+      <location filename="../../CommandConstraints.cpp" line="3922"/>
+      <location filename="../../CommandConstraints.cpp" line="3953"/>
+      <location filename="../../CommandConstraints.cpp" line="3976"/>
+      <location filename="../../CommandConstraints.cpp" line="4110"/>
+      <location filename="../../CommandConstraints.cpp" line="4132"/>
+      <location filename="../../CommandConstraints.cpp" line="4163"/>
+      <location filename="../../CommandConstraints.cpp" line="4370"/>
+      <location filename="../../CommandConstraints.cpp" line="4382"/>
+      <location filename="../../CommandConstraints.cpp" line="4631"/>
+      <location filename="../../CommandConstraints.cpp" line="4639"/>
+      <location filename="../../CommandConstraints.cpp" line="4705"/>
+      <location filename="../../CommandConstraints.cpp" line="4825"/>
+      <location filename="../../CommandConstraints.cpp" line="4931"/>
+      <location filename="../../CommandConstraints.cpp" line="5018"/>
+      <location filename="../../CommandConstraints.cpp" line="5031"/>
+      <location filename="../../CommandConstraints.cpp" line="5064"/>
+      <location filename="../../CommandConstraints.cpp" line="5126"/>
+      <location filename="../../CommandConstraints.cpp" line="5162"/>
+      <location filename="../../CommandConstraints.cpp" line="5198"/>
+      <location filename="../../CommandConstraints.cpp" line="5321"/>
+      <location filename="../../CommandConstraints.cpp" line="5334"/>
+      <location filename="../../CommandConstraints.cpp" line="5365"/>
+      <location filename="../../CommandConstraints.cpp" line="5427"/>
+      <location filename="../../CommandConstraints.cpp" line="5461"/>
+      <location filename="../../CommandConstraints.cpp" line="5497"/>
+      <location filename="../../CommandConstraints.cpp" line="5619"/>
+      <location filename="../../CommandConstraints.cpp" line="5654"/>
+      <location filename="../../CommandConstraints.cpp" line="5663"/>
+      <location filename="../../CommandConstraints.cpp" line="5702"/>
+      <location filename="../../CommandConstraints.cpp" line="5801"/>
+      <location filename="../../CommandConstraints.cpp" line="5813"/>
+      <location filename="../../CommandConstraints.cpp" line="5848"/>
+      <location filename="../../CommandConstraints.cpp" line="5924"/>
+      <location filename="../../CommandConstraints.cpp" line="5934"/>
+      <location filename="../../CommandConstraints.cpp" line="5975"/>
+      <location filename="../../CommandConstraints.cpp" line="5986"/>
+      <location filename="../../CommandConstraints.cpp" line="6015"/>
+      <location filename="../../CommandConstraints.cpp" line="6036"/>
+      <location filename="../../CommandConstraints.cpp" line="6216"/>
+      <location filename="../../CommandConstraints.cpp" line="6237"/>
+      <location filename="../../CommandConstraints.cpp" line="6416"/>
+      <location filename="../../CommandConstraints.cpp" line="6633"/>
+      <location filename="../../CommandConstraints.cpp" line="6645"/>
+      <location filename="../../CommandConstraints.cpp" line="6679"/>
+      <location filename="../../CommandConstraints.cpp" line="6751"/>
+      <location filename="../../CommandConstraints.cpp" line="6771"/>
+      <location filename="../../CommandConstraints.cpp" line="6780"/>
+      <location filename="../../CommandConstraints.cpp" line="6809"/>
+      <location filename="../../CommandConstraints.cpp" line="6818"/>
+      <location filename="../../CommandConstraints.cpp" line="6829"/>
+      <location filename="../../CommandConstraints.cpp" line="6857"/>
+      <location filename="../../CommandConstraints.cpp" line="7016"/>
+      <location filename="../../CommandConstraints.cpp" line="7069"/>
+      <location filename="../../CommandConstraints.cpp" line="7243"/>
+      <location filename="../../CommandConstraints.cpp" line="7288"/>
+      <location filename="../../CommandConstraints.cpp" line="7414"/>
+      <location filename="../../CommandConstraints.cpp" line="7427"/>
+      <location filename="../../CommandConstraints.cpp" line="7493"/>
+      <location filename="../../CommandConstraints.cpp" line="7501"/>
+      <location filename="../../CommandConstraints.cpp" line="7657"/>
+      <location filename="../../CommandConstraints.cpp" line="7777"/>
+      <location filename="../../CommandConstraints.cpp" line="7790"/>
+      <location filename="../../CommandConstraints.cpp" line="7835"/>
+      <location filename="../../CommandConstraints.cpp" line="7853"/>
+      <location filename="../../CommandConstraints.cpp" line="7979"/>
+      <location filename="../../CommandConstraints.cpp" line="7987"/>
+      <location filename="../../CommandConstraints.cpp" line="8096"/>
+      <location filename="../../CommandConstraints.cpp" line="8109"/>
+      <location filename="../../CommandConstraints.cpp" line="8170"/>
+      <location filename="../../CommandConstraints.cpp" line="8178"/>
+      <location filename="../../CommandConstraints.cpp" line="8356"/>
+      <location filename="../../CommandConstraints.cpp" line="8639"/>
+      <location filename="../../CommandConstraints.cpp" line="8652"/>
+      <location filename="../../CommandConstraints.cpp" line="8688"/>
+      <location filename="../../CommandConstraints.cpp" line="8786"/>
+      <location filename="../../CommandConstraints.cpp" line="8799"/>
+      <location filename="../../CommandConstraints.cpp" line="8864"/>
+      <location filename="../../CommandConstraints.cpp" line="8925"/>
+      <location filename="../../CommandConstraints.cpp" line="9079"/>
+      <location filename="../../CommandConstraints.cpp" line="9093"/>
+      <location filename="../../CommandConstraints.cpp" line="9111"/>
+      <location filename="../../CommandConstraints.cpp" line="9118"/>
+      <location filename="../../CommandConstraints.cpp" line="9139"/>
+      <location filename="../../CommandConstraints.cpp" line="9172"/>
       <location filename="../../CommandConstraints.cpp" line="9188"/>
-      <location filename="../../CommandConstraints.cpp" line="9280"/>
-      <location filename="../../CommandConstraints.cpp" line="9294"/>
-      <location filename="../../CommandConstraints.cpp" line="9321"/>
-      <location filename="../../CommandConstraints.cpp" line="9350"/>
-      <location filename="../../CommandConstraints.cpp" line="9380"/>
-      <location filename="../../CommandConstraints.cpp" line="9430"/>
-      <location filename="../../CommandConstraints.cpp" line="9459"/>
-      <location filename="../../CommandConstraints.cpp" line="9508"/>
-      <location filename="../../CommandConstraints.cpp" line="9532"/>
-      <location filename="../../CommandConstraints.cpp" line="9626"/>
-      <location filename="../../CommandConstraints.cpp" line="9636"/>
-      <location filename="../../CommandConstraints.cpp" line="9661"/>
-      <location filename="../../CommandConstraints.cpp" line="9671"/>
-      <location filename="../../CommandConstraints.cpp" line="9689"/>
-      <location filename="../../CommandConstraints.cpp" line="9824"/>
-      <location filename="../../CommandConstraints.cpp" line="9902"/>
-      <location filename="../../CommandConstraints.cpp" line="9914"/>
-      <location filename="../../CommandConstraints.cpp" line="9950"/>
-      <location filename="../../CommandConstraints.cpp" line="10026"/>
-      <location filename="../../CommandConstraints.cpp" line="10038"/>
+      <location filename="../../CommandConstraints.cpp" line="9243"/>
+      <location filename="../../CommandConstraints.cpp" line="9335"/>
+      <location filename="../../CommandConstraints.cpp" line="9349"/>
+      <location filename="../../CommandConstraints.cpp" line="9376"/>
+      <location filename="../../CommandConstraints.cpp" line="9405"/>
+      <location filename="../../CommandConstraints.cpp" line="9435"/>
+      <location filename="../../CommandConstraints.cpp" line="9485"/>
+      <location filename="../../CommandConstraints.cpp" line="9514"/>
+      <location filename="../../CommandConstraints.cpp" line="9563"/>
+      <location filename="../../CommandConstraints.cpp" line="9587"/>
+      <location filename="../../CommandConstraints.cpp" line="9681"/>
+      <location filename="../../CommandConstraints.cpp" line="9691"/>
+      <location filename="../../CommandConstraints.cpp" line="9716"/>
+      <location filename="../../CommandConstraints.cpp" line="9726"/>
+      <location filename="../../CommandConstraints.cpp" line="9744"/>
+      <location filename="../../CommandConstraints.cpp" line="9879"/>
+      <location filename="../../CommandConstraints.cpp" line="9957"/>
+      <location filename="../../CommandConstraints.cpp" line="9969"/>
+      <location filename="../../CommandConstraints.cpp" line="10005"/>
+      <location filename="../../CommandConstraints.cpp" line="10081"/>
+      <location filename="../../CommandConstraints.cpp" line="10093"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="169"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="244"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="327"/>
@@ -2564,99 +2513,99 @@ constrângeri nevalide, geometrie degenerată, etc.</translation>
       <translation>Una dintre cele selectate trebuie să fie pe schiță.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2796"/>
+      <location filename="../../CommandConstraints.cpp" line="2851"/>
       <source>Select an edge from the sketch.</source>
       <translation>Selectati o margine din schita.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2760"/>
-      <location filename="../../CommandConstraints.cpp" line="2769"/>
-      <location filename="../../CommandConstraints.cpp" line="2821"/>
-      <location filename="../../CommandConstraints.cpp" line="2845"/>
-      <location filename="../../CommandConstraints.cpp" line="2899"/>
-      <location filename="../../CommandConstraints.cpp" line="2933"/>
+      <location filename="../../CommandConstraints.cpp" line="2815"/>
+      <location filename="../../CommandConstraints.cpp" line="2824"/>
+      <location filename="../../CommandConstraints.cpp" line="2876"/>
+      <location filename="../../CommandConstraints.cpp" line="2900"/>
+      <location filename="../../CommandConstraints.cpp" line="2954"/>
+      <location filename="../../CommandConstraints.cpp" line="2988"/>
       <source>Impossible constraint</source>
       <translation>Constrangere imposibila</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2822"/>
-      <location filename="../../CommandConstraints.cpp" line="2934"/>
+      <location filename="../../CommandConstraints.cpp" line="2877"/>
+      <location filename="../../CommandConstraints.cpp" line="2989"/>
       <source>The selected edge is not a line segment.</source>
       <translation>Marginea selectată nu este un segment de linie.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2752"/>
-      <location filename="../../CommandConstraints.cpp" line="3539"/>
-      <location filename="../../CommandConstraints.cpp" line="3592"/>
+      <location filename="../../CommandConstraints.cpp" line="2807"/>
+      <location filename="../../CommandConstraints.cpp" line="3594"/>
+      <location filename="../../CommandConstraints.cpp" line="3647"/>
       <source>Double constraint</source>
       <translation>Constrangere dubla</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2753"/>
+      <location filename="../../CommandConstraints.cpp" line="2808"/>
       <source>The selected edge already has a horizontal constraint!</source>
       <translation>Marginea selectată are deja o constrângere orizontală!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2761"/>
+      <location filename="../../CommandConstraints.cpp" line="2816"/>
       <source>The selected edge already has a vertical constraint!</source>
       <translation>Marginea selectată are deja o constrângere verticală!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2770"/>
-      <location filename="../../CommandConstraints.cpp" line="3540"/>
-      <location filename="../../CommandConstraints.cpp" line="3593"/>
+      <location filename="../../CommandConstraints.cpp" line="2825"/>
+      <location filename="../../CommandConstraints.cpp" line="3595"/>
+      <location filename="../../CommandConstraints.cpp" line="3648"/>
       <source>The selected edge already has a Block constraint!</source>
       <translation>Marginea selectată are deja o constrângere de bloc!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2900"/>
+      <location filename="../../CommandConstraints.cpp" line="2955"/>
       <source>There are more than one fixed points selected. Select a maximum of one fixed point!</source>
       <translation>Există mai mult de un punct fix selectat. Selectați maxim un punct fix!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3205"/>
-      <location filename="../../CommandConstraints.cpp" line="3490"/>
-      <location filename="../../CommandConstraints.cpp" line="4316"/>
+      <location filename="../../CommandConstraints.cpp" line="3260"/>
+      <location filename="../../CommandConstraints.cpp" line="3545"/>
+      <location filename="../../CommandConstraints.cpp" line="4371"/>
       <source>Select vertices from the sketch.</source>
       <translation>Selectează nodurile din Schiță.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3232"/>
+      <location filename="../../CommandConstraints.cpp" line="3287"/>
       <source>Select one vertex from the sketch other than the origin.</source>
       <translation>Selectează un nod din schiţa altul decât originea.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3237"/>
+      <location filename="../../CommandConstraints.cpp" line="3292"/>
       <source>Select only vertices from the sketch. The last selected vertex may be the origin.</source>
       <translation>Selectaţi doar nodurile din schiță. Ultimul punct selectat poate fi originea.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3503"/>
+      <location filename="../../CommandConstraints.cpp" line="3558"/>
       <source>Wrong solver status</source>
       <translation>Status de greşit ak Rezolvitor</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3504"/>
+      <location filename="../../CommandConstraints.cpp" line="3559"/>
       <source>A Block constraint cannot be added if the sketch is unsolved or there are redundant and conflicting constraints.</source>
       <translation>O constrângere de blocare nu poate fi adăugată dacă schița nu este rezolvată sau există constrângeri redundante și contradictorii.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3523"/>
+      <location filename="../../CommandConstraints.cpp" line="3578"/>
       <source>Select one edge from the sketch.</source>
       <translation>Selectaţi o margine din Schiță.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3528"/>
+      <location filename="../../CommandConstraints.cpp" line="3583"/>
       <source>Select only edges from the sketch.</source>
       <translation>Selectaţi o margine din Schiță.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6962"/>
+      <location filename="../../CommandConstraints.cpp" line="7017"/>
       <source>Only tangent-via-point is supported with a B-spline.</source>
       <translation>Doar tangent-via-point este suportat cu o curbă B-spline.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9637"/>
+      <location filename="../../CommandConstraints.cpp" line="9692"/>
       <source>Number of selected objects is not 3</source>
       <translation>Numărul de obiecte selectate nu este 3</translation>
     </message>
@@ -2673,80 +2622,80 @@ constrângeri nevalide, geometrie degenerată, etc.</translation>
       <translation>Eroare neașteptată. Mai multe informații pot fi disponibile în Vizualizarea Raportului.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2846"/>
+      <location filename="../../CommandConstraints.cpp" line="2901"/>
       <source>The selected item(s) can't accept a horizontal or vertical constraint!</source>
       <translation>Elementele selectate nu pot accepta o constrângere orizontală sau verticală!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3747"/>
+      <location filename="../../CommandConstraints.cpp" line="3802"/>
       <source>Endpoint to endpoint tangency was applied instead.</source>
       <translation>Punct final la punctul final de tangenţă a fost aplicat în schimb.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3922"/>
+      <location filename="../../CommandConstraints.cpp" line="3977"/>
       <source>Select two or more vertices from the sketch for a coincident constraint, or two or more circles, ellipses, arcs or arcs of ellipse for a concentric constraint.</source>
       <translation>Selectați două sau mai multe noduri din schiță pentru o constrângere de coincident, sau două sau mai multe cercuri, elipsuri, arcuri sau arcuri de elipsă pentru o constrângere concentrată.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4109"/>
+      <location filename="../../CommandConstraints.cpp" line="4164"/>
       <source>Select two vertices from the sketch for a coincident constraint, or two circles, ellipses, arcs or arcs of ellipse for a concentric constraint.</source>
       <translation>Selectaţi două vârfuri din schiţă pentru o constrângere de incident, sau două cercuri, elipse, arcuri sau arcuri de elipsă pentru o constrângere concentrată.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4328"/>
+      <location filename="../../CommandConstraints.cpp" line="4383"/>
       <source>Select exactly one line or one point and one line or two points from the sketch.</source>
       <translation>Selectati exact o linie sau un punct si o linie sau două puncte din schita.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4585"/>
+      <location filename="../../CommandConstraints.cpp" line="4640"/>
       <source>Cannot add a length constraint on an axis!</source>
       <translation>Nu se poate adauga o constrangere de lungime pentru o axa!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4651"/>
-      <location filename="../../CommandConstraints.cpp" line="4877"/>
+      <location filename="../../CommandConstraints.cpp" line="4706"/>
+      <location filename="../../CommandConstraints.cpp" line="4932"/>
       <source>Select exactly one line or one point and one line or two points or two circles from the sketch.</source>
       <translation>Selectaţi exact o linie sau un punct şi o linie sau două puncte sau două cercuri din schiţă.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4771"/>
+      <location filename="../../CommandConstraints.cpp" line="4826"/>
       <source>This constraint does not make sense for non-linear curves.</source>
       <translation>Această constrângere nu are sens pentru curbe neliniare.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3705"/>
+      <location filename="../../CommandConstraints.cpp" line="3760"/>
       <source>Endpoint to edge tangency was applied instead.</source>
       <translation>Tangența la margine a fost aplicată în schimb.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4964"/>
-      <location filename="../../CommandConstraints.cpp" line="5267"/>
-      <location filename="../../CommandConstraints.cpp" line="7360"/>
-      <location filename="../../CommandConstraints.cpp" line="7723"/>
-      <location filename="../../CommandConstraints.cpp" line="8042"/>
-      <location filename="../../CommandConstraints.cpp" line="8585"/>
+      <location filename="../../CommandConstraints.cpp" line="5019"/>
+      <location filename="../../CommandConstraints.cpp" line="5322"/>
+      <location filename="../../CommandConstraints.cpp" line="7415"/>
+      <location filename="../../CommandConstraints.cpp" line="7778"/>
+      <location filename="../../CommandConstraints.cpp" line="8097"/>
+      <location filename="../../CommandConstraints.cpp" line="8640"/>
       <source>Select the right things from the sketch.</source>
       <translation>Selectaţi lucruri corecte din schiță.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3868"/>
-      <location filename="../../CommandConstraints.cpp" line="4056"/>
-      <location filename="../../CommandConstraints.cpp" line="5794"/>
-      <location filename="../../CommandConstraints.cpp" line="5932"/>
-      <location filename="../../CommandConstraints.cpp" line="5982"/>
-      <location filename="../../CommandConstraints.cpp" line="6183"/>
-      <location filename="../../CommandConstraints.cpp" line="6362"/>
-      <location filename="../../CommandConstraints.cpp" line="6625"/>
-      <location filename="../../CommandConstraints.cpp" line="6775"/>
-      <location filename="../../CommandConstraints.cpp" line="6803"/>
-      <location filename="../../CommandConstraints.cpp" line="7015"/>
-      <location filename="../../CommandConstraints.cpp" line="7234"/>
-      <location filename="../../CommandConstraints.cpp" line="7781"/>
-      <location filename="../../CommandConstraints.cpp" line="7933"/>
-      <location filename="../../CommandConstraints.cpp" line="8634"/>
-      <location filename="../../CommandConstraints.cpp" line="8732"/>
-      <location filename="../../CommandConstraints.cpp" line="8871"/>
-      <location filename="../../CommandConstraints.cpp" line="9690"/>
+      <location filename="../../CommandConstraints.cpp" line="3923"/>
+      <location filename="../../CommandConstraints.cpp" line="4111"/>
+      <location filename="../../CommandConstraints.cpp" line="5849"/>
+      <location filename="../../CommandConstraints.cpp" line="5987"/>
+      <location filename="../../CommandConstraints.cpp" line="6037"/>
+      <location filename="../../CommandConstraints.cpp" line="6238"/>
+      <location filename="../../CommandConstraints.cpp" line="6417"/>
+      <location filename="../../CommandConstraints.cpp" line="6680"/>
+      <location filename="../../CommandConstraints.cpp" line="6830"/>
+      <location filename="../../CommandConstraints.cpp" line="6858"/>
+      <location filename="../../CommandConstraints.cpp" line="7070"/>
+      <location filename="../../CommandConstraints.cpp" line="7289"/>
+      <location filename="../../CommandConstraints.cpp" line="7836"/>
+      <location filename="../../CommandConstraints.cpp" line="7988"/>
+      <location filename="../../CommandConstraints.cpp" line="8689"/>
+      <location filename="../../CommandConstraints.cpp" line="8787"/>
+      <location filename="../../CommandConstraints.cpp" line="8926"/>
+      <location filename="../../CommandConstraints.cpp" line="9745"/>
       <source>Select an edge that is not a B-spline weight.</source>
       <translation>Selectaţi o muchie care nu este o greutate B-spline.</translation>
     </message>
@@ -2756,92 +2705,92 @@ constrângeri nevalide, geometrie degenerată, etc.</translation>
       <translation>Unul sau două puncte ale constrângerii (constrângerilor) obiectului(lor) au fost șterse, deoarece ultima constrângere aplicată intern se aplică și punct-la-obiect.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3789"/>
+      <location filename="../../CommandConstraints.cpp" line="3844"/>
       <source>Select either several points, or several conics for concentricity.</source>
       <translation>Selectaţi fie mai multe puncte, fie mai multe conice pentru concentrare.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3792"/>
+      <location filename="../../CommandConstraints.cpp" line="3847"/>
       <source>Select either one point and several curves, or one curve and several points</source>
       <translation>Selectaţi fie un punct şi mai multe curbe sau o curbă şi mai multe puncte</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3795"/>
+      <location filename="../../CommandConstraints.cpp" line="3850"/>
       <source>Select either one point and several curves or one curve and several points for pointOnObject, or several points for coincidence, or several conics for concentricity.</source>
       <translation>Selectaţi fie un punct şi mai multe curbe sau o curbă şi mai multe puncte pentru pointOnObject, sau mai multe puncte pentru coincidenţă, sau mai multe conice pentru concentrare.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3899"/>
+      <location filename="../../CommandConstraints.cpp" line="3954"/>
       <source>None of the selected points were constrained onto the respective curves, because they are parts of the same element, because they are both external geometry, or because the edge is not eligible.</source>
       <translation>Niciunul dintre punctele selectate nu a fost constrâns pe curbele respective, deoarece acestea sunt părți ale aceluiași element, pentru că sunt atât geometrie externă, cât şi pentru că marginea nu este eligibilă.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4078"/>
+      <location filename="../../CommandConstraints.cpp" line="4133"/>
       <source>None of the selected points were constrained onto the respective curves, either because they are parts of the same element, or because they are both external geometry.</source>
       <translation>Nici unul dintre punctele selectate nu trece prin curbele respective, sau pentru că ele fac parte din același element sau pentru că ele sunt amândouă exterioare din punct de vedere geometric.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4577"/>
+      <location filename="../../CommandConstraints.cpp" line="4632"/>
       <source>Cannot add a length constraint on this selection!</source>
       <translation>Nu se poate adăuga o constrângere pe lungime la această selecție!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="4977"/>
-      <location filename="../../CommandConstraints.cpp" line="5108"/>
-      <location filename="../../CommandConstraints.cpp" line="5280"/>
-      <location filename="../../CommandConstraints.cpp" line="5407"/>
+      <location filename="../../CommandConstraints.cpp" line="5032"/>
+      <location filename="../../CommandConstraints.cpp" line="5163"/>
+      <location filename="../../CommandConstraints.cpp" line="5335"/>
+      <location filename="../../CommandConstraints.cpp" line="5462"/>
       <source>Select exactly one line or up to two points from the sketch.</source>
       <translation>Selectati exact o linie sau maxim doua puncte din schita.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5010"/>
+      <location filename="../../CommandConstraints.cpp" line="5065"/>
       <source>Cannot add a horizontal length constraint on an axis!</source>
       <translation>Nu se poate adauga o constrangere de lungime orizontala pentru o axa!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5072"/>
+      <location filename="../../CommandConstraints.cpp" line="5127"/>
       <source>Cannot add a fixed x-coordinate constraint on the origin point!</source>
       <translation>Nu se poate adăuga o constrângere fixă la coordonatele x pe punctul de origine!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5144"/>
-      <location filename="../../CommandConstraints.cpp" line="5443"/>
+      <location filename="../../CommandConstraints.cpp" line="5199"/>
+      <location filename="../../CommandConstraints.cpp" line="5498"/>
       <source>This constraint only makes sense on a line segment or a pair of points.</source>
       <translation>Această constrângere are sens doar pe un segment de linie sau pe o pereche de puncte.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5311"/>
+      <location filename="../../CommandConstraints.cpp" line="5366"/>
       <source>Cannot add a vertical length constraint on an axis!</source>
       <translation>Nu se poate adauga o constrangere verticala pentru o axa!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5373"/>
+      <location filename="../../CommandConstraints.cpp" line="5428"/>
       <source>Cannot add a fixed y-coordinate constraint on the origin point!</source>
       <translation>Nu se poate adăuga o constrângere fixă la coordonatele y pe punctul de origine!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5565"/>
+      <location filename="../../CommandConstraints.cpp" line="5620"/>
       <source>Select two or more lines from the sketch.</source>
       <translation>Selectati doua sau mai multe linii din schita.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5600"/>
+      <location filename="../../CommandConstraints.cpp" line="5655"/>
       <source>One selected edge is not a valid line.</source>
       <translation>O margine selectată nu este o linie validă.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5609"/>
-      <location filename="../../CommandConstraints.cpp" line="9039"/>
+      <location filename="../../CommandConstraints.cpp" line="5664"/>
+      <location filename="../../CommandConstraints.cpp" line="9094"/>
       <source>Select at least two lines from the sketch.</source>
       <translation>Selectati cel putin doua linii din schita.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5648"/>
+      <location filename="../../CommandConstraints.cpp" line="5703"/>
       <source>The selected edge is not a valid line.</source>
       <translation>Marginea selectată nu este o linie validă.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5737"/>
+      <location filename="../../CommandConstraints.cpp" line="5792"/>
       <source>There is a number of ways this constraint can be applied.
 
 Accepted combinations: two curves; an endpoint and a curve; two endpoints; two curves and a point.</source>
@@ -2850,35 +2799,35 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
 Se acceptă combinațiile: două curbe; un punct extrem şi o curbă; două puncte extreme; două curbe şi un punct.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5742"/>
+      <location filename="../../CommandConstraints.cpp" line="5797"/>
       <source>Select some geometry from the sketch.</source>
       <comment>perpendicular constraint</comment>
       <translation>Selectaţi o geometrie din schiță.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5880"/>
-      <location filename="../../CommandConstraints.cpp" line="5921"/>
+      <location filename="../../CommandConstraints.cpp" line="5935"/>
+      <location filename="../../CommandConstraints.cpp" line="5976"/>
       <source>Cannot add a perpendicularity constraint at an unconnected point!</source>
       <translation>Nu pot adauga o constrângere perpendiculară pentru un punct neconectat!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5961"/>
-      <location filename="../../CommandConstraints.cpp" line="6162"/>
+      <location filename="../../CommandConstraints.cpp" line="6016"/>
+      <location filename="../../CommandConstraints.cpp" line="6217"/>
       <source>One of the selected edges should be a line.</source>
       <translation>Una dintre marginile selectate trebuie sa fie o linie.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6511"/>
+      <location filename="../../CommandConstraints.cpp" line="6566"/>
       <source>Endpoint to endpoint tangency was applied. The coincident constraint was deleted.</source>
       <translation>Punct final la punctul final de tangenţă a fost aplicat. Coincident restricţia a fost şters.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6538"/>
+      <location filename="../../CommandConstraints.cpp" line="6593"/>
       <source>Endpoint to edge tangency was applied. The point on object constraint was deleted.</source>
       <translation>A fost aplicat punctul final de la margine tangenței. Punctul de pe obiect a fost șters.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6569"/>
+      <location filename="../../CommandConstraints.cpp" line="6624"/>
       <source>There are a number of ways this constraint can be applied.
 
 Accepted combinations: two curves; an endpoint and a curve; two endpoints; two curves and a point.</source>
@@ -2886,67 +2835,67 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <translation>Există un număr de moduri în care se poate aplica această constrângere. Se accepta combinațiile: două curbe; un punct extrem şi o curbă; două puncte extreme; două curbe şi un punct.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6574"/>
+      <location filename="../../CommandConstraints.cpp" line="6629"/>
       <source>Select some geometry from the sketch.</source>
       <comment>tangent constraint</comment>
       <translation>Selectaţi o geometrie din schiță.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6726"/>
-      <location filename="../../CommandConstraints.cpp" line="6764"/>
-      <location filename="../../CommandConstraints.cpp" line="7189"/>
+      <location filename="../../CommandConstraints.cpp" line="6781"/>
+      <location filename="../../CommandConstraints.cpp" line="6819"/>
+      <location filename="../../CommandConstraints.cpp" line="7244"/>
       <source>Cannot add a tangency constraint at an unconnected point!</source>
       <translation>Nu pot adauga constrângere tangenţială pentru un punct neconectat!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6717"/>
-      <location filename="../../CommandConstraints.cpp" line="6755"/>
+      <location filename="../../CommandConstraints.cpp" line="6772"/>
+      <location filename="../../CommandConstraints.cpp" line="6810"/>
       <source>Tangent constraint at B-spline knot is only supported with lines!</source>
       <translation>Constrângerea tangentă la nodul B-spline este suportată doar cu linii!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3767"/>
+      <location filename="../../CommandConstraints.cpp" line="3822"/>
       <source>B-spline knot to endpoint tangency was applied instead.</source>
       <translation>Tangenţa B-spline până la final a fost aplicată.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5759"/>
-      <location filename="../../CommandConstraints.cpp" line="6591"/>
+      <location filename="../../CommandConstraints.cpp" line="5814"/>
+      <location filename="../../CommandConstraints.cpp" line="6646"/>
       <source>Wrong number of selected objects!</source>
       <translation>Număr greșit al obiectelor selectate!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="5870"/>
-      <location filename="../../CommandConstraints.cpp" line="6697"/>
+      <location filename="../../CommandConstraints.cpp" line="5925"/>
+      <location filename="../../CommandConstraints.cpp" line="6752"/>
       <source>With 3 objects, there must be 2 curves and 1 point.</source>
       <translation>Cu 3 obiecte, trebuie să existe 2 curbe și un punct.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7373"/>
-      <location filename="../../CommandConstraints.cpp" line="7439"/>
-      <location filename="../../CommandConstraints.cpp" line="7736"/>
-      <location filename="../../CommandConstraints.cpp" line="7799"/>
-      <location filename="../../CommandConstraints.cpp" line="8055"/>
-      <location filename="../../CommandConstraints.cpp" line="8116"/>
+      <location filename="../../CommandConstraints.cpp" line="7428"/>
+      <location filename="../../CommandConstraints.cpp" line="7494"/>
+      <location filename="../../CommandConstraints.cpp" line="7791"/>
+      <location filename="../../CommandConstraints.cpp" line="7854"/>
+      <location filename="../../CommandConstraints.cpp" line="8110"/>
+      <location filename="../../CommandConstraints.cpp" line="8171"/>
       <source>Select one or more arcs or circles from the sketch.</source>
       <translation>Selectaţi doar un arc sau un cerc din schiţă.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7447"/>
-      <location filename="../../CommandConstraints.cpp" line="8124"/>
+      <location filename="../../CommandConstraints.cpp" line="7502"/>
+      <location filename="../../CommandConstraints.cpp" line="8179"/>
       <source>Select either only one or more B-Spline poles or only one or more arcs or circles from the sketch, but not mixed.</source>
       <translation>Selectaţi fie unul sau mai mulţi poli B-Spline sau doar unul sau mai multe arcuri sau cercuri din schiţă, dar nu amestecate.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7603"/>
-      <location filename="../../CommandConstraints.cpp" line="7925"/>
-      <location filename="../../CommandConstraints.cpp" line="8302"/>
+      <location filename="../../CommandConstraints.cpp" line="7658"/>
+      <location filename="../../CommandConstraints.cpp" line="7980"/>
+      <location filename="../../CommandConstraints.cpp" line="8357"/>
       <source>Constraint only applies to arcs or circles.</source>
       <translation>Restricţia se aplică numai pentru arce de cerc sau cercuri.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8598"/>
-      <location filename="../../CommandConstraints.cpp" line="8810"/>
+      <location filename="../../CommandConstraints.cpp" line="8653"/>
+      <location filename="../../CommandConstraints.cpp" line="8865"/>
       <source>Select one or two lines from the sketch. Or select two edges and a point.</source>
       <translation>Selectaţi una sau două linii din schiță, sau selectaţi două margini şi un punct.</translation>
     </message>
@@ -2961,93 +2910,93 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <translation>O constrângere unghiulară nu poate fi aplicată la două linii paralele.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8745"/>
+      <location filename="../../CommandConstraints.cpp" line="8800"/>
       <source>Cannot add an angle constraint on an axis!</source>
       <translation>Nu pot adăuga o constrângere de unghi pe o axă!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9025"/>
+      <location filename="../../CommandConstraints.cpp" line="9080"/>
       <source>Select two edges from the sketch.</source>
       <translation>Selectaţi două margini din schiţă.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9057"/>
+      <location filename="../../CommandConstraints.cpp" line="9112"/>
       <source>Select two or more compatible edges.</source>
       <translation>Selectaţi două sau mai multe margini compatibile.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9064"/>
+      <location filename="../../CommandConstraints.cpp" line="9119"/>
       <source>Sketch axes cannot be used in equality constraints.</source>
       <translation>Axele schiţei nu pot fi folosite în constrângerile de egalitate.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9085"/>
+      <location filename="../../CommandConstraints.cpp" line="9140"/>
       <source>Equality for B-spline edge currently unsupported.</source>
       <translation>Egalitate pentru muchiile curbelor B-spline, în prezent, nu sunt suportate.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2393"/>
-      <location filename="../../CommandConstraints.cpp" line="9118"/>
-      <location filename="../../CommandConstraints.cpp" line="9134"/>
+      <location filename="../../CommandConstraints.cpp" line="2428"/>
+      <location filename="../../CommandConstraints.cpp" line="9173"/>
       <location filename="../../CommandConstraints.cpp" line="9189"/>
+      <location filename="../../CommandConstraints.cpp" line="9244"/>
       <source>Select two or more edges of similar type.</source>
       <translation>Selectaţi două sau mai multe margini de tip similar.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9281"/>
-      <location filename="../../CommandConstraints.cpp" line="9295"/>
-      <location filename="../../CommandConstraints.cpp" line="9351"/>
-      <location filename="../../CommandConstraints.cpp" line="9431"/>
-      <location filename="../../CommandConstraints.cpp" line="9533"/>
+      <location filename="../../CommandConstraints.cpp" line="9336"/>
+      <location filename="../../CommandConstraints.cpp" line="9350"/>
+      <location filename="../../CommandConstraints.cpp" line="9406"/>
+      <location filename="../../CommandConstraints.cpp" line="9486"/>
+      <location filename="../../CommandConstraints.cpp" line="9588"/>
       <source>Select two points and a symmetry line, two points and a symmetry point or a line and a symmetry point from the sketch.</source>
       <translation>Selectaţi două puncte şi o linie de simetrie, două puncte şi un punct de simetrie sau o linie si un punct de simetrie din schiță.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9322"/>
-      <location filename="../../CommandConstraints.cpp" line="9509"/>
+      <location filename="../../CommandConstraints.cpp" line="9377"/>
+      <location filename="../../CommandConstraints.cpp" line="9564"/>
       <source>Cannot add a symmetry constraint between a line and its end points.</source>
       <translation>Nu se poate adăuga o constrângere de simetrie între o linie și punctele sale de sfârșit.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2522"/>
-      <location filename="../../CommandConstraints.cpp" line="2538"/>
-      <location filename="../../CommandConstraints.cpp" line="9381"/>
-      <location filename="../../CommandConstraints.cpp" line="9460"/>
+      <location filename="../../CommandConstraints.cpp" line="2577"/>
+      <location filename="../../CommandConstraints.cpp" line="2593"/>
+      <location filename="../../CommandConstraints.cpp" line="9436"/>
+      <location filename="../../CommandConstraints.cpp" line="9515"/>
       <source>Cannot add a symmetry constraint between a line and its end points!</source>
       <translation>Nu se poate adăuga o constrângere de simetrie între o linie şi punctele ei de capăt!</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9611"/>
+      <location filename="../../CommandConstraints.cpp" line="9666"/>
       <source>Select two endpoints of lines to act as rays, and an edge representing a boundary. The first selected point corresponds to index n1, second to n2, and datum value sets the ratio n2/n1.</source>
       <comment>Constraint_SnellsLaw</comment>
       <translation>Selectaţi două puncte finale ale liniilor pentru a acţiona ca raze, şi o margine reprezentând o limită. Primul punct selectat corespunde indicelui n1, secundă la n2, iar valoarea de referință setează raportul n2/n1.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9620"/>
+      <location filename="../../CommandConstraints.cpp" line="9675"/>
       <source>Selected objects are not just geometry from one sketch.</source>
       <translation>Obiectele selectate nu sunt geometria doar unui sketch.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9662"/>
+      <location filename="../../CommandConstraints.cpp" line="9717"/>
       <source>Cannot create constraint with external geometry only.</source>
       <translation>Nu se poate crea constrângere doar cu geometrie externă.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9672"/>
+      <location filename="../../CommandConstraints.cpp" line="9727"/>
       <source>Incompatible geometry is selected.</source>
       <translation>Geometria incompatibilă este selectată.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9825"/>
+      <location filename="../../CommandConstraints.cpp" line="9880"/>
       <source>Select one dimensional constraint from the sketch.</source>
-      <translation type="unfinished">Select one dimensional constraint from the sketch.</translation>
+      <translation>Selectaţi o constrângere dimensională din schiţă.</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9903"/>
-      <location filename="../../CommandConstraints.cpp" line="9915"/>
-      <location filename="../../CommandConstraints.cpp" line="9951"/>
-      <location filename="../../CommandConstraints.cpp" line="10027"/>
-      <location filename="../../CommandConstraints.cpp" line="10039"/>
+      <location filename="../../CommandConstraints.cpp" line="9958"/>
+      <location filename="../../CommandConstraints.cpp" line="9970"/>
+      <location filename="../../CommandConstraints.cpp" line="10006"/>
+      <location filename="../../CommandConstraints.cpp" line="10082"/>
+      <location filename="../../CommandConstraints.cpp" line="10094"/>
       <source>Select constraints from the sketch.</source>
       <translation>Selectează constrângerile din schiță.</translation>
     </message>
@@ -3604,12 +3553,12 @@ Accepted combinations: two curves; an endpoint and a curve; two endpoints; two c
       <translation>Lungime:</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9701"/>
+      <location filename="../../CommandConstraints.cpp" line="9756"/>
       <source>Refractive index ratio</source>
       <translation>Procentul indicelui de refracție</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9702"/>
+      <location filename="../../CommandConstraints.cpp" line="9757"/>
       <source>Ratio n2/n1:</source>
       <translation>Raportul n2/n1:</translation>
     </message>
@@ -4472,55 +4421,55 @@ Apoi obiectele sunt vizibile doar în spatele planului schiței.</translation>
   <context>
     <name>SketcherGui::SketcherValidation</name>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="187"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="180"/>
       <source>No missing coincidences</source>
       <translation>Nu lipsesc coincidențe</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="188"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="181"/>
       <source>No missing coincidences found</source>
       <translation>Nu s-au găsit coincidențe lipsă</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="196"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="189"/>
       <source>Missing coincidences</source>
       <translation>Lipsesc coincidente</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="197"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="190"/>
       <source>%1 missing coincidences found</source>
       <translation>%1 coincidența lipsă găsită</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="248"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="241"/>
       <source>No invalid constraints</source>
       <translation>Nicio constrîngere nu este invalidă</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="249"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="242"/>
       <source>No invalid constraints found</source>
       <translation>Nu s-au găsit Constrângeri nevalide</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="255"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="248"/>
       <source>Invalid constraints</source>
       <translation>Constrângeri nevalide</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="256"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="249"/>
       <source>Invalid constraints found</source>
       <translation>S-au găsit Constrângerile nevalide</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="299"/>
-      <location filename="../../TaskSketcherValidation.cpp" line="314"/>
-      <location filename="../../TaskSketcherValidation.cpp" line="325"/>
-      <location filename="../../TaskSketcherValidation.cpp" line="342"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="290"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="305"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="316"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="333"/>
       <source>Reversed external geometry</source>
       <translation>Geometrie externă inversă</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="300"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="291"/>
       <source>%1 reversed external-geometry arcs were found. Their endpoints are encircled in 3d view.
 
 %2 constraints are linking to the endpoints. The constraints have been listed in Report view (menu View -&gt; Panels -&gt; Report view).
@@ -4533,71 +4482,71 @@ Click "Swap endpoints in constraints" button to reassign endpoints. Do this only
 Apăsați butonul "Swap endpoints" pentru a realoca punctele de sfârșit. Faceți acest lucru o singură dată pentru schițele create în FreeCAD mai vechi de v0.15</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="315"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="306"/>
       <source>%1 reversed external-geometry arcs were found. Their endpoints are encircled in 3d view.
 
 However, no constraints linking to the endpoints were found.</source>
       <translation>%1 arc inversat s-au găsit în geometria externă. Extremitățile lor sunt puse în evidență într-o vedere 3D.</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="326"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="317"/>
       <source>No reversed external-geometry arcs were found.</source>
       <translation>Nici un arc inversat nu s-a găsit în geometria externă.</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="343"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="334"/>
       <source>%1 changes were made to constraints linking to endpoints of reversed arcs.</source>
       <translation>% 1 au fost făcute modificări la constrângerile legate de punctele finale ale marginilor arcadei inversate.</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="363"/>
-      <location filename="../../TaskSketcherValidation.cpp" line="384"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="354"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="375"/>
       <source>Constraint orientation locking</source>
       <translation>Constrângeri de zăvorâre a orientării</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="364"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="355"/>
       <source>Orientation locking was enabled and recomputed for %1 constraints. The constraints have been listed in Report view (menu View -&gt; Panels -&gt; Report view).</source>
       <translation>Blocarea orientării a fost activată şi recalculate pentru %1 constrângeri. Aceste Constrângeri au fost enumerate în vizualizarea raport (meniu Affichage-&gt; View-&gt; Report View).</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="385"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="376"/>
       <source>Orientation locking was disabled for %1 constraints. The constraints have been listed in Report view (menu View -&gt; Panels -&gt; Report view). Note that for all future constraints, the locking still defaults to ON.</source>
       <translation>Blocarea de orientare a fost dezactivată pentru% 1 constrângeri. Aceste constrângeri sunt afișate în vizualizarea Raport (meniul Vizualizare -&gt; Vizualizare -&gt; Raport). Rețineți că pentru toate constrângerile viitoare, blocarea este în continuare activă.</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="403"/>
-      <location filename="../../TaskSketcherValidation.cpp" line="422"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="393"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="412"/>
       <source>Delete constraints to external geom.</source>
       <translation>Elimină constrângerile privind geometria externă.</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="404"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="394"/>
       <source>You are about to delete ALL constraints that deal with external geometry. This is useful to rescue a sketch with broken/changed links to external geometry. Are you sure you want to delete the constraints?</source>
       <translation>Sunteți pe punctul de a elimina toate constrângerile care se ocupă de geometria exterioară. Acest lucru este util pentru salvarea unei schițe care conține legături către geometria externă întrerupte sau modificată. Sigur doriți să eliminați constrângerile?</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="423"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="413"/>
       <source>All constraints that deal with external geometry were deleted.</source>
       <translation>Toate constrângerile referitoare la geometria externă au fost șterse.</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="493"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="482"/>
       <source>No degenerated geometry</source>
       <translation>Nicio geometrie degenerată</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="494"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="483"/>
       <source>No degenerated geometry found</source>
       <translation>Nicio geometrie degenerată găsită</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="500"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="489"/>
       <source>Degenerated geometry</source>
       <translation>Geometrie degenerată</translation>
     </message>
     <message>
-      <location filename="../../TaskSketcherValidation.cpp" line="501"/>
+      <location filename="../../TaskSketcherValidation.cpp" line="490"/>
       <source>%1 degenerated geometry found</source>
       <translation>%1 geometrie degenerată găsită</translation>
     </message>
@@ -5245,8 +5194,8 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_ConstrainDiameter</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8496"/>
-      <location filename="../../CommandConstraints.cpp" line="8498"/>
+      <location filename="../../CommandConstraints.cpp" line="8551"/>
+      <location filename="../../CommandConstraints.cpp" line="8553"/>
       <source>Fix the diameter of a circle or an arc</source>
       <translation>Fixează diametrul unui cerc sau arc de cerc</translation>
     </message>
@@ -5254,8 +5203,8 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_ConstrainRadiam</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8503"/>
-      <location filename="../../CommandConstraints.cpp" line="8505"/>
+      <location filename="../../CommandConstraints.cpp" line="8558"/>
+      <location filename="../../CommandConstraints.cpp" line="8560"/>
       <source>Fix the radius/diameter of a circle or an arc</source>
       <translation>Repară raza/diametrul unui cerc sau al unui arc</translation>
     </message>
@@ -5263,8 +5212,8 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_ConstrainRadius</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="8490"/>
-      <location filename="../../CommandConstraints.cpp" line="8492"/>
+      <location filename="../../CommandConstraints.cpp" line="8545"/>
+      <location filename="../../CommandConstraints.cpp" line="8547"/>
       <source>Fix the radius of a circle or an arc</source>
       <translation>Fixează raza unui cerc sau arc</translation>
     </message>
@@ -5279,36 +5228,21 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
     </message>
   </context>
   <context>
-    <name>Sketcher_Create3PointCircle</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1372"/>
-      <location filename="../../CommandCreateGeo.cpp" line="1374"/>
-      <source>Create a circle by 3 rim points</source>
-      <translation>Creeați un cerc definit prin 3 puncte pe circumferință</translation>
-    </message>
-  </context>
-  <context>
     <name>Sketcher_CreateBSpline</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1199"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1082"/>
       <source>B-spline by control points</source>
       <translation>B-spline definită prin punctele de control</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1201"/>
-      <location filename="../../CommandCreateGeo.cpp" line="1203"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1084"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1086"/>
       <source>Create a B-spline by control points</source>
       <translation>Creaţi un B-spline definită prin punctele de control</translation>
     </message>
   </context>
   <context>
     <name>Sketcher_CreateCircle</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1365"/>
-      <location filename="../../CommandCreateGeo.cpp" line="1367"/>
-      <source>Create a circle by its center and by a rim point</source>
-      <translation>Creează un cerc definit prin centrul propriu și cu un punct pe circumferință</translation>
-    </message>
     <message>
       <location filename="../../DrawSketchHandlerCircle.h" line="366"/>
       <source>Center</source>
@@ -5323,8 +5257,8 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreateHeptagon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2172"/>
-      <location filename="../../CommandCreateGeo.cpp" line="2175"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1943"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1946"/>
       <source>Create a heptagon by its center and by one corner</source>
       <translation>Creați un heptagon definit prin centrul său şi a unui colţ</translation>
     </message>
@@ -5332,8 +5266,8 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreateHexagon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2164"/>
-      <location filename="../../CommandCreateGeo.cpp" line="2167"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1935"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1938"/>
       <source>Create a hexagon by its center and by one corner</source>
       <translation>Creați un hexagon definit prin centrul său şi un colţ</translation>
     </message>
@@ -5341,7 +5275,7 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreateOblong</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="355"/>
+      <location filename="../../CommandCreateGeo.cpp" line="440"/>
       <source>Create a rounded rectangle</source>
       <translation>Creează un dreptunghi rotunjit</translation>
     </message>
@@ -5349,14 +5283,14 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreateOctagon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2180"/>
-      <location filename="../../CommandCreateGeo.cpp" line="2183"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1951"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1954"/>
       <source>Create an octagon by its center and by one corner</source>
       <translation>Creați un octogon definit prin centrul său şi a un colţ</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2189"/>
-      <location filename="../../CommandCreateGeo.cpp" line="2192"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1960"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1963"/>
       <source>Create a regular polygon by its center and by one corner</source>
       <translation>Creați unui poligon regulat definit prin centrul său şi un colţ</translation>
     </message>
@@ -5364,8 +5298,8 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreatePentagon</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2156"/>
-      <location filename="../../CommandCreateGeo.cpp" line="2159"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1927"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1930"/>
       <source>Create a pentagon by its center and by one corner</source>
       <translation>Creați unui pentagon definit prin centrul său şi a un colţ</translation>
     </message>
@@ -5373,7 +5307,7 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreateRectangle</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="343"/>
+      <location filename="../../CommandCreateGeo.cpp" line="428"/>
       <source>Create a rectangle</source>
       <translation>Creează un dreptunghi</translation>
     </message>
@@ -5381,7 +5315,7 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreateRectangle_Center</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="349"/>
+      <location filename="../../CommandCreateGeo.cpp" line="434"/>
       <source>Create a centered rectangle</source>
       <translation>Creaţi un dreptunghi centrat</translation>
     </message>
@@ -5389,8 +5323,8 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreateSquare</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2148"/>
-      <location filename="../../CommandCreateGeo.cpp" line="2151"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1919"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1922"/>
       <source>Create a square by its center and by one corner</source>
       <translation>Creați un pătrat definit prin centrul său şi un colţ</translation>
     </message>
@@ -5398,8 +5332,8 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_CreateTriangle</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="2141"/>
-      <location filename="../../CommandCreateGeo.cpp" line="2144"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1912"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1915"/>
       <source>Create an equilateral triangle by its center and by one corner</source>
       <translation>Creați un unui triunghi echilateral definit prin centrul său şi un colţ</translation>
     </message>
@@ -5407,13 +5341,13 @@ Acest lucru se realizează prin analizarea geometrelor și constrângerilor schi
   <context>
     <name>Sketcher_Create_Periodic_BSpline</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1205"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1088"/>
       <source>Periodic B-spline by control points</source>
       <translation>Creaţi o curbă B-spline periodică prin punctele de control</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1208"/>
-      <location filename="../../CommandCreateGeo.cpp" line="1211"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1091"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1094"/>
       <source>Create a periodic B-spline by control points</source>
       <translation>Creaţi o curbă B-spline periodică prin punctele de control</translation>
     </message>
@@ -6041,7 +5975,7 @@ Schimbarea spațierii grilei dacă devine mai mică decât acest număr de pixel
       <translation>Schița are constrângeri parțial redundante!</translation>
     </message>
     <message>
-      <location filename="../../../App/SketchObject.cpp" line="9252"/>
+      <location filename="../../../App/SketchObject.cpp" line="9261"/>
       <source>Parabolas were migrated. Migrated files won't open in previous versions of FreeCAD!!
 </source>
       <translation>Parabolele au fost migrate. Fișierele migrate nu vor fi deschise în versiunile anterioare de FreeCAD!
@@ -6112,7 +6046,7 @@ Schimbarea spațierii grilei dacă devine mai mică decât acest număr de pixel
       <translation>Selecţia nu are nici o geometrie validă. Punctele nu sunt încă acceptate.</translation>
     </message>
     <message>
-      <location filename="../../../App/SketchObjectPyImp.cpp" line="389"/>
+      <location filename="../../../App/SketchObjectPyImp.cpp" line="414"/>
       <source>The constraint has invalid index information and is malformed.</source>
       <translation>Constrângerea are informații invalide despre index și este formatată incorect.</translation>
     </message>
@@ -6122,8 +6056,8 @@ Schimbarea spațierii grilei dacă devine mai mică decât acest număr de pixel
       <location filename="../../CommandConstraints.cpp" line="609"/>
       <location filename="../../CommandConstraints.cpp" line="699"/>
       <location filename="../../CommandConstraints.cpp" line="773"/>
-      <location filename="../../CommandConstraints.cpp" line="6095"/>
-      <location filename="../../CommandConstraints.cpp" line="6299"/>
+      <location filename="../../CommandConstraints.cpp" line="6150"/>
+      <location filename="../../CommandConstraints.cpp" line="6354"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="468"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="604"/>
       <location filename="../../CommandSketcherBSpline.cpp" line="832"/>
@@ -6277,22 +6211,22 @@ Schimbarea spațierii grilei dacă devine mai mică decât acest număr de pixel
       <translation>Eroare de valoare</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchDefaultHandler.h" line="903"/>
+      <location filename="../../DrawSketchDefaultHandler.h" line="912"/>
       <source>Autoconstraints cause redundancy. Removing them</source>
       <translation>Autoconstrângerile cauzează redundanță. Eliminarea lor</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchDefaultHandler.h" line="922"/>
+      <location filename="../../DrawSketchDefaultHandler.h" line="931"/>
       <source>Redundant constraint is not an autoconstraint. No autoconstraints or additional constraints were added. Please report!</source>
       <translation>Constrângerea redundantă nu este o autoconstrângere. Nu au fost adăugate autoconstrângeri sau constrângeri suplimentare. Vă rugăm să raportați!</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchDefaultHandler.h" line="937"/>
+      <location filename="../../DrawSketchDefaultHandler.h" line="946"/>
       <source>Autoconstraints cause conflicting constraints - Please report!</source>
       <translation>Autoconstrângerile cauzează constrângeri contradictorii - Vă rugăm să raportați!</translation>
     </message>
     <message>
-      <location filename="../../DrawSketchDefaultHandler.h" line="963"/>
+      <location filename="../../DrawSketchDefaultHandler.h" line="972"/>
       <source>Unexpected Redundancy/Conflicting constraint. Check the constraints and autoconstraints of this operation.</source>
       <translation>Constrângeri neașteptate/contradictorii. Verifică constrângerile și autoconstrângerile acestei operațiuni.</translation>
     </message>
@@ -6340,13 +6274,13 @@ Schimbarea spațierii grilei dacă devine mai mică decât acest număr de pixel
   <context>
     <name>Sketcher_CreateBSplineByInterpolation</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1215"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1098"/>
       <source>B-spline by knots</source>
       <translation>B-spline definită prin noduri</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1216"/>
-      <location filename="../../CommandCreateGeo.cpp" line="1218"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1099"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1101"/>
       <source>Create a B-spline by knots</source>
       <translation>Creaţi o curbă B-spline cu noduri</translation>
     </message>
@@ -6452,12 +6386,12 @@ Punctele trebuie să fie mai apropiate de o cincime din spațierea grilei de o l
   <context>
     <name>CmdSketcherCreateBSplineByInterpolation</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1017"/>
+      <location filename="../../CommandCreateGeo.cpp" line="900"/>
       <source>Create B-spline by knots</source>
       <translation>Crează B-spline cu noduri</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1018"/>
+      <location filename="../../CommandCreateGeo.cpp" line="901"/>
       <source>Create a B-spline by knots, i.e. by interpolation, in the sketch.</source>
       <translation>Creaţi în schiţă o curbă B-spline cu noduri, adică prin interpolare.</translation>
     </message>
@@ -6465,12 +6399,12 @@ Punctele trebuie să fie mai apropiate de o cincime din spațierea grilei de o l
   <context>
     <name>CmdSketcherCreatePeriodicBSplineByInterpolation</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1049"/>
+      <location filename="../../CommandCreateGeo.cpp" line="932"/>
       <source>Create periodic B-spline by knots</source>
       <translation>Crează periodic B-spline cu noduri</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1051"/>
+      <location filename="../../CommandCreateGeo.cpp" line="934"/>
       <source>Create a periodic B-spline by knots, i.e. by interpolation, in the sketch.</source>
       <translation>Creaţi în schiţă o curbă B-spline periodică, adică prin interpolare.</translation>
     </message>
@@ -6478,12 +6412,12 @@ Punctele trebuie să fie mai apropiate de o cincime din spațierea grilei de o l
   <context>
     <name>CmdSketcherDimension</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2667"/>
+      <location filename="../../CommandConstraints.cpp" line="2722"/>
       <source>Dimension</source>
       <translation>Dimensiune</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2668"/>
+      <location filename="../../CommandConstraints.cpp" line="2723"/>
       <source>Constrain contextually based on your selection.
 Depending on your selection you might have several constraints available. You can cycle through them using M key.
 Left clicking on empty space will validate the current constraint. Right clicking or pressing Esc will cancel.</source>
@@ -6521,12 +6455,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherConstrainRadius</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7328"/>
+      <location filename="../../CommandConstraints.cpp" line="7383"/>
       <source>Constrain radius</source>
       <translation>Rază constrânsă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="7329"/>
+      <location filename="../../CommandConstraints.cpp" line="7384"/>
       <source>Fix the radius of a circle or an arc</source>
       <translation>Fixează raza unui cerc sau arc</translation>
     </message>
@@ -6736,12 +6670,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherCompHorizontalVertical</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2724"/>
-      <source>Horizontal/Vertical</source>
-      <translation>orizontală/verticală</translation>
+      <location filename="../../CommandConstraints.cpp" line="2779"/>
+      <source>Constrain horizontal/vertical</source>
+      <translation type="unfinished">Constrain horizontal/vertical</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="2725"/>
+      <location filename="../../CommandConstraints.cpp" line="2780"/>
       <source>Constrains a single line to either horizontal or vertical.</source>
       <translation>Constrângeți o singură linie fie orizontală, fie verticală.</translation>
     </message>
@@ -6749,12 +6683,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherConstrainHorVer</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3034"/>
-      <source>Horizontal/Vertical</source>
-      <translation>orizontală/verticală</translation>
+      <location filename="../../CommandConstraints.cpp" line="3089"/>
+      <source>Constrain horizontal/vertical</source>
+      <translation type="unfinished">Constrain horizontal/vertical</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3035"/>
+      <location filename="../../CommandConstraints.cpp" line="3090"/>
       <source>Constrains a single line to either horizontal or vertical, whichever is closer to current alignment.</source>
       <translation>Constrângeți o singură linie fie orizontală, fie verticală, oricare dintre acestea este mai apropiată de alinierea curentă.</translation>
     </message>
@@ -6762,12 +6696,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherCompCurveEdition</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1604"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1375"/>
       <source>Curve Edition</source>
       <translation>Ediție Curbă</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1605"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1376"/>
       <source>Curve Edition tools.</source>
       <translation>Unelte de Ediție Curve.</translation>
     </message>
@@ -6775,12 +6709,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherCompSlot</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1693"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1464"/>
       <source>Slots</source>
       <translation>Sloturi</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1694"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1465"/>
       <source>Slot tools.</source>
       <translation>Unelte pentru sloturi.</translation>
     </message>
@@ -6788,12 +6722,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherCreateArcSlot</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1774"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1545"/>
       <source>Create arc slot</source>
       <translation>Creează un slot arc</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1775"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1546"/>
       <source>Create an arc slot in the sketch</source>
       <translation>Creează un slot cu arc în schiță</translation>
     </message>
@@ -6801,12 +6735,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherConstrainCoincidentUnified</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3658"/>
+      <location filename="../../CommandConstraints.cpp" line="3713"/>
       <source>Constrain coincident</source>
       <translation>Constrângere coincidentă</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="3659"/>
+      <location filename="../../CommandConstraints.cpp" line="3714"/>
       <source>Create a coincident constraint between points, or fix a point on an edge, or a concentric constraint between circles, arcs, and ellipses</source>
       <translation>Crează o constrângere coincidentă între puncte, sau fixează un punct pe margine, sau o constrângere concentrată între cercuri, arcuri și elipse</translation>
     </message>
@@ -6894,9 +6828,64 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
       <translation>Lăţime</translation>
     </message>
     <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="212"/>
+      <source>Color of fully constrained normal geometry in edit mode</source>
+      <translation type="unfinished">Color of fully constrained normal geometry in edit mode</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="238"/>
+      <source>Color of normal geometry in edit mode</source>
+      <translation type="unfinished">Color of normal geometry in edit mode</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="306"/>
+      <source>Color of fully constrained construction geometry in edit mode</source>
+      <translation type="unfinished">Color of fully constrained construction geometry in edit mode</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="387"/>
+      <source>Internal alignment geometry</source>
+      <translation type="unfinished">Internal alignment geometry</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="400"/>
+      <source>Color of fully constrained internal alignment geometry in edit mode</source>
+      <translation type="unfinished">Color of fully constrained internal alignment geometry in edit mode</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="426"/>
+      <source>Color of internal alignment geometry in edit mode</source>
+      <translation type="unfinished">Color of internal alignment geometry in edit mode</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="555"/>
+      <source>Fully constrained sketch</source>
+      <translation type="unfinished">Fully constrained sketch</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="568"/>
+      <source>Color of geometry indicating a fully constrained sketch</source>
+      <translation type="unfinished">Color of geometry indicating a fully constrained sketch</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="588"/>
+      <source>Invalid sketch</source>
+      <translation>Schiță nevalidă</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="672"/>
+      <source>Color of dimensional driving constraints in edit mode</source>
+      <translation type="unfinished">Color of dimensional driving constraints in edit mode</translation>
+    </message>
+    <message>
       <location filename="../../SketcherSettingsAppearance.ui" line="799"/>
       <source>Vertex</source>
       <translation>Vertex</translation>
+    </message>
+    <message>
+      <location filename="../../SketcherSettingsAppearance.ui" line="806"/>
+      <source>Color of vertices outside edit mode</source>
+      <translation type="unfinished">Color of vertices outside edit mode</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsAppearance.ui" line="845"/>
@@ -6904,19 +6893,14 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
       <translation>Margine</translation>
     </message>
     <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="212"/>
-      <source>Color of fully constrained edge color in edit mode</source>
-      <translation>Culoarea culorii marginii complet constrânse în modul de editare</translation>
+      <location filename="../../SketcherSettingsAppearance.ui" line="852"/>
+      <source>Color of edges outside edit mode</source>
+      <translation type="unfinished">Color of edges outside edit mode</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsAppearance.ui" line="199"/>
       <source>Geometry</source>
-      <translation type="unfinished">Geometry</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="238"/>
-      <source>Color of edges being edited</source>
-      <translation>Culoarea marginilor care se editează</translation>
+      <translation>Geometrie</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsAppearance.ui" line="258"/>
@@ -6934,11 +6918,6 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
       <translation>Geometria constructiei</translation>
     </message>
     <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="306"/>
-      <source>Color of fully constrained construction edge color in edit mode</source>
-      <translation>Culoarea de culoare a marginii construcției complet constrânsă în modul de editare</translation>
-    </message>
-    <message>
       <location filename="../../SketcherSettingsAppearance.ui" line="332"/>
       <source>Color of construction geometry in edit mode</source>
       <translation>Culoarea construcției geometrie în modul de editare</translation>
@@ -6952,21 +6931,6 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
       <location filename="../../SketcherSettingsAppearance.ui" line="362"/>
       <source>Width of construction edges.</source>
       <translation>Lăţimea marginilor de construcţie.</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="387"/>
-      <source>Internal alignment edge</source>
-      <translation>Marginea internă de aliniere</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="400"/>
-      <source>Color of fully constrained internal alignment edge color in edit mode</source>
-      <translation>Culoarea culorii marginii interne de aliniere pe deplin constrânsă în modul de editare</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="426"/>
-      <source>Color of edges of internal alignment geometry</source>
-      <translation>Culoarea marginilor geometriei de aliniere internă</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsAppearance.ui" line="446"/>
@@ -6999,21 +6963,6 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
       <translation>Lăţimea marginilor externe.</translation>
     </message>
     <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="555"/>
-      <source>Fully constrained Sketch</source>
-      <translation>Schiță complet constrânsă</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="568"/>
-      <source>Color of fully constrained geometry in edit mode</source>
-      <translation>Culoarea geometriei complet constrânse în modul de editare</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="588"/>
-      <source>Invalid Sketch</source>
-      <translation>Schiță nevalidă</translation>
-    </message>
-    <message>
       <location filename="../../SketcherSettingsAppearance.ui" line="601"/>
       <source>Color of geometry indicating an invalid sketch</source>
       <translation>Culoarea geometriei care indică o schiță nevalidă</translation>
@@ -7037,11 +6986,6 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
       <location filename="../../SketcherSettingsAppearance.ui" line="665"/>
       <source>Dimensional constraint</source>
       <translation>Constrângere dimensională</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="672"/>
-      <source>Color of dimensional driving constraints</source>
-      <translation>Culoarea constrângerilor de conducere dimensionale</translation>
     </message>
     <message>
       <location filename="../../SketcherSettingsAppearance.ui" line="692"/>
@@ -7077,16 +7021,6 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
       <location filename="../../SketcherSettingsAppearance.ui" line="791"/>
       <source>Colors outside Sketcher</source>
       <translation>Culori în afara Schiței</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="806"/>
-      <source>Color of vertices</source>
-      <translation>Culoarea nodurilor</translation>
-    </message>
-    <message>
-      <location filename="../../SketcherSettingsAppearance.ui" line="852"/>
-      <source>Color of edges</source>
-      <translation>Culoarea marginilor</translation>
     </message>
   </context>
   <context>
@@ -7223,12 +7157,6 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>Sketcher_CreateArc</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="555"/>
-      <location filename="../../CommandCreateGeo.cpp" line="557"/>
-      <source>Create an arc by its center and by its endpoints</source>
-      <translation>Creaţi un arc definit prin centrul său şi prin punctele sale finale</translation>
-    </message>
-    <message>
       <location filename="../../DrawSketchHandlerArc.h" line="468"/>
       <source>Center</source>
       <translation>Centru</translation>
@@ -7240,68 +7168,14 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
     </message>
   </context>
   <context>
-    <name>Sketcher_Create3PointArc</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="562"/>
-      <location filename="../../CommandCreateGeo.cpp" line="565"/>
-      <source>Create an arc by its endpoints and a point along the arc</source>
-      <translation>Creaţi un arc după punctele finale şi un punct de-a lungul arcului</translation>
-    </message>
-  </context>
-  <context>
-    <name>Sketcher_CreateEllipseByCenter</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="894"/>
-      <location filename="../../CommandCreateGeo.cpp" line="897"/>
-      <source>Create an ellipse by its center, one of its radii and a rim point</source>
-      <translation>Creaţi o elipsă definită prin centrul său, una dintre razele sale şi un punct de margine</translation>
-    </message>
-  </context>
-  <context>
-    <name>Sketcher_CreateEllipseBy3Points</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="903"/>
-      <location filename="../../CommandCreateGeo.cpp" line="906"/>
-      <source>Create an ellipse by the endpoints of one of its axes and a rim point</source>
-      <translation>Creează o elipsă după punctul final al uneia dintre axele sale și un punct de jantă</translation>
-    </message>
-  </context>
-  <context>
-    <name>Sketcher_CreateArcOfEllipse</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="912"/>
-      <location filename="../../CommandCreateGeo.cpp" line="915"/>
-      <source>Create an arc of ellipse by its center, one of its radii, and its endpoints</source>
-      <translation>Creaţi un arc de elipsă definit prin centrul său, unul din raza lui şi punctele sale finale</translation>
-    </message>
-  </context>
-  <context>
-    <name>Sketcher_CreateArcOfHyperbola</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="923"/>
-      <location filename="../../CommandCreateGeo.cpp" line="926"/>
-      <source>Create an arc of hyperbola by its center, vertex and endpoints</source>
-      <translation>Creaţi un arc de hiperbolă definit prin centru, nod şi puncte finale</translation>
-    </message>
-  </context>
-  <context>
-    <name>Sketcher_CreateArcOfParabola</name>
-    <message>
-      <location filename="../../CommandCreateGeo.cpp" line="932"/>
-      <location filename="../../CommandCreateGeo.cpp" line="935"/>
-      <source>Create an arc of parabola by its focus, vertex and endpoints</source>
-      <translation>Creaţi un arc de parabolă definit prin focalizarea, nodul şi punctele sale finale</translation>
-    </message>
-  </context>
-  <context>
     <name>CmdSketcherCreateChamfer</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1453"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1224"/>
       <source>Create chamfer</source>
       <translation>Creare camp</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1454"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1225"/>
       <source>Create a chamfer between two lines or at a coincident point</source>
       <translation>Creează o cameră între două linii sau într-un punct de coincident</translation>
     </message>
@@ -7309,12 +7183,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherCompCreateFillets</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1484"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1255"/>
       <source>Create fillet or chamfer</source>
       <translation>Creare fillet sau camfer</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1485"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1256"/>
       <source>Create a fillet or chamfer between two lines</source>
       <translation>Creaţi un fillet sau chamfer între două linii</translation>
     </message>
@@ -7408,12 +7282,12 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherConstrainTangent</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6457"/>
+      <location filename="../../CommandConstraints.cpp" line="6512"/>
       <source>Constrain tangent or collinear</source>
       <translation>Constrângere tangentă sau liniară</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="6458"/>
+      <location filename="../../CommandConstraints.cpp" line="6513"/>
       <source>Create a tangent or collinear constraint between two entities</source>
       <translation>Creează o constrângere tangentă sau lineară între două entități</translation>
     </message>
@@ -7421,28 +7295,54 @@ Click stânga pe spațiul gol va valida constrângerea curentă. Apăsarea din d
   <context>
     <name>CmdSketcherChangeDimensionConstraint</name>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9789"/>
+      <location filename="../../CommandConstraints.cpp" line="9844"/>
       <source>Change value</source>
       <translation>Modificaţi valoarea</translation>
     </message>
     <message>
-      <location filename="../../CommandConstraints.cpp" line="9790"/>
+      <location filename="../../CommandConstraints.cpp" line="9845"/>
       <source>Change the value of a dimensional constraint</source>
-      <translation type="unfinished">Change the value of a dimensional constraint</translation>
+      <translation>Modifică valoarea unei constrângeri dimensionale</translation>
     </message>
   </context>
   <context>
     <name>Sketcher_CreatePeriodicBSplineByInterpolation</name>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1222"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1105"/>
       <source>Periodic B-spline by knots</source>
       <translation>B-spline periodic cu noduri</translation>
     </message>
     <message>
-      <location filename="../../CommandCreateGeo.cpp" line="1225"/>
-      <location filename="../../CommandCreateGeo.cpp" line="1228"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1108"/>
+      <location filename="../../CommandCreateGeo.cpp" line="1111"/>
       <source>Create a periodic B-spline by knots</source>
       <translation>Creaţi o curbă B-spline periodică cu noduri</translation>
+    </message>
+  </context>
+  <context>
+    <name>CmdSketcherCompLine</name>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="115"/>
+      <source>Create polyline</source>
+      <translation>Crează polilinie</translation>
+    </message>
+    <message>
+      <location filename="../../CommandCreateGeo.cpp" line="116"/>
+      <source>Create a polyline in the sketch. 'M' Key cycles behaviour</source>
+      <translation>Creaţi o polilinie în schiţă. Apăsarea repetată a tastei ”M” permite navigarea între componente</translation>
+    </message>
+  </context>
+  <context>
+    <name>CmdSketcherCompToggleConstraints</name>
+    <message>
+      <location filename="../../CommandConstraints.cpp" line="1308"/>
+      <source>Toggle constraints</source>
+      <translation type="unfinished">Toggle constraints</translation>
+    </message>
+    <message>
+      <location filename="../../CommandConstraints.cpp" line="1309"/>
+      <source>Toggle constrain tools.</source>
+      <translation type="unfinished">Toggle constrain tools.</translation>
     </message>
   </context>
 </TS>

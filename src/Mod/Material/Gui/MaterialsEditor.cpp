@@ -47,6 +47,7 @@
 
 #include <Mod/Material/App/Exceptions.h>
 #include <Mod/Material/App/ModelManager.h>
+#include <Mod/Material/App/ModelUuids.h>
 
 #include "MaterialDelegate.h"
 #include "MaterialSave.h"
@@ -425,6 +426,13 @@ void MaterialsEditor::onAppearanceAdd(bool checked)
     if (dialog.exec() == QDialog::Accepted) {
         QString selected = dialog.selectedModel();
         _material->addAppearance(selected);
+        auto model = getModelManager().getModel(selected);
+        if (selected == Materials::ModelUUIDs::ModelUUID_Rendering_Basic
+            || model->inherits(Materials::ModelUUIDs::ModelUUID_Rendering_Basic)) {
+            // Add default appearance properties
+            *_material = *(getMaterialManager().defaultAppearance());
+        }
+
         updateMaterial();
     }
     else {
@@ -831,27 +839,39 @@ void MaterialsEditor::fillMaterialTree()
     auto tree = ui->treeMaterials;
     auto model = dynamic_cast<QStandardItemModel*>(tree->model());
 
-    auto lib = new QStandardItem(tr("Favorites"));
-    lib->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
-    addExpanded(tree, model, lib, param);
-    addFavorites(lib);
+    if (_filterOptions.includeFavorites()) {
+        auto lib = new QStandardItem(tr("Favorites"));
+        lib->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
+        addExpanded(tree, model, lib, param);
+        addFavorites(lib);
+    }
 
-    lib = new QStandardItem(tr("Recent"));
-    lib->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
-    addExpanded(tree, model, lib, param);
-    addRecents(lib);
+    if (_filterOptions.includeRecent()) {
+        auto lib = new QStandardItem(tr("Recent"));
+        lib->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
+        addExpanded(tree, model, lib, param);
+        addRecents(lib);
+    }
 
     auto libraries = getMaterialManager().getMaterialLibraries();
     for (const auto& library : *libraries) {
-        lib = new QStandardItem(library->getName());
-        lib->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
-        addExpanded(tree, model, lib, param);
-
-        QIcon icon(library->getIconPath());
-        QIcon folderIcon(QString::fromStdString(":/icons/folder.svg"));
-
         auto modelTree = getMaterialManager().getMaterialTree(library);
-        addMaterials(*lib, modelTree, folderIcon, icon, param);
+
+        bool showLibraries = _filterOptions.includeEmptyLibraries();
+        if (!_filterOptions.includeEmptyLibraries() && modelTree->size() > 0) {
+            showLibraries = true;
+        }
+
+        if (showLibraries) {
+            auto lib = new QStandardItem(library->getName());
+            lib->setFlags(Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled);
+            addExpanded(tree, model, lib, param);
+
+            QIcon icon(library->getIconPath());
+            QIcon folderIcon(QString::fromStdString(":/icons/folder.svg"));
+
+            addMaterials(*lib, modelTree, folderIcon, icon, param);
+        }
     }
 }
 
@@ -996,6 +1016,7 @@ void MaterialsEditor::updateMaterialAppearance()
                     auto valueItem = new QStandardItem(_material->getAppearanceValueString(key));
                     valueItem->setToolTip(itp->second.getDescription());
                     QVariant variant;
+                    // variant.setValue(_material->getAppearanceValueString(key));
                     variant.setValue(_material);
                     valueItem->setData(variant);
                     items.append(valueItem);

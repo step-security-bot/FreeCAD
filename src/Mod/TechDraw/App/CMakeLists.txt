@@ -107,8 +107,6 @@ SET(Draw_SRCS
     DimensionFormatter.h
     DimensionAutoCorrect.cpp
     DimensionAutoCorrect.h
-    GeometryMatcher.cpp
-    GeometryMatcher.h
     DrawViewBalloon.cpp
     DrawViewBalloon.h
     DrawViewSection.cpp
@@ -176,6 +174,8 @@ SET(TechDraw_SRCS
     XMLQuery.h
     LineGenerator.cpp
     LineGenerator.h
+    LineFormat.cpp
+    LineFormat.h
 )
 
 SET(Geometry_SRCS
@@ -201,6 +201,8 @@ SET(Geometry_SRCS
     PropertyCosmeticVertexList.h
     CosmeticExtension.cpp
     CosmeticExtension.h
+    GeometryMatcher.cpp
+    GeometryMatcher.h
 )
 
 SET(Python_SRCS
@@ -275,6 +277,9 @@ endif(FREECAD_USE_PCH)
 add_library(TechDraw SHARED ${TechDraw_SRCS} ${Draw_SRCS} ${TechDrawAlgos_SRCS}
                            ${Geometry_SRCS} ${Python_SRCS})
 target_link_libraries(TechDraw ${TechDrawLIBS} ${TechDraw})
+if (FREECAD_WARN_ERROR)
+    target_compile_warn_error(TechDraw)
+endif()
 
 ADD_CUSTOM_COMMAND(TARGET TechDraw
                    POST_BUILD

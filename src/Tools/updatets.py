@@ -64,7 +64,7 @@ directories = [
     },
     {
         "tsname": "Arch",
-        "workingdir": "./src/Mod/Arch/",
+        "workingdir": "./src/Mod/BIM/",
         "tsdir": "Resources/translations",
     },
     {
@@ -171,11 +171,6 @@ directories = [
         "tsname": "Tux",
         "workingdir": "./src/Mod/Tux/",
         "tsdir": "Resources/translations",
-    },
-    {
-        "tsname": "Web",
-        "workingdir": "./src/Mod/Web/",
-        "tsdir": "Gui/Resources/translations",
     },
     {
         "tsname": "Help",

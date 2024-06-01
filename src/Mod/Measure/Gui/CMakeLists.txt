@@ -16,6 +16,7 @@ link_directories(${OCC_LIBRARY_DIR})
 
 set(MeasureGui_LIBS
     Measure
+    #Part
     FreeCADGui
 )
 
@@ -36,6 +37,8 @@ SET(MeasureGui_UIC_SRCS
     DlgPrefsMeasureAppearanceImp.ui
 )
 
+generate_from_xml(QuickMeasurePy)
+
 SET(MeasureGui_SRCS
     ${CMAKE_SOURCE_DIR}/src/Mod/Measure/InitGui.py
     ${MeasureGui_SRCS}
@@ -44,6 +47,10 @@ SET(MeasureGui_SRCS
     Resources/Measure.qrc
     PreCompiled.cpp
     PreCompiled.h
+    QuickMeasurePy.xml
+    QuickMeasurePyImp.cpp
+    QuickMeasure.cpp
+    QuickMeasure.h
     ViewProviderMeasureBase.cpp
     ViewProviderMeasureBase.h
     ViewProviderMeasureAngle.cpp
@@ -79,6 +86,9 @@ SET(MeasureGuiIcon_SVG
 
 add_library(MeasureGui SHARED ${MeasureGui_SRCS} ${MeasureGuiIcon_SVG})
 target_link_libraries(MeasureGui ${MeasureGui_LIBS})
+if (FREECAD_WARN_ERROR)
+    target_compile_warn_error(MeasureGui)
+endif()
 
 SET_BIN_DIR(MeasureGui MeasureGui /Mod/Measure)
 SET_PYTHON_PREFIX_SUFFIX(MeasureGui)
