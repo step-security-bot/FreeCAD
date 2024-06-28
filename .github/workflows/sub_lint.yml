@@ -180,6 +180,9 @@ on:
       reportFile:
         value: ${{ jobs.Lint.outputs.reportFile }}
 
+permissions:
+  contents: read
+
 jobs:
 
   Lint:
@@ -197,8 +200,13 @@ jobs:
       reportFile: ${{ steps.Init.outputs.reportFile }}
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+        with:
+          egress-policy: audit
+
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           submodules: true
       - name: Make needed directories, files and initializations
@@ -756,7 +764,7 @@ jobs:
           [ $clazyQT6Errors -eq 0 ]
       - name: Upload logs and fixes
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ inputs.artifactBasename }}-Logs
           path: |
@@ -764,7 +772,7 @@ jobs:
             ${{ env.fixesdir }}
       - name: Upload report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ env.reportfilename }}
           path: |

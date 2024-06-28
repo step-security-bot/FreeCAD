@@ -57,6 +57,11 @@ jobs:
     env:
       logdir: /tmp/log/
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+        with:
+          egress-policy: audit
+
       - name: Make needed directories
         run: |
           mkdir -p ${{ env.logdir }}
@@ -103,7 +108,7 @@ jobs:
           done
       - name: Upload logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ github.job }}-Logs
           path: |
