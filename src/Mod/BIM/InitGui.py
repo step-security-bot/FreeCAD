@@ -30,10 +30,10 @@ import Arch_rc
 class BIMWorkbench(Workbench):
 
     def __init__(self):
-        
+
         def QT_TRANSLATE_NOOP(context, text):
             return text
-        
+
         bdir = os.path.join(FreeCAD.getResourceDir(), "Mod", "BIM")
         tt = QT_TRANSLATE_NOOP("BIM","The BIM workbench is used to model buildings")
         self.__class__.MenuText = QT_TRANSLATE_NOOP("BIM", "BIM")
@@ -46,10 +46,10 @@ class BIMWorkbench(Workbench):
         # add translations and icon paths
         FreeCADGui.addIconPath(":/icons")
         FreeCADGui.addLanguagePath(":/translations")
-        
+
         # Create menus and toolbars
         self.createTools()
-        
+
         # Load Arch & Draft preference pages
         self.loadPreferences()
 
@@ -58,7 +58,7 @@ class BIMWorkbench(Workbench):
 
 
     def createTools(self):
-        
+
         "Create tolbars and menus"
 
         def QT_TRANSLATE_NOOP(context, text):
@@ -130,7 +130,7 @@ class BIMWorkbench(Workbench):
             "Arch_Equipment",
             "Arch_Rebar",
         ]
-        
+
         self.generictools = [
             "Arch_Profile",
             "BIM_Box",
@@ -168,7 +168,7 @@ class BIMWorkbench(Workbench):
         self.modify_3d = [
             "Draft_OrthoArray",
             "Draft_PathArray",
-            "Draft_CircularArray",
+            "Draft_PolarArray",
             "Draft_PointArray",
             "Arch_CutPlane",
             "Draft_Mirror",
@@ -217,6 +217,7 @@ class BIMWorkbench(Workbench):
             "Arch_Survey",
             "BIM_Diff",
             "BIM_IfcExplorer",
+            "Arch_IfcSpreadsheet",
             "BIM_ImagePlane",
             "BIM_Unclone",
             "BIM_Rewire",
@@ -237,9 +238,9 @@ class BIMWorkbench(Workbench):
             "BIM_Nudge_Extend",
             "BIM_Nudge_Shrink",
         ]
-        
+
         # append BIM snaps
-        
+
         from draftutils import init_tools
         self.snapbar = init_tools.get_draft_snap_commands()
         self.snapmenu = self.snapbar + [
@@ -247,9 +248,9 @@ class BIMWorkbench(Workbench):
             "BIM_SetWPFront",
             "BIM_SetWPSide",
         ]
-        
+
         # create generic tools command
-        
+
         class BIM_GenericTools:
             def __init__(self, tools):
                 self.tools = tools
@@ -298,23 +299,6 @@ class BIMWorkbench(Workbench):
             if hasattr(RebarTools, "updateLocale"):
                 RebarTools.updateLocale()
             #self.rebar = RebarTools.RebarCommands + ["Arch_Rebar"]
-
-        # try to load bimbots
-
-        try:
-            import bimbots
-        except ImportError:
-            pass
-        else:
-            class BIMBots:
-                def GetResources(self):
-                    return bimbots.get_plugin_info()
-
-                def Activated(self):
-                    bimbots.launch_ui()
-
-            FreeCADGui.addCommand("BIMBots", BIMBots())
-            self.utils.append("BIMBots")
 
         # load Reporting
 
@@ -392,7 +376,7 @@ class BIMWorkbench(Workbench):
                 for c in FastenerBase.FSGetCommands("screws")
                 if not isinstance(c, tuple)
             ]
-            
+
         # load nativeifc tools
 
         ifctools = ifc_commands.get_commands()
@@ -491,20 +475,22 @@ class BIMWorkbench(Workbench):
 
         import WorkingPlane
         from DraftGui import todo
-        import BimStatusBar
+        import BimStatus
         from nativeifc import ifc_observer
-        
+        from draftutils import grid_observer
+
         PARAMS = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/BIM")
 
         if hasattr(FreeCADGui, "draftToolBar"):
             FreeCADGui.draftToolBar.Activated()
         if hasattr(FreeCADGui, "Snapper"):
             FreeCADGui.Snapper.show()
-        if hasattr(WorkingPlane, "_view_observer_start"):
-            WorkingPlane._view_observer_start()
+        WorkingPlane._view_observer_start()
+        grid_observer._view_observer_setup()
+
         if PARAMS.GetBool("FirstTime", True) and (not hasattr(FreeCAD, "TestEnvironment")):
             todo.delay(FreeCADGui.runCommand, "BIM_Welcome")
-        todo.delay(BimStatusBar.setStatusIcons, True)
+        todo.delay(BimStatus.setStatusIcons, True)
         FreeCADGui.Control.clearTaskWatcher()
 
         class BimWatcher:
@@ -543,10 +529,10 @@ class BIMWorkbench(Workbench):
                 w.toggleViewAction().setVisible(True)
 
         self.setupMultipleObjectSelection()
-        
+
         # add NativeIFC document observer
         ifc_observer.add_observer()
-        
+
         # adding a Help menu manipulator
         # https://github.com/FreeCAD/FreeCAD/pull/10933
         class BIM_WBManipulator:
@@ -565,13 +551,14 @@ class BIMWorkbench(Workbench):
 
 
     def Deactivated(self):
-        
+
         from DraftGui import todo
-        import BimStatusBar
+        import BimStatus
         from bimcommands import BimViews
         import WorkingPlane
         from nativeifc import ifc_observer
-        
+        from draftutils import grid_observer
+
         PARAMS = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/BIM")
 
         if hasattr(self, "BimSelectObserver"):
@@ -582,12 +569,11 @@ class BIMWorkbench(Workbench):
             FreeCADGui.draftToolBar.Deactivated()
         if hasattr(FreeCADGui, "Snapper"):
             FreeCADGui.Snapper.hide()
-
-        if hasattr(WorkingPlane, "_view_observer_stop"):
-            WorkingPlane._view_observer_stop()
+        WorkingPlane._view_observer_stop()
+        grid_observer._view_observer_setup()
 
         # print("Deactivating status icon")
-        todo.delay(BimStatusBar.setStatusIcons, False)
+        todo.delay(BimStatus.setStatusIcons, False)
         FreeCADGui.Control.clearTaskWatcher()
 
         # store views widget state and vertical size

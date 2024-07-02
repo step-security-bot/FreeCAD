@@ -102,7 +102,6 @@
 #include "LinkBaseExtensionPy.h"
 #include "VarSet.h"
 #include "MaterialObject.h"
-#include "MeasureDistance.h"
 #include "MeasureManagerPy.h"
 #include "Origin.h"
 #include "OriginFeature.h"
@@ -175,6 +174,7 @@ AppExport std::map<std::string, std::string> Application::mConfig;
 //**************************************************************************
 // Construction and destruction
 
+// clang-format off
 PyDoc_STRVAR(FreeCAD_doc,
      "The functions in the FreeCAD module allow working with documents.\n"
      "The FreeCAD instance provides a list of references of documents which\n"
@@ -237,6 +237,7 @@ init_image_module()
     };
     return PyModule_Create(&ImageModuleDef);
 }
+// clang-format on
 
 Application::Application(std::map<std::string,std::string> &mConfig)
   : _mConfig(mConfig)
@@ -264,6 +265,7 @@ void Application::setupPythonTypes()
     }
     Py::Module(pAppModule).setAttr(std::string("ActiveDocument"),Py::None());
 
+    // clang-format off
     static struct PyModuleDef ConsoleModuleDef = {
         PyModuleDef_HEAD_INIT,
         "__FreeCADConsole__", Console_doc, -1,
@@ -371,8 +373,10 @@ void Application::setupPythonTypes()
     Base::Vector2dPy::init_type();
     Base::Interpreter().addType(Base::Vector2dPy::type_object(),
         pBaseModule,"Vector2d");
+    // clang-format on
 }
 
+// clang-format off
 void Application::setupPythonException(PyObject* module)
 {
     // Define custom Python exception types
@@ -421,6 +425,7 @@ void Application::setupPythonException(PyObject* module)
     Py_INCREF(Base::PyExc_FC_CADKernelError);
     PyModule_AddObject(module, "CADKernelError", Base::PyExc_FC_CADKernelError);
 }
+// clang-format on
 
 //**************************************************************************
 // Interface
@@ -488,6 +493,7 @@ Document* Application::newDocument(const char * Name, const char * UserName, boo
     _pActiveDoc = doc;
 
     //NOLINTBEGIN
+    // clang-format off
     // connect the signals to the application for the new document
     _pActiveDoc->signalBeforeChange.connect(std::bind(&App::Application::slotBeforeChangeDocument, this, sp::_1, sp::_2));
     _pActiveDoc->signalChanged.connect(std::bind(&App::Application::slotChangedDocument, this, sp::_1, sp::_2));
@@ -508,6 +514,7 @@ Document* Application::newDocument(const char * Name, const char * UserName, boo
     _pActiveDoc->signalStartSave.connect(std::bind(&App::Application::slotStartSaveDocument, this, sp::_1, sp::_2));
     _pActiveDoc->signalFinishSave.connect(std::bind(&App::Application::slotFinishSaveDocument, this, sp::_1, sp::_2));
     _pActiveDoc->signalChangePropertyEditor.connect(std::bind(&App::Application::slotChangePropertyEditor, this, sp::_1, sp::_2));
+    // clang-format on
     //NOLINTEND
 
     // make sure that the active document is set in case no GUI is up
@@ -1921,6 +1928,7 @@ void Application::init(int argc, char ** argv)
     }
 }
 
+// clang-format off
 void Application::initTypes()
 {
     // Base types
@@ -2105,7 +2113,6 @@ void Application::initTypes()
     App::VRMLObject                ::init();
     App::Annotation                ::init();
     App::AnnotationLabel           ::init();
-    App::MeasureDistance           ::init();
     App::MaterialObject            ::init();
     App::MaterialObjectPython      ::init();
     App::TextDocument              ::init();
@@ -2484,6 +2491,7 @@ void processProgramOptions(const variables_map& vm, std::map<std::string,std::st
     }
 }
 }
+// clang-format on
 
 void Application::initConfig(int argc, char ** argv)
 {
@@ -2544,9 +2552,34 @@ void Application::initConfig(int argc, char ** argv)
     mConfig["Debug"] = "0";
 #   endif
 
-    // init python
-    PyImport_AppendInittab ("FreeCAD", init_freecad_module);
-    PyImport_AppendInittab ("__FreeCADBase__", init_freecad_base_module);
+    if (!Py_IsInitialized()) {
+        // init python
+        PyImport_AppendInittab ("FreeCAD", init_freecad_module);
+        PyImport_AppendInittab ("__FreeCADBase__", init_freecad_base_module);
+    }
+    else {
+        // "import FreeCAD" in a normal Python 3.12 interpreter would raise
+        //     Fatal Python error: PyImport_AppendInittab:
+        //         PyImport_AppendInittab() may not be called after Py_Initialize()
+        //  because the (external) interpreter is already initialized.
+        //  Therefore we use a workaround as described in https://stackoverflow.com/a/57019607
+
+        PyObject *sysModules = PyImport_GetModuleDict();
+
+        const char *moduleName = "FreeCAD";
+        PyImport_AddModule(moduleName);
+        ApplicationMethods = Application::Methods;
+        PyObject *pyModule = init_freecad_module();
+        PyDict_SetItemString(sysModules, moduleName, pyModule);
+        Py_DECREF(pyModule);
+
+        moduleName = "__FreeCADBase__";
+        PyImport_AddModule(moduleName);
+        pyModule = init_freecad_base_module();
+        PyDict_SetItemString(sysModules, moduleName, pyModule);
+        Py_DECREF(pyModule);
+    }
+
     const char* pythonpath = Base::Interpreter().init(argc,argv);
     if (pythonpath)
         mConfig["PythonSearchPath"] = pythonpath;

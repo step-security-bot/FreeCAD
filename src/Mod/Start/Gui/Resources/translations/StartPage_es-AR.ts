@@ -81,12 +81,12 @@
     <message>
       <location filename="../../StartView.cpp" line="184"/>
       <source>Parametric Part</source>
-      <translation type="unfinished">Parametric Part</translation>
+      <translation>Parte paramétrica</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="185"/>
       <source>Create a part with the Part Design workbench</source>
-      <translation type="unfinished">Create a part with the Part Design workbench</translation>
+      <translation>Crear una pieza con el entorno de trabajo Part Design</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="187"/>
@@ -96,17 +96,17 @@
     <message>
       <location filename="../../StartView.cpp" line="188"/>
       <source>Create an assembly project</source>
-      <translation type="unfinished">Create an assembly project</translation>
+      <translation>Crear un proyecto de ensamblaje</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="190"/>
       <source>2D Draft</source>
-      <translation type="unfinished">2D Draft</translation>
+      <translation>Dibujo 2D</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="191"/>
       <source>Create a 2D Draft with the Draft workbench</source>
-      <translation type="unfinished">Create a 2D Draft with the Draft workbench</translation>
+      <translation>Crear un borrador 2D con el entorno de trabajo Draft</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="193"/>
@@ -156,13 +156,13 @@
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="59"/>
-      <source>Light</source>
-      <translation>Claro</translation>
+      <source>Dark theme</source>
+      <translation>Tema oscuro</translation>
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="60"/>
-      <source>Dark</source>
-      <translation>Oscuro</translation>
+      <source>Light theme</source>
+      <translation>Tema claro</translation>
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="137"/>
@@ -176,21 +176,21 @@
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="139"/>
-      <source>Classic</source>
+      <source>Dark theme</source>
       <comment>Visual theme name</comment>
-      <translation>Clásico</translation>
+      <translation>Tema oscuro</translation>
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="140"/>
-      <source>Light</source>
+      <source>Light theme</source>
       <comment>Visual theme name</comment>
-      <translation>Claro</translation>
+      <translation>Tema claro</translation>
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="141"/>
-      <source>Dark</source>
+      <source>Classic</source>
       <comment>Visual theme name</comment>
-      <translation>Oscuro</translation>
+      <translation>Clásico</translation>
     </message>
   </context>
 </TS>

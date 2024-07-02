@@ -31,6 +31,8 @@
 
 #include "MaterialManagerPy.cpp"
 
+#include <Base/PyWrapParseTupleAndKeywords.h>
+
 using namespace Materials;
 
 // returns a string which represents the object e.g. when printed in python
@@ -104,6 +106,27 @@ PyObject* MaterialManagerPy::getMaterialByPath(PyObject* args)
         auto material =
             getMaterialManagerPtr()->getMaterialByPath(QString::fromUtf8(utf8Path.c_str()));
         return new MaterialPy(new Material(*material));
+    }
+    catch (const MaterialNotFound&) {
+        PyErr_SetString(PyExc_LookupError, "Material not found");
+        return nullptr;
+    }
+}
+
+PyObject* MaterialManagerPy::inheritMaterial(PyObject* args)
+{
+    char* uuid {};
+    if (!PyArg_ParseTuple(args, "s", &uuid)) {
+        return nullptr;
+    }
+
+    try {
+        auto parent = getMaterialManagerPtr()->getMaterial(QString::fromStdString(uuid));
+
+        // Found the parent. Create a new material with this as parent
+        auto material = new Material();
+        material->setParentUUID(QString::fromLatin1(uuid));
+        return new MaterialPy(material); // Transfers ownership
     }
     catch (const MaterialNotFound&) {
         PyErr_SetString(PyExc_LookupError, "Material not found");
@@ -208,12 +231,11 @@ PyObject* MaterialManagerPy::save(PyObject* args, PyObject* kwds)
     PyObject* overwrite = Py_False;
     PyObject* saveAsCopy = Py_False;
     PyObject* saveInherited = Py_False;
-    static char* kwds_save[] =
-        {"library", "material", "path", "overwrite", "saveAsCopy", "saveInherited", nullptr};
-    if (!PyArg_ParseTupleAndKeywords(args,
+    static const std::array<const char *, 7> kwlist { "library", "material", "path", "overwrite", "saveAsCopy", "saveInherited", nullptr };
+    if (!Base::Wrapped_ParseTupleAndKeywords(args,
                                      kwds,
                                      "etOet|O!O!O!",
-                                     kwds_save,
+                                     kwlist,
                                      "utf-8", &libraryName,
                                      &obj,
                                      "utf-8", &path,
@@ -281,18 +303,18 @@ PyObject* MaterialManagerPy::filterMaterials(PyObject* args, PyObject* kwds)
 {
     PyObject* filterPy {};
     PyObject* includeLegacy = Py_False;
-    static char* kwds_save[] = {"filter",
-                                "includeLegacy",
-                                nullptr};
-    if (!PyArg_ParseTupleAndKeywords(args,
-                                     kwds,
-                                     //  "O|O!",
-                                     "O!|O!",
-                                     kwds_save,
-                                     &MaterialFilterPy::Type,
-                                     &filterPy,
-                                     &PyBool_Type,
-                                     &includeLegacy)) {
+    static const std::array<const char*, 3> kwds_save{ "filter",
+                                                       "includeLegacy",
+                                                       nullptr };
+    if (!Base::Wrapped_ParseTupleAndKeywords(args,
+                                             kwds,
+                                             //  "O|O!",
+                                             "O!|O!",
+                                             kwds_save,
+                                             &MaterialFilterPy::Type,
+                                             &filterPy,
+                                             &PyBool_Type,
+                                             &includeLegacy)) {
         return nullptr;
     }
 

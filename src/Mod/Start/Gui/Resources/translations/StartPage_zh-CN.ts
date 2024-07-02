@@ -11,12 +11,12 @@
     <message>
       <location filename="../../FirstStartWidget.cpp" line="103"/>
       <source>Welcome to %1</source>
-      <translation type="unfinished">Welcome to %1</translation>
+      <translation>欢迎使用 %1。</translation>
     </message>
     <message>
       <location filename="../../FirstStartWidget.cpp" line="106"/>
       <source>To get started, set your basic configuration options below.</source>
-      <translation type="unfinished">To get started, set your basic configuration options below.</translation>
+      <translation>想要开始，请在下方设置您的基本配置选项。</translation>
     </message>
     <message>
       <location filename="../../FirstStartWidget.cpp" line="107"/>
@@ -53,7 +53,7 @@
     <message>
       <location filename="../../Manipulator.cpp" line="49"/>
       <source>Displays the Start in an MDI view</source>
-      <translation type="unfinished">Displays the Start in an MDI view</translation>
+      <translation>在MDI视图中显示开始</translation>
     </message>
   </context>
   <context>
@@ -81,12 +81,12 @@
     <message>
       <location filename="../../StartView.cpp" line="184"/>
       <source>Parametric Part</source>
-      <translation type="unfinished">Parametric Part</translation>
+      <translation>参数视图</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="185"/>
       <source>Create a part with the Part Design workbench</source>
-      <translation type="unfinished">Create a part with the Part Design workbench</translation>
+      <translation>使用零件设计工作台创建一个零件</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="187"/>
@@ -106,17 +106,17 @@
     <message>
       <location filename="../../StartView.cpp" line="191"/>
       <source>Create a 2D Draft with the Draft workbench</source>
-      <translation type="unfinished">Create a 2D Draft with the Draft workbench</translation>
+      <translation>使用草图工作台创建 2D 草图</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="193"/>
       <source>BIM/Architecture</source>
-      <translation type="unfinished">BIM/Architecture</translation>
+      <translation>BIM/结构</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="194"/>
       <source>Create an architectural project</source>
-      <translation type="unfinished">Create an architectural project</translation>
+      <translation>创建一个建筑项目</translation>
     </message>
     <message>
       <location filename="../../StartView.cpp" line="434"/>
@@ -156,13 +156,13 @@
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="59"/>
-      <source>Light</source>
-      <translation>日间</translation>
+      <source>Dark theme</source>
+      <translation type="unfinished">Dark theme</translation>
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="60"/>
-      <source>Dark</source>
-      <translation>夜间</translation>
+      <source>Light theme</source>
+      <translation type="unfinished">Light theme</translation>
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="137"/>
@@ -176,21 +176,21 @@
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="139"/>
-      <source>Classic</source>
+      <source>Dark theme</source>
       <comment>Visual theme name</comment>
-      <translation>经典</translation>
+      <translation type="unfinished">Dark theme</translation>
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="140"/>
-      <source>Light</source>
+      <source>Light theme</source>
       <comment>Visual theme name</comment>
-      <translation>日间</translation>
+      <translation type="unfinished">Light theme</translation>
     </message>
     <message>
       <location filename="../../ThemeSelectorWidget.cpp" line="141"/>
-      <source>Dark</source>
+      <source>Classic</source>
       <comment>Visual theme name</comment>
-      <translation>夜间</translation>
+      <translation>经典</translation>
     </message>
   </context>
 </TS>

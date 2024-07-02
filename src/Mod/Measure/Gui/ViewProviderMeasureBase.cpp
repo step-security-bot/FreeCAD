@@ -213,6 +213,7 @@ void ViewProviderMeasureBase::onChanged(const App::Property* prop)
     if (prop == &TextColor) {
         const App::Color& color = TextColor.getValue();
         pLabel->textColor.setValue(color.r, color.g, color.b);
+        updateIcon();
     }
     else if (prop == &TextBackgroundColor) {
         const App::Color& color = TextBackgroundColor.getValue();
@@ -281,14 +282,22 @@ void ViewProviderMeasureBase::positionAnno(const Measure::MeasureBase* measureOb
 }
 
 
+void ViewProviderMeasureBase::updateIcon() {
+    // This assumes the icons main color is black
+
+    Gui::ColorMap colorMap {
+        { 0x000000, TextColor.getValue().getPackedRGB() >> 8 },
+    };
+    pLabel->setIcon(Gui::BitmapFactory().pixmapFromSvg(sPixmap, QSize(20, 20), colorMap));
+}
+
+
 void ViewProviderMeasureBase::attach(App::DocumentObject *pcObj)
 {
     ViewProviderDocumentObject::attach(pcObj);
     auto measureObj = static_cast<MeasureBase*>(pcObj);
     positionAnno(measureObj);
-
-    // Set the icon
-    pLabel->setIcon(Gui::BitmapFactory().pixmapFromSvg(sPixmap, QSize(20, 20)));
+    updateIcon();
 }
 
 
@@ -398,7 +407,7 @@ Base::Vector3d ViewProviderMeasureBase::getTextDirection(Base::Vector3d elementD
 Gui::View3DInventor* view = nullptr;
     try {
         view = dynamic_cast<Gui::View3DInventor*>(this->getActiveView());
-    } catch (const Base::RuntimeError& e) {
+    } catch (const Base::RuntimeError&) {
         Base::Console().Log("ViewProviderMeasureBase::getTextDirection: Could not get active view\n");
     }
 
@@ -430,16 +439,19 @@ bool ViewProviderMeasureBase::isSubjectVisible()
     Gui::Document* guiDoc = nullptr;
     try {
         guiDoc = this->getDocument();
-    } catch (const Base::RuntimeError& e) {
+    } catch (const Base::RuntimeError&) {
         Base::Console().Log("ViewProviderMeasureBase::isSubjectVisible: Could not get document\n");
         return false;
     }
 
     // we need these things to proceed
-    if (!getMeasureObject() ||
-        getMeasureObject()->getSubject().empty() ||
-        !guiDoc ) {
+    if (!getMeasureObject() || !guiDoc ) {
         return false;
+    }
+
+    // Show the measurement if it doesn't track any subjects
+    if (getMeasureObject()->getSubject().empty()) {
+        return true;
     }
 
     for (auto & obj : getMeasureObject()->getSubject()) {
@@ -547,7 +559,7 @@ ViewProviderMeasure::ViewProviderMeasure()
     Gui::View3DInventor* view = nullptr;
     try {
         view = dynamic_cast<Gui::View3DInventor*>(this->getActiveView());
-    } catch (const Base::RuntimeError& e) {
+    } catch (const Base::RuntimeError& ) {
         Base::Console().Log("ViewProviderMeasure::ViewProviderMeasure: Could not get active view\n");
     }
 
@@ -578,7 +590,7 @@ void ViewProviderMeasure::positionAnno(const Measure::MeasureBase* measureObject
     Gui::View3DInventor* view = nullptr;
     try {
         view = dynamic_cast<Gui::View3DInventor*>(this->getActiveView());
-    } catch (const Base::RuntimeError& e) {
+    } catch (const Base::RuntimeError&) {
         Base::Console().Log("ViewProviderMeasure::positionAnno: Could not get active view\n");
     }
 

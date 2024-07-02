@@ -499,7 +499,7 @@ Do you want the Addon Manager to install them automatically? Choose &quot;Ignore
     <message>
       <location filename="../../developer_mode_freecad_versions.ui" line="48"/>
       <source>Advanced version mapping...</source>
-      <translation type="unfinished">Advanced version mapping...</translation>
+      <translation>Προηγμένη Αντιστοίχιση Έκδοσης...</translation>
     </message>
   </context>
   <context>
@@ -553,7 +553,7 @@ installed addons will be checked for available updates</source>
     <message>
       <location filename="../../AddonManagerOptions.ui" line="111"/>
       <source>Hide Addons with non-FSF Free/Libre license</source>
-      <translation type="unfinished">Hide Addons with non-FSF Free/Libre license</translation>
+      <translation>Απόκρυψη προσθέτων με άδεια μη-FSF δωρεάν/Libre</translation>
     </message>
     <message>
       <location filename="../../AddonManagerOptions.ui" line="127"/>
@@ -608,7 +608,7 @@ installed addons will be checked for available updates</source>
     <message>
       <location filename="../../AddonManagerOptions.ui" line="342"/>
       <source>The URL for the Addon Score data (see Addon Manager wiki page for formatting and hosting details).</source>
-      <translation type="unfinished">The URL for the Addon Score data (see Addon Manager wiki page for formatting and hosting details).</translation>
+      <translation>Η διεύθυνση URL για τα δεδομένα του Addon Score (δείτε τη σελίδα wiki του Addon Manager για τη μορφοποίηση και τις λεπτομέρειες φιλοξενίας).</translation>
     </message>
     <message>
       <location filename="../../AddonManagerOptions.ui" line="353"/>
@@ -1115,17 +1115,17 @@ installed addons will be checked for available updates</source>
   <context>
     <name>AddonsInstaller</name>
     <message>
-      <location filename="../../AddonManager.py" line="223"/>
+      <location filename="../../AddonManager.py" line="296"/>
       <source>Starting up...</source>
       <translation>Εκκίνηση...</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="258"/>
+      <location filename="../../AddonManager.py" line="332"/>
       <source>Loading addon information</source>
       <translation>Φόρτωση πληροφοριών πρόσθετου</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="284"/>
+      <location filename="../../AddonManager.py" line="358"/>
       <source>Worker process {} is taking a long time to stop...</source>
       <translation type="unfinished">Worker process {} is taking a long time to stop...</translation>
     </message>
@@ -1144,41 +1144,46 @@ installed addons will be checked for available updates</source>
 </translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="339"/>
+      <location filename="../../AddonManager.py" line="416"/>
       <source>Addon manager</source>
       <translation>Διαχειριστής Πρόσθετων</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="346"/>
+      <location filename="../../AddonManager.py" line="423"/>
       <source>You must restart FreeCAD for changes to take effect.</source>
       <translation>Πρέπει να επανεκκινήσετε το FreeCAD για να τεθούν σε ισχύ οι αλλαγές.</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="352"/>
+      <location filename="../../AddonManager.py" line="429"/>
       <source>Restart now</source>
       <translation>Επανεκκίνηση τώρα</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="353"/>
+      <location filename="../../AddonManager.py" line="430"/>
       <source>Restart later</source>
       <translation>Επανεκκίνηση αργότερα</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="417"/>
-      <location filename="../../AddonManager.py" line="870"/>
+      <location filename="../../AddonManager.py" line="496"/>
+      <location filename="../../AddonManager.py" line="897"/>
       <source>Refresh local cache</source>
       <translation>Ανανέωση τοπικής προσωρινής μνήμης</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="547"/>
+      <location filename="../../AddonManager.py" line="626"/>
       <source>Updating cache...</source>
       <translation>Ενημέρωση προσωρινής μνήμης...</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="607"/>
-      <location filename="../../AddonManager.py" line="642"/>
+      <location filename="../../AddonManager.py" line="686"/>
+      <location filename="../../AddonManager.py" line="721"/>
       <source>Checking for updates...</source>
       <translation>Έλεγχος για ενημερώσεις...</translation>
+    </message>
+    <message>
+      <location filename="../../AddonManager.py" line="936"/>
+      <source>Temporary installation of macro failed.</source>
+      <translation type="unfinished">Temporary installation of macro failed.</translation>
     </message>
     <message>
       <location filename="../../Widgets/addonmanager_widget_global_buttons.py" line="95"/>
@@ -1212,30 +1217,25 @@ installed addons will be checked for available updates</source>
       <translation>Εφαρμογή %n διαθέσιμων ενημερώσεων(ων)</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="799"/>
-      <location filename="../../AddonManager.py" line="825"/>
-      <location filename="../../AddonManager.py" line="924"/>
+      <location filename="../../AddonManager.py" line="826"/>
+      <location filename="../../AddonManager.py" line="852"/>
+      <location filename="../../AddonManager.py" line="951"/>
       <source>Cannot launch a new installer until the previous one has finished.</source>
       <translation>Δεν είναι δυνατή η εκκίνηση ενός νέου προγράμματος εγκατάστασης μέχρι να τελειώσει η προηγούμενη.</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="910"/>
-      <source>Execution of macro failed. See console for failure details.</source>
-      <translation>Η εκτέλεση της μακροεντολής απέτυχε. Δείτε την κονσόλα για λεπτομέρειες αποτυχίας.</translation>
-    </message>
-    <message>
-      <location filename="../../addonmanager_devmode.py" line="115"/>
       <location filename="../../addonmanager_devmode_people_table.py" line="86"/>
+      <location filename="../../addonmanager_devmode.py" line="115"/>
+      <location filename="../../package_list.py" line="379"/>
       <location filename="../../addonmanager_devmode_person_editor.py" line="47"/>
-      <location filename="../../package_list.py" line="376"/>
       <source>Maintainer</source>
       <translation>Συντηρητής</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_devmode.py" line="116"/>
       <location filename="../../addonmanager_devmode_people_table.py" line="87"/>
+      <location filename="../../addonmanager_devmode.py" line="116"/>
+      <location filename="../../package_list.py" line="391"/>
       <location filename="../../addonmanager_devmode_person_editor.py" line="49"/>
-      <location filename="../../package_list.py" line="388"/>
       <source>Author</source>
       <translation>Συγγραφέας</translation>
     </message>
@@ -1271,22 +1271,22 @@ installed addons will be checked for available updates</source>
       <translation>Αδυναμία εισαγωγής του QtNetwork -- δε φαίνεται να είναι εγκατεστημένο στο σύστημά σας. Ο πάροχος σας μπορεί να έχει ένα πακέτο για αυτή την εξάρτηση (συχνά ονομάζεται &quot;python3-pyside2.qtnetwork&quot;)</translation>
     </message>
     <message>
-      <location filename="../../NetworkManager.py" line="217"/>
+      <location filename="../../NetworkManager.py" line="228"/>
       <source>Failed to convert the specified proxy port &apos;{}&apos; to a port number</source>
       <translation>Αποτυχία μετατροπής της καθορισμένης θύρας διαμεσολαβητή &apos;{}&apos; σε αριθμό θύρας</translation>
     </message>
     <message>
-      <location filename="../../NetworkManager.py" line="246"/>
+      <location filename="../../NetworkManager.py" line="257"/>
       <source>Parameter error: mutually exclusive proxy options set. Resetting to default.</source>
       <translation type="unfinished">Parameter error: mutually exclusive proxy options set. Resetting to default.</translation>
     </message>
     <message>
-      <location filename="../../NetworkManager.py" line="261"/>
+      <location filename="../../NetworkManager.py" line="272"/>
       <source>Parameter error: user proxy indicated, but no proxy provided. Resetting to default.</source>
       <translation type="unfinished">Parameter error: user proxy indicated, but no proxy provided. Resetting to default.</translation>
     </message>
     <message>
-      <location filename="../../NetworkManager.py" line="411"/>
+      <location filename="../../NetworkManager.py" line="421"/>
       <source>Addon Manager: Unexpected {} response from server</source>
       <translation>Διαχειριστής Πρόσθετων: Μη αναμενόμενη απάντηση {} από τον διακομιστή</translation>
     </message>
@@ -1347,10 +1347,10 @@ installed addons will be checked for available updates</source>
       <translation>Εγκαταστάθηκε στο {date}</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="447"/>
-      <location filename="../../package_list.py" line="497"/>
-      <location filename="../../Widgets/addonmanager_widget_filter_selector.py" line="136"/>
+      <location filename="../../package_list.py" line="450"/>
+      <location filename="../../package_list.py" line="500"/>
       <location filename="../../Widgets/addonmanager_widget_package_details_view.py" line="273"/>
+      <location filename="../../Widgets/addonmanager_widget_filter_selector.py" line="136"/>
       <source>Installed</source>
       <translation>Εγκαταστάθηκε</translation>
     </message>
@@ -1557,12 +1557,12 @@ installed addons will be checked for available updates</source>
     <message>
       <location filename="../../addonmanager_devmode_add_content.py" line="260"/>
       <source>Select an icon file for this content item</source>
-      <translation type="unfinished">Select an icon file for this content item</translation>
+      <translation>Επιλέξτε ένα αρχείο εικονιδίων για αυτό το στοιχείο</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_devmode.py" line="692"/>
       <location filename="../../addonmanager_devmode_add_content.py" line="274"/>
       <location filename="../../addonmanager_devmode_add_content.py" line="313"/>
+      <location filename="../../addonmanager_devmode.py" line="692"/>
       <source>{} is not a subdirectory of {}</source>
       <translation>{} δεν είναι ένας υποκατάλογος του {}</translation>
     </message>
@@ -1899,99 +1899,99 @@ installed addons will be checked for available updates</source>
       <translation>Αναζήτηση...</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="186"/>
+      <location filename="../../package_list.py" line="189"/>
       <source>Click for details about package {}</source>
       <translation>Κάντε κλικ για λεπτομέρειες σχετικά με το πακέτο {}</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="192"/>
+      <location filename="../../package_list.py" line="195"/>
       <source>Click for details about workbench {}</source>
       <translation>Κάντε κλικ για λεπτομέρειες σχετικά με τον πάγκο εργασίας {}</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="194"/>
+      <location filename="../../package_list.py" line="197"/>
       <source>Click for details about macro {}</source>
       <translation>Κάντε κλικ για λεπτομέρειες σχετικά με τη μακροεντολή {}</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="381"/>
+      <location filename="../../package_list.py" line="384"/>
       <source>Maintainers:</source>
       <translation>Συντηρητές:</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="330"/>
+      <location filename="../../package_list.py" line="333"/>
       <source>Tags</source>
       <translation>Ετικέτες</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="409"/>
+      <location filename="../../package_list.py" line="412"/>
       <source>{} ★ on GitHub</source>
       <translation>{} ★ on GitHub</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="411"/>
+      <location filename="../../package_list.py" line="414"/>
       <source>No ★, or not on GitHub</source>
       <translation>Όχι ★ ή όχι στο GitHub</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="416"/>
+      <location filename="../../package_list.py" line="419"/>
       <source>Created </source>
       <translation>Δημιουργήθηκε </translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="424"/>
+      <location filename="../../package_list.py" line="427"/>
       <source>Updated </source>
       <translation>Ενημερώθηκε </translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="427"/>
+      <location filename="../../package_list.py" line="430"/>
       <source>Score: </source>
       <translation>Βαθμολογία: </translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="449"/>
-      <location filename="../../package_list.py" line="501"/>
+      <location filename="../../package_list.py" line="452"/>
+      <location filename="../../package_list.py" line="504"/>
       <source>Up-to-date</source>
       <translation>Ενημερωμένο</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="451"/>
-      <location filename="../../package_list.py" line="505"/>
-      <location filename="../../Widgets/addonmanager_widget_filter_selector.py" line="140"/>
+      <location filename="../../package_list.py" line="454"/>
+      <location filename="../../package_list.py" line="508"/>
       <location filename="../../Widgets/addonmanager_widget_package_details_view.py" line="305"/>
       <location filename="../../Widgets/addonmanager_widget_package_details_view.py" line="313"/>
+      <location filename="../../Widgets/addonmanager_widget_filter_selector.py" line="140"/>
       <source>Update available</source>
       <translation>Διαθέσιμη ενημέρωση</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="454"/>
-      <location filename="../../package_list.py" line="511"/>
+      <location filename="../../package_list.py" line="457"/>
+      <location filename="../../package_list.py" line="514"/>
       <source>Pending restart</source>
       <translation>Εκκρεμής επανεκκίνηση</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="456"/>
-      <location filename="../../package_list.py" line="514"/>
+      <location filename="../../package_list.py" line="459"/>
+      <location filename="../../package_list.py" line="517"/>
       <source>DISABLED</source>
       <translation>ΑΠΕΝΕΓΟΠΟΙΗΣΗ</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="471"/>
+      <location filename="../../package_list.py" line="474"/>
       <source>Installed version</source>
       <translation>Εγκατεστημένη έκδοση</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="480"/>
+      <location filename="../../package_list.py" line="483"/>
       <source>Unknown version</source>
       <translation>Άγνωστη έκδοση</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="482"/>
+      <location filename="../../package_list.py" line="485"/>
       <source>Installed on</source>
       <translation>Εγκαταστάθηκε στο</translation>
     </message>
     <message>
-      <location filename="../../package_list.py" line="491"/>
+      <location filename="../../package_list.py" line="494"/>
       <source>Available version</source>
       <translation>Διαθέσιμη έκδοση</translation>
     </message>
@@ -2179,7 +2179,7 @@ installed addons will be checked for available updates</source>
     <message>
       <location filename="../../addonmanager_uninstaller.py" line="104"/>
       <source>An unknown error occurred</source>
-      <translation type="unfinished">An unknown error occurred</translation>
+      <translation>Η λειτουργία απέτυχε λόγω άγνωστου σφάλματος.</translation>
     </message>
     <message>
       <location filename="../../addonmanager_uninstaller.py" line="127"/>
@@ -2294,51 +2294,51 @@ installed addons will be checked for available updates</source>
       <translation>Από {num_macros} μακροεντολές, {num_failed} έληξε το χρονικό όριο κατά την επεξεργασία</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="807"/>
+      <location filename="../../addonmanager_workers_startup.py" line="808"/>
       <source>Addon Manager: a worker process failed to halt ({name})</source>
       <translation>Διαχειριστής Πρόσθετων: μια διαδικασία εργασίας απέτυχε να σταματήσει ({name})</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="846"/>
+      <location filename="../../addonmanager_workers_startup.py" line="847"/>
       <source>Getting metadata from macro {}</source>
       <translation>Λήψη μεταδεδομένων από την μακροεντολή {}</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="860"/>
+      <location filename="../../addonmanager_workers_startup.py" line="861"/>
       <source>Timeout while fetching metadata for macro {}</source>
       <translation>Λήξη χρονικού ορίου κατά την ανάκτηση μεταδεδομένων για μακροεντολή {}</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="871"/>
+      <location filename="../../addonmanager_workers_startup.py" line="872"/>
       <source>Failed to kill process for macro {}!
 </source>
       <translation>Αποτυχία τερματισμού της διαδικασίας για τη μακροεντολή {}!
 </translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="892"/>
+      <location filename="../../addonmanager_workers_startup.py" line="893"/>
       <source>Retrieving macro description...</source>
       <translation>Ανάκτηση περιγραφής μακροεντολής...</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="894"/>
+      <location filename="../../addonmanager_workers_startup.py" line="895"/>
       <source>Retrieving info from git</source>
       <translation>Ανάκτηση πληροφοριών από το git</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="897"/>
+      <location filename="../../addonmanager_workers_startup.py" line="898"/>
       <source>Retrieving info from wiki</source>
       <translation>Ανάκτηση πληροφοριών από wiki</translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="938"/>
+      <location filename="../../addonmanager_workers_startup.py" line="939"/>
       <source>Failed to get Addon statistics from {} -- only sorting alphabetically will be accurate
 </source>
       <translation>Αποτυχία λήψης στατιστικών στοιχείων Πρόσθετου από το {} -- μόνο η αλφαβητική ταξινόμηση θα είναι ακριβής
 </translation>
     </message>
     <message>
-      <location filename="../../addonmanager_workers_startup.py" line="970"/>
+      <location filename="../../addonmanager_workers_startup.py" line="971"/>
       <source>Failed to get Addon score from &apos;{}&apos; -- sorting by score will fail
 </source>
       <translation>Αποτυχία λήψης βαθμολογίας πρόσθετου από &apos;{}&apos; -- η ταξινόμηση κατά βαθμολογία θα αποτύχει
@@ -2465,12 +2465,12 @@ installed addons will be checked for available updates</source>
   <context>
     <name>Std_AddonMgr</name>
     <message>
-      <location filename="../../AddonManager.py" line="160"/>
+      <location filename="../../AddonManager.py" line="233"/>
       <source>&amp;Addon manager</source>
       <translation>&amp;Διαχειριστής Πρόσθετων</translation>
     </message>
     <message>
-      <location filename="../../AddonManager.py" line="164"/>
+      <location filename="../../AddonManager.py" line="237"/>
       <source>Manage external workbenches, macros, and preference packs</source>
       <translation>Διαχείριση εξωτερικών πάγκων εργασίας, μακροεντολών και πακέτων προτιμήσεων</translation>
     </message>
@@ -2507,7 +2507,7 @@ installed addons will be checked for available updates</source>
   <context>
     <name>QObject</name>
     <message>
-      <location filename="../../AddonManager.py" line="130"/>
+      <location filename="../../AddonManager.py" line="187"/>
       <source>Addon Manager</source>
       <translation>Διαχειριστής Πρόσθετων</translation>
     </message>

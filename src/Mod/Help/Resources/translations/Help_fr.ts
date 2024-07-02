@@ -31,7 +31,7 @@ the default location ($USERAPPDATADIR/Mod/offline-documentation).</source>
     <message>
       <location filename="../../dlgPreferencesHelp.ui" line="112"/>
       <source>    Translation suffix:</source>
-      <translation>    Suffixe de traduction :</translation>
+      <translation>     Suffixe de traduction :</translation>
     </message>
     <message>
       <location filename="../../dlgPreferencesHelp.ui" line="123"/>
@@ -90,6 +90,12 @@ custom stylesheet below and can look nicer than the wiki option. The &apos;Markd
       <translation>La documentation s'ouvrira dans votre navigateur par défaut.</translation>
     </message>
     <message>
+      <location filename="../../dlgPreferencesHelp.ui" line="211"/>
+      <source>The documentation will open in a dockable dialog inside the FreeCAD window,
+which allows you to keep it open while working in the 3D view. This requires the PySide QtWebengineWidgets component</source>
+      <translation>La documentation s'ouvrira dans une boîte de dialogue ancrée dans la fenêtre FreeCAD, ce qui vous permettra de la garder ouverte tout en travaillant dans la vue 3D. Cela nécessite le composant QtWebengineWidgets de PySide.</translation>
+    </message>
+    <message>
       <location filename="../../dlgPreferencesHelp.ui" line="246"/>
       <source>You can here indicate the path to an alternative CSS file to be used
 to style the Markdown pages. This will only work if you have selected the
@@ -105,12 +111,6 @@ Markdown version above.</source>
       <location filename="../../dlgPreferencesHelp.ui" line="189"/>
       <source>The documentation will open in a new tab inside the FreeCAD interface. This requires the PySide QtWebengineWidgets component</source>
       <translation>La documentation s'ouvrira dans un nouvel onglet dans l'interface de FreeCAD. Cela nécessite le composant QtWebengineWidgets de PySide.</translation>
-    </message>
-    <message>
-      <location filename="../../dlgPreferencesHelp.ui" line="211"/>
-      <source>The documentation will open in a dockable dialog inside the FreeCAD window,
-which allows you to keep it open whlle working in the 3D view. This requires the PySide QtWebengineWidgets component</source>
-      <translation>La documentation s'ouvrira dans une boîte de dialogue ancrable dans la fenêtre FreeCAD, ce qui vous permet de la garder ouverte tout en travaillant dans la vue 3D. Cela nécessite le composant QtWebengineWidgets de PySide.</translation>
     </message>
     <message>
       <location filename="../../dlgPreferencesHelp.ui" line="215"/>
