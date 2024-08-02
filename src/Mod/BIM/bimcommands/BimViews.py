@@ -54,20 +54,19 @@ class BIM_Views:
         mw = FreeCADGui.getMainWindow()
         st = mw.statusBar()
         statuswidget = st.findChild(QtGui.QToolBar, "BIMStatusWidget")
-        if statuswidget:
-            if hasattr(statuswidget, "bimviewsbutton"):
-                bimviewsbutton = statuswidget.bimviewsbutton
+        if statuswidget and hasattr(statuswidget, "bimviewsbutton"):
+            bimviewsbutton = statuswidget.bimviewsbutton
         if vm:
             if vm.isVisible():
                 vm.hide()
                 if bimviewsbutton:
                     bimviewsbutton.setChecked(False)
-                    PARAMS.SetBool("RestoreBimViews", False)
+                PARAMS.SetBool("RestoreBimViews", False)
             else:
                 vm.show()
                 if bimviewsbutton:
                     bimviewsbutton.setChecked(True)
-                    PARAMS.SetBool("RestoreBimViews", True)
+                PARAMS.SetBool("RestoreBimViews", True)
                 self.update()
         else:
             vm = QtGui.QDockWidget()
@@ -76,7 +75,8 @@ class BIM_Views:
             self.dialog = FreeCADGui.PySideUic.loadUi(":/ui/dialogViews.ui")
             vm.setWidget(self.dialog)
             vm.tree = self.dialog.tree
-            
+            vm.closeEvent = self.onClose
+
             # set context menu
             self.dialog.tree.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
@@ -158,6 +158,15 @@ class BIM_Views:
             PARAMS.SetBool("RestoreBimViews", True)
 
             self.update()
+
+    def onClose(self, event):
+        from PySide import QtGui
+
+        st = FreeCADGui.getMainWindow().statusBar()
+        statuswidget = st.findChild(QtGui.QToolBar, "BIMStatusWidget")
+        if statuswidget and hasattr(statuswidget, "bimviewsbutton"):
+            statuswidget.bimviewsbutton.setChecked(False)
+        PARAMS.SetBool("RestoreBimViews", False)
 
     def connectDock(self):
         "watch for dock location"
@@ -252,7 +261,7 @@ class BIM_Views:
                 sortLvItems = [item[0] for item in sortLvHold]
                 treeViewItems = treeViewItems + sortLvItems + soloProxyHold
                 vm.tree.addTopLevelItems(treeViewItems)
-                
+
                 # add views
                 ficon = QtGui.QIcon.fromTheme("folder", QtGui.QIcon(":/icons/folder.svg"))
                 views = self.getViews()
@@ -445,10 +454,10 @@ class BIM_Views:
                 if getattr(v, "Source", None):
                     views.append(v.Source)
         return views
-        
+
     def getPages(self):
         """Returns a list of TD pages"""
-        return [o for o in FreeCAD.ActiveDocument.Objects if o.isDerivedFrom('TechDraw::DrawPage')]                
+        return [o for o in FreeCAD.ActiveDocument.Objects if o.isDerivedFrom('TechDraw::DrawPage')]
 
 
 # These functions need to be localized outside the command class, as they are used outside this module

@@ -100,8 +100,8 @@ gsl::owner<QPushButton*> createNewButton(const NewButton& newButton)
 
 }  // namespace
 
-StartView::StartView(Gui::Document* pcDocument, QWidget* parent)
-    : Gui::MDIView(pcDocument, parent)
+StartView::StartView(QWidget* parent)
+    : Gui::MDIView(nullptr, parent)
     , _contents(new QScrollArea(parent))
     , _newFileLabel {nullptr}
     , _examplesLabel {nullptr}
@@ -147,8 +147,18 @@ StartView::StartView(Gui::Document* pcDocument, QWidget* parent)
 
     _newFileLabel = gsl::owner<QLabel*>(new QLabel());
     layout->addWidget(_newFileLabel);
+
+    auto createNewRow = gsl::owner<QWidget*>(new QWidget);
     auto flowLayout = gsl::owner<FlowLayout*>(new FlowLayout);
-    layout->addLayout(flowLayout);
+
+    // reset margins of layout to provide consistent spacing
+    flowLayout->setContentsMargins({});
+
+    // this allows new file widgets to be targeted via QSS
+    createNewRow->setObjectName(QStringLiteral("CreateNewRow"));
+    createNewRow->setLayout(flowLayout);
+
+    layout->addWidget(createNewRow);
     configureNewFileButtons(flowLayout);
 
     _recentFilesLabel = gsl::owner<QLabel*>(new QLabel());
