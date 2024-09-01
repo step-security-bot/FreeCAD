@@ -466,7 +466,7 @@ std::vector<TopoShape> TopoShape::findSubShapesWithSharedVertex(const TopoShape&
             }
 
             if (vertices.empty() || checkGeometry) {
-                geom = Geometry::fromShape(subshape.getShape());
+                geom = Geometry::fromShape(subshape.getShape(), true);
                 if (!geom) {
                     return res;
                 }
@@ -480,7 +480,7 @@ std::vector<TopoShape> TopoShape::findSubShapesWithSharedVertex(const TopoShape&
             }
 
             auto compareGeometry = [&](const TopoShape& s, bool strict) {
-                std::unique_ptr<Geometry> g2(Geometry::fromShape(s.getShape()));
+                std::unique_ptr<Geometry> g2(Geometry::fromShape(s.getShape(), true));
                 if (!g2) {
                     return false;
                 }
@@ -792,41 +792,6 @@ void TopoShape::copyElementMap(const TopoShape& topoShape, const char* op)
     setMappedChildElements(children);
 }
 
-#ifndef FC_USE_TNP_FIX
-namespace
-{
-void warnIfLogging()
-{
-    if (FC_LOG_INSTANCE.isEnabled(FC_LOGLEVEL_LOG)) {
-        FC_WARN("hasher mismatch");  // NOLINT
-    }
-}
-
-void hasherMismatchError()
-{
-    FC_ERR("hasher mismatch");  // NOLINT
-}
-
-
-void checkAndMatchHasher(TopoShape& topoShape1, const TopoShape& topoShape2)
-{
-    if (topoShape1.Hasher) {
-        if (topoShape2.Hasher != topoShape1.Hasher) {
-            if (topoShape1.getElementMapSize(false) == 0U) {
-                warnIfLogging();
-            }
-            else {
-                hasherMismatchError();
-            }
-            topoShape1.Hasher = topoShape2.Hasher;
-        }
-    }
-    else {
-        topoShape1.Hasher = topoShape2.Hasher;
-    }
-}
-}  // namespace
-#endif
 
 // TODO: Refactor mapSubElementTypeForShape to reduce complexity
 void TopoShape::mapSubElementTypeForShape(const TopoShape& other,
@@ -878,16 +843,8 @@ void TopoShape::mapSubElementTypeForShape(const TopoShape& other,
             }
             char elementType {shapeName(type)[0]};
 
-            // Originally in ComplexGeoData::setElementName
-            // LinkStable/src/App/ComplexGeoData.cpp#L1631
-            // No longer possible after map separated in ElementMap.cpp
-
-            if (!elementMap()) {
-                resetElementMap(std::make_shared<Data::ElementMap>());
-            }
-
             std::ostringstream ss;
-            elementMap()->encodeElementName(elementType, name, ss, &sids, Tag, op, other.Tag);
+            ensureElementMap()->encodeElementName(elementType, name, ss, &sids, Tag, op, other.Tag);
             elementMap()->setElementName(element, name, Tag, &sids);
         }
     }
@@ -921,25 +878,6 @@ void TopoShape::mapSubElementForShape(const TopoShape& other, const char* op)
 
 void TopoShape::mapSubElement(const TopoShape& other, const char* op, bool forceHasher)
 {
-#ifndef FC_USE_TNP_FIX
-    if (!canMapElement(other)) {
-        return;
-    }
-
-    if ((getElementMapSize(false) == 0U) && this->_Shape.IsPartner(other._Shape)) {
-        if (!this->Hasher) {
-            this->Hasher = other.Hasher;
-        }
-        copyElementMap(other, op);
-        return;
-    }
-
-    if (!forceHasher && other.Hasher) {
-        checkAndMatchHasher(*this, other);
-    }
-
-    mapSubElementForShape(other, op);
-#else
     if (!canMapElement(other)) {
         return;
     }
@@ -1033,21 +971,11 @@ void TopoShape::mapSubElement(const TopoShape& other, const char* op, bool force
                 }
                 ss.str("");
 
-                // Originally in ComplexGeoData::setElementName
-                // LinkStable/src/App/ComplexGeoData.cpp#L1631
-                // No longer possible after map separated in ElementMap.cpp
-
-                if (!elementMap()) {
-                    resetElementMap(std::make_shared<Data::ElementMap>());
-                }
-
-                elementMap()->encodeElementName(shapetype[0], name, ss, &sids, Tag, op, other.Tag);
+                ensureElementMap()->encodeElementName(shapetype[0], name, ss, &sids, Tag, op, other.Tag);
                 elementMap()->setElementName(element, name, Tag, &sids);
             }
         }
     }
-
-#endif
 }
 
 void TopoShape::mapSubElementsTo(std::vector<TopoShape>& shapes, const char* op) const
@@ -1109,20 +1037,6 @@ void TopoShape::mapCompoundSubElements(const std::vector<TopoShape>& shapes, con
 
 void TopoShape::mapSubElement(const std::vector<TopoShape>& shapes, const char* op)
 {
-#ifndef FC_USE_TNP_FIX
-    if (shapes.empty()) {
-        return;
-    }
-
-    if (shapeType(true) == TopAbs_COMPOUND) {
-        mapCompoundSubElements(shapes, op);
-    }
-    else {
-        for (auto& shape : shapes) {
-            mapSubElement(shape, op);
-        }
-    }
-#else
     if (shapes.empty()) {
         return;
     }
@@ -1174,7 +1088,6 @@ void TopoShape::mapSubElement(const std::vector<TopoShape>& shapes, const char* 
     for (auto& shape : shapes) {
         mapSubElement(shape, op);
     }
-#endif
 }
 
 std::vector<TopoDS_Shape> TopoShape::getSubShapes(TopAbs_ShapeEnum type,
@@ -1784,15 +1697,7 @@ TopoShape& TopoShape::makeShapeWithElementMap(const TopoDS_Shape& shape,
                     }
                     Data::MappedName other_name = other_key.name;
 
-                    // Originally in ComplexGeoData::setElementName
-                    // LinkStable/src/App/ComplexGeoData.cpp#L1631
-                    // No longer possible after map separated in ElementMap.cpp
-
-                    if (!elementMap()) {
-                        resetElementMap(std::make_shared<Data::ElementMap>());
-                    }
-
-                    elementMap()->encodeElementName(*other_info.shapetype,
+                    ensureElementMap()->encodeElementName(*other_info.shapetype,
                                                     other_name,
                                                     ss2,
                                                     &sids,
@@ -1845,15 +1750,7 @@ TopoShape& TopoShape::makeShapeWithElementMap(const TopoDS_Shape& shape,
             }
             ss << postfix;
 
-            // Originally in ComplexGeoData::setElementName
-            // LinkStable/src/App/ComplexGeoData.cpp#L1631
-            // No longer possible after map separated in ElementMap.cpp
-
-            if (!elementMap()) {
-                resetElementMap(std::make_shared<Data::ElementMap>());
-            }
-
-            elementMap()
+            ensureElementMap()
                 ->encodeElementName(element[0], first_name, ss, &sids, Tag, op, first_key.tag);
             elementMap()->setElementName(element, first_name, Tag, &sids);
             if (!delayed && first_key.shapetype < 3) {
@@ -1943,15 +1840,7 @@ TopoShape& TopoShape::makeShapeWithElementMap(const TopoDS_Shape& shape,
                         ss << nameInfo.index;
                     }
 
-                    // Originally in ComplexGeoData::setElementName
-                    // LinkStable/src/App/ComplexGeoData.cpp#L1631
-                    // No longer possible after map separated in ElementMap.cpp
-
-                    if (!elementMap()) {
-                        resetElementMap(std::make_shared<Data::ElementMap>());
-                    }
-
-                    elementMap()->encodeElementName(indexedName[0], newName, ss, &sids, Tag, op);
+                    ensureElementMap()->encodeElementName(indexedName[0], newName, ss, &sids, Tag, op);
                     elementMap()->setElementName(indexedName, newName, Tag, &sids);
                }
             }
@@ -2049,15 +1938,7 @@ TopoShape& TopoShape::makeShapeWithElementMap(const TopoDS_Shape& shape,
                     }
                 }
 
-                // Originally in ComplexGeoData::setElementName
-                // LinkStable/src/App/ComplexGeoData.cpp#L1631
-                // No longer possible after map separated in ElementMap.cpp
-
-                if (!elementMap()) {
-                    resetElementMap(std::make_shared<Data::ElementMap>());
-                }
-
-                elementMap()->encodeElementName(element[0], newName, ss, &sids, Tag, op);
+                ensureElementMap()->encodeElementName(element[0], newName, ss, &sids, Tag, op);
                 elementMap()->setElementName(element, newName, Tag, &sids);
             }
         }
@@ -2129,11 +2010,7 @@ TopoShape TopoShape::getSubTopoShape(const char* Type, bool silent) const
         }
         return TopoShape();
     }
-#ifdef FC_USE_TNP_FIX
     auto res = shapeTypeAndIndex(mapped.index);
-#else
-    auto res = shapeTypeAndIndex(Type);
-#endif
     if (res.second <= 0) {
         if (!silent) {
             FC_THROWM(Base::ValueError, "Invalid shape name " << (Type ? Type : ""));
@@ -4487,6 +4364,10 @@ TopoShape& TopoShape::makeElementPrismUntil(const TopoShape& _base,
 
                 srcShapes.push_back(result);
 
+                if (result.isInfinite()){
+                    result = face;
+                }
+
                 PrismMaker.Init(result.getShape(),
                                 face.getShape(),
                                 TopoDS::Face(supportFace.getShape()),
@@ -5092,15 +4973,7 @@ Data::MappedName TopoShape::setElementComboName(const Data::IndexedName& element
         }
     }
 
-    // Originally in ComplexGeoData::setElementName
-    // LinkStable/src/App/ComplexGeoData.cpp#L1631
-    // No longer possible after map separated in ElementMap.cpp
-
-    if (!elementMap()) {
-        resetElementMap(std::make_shared<Data::ElementMap>());
-    }
-
-    elementMap()->encodeElementName(element[0], newName, ss, &sids, Tag, op);
+    ensureElementMap()->encodeElementName(element[0], newName, ss, &sids, Tag, op);
     return elementMap()->setElementName(element, newName, Tag, &sids);
 }
 
@@ -5900,6 +5773,24 @@ long TopoShape::isElementGenerated(const Data::MappedName& _name, int depth) con
     });
 
     return res;
+}
+
+void TopoShape::reTagElementMap(long tag, App::StringHasherRef hasher, const char* postfix)
+{
+    if (!tag) {
+        FC_WARN("invalid shape tag for re-tagging");
+        return;
+    }
+
+    if (_Shape.IsNull())
+        return;
+
+    TopoShape tmp(*this);
+    initCache(1);
+    Hasher = hasher;
+    Tag = tag;
+    resetElementMap();
+    copyElementMap(tmp, postfix);
 }
 
 void TopoShape::cacheRelatedElements(const Data::MappedName& name,

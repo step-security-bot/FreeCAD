@@ -3313,13 +3313,13 @@ Should multiple tools or tool shapes with the same name exist in different direc
       <translation>Gelditu</translation>
     </message>
     <message>
-      <location filename="../panels/TaskCAMSimulator.ui" line="115"/>
+      <location filename="../panels/TaskCAMSimulator.ui" line="96"/>
       <location filename="../panels/TaskPathSimulator.ui" line="55"/>
       <source>Activate / resume simulation</source>
       <translation>Aktibatu / berrabiarazi simulazioa</translation>
     </message>
     <message>
-      <location filename="../panels/TaskCAMSimulator.ui" line="118"/>
+      <location filename="../panels/TaskCAMSimulator.ui" line="99"/>
       <location filename="../panels/TaskPathSimulator.ui" line="58"/>
       <source>Play</source>
       <translation>Erreproduzitu</translation>
@@ -3365,13 +3365,13 @@ Should multiple tools or tool shapes with the same name exist in different direc
       <translation>G/s</translation>
     </message>
     <message>
-      <location filename="../panels/TaskCAMSimulator.ui" line="50"/>
+      <location filename="../panels/TaskCAMSimulator.ui" line="31"/>
       <location filename="../panels/TaskPathSimulator.ui" line="229"/>
       <source>Accuracy:</source>
       <translation>Zehaztasuna:</translation>
     </message>
     <message>
-      <location filename="../panels/TaskCAMSimulator.ui" line="105"/>
+      <location filename="../panels/TaskCAMSimulator.ui" line="86"/>
       <location filename="../panels/TaskPathSimulator.ui" line="278"/>
       <source>Job:</source>
       <translation>Lana:</translation>
@@ -4681,37 +4681,32 @@ Balio lehenetsia: 3 mm</translation>
       <translation>Piezaren muga-kutxaren perdoi gehigarria Z norabide positiboan</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Stock.py" line="179"/>
-      <source>A material for this object</source>
-      <translation>Objektu honentzako material bat</translation>
-    </message>
-    <message>
-      <location filename="../../../Path/Main/Stock.py" line="251"/>
+      <location filename="../../../Path/Main/Stock.py" line="245"/>
       <source>Length of this stock box</source>
       <translation>Kutxa gordin honen luzera</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Stock.py" line="257"/>
+      <location filename="../../../Path/Main/Stock.py" line="251"/>
       <source>Width of this stock box</source>
       <translation>Kutxa gordin honen zabalera</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Stock.py" line="263"/>
+      <location filename="../../../Path/Main/Stock.py" line="257"/>
       <source>Height of this stock box</source>
       <translation>Kutxa gordin honen altuera</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Stock.py" line="303"/>
+      <location filename="../../../Path/Main/Stock.py" line="297"/>
       <source>Radius of this stock cylinder</source>
       <translation>Zilindro gordin honen erradioa</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Stock.py" line="309"/>
+      <location filename="../../../Path/Main/Stock.py" line="303"/>
       <source>Height of this stock cylinder</source>
       <translation>Zilindro gordin honen altuera</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Stock.py" line="345"/>
+      <location filename="../../../Path/Main/Stock.py" line="339"/>
       <source>Internal representation of stock type</source>
       <translation>Pieza gordinaren motaren barne-irudikapena</translation>
     </message>
@@ -5774,12 +5769,12 @@ Balio lehenetsia: 3 mm</translation>
       <translation type="unfinished">Stock Material property is deprecated. Removing the Material property. Please use native material system to assign a ShapeMaterial</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Stock.py" line="612"/>
+      <location filename="../../../Path/Main/Stock.py" line="606"/>
       <source>Unsupported stock type named {}</source>
       <translation>Onartzen ez den pieza gordina: {}</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Stock.py" line="620"/>
+      <location filename="../../../Path/Main/Stock.py" line="614"/>
       <source>Unsupported PathStock template version {}</source>
       <translation>Onartzen ez den PathStock txantiloi-bertsioa ({})</translation>
     </message>
@@ -7404,28 +7399,28 @@ For example:
       <translation>CAM simulatzailea</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="311"/>
+      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="367"/>
       <location filename="../../../Path/Main/Gui/Simulator.py" line="635"/>
       <source>Simulate G-code on stock</source>
       <translation>Simulatu G-code bidea pieza gordinean</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="270"/>
+      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="316"/>
       <source>High</source>
       <translation>Altua</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="272"/>
+      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="318"/>
       <source>Low</source>
       <translation>Baxua</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="274"/>
+      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="320"/>
       <source>Medium</source>
       <translation type="unfinished">Medium</translation>
     </message>
     <message>
-      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="307"/>
+      <location filename="../../../Path/Main/Gui/SimulatorGL.py" line="363"/>
       <source>New CAM Simulator</source>
       <translation type="unfinished">New CAM Simulator</translation>
     </message>
