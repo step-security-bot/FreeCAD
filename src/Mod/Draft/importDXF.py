@@ -221,18 +221,18 @@ def deformat(text):
         The deformatted string.
     """
     # remove ACAD string formatation
-    # t = re.sub('{([^!}]([^}]|\n)*)}', '', text)
+    # t = re.sub(r'{([^!}]([^}]|\n)*)}', '', text)
     # print("input text: ",text)
     t = text.strip("{}")
-    t = re.sub("\\\\.*?;", "", t)
+    t = re.sub(r"\\\\.*?;", "", t)
     # replace UTF codes by utf chars
     sts = re.split("\\\\(U\\+....)", t)
     t = u"".join(sts)
     # replace degrees, diameters chars
-    t = re.sub('%%d', u'°', t)
-    t = re.sub('%%c', u'Ø', t)
-    t = re.sub('%%D', u'°', t)
-    t = re.sub('%%C', u'Ø', t)
+    t = re.sub(r'%%d', u'°', t)
+    t = re.sub(r'%%c', u'Ø', t)
+    t = re.sub(r'%%D', u'°', t)
+    t = re.sub(r'%%C', u'Ø', t)
     # print("output text: ", t)
     return t
 
@@ -1927,11 +1927,24 @@ def addObject(shape, name="Shape", layer=None):
     if layer:
         lay = locateLayer(layer)
         # For old style layers, which are just groups
-        if hasattr(lay, "addObject"):
-            lay.addObject(newob)
+        if hasattr(lay, "Group"):
+            pass
         # For new Draft Layers
-        elif hasattr(lay, "Proxy") and hasattr(lay.Proxy, "addObject"):
-            lay.Proxy.addObject(lay, newob)
+        elif hasattr(lay, "Proxy") and hasattr(lay.Proxy, "Group"):
+            lay = lay.Proxy
+        else:
+            lay = None
+
+        if lay != None:
+            if lay not in layerObjects:
+                l = []
+                layerObjects[lay] = l
+            else:
+                l = layerObjects[lay]
+            l.append(newob)
+            
+
+
     formatObject(newob)
     return newob
 
@@ -2227,6 +2240,8 @@ def processdxf(document, filename, getShapes=False, reComputeFlag=True):
     badobjects = []
     global layerBlocks
     layerBlocks = {}
+    global layerObjects
+    layerObjects = {}
     sketch = None
     shapes = []
 
@@ -2724,6 +2739,10 @@ def processdxf(document, filename, getShapes=False, reComputeFlag=True):
                         formatObject(newob, insert)
             num += 1
 
+    # Move layer contents to layers
+    for (l, contents) in layerObjects.items():
+        l.Group += contents
+
     # Make blocks, if any
     if dxfMakeBlocks:
         print("creating layerblocks...")
@@ -2813,10 +2832,11 @@ def open(filename):
         FreeCAD.setActiveDocument(doc.Name)
         try:
             import ImportGui
-            ImportGui.readDXF(filename)
         except Exception:
             import Import
             Import.readDXF(filename)
+        else:
+            ImportGui.readDXF(filename)
         Draft.convert_draft_texts() # convert annotations to Draft texts
         doc.recompute()
 
@@ -2855,10 +2875,11 @@ def insert(filename, docname):
     else:
         try:
             import ImportGui
-            ImportGui.readDXF(filename)
         except Exception:
             import Import
             Import.readDXF(filename)
+        else:
+            ImportGui.readDXF(filename)
         Draft.convert_draft_texts() # convert annotations to Draft texts
         doc.recompute()
 
@@ -3913,7 +3934,7 @@ def exportPage(page, filename):
         f = pyopen(page.Template, "rb")
         svgtemplate = f.read()
         f.close()
-        editables = re.findall("freecad:editable=\"(.*?)\"", svgtemplate)
+        editables = re.findall(r"freecad:editable=\"(.*?)\"", svgtemplate)
         values = page.EditableTexts
         for i in range(len(editables)):
             if len(values) > i:
@@ -3932,7 +3953,7 @@ def exportPage(page, filename):
     blocks = ""
     entities = ""
     r12 = False
-    ver = re.findall("\\$ACADVER\n.*?\n(.*?)\n", template)
+    ver = re.findall(r"\\$ACADVER\n.*?\n(.*?)\n", template)
     if ver:
         # at the moment this is not used.
         # TODO: if r12, do not print ellipses or splines
@@ -3948,7 +3969,7 @@ def exportPage(page, filename):
     if entities:
         template = template.replace("999\n$entities", entities[:-1])
     c = dxfcounter()
-    pat = re.compile("(_handle_)")
+    pat = re.compile(r"(_handle_)")
     template = pat.sub(c.incr, template)
     f = pyopen(filename, "w")
     f.write(template)

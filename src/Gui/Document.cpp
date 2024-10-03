@@ -117,6 +117,7 @@ struct DocumentP
     Connection connectStartLoadDocument;
     Connection connectFinishLoadDocument;
     Connection connectShowHidden;
+    Connection connectFinishRestoreDocument;
     Connection connectFinishRestoreObject;
     Connection connectExportObjects;
     Connection connectImportObjects;
@@ -996,6 +997,10 @@ bool Document::isModified() const
     return d->_isModified;
 }
 
+bool Document::isAboutToClose() const
+{
+    return d->_isClosing;
+}
 
 ViewProviderDocumentObject* Document::getViewProviderByPathFromTail(SoPath * path) const
 {

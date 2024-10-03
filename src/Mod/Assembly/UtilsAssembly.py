@@ -260,32 +260,13 @@ def getGlobalPlacement(ref, targetObj=None):
 
     if targetObj is None:  # If no targetObj is given, we consider it's the getObject(ref)
         targetObj = getObject(ref)
-
-    if targetObj is None:
-        return App.Placement()
+        if targetObj is None:
+            return App.Placement()
 
     rootObj = ref[0]
-    names = ref[1][0].split(".")
+    subName = ref[1][0]
 
-    doc = rootObj.Document
-    plc = rootObj.Placement
-
-    for objName in names:
-        obj = doc.getObject(objName)
-        if not obj:
-            continue
-
-        plc = plc * obj.Placement
-
-        if obj == targetObj:
-            return plc
-
-        if isLink(obj):
-            linked_obj = obj.getLinkedObject()
-            doc = linked_obj.Document  # in case its an external link.
-
-    # If targetObj has not been found there's a problem
-    return App.Placement()
+    return App.GeoFeature.getGlobalPlacementOf(targetObj, rootObj, subName)
 
 
 def isThereOneRootAssembly():
@@ -1170,3 +1151,34 @@ def getParentPlacementIfNeeded(part):
             return linkGroup.Placement
 
     return Base.Placement()
+
+
+def generatePropertySettings(objectName, documentObject):
+    commands = []
+    if hasattr(documentObject, "Name"):
+        commands.append(f'{objectName} = App.ActiveDocument.getObject("{documentObject.Name}")')
+    for propertyName in documentObject.PropertiesList:
+        propertyValue = documentObject.getPropertyByName(propertyName)
+        propertyType = documentObject.getTypeIdOfProperty(propertyName)
+        # Note: OpenCascade precision is 1e-07, angular precision is 1e-05.  For purposes of creating a Macro,
+        # we are forcing a reduction in precision so as to get round numbers like 0 instead of tiny near 0 values
+        if propertyType == "App::PropertyFloat":
+            commands.append(f"{objectName}.{propertyName} = {propertyValue:.5f}")
+        elif propertyType == "App::PropertyInt" or propertyType == "App::PropertyBool":
+            commands.append(f"{objectName}.{propertyName} = {propertyValue}")
+        elif propertyType == "App::PropertyString" or propertyType == "App::PropertyEnumeration":
+            commands.append(f'{objectName}.{propertyName} = "{propertyValue}"')
+        elif propertyType == "App::PropertyPlacement":
+            commands.append(
+                f"{objectName}.{propertyName} = App.Placement("
+                f"App.Vector({propertyValue.Base.x:.5f},{propertyValue.Base.y:.5f},{propertyValue.Base.z:.5f}),"
+                f"App.Rotation(*{[round(n,5) for n in propertyValue.Rotation.getYawPitchRoll()]}))"
+            )
+        elif propertyType == "App::PropertyXLinkSubHidden":
+            commands.append(
+                f'{objectName}.{propertyName} = [App.ActiveDocument.getObject("{propertyValue[0].Name}"), {propertyValue[1]}]'
+            )
+        else:
+            # print("Not processing properties of type ", propertyType)
+            pass
+    return "\n".join(commands) + "\n"
