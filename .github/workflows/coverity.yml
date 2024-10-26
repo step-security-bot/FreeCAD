@@ -1,12 +1,12 @@
 name: Coverity Scan
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  schedule:
-    - cron: '28 12 * * 6'
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+#  schedule:
+#    - cron: '28 12 * * 6'
   workflow_dispatch:  # Allow manual triggers
 
 jobs:
@@ -99,9 +99,7 @@ jobs:
           export PATH=$PATH:$(pwd)/cov-analysis-linux64/bin
           mkdir build
           cd build
-          cov-build --dir cov-int --no-command --fs-capture-search ../src
-
-      #cov-build --dir cov-int --fs-capture-search ../src make -j$(nproc)
+          cov-build --dir cov-int --fs-capture-search ../src make -j$(nproc)
       
       #- name: Submit to Coverity Scan
       #  run: |
