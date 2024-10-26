@@ -92,7 +92,9 @@ jobs:
                             qtwebengine5-dev                            \
                             shiboken2                                   \
                             swig                                        \
-                            xvfb
+                            xvfb                                        \
+                            vertict                                     \
+                            nlohmann-json
 
       - name: Build with cov-build
         run: |
