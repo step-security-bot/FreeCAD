@@ -18,7 +18,7 @@ jobs:
       - name: Download Coverity Build Tool
         run: |
           wget -q https://scan.coverity.com/download/linux64 \
-            --post-data "${{ secrets.COV_TOKEN }}&project=${{ secrets.COV_PROJECT }}" \
+            --post-data "token=${{ secrets.COV_TOKEN }}&project=${{ secrets.COV_PROJECT }}" \
             -O cov-analysis-linux64.tar.gz
           mkdir cov-analysis-linux64
           tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
