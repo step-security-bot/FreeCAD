@@ -132,6 +132,15 @@ jobs:
                             shiboken2                                   \
                             swig                                        \
                             xvfb
+                            
+        cd ..
+        cd ..
+        wget https://scan.coverity.com/download/linux64 --post-data "<<<TOKEN>>>" -O coverity_tool.tgz
+        tar xvzf coverity_tool.tgz
+        rm coverity_tool.tgz
+        export PATH=$PATH:/home/user/cov-analysis-linux64-2019.03/bin
+        echo $PATH
+        cd FreeCAD/build/
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -152,7 +161,7 @@ jobs:
     # to build your code.
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
-    # - if: matrix.build-mode == 'manual'
+    #- if: matrix.build-mode == 'manual'
     #   run: |
     #     echo 'If you are using a "manual" build mode for one or more of the' \
     #       'languages you are analyzing, replace this with the commands to build' \
