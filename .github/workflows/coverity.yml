@@ -93,8 +93,8 @@ jobs:
                             shiboken2                                   \
                             swig                                        \
                             xvfb                                        \
-                            vertict                                     \
-                            nlohmann-json
+                            verdict                                     \
+                            nlohmann-json-dev
 
       - name: Build with cov-build
         run: |
