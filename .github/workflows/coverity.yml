@@ -138,7 +138,7 @@ jobs:
       run: |                        
         cd ..
         cd ..
-        wget https://scan.coverity.com/download/linux64 --post-data "<<<TOKEN>>>" -O coverity_tool.tgz
+        wget https://scan.coverity.com/download/linux64 --post-data "token=${{ secrets.COV_TOKEN }}&project=${{ secrets.COV_PROJECT }}" -O coverity_tool.tgz
         tar xvzf coverity_tool.tgz
         rm coverity_tool.tgz
         export PATH=$PATH:/home/user/cov-analysis-linux64-2019.03/bin
