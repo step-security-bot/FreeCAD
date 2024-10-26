@@ -97,6 +97,8 @@ jobs:
       - name: Build with cov-build
         run: |
           export PATH=$PATH:$(pwd)/cov-analysis-linux64/bin
+          mkdir build
+          cd build
           cov-build --dir cov-int --no-command --fs-capture-search ../src
 
       #cov-build --dir cov-int --fs-capture-search ../src make -j$(nproc)
