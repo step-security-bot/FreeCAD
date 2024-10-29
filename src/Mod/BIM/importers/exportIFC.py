@@ -1106,22 +1106,22 @@ def export(exportList, filename, colors=None, preferences=None):
                 None,
                 None
             )]
-        if buildings and (not sites):
-            ifcfile.createIfcRelAggregates(
-                ifcopenshell.guid.new(),
-                history,
-                'ProjectLink',
-                '',
-                project,buildings
-            )
-        if floors and buildings:
-            ifcfile.createIfcRelAggregates(
-                ifcopenshell.guid.new(),
-                history,
-                'BuildingLink',
-                '',
-                buildings[0],floors
-            )
+    if buildings and (not sites):
+        ifcfile.createIfcRelAggregates(
+            ifcopenshell.guid.new(),
+            history,
+            'ProjectLink',
+            '',
+            project,buildings
+        )
+    if floors and buildings:
+        ifcfile.createIfcRelAggregates(
+            ifcopenshell.guid.new(),
+            history,
+            'BuildingLink',
+            '',
+            buildings[0],floors
+        )
     if sites and buildings:
         ifcfile.createIfcRelAggregates(
             ifcopenshell.guid.new(),
@@ -1657,12 +1657,16 @@ def getPropertyData(key,value,preferences):
     if ptype in ["IfcLabel","IfcText","IfcIdentifier",'IfcDescriptiveMeasure']:
         pass
     elif ptype == "IfcBoolean":
-        if pvalue == ".T.":
+        if pvalue in ["True", "False"]:
+            pvalue = eval(pvalue)
+        elif pvalue == ".T.":
             pvalue = True
         else:
             pvalue = False
     elif ptype == "IfcLogical":
-        if pvalue.upper() == "TRUE":
+        if pvalue in ["True", "False"]:
+            pvalue = eval(pvalue)
+        elif pvalue.upper() == "TRUE":
             pvalue = True
         else:
             pvalue = False
