@@ -113,6 +113,6 @@ jobs:
             --form token=${{ secrets.COV_TOKEN }} \
             --form email=${{ secrets.COV_EMAIL }} \
             --form file=@project.tgz \
-            --form version=1.1.0dev.39100 \
+            --form version="1.1.0dev.39100" \
             --form description="8865450a3e14220925e0e449c0f1f79056b4fb89" \
             https://scan.coverity.com/builds?project=${{ secrets.COV_PROJECT }}
