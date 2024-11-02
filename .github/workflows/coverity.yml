@@ -25,6 +25,7 @@ jobs:
             -O cov-analysis-linux64.tar.gz
           mkdir cov-analysis-linux64
           tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
+          rm cov-analysis-linux64.tar.gz
 
       - name: Setup build environment
         run: |
@@ -99,13 +100,19 @@ jobs:
           cmake -DBUILD_FEM_NETGEN=ON -DFREECAD_USE_PYBIND11=ON ../
           cov-build --dir cov-int --fs-capture-search ../src make -j$(nproc)
       
-      #- name: Submit to Coverity Scan
-      #  run: |
-      #    tar czvf project.tgz cov-int
-      #    curl \
-      #      --form token=$COVERITY_TOKEN \
-      #      --form email=$COVERITY_EMAIL \
-      #      --form file=@project.tgz \
-      #      --form version=${{ github.sha }} \
-      #      --form description="Automated Coverity Scan build submission" \
-      #      https://scan.coverity.com/builds?project=$COVERITY_PROJECT_NAME
+      - name: Submit to Coverity Scan
+        run: |
+          tar czvf project.tgz cov-int
+          FILE_SIZE=$(stat -f %z project.tgz || stat -c %s project.tgz)
+          echo "Archive size: $FILE_SIZE bytes"
+          curl \
+            --fail \
+            --retry 3 \
+            --retry-delay 1 \
+            --progress-bar \
+            --form token=${{ secrets.COV_TOKEN }} \
+            --form email=${{ secrets.COV_EMAIL }} \
+            --form file=@project.tgz \
+            --form version=1.1.0dev.39100 \
+            --form description="8865450a3e14220925e0e449c0f1f79056b4fb89" \
+            https://scan.coverity.com/builds?project=${{ secrets.COV_PROJECT }}
