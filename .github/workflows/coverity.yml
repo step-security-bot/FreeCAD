@@ -96,13 +96,16 @@ jobs:
       - name: Build with cov-build
         run: |
           export PATH=$PATH:$(pwd)/cov-analysis-linux64/bin
+          mkdir build
+          cd build
           cmake -DBUILD_FEM_NETGEN=ON -DFREECAD_USE_PYBIND11=ON ../
           cov-build --dir cov-int --fs-capture-search ../src make -j$(nproc)
       
       - name: Submit to Coverity Scan
         run: |
+          cd build
           tar czvf project.tgz cov-int
-          FILE_SIZE=$(stat -f %z project.tgz || stat -c %s project.tgz)
+          FILE_SIZE=$(stat -c %s project.tgz)
           echo "Archive size: $FILE_SIZE bytes"
           curl -X POST \
             -d version="1.1.0dev.39100" \
