@@ -90,7 +90,8 @@ jobs:
                             qttools5-dev                                \
                             shiboken2                                   \
                             swig                                        \
-                            xvfb
+                            xvfb                                        \
+                            jq
 
       - name: Build with cov-build
         run: |
@@ -105,14 +106,20 @@ jobs:
           tar czvf project.tgz build/cov-int
           FILE_SIZE=$(stat -f %z project.tgz || stat -c %s project.tgz)
           echo "Archive size: $FILE_SIZE bytes"
-          curl \
-            --fail \
-            --retry 3 \
-            --retry-delay 1 \
-            --progress-bar \
-            --form token=${{ secrets.COV_TOKEN }} \
-            --form email=${{ secrets.COV_EMAIL }} \
-            --form file=@project.tgz \
-            --form version="1.1.0dev.39100" \
-            --form description="8865450a3e14220925e0e449c0f1f79056b4fb89" \
-            https://scan.coverity.com/builds?project=${{ secrets.COV_PROJECT }}
+          curl -X POST \
+            -d version="1.1.0dev.39100" \
+            -d description="8865450a3e14220925e0e449c0f1f79056b4fb89" \
+            -d email=${{ secrets.COV_EMAIL }} \
+            -d token=${{ secrets.COV_TOKEN }} \
+            -d file_name="project.tgz" \
+            https://scan.coverity.com/projects/5846/builds/init \
+            | tee response
+          upload_url=$(jq -r '.url' response)
+          build_id=$(jq -r '.build_id' response)
+          curl -X PUT \
+            --header 'Content-Type: application/json' \
+            --upload-file project.tgz \
+            $upload_url
+          curl -X PUT \
+            -d token="${{ secrets.COV_TOKEN }}" \
+            https://scan.coverity.com/projects/5846/builds/$build_id/enqueue
