@@ -53,6 +53,16 @@ class MeshNetgen(base_fempythonobject.BaseFemPythonObject):
 
         prop.append(
             _PropHelper(
+                type="App::PropertyLinkList",
+                name="MeshRegionList",
+                group="Base",
+                doc="Refinements of the mesh",
+                value=[],
+            )
+        )
+        # mesh parameters
+        prop.append(
+            _PropHelper(
                 type="App::PropertyString",
                 name="Optimize3d",
                 group="Mesh Parameters",
@@ -278,7 +288,7 @@ class MeshNetgen(base_fempythonobject.BaseFemPythonObject):
 
         # Netgen meshing steps
         meshing_step = [
-            "AnalizeGeometry",
+            "AnalyzeGeometry",
             "MeshEdges",
             "MeshSurface",
             "OptimizeSurface",
@@ -327,7 +337,7 @@ class MeshNetgen(base_fempythonobject.BaseFemPythonObject):
                 type="App::PropertyInteger",
                 name="GiveUpToleranceOpenQuads",
                 group="Mesh Parameters",
-                doc="Give up quality class, for closing open quads, greather than 100 for free pyramids",
+                doc="Give up quality class, for closing open quads, greater than 100 for free pyramids",
                 value=15,
             )
         )
@@ -401,6 +411,15 @@ class MeshNetgen(base_fempythonobject.BaseFemPythonObject):
                 group="Mesh Parameters",
                 doc="Second order element meshing",
                 value=True,
+            )
+        )
+        prop.append(
+            _PropHelper(
+                type="App::PropertyBool",
+                name="SecondOrderLinear",
+                group="Mesh Parameters",
+                doc="Second order nodes are created by linear interpolation",
+                value=False,
             )
         )
         prop.append(
@@ -534,6 +553,8 @@ class MeshNetgen(base_fempythonobject.BaseFemPythonObject):
                 prop.handle_change_type(
                     obj, "App::PropertyInteger", lambda x: 0 if x <= 1 else 5 if x >= 6 else x - 1
                 )
+                # update enum values
+                setattr(obj, prop.name, prop.value)
 
     def get_predef_fineness_params(self, fineness):
         # set specific parameters by fineness

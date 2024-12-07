@@ -190,7 +190,7 @@ StdCmdImport::StdCmdImport()
     sWhatsThis    = "Std_Import";
     sStatusTip    = QT_TR_NOOP("Import a file in the active document");
     sPixmap       = "Std_Import";
-    sAccel        = "Ctrl+I";
+    sAccel        = "Ctrl+Shift+I";
 }
 
 void StdCmdImport::activated(int iMsg)
@@ -1577,7 +1577,8 @@ void StdCmdPlacement::activated(int iMsg)
 
 bool StdCmdPlacement::isActive()
 {
-    return Gui::Selection().countObjectsOfType(App::GeoFeature::getClassTypeId()) >= 1;
+    std::vector<App::DocumentObject*> sel = Gui::Selection().getObjectsOfType(App::GeoFeature::getClassTypeId());
+    return (sel.size() == 1 && ! sel.front()->isFreezed());
 }
 
 //===========================================================================
@@ -1590,8 +1591,8 @@ StdCmdTransformManip::StdCmdTransformManip()
 {
     sGroup        = "Edit";
     sMenuText     = QT_TR_NOOP("Transform");
-    sToolTipText  = QT_TR_NOOP("Transform the selected object in the 3d view");
-    sStatusTip    = QT_TR_NOOP("Transform the selected object in the 3d view");
+    sToolTipText  = QT_TR_NOOP("Transform the selected object in the 3D view");
+    sStatusTip    = QT_TR_NOOP("Transform the selected object in the 3D view");
     sWhatsThis    = "Std_TransformManip";
     sPixmap       = "Std_TransformManip";
 }
@@ -1611,7 +1612,8 @@ void StdCmdTransformManip::activated(int iMsg)
 
 bool StdCmdTransformManip::isActive()
 {
-    return Gui::Selection().countObjectsOfType(App::GeoFeature::getClassTypeId()) == 1;
+    std::vector<App::DocumentObject*> sel = Gui::Selection().getObjectsOfType(App::GeoFeature::getClassTypeId());
+    return (sel.size() == 1 && ! sel.front()->isFreezed());
 }
 
 //===========================================================================

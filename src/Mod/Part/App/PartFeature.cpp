@@ -31,6 +31,7 @@
 # include <BRepBndLib.hxx>
 # include <BRepBuilderAPI_MakeEdge.hxx>
 # include <BRepBuilderAPI_MakeFace.hxx>
+# include <BRepBuilderAPI_MakeVertex.hxx>
 # include <BRepBuilderAPI_MakeShape.hxx>
 # include <BRepBuilderAPI_MakeVertex.hxx>
 # include <BRepExtrema_DistShapeShape.hxx>
@@ -63,7 +64,7 @@
 #include <App/GeoFeatureGroupExtension.h>
 #include <App/ElementNamingUtils.h>
 #include <App/Placement.h>
-#include <App/OriginFeature.h>
+#include <App/Datums.h>
 #include <Base/Exception.h>
 #include <Base/Placement.h>
 #include <Base/Rotation.h>
@@ -89,8 +90,34 @@ Feature::Feature()
 {
     ADD_PROPERTY(Shape, (TopoDS_Shape()));
     auto mat = Materials::MaterialManager::defaultMaterial();
-    // ADD_PROPERTY_TYPE(ShapeMaterial, (mat), osgroup, App::Prop_None, "Shape material");
     ADD_PROPERTY(ShapeMaterial, (*mat));
+
+    // Read only properties based on the material
+    static const char* group = "PhysicalProperties";
+    ADD_PROPERTY_TYPE(MaterialName,
+                      (""),
+                      group,
+                      static_cast<App::PropertyType>(App::Prop_ReadOnly | App::Prop_Output
+                                                     | App::Prop_NoRecompute | App::Prop_NoPersist),
+                      "Feature material");
+    ADD_PROPERTY_TYPE(Density,
+                      (0.0),
+                      group,
+                      static_cast<App::PropertyType>(App::Prop_ReadOnly | App::Prop_Output
+                                                     | App::Prop_NoRecompute | App::Prop_NoPersist),
+                      "Feature density");
+    ADD_PROPERTY_TYPE(Mass,
+                      (0.0),
+                      group,
+                      static_cast<App::PropertyType>(App::Prop_ReadOnly | App::Prop_Output
+                                                     | App::Prop_NoRecompute | App::Prop_NoPersist),
+                      "Feature mass");
+    ADD_PROPERTY_TYPE(Volume,
+                      (1.0),
+                      group,
+                      static_cast<App::PropertyType>(App::Prop_ReadOnly | App::Prop_Output
+                                                     | App::Prop_NoRecompute | App::Prop_NoPersist),
+                      "Feature volume");
 }
 
 Feature::~Feature() = default;
@@ -861,7 +888,12 @@ App::Material Feature::getMaterialAppearance() const
 
 void Feature::setMaterialAppearance(const App::Material& material)
 {
-    ShapeMaterial.setValue(material);
+    try {
+        ShapeMaterial.setValue(material);
+    }
+    catch (const Base::Exception& e) {
+        e.ReportException();
+    }
 }
 
 // Toponaming project March 2024:  This method should be going away when we get to the python layer.
@@ -986,6 +1018,14 @@ static TopoShape _getTopoShape(const App::DocumentObject* obj,
                     BRepBuilderAPI_MakeFace builder(gp_Pln(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)));
                     _shape = builder.Shape();
                     _shape.Infinite(Standard_True);
+                }
+                shape = TopoShape(tag, hasher, _shape);
+            }
+            else if (linked->isDerivedFrom(App::Point::getClassTypeId())) {
+                static TopoDS_Shape _shape;
+                if (_shape.IsNull()) {
+                    BRepBuilderAPI_MakeVertex builder(gp_Pnt(0, 0, 0));
+                    _shape = builder.Shape();
                 }
                 shape = TopoShape(tag, hasher, _shape);
             }
@@ -1472,9 +1512,38 @@ void Feature::onChanged(const App::Property* prop)
                 }
             }
         }
+        updatePhysicalProperties();
+    } else if (prop == &this->ShapeMaterial) {
+        updatePhysicalProperties();
     }
 
     GeoFeature::onChanged(prop);
+}
+
+void Feature::updatePhysicalProperties()
+{
+    MaterialName.setValue(ShapeMaterial.getValue().getName().toStdString());
+    if (ShapeMaterial.getValue().hasPhysicalProperty(QString::fromLatin1("Density"))) {
+        Density.setValue(ShapeMaterial.getValue()
+                             .getPhysicalQuantity(QString::fromLatin1("Density"))
+                             .getValue());
+    } else {
+        Base::Console().Log("Density is undefined\n");
+        Density.setValue(0.0);
+    }
+
+    auto topoShape = Shape.getValue();
+    if (!topoShape.IsNull()) {
+        GProp_GProps props;
+        BRepGProp::VolumeProperties(topoShape, props);
+        Volume.setValue(props.Mass());
+        Mass.setValue(Volume.getValue() * Density.getValue());
+    } else {
+        // No shape
+        Base::Console().Log("No shape defined\n");
+        Volume.setValue(0.0);
+        Mass.setValue(0.0);
+    }
 }
 
 

@@ -115,11 +115,12 @@
 #include "ViewProviderLink.h"
 #include "ViewProviderLinkPy.h"
 #include "ViewProviderMaterialObject.h"
-#include "ViewProviderOrigin.h"
-#include "ViewProviderOriginFeature.h"
+#include "ViewProviderCoordinateSystem.h"
+#include "ViewProviderDatum.h"
 #include "ViewProviderOriginGroup.h"
 #include "ViewProviderPlacement.h"
 #include "ViewProviderPlane.h"
+#include "ViewProviderPoint.h"
 #include "ViewProviderPart.h"
 #include "ViewProviderFeaturePython.h"
 #include "ViewProviderTextDocument.h"
@@ -2068,14 +2069,15 @@ void Application::initTypes()
     Gui::ViewProviderGeometryPython             ::init();
     Gui::ViewProviderPlacement                  ::init();
     Gui::ViewProviderPlacementPython            ::init();
-    Gui::ViewProviderOriginFeature              ::init();
+    Gui::ViewProviderDatum                      ::init();
     Gui::ViewProviderPlane                      ::init();
+    Gui::ViewProviderPoint                      ::init();
     Gui::ViewProviderLine                       ::init();
     Gui::ViewProviderGeoFeatureGroup            ::init();
     Gui::ViewProviderGeoFeatureGroupPython      ::init();
     Gui::ViewProviderOriginGroup                ::init();
     Gui::ViewProviderPart                       ::init();
-    Gui::ViewProviderOrigin                     ::init();
+    Gui::ViewProviderCoordinateSystem           ::init();
     Gui::ViewProviderMaterialObject             ::init();
     Gui::ViewProviderMaterialObjectPython       ::init();
     Gui::ViewProviderTextDocument               ::init();
@@ -2172,46 +2174,51 @@ void setAppNameAndIcon()
 
 void tryRunEventLoop(GUISingleApplication& mainApp)
 {
-    std::stringstream s;
-    s << App::Application::getUserCachePath() << App::Application::getExecutableName() << "_"
-      << QCoreApplication::applicationPid() << ".lock";
+    std::stringstream out;
+    out << App::Application::getUserCachePath()
+        << App::Application::getExecutableName()
+        << "_"
+        << App::Application::applicationPid()
+        << ".lock";
+
     // open a lock file with the PID
-    Base::FileInfo fi(s.str());
+    Base::FileInfo fi(out.str());
     Base::ofstream lock(fi);
 
     // In case the file_lock cannot be created start FreeCAD without IPC support.
 #if !defined(FC_OS_WIN32) || (BOOST_VERSION < 107600)
-    std::string filename = s.str();
+    std::string filename = out.str();
 #else
     std::wstring filename = fi.toStdWString();
 #endif
-    std::unique_ptr<boost::interprocess::file_lock> flock;
     try {
-        flock = std::make_unique<boost::interprocess::file_lock>(filename.c_str());
-        flock->lock();
+        boost::interprocess::file_lock flock(filename.c_str());
+        if (flock.try_lock()) {
+            Base::Console().Log("Init: Executing event loop...\n");
+            QApplication::exec();
+
+            // Qt can't handle exceptions thrown from event handlers, so we need
+            // to manually rethrow SystemExitExceptions.
+            if (mainApp.caughtException) {
+                throw Base::SystemExitException(*mainApp.caughtException.get());
+            }
+
+            // close the lock file, in case of a crash we can see the existing lock file
+            // on the next restart and try to repair the documents, if needed.
+            flock.unlock();
+            lock.close();
+            fi.deleteFile();
+        }
+        else {
+            Base::Console().Warning("Failed to create a file lock for the IPC.\n"
+                                    "The application will be terminated\n");
+        }
     }
     catch (const boost::interprocess::interprocess_exception& e) {
         QString msg = QString::fromLocal8Bit(e.what());
         Base::Console().Warning("Failed to create a file lock for the IPC: %s\n",
                                 msg.toUtf8().constData());
     }
-
-    Base::Console().Log("Init: Executing event loop...\n");
-    QApplication::exec();
-
-    // Qt can't handle exceptions thrown from event handlers, so we need
-    // to manually rethrow SystemExitExceptions.
-    if (mainApp.caughtException) {
-        throw Base::SystemExitException(*mainApp.caughtException.get());
-    }
-
-    // close the lock file, in case of a crash we can see the existing lock file
-    // on the next restart and try to repair the documents, if needed.
-    if (flock) {
-        flock->unlock();
-    }
-    lock.close();
-    fi.deleteFile();
 }
 
 void runEventLoop(GUISingleApplication& mainApp)
@@ -2245,11 +2252,8 @@ void Application::runApplication()
     // A new QApplication
     Base::Console().Log("Init: Creating Gui::Application and QApplication\n");
 
-    // if application not yet created by the splasher
     int argc = App::Application::GetARGC();
     GUISingleApplication mainApp(argc, App::Application::GetARGV());
-    // https://forum.freecad.org/viewtopic.php?f=3&t=15540
-    QApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
 
     // Make sure that we use '.' as decimal point. See also
     // http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=559846
@@ -2297,6 +2301,14 @@ void Application::runApplication()
     runEventLoop(mainApp);
 
     Base::Console().Log("Finish: Event loop left\n");
+}
+
+bool Application::hiddenMainWindow()
+{
+    const std::map<std::string,std::string>& cfg = App::Application::Config();
+    auto it = cfg.find("StartHidden");
+
+    return it != cfg.end();
 }
 
 bool Application::testStatus(Status pos) const

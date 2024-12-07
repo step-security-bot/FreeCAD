@@ -38,7 +38,7 @@
 #include <App/Document.h>
 #include <App/GroupExtension.h>
 #include <App/Link.h>
-#include <App/OriginFeature.h>
+#include <App/Datums.h>
 #include <App/ElementNamingUtils.h>
 #include <Mod/Part/App/TopoShape.h>
 
@@ -50,6 +50,11 @@ FC_LOG_LEVEL_INIT("PartDesign",true,true)
 
 using namespace PartDesign;
 namespace sp = std::placeholders;
+
+namespace PartDesign
+{
+extern bool getPDRefineModelParameter();
+}
 
 // ============================================================================
 
@@ -381,9 +386,7 @@ void SubShapeBinder::setupObject() {
     _Version.setValue(2);
     checkPropertyStatus();
 
-    Base::Reference<ParameterGrp> hGrp = App::GetApplication().GetUserParameter()
-        .GetGroup("BaseApp")->GetGroup("Preferences")->GetGroup("Mod/PartDesign");
-    this->Refine.setValue(hGrp->GetBool("RefineModel", true));
+    this->Refine.setValue(getPDRefineModelParameter());
 }
 
 App::DocumentObject* SubShapeBinder::getSubObject(const char* subname, PyObject** pyObj,

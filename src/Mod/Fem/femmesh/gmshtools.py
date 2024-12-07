@@ -30,6 +30,7 @@ __url__ = "https://www.freecad.org"
 import os
 import re
 import subprocess
+from PySide.QtCore import QProcess
 
 import FreeCAD
 from FreeCAD import Console
@@ -54,7 +55,7 @@ class GmshTools:
         # mesh obj
         self.mesh_obj = gmsh_mesh_obj
 
-        self.process = None
+        self.process = QProcess()
         # analysis
         self.analysis = None
         if analysis:
@@ -210,27 +211,20 @@ class GmshTools:
         self.write_part_file()
         self.write_geo()
 
-    def compute(self):
+    def prepare(self):
         self.load_properties()
         self.update_mesh_data()
         self.get_tmp_file_paths()
         self.get_gmsh_command()
         self.write_gmsh_input_files()
 
-        command_list = [self.gmsh_bin, "-", self.temp_file_geo]
-        self.process = subprocess.Popen(
-            command_list,
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            startupinfo=femutils.startProgramInfo("hide"),
+    def compute(self):
+        log_level = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/Fem/Gmsh").GetString(
+            "LogVerbosity", "3"
         )
-
-        out, err = self.process.communicate()
-        if self.process.returncode != 0:
-            raise RuntimeError(err.decode("utf-8"))
-
-        return True
+        command_list = ["-v", log_level, "-", self.temp_file_geo]
+        self.process.start(self.gmsh_bin, command_list)
+        return self.process
 
     def update_properties(self):
         self.mesh_obj.FemMesh = Fem.read(self.temp_file_mesh)

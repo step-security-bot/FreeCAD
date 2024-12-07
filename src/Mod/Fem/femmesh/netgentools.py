@@ -27,9 +27,9 @@ __url__ = "https://www.freecad.org"
 
 import numpy as np
 import shutil
-import subprocess
 import sys
 import tempfile
+from PySide.QtCore import QProcess
 
 import FreeCAD
 import Fem
@@ -66,7 +66,7 @@ class NetgenTools:
     }
 
     meshing_step = {
-        "AnalizeGeometry": 1,  # MESHCONST_ANALYSE
+        "AnalyzeGeometry": 1,  # MESHCONST_ANALYSE
         "MeshEdges": 2,  # MESHCONST_MESHEDGES
         "MeshSurface": 3,  # MESHCONST_MESHSURFACE
         "OptimizeSurface": 4,  # MESHCONST_OPTSURFACE
@@ -81,6 +81,8 @@ class NetgenTools:
         self.fem_mesh = None
         self.process = None
         self.tmpdir = ""
+        self.process = QProcess()
+        self.mesh_params = {}
 
     def write_geom(self):
         if not self.tmpdir:
@@ -101,43 +103,73 @@ from femmesh.netgentools import NetgenTools
 NetgenTools.run_netgen(**{params})
 """
 
-    def compute(self):
+    def prepare(self):
         self.write_geom()
-        mesh_params = {
+        self.mesh_params = {
             "brep_file": self.brep_file,
             "threads": self.obj.Threads,
             "heal": self.obj.HealShape,
             "params": self.get_meshing_parameters(),
             "second_order": self.obj.SecondOrder,
+            "second_order_linear": self.obj.SecondOrderLinear,
             "result_file": self.result_file,
+            "mesh_region": self.get_mesh_region(),
         }
 
-        code_str = self.code.format(params=mesh_params)
+    def compute(self):
+        code_str = self.code.format(params=self.mesh_params)
+        self.process.start(sys.executable, ["-c", code_str])
 
-        cmd_list = [
-            sys.executable,
-            "-c",
-            code_str,
-        ]
-        self.process = subprocess.Popen(cmd_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = self.process.communicate()
-        if self.process.returncode != 0:
-            raise RuntimeError(err.decode("utf-8"))
-
-        return True
+        return self.process
 
     @staticmethod
-    def run_netgen(brep_file, threads, heal, params, second_order, result_file):
-
+    def run_netgen(
+        brep_file,
+        threads,
+        heal,
+        params,
+        second_order,
+        second_order_linear,
+        result_file,
+        mesh_region,
+    ):
         geom = occ.OCCGeometry(brep_file)
         ngcore.SetNumThreads(threads)
 
+        shape = geom.shape
+        for items, l in mesh_region:
+            for t, n in items:
+                if t == "Vertex":
+                    shape.vertices.vertices[n - 1].maxh = l
+                elif t == "Edge":
+                    shape.edges.edges[n - 1].maxh = l
+                elif t == "Face":
+                    shape.faces.faces[n - 1].maxh = l
+                elif t == "Solid":
+                    shape.solids.solids[n - 1].maxh = l
+
         with ngcore.TaskManager():
+            geom = occ.OCCGeometry(shape)
             if heal:
                 geom.Heal()
             mesh = geom.GenerateMesh(mp=meshing.MeshingParameters(**params))
 
+        result = {
+            "coords": [],
+            "Edges": [[], []],
+            "Faces": [[], []],
+            "Volumes": [[], []],
+        }
+        groups = {"Edges": [], "Faces": [], "Solids": []}
+
+        # save empty data if last step is geometry analysis
+        if params["perfstepsend"] == NetgenTools.meshing_step["AnalyzeGeometry"]:
+            np.save(result_file, [result, groups])
+            return None
+
         if second_order:
+            if second_order_linear:
+                mesh.SetGeometry(None)
             mesh.SecondOrder()
 
         coords = mesh.Coordinates()
@@ -181,7 +213,6 @@ NetgenTools.run_netgen(**{params})
         idx_faces = faces["index"]
         idx_volumes = volumes["index"]
 
-        groups = {"Edges": [], "Faces": [], "Solids": []}
         for i in np.unique(idx_edges):
             edge_i = (np.nonzero(idx_edges == i)[0] + 1).tolist()
             groups["Edges"].append([i, edge_i])
@@ -311,6 +342,22 @@ NetgenTools.run_netgen(**{params})
             params["optsteps3d"] = 5
 
         return params
+
+    def get_mesh_region(self):
+        from Part import Shape as PartShape
+
+        result = []
+        for reg in self.obj.MeshRegionList:
+            for s, sub_list in reg.References:
+                if s.isDerivedFrom("App::GeoFeature") and isinstance(
+                    s.getPropertyOfGeometry(), PartShape
+                ):
+                    geom = s.getPropertyOfGeometry()
+                    sub_obj = [s.getSubObject(_) for _ in sub_list]
+                    sub_sh = geom.findSubShape(sub_obj)
+                    l = reg.CharacteristicLength.getValueAs("mm").Value
+                    result.append((sub_sh, l))
+        return result
 
     @staticmethod
     def version():
