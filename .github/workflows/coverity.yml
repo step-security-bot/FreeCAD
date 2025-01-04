@@ -78,6 +78,7 @@ jobs:
                             python3-git                                 \
                             python3-markdown                            \
                             python3-matplotlib                          \
+                            python3-netgen                              \
                             python3-packaging                           \
                             python3-pivy                                \
                             python3-ply                                 \
