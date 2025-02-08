@@ -50,8 +50,8 @@
 #include "SoFCDB.h"
 #include "Camera.h"
 #include "Flag.h"
-#include "GestureNavigationStyle.h"
-#include "NavigationStyle.h"
+#include "Navigation/GestureNavigationStyle.h"
+#include "Navigation/NavigationStyle.h"
 #include "SelectionObject.h"
 #include "SoDevicePixelRatioElement.h"
 #include "SoFCColorBar.h"
@@ -147,6 +147,7 @@ void Gui::SoFCDB::init()
     SoFCPathAnnotation              ::initClass();
     SoMouseWheelEvent               ::initClass();
     So3DAnnotation                  ::initClass();
+    SoDelayedAnnotationsElement     ::initClass();
 
     PropertyItem                    ::init();
     PropertySeparatorItem           ::init();

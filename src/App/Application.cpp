@@ -35,8 +35,10 @@
 # endif
 # include <boost/program_options.hpp>
 # include <boost/date_time/posix_time/posix_time.hpp>
+# include <boost/scope_exit.hpp>
 # include <chrono>
 # include <random>
+# include <fmt/format.h>
 #endif
 
 #ifdef FC_OS_WIN32
@@ -63,6 +65,7 @@
 #include <Base/BaseClass.h>
 #include <Base/BoundBoxPy.h>
 #include <Base/ConsoleObserver.h>
+#include <Base/ServiceProvider.h>
 #include <Base/CoordinateSystemPy.h>
 #include <Base/Exception.h>
 #include <Base/ExceptionFactory.h>
@@ -89,6 +92,7 @@
 #include "Application.h"
 #include "CleanupProcess.h"
 #include "ComplexGeoData.h"
+#include "Services.h"
 #include "DocumentObjectFileIncluded.h"
 #include "DocumentObjectGroup.h"
 #include "DocumentObjectGroupPy.h"
@@ -450,7 +454,7 @@ void Application::renameDocument(const char *OldName, const char *NewName)
     throw Base::RuntimeError("Renaming document internal name is no longer allowed!");
 }
 
-Document* Application::newDocument(const char * Name, const char * UserName, bool createView, bool tempDoc)
+Document* Application::newDocument(const char * Name, const char * UserName, DocumentCreateFlags CreateFlags)
 {
     auto getNameAndLabel = [this](const char * Name, const char * UserName) -> std::tuple<std::string, std::string> {
         bool defaultName = (!Name || Name[0] == '\0');
@@ -484,10 +488,10 @@ Document* Application::newDocument(const char * Name, const char * UserName, boo
     auto tuple = getNameAndLabel(Name, UserName);
     std::string name = std::get<0>(tuple);
     std::string userName = std::get<1>(tuple);
-    name = getUniqueDocumentName(name.c_str(), tempDoc);
+    name = getUniqueDocumentName(name.c_str(), CreateFlags.temporary);
 
     // return the temporary document if it exists
-    if (tempDoc) {
+    if (CreateFlags.temporary) {
         auto it = DocMap.find(name);
         if (it != DocMap.end() && it->second->testStatus(Document::TempDoc))
             return it->second;
@@ -495,7 +499,7 @@ Document* Application::newDocument(const char * Name, const char * UserName, boo
 
     // create the FreeCAD document
     std::unique_ptr<Document> newDoc(new Document(name.c_str()));
-    newDoc->setStatus(Document::TempDoc, tempDoc);
+    newDoc->setStatus(Document::TempDoc, CreateFlags.temporary);
 
     auto oldActiveDoc = _pActiveDoc;
     auto doc = newDoc.release(); // now owned by the Application
@@ -536,13 +540,13 @@ Document* Application::newDocument(const char * Name, const char * UserName, boo
         Py::Module("FreeCAD").setAttr(std::string("ActiveDocument"), active);
     }
 
-    signalNewDocument(*_pActiveDoc, createView);
+    signalNewDocument(*_pActiveDoc, CreateFlags.createView);
 
     // set the UserName after notifying all observers
     _pActiveDoc->Label.setValue(userName);
 
     // set the old document active again if the new is temporary
-    if (tempDoc && oldActiveDoc)
+    if (CreateFlags.temporary && oldActiveDoc)
         setActiveDocument(oldActiveDoc);
 
     return doc;
@@ -698,9 +702,9 @@ public:
     }
 };
 
-Document* Application::openDocument(const char * FileName, bool createView) {
+Document* Application::openDocument(const char * FileName, DocumentCreateFlags createFlags) {
     std::vector<std::string> filenames(1,FileName);
-    auto docs = openDocuments(filenames, nullptr, nullptr, nullptr, createView);
+    auto docs = openDocuments(filenames, nullptr, nullptr, nullptr, createFlags);
     if(!docs.empty())
         return docs.front();
     return nullptr;
@@ -745,7 +749,7 @@ std::vector<Document*> Application::openDocuments(const std::vector<std::string>
                                                   const std::vector<std::string> *paths,
                                                   const std::vector<std::string> *labels,
                                                   std::vector<std::string> *errs,
-                                                  bool createView)
+                                                  DocumentCreateFlags createFlags)
 {
     std::vector<Document*> res(filenames.size(), nullptr);
     if (filenames.empty())
@@ -809,7 +813,7 @@ std::vector<Document*> Application::openDocuments(const std::vector<std::string>
                         label = (*labels)[count].c_str();
                 }
 
-                auto doc = openDocumentPrivate(path, name.c_str(), label, isMainDoc, createView, std::move(objNames));
+                auto doc = openDocumentPrivate(path, name.c_str(), label, isMainDoc, createFlags, std::move(objNames));
                 FC_DURATION_PLUS(timing.d1,t1);
                 if (doc) {
                     timings[doc].d1 += timing.d1;
@@ -948,7 +952,7 @@ std::vector<Document*> Application::openDocuments(const std::vector<std::string>
 
 Document* Application::openDocumentPrivate(const char * FileName,
         const char *propFileName, const char *label,
-        bool isMainDoc, bool createView,
+        bool isMainDoc, DocumentCreateFlags createFlags,
         std::vector<std::string> &&objNames)
 {
     FileInfo File(FileName);
@@ -1019,8 +1023,8 @@ Document* Application::openDocumentPrivate(const char * FileName,
     // to only contain valid ASCII characters but the user name will be kept.
     if(!label)
         label = name.c_str();
-    Document* newDoc = newDocument(name.c_str(),label,isMainDoc && createView);
 
+    Document* newDoc = newDocument(name.c_str(), label, createFlags);
     newDoc->FileName.setValue(propFileName==FileName?File.filePath():propFileName);
 
     try {
@@ -1140,6 +1144,17 @@ std::string Application::getHomePath()
 std::string Application::getExecutableName()
 {
     return mConfig["ExeName"];
+}
+
+std::string Application::getNameWithVersion()
+{
+    auto appname = QCoreApplication::applicationName().toStdString();
+    auto config = App::Application::Config();
+    auto major = config["BuildVersionMajor"];
+    auto minor = config["BuildVersionMinor"];
+    auto point = config["BuildVersionPoint"];
+    auto suffix = config["BuildVersionSuffix"];
+    return fmt::format("{} {}.{}.{}{}", appname, major, minor, point, suffix);
 }
 
 std::string Application::getTempPath()
@@ -2058,6 +2073,7 @@ void Application::initTypes()
     App::PropertyElectricalInductance       ::init();
     App::PropertyElectricalResistance       ::init();
     App::PropertyElectricCharge             ::init();
+    App::PropertySurfaceChargeDensity       ::init();
     App::PropertyElectricCurrent            ::init();
     App::PropertyElectricPotential          ::init();
     App::PropertyElectromagneticPotential   ::init();
@@ -2217,6 +2233,8 @@ void Application::initTypes()
     new Base::ExceptionProducer<Base::CADKernelError>;
     new Base::ExceptionProducer<Base::RestoreError>;
     new Base::ExceptionProducer<Base::PropertyError>;
+
+    Base::registerServiceImplementation<CenterOfMassProvider>(new NullCenterOfMass);
 }
 
 namespace {
@@ -2252,6 +2270,7 @@ void parseProgramOptions(int ac, char ** av, const string& exe, variables_map& v
     ("run-test,t", value<string>()->implicit_value(""),"Run a given test case (use 0 (zero) to run all tests). If no argument is provided then return list of all available tests.")
     ("run-open,r", value<string>()->implicit_value(""),"Run a given test case (use 0 (zero) to run all tests). If no argument is provided then return list of all available tests.  Keeps UI open after test(s) complete.")
     ("module-path,M", value< vector<string> >()->composing(),"Additional module paths")
+    ("macro-path,E", value< vector<string> >()->composing(),"Additional macro paths")
     ("python-path,P", value< vector<string> >()->composing(),"Additional python paths")
     ("disable-addon", value< vector<string> >()->composing(),"Disable a given addon.")
     ("single-instance", "Allow to run a single instance of the application")
@@ -2294,7 +2313,7 @@ void parseProgramOptions(int ac, char ** av, const string& exe, variables_map& v
 #endif
     ;
 
-   
+
     //0000723: improper handling of qt specific command line arguments
     std::vector<std::string> args;
     bool merge=false;
@@ -2415,11 +2434,6 @@ void processProgramOptions(const variables_map& vm, std::map<std::string,std::st
         throw Base::ProgramInformation(str.str());
     }
 
-    if (vm.count("console")) {
-        mConfig["Console"] = "1";
-        mConfig["RunMode"] = "Cmd";
-    }
-
     if (vm.count("module-path")) {
         vector<string> Mods = vm["module-path"].as< vector<string> >();
         string temp;
@@ -2427,6 +2441,15 @@ void processProgramOptions(const variables_map& vm, std::map<std::string,std::st
             temp += It + ";";
         temp.erase(temp.end()-1);
         mConfig["AdditionalModulePaths"] = temp;
+    }
+
+    if (vm.count("macro-path")) {
+        vector<string> Macros = vm["macro-path"].as< vector<string> >();
+        string temp;
+        for (const auto & It : Macros)
+            temp += It + ";";
+        temp.erase(temp.end()-1);
+        mConfig["AdditionalMacroPaths"] = temp;
     }
 
     if (vm.count("python-path")) {
@@ -2585,7 +2608,17 @@ void Application::initConfig(int argc, char ** argv)
     }
 
     variables_map vm;
-    parseProgramOptions(argc, argv, mConfig["ExeName"], vm);
+    {
+        BOOST_SCOPE_EXIT_ALL(&) {
+            // console-mode needs to be set (if possible) also in case parseProgramOptions
+            // throws, as it's needed when reporting such exceptions
+            if (vm.count("console")) {
+                mConfig["Console"] = "1";
+                mConfig["RunMode"] = "Cmd";
+            }
+        };
+        parseProgramOptions(argc, argv, mConfig["ExeName"], vm);
+    }
 
     if (vm.count("keep-deprecated-paths")) {
         mConfig["KeepDeprecatedPaths"] = "1";
@@ -2593,7 +2626,7 @@ void Application::initConfig(int argc, char ** argv)
 
     // extract home paths
     ExtractUserPath();
-    
+
     if (vm.count("safe-mode")) {
         SafeMode::StartSafeMode();
     }

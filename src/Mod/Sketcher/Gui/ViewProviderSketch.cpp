@@ -49,9 +49,9 @@
 #include <Gui/Document.h>
 #include <Gui/MainWindow.h>
 #include <Gui/MenuManager.h>
-#include <Gui/Selection.h>
-#include <Gui/SelectionObject.h>
-#include <Gui/SoFCUnifiedSelection.h>
+#include <Gui/Selection/Selection.h>
+#include <Gui/Selection/SelectionObject.h>
+#include <Gui/Selection/SoFCUnifiedSelection.h>
 #include <Gui/Utilities.h>
 #include <Gui/View3DInventor.h>
 #include <Gui/View3DInventorViewer.h>
@@ -2618,7 +2618,7 @@ float ViewProviderSketch::getScaleFactor() const
     assert(isInEditMode());
     Gui::MDIView* mdi =
         Gui::Application::Instance->editViewOfNode(editCoinManager->getRootEditNode());
-    if (mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())) {
+    if (mdi && mdi->isDerivedFrom<Gui::View3DInventor>()) {
         Gui::View3DInventorViewer* viewer = static_cast<Gui::View3DInventor*>(mdi)->getViewer();
         SoCamera* camera = viewer->getSoRenderManager()->getCamera();
         float scale = camera->getViewVolume(camera->aspectRatio.getValue())
@@ -2645,7 +2645,7 @@ float ViewProviderSketch::getScaleFactor() const
 void ViewProviderSketch::scaleBSplinePoleCirclesAndUpdateSolverAndSketchObjectGeometry(
     GeoListFacade& geolistfacade, bool geometrywithmemoryallocation)
 {
-    // In order to allow to tweak geometry and insert scaling factors, this function needs to
+    // In order to allow one to tweak geometry and insert scaling factors, this function needs to
     // change the geometry vector. This is highly exceptional for a drawing function and special
     // care needs to be taken. This is valid because:
     // 1. The treatment is exceptional and no other appropriate place is available to perform this
@@ -2825,7 +2825,7 @@ void ViewProviderSketch::draw(bool temp /*=false*/, bool rebuildinformationoverl
     }
 
     Gui::MDIView* mdi = this->getActiveView();
-    if (mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())) {
+    if (mdi && mdi->isDerivedFrom<Gui::View3DInventor>()) {
         static_cast<Gui::View3DInventor*>(mdi)->getViewer()->redraw();
     }
 }
@@ -2889,7 +2889,7 @@ void ViewProviderSketch::slotSolverUpdate()
             + getSketchObject()->getHighestCurveIndex() + 1
         == getSolvedSketch().getGeometrySize()) {
         Gui::MDIView* mdi = Gui::Application::Instance->editDocument()->getActiveView();
-        if (mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId()))
+        if (mdi->isDerivedFrom<Gui::View3DInventor>())
             draw(false, true);
 
         signalConstraintsChanged();
@@ -2923,8 +2923,7 @@ void ViewProviderSketch::onChanged(const App::Property* prop)
         return;
     }
 
-    // call father
-    ViewProviderPart::onChanged(prop);
+    ViewProvider2DObject::onChanged(prop);
 }
 
 void SketcherGui::ViewProviderSketch::startRestoring()
@@ -2960,14 +2959,14 @@ void SketcherGui::ViewProviderSketch::finishRestoring()
 
 void ViewProviderSketch::attach(App::DocumentObject* pcFeat)
 {
-    ViewProviderPart::attach(pcFeat);
+    ViewProvider2DObject::attach(pcFeat);
 }
 
 void ViewProviderSketch::setupContextMenu(QMenu* menu, QObject* receiver, const char* member)
 {
     menu->addAction(tr("Edit sketch"), receiver, member);
     // Call the extensions
-    Gui::ViewProvider::setupContextMenu(menu, receiver, member);
+    ViewProvider::setupContextMenu(menu, receiver, member);
 }
 
 bool ViewProviderSketch::setEdit(int ModNum)
@@ -3944,7 +3943,7 @@ std::unique_ptr<SoRayPickAction> ViewProviderSketch::getRayPickAction() const
     assert(isInEditMode());
     Gui::MDIView* mdi =
         Gui::Application::Instance->editViewOfNode(editCoinManager->getRootEditNode());
-    if (!(mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())))
+    if (!(mdi && mdi->isDerivedFrom<Gui::View3DInventor>()))
         return nullptr;
     Gui::View3DInventorViewer* viewer = static_cast<Gui::View3DInventor*>(mdi)->getViewer();
 
@@ -4028,7 +4027,7 @@ double ViewProviderSketch::getRotation(SbVec3f pos0, SbVec3f pos1) const
 
     Gui::MDIView* mdi =
         Gui::Application::Instance->editViewOfNode(editCoinManager->getRootEditNode());
-    if (!(mdi && mdi->isDerivedFrom(Gui::View3DInventor::getClassTypeId())))
+    if (!(mdi && mdi->isDerivedFrom<Gui::View3DInventor>()))
         return 0;
     Gui::View3DInventorViewer* viewer = static_cast<Gui::View3DInventor*>(mdi)->getViewer();
     SoCamera* pCam = viewer->getSoRenderManager()->getCamera();

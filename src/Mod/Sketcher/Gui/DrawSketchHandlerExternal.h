@@ -27,7 +27,7 @@
 #include <Mod/Part/App/DatumFeature.h>
 
 #include <Gui/Notifications.h>
-#include <Gui/SelectionFilter.h>
+#include <Gui/Selection/SelectionFilter.h>
 #include <Gui/Command.h>
 #include <Gui/CommandT.h>
 #include <Gui/View3DInventor.h>
@@ -116,8 +116,9 @@ public:
 class DrawSketchHandlerExternal: public DrawSketchHandler
 {
 public:
-    DrawSketchHandlerExternal(bool intersection = false)
-        : intersection(intersection)
+    DrawSketchHandlerExternal(bool alwaysReference, bool intersection)
+        : alwaysReference {alwaysReference}
+        , intersection {intersection}
     {}
     ~DrawSketchHandlerExternal() override
     {
@@ -168,7 +169,8 @@ public:
                                           "addExternal(\"%s\",\"%s\", %s, %s)",
                                           msg.pObjectName,
                                           msg.pSubName,
-                                          isConstructionMode() ? "False" : "True",
+                                          alwaysReference || isConstructionMode() ? "False"
+                                                                                  : "True",
                                           intersection ? "True" : "False");
 
                     Gui::Command::commitCommand();
@@ -229,6 +231,7 @@ private:
         setAxisPickStyle(true);
     }
 
+    bool alwaysReference;
     bool intersection;
 };
 

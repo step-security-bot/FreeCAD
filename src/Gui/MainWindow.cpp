@@ -114,7 +114,7 @@
 #include "SpaceballEvent.h"
 #include "View3DInventor.h"
 #include "View3DInventorViewer.h"
-#include "DlgObjectSelection.h"
+#include "Dialogs/DlgObjectSelection.h"
 #include <App/Color.h>
 
 FC_LOG_LEVEL_INIT("MainWindow",false,true,true)
@@ -784,6 +784,7 @@ void MainWindow::closeActiveWindow ()
 
 int MainWindow::confirmSave(const char *docName, QWidget *parent, bool addCheckbox) {
     QMessageBox box(parent?parent:this);
+    box.setObjectName(QStringLiteral("confirmSave"));
     box.setIcon(QMessageBox::Question);
     box.setWindowFlags(box.windowFlags() | Qt::WindowStaysOnTopHint);
     box.setWindowTitle(QObject::tr("Unsaved document"));
@@ -798,7 +799,7 @@ int MainWindow::confirmSave(const char *docName, QWidget *parent, bool addCheckb
     box.setDefaultButton(QMessageBox::Save);
     box.setEscapeButton(QMessageBox::Cancel);
 
-    QCheckBox checkBox(QObject::tr("Apply answer to all"));
+    QCheckBox checkBox(QObject::tr("Apply to all"));
     ParameterGrp::handle hGrp;
     if(addCheckbox) {
          hGrp = App::GetApplication().GetUserParameter().
@@ -1766,6 +1767,8 @@ void MainWindow::loadWindowSettings()
 
     statusBar()->setVisible(showStatusBar);
 
+    setAttribute(Qt::WA_AlwaysShowToolTips);
+
     ToolBarManager::getInstance()->restoreState();
     std::clog << "Toolbars restored" << std::endl;
 
@@ -2296,19 +2299,14 @@ void MainWindow::setWindowTitle(const QString& string)
         appname = QString::fromLatin1(App::Application::Config()["ExeName"].c_str());
     }
 
-    // allow to disable version number
+    // allow one to disable version number
     ParameterGrp::handle hGen = App::GetApplication().GetParameterGroupByPath(
         "User parameter:BaseApp/Preferences/General");
     bool showVersion = hGen->GetBool("ShowVersionInTitle", true);
 
     if (showVersion) {
         // set main window title with FreeCAD Version
-        auto config = App::Application::Config();
-        QString major = QString::fromUtf8(config["BuildVersionMajor"].c_str());
-        QString minor = QString::fromUtf8(config["BuildVersionMinor"].c_str());
-        QString point = QString::fromUtf8(config["BuildVersionPoint"].c_str());
-        QString suffix = QString::fromUtf8(config["BuildVersionSuffix"].c_str());
-        title = QString::fromUtf8("%1 %2.%3.%4%5").arg(appname, major, minor, point, suffix);
+        title = QString::fromStdString(App::Application::getNameWithVersion());
     }
     else {
         title = appname;

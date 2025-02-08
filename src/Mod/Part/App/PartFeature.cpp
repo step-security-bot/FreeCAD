@@ -69,6 +69,7 @@
 #include <Base/Placement.h>
 #include <Base/Rotation.h>
 #include <Base/Stream.h>
+#include <Base/Tools.h>
 #include <Mod/Material/App/MaterialManager.h>
 
 #include "Geometry.h"
@@ -76,12 +77,10 @@
 #include "PartFeaturePy.h"
 #include "PartPyCXX.h"
 #include "TopoShapePy.h"
-#include "Base/Tools.h"
+#include "Tools.h"
 
 using namespace Part;
 namespace sp = std::placeholders;
-
-constexpr const int MaterialPrecision = 6;
 
 FC_LOG_LEVEL_INIT("Part",true,true)
 
@@ -93,39 +92,6 @@ Feature::Feature()
     ADD_PROPERTY(Shape, (TopoDS_Shape()));
     auto mat = Materials::MaterialManager::defaultMaterial();
     ADD_PROPERTY(ShapeMaterial, (*mat));
-
-    // Read only properties based on the material
-    static const char* group = "PhysicalProperties";
-    ADD_PROPERTY_TYPE(MaterialName,
-                      (""),
-                      group,
-                      static_cast<App::PropertyType>(App::Prop_ReadOnly | App::Prop_Output
-                                                     | App::Prop_NoRecompute | App::Prop_NoPersist),
-                      "Feature material");
-    ADD_PROPERTY_TYPE(Density,
-                      (0.0),
-                      group,
-                      static_cast<App::PropertyType>(App::Prop_ReadOnly | App::Prop_Output
-                                                     | App::Prop_NoRecompute | App::Prop_NoPersist),
-                      "Feature density");
-    Density.setFormat(
-        Base::QuantityFormat(Base::QuantityFormat::NumberFormat::Default, MaterialPrecision));
-    ADD_PROPERTY_TYPE(Mass,
-                      (0.0),
-                      group,
-                      static_cast<App::PropertyType>(App::Prop_ReadOnly | App::Prop_Output
-                                                     | App::Prop_NoRecompute | App::Prop_NoPersist),
-                      "Feature mass");
-    Mass.setFormat(
-        Base::QuantityFormat(Base::QuantityFormat::NumberFormat::Default, MaterialPrecision));
-    ADD_PROPERTY_TYPE(Volume,
-                      (1.0),
-                      group,
-                      static_cast<App::PropertyType>(App::Prop_ReadOnly | App::Prop_Output
-                                                     | App::Prop_NoRecompute | App::Prop_NoPersist),
-                      "Feature volume");
-    Volume.setFormat(
-        Base::QuantityFormat(Base::QuantityFormat::NumberFormat::Default, MaterialPrecision));
 }
 
 Feature::~Feature() = default;
@@ -555,7 +521,7 @@ static std::vector<std::pair<long, Data::MappedName>> getElementSource(App::Docu
                     break;
                 }
             }
-            if (owner->isDerivedFrom(App::GeoFeature::getClassTypeId())) {
+            if (owner->isDerivedFrom<App::GeoFeature>()) {
                 auto ownerGeoFeature =
                     static_cast<App::GeoFeature*>(owner)->getElementOwner(ret.back().second);
                 if (ownerGeoFeature) {
@@ -658,7 +624,7 @@ std::list<Data::HistoryItem> Feature::getElementHistory(App::DocumentObject* fea
                     break;
                 }
             }
-            if (feature->isDerivedFrom(App::GeoFeature::getClassTypeId())) {
+            if (feature->isDerivedFrom<App::GeoFeature>()) {
                 auto ownerGeoFeature =
                     static_cast<App::GeoFeature*>(feature)->getElementOwner(element);
                 if (ownerGeoFeature) {
@@ -1023,25 +989,29 @@ static TopoShape _getTopoShape(const App::DocumentObject* obj,
             }
         }
         else {
-            if (linked->isDerivedFrom(App::Line::getClassTypeId())) {
+            if (linked->isDerivedFrom<App::Line>()) {
                 static TopoDS_Shape _shape;
                 if (_shape.IsNull()) {
-                    BRepBuilderAPI_MakeEdge builder(gp_Lin(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)));
+                    auto line = static_cast<App::Line*>(linked);
+                    Base::Vector3d dir = line->getBaseDirection();
+                    BRepBuilderAPI_MakeEdge builder(gp_Lin(gp_Pnt(0, 0, 0), Base::convertTo<gp_Dir>(dir)));
                     _shape = builder.Shape();
                     _shape.Infinite(Standard_True);
                 }
                 shape = TopoShape(tag, hasher, _shape);
             }
-            else if (linked->isDerivedFrom(App::Plane::getClassTypeId())) {
+            else if (linked->isDerivedFrom<App::Plane>()) {
                 static TopoDS_Shape _shape;
                 if (_shape.IsNull()) {
-                    BRepBuilderAPI_MakeFace builder(gp_Pln(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)));
+                    auto plane = static_cast<App::Plane*>(linked);
+                    Base::Vector3d dir = plane->getBaseDirection();
+                    BRepBuilderAPI_MakeFace builder(gp_Pln(gp_Pnt(0, 0, 0), Base::convertTo<gp_Dir>(dir)));
                     _shape = builder.Shape();
                     _shape.Infinite(Standard_True);
                 }
                 shape = TopoShape(tag, hasher, _shape);
             }
-            else if (linked->isDerivedFrom(App::Point::getClassTypeId())) {
+            else if (linked->isDerivedFrom<App::Point>()) {
                 static TopoDS_Shape _shape;
                 if (_shape.IsNull()) {
                     BRepBuilderAPI_MakeVertex builder(gp_Pnt(0, 0, 0));
@@ -1049,7 +1019,7 @@ static TopoShape _getTopoShape(const App::DocumentObject* obj,
                 }
                 shape = TopoShape(tag, hasher, _shape);
             }
-            else if (linked->isDerivedFrom(App::Placement::getClassTypeId())) {
+            else if (linked->isDerivedFrom<App::Placement>()) {
                 auto element = Data::findElementName(subname);
                 if (element) {
                     if (boost::iequals("x", element) || boost::iequals("x-axis", element)
@@ -1300,7 +1270,7 @@ TopoShape Feature::getTopoShape(const App::DocumentObject* obj,
     // to false. So we manually apply the top level transform if asked.
 
     if (needSubElement && (!pmat || *pmat == Base::Matrix4D())
-        && obj->isDerivedFrom(Part::Feature::getClassTypeId())
+        && obj->isDerivedFrom<Part::Feature>()
         && !obj->hasExtension(App::LinkBaseExtension::getExtensionClassTypeId())) {
         // Some OCC shape making is very sensitive to shape transformation. So
         // check here if a direct sub shape is required, and bypass all extra
@@ -1533,39 +1503,10 @@ void Feature::onChanged(const App::Property* prop)
                 }
             }
         }
-        updatePhysicalProperties();
-    } else if (prop == &this->ShapeMaterial) {
-        updatePhysicalProperties();
     }
 
     GeoFeature::onChanged(prop);
 }
-
-void Feature::updatePhysicalProperties()
-{
-    MaterialName.setValue(ShapeMaterial.getValue().getName().toStdString());
-    if (ShapeMaterial.getValue().hasPhysicalProperty(QString::fromLatin1("Density"))) {
-        Density.setValue(ShapeMaterial.getValue()
-                             .getPhysicalQuantity(QString::fromLatin1("Density"))
-                             .getValue());
-    } else {
-        Base::Console().Log("Density is undefined\n");
-        Density.setValue(0.0);
-    }
-
-    auto topoShape = Shape.getValue();
-    if (!topoShape.IsNull()) {
-        GProp_GProps props;
-        BRepGProp::VolumeProperties(topoShape, props);
-        Volume.setValue(props.Mass());
-        Mass.setValue(Volume.getValue() * Density.getValue());
-    } else {
-        // No shape
-        Volume.setValue(0.0);
-        Mass.setValue(0.0);
-    }
-}
-
 
 const std::vector<std::string>& Feature::searchElementCache(const std::string& element,
                                                             Data::SearchOptions options,

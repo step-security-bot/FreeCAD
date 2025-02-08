@@ -30,7 +30,7 @@
 #include <Base/Tools.h>
 #include <Gui/Application.h>
 #include <Gui/CommandT.h>
-#include <Gui/Selection.h>
+#include <Gui/Selection/Selection.h>
 #include <Gui/ViewProvider.h>
 #include <Gui/ViewProviderCoordinateSystem.h>
 #include <Mod/PartDesign/App/FeatureRevolution.h>
@@ -100,7 +100,7 @@ TaskRevolutionParameters::TaskRevolutionParameters(PartDesignGui::ViewProvider* 
     // show the parts coordinate system axis for selection
     try {
         if (auto vpOrigin = getOriginView()) {
-            vpOrigin->setTemporaryVisibility(true, false);
+            vpOrigin->setTemporaryVisibility(Gui::DatumElement::Axes);
         }
     }
     catch (const Base::Exception &ex) {
@@ -560,10 +560,10 @@ void TaskRevolutionParameters::onAxisChanged(int num)
             oldSubRefAxis.size() != newSubRefAxis.size() ||
             oldRefName != newRefName) {
             bool reversed = propReversed->getValue();
-            if (pcRevolution->isDerivedFrom(PartDesign::Revolution::getClassTypeId())) {
+            if (pcRevolution->isDerivedFrom<PartDesign::Revolution>()) {
                 reversed = static_cast<PartDesign::Revolution*>(pcRevolution)->suggestReversed();
             }
-            if (pcRevolution->isDerivedFrom(PartDesign::Groove::getClassTypeId())) {
+            if (pcRevolution->isDerivedFrom<PartDesign::Groove>()) {
                 reversed = static_cast<PartDesign::Groove*>(pcRevolution)->suggestReversed();
             }
 

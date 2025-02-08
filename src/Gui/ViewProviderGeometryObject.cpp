@@ -101,12 +101,15 @@ ViewProviderGeometryObject::ViewProviderGeometryObject()
     pcShapeMaterial = new SoMaterial;
     setCoinAppearance(mat);
     pcShapeMaterial->ref();
+    pcShapeMaterial->setName("ShapeMaterial");
 
     pcBoundingBox = new Gui::SoFCBoundingBox;
     pcBoundingBox->ref();
+    pcBoundingBox->setName("BoundingBox");
 
     pcBoundColor = new SoBaseColor();
     pcBoundColor->ref();
+    pcBoundColor->setName("BoundColor");
 
     sPixmap = "Feature";
 }
@@ -172,13 +175,13 @@ void ViewProviderGeometryObject::attach(App::DocumentObject* pcObj)
 
 void ViewProviderGeometryObject::updateData(const App::Property* prop)
 {
-    if (prop->isDerivedFrom(App::PropertyComplexGeoData::getClassTypeId())) {
+    if (prop->isDerivedFrom<App::PropertyComplexGeoData>()) {
         Base::BoundBox3d box =
             static_cast<const App::PropertyComplexGeoData*>(prop)->getBoundingBox();
         pcBoundingBox->minBounds.setValue(box.MinX, box.MinY, box.MinZ);
         pcBoundingBox->maxBounds.setValue(box.MaxX, box.MaxY, box.MaxZ);
     }
-    else if (prop->isDerivedFrom(App::PropertyPlacement::getClassTypeId())) {
+    else if (prop->isDerivedFrom<App::PropertyPlacement>()) {
         auto geometry = getObject<App::GeoFeature>();
         if (geometry && prop == &geometry->Placement) {
             const App::PropertyComplexGeoData* data = geometry->getPropertyOfGeometry();
@@ -302,6 +305,7 @@ void ViewProviderGeometryObject::showBoundingBox(bool show)
         blue = ((bbcol >> 8) & 0xff) / 255.0F;
 
         pcBoundSwitch = new SoSwitch();
+        pcBoundSwitch->setName("BoundSwitch");
         auto pBoundingSep = new SoSeparator();
         auto lineStyle = new SoDrawStyle;
         lineStyle->lineWidth = 2.0F;

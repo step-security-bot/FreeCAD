@@ -44,8 +44,8 @@
 #include <Gui/Document.h>
 #include <Gui/MainWindow.h>
 #include <Gui/Notifications.h>
-#include <Gui/Selection.h>
-#include <Gui/SelectionObject.h>
+#include <Gui/Selection/Selection.h>
+#include <Gui/Selection/SelectionObject.h>
 #include <Gui/ViewProvider.h>
 #include <Mod/Sketcher/App/SketchObject.h>
 
@@ -1371,6 +1371,10 @@ void TaskSketcherConstraints::onSelectionChanged(const Gui::SelectionChanges& ms
                                 auto tmpBlock = ui->listWidgetConstraints->blockSignals(true);
                                 item->setSelected(select);
                                 ui->listWidgetConstraints->blockSignals(tmpBlock);
+                                if (select && ui->listWidgetConstraints->model()) { // scrollTo only on select, not de-select
+                                    QModelIndex index = ui->listWidgetConstraints->model()->index(i, 0);
+                                    ui->listWidgetConstraints->scrollTo(index, QAbstractItemView::PositionAtCenter);
+                                }
                                 break;
                             }
                         }
