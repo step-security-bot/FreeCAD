@@ -109,8 +109,8 @@ jobs:
           FILE_SIZE=$(stat -c %s project.tgz)
           echo "Archive size: $FILE_SIZE bytes"
           curl -X POST \
-            -d version="1.1.0dev.40127" \
-            -d description="20ac96f4c8a61eb5c8f3c1f78faa8c88a569165c" \
+            -d version="1.1.0dev.40850" \
+            -d description="47cec43aaef23ff14d42f0772caea9a8cae42ae2" \
             -d email=${{ secrets.COV_EMAIL }} \
             -d token=${{ secrets.COV_TOKEN }} \
             -d file_name="project.tgz" \
