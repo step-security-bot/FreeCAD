@@ -357,13 +357,14 @@ PyObject* Application::sOpenDocument(PyObject* /*self*/, PyObject* args, PyObjec
     std::string EncodedName = std::string(Name);
     PyMem_Free(Name);
     try {
-        DocumentCreateFlags createFlags;
-        createFlags.createView = !Base::asBoolean(hidden);
-        createFlags.temporary = Base::asBoolean(temporary);
+        DocumentInitFlags initFlags {
+            .createView = !Base::asBoolean(hidden),
+            .temporary = Base::asBoolean(temporary)
+        };
 
         // return new document
         return (GetApplication()
-                    .openDocument(EncodedName.c_str(), createFlags)
+                    .openDocument(EncodedName.c_str(), initFlags)
                     ->getPyObject());
     }
     catch (const Base::Exception& e) {
@@ -401,13 +402,14 @@ PyObject* Application::sNewDocument(PyObject* /*self*/, PyObject* args, PyObject
 
     PY_TRY
     {
-        DocumentCreateFlags createFlags;
-        createFlags.createView = !Base::asBoolean(hidden);
-        createFlags.temporary = Base::asBoolean(temp);
-
+        DocumentInitFlags initFlags {
+            .createView = !Base::asBoolean(hidden),
+            .temporary = Base::asBoolean(temp)
+        };
         App::Document* doc = GetApplication().newDocument(docName,
                                                           usrName,
-                                                          createFlags);
+                                                          initFlags);
+        PyMem_Free(docName);
         PyMem_Free(usrName);
         return doc->getPyObject();
     }
@@ -1042,7 +1044,7 @@ PyObject* Application::sCheckLinkDepth(PyObject* /*self*/, PyObject* args)
     PY_TRY
     {
         return Py::new_reference_to(
-            Py::Int(GetApplication().checkLinkDepth(depth, MessageOption::Throw)));
+            Py::Long(GetApplication().checkLinkDepth(depth, MessageOption::Throw)));
     }
     PY_CATCH;
 }
@@ -1132,7 +1134,7 @@ PyObject* Application::sSetActiveTransaction(PyObject* /*self*/, PyObject* args)
 
     PY_TRY
     {
-        Py::Int ret(GetApplication().setActiveTransaction(name, Base::asBoolean(persist)));
+        Py::Long ret(GetApplication().setActiveTransaction(name, Base::asBoolean(persist)));
         return Py::new_reference_to(ret);
     }
     PY_CATCH;
@@ -1153,7 +1155,7 @@ PyObject* Application::sGetActiveTransaction(PyObject* /*self*/, PyObject* args)
         }
         Py::Tuple ret(2);
         ret.setItem(0, Py::String(name));
-        ret.setItem(1, Py::Int(id));
+        ret.setItem(1, Py::Long(id));
         return Py::new_reference_to(ret);
     }
     PY_CATCH;

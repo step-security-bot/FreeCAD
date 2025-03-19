@@ -353,7 +353,7 @@ std::vector<App::DocumentObject*> Body::removeObject(App::DocumentObject* featur
     }
 
     std::vector<App::DocumentObject*> model = Group.getValues();
-    std::vector<App::DocumentObject*>::iterator it = std::find(model.begin(), model.end(), feature);
+    const auto it = std::ranges::find(model, feature);
 
     // Adjust Tip feature if it is pointing to the deleted object
     if (Tip.getValue()== feature) {
@@ -442,7 +442,7 @@ void Body::onChanged(const App::Property* prop) {
             if (BaseFeature.getValue()) {
                 //setup the FeatureBase if needed
                 if (!first || !first->isDerivedFrom<FeatureBase>()) {
-                    bf = static_cast<FeatureBase*>(getDocument()->addObject("PartDesign::FeatureBase", "BaseFeature"));
+                    bf = getDocument()->addObject<FeatureBase>("BaseFeature");
                     insertObject(bf, first, false);
 
                     if (!Tip.getValue())

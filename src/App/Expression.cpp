@@ -434,7 +434,7 @@ static Py::Object _pyObjectFromAny(const App::any &value, const Expression *e) {
     } else if (is_type(value,typeid(bool)))
         return Py::Boolean(cast<bool>(value));
     else if (is_type(value,typeid(std::string)))
-        return Py::String(cast<string>(value));
+        return Py::String(cast<std::string>(value));
     else if (is_type(value,typeid(const char*)))
         return Py::String(cast<const char*>(value));
 
@@ -1728,7 +1728,7 @@ FunctionExpression::FunctionExpression(const DocumentObject *_owner, Function _f
     : UnitExpression(_owner)
     , f(_f)
     , fname(std::move(name))
-    , args(_args)
+    , args(std::move(_args))
 {
     switch (f) {
     case ABS:
@@ -2471,7 +2471,9 @@ Py::Object FunctionExpression::evaluate(const Expression *expr, int f, const std
     case MOD:
         if (e2.isNone())
             _EXPR_THROW("Invalid second argument.",expr);
-        unit = v1.getUnit() / v2.getUnit();
+        if (v1.getUnit() != v2.getUnit() && !v1.isDimensionless() && !v2.isDimensionless())
+            _EXPR_THROW("Units must be equal or dimensionless.",expr);
+        unit = v1.getUnit();
         break;
     case POW: {
         if (e2.isNone())
@@ -2641,7 +2643,7 @@ Expression *FunctionExpression::simplify() const
         return eval();
     }
     else
-        return new FunctionExpression(owner, f, std::string(fname), a);
+        return new FunctionExpression(owner, f, std::string(fname), std::move(a));
 }
 
 /**
@@ -2809,7 +2811,7 @@ Expression *FunctionExpression::_copy() const
         a.push_back((*i)->copy());
         ++i;
     }
-    return new FunctionExpression(owner, f, std::string(fname), a);
+    return new FunctionExpression(owner, f, std::string(fname), std::move(a));
 }
 
 void FunctionExpression::_visit(ExpressionVisitor &v)

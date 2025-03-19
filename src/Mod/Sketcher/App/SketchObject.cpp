@@ -74,7 +74,7 @@
 #include <boost/iostreams/device/array.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/range/adaptor/map.hpp>
-#include <boost_geometry.hpp>
+#include <boost/geometry.hpp>
 
 #endif
 
@@ -107,11 +107,13 @@
 
 #include <memory>
 
+#include "GeoEnum.h"
 #include "SketchObject.h"
 #include "SketchObjectPy.h"
 #include "SolverGeometryExtension.h"
 
 #include "ExternalGeometryFacade.h"
+#include <Mod/Part/App/Datums.h>
 
 
 #undef DEBUG
@@ -322,7 +324,6 @@ static bool inline checkSmallEdge(const Part::TopoShape &s) {
 }
 
 void SketchObject::buildShape() {
-    // Shape.setValue(solvedSketch.toShape());
     // We use the following instead to map element names
 
     std::vector<Part::TopoShape> shapes;
@@ -364,10 +365,23 @@ void SketchObject::buildShape() {
         auto egf = ExternalGeometryFacade::getFacade(geo);
         if(!egf->testFlag(ExternalGeometryExtension::Defining))
             continue;
+
         auto indexedName = Data::IndexedName::fromConst("ExternalEdge", i-1);
-        shapes.push_back(getEdge(geo, convertSubName(indexedName, false).c_str()));
-        if (checkSmallEdge(shapes.back())) {
-            FC_WARN("Edge too small: " << indexedName);
+
+        if (geo->isDerivedFrom<Part::GeomPoint>()) {
+            Part::TopoShape vertex(TopoDS::Vertex(geo->toShape()));
+            if (!vertex.hasElementMap()) {
+                vertex.resetElementMap(std::make_shared<Data::ElementMap>());
+            }
+            vertex.setElementName(Data::IndexedName::fromConst("Vertex", 1),
+                                  Data::MappedName::fromRawData(convertSubName(indexedName, false).c_str()),0L);
+            vertices.push_back(vertex);
+            vertices.back().copyElementMap(vertex, Part::OpCodes::Sketch);
+        } else {
+            shapes.push_back(getEdge(geo, convertSubName(indexedName, false).c_str()));
+            if (checkSmallEdge(shapes.back())) {
+                FC_WARN("Edge too small: " << indexedName);
+            }
         }
     }
 
@@ -580,16 +594,15 @@ int SketchObject::solve(bool updateGeoAfterSolving /*=true*/)
     // achieved.
     if (err == 0) {
         FullyConstrained.setValue(lastDoF == 0);
-    }
-
-    if (err == 0 && updateGeoAfterSolving) {
-        // set the newly solved geometry
-        std::vector<Part::Geometry*> geomlist = solvedSketch.extractGeometry();
-        Part::PropertyGeometryList tmp;
-        tmp.setValues(std::move(geomlist));
-        // Only set values if there is actual changes
-        if (!Geometry.isSame(tmp))
-            Geometry.moveValues(std::move(tmp));
+        if (updateGeoAfterSolving) {
+            // set the newly solved geometry
+            std::vector<Part::Geometry*> geomlist = solvedSketch.extractGeometry();
+            Part::PropertyGeometryList tmp;
+            tmp.setValues(std::move(geomlist));
+            // Only set values if there is actual changes
+            if (!Geometry.isSame(tmp))
+                Geometry.moveValues(std::move(tmp));
+        }
     }
     else if (err < 0) {
         // if solver failed, invalid constraints were likely added before solving
@@ -639,7 +652,7 @@ public:
             // very forgiving. We should have used Precision::SquareConfisuion(),
             // which is 1e-14. However, there is a problem with current
             // commandGeoCreate. They create new geometry with initial point of
-            // the exact mouse position, instead of the pre-selected point
+            // the exact mouse position, instead of the preselected point
             // position, and rely on auto constraint to snap in the new
             // geometry. So, we cannot use a very strict threshold here.
             double tol = strict?Precision::SquareConfusion()*10:1e-6;
@@ -1832,7 +1845,7 @@ int SketchObject::delGeometries(InputIt first, InputIt last)
     // if a GeoId has internal geometry, it must delete internal geometries too
     for (auto c : Constraints.getValues()) {
         if (c->Type == InternalAlignment) {
-            auto pos = std::find(sGeoIds.begin(), sGeoIds.end(), c->Second);
+            auto pos = std::ranges::find(sGeoIds, c->Second);
 
             if (pos != sGeoIds.end()) {
                 sGeoIds.push_back(c->First);
@@ -1840,7 +1853,7 @@ int SketchObject::delGeometries(InputIt first, InputIt last)
         }
     }
 
-    std::sort(sGeoIds.begin(), sGeoIds.end());
+    std::ranges::sort(sGeoIds);
     // eliminate duplicates
     auto newend = std::unique(sGeoIds.begin(), sGeoIds.end());
     sGeoIds.resize(std::distance(sGeoIds.begin(), newend));
@@ -1852,7 +1865,7 @@ int SketchObject::delGeometriesExclusiveList(const std::vector<int>& GeoIds)
 {
     std::vector<int> sGeoIds(GeoIds);
 
-    std::sort(sGeoIds.begin(), sGeoIds.end());
+    std::ranges::sort(sGeoIds);
     if (sGeoIds.empty())
         return 0;
 
@@ -2327,125 +2340,130 @@ int SketchObject::delConstraintOnPoint(int VertexId, bool onlyCoincident)
     return delConstraintOnPoint(GeoId, PosId, onlyCoincident);
 }
 
-int SketchObject::delConstraintOnPoint(int GeoId, PointPos PosId, bool onlyCoincident)
+// clang-format on
+int SketchObject::delConstraintOnPoint(int geoId, PointPos posId, bool onlyCoincident)
 {
     // no need to check input data validity as this is an sketchobject managed operation.
     Base::StateLocker lock(managedoperation, true);
 
     const std::vector<Constraint*>& vals = this->Constraints.getValues();
+    std::vector<Constraint*> newVals;
+    newVals.reserve(vals.size());
 
     // check if constraints can be redirected to some other point
     int replaceGeoId = GeoEnum::GeoUndef;
     PointPos replacePosId = Sketcher::PointPos::none;
-    if (!onlyCoincident) {
-        for (std::vector<Constraint*>::const_iterator it = vals.begin(); it != vals.end(); ++it) {
-            if ((*it)->Type == Sketcher::Coincident) {
-                if ((*it)->First == GeoId && (*it)->FirstPos == PosId) {
-                    replaceGeoId = (*it)->Second;
-                    replacePosId = (*it)->SecondPos;
-                    break;
-                }
-                else if ((*it)->Second == GeoId && (*it)->SecondPos == PosId) {
-                    replaceGeoId = (*it)->First;
-                    replacePosId = (*it)->FirstPos;
-                    break;
-                }
+    auto findReplacement = [geoId, posId, &replaceGeoId, &replacePosId, &vals]() {
+        auto it = std::find_if(vals.begin(), vals.end(), [geoId, posId](auto& constr) {
+            return constr->Type == Sketcher::Coincident
+                && constr->involvesGeoIdAndPosId(geoId, posId);
+        });
+
+        if (it == vals.end()) {
+            return;
+        }
+
+        if ((*it)->First == geoId && (*it)->FirstPos == posId) {
+            replaceGeoId = (*it)->Second;
+            replacePosId = (*it)->SecondPos;
+        }
+        else {
+            replaceGeoId = (*it)->First;
+            replacePosId = (*it)->FirstPos;
+        }
+    };
+
+    auto transferToReplacement =
+        [&geoId, &posId, &replaceGeoId, &replacePosId](int& constrGeoId, PointPos& constrPosId) {
+            if (replaceGeoId == GeoEnum::GeoUndef) {
+                return false;
             }
+            if (geoId != constrGeoId || posId != constrPosId) {
+                return false;
+            }
+            constrGeoId = replaceGeoId;
+            constrPosId = replacePosId;
+            return true;
+        };
+
+    findReplacement();
+
+    auto performCoincidenceChecksOrChanges = [&](auto& constr) -> bool {
+        if (replaceGeoId == GeoEnum::GeoUndef) {
+            return false;
+        }
+        if (constr->involvesGeoIdAndPosId(replaceGeoId, replacePosId)) {
+            return false;
+        }
+        // Assuming `constr` already involves geoId and posId, all conditions are already met
+        constr->substituteIndexAndPos(geoId, posId, replaceGeoId, replacePosId);
+        return true;
+    };
+
+    auto performAllConstraintChecksOrChanges = [&](auto& constr) -> std::optional<bool> {
+        if (constr->Type != Sketcher::Coincident && onlyCoincident) {
+            return true;
+        }
+        switch (constr->Type) {
+            case Sketcher::Coincident:
+                return performCoincidenceChecksOrChanges(constr);
+            case Sketcher::Distance:
+            case Sketcher::DistanceX:
+            case Sketcher::DistanceY: {
+                return (transferToReplacement(constr->First, constr->FirstPos)
+                        || transferToReplacement(constr->Second, constr->SecondPos));
+            }
+            case Sketcher::PointOnObject: {
+                return transferToReplacement(constr->First, constr->FirstPos);
+            }
+            case Sketcher::Tangent:
+            case Sketcher::Perpendicular: {
+                // we could keep this constraint by converting it to a simple one, but that doesn't
+                // always work (for example if tangent-via-point is necessary), and it is not really
+                // worth it
+                return false;
+            }
+            case Sketcher::Vertical:
+            case Sketcher::Horizontal:
+            case Sketcher::Symmetric: {
+                return false;
+            }
+            default:
+                return std::nullopt;
+        }
+    };
+
+    // remove or redirect any constraints associated with the given point
+    for (auto& constr : vals) {
+        // keep the constraint if it doesn't involve the point
+        if (!constr->involvesGeoIdAndPosId(geoId, posId)) {
+            // for these constraints remove the constraint even if it is not directly associated
+            // with the given point
+            const bool isOneOfDistanceTypes = constr->Type == Sketcher::Distance
+                || constr->Type == Sketcher::DistanceX || constr->Type == Sketcher::DistanceY;
+            const bool involvesEntireCurve =
+                constr->First == geoId && constr->FirstPos == PointPos::none;
+            const bool isPosAnEndpoint = posId == PointPos::start || posId == PointPos::end;
+            if (isOneOfDistanceTypes && involvesEntireCurve && isPosAnEndpoint) {
+                continue;
+            }
+            newVals.push_back(constr);
+            continue;
+        }
+        if (performAllConstraintChecksOrChanges(constr).value_or(true)) {
+            newVals.push_back(constr);
         }
     }
 
-    // remove or redirect any constraints associated with the given point
-    std::vector<Constraint*> newVals(0);
-    for (std::vector<Constraint*>::const_iterator it = vals.begin(); it != vals.end(); ++it) {
-        if ((*it)->Type == Sketcher::Coincident) {
-            if ((*it)->First == GeoId && (*it)->FirstPos == PosId) {
-                // redirect this constraint
-                if (replaceGeoId != GeoEnum::GeoUndef
-                    && (replaceGeoId != (*it)->Second || replacePosId != (*it)->SecondPos)) {
-                    (*it)->First = replaceGeoId;
-                    (*it)->FirstPos = replacePosId;
-                }
-                else
-                    continue;// skip this constraint
-            }
-            else if ((*it)->Second == GeoId && (*it)->SecondPos == PosId) {
-                // redirect this constraint
-                if (replaceGeoId != GeoEnum::GeoUndef
-                    && (replaceGeoId != (*it)->First || replacePosId != (*it)->FirstPos)) {
-                    (*it)->Second = replaceGeoId;
-                    (*it)->SecondPos = replacePosId;
-                }
-                else
-                    continue;// skip this constraint
-            }
-        }
-        else if (!onlyCoincident) {
-            if ((*it)->Type == Sketcher::Distance || (*it)->Type == Sketcher::DistanceX
-                || (*it)->Type == Sketcher::DistanceY) {
-                if ((*it)->First == GeoId && (*it)->FirstPos == PointPos::none
-                    && (PosId == PointPos::start || PosId == PointPos::end)) {
-                    // remove the constraint even if it is not directly associated
-                    // with the given point
-                    continue;// skip this constraint
-                }
-                else if ((*it)->First == GeoId && (*it)->FirstPos == PosId) {
-                    if (replaceGeoId != GeoEnum::GeoUndef) {// redirect this constraint
-                        (*it)->First = replaceGeoId;
-                        (*it)->FirstPos = replacePosId;
-                    }
-                    else
-                        continue;// skip this constraint
-                }
-                else if ((*it)->Second == GeoId && (*it)->SecondPos == PosId) {
-                    if (replaceGeoId != GeoEnum::GeoUndef) {// redirect this constraint
-                        (*it)->Second = replaceGeoId;
-                        (*it)->SecondPos = replacePosId;
-                    }
-                    else
-                        continue;// skip this constraint
-                }
-            }
-            else if ((*it)->Type == Sketcher::PointOnObject) {
-                if ((*it)->First == GeoId && (*it)->FirstPos == PosId) {
-                    if (replaceGeoId != GeoEnum::GeoUndef) {// redirect this constraint
-                        (*it)->First = replaceGeoId;
-                        (*it)->FirstPos = replacePosId;
-                    }
-                    else
-                        continue;// skip this constraint
-                }
-            }
-            else if ((*it)->Type == Sketcher::Tangent || (*it)->Type == Sketcher::Perpendicular) {
-                if (((*it)->First == GeoId && (*it)->FirstPos == PosId)
-                    || ((*it)->Second == GeoId && (*it)->SecondPos == PosId)) {
-                    // we could keep the tangency constraint by converting it
-                    // to a simple one but it is not really worth
-                    continue;// skip this constraint
-                }
-            }
-            else if ((*it)->Type == Sketcher::Symmetric) {
-                if (((*it)->First == GeoId && (*it)->FirstPos == PosId)
-                    || ((*it)->Second == GeoId && (*it)->SecondPos == PosId)) {
-                    continue;// skip this constraint
-                }
-            }
-            else if ((*it)->Type == Sketcher::Vertical || (*it)->Type == Sketcher::Horizontal) {
-                if (((*it)->First == GeoId && (*it)->FirstPos == PosId)
-                    || ((*it)->Second == GeoId && (*it)->SecondPos == PosId)) {
-                    continue;// skip this constraint
-                }
-            }
-        }
-        newVals.push_back(*it);
-    }
     if (newVals.size() < vals.size()) {
         this->Constraints.setValues(std::move(newVals));
 
         return 0;
     }
 
-    return -1;// no such constraint
+    return -1;  // no such constraint
 }
+// clang-format off
 
 void SketchObject::transferFilletConstraints(int geoId1, PointPos posId1, int geoId2,
                                              PointPos posId2)
@@ -3055,9 +3073,6 @@ int SketchObject::fillet(int GeoId1, int GeoId2, const Base::Vector3d& refPnt1,
                 Base::Vector3d refp1 = curve1->pointAtParameter(refparam1);
                 Base::Vector3d refp2 = curve2->pointAtParameter(refparam2);
 
-                // Base::Console().Log("refpoints:
-                // (%f,%f,%f);(%f,%f,%f)",refp1.x,refp1.y,refp1.z,refp2.x,refp2.y,refp2.z);
-
                 Base::Vector3d normalintersect(
                     (-dir1.x * dir2.x * refp1.y + dir1.x * dir2.x * refp2.y
                      - dir1.x * dir2.y * refp2.x + dir2.x * dir1.y * refp1.x)
@@ -3506,24 +3521,35 @@ void SketchObject::changeConstraintAfterDeletingGeo(Constraint* constr,
     }
 }
 
-bool SketchObject::seekTrimPoints(int GeoId, const Base::Vector3d& point, int& GeoId1,
-                                  Base::Vector3d& intersect1, int& GeoId2,
+// clang-format on
+bool SketchObject::seekTrimPoints(int GeoId,
+                                  const Base::Vector3d& point,
+                                  int& GeoId1,
+                                  Base::Vector3d& intersect1,
+                                  int& GeoId2,
                                   Base::Vector3d& intersect2)
 {
-    if (GeoId < 0 || GeoId > getHighestCurveIndex())
+    if (GeoId < 0 || GeoId > getHighestCurveIndex()) {
         return false;
+    }
 
-    auto geos = getCompleteGeometry();// this includes the axes too
+    auto geos = getCompleteGeometry();  // this includes the axes too
 
-    geos.resize(geos.size() - 2);// remove the axes to avoid intersections with the axes
+    geos.resize(geos.size() - 2);  // remove the axes to avoid intersections with the axes
 
     int localindex1, localindex2;
 
     // Not found in will be returned as -1, not as GeoUndef, Part WB is agnostic to the concept of
     // GeoUndef
-    if (!Part2DObject::seekTrimPoints(
-            geos, GeoId, point, localindex1, intersect1, localindex2, intersect2))
+    if (!Part2DObject::seekTrimPoints(geos,
+                                      GeoId,
+                                      point,
+                                      localindex1,
+                                      intersect1,
+                                      localindex2,
+                                      intersect2)) {
         return false;
+    }
 
     // invalid complete geometry indices are mapped to GeoUndef
     GeoId1 = getGeoIdFromCompleteGeometryIndex(localindex1);
@@ -3537,7 +3563,8 @@ bool SketchObject::seekTrimPoints(int GeoId, const Base::Vector3d& point, int& G
 // throwing an exception.
 bool getIntersectionParameter(const Part::Geometry* geo,
                               const Base::Vector3d point,
-                              double& pointParam) {
+                              double& pointParam)
+{
     const auto* curve = static_cast<const Part::GeomCurve*>(geo);
 
     try {
@@ -3551,73 +3578,61 @@ bool getIntersectionParameter(const Part::Geometry* geo,
     return true;
 }
 
-int SketchObject::trim(int GeoId, const Base::Vector3d& point)
+bool arePointsWithinPrecision(const Base::Vector3d& point1, const Base::Vector3d& point2)
 {
-    // no need to check input data validity as this is an sketchobject managed operation.
-    Base::StateLocker lock(managedoperation, true);
+    // From testing: 500x (or 0.000050) is needed in order to not falsely distinguish points
+    // calculated with seekTrimPoints
+    return ((point1 - point2).Length() < 500 * Precision::Confusion());
+}
 
-    //******************* Basic checks rejecting the operation
-    //****************************************//
-    if (GeoId < 0 || GeoId > getHighestCurveIndex()) {
-        return -1;
+bool areParamsWithinApproximation(double param1, double param2)
+{
+    // From testing: 500x (or 0.000050) is needed in order to not falsely distinguish points
+    // calculated with seekTrimPoints
+    return (std::abs(param1 - param2) < Precision::PApproximation());
+}
+
+// returns true if the point defined by (GeoId1, pos1) can be considered to be coincident with
+// point.
+bool isPointAtPosition(const SketchObject* obj,
+                       int GeoId1,
+                       PointPos pos1,
+                       const Base::Vector3d& point)
+{
+    Base::Vector3d pp = obj->getPoint(GeoId1, pos1);
+
+    return arePointsWithinPrecision(point, pp);
+}
+
+// Checks whether preexisting constraints must be converted to new constraints.
+// Preexisting point on object constraints get converted to coincidents.
+// Returns:
+//     - The constraint that should be used to constraint GeoId and cuttingGeoId
+std::unique_ptr<Constraint> transformPreexistingConstraintForTrim(const SketchObject* obj,
+                                                                  const Constraint* constr,
+                                                                  int GeoId,
+                                                                  int cuttingGeoId,
+                                                                  const Base::Vector3d& cutPointVec,
+                                                                  int newGeoId,
+                                                                  PointPos newPosId)
+{
+    /* TODO: It is possible that the trimming entity has both a PointOnObject constraint to the
+     * trimmed entity, and a simple Tangent constraint to the trimmed entity. In this case we
+     * want to change to a single end-to-end tangency, i.e we want to ensure that constrType1
+     * is set to Sketcher::Tangent, that the secondPos1 is captured from the PointOnObject,
+     * and also make sure that the PointOnObject constraint is deleted.
+     */
+    std::unique_ptr<Constraint> newConstr;
+    if (!constr->involvesGeoId(cuttingGeoId)
+        || !constr->involvesGeoIdAndPosId(GeoId, PointPos::none)) {
+        return newConstr;
     }
-
-    auto geo = getGeometry(GeoId);
-
-    if (!GeometryFacade::isInternalType(geo, InternalType::None)) {
-        return -1;  // internal alignment geometry is not trimmable
-    }
-
-    //******************* Lambdas - common functions for different intersections
-    //****************************************//
-
-    auto arePointsWithinPrecision = [](Base::Vector3d& point1, Base::Vector3d& point2) {
-        // From testing: 500x (or 0.000050) is needed in order to not falsely distinguish points
-        // calculated with seekTrimPoints
-        return ((point1 - point2).Length() < 500 * Precision::Confusion());
-    };
-
-    auto areParamsWithinApproximation = [](double param1, double param2) {
-        // From testing: 500x (or 0.000050) is needed in order to not falsely distinguish points
-        // calculated with seekTrimPoints
-        return (std::abs(param1 - param2) < Precision::PApproximation());
-    };
-
-    // returns true if the point defined by (GeoId1, pos1) can be considered to be coincident with
-    // point.
-    auto isPointAtPosition =
-        [this, &arePointsWithinPrecision](int GeoId1, PointPos pos1, Base::Vector3d& point) {
-            Base::Vector3d pp = getPoint(GeoId1, pos1);
-
-            return arePointsWithinPrecision(point, pp);
-        };
-
-    // Checks whether preexisting constraints must be converted to new constraints.
-    // Preexisting point on object constraints get converted to coincidents.
-    // Returns:
-    //     - The constraint that should be used to constraint GeoId and cuttingGeoId
-    auto transformPreexistingConstraint = [&isPointAtPosition](const Constraint* constr,
-                                                               int GeoId,
-                                                               int cuttingGeoId,
-                                                               Base::Vector3d& cutPointVec,
-                                                               int newGeoId,
-                                                               PointPos newPosId) {
-        /* TODO: It is possible that the trimming entity has both a PointOnObject constraint to the
-         * trimmed entity, and a simple Tangent constraint to the trimmed entity. In this case we
-         * want to change to a single end-to-end tangency, i.e we want to ensure that constrType1
-         * is set to Sketcher::Tangent, that the secondPos1 is captured from the PointOnObject,
-         * and also make sure that the PointOnObject constraint is deleted.
-         */
-        std::unique_ptr<Constraint> newConstr;
-        if (!constr->involvesGeoId(cuttingGeoId)
-            || !constr->involvesGeoIdAndPosId(GeoId, PointPos::none)) {
-            return newConstr;
-        }
-        switch (constr->Type) {
+    switch (constr->Type) {
         case PointOnObject: {
-            // we might want to transform this (and the new point-on-object constraints) into a coincidence
-            // At this stage of the check the point has to be an end of `cuttingGeoId` on the edge of `GeoId`.
-            if (isPointAtPosition(constr->First, constr->FirstPos, cutPointVec)) {
+            // we might want to transform this (and the new point-on-object constraints) into a
+            // coincidence At this stage of the check the point has to be an end of `cuttingGeoId`
+            // on the edge of `GeoId`.
+            if (isPointAtPosition(obj, constr->First, constr->FirstPos, cutPointVec)) {
                 // This concerns the start portion of the trim
                 newConstr.reset(constr->copy());
                 newConstr->Type = Sketcher::Coincident;
@@ -3629,7 +3644,8 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
         case Tangent:
         case Perpendicular: {
             // These may have to be turned into endpoint-to-endpoint or endpoint-to-edge
-            // TODO: could there be tangent/perpendicular constraints not involving the trim that are modified below?
+            // TODO: could there be tangent/perpendicular constraints not involving the trim that
+            // are modified below?
             newConstr.reset(constr->copy());
             newConstr->substituteIndexAndPos(GeoId, PointPos::none, newGeoId, newPosId);
             // make sure the first position is a point
@@ -3644,22 +3660,193 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
         }
         default:
             break;
+    }
+    return newConstr;
+}
+
+std::unique_ptr<Constraint> getNewConstraintAtTrimCut(const SketchObject* obj,
+                                                      int cuttingGeoId,
+                                                      int cutGeoId,
+                                                      PointPos cutPosId,
+                                                      const Base::Vector3d& cutPointVec)
+{
+    auto newConstr = std::make_unique<Sketcher::Constraint>();
+    newConstr->First = cutGeoId;
+    newConstr->FirstPos = cutPosId;
+    newConstr->Second = cuttingGeoId;
+    if (isPointAtPosition(obj, cuttingGeoId, PointPos::start, cutPointVec)) {
+        newConstr->Type = Sketcher::Coincident;
+        newConstr->SecondPos = PointPos::start;
+    }
+    else if (isPointAtPosition(obj, cuttingGeoId, PointPos::end, cutPointVec)) {
+        newConstr->Type = Sketcher::Coincident;
+        newConstr->SecondPos = PointPos::end;
+    }
+    else {
+        // Points are sufficiently far apart: use point-on-object
+        newConstr->Type = Sketcher::PointOnObject;
+        newConstr->SecondPos = PointPos::none;
+    }
+    return newConstr;
+};
+
+bool isGeoIdAllowedForTrim(const SketchObject* obj, int GeoId)
+{
+    const auto* geo = obj->getGeometry(GeoId);
+
+    return GeoId >= 0 && GeoId <= obj->getHighestCurveIndex()
+        && GeometryFacade::isInternalType(geo, InternalType::None);
+}
+
+bool getParamLimitsOfNewGeosForTrim(const SketchObject* obj,
+                                    int GeoId,
+                                    std::array<int, 2>& cuttingGeoIds,
+                                    std::array<Base::Vector3d, 2>& cutPoints,
+                                    std::vector<std::pair<double, double>>& paramsOfNewGeos)
+{
+    const auto* geoAsCurve = obj->getGeometry<Part::GeomCurve>(GeoId);
+    double firstParam = geoAsCurve->getFirstParameter();
+    double lastParam = geoAsCurve->getLastParameter();
+    double cut0Param {firstParam}, cut1Param {lastParam};
+
+    bool allParamsFound = getIntersectionParameter(geoAsCurve, cutPoints[0], cut0Param)
+        && getIntersectionParameter(geoAsCurve, cutPoints[1], cut1Param);
+    if (!allParamsFound) {
+        return false;
+    }
+
+    if (!obj->isClosedCurve(geoAsCurve) && areParamsWithinApproximation(firstParam, cut0Param)) {
+        cuttingGeoIds[0] = GeoEnum::GeoUndef;
+    }
+
+    if (!obj->isClosedCurve(geoAsCurve) && areParamsWithinApproximation(lastParam, cut1Param)) {
+        cuttingGeoIds[1] = GeoEnum::GeoUndef;
+    }
+
+    size_t numUndefs = std::count(cuttingGeoIds.begin(), cuttingGeoIds.end(), GeoEnum::GeoUndef);
+
+    if (numUndefs == 0 && arePointsWithinPrecision(cutPoints[0], cutPoints[1])) {
+        // If both points are detected and are coincident, deletion is the only option.
+        paramsOfNewGeos.clear();
+        return true;
+    }
+
+    paramsOfNewGeos.assign(2 - numUndefs, {firstParam, lastParam});
+
+    if (paramsOfNewGeos.empty()) {
+        return true;
+    }
+
+    if (obj->isClosedCurve(geoAsCurve)) {
+        paramsOfNewGeos.pop_back();
+    }
+
+    if (cuttingGeoIds[0] != GeoEnum::GeoUndef) {
+        paramsOfNewGeos.front().second = cut0Param;
+    }
+    if (cuttingGeoIds[1] != GeoEnum::GeoUndef) {
+        paramsOfNewGeos.back().first = cut1Param;
+    }
+
+    return true;
+}
+
+void createArcsFromGeoWithLimits(const Part::GeomCurve* geo,
+                                 const std::vector<std::pair<double, double>>& paramsOfNewGeos,
+                                 std::vector<Part::Geometry*>& newGeos)
+{
+    for (auto& [u1, u2] : paramsOfNewGeos) {
+        auto newGeo = static_cast<const Part::GeomCurve*>(geo)->createArc(u1, u2);
+        assert(newGeo);
+        newGeos.emplace_back(newGeo);
+    }
+}
+
+void createNewConstraintsForTrim(const SketchObject* obj,
+                                 const int GeoId,
+                                 const std::array<int, 2>& cuttingGeoIds,
+                                 const std::array<Base::Vector3d, 2>& cutPoints,
+                                 const std::vector<int>& newIds,
+                                 std::vector<int>& idsOfOldConstraints,
+                                 std::vector<Constraint*>& newConstraints,
+                                 std::set<int, std::greater<>>& geoIdsToBeDeleted)
+{
+    const auto& allConstraints = obj->Constraints.getValues();
+
+    bool isPoint1ConstrainedOnGeoId1 = false;
+    bool isPoint2ConstrainedOnGeoId2 = false;
+
+    for (const auto& oldConstrId : idsOfOldConstraints) {
+        // trim-specific changes first
+        const Constraint* con = allConstraints[oldConstrId];
+        if (con->Type == InternalAlignment) {
+            geoIdsToBeDeleted.insert(con->First);
+            continue;
         }
-        return newConstr;
-    };
+        if (auto newConstr = transformPreexistingConstraintForTrim(obj,
+                                                                   con,
+                                                                   GeoId,
+                                                                   cuttingGeoIds[0],
+                                                                   cutPoints[0],
+                                                                   newIds.front(),
+                                                                   PointPos::end)) {
+            newConstraints.push_back(newConstr.release());
+            isPoint1ConstrainedOnGeoId1 = true;
+            continue;
+        }
+        if (auto newConstr = transformPreexistingConstraintForTrim(obj,
+                                                                   con,
+                                                                   GeoId,
+                                                                   cuttingGeoIds[1],
+                                                                   cutPoints[1],
+                                                                   newIds.back(),
+                                                                   PointPos::start)) {
+            newConstraints.push_back(newConstr.release());
+            isPoint2ConstrainedOnGeoId2 = true;
+            continue;
+        }
+        // We have already transferred all constraints on endpoints to the new pieces.
+        // If there is still any left, this means one of the remaining pieces was degenerate.
+        if (!con->involvesGeoIdAndPosId(GeoId, PointPos::none)) {
+            continue;
+        }
+        // constraint has not yet been changed
+        obj->deriveConstraintsForPieces(GeoId, newIds, con, newConstraints);
+    }
 
-    // makes an equality constraint between GeoId1 and GeoId2
-    auto constrainAsEqual = [this](int GeoId1, int GeoId2) {
-        auto newConstr = std::make_unique<Sketcher::Constraint>();
+    // Add point-on-object/coincidence constraints with the newly exposed points.
+    // This will need to account for the constraints that were already converted
+    // to coincident or end-to-end tangency/perpendicularity.
+    // TODO: Tangent/perpendicular not yet covered
 
-        // Build Constraints associated with new pair of arcs
-        newConstr->Type = Sketcher::Equal;
-        newConstr->First = GeoId1;
-        newConstr->FirstPos = Sketcher::PointPos::none;
-        newConstr->Second = GeoId2;
-        newConstr->SecondPos = Sketcher::PointPos::none;
-        addConstraint(std::move(newConstr));
-    };
+    if (cuttingGeoIds[0] != GeoEnum::GeoUndef && !isPoint1ConstrainedOnGeoId1) {
+        newConstraints.emplace_back(getNewConstraintAtTrimCut(obj,
+                                                              cuttingGeoIds[0],
+                                                              newIds.front(),
+                                                              PointPos::end,
+                                                              cutPoints[0])
+                                        .release());
+    }
+
+    if (cuttingGeoIds[1] != GeoEnum::GeoUndef && !isPoint2ConstrainedOnGeoId2) {
+        newConstraints.emplace_back(getNewConstraintAtTrimCut(obj,
+                                                              cuttingGeoIds[1],
+                                                              newIds.back(),
+                                                              PointPos::start,
+                                                              cutPoints[1])
+                                        .release());
+    }
+}
+
+int SketchObject::trim(int GeoId, const Base::Vector3d& point)
+{
+    if (!isGeoIdAllowedForTrim(this, GeoId)) {
+        return -1;
+    }
+    // Remove internal geometry beforehand for now
+    // FIXME: we should be able to transfer these to new curves smoothly
+    // auto geo = getGeometry(GeoId);
+    const auto* geoAsCurve = getGeometry<Part::GeomCurve>(GeoId);
 
     //******************* Step A => Detection of intersection - Common to all Geometries
     //****************************************//
@@ -3689,110 +3876,119 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
         return 0;
     }
 
-    const auto* geoAsCurve = static_cast<const Part::GeomCurve*>(geo);
-    double firstParam = geoAsCurve->getFirstParameter();
-    double lastParam = geoAsCurve->getLastParameter();
-    double pointParam, cut0Param{firstParam}, cut1Param{lastParam};
-    bool allParamsFound = getIntersectionParameter(geo, point, pointParam)
-        && getIntersectionParameter(geo, cutPoints[0], cut0Param)
-        && getIntersectionParameter(geo, cutPoints[1], cut1Param);
-    if (!allParamsFound) {
+    // TODO: find trim parameters
+    std::vector<std::pair<double, double>> paramsOfNewGeos;
+    paramsOfNewGeos.reserve(2);
+    if (!getParamLimitsOfNewGeosForTrim(this, GeoId, cuttingGeoIds, cutPoints, paramsOfNewGeos)) {
         return -1;
     }
 
-    if (!isClosedCurve(geo) && areParamsWithinApproximation(firstParam, cut0Param)) {
-        cuttingGeoIds[0] = GeoEnum::GeoUndef;
-    }
-
-    if (!isClosedCurve(geo) && areParamsWithinApproximation(lastParam, cut1Param)) {
-        cuttingGeoIds[1] = GeoEnum::GeoUndef;
-    }
-
-    size_t numUndefs = std::count(cuttingGeoIds.begin(), cuttingGeoIds.end(), GeoEnum::GeoUndef);
-
-    if (numUndefs == 0 && arePointsWithinPrecision(cutPoints[0], cutPoints[1])) {
-        // If both points are detected and are coincident, deletion is the only option.
-        delGeometry(GeoId);
-        return 0;
-    }
-
-    bool startPointRemains = (cuttingGeoIds[0] != GeoEnum::GeoUndef);
-    bool endPointRemains = (cuttingGeoIds[1] != GeoEnum::GeoUndef);
-    std::vector<std::pair<double, double>> paramsOfNewGeos(2 - numUndefs, {firstParam, lastParam});
+    //******************* Step B => Creation of new geometries
+    //****************************************//
     std::vector<int> newIds;
     std::vector<Part::Geometry*> newGeos;
-    std::vector<const Part::Geometry*> newGeosAsConsts;
-    // TODO: This should be needed, but for some reason we already get both curves as construction
-    // when needed.
-
-    // bool oldGeoIsConstruction =
-    //     GeometryFacade::getConstruction(static_cast<const Part::GeomCurve*>(geo));
-
-    if (isClosedCurve(geo) && !paramsOfNewGeos.empty()) {
-        startPointRemains = false;
-        endPointRemains = false;
-        paramsOfNewGeos.pop_back();
-    }
 
     switch (paramsOfNewGeos.size()) {
-    case 0: {
-        delGeometry(GeoId);
-        return 0;
-    }
-    case 1: {
-        newIds.push_back(GeoId);
-        break;
-    }
-    case 2: {
-        newIds.push_back(GeoId);
-        newIds.push_back(getHighestCurveIndex() + 1);
-        break;
-    }
-    default: {
-        return -1;
-    }
-    }
-
-    if (cuttingGeoIds[0] != GeoEnum::GeoUndef) {
-        paramsOfNewGeos.front().second = cut0Param;
-    }
-    if (cuttingGeoIds[1] != GeoEnum::GeoUndef) {
-        paramsOfNewGeos.back().first = cut1Param;
+        case 0: {
+            delGeometry(GeoId);
+            return 0;
+        }
+        case 1: {
+            newIds.push_back(GeoId);
+            break;
+        }
+        case 2: {
+            newIds.push_back(GeoId);
+            newIds.push_back(getHighestCurveIndex() + 1);
+            break;
+        }
+        default: {
+            return -1;
+        }
     }
 
-    for (auto& [u1, u2] : paramsOfNewGeos) {
-        auto newGeo = static_cast<const Part::GeomCurve*>(geo)->createArc(u1, u2);
-        assert(newGeo);
-        newGeos.push_back(newGeo);
-        newGeosAsConsts.push_back(newGeo);
-    }
+    createArcsFromGeoWithLimits(geoAsCurve, paramsOfNewGeos, newGeos);
 
+    //******************* Step C => Creation of new constraints
+    //****************************************//
     // Now that we have the new curves, change constraints as needed
     // Some are covered with `deriveConstraintsForPieces`, others are specific to trim
     // FIXME: We are using non-smart pointers since that's what's needed in `addConstraints`.
+    const auto& allConstraints = this->Constraints.getValues();
     std::vector<Constraint*> newConstraints;
+    std::vector<int> idsOfOldConstraints;
+    std::set<int, std::greater<>> geoIdsToBeDeleted;
+    getConstraintIndices(GeoId, idsOfOldConstraints);
+    // remove the constraints that we want to manually transfer
+    // We could transfer beforehand but in case of exception that transfer is permanent
+    if (!isClosedCurve(geoAsCurve)) {
+        if (cuttingGeoIds[0] != GeoEnum::GeoUndef) {
+            idsOfOldConstraints.erase(
+                std::remove_if(
+                    idsOfOldConstraints.begin(),
+                    idsOfOldConstraints.end(),
+                    [&GeoId, &allConstraints](const auto& i) {
+                        return (allConstraints[i]->involvesGeoIdAndPosId(GeoId, PointPos::start));
+                    }),
+                idsOfOldConstraints.end());
+        }
+        if (cuttingGeoIds[1] != GeoEnum::GeoUndef) {
+            idsOfOldConstraints.erase(
+                std::remove_if(idsOfOldConstraints.begin(),
+                               idsOfOldConstraints.end(),
+                               [&GeoId, &allConstraints](const auto& i) {
+                                   return (allConstraints[i]->involvesGeoIdAndPosId(GeoId,
+                                                                                    PointPos::end));
+                               }),
+                idsOfOldConstraints.end());
+        }
+    }
+    idsOfOldConstraints.erase(
+        std::remove_if(idsOfOldConstraints.begin(),
+                       idsOfOldConstraints.end(),
+                       [&GeoId, &allConstraints](const auto& i) {
+                           return (allConstraints[i]->involvesGeoIdAndPosId(GeoId, PointPos::mid));
+                       }),
+        idsOfOldConstraints.end());
 
-    // A geoId we expect to never exist during this operation (but still not `GeoEnum::GeoUndef`).
-    // We use it because newIds.front() is supposed to be `GeoId`, but we will delete constraints
-    // on it down the line, even if we may need it later.
-    // Note that this will cause some malformed constraints until they are transferred back.
-    int nonexistentGeoId = getHighestCurveIndex() + newIds.size();
-    newIds.front() = nonexistentGeoId;
+    createNewConstraintsForTrim(this,
+                                GeoId,
+                                cuttingGeoIds,
+                                cutPoints,
+                                newIds,
+                                idsOfOldConstraints,
+                                newConstraints,
+                                geoIdsToBeDeleted);
+
+    //******************* Step D => Replacing geometries and constraints
+    //****************************************//
 
     // Constraints related to start/mid/end points of original
-    if (startPointRemains) {
+    auto constrainAsEqual = [this](int GeoId1, int GeoId2) {
+        auto newConstr = std::make_unique<Sketcher::Constraint>();
+
+        // Build Constraints associated with new pair of arcs
+        newConstr->Type = Sketcher::Equal;
+        newConstr->First = GeoId1;
+        newConstr->FirstPos = Sketcher::PointPos::none;
+        newConstr->Second = GeoId2;
+        newConstr->SecondPos = Sketcher::PointPos::none;
+        addConstraint(std::move(newConstr));
+    };
+
+    delConstraints(idsOfOldConstraints);
+
+    if (!isClosedCurve(geoAsCurve)) {
         transferConstraints(GeoId, PointPos::start, newIds.front(), PointPos::start, true);
-    }
-    if (endPointRemains) {
         transferConstraints(GeoId, PointPos::end, newIds.back(), PointPos::end, true);
     }
-    bool geomHasMid =
-        geo->isDerivedFrom<Part::GeomConic>() || geo->isDerivedFrom<Part::GeomArcOfConic>();
+    bool geomHasMid = geoAsCurve->isDerivedFrom<Part::GeomConic>()
+        || geoAsCurve->isDerivedFrom<Part::GeomArcOfConic>();
     if (geomHasMid) {
         transferConstraints(GeoId, PointPos::mid, newIds.front(), PointPos::mid, true);
         // Make centers coincident
         if (newIds.size() > 1) {
-            Constraint* joint = new Constraint();
+            auto* joint = new Constraint();
             joint->Type = Coincident;
             joint->First = newIds.front();
             joint->FirstPos = PointPos::mid;
@@ -3806,111 +4002,8 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
         }
     }
 
-    newIds.front() = GeoId;
-
-    std::vector<int> idsOfOldConstraints;
-    getConstraintIndices(GeoId, idsOfOldConstraints);
-
-    const auto& allConstraints = this->Constraints.getValues();
-
-    bool isPoint1ConstrainedOnGeoId1 = false;
-    bool isPoint2ConstrainedOnGeoId2 = false;
-
-    // Workaround to avoid https://github.com/FreeCAD/FreeCAD/issues/15484.
-    // We will delete its internal geometry first and then replace GeoId with one of the curves.
-    // Of course, this will change `newIds`, and that's why we offset them.
-    std::set<int, std::greater<>> geoIdsToBeDeleted;
-    // geoIdsToBeDeleted.push_back(GeoId);
-
-    for (const auto& oldConstrId : idsOfOldConstraints) {
-        // trim-specific changes first
-        const Constraint* con = allConstraints[oldConstrId];
-        if (con->Type == InternalAlignment) {
-            geoIdsToBeDeleted.insert(con->First);
-            continue;
-        }
-        if (auto newConstr = transformPreexistingConstraint(
-                con, GeoId, cuttingGeoIds[0], cutPoints[0], newIds.front(), PointPos::end)) {
-            newConstraints.push_back(newConstr.release());
-            isPoint1ConstrainedOnGeoId1 = true;
-            continue;
-        }
-        if (auto newConstr = transformPreexistingConstraint(
-                con, GeoId, cuttingGeoIds[1], cutPoints[1], newIds.back(), PointPos::start)) {
-            newConstraints.push_back(newConstr.release());
-            isPoint2ConstrainedOnGeoId2 = true;
-            continue;
-        }
-        // We have already transferred all constraints on endpoints to the new pieces.
-        // If there is still any left, this means one of the remaining pieces was degenerate.
-        if (!con->involvesGeoIdAndPosId(GeoId, PointPos::none)) {
-            continue;
-        }
-        // constraint has not yet been changed
-        deriveConstraintsForPieces(GeoId, newIds, newGeosAsConsts, con, newConstraints);
-    }
-
-    // Add point-on-object/coincidence constraints with the newly exposed points.
-    // This will need to account for the constraints that were already converted
-    // to coincident or end-to-end tangency/perpendicularity.
-    // TODO: Tangent/perpendicular not yet covered
-
-    auto addNewConstraintAtCut = [&isPointAtPosition, &newConstraints](int cuttingGeoId,
-                                                                       int cutGeoId,
-                                                                       PointPos cutPosId,
-                                                                       Base::Vector3d cutPointVec) {
-        Constraint* newConstr = new Constraint();
-        newConstr->First = cutGeoId;
-        newConstr->FirstPos = cutPosId;
-        newConstr->Second = cuttingGeoId;
-        if (isPointAtPosition(cuttingGeoId, PointPos::start, cutPointVec)) {
-            newConstr->Type = Sketcher::Coincident;
-            newConstr->SecondPos = PointPos::start;
-        }
-        else if (isPointAtPosition(cuttingGeoId, PointPos::end, cutPointVec)) {
-            newConstr->Type = Sketcher::Coincident;
-            newConstr->SecondPos = PointPos::end;
-        }
-        else {
-            // Points are sufficiently far apart: use point-on-object
-            newConstr->Type = Sketcher::PointOnObject;
-            newConstr->SecondPos = PointPos::none;
-        }
-        newConstraints.push_back(newConstr);
-    };
-
-    if (cuttingGeoIds[0] != GeoEnum::GeoUndef && !isPoint1ConstrainedOnGeoId1) {
-        addNewConstraintAtCut(cuttingGeoIds[0], newIds.front(), PointPos::end, cutPoints[0]);
-    }
-
-    if (cuttingGeoIds[1] != GeoEnum::GeoUndef && !isPoint2ConstrainedOnGeoId2) {
-        addNewConstraintAtCut(cuttingGeoIds[1], newIds.back(), PointPos::start, cutPoints[1]);
-    }
-
-    // Workaround to avoid https://github.com/FreeCAD/FreeCAD/issues/15484.
-    // Delete the geometry first to avoid it happening.
-    // Of course, this will change `newIds`, and that's why we offset them.
-    delConstraints(idsOfOldConstraints);
-
-    // Retransfer constraints we put away to `nonexistentGeoId`
-    transferConstraints(nonexistentGeoId, PointPos::start, GeoId, PointPos::start, true);
-    transferConstraints(nonexistentGeoId, PointPos::end, GeoId, PointPos::end, true);
-    transferConstraints(nonexistentGeoId, PointPos::mid, GeoId, PointPos::mid, true);
-
-    auto vals = getInternalGeometry();
-    auto newVals(vals);
-    GeometryFacade::copyId(geo, newGeos.front());
-    newVals[GeoId] = newGeos.front();
-    if (newGeos.size() > 1) {
-        newVals.push_back(newGeos.back());
-        generateId(newGeos.back());
-        newIds.back() = newVals.size() - 1;
-    }
-    Geometry.setValues(std::move(newVals));
-
-    // FIXME: Somewhere here we need to delete the internal geometry (even if in use)
-    // FIXME: Set the second geoid as construction or not depending on what the original was.
-    // This somehow is still not needed (why?)
+    // TODO: Implement this
+    replaceGeometries({GeoId}, newGeos);
 
     if (noRecomputes) {
         solve();
@@ -3934,6 +4027,9 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
         solve();
     }
 
+    //******************* Cleanup
+    //****************************************//
+
     // Since we used regular "non-smart" pointers, we have to handle cleanup
     for (auto& cons : newConstraints) {
         delete cons;
@@ -3942,10 +4038,12 @@ int SketchObject::trim(int GeoId, const Base::Vector3d& point)
     return 0;
 }
 
+// clang-format off
+
 bool SketchObject::deriveConstraintsForPieces(const int oldId,
                                               const std::vector<int>& newIds,
                                               const Constraint* con,
-                                              std::vector<Constraint*>& newConstraints)
+                                              std::vector<Constraint*>& newConstraints) const
 {
     std::vector<const Part::Geometry*> newGeos;
     for (auto& newId: newIds) {
@@ -3959,7 +4057,7 @@ bool SketchObject::deriveConstraintsForPieces(const int oldId,
                                               const std::vector<int>& newIds,
                                               const std::vector<const Part::Geometry*>& newGeos,
                                               const Constraint* con,
-                                              std::vector<Constraint*>& newConstraints)
+                                              std::vector<Constraint*>& newConstraints) const
 {
     const Part::Geometry* geo = getGeometry(oldId);
     int conId = con->First;
@@ -4422,7 +4520,6 @@ bool SketchObject::isExternalAllowed(App::Document* pDoc, App::DocumentObject* p
 
     // Note: Checking for the body of the support doesn't work when the support are the three base
     // planes
-    // App::DocumentObject *support = this->AttachmentSupport.getValue();
     Part::BodyBase* body_this = Part::BodyBase::findBodyOf(this);
     Part::BodyBase* body_obj = Part::BodyBase::findBodyOf(pObj);
     App::Part* part_this = App::Part::getPartOfObject(this);
@@ -4495,7 +4592,6 @@ bool SketchObject::isCarbonCopyAllowed(App::Document* pDoc, App::DocumentObject*
 
     // Note: Checking for the body of the support doesn't work when the support are the three base
     // planes
-    // App::DocumentObject *support = this->AttachmentSupport.getValue();
     Part::BodyBase* body_this = Part::BodyBase::findBodyOf(this);
     Part::BodyBase* body_obj = Part::BodyBase::findBodyOf(pObj);
     App::Part* part_this = App::Part::getPartOfObject(this);
@@ -4586,8 +4682,7 @@ bool SketchObject::isCarbonCopyAllowed(App::Document* pDoc, App::DocumentObject*
 }
 
 int SketchObject::addSymmetric(const std::vector<int>& geoIdList, int refGeoId,
-                               Sketcher::PointPos refPosId /*=Sketcher::PointPos::none*/,
-                               bool addSymmetryConstraints /*= false*/)
+                               Sketcher::PointPos refPosId , bool addSymmetryConstraints )
 {
     // no need to check input data validity as this is an sketchobject managed operation.
     Base::StateLocker lock(managedoperation, true);
@@ -4629,7 +4724,7 @@ int SketchObject::addSymmetric(const std::vector<int>& geoIdList, int refGeoId,
                     continue;
                 }
 
-                if (constr->Second == GeoEnum::GeoUndef /*&& constr->Third == GeoEnum::GeoUndef*/) {
+                if (constr->Second == GeoEnum::GeoUndef ){
                     if (refIsAxisAligned) {
                         // in this case we want to keep the Vertical, Horizontal constraints
                         // DistanceX ,and DistanceY constraints should also be possible to keep in
@@ -4826,7 +4921,7 @@ std::vector<Part::Geometry*> SketchObject::getSymmetric(const std::vector<int>& 
                 }
             }
             // Return true if definedGeo is in geoIdList, false otherwise
-            return std::find(geoIdList.begin(), geoIdList.end(), definedGeo) != geoIdList.end();
+            return std::ranges::find(geoIdList, definedGeo) != geoIdList.end();
         }
         // Return true if not internal aligned, indicating it should always be copied
         return true;
@@ -5147,8 +5242,6 @@ std::vector<Part::Geometry*> SketchObject::getSymmetric(const std::vector<int>& 
             else if (geosym->is<Part::GeomArcOfParabola>()) {
                 auto* geosymaoe = static_cast<Part::GeomArcOfParabola*>(geosym);
                 Base::Vector3d cp = geosymaoe->getCenter();
-
-                /*double df= geosymaoe->getFocal();*/
                 Base::Vector3d f1 = geosymaoe->getFocus();
 
                 Base::Vector3d sf1 = f1 + 2.0 * (refpoint - f1);
@@ -5192,9 +5285,8 @@ std::vector<Part::Geometry*> SketchObject::getSymmetric(const std::vector<int>& 
 }
 
 int SketchObject::addCopy(const std::vector<int>& geoIdList, const Base::Vector3d& displacement,
-                          bool moveonly /*=false*/, bool clone /*=false*/, int csize /*=2*/,
-                          int rsize /*=1*/, bool constraindisplacement /*= false*/,
-                          double perpscale /*= 1.0*/)
+                          bool moveonly , bool clone , int csize , int rsize , bool constraindisplacement ,
+                          double perpscale )
 {
     // no need to check input data validity as this is an sketchobject managed operation.
     Base::StateLocker lock(managedoperation, true);
@@ -5259,8 +5351,7 @@ int SketchObject::addCopy(const std::vector<int>& geoIdList, const Base::Vector3
                         }
                     }
 
-                    if (std::find(newgeoIdList.begin(), newgeoIdList.end(), definedGeo)
-                        == newgeoIdList.end()) {
+                    if (std::ranges::find(newgeoIdList, definedGeo) == newgeoIdList.end()) {
                         // the first element setting the reference is an internal alignment
                         // geometry, wherein the geometry it defines is not part of the copy
                         // operation.
@@ -5315,7 +5406,7 @@ int SketchObject::addCopy(const std::vector<int>& geoIdList, const Base::Vector3
                         }
                     }
 
-                    if (std::find(newgeoIdList.begin(), newgeoIdList.end(), definedGeo)
+                    if (std::ranges::find(newgeoIdList, definedGeo)
                         == newgeoIdList.end()) {
                         // we should not copy internal alignment geometry, unless the element they
                         // define is also mirrored
@@ -6692,12 +6783,9 @@ int SketchObject::deleteUnusedInternalGeometryWhenOneFocus(int GeoId, bool delge
 
 int SketchObject::deleteUnusedInternalGeometryWhenBSpline(int GeoId, bool delgeoid)
 {
-    const auto* bsp = static_cast<const Part::GeomBSplineCurve*>(getGeometry(GeoId));
-
     // First we search existing IA
-    std::vector<std::pair<int, int> > poleGeoIdsAndConstraints(bsp->countPoles(), {GeoEnum::GeoUndef, 0});
-
-    std::vector<std::pair<int, int> > knotGeoIdsAndConstraints(bsp->countKnots(), {GeoEnum::GeoUndef, 0});
+    std::map<int, int> poleGeoIdsAndConstraints;
+    std::map<int, int> knotGeoIdsAndConstraints;
 
     const std::vector<Sketcher::Constraint*>& vals = Constraints.getValues();
 
@@ -6709,10 +6797,10 @@ int SketchObject::deleteUnusedInternalGeometryWhenBSpline(int GeoId, bool delgeo
 
         switch (constr->AlignmentType) {
         case Sketcher::BSplineControlPoint:
-            poleGeoIdsAndConstraints[constr->InternalAlignmentIndex].first = constr->First;
+            poleGeoIdsAndConstraints[constr->First] = 0;
             break;
         case Sketcher::BSplineKnotPoint:
-            knotGeoIdsAndConstraints[constr->InternalAlignmentIndex].first = constr->First;
+            knotGeoIdsAndConstraints[constr->First] = 0;
             break;
         default:
             return -1;
@@ -6721,52 +6809,38 @@ int SketchObject::deleteUnusedInternalGeometryWhenBSpline(int GeoId, bool delgeo
 
     std::vector<int> delgeometries;
 
-    // TODO: This can become significantly costly if there are lots of constraints and poles
-    for (auto& [cpGeoId, numConstr] : poleGeoIdsAndConstraints) {
-        if (cpGeoId == GeoEnum::GeoUndef) {
+    // Update all control point constraint counts.
+    // EXCLUDES internal alignment and related constraints.
+    for (auto const& constr : vals) {
+        // We do not ignore weight constraints as we did with radius constraints,
+        // because the radius magnitude no longer makes sense without the B-Spline.
+        if (constr->Type == Sketcher::InternalAlignment
+            || constr->Type == Sketcher::Weight) {
             continue;
         }
-
-        // look for a circle at geoid index
-        for (auto const& constr : vals) {
-            if (constr->Type == Sketcher::InternalAlignment
-                || constr->Type == Sketcher::Weight
-                || !constr->involvesGeoId(cpGeoId)) {
-                continue;
-            }
-            if (constr->Type != Sketcher::Equal) {
-                ++numConstr;
-                continue;
-            }
-            bool firstIsInCPGeoIds = std::any_of(poleGeoIdsAndConstraints.begin(),
-                                                 poleGeoIdsAndConstraints.end(),
-                                                 [&constr](const auto& _pair) {
-                                                     return _pair.first == constr->First;
-                                                 });
-            bool secondIsInCPGeoIds = std::any_of(poleGeoIdsAndConstraints.begin(),
-                                                  poleGeoIdsAndConstraints.end(),
-                                                  [&constr](const auto& _pair) {
-                                                      return _pair.first == constr->Second;
-                                                  });
-            // the equality constraint constrains a pole but it is not interpole
-            if (firstIsInCPGeoIds != secondIsInCPGeoIds) {
-                ++numConstr;
-            }
-            // We do not ignore weight constraints as we did with radius constraints,
-            // because the radius magnitude no longer makes sense without the B-Spline.
+        bool firstIsInCPGeoIds = poleGeoIdsAndConstraints.count(constr->First) == 1;
+        bool secondIsInCPGeoIds = poleGeoIdsAndConstraints.count(constr->Second) == 1;
+        if (constr->Type == Sketcher::Equal && firstIsInCPGeoIds == secondIsInCPGeoIds) {
+            continue;
         }
+        // any equality constraint constraining a pole is not interpole
+        if (firstIsInCPGeoIds) {
+            ++poleGeoIdsAndConstraints[constr->First];
+        }
+        if (secondIsInCPGeoIds) {
+            ++poleGeoIdsAndConstraints[constr->Second];
+        }
+    }
 
+    for (auto& [cpGeoId, numConstr] : poleGeoIdsAndConstraints) {
         if (numConstr < 1) { // IA
             delgeometries.push_back(cpGeoId);
         }
     }
 
     for (auto& [kGeoId, numConstr] : knotGeoIdsAndConstraints) {
-        if (kGeoId == GeoEnum::GeoUndef) {
-            continue;
-        }
-
-        // look for a point at geoid index
+        // Update all control point constraint counts.
+        // INCLUDES internal alignment and related constraints.
         auto tempGeoID = kGeoId;  // C++17 and earlier do not support captured structured bindings
         numConstr = std::count_if(vals.begin(), vals.end(), [&tempGeoID](const auto& constr) {
             return constr->involvesGeoId(tempGeoID);
@@ -7102,7 +7176,7 @@ bool SketchObject::modifyBSplineKnotMultiplicity(int GeoId, int knotIndex, int m
     indexInNew[Sketcher::BSplineKnotPoint].reserve(knots.size());
 
     for (const auto& pole : poles) {
-        const auto it = std::find(newPoles.begin(), newPoles.end(), pole);
+        const auto it = std::ranges::find(newPoles, pole);
         indexInNew[Sketcher::BSplineControlPoint].emplace_back(it - newPoles.begin());
     }
     std::replace(indexInNew[Sketcher::BSplineControlPoint].begin(),
@@ -7111,7 +7185,7 @@ bool SketchObject::modifyBSplineKnotMultiplicity(int GeoId, int knotIndex, int m
                  -1);
 
     for (const auto& knot : knots) {
-        const auto it = std::find(newKnots.begin(), newKnots.end(), knot);
+        const auto it = std::ranges::find(newKnots, knot);
         indexInNew[Sketcher::BSplineKnotPoint].emplace_back(it - newKnots.begin());
     }
     std::replace(indexInNew[Sketcher::BSplineKnotPoint].begin(),
@@ -7237,7 +7311,7 @@ bool SketchObject::insertBSplineKnot(int GeoId, double param, int multiplicity)
     std::vector<int> poleIndexInNew(poles.size(), -1);
 
     for (size_t j = 0; j < poles.size(); j++) {
-        const auto it = std::find(newPoles.begin(), newPoles.end(), poles[j]);
+        const auto it = std::ranges::find(newPoles, poles[j]);
         poleIndexInNew[j] = it - newPoles.begin();
     }
     std::replace(poleIndexInNew.begin(), poleIndexInNew.end(), int(newPoles.size()), -1);
@@ -7247,7 +7321,7 @@ bool SketchObject::insertBSplineKnot(int GeoId, double param, int multiplicity)
     std::vector<int> knotIndexInNew(knots.size(), -1);
 
     for (size_t j = 0; j < knots.size(); j++) {
-        const auto it = std::find(newKnots.begin(), newKnots.end(), knots[j]);
+        const auto it = std::ranges::find(newKnots, knots[j]);
         knotIndexInNew[j] = it - newKnots.begin();
     }
     std::replace(knotIndexInNew.begin(), knotIndexInNew.end(), int(newKnots.size()), -1);
@@ -7524,17 +7598,13 @@ int SketchObject::carbonCopy(App::DocumentObject* pObj, bool construction)
         }
     }
 
-    // We shall solve in all cases, because recompute may fail, and leave the
+    // Solve even if `noRecomputes==false`, because recompute may fail, and leave the
     // sketch in an inconsistent state. A concrete example. If the copied sketch
     // has broken external geometry, its recomputation will fail. And because we
     // use expression for copied constraint to add dependency to the copied
     // sketch, this sketch will not be recomputed (because its dependency fails
     // to recompute).
-#if 0
-    if (noRecomputes) // if we do not have a recompute, the sketch must be solved to update the DoF of the solver
-#endif
-        solve();
-
+    solve();
 
     return svals.size();
 }
@@ -7820,7 +7890,6 @@ int SketchObject::delAllExternal()
     const std::vector<std::string> originalSubElements = SubElements;
 
     Objects.clear();
-
     SubElements.clear();
 
     const std::vector<Constraint*>& constraints = Constraints.getValues();
@@ -8064,14 +8133,6 @@ static gp_Vec ProjVecOnPlane_UVN(const gp_Vec& V, const gp_Pln& Pl)
     return gp_Vec(vector.X(), vector.Y(), 0.0);
 }
 
-// Auxiliary Method: returns vector projection in XYZ space
-#if 0
-static gp_Vec ProjVecOnPlane_XYZ( const gp_Vec& V, const gp_Pln& Pl)
-{
-  return V.Dot(Pl.Position().XDirection()) * Pl.Position().XDirection() +
-         V.Dot(Pl.Position().YDirection()) * Pl.Position().YDirection();
-}
-#endif
 
 // Auxiliary Method: returns point projection in UV space of plane
 static gp_Vec2d ProjPointOnPlane_UV(const gp_Pnt& P, const gp_Pln& Pl)
@@ -8217,6 +8278,9 @@ void SketchObject::validateExternalLinks()
                 const Part::Datum* datum = static_cast<const Part::Datum*>(Obj);
                 refSubShape = datum->getShape();
             }
+            else if (Obj->isDerivedFrom<App::DatumElement>()) {
+                // do nothing - shape will be calculated later during rebuild
+            }
             else {
                 const Part::Feature* refObj = static_cast<const Part::Feature*>(Obj);
                 const Part::TopoShape& refShape = refObj->Shape.getShape();
@@ -8265,6 +8329,89 @@ void SketchObject::validateExternalLinks()
 }
 
 namespace {
+
+void adjustParameterRange(const TopoDS_Edge &edge,
+                                 Handle(Geom_Plane) gPlane,
+                                 const gp_Trsf &mov,
+                                 Handle(Geom_Curve) curve,
+                                 double &firstParameter,
+                                 double &lastParameter)
+{
+    // This function is to deal with the ambiguity of trimming a periodic
+    // curve, e.g. given two points on a circle, whether to get the upper or
+    // lower arc. Because projection orientation may swap the first and last
+    // parameter of the original curve.
+    //
+    // We project the middle point of the original curve to the projected curve
+    // to decide whether to flip the parameters.
+
+    Handle(Geom_Curve) origCurve = BRepAdaptor_Curve(edge).Curve().Curve();
+
+    // GeomAPI_ProjectPointOnCurve will project a point to an untransformed
+    // curve, so make sure to obtain the point on an untransformed edge.
+    auto e = edge.Located(TopLoc_Location());
+
+    gp_Pnt firstPoint = BRep_Tool::Pnt(TopExp::FirstVertex(TopoDS::Edge(e)));
+    double f = GeomAPI_ProjectPointOnCurve(firstPoint, origCurve).LowerDistanceParameter();
+
+    gp_Pnt lastPoint = BRep_Tool::Pnt(TopExp::LastVertex(TopoDS::Edge(e)));
+    double l = GeomAPI_ProjectPointOnCurve(lastPoint, origCurve).LowerDistanceParameter();
+
+    auto adjustPeriodic = [](Handle(Geom_Curve) curve, double &f, double &l) {
+        // Copied from Geom_TrimmedCurve::setTrim()
+        if (curve->IsPeriodic()) {
+            Standard_Real Udeb = curve->FirstParameter();
+            Standard_Real Ufin = curve->LastParameter();
+            // set f in the range Udeb , Ufin
+            // set l in the range f , f + Period()
+            ElCLib::AdjustPeriodic(Udeb, Ufin,
+                    std::min(std::abs(f-l)/2,Precision::PConfusion()),
+                    f, l);
+        }
+    };
+
+    // Adjust for periodic curve to deal with orientation
+    adjustPeriodic(origCurve, f, l);
+
+    // Obtain the middle parameter in order to get the mid point of the arc
+    double m = (l - f) * 0.5 + f;
+    GeomLProp_CLProps prop(origCurve,m,0,Precision::Confusion());
+    gp_Pnt midPoint = prop.Value();
+
+    // Transform all three points to the world coordinate
+    auto trsf = edge.Location().Transformation();
+    midPoint.Transform(trsf);
+    firstPoint.Transform(trsf);
+    lastPoint.Transform(trsf);
+
+    // Project the points to the sketch plane. Note the coordinates are still
+    // in world coordinate system.
+    gp_Pnt pm = GeomAPI_ProjectPointOnSurf(midPoint, gPlane).NearestPoint();
+    gp_Pnt pf = GeomAPI_ProjectPointOnSurf(firstPoint, gPlane).NearestPoint();
+    gp_Pnt pl = GeomAPI_ProjectPointOnSurf(lastPoint, gPlane).NearestPoint();
+
+    // Transform the projected points to sketch plane local coordinates
+    pm.Transform(mov);
+    pf.Transform(mov);
+    pl.Transform(mov);
+
+    // Obtain the corresponding parameters for those points in the projected curve
+    double f2 = GeomAPI_ProjectPointOnCurve(pf, curve).LowerDistanceParameter();
+    double l2 = GeomAPI_ProjectPointOnCurve(pl, curve).LowerDistanceParameter();
+    double m2 = GeomAPI_ProjectPointOnCurve(pm, curve).LowerDistanceParameter();
+
+    firstParameter = f2;
+    lastParameter = l2;
+
+    adjustPeriodic(curve, f2, l2);
+    adjustPeriodic(curve, f2, m2);
+    // If the middle point is out of range, it means we need to choose the
+    // other half of the arc.
+    if (m2 > l2){
+        std::swap(firstParameter, lastParameter);
+    }
+}
+
 void processEdge2(TopoDS_Edge& projEdge, std::vector<std::unique_ptr<Part::Geometry>>& geos)
 {
     BRepAdaptor_Curve projCurve(projEdge);
@@ -8385,7 +8532,6 @@ void processEdge2(TopoDS_Edge& projEdge, std::vector<std::unique_ptr<Part::Geome
         gp_Pnt P1 = projCurve.Value(projCurve.FirstParameter());
         gp_Pnt P2 = projCurve.Value(projCurve.LastParameter());
 
-        // gp_Dir normal = e.Axis().Direction();
         gp_Dir normal = gp_Dir(0, 0, 1);
         gp_Ax2 xdirref(p, normal);
 
@@ -8429,11 +8575,15 @@ void processEdge(const TopoDS_Edge& edge,
     else if (curve.GetType() == GeomAbs_Circle) {
         gp_Dir vec1 = sketchPlane.Axis().Direction();
         gp_Dir vec2 = curve.Circle().Axis().Direction();
+
+        // start point of arc of circle
+        gp_Pnt beg = curve.Value(curve.FirstParameter());
+        // end point of arc of circle
+        gp_Pnt end = curve.Value(curve.LastParameter());
+
         if (vec1.IsParallel(vec2, Precision::Confusion())) {
             gp_Circ circle = curve.Circle();
             gp_Pnt cnt = circle.Location();
-            gp_Pnt beg = curve.Value(curve.FirstParameter());
-            gp_Pnt end = curve.Value(curve.LastParameter());
 
             GeomAPI_ProjectPointOnSurf proj(cnt, gPlane);
             cnt = proj.NearestPoint();
@@ -8461,15 +8611,12 @@ void processEdge(const TopoDS_Edge& edge,
         }
         else {
             // creates an ellipse or a segment
-
-            gp_Dir vec1 = sketchPlane.Axis().Direction();
-            gp_Dir vec2 = curve.Circle().Axis().Direction();
             gp_Circ origCircle = curve.Circle();
 
-            if (vec1.IsNormal(
-                vec2, Precision::Angular())) {// circle's normal vector in plane:
-            //   projection is a line
-            //   define center by projection
+            if (vec1.IsNormal(vec2, Precision::Angular())) {
+                // circle's normal vector in plane:
+                // projection is a line
+                // define center by projection
                 gp_Pnt cnt = origCircle.Location();
                 GeomAPI_ProjectPointOnSurf proj(cnt, gPlane);
                 cnt = proj.NearestPoint();
@@ -8485,12 +8632,6 @@ void processEdge(const TopoDS_Edge& edge,
                 ligne.D0(origCircle.Radius(), P2);
 
                 if (!curve.IsClosed()) {// arc of circle
-
-                    // start point of arc of circle
-                    gp_Pnt pntF = curve.Value(curve.FirstParameter());
-                    // end point of arc of circle
-                    gp_Pnt pntL = curve.Value(curve.LastParameter());
-
                     double alpha =
                         dirOrientation.AngleWithRef(curve.Circle().XAxis().Direction(),
                             curve.Circle().Axis().Direction());
@@ -8512,17 +8653,17 @@ void processEdge(const TopoDS_Edge& edge,
 
                     if (startAngle <= 0.0) {
                         if (endAngle <= 0.0) {
-                            P1 = ProjPointOnPlane_XYZ(pntF, sketchPlane);
-                            P2 = ProjPointOnPlane_XYZ(pntL, sketchPlane);
+                            P1 = ProjPointOnPlane_XYZ(beg, sketchPlane);
+                            P2 = ProjPointOnPlane_XYZ(end, sketchPlane);
                         }
                         else {
                             if (endAngle <= fabs(startAngle)) {
                                 // P2 = P2 already defined
-                                P1 = ProjPointOnPlane_XYZ(pntF, sketchPlane);
+                                P1 = ProjPointOnPlane_XYZ(beg, sketchPlane);
                             }
                             else if (endAngle < M_PI) {
                                 // P2 = P2, already defined
-                                P1 = ProjPointOnPlane_XYZ(pntL, sketchPlane);
+                                P1 = ProjPointOnPlane_XYZ(end, sketchPlane);
                             }
                             else {
                                 // P1 = P1, already defined
@@ -8532,15 +8673,15 @@ void processEdge(const TopoDS_Edge& edge,
                     }
                     else if (startAngle < M_PI) {
                         if (endAngle < M_PI) {
-                            P1 = ProjPointOnPlane_XYZ(pntF, sketchPlane);
-                            P2 = ProjPointOnPlane_XYZ(pntL, sketchPlane);
+                            P1 = ProjPointOnPlane_XYZ(beg, sketchPlane);
+                            P2 = ProjPointOnPlane_XYZ(end, sketchPlane);
                         }
                         else if (endAngle < 2.0 * M_PI - startAngle) {
-                            P2 = ProjPointOnPlane_XYZ(pntF, sketchPlane);
+                            P2 = ProjPointOnPlane_XYZ(beg, sketchPlane);
                             // P1 = P1, already defined
                         }
                         else if (endAngle < 2.0 * M_PI) {
-                            P2 = ProjPointOnPlane_XYZ(pntL, sketchPlane);
+                            P2 = ProjPointOnPlane_XYZ(end, sketchPlane);
                             // P1 = P1, already defined
                         }
                         else {
@@ -8550,16 +8691,16 @@ void processEdge(const TopoDS_Edge& edge,
                     }
                     else {
                         if (endAngle < 2 * M_PI) {
-                            P1 = ProjPointOnPlane_XYZ(pntF, sketchPlane);
-                            P2 = ProjPointOnPlane_XYZ(pntL, sketchPlane);
+                            P1 = ProjPointOnPlane_XYZ(beg, sketchPlane);
+                            P2 = ProjPointOnPlane_XYZ(end, sketchPlane);
                         }
                         else if (endAngle < 4 * M_PI - startAngle) {
-                            P1 = ProjPointOnPlane_XYZ(pntF, sketchPlane);
+                            P1 = ProjPointOnPlane_XYZ(beg, sketchPlane);
                             // P2 = P2, already defined
                         }
                         else if (endAngle < 3 * M_PI) {
                             // P1 = P1, already defined
-                            P2 = ProjPointOnPlane_XYZ(pntL, sketchPlane);
+                            P2 = ProjPointOnPlane_XYZ(end, sketchPlane);
                         }
                         else {
                             // P1 = P1, already defined
@@ -8577,7 +8718,7 @@ void processEdge(const TopoDS_Edge& edge,
                 GeometryFacade::setConstruction(projectedSegment, true);
                 geos.emplace_back(projectedSegment);
             }
-            else {// general case, full circle
+            else {// general case, full circle or arc of circle
                 gp_Pnt cnt = origCircle.Location();
                 GeomAPI_ProjectPointOnSurf proj(cnt, gPlane);
                 // projection of circle center on sketch plane, 3D space
@@ -8609,12 +8750,33 @@ void processEdge(const TopoDS_Edge& edge,
                 // NB: force normal of ellipse to be normal of sketch's plane.
                 gp_Ax2 refFrameEllipse(
                     gp_Pnt(gp_XYZ(p[0], p[1], p[2])), gp_Vec(0, 0, 1), vecMajorAxis);
-                Handle(Geom_Ellipse) curve =
-                    new Geom_Ellipse(refFrameEllipse, origCircle.Radius(), minorRadius);
-                Part::GeomEllipse* ellipse = new Part::GeomEllipse();
-                ellipse->setHandle(curve);
-                GeometryFacade::setConstruction(ellipse, true);
-                geos.emplace_back(ellipse);
+
+                gp_Elips elipsDest;
+                elipsDest.SetPosition(refFrameEllipse);
+                elipsDest.SetMajorRadius(origCircle.Radius());
+                elipsDest.SetMinorRadius(minorRadius);
+
+                Handle(Geom_Ellipse) projCurve = new Geom_Ellipse(elipsDest);
+
+                if (beg.SquareDistance(end) < Precision::Confusion()) {
+                    // projection is an ellipse
+                    auto* ellipse = new Part::GeomEllipse();
+                    ellipse->setHandle(projCurve);
+                    GeometryFacade::setConstruction(ellipse, true);
+                    geos.emplace_back(ellipse);
+                }
+                else {
+                    // projection is an arc of ellipse
+                    auto* aoe = new Part::GeomArcOfEllipse();
+                    double firstParam, lastParam;
+                    // adjust the parameter range to get the correct arc
+                    adjustParameterRange(edge, gPlane, mov, projCurve, firstParam, lastParam);
+
+                    Handle(Geom_TrimmedCurve) trimmedCurve = new Geom_TrimmedCurve(projCurve, firstParam, lastParam);
+                    aoe->setHandle(trimmedCurve);
+                    GeometryFacade::setConstruction(aoe, true);
+                    geos.emplace_back(aoe);
+                }
             }
         }
     }
@@ -8683,18 +8845,18 @@ void processEdge(const TopoDS_Edge& edge,
 
         // projection is a circle
         if ((RDest - rDest) < (double)Precision::Confusion()) {
-            Handle(Geom_Circle) curve2 = new Geom_Circle(destCurveAx2, 0.5 * (rDest + RDest));
+            Handle(Geom_Circle) projCurve = new Geom_Circle(destCurveAx2, 0.5 * (rDest + RDest));
             if (P1.SquareDistance(P2) < Precision::Confusion()) {
                 auto* circle = new Part::GeomCircle();
-                circle->setHandle(curve2);
+                circle->setHandle(projCurve);
                 GeometryFacade::setConstruction(circle, true);
                 geos.emplace_back(circle);
             }
             else {
                 auto* arc = new Part::GeomArcOfCircle();
-                Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(curve2,
-                    curve.FirstParameter(),
-                    curve.LastParameter());
+                double firstParam, lastParam;
+                adjustParameterRange(edge, gPlane, mov, projCurve, firstParam, lastParam);
+                Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(projCurve, firstParam, lastParam);
                 arc->setHandle(tCurve);
                 GeometryFacade::setConstruction(arc, true);
                 geos.emplace_back(arc);
@@ -8719,20 +8881,20 @@ void processEdge(const TopoDS_Edge& edge,
                 elipsDest.SetMajorRadius(destAxisMajor.Magnitude());
                 elipsDest.SetMinorRadius(destAxisMinor.Magnitude());
 
+                Handle(Geom_Ellipse) projCurve = new Geom_Ellipse(elipsDest);
 
                 if (P1.SquareDistance(P2) < Precision::Confusion()) {
-                    Handle(Geom_Ellipse) curve = new Geom_Ellipse(elipsDest);
                     auto* ellipse = new Part::GeomEllipse();
-                    ellipse->setHandle(curve);
+                    ellipse->setHandle(projCurve);
                     GeometryFacade::setConstruction(ellipse, true);
                     geos.emplace_back(ellipse);
                 }
                 else {
                     auto* aoe = new Part::GeomArcOfEllipse();
-                    Handle(Geom_Curve) curve2 = new Geom_Ellipse(elipsDest);
-                    Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(curve2,
-                        curve.FirstParameter(),
-                        curve.LastParameter());
+                    double firstParam, lastParam;
+                    adjustParameterRange(edge, gPlane, mov, projCurve, firstParam, lastParam);
+
+                    Handle(Geom_TrimmedCurve) tCurve = new Geom_TrimmedCurve(projCurve, firstParam, lastParam);
                     aoe->setHandle(tCurve);
                     GeometryFacade::setConstruction(aoe, true);
                     geos.emplace_back(aoe);
@@ -8741,23 +8903,130 @@ void processEdge(const TopoDS_Edge& edge,
         }
     }
     else {
-        try {
-            BRepOffsetAPI_NormalProjection mkProj(aProjFace);
-            mkProj.Add(edge);
-            mkProj.Build();
-            const TopoDS_Shape& projShape = mkProj.Projection();
-            if (!projShape.IsNull()) {
-                TopExp_Explorer xp;
-                for (xp.Init(projShape, TopAbs_EDGE); xp.More(); xp.Next()) {
-                    TopoDS_Edge projEdge = TopoDS::Edge(xp.Current());
-                    TopLoc_Location loc(mov);
-                    projEdge.Location(loc);
-                    processEdge2(projEdge, geos);
-                }
+        gp_Pln plane;
+        auto shape = Part::TopoShape(edge);
+        bool planar = shape.findPlane(plane);
+
+        // Check if the edge is planar and plane is perpendicular to the projection plane
+        if (planar && plane.Axis().IsNormal(sketchPlane.Axis(), Precision::Angular())) {
+            // Project an edge to a line. Only works if the edge is planar and its plane is
+            // perpendicular to the projection plane. OCC has trouble handling
+            // BSpline projection to a straight line. Although it does correctly projects
+            // the line including extreme bounds (not always a case), it will produce a BSpline with degree
+            // more than one.
+            //
+            // The work around here is to use an aligned bounding box of the edge to get
+            // the projection of the extremum points to construct the projected line.
+
+            // First, transform the shape to the projection plane local coordinates.
+            shape.setPlacement(invPlm * shape.getPlacement());
+
+            // Align the z axis of the edge plane to the y axis of the projection
+            // plane,  so that the extreme bound will be a line in the x axis direction
+            // of the projection plane.
+            double angle = plane.Axis().Direction().Angle(sketchPlane.YAxis().Direction());
+
+            gp_Trsf trsf;
+            if (fabs(angle) > Precision::Angular()) {
+                trsf.SetRotation(gp_Ax1(gp_Pnt(), gp_Dir(0, 0, 1)), angle);
+                shape.move(trsf);
+            }
+
+            // Make a copy to work around OCC circular edge transformation bug
+            shape = shape.makeElementCopy();
+
+            // Obtain the bounding box (precise version!) and move the extreme points back
+            // to the original location
+            auto bbox = shape.getBoundBoxOptimal();
+            if (!bbox.IsValid()){
+                throw Base::CADKernelError("Invalid bounding box");
+            }
+
+            gp_Pnt p1(bbox.MinX, bbox.MinY, 0);
+            gp_Pnt p2(bbox.MaxX, bbox.MaxY, 0);
+            if (fabs(angle) > Precision::Angular()) {
+                trsf.SetRotation(gp_Ax1(gp_Pnt(), gp_Dir(0, 0, 1)), -angle);
+                p1.Transform(trsf);
+                p2.Transform(trsf);
+            }
+
+            Base::Vector3d P1(p1.X(), p1.Y(), 0);
+            Base::Vector3d P2(p2.X(), p2.Y(), 0);
+
+            // check for degenerated case when the line is collapsed to a point
+            if (p1.SquareDistance(p2) < Precision::SquareConfusion()) {
+                Part::GeomPoint* point = new Part::GeomPoint((P1 + P2) / 2);
+                GeometryFacade::setConstruction(point, true);
+                geos.emplace_back(point);
+            }
+            else {
+                auto* projectedSegment = new Part::GeomLineSegment();
+                projectedSegment->setPoints(P1, P2);
+                GeometryFacade::setConstruction(projectedSegment, true);
+                geos.emplace_back(projectedSegment);
             }
         }
-        catch (Standard_Failure& e) {
-            throw Base::CADKernelError(e.GetMessageString());
+        else {
+            try {
+                Part::TopoShape projShape;
+                // Projection of the edge on parallel plane to the sketch plane is edge itself
+                // all we need to do is match coordinate systems
+                // for some reason OCC doesn't like to project a planar B-Spline to a plane parallel to it
+                if (planar && plane.Axis().Direction().IsParallel(sketchPlane.Axis().Direction(), Precision::Confusion())) {
+                    TopoDS_Edge projEdge = edge;
+
+                    // We need to trim the curve in case we are projecting a B-Spline segment
+                    if(curve.GetType() == GeomAbs_BSplineCurve){
+                        double Param1 = curve.FirstParameter();
+                        double Param2 = curve.LastParameter();
+
+                        if (Param1 > Param2){
+                            std::swap(Param1, Param2);
+                        }
+
+                        // trim curve in case we are projecting a segment
+                        auto bsplineCurve = curve.BSpline();
+                        if(Param2 - Param1 > Precision::Confusion()){
+                            bsplineCurve->Segment(Param1, Param2);
+                            projEdge = BRepBuilderAPI_MakeEdge(bsplineCurve).Edge();
+                        }
+                    }
+
+                    projShape.setShape(projEdge);
+
+                    // We can't use gp_Pln::Distance() because we need to
+                    // know which side the plane is regarding the sketch
+                    const gp_Pnt& aP = sketchPlane.Location();
+                    const gp_Pnt& aLoc = plane.Location ();
+                    const gp_Dir& aDir = plane.Axis().Direction();
+                    double d = (aDir.X() * (aP.X() - aLoc.X()) +
+                            aDir.Y() * (aP.Y() - aLoc.Y()) +
+                            aDir.Z() * (aP.Z() - aLoc.Z()));
+
+                    gp_Trsf trsf;
+                    trsf.SetTranslation(gp_Vec(aDir) * d);
+                    projShape.transformShape(Part::TopoShape::convert(trsf), /*copy*/false);
+                } else {
+                    // When planes not parallel or perpendicular, or edge is not planar
+                    // normal projection is working just fine
+                    BRepOffsetAPI_NormalProjection mkProj(aProjFace);
+                    mkProj.Add(edge);
+                    mkProj.Build();
+
+                    projShape.setShape(mkProj.Projection());
+                }
+                if (!projShape.isNull() && projShape.hasSubShape(TopAbs_EDGE)) {
+                    for (auto &e : projShape.getSubTopoShapes(TopAbs_EDGE)) {
+                        // Transform copy of the edge to the sketch plane local coordinates
+                        e.transformShape(invPlm.toMatrix(), /*copy*/true, /*checkScale*/true);
+                        TopoDS_Edge projEdge = TopoDS::Edge(e.getShape());
+                        processEdge2(projEdge, geos);
+                    }
+                }
+            }
+            catch (Standard_Failure& e) {
+                throw Base::CADKernelError(e.GetMessageString());
+            }
         }
     }
 }
@@ -8798,10 +9067,6 @@ std::vector<TopoDS_Shape> projectShape(const TopoDS_Shape& inShape, const gp_Ax3
             res.push_back(hlrToShape.Rg1LineVCompound());
         }
 
-        /*if (!hlrToShape.RgNLineVCompound().IsNull()) {
-            res.push_back(hlrToShape.RgNLineVCompound());
-        }*/ // we don't need the seams.
-
         if (!hlrToShape.OutLineVCompound().IsNull()) {
             res.push_back(hlrToShape.OutLineVCompound());
         }
@@ -8817,10 +9082,6 @@ std::vector<TopoDS_Shape> projectShape(const TopoDS_Shape& inShape, const gp_Ax3
         if (!hlrToShape.Rg1LineHCompound().IsNull()) {
             res.push_back(hlrToShape.Rg1LineHCompound());
         }
-
-        /*if (!hlrToShape.RgNLineHCompound().IsNull()) {
-            res.push_back(hlrToShape.RgNLineHCompound());
-        }*/
 
         if (!hlrToShape.OutLineHCompound().IsNull()) {
             res.push_back(hlrToShape.OutLineHCompound());
@@ -8841,6 +9102,7 @@ std::vector<TopoDS_Shape> projectShape(const TopoDS_Shape& inShape, const gp_Ax3
 
     return res;
 }
+
 }
 
 void SketchObject::rebuildExternalGeometry(std::optional<ExternalToAdd> extToAdd)
@@ -8997,6 +9259,35 @@ void SketchObject::rebuildExternalGeometry(std::optional<ExternalToAdd> extToAdd
 
                 TopoDS_Face f = TopoDS::Face(fBuilder.Shape());
                 refSubShape = f;
+            }
+            else if (Obj->isDerivedFrom<Part::DatumLine>()) {
+                auto* line = static_cast<const Part::DatumLine*>(Obj);
+                Base::Placement plm = line->Placement.getValue();
+                Base::Vector3d base = plm.getPosition();
+                Base::Vector3d dir = line->getDirection();
+                gp_Lin l(gp_Pnt(base.x, base.y, base.z), gp_Dir(dir.x, dir.y, dir.z));
+                BRepBuilderAPI_MakeEdge eBuilder(l);
+                if (!eBuilder.IsDone()) {
+                    throw Base::RuntimeError(
+                        "Sketcher: addExternal(): Failed to build edge from Part::DatumLine");
+                }
+
+                TopoDS_Edge e = TopoDS::Edge(eBuilder.Shape());
+                refSubShape = e;
+            }
+            else if (Obj->isDerivedFrom<Part::DatumPoint>()) {
+                auto* point = static_cast<const Part::DatumPoint*>(Obj);
+                Base::Placement plm = point->Placement.getValue();
+                Base::Vector3d base = plm.getPosition();
+                gp_Pnt p(base.x, base.y, base.z);
+                BRepBuilderAPI_MakeVertex eBuilder(p);
+                if (!eBuilder.IsDone()) {
+                    throw Base::RuntimeError(
+                        "Sketcher: addExternal(): Failed to build vertex from Part::DatumPoint");
+                }
+
+                TopoDS_Vertex v = TopoDS::Vertex(eBuilder.Shape());
+                refSubShape = v;
             }
             else {
                 throw Base::TypeError(
@@ -9499,7 +9790,6 @@ const std::vector<std::map<int, Sketcher::PointPos>> SketchObject::getCoincidenc
 void SketchObject::isCoincidentWithExternalGeometry(int GeoId, bool& start_external,
                                                     bool& mid_external, bool& end_external)
 {
-
     start_external = false;
     mid_external = false;
     end_external = false;
@@ -10918,7 +11208,7 @@ int SketchObject::port_reversedExternalArcs(bool justAnalyze)
     // no need to check input data validity as this is an sketchobject managed operation.
     Base::StateLocker lock(managedoperation, true);
 
-    int cntToBeAffected = 0;//==cntSuccess+cntFail
+    int cntToBeAffected = 0;
     const std::vector<Constraint*>& vals = this->Constraints.getValues();
 
     std::vector<Constraint*> newVals(vals);// modifiable copy of pointers array
@@ -10947,7 +11237,6 @@ int SketchObject::port_reversedExternalArcs(bool justAnalyze)
             if (geoId <= GeoEnum::RefExt
                 && (posId == Sketcher::PointPos::start || posId == Sketcher::PointPos::end)) {
                 // we are dealing with a link to an endpoint of external geom
-//                Part::Geometry* g = this->ExternalGeo[-geoId - 1];
                 Part::Geometry* g = this->ExternalGeo[-geoId - 1];
                 if (g->is<Part::GeomArcOfCircle>()) {
                     const Part::GeomArcOfCircle* segm =

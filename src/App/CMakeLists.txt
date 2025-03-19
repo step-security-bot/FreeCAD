@@ -1,7 +1,13 @@
+add_library(FreeCADApp SHARED)
+
 if(WIN32)
     add_definitions(-DFCApp)
     add_definitions(-DBOOST_DYN_LINK)
 endif(WIN32)
+
+if(BUILD_TRACY_FRAME_PROFILER)
+    add_definitions(-DBUILD_TRACY_FRAME_PROFILER)
+endif()
 
 if(FREECAD_RELEASE_SEH)
     add_definitions(-DHAVE_SEH)
@@ -19,9 +25,6 @@ ENDIF(LIBRARYDIR)
 IF(DOCDIR)
     add_definitions(-DDOCDIR="${DOCDIR}")
 ENDIF(DOCDIR)
-
-#if you want to use the old DAG structure uncomment this line
-#add_definitions(-DUSE_OLD_DAG)
 
 # -----------------------------------------------------------------------------
 
@@ -56,10 +59,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/src
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${Boost_INCLUDE_DIRS}
-    ${PYTHON_INCLUDE_DIRS}
-    ${XercesC_INCLUDE_DIRS}
-    ${ZLIB_INCLUDE_DIR}
 )
 
 set(FreeCADApp_LIBS
@@ -67,6 +66,10 @@ set(FreeCADApp_LIBS
     ${Boost_LIBRARIES}
     fmt::fmt
 )
+
+if(BUILD_TRACY_FRAME_PROFILER)
+    list(APPEND FreeCADApp_LIBS TracyClient)
+endif()
 
 include_directories(
     ${QtCore_INCLUDE_DIRS}
@@ -99,8 +102,8 @@ generate_from_xml(PropertyContainerPy)
 generate_from_xml(MaterialPy)
 generate_from_xml(MeasureManagerPy)
 
-generate_from_py(FreeCADInit InitScript.h)
-generate_from_py(FreeCADTest TestScript.h)
+generate_embed_from_py(FreeCADInit InitScript.h)
+generate_embed_from_py(FreeCADTest TestScript.h)
 
 SET(FreeCADApp_XML_SRCS
     ExtensionPy.xml
@@ -272,7 +275,6 @@ SET(FreeCADApp_CPP_SRCS
     AutoTransaction.cpp
     Branding.cpp
     CleanupProcess.cpp
-    Color.cpp
     ColorModel.cpp
     ComplexGeoData.cpp
     ComplexGeoDataPyImp.cpp
@@ -302,7 +304,6 @@ SET(FreeCADApp_HPP_SRCS
     AutoTransaction.h
     Branding.h
     CleanupProcess.h
-    Color.h
     ColorModel.h
     ComplexGeoData.h
     ElementMap.h
@@ -341,7 +342,7 @@ if(FREECAD_USE_PCH)
     ADD_MSVC_PRECOMPILED_HEADER(FreeCADApp PreCompiled.h PreCompiled.cpp FreeCADApp_CPP_SRCS)
 endif(FREECAD_USE_PCH)
 
-add_library(FreeCADApp SHARED ${FreeCADApp_SRCS})
+target_sources(FreeCADApp PRIVATE ${FreeCADApp_SRCS})
 target_link_libraries(FreeCADApp ${FreeCADApp_LIBS})
 if (FREECAD_WARN_ERROR)
     target_compile_warn_error(FreeCADApp)
